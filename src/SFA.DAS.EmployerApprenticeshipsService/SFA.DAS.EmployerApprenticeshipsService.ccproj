@@ -43,12 +43,13 @@
     <DiagnosticsConfiguration Include="SFA.DAS.EmployerApprenticeshipsService.WebContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
       <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EmployerApprenticeshipsService.Web</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
   </ItemGroup>
   <!-- Import the target files for this project template -->
