@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 
-namespace SFA.DAS.EmployerApprenticeshipService.Web.UnitTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests
 {
     public class Class1
     {

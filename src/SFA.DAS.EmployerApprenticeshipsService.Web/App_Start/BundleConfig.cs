@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace SFA.DAS.EmployerApprenticeshipService.Web
+namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class BundleConfig
     {

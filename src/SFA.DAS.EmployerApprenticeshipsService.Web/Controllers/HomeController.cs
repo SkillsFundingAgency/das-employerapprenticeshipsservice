@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace SFA.DAS.EmployerApprenticeshipService.Web.Controllers
+namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class HomeController : Controller
     {

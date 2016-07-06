@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipService.Web", "SFA.DAS.EmployerApprenticeshipService.Web\SFA.DAS.EmployerApprenticeshipService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A009A248-48A7-4CD5-BF80-8EBD092D6FD4}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{331690B3-1DA8-408E-B6A7-A3237310E6AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipService.Web.UnitTests", "SFA.DAS.EmployerApprenticeshipService.Web.UnitTests\SFA.DAS.EmployerApprenticeshipService.Web.UnitTests.csproj", "{BED31C59-63BE-4F2A-A814-4FF848E3F440}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.csproj", "{BED31C59-63BE-4F2A-A814-4FF848E3F440}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.EmployerApprenticeshipsService", "SFA.DAS.EmployerApprenticeshipsService\SFA.DAS.EmployerApprenticeshipsService.ccproj", "{97F77CF7-A13E-4441-8081-F941AC1B8BB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{BED31C59-63BE-4F2A-A814-4FF848E3F440}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BED31C59-63BE-4F2A-A814-4FF848E3F440}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BED31C59-63BE-4F2A-A814-4FF848E3F440}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F77CF7-A13E-4441-8081-F941AC1B8BB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F77CF7-A13E-4441-8081-F941AC1B8BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F77CF7-A13E-4441-8081-F941AC1B8BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F77CF7-A13E-4441-8081-F941AC1B8BB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

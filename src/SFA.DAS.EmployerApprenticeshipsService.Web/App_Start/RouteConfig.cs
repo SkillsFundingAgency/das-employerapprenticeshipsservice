@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace SFA.DAS.EmployerApprenticeshipService.Web
+namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class RouteConfig
     {

@@ -2,7 +2,7 @@
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace SFA.DAS.EmployerApprenticeshipService.Web
+namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
