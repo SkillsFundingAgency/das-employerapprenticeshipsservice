@@ -56,8 +56,8 @@
     </header>
 
 
-<div id="global-header-bar"></div>
-<main role="main">
+    <div id="global-header-bar"></div>
+    <main role="main">
         <div class="service-info ">
             <div class="phase-banner-beta">
                 <p>
@@ -65,10 +65,29 @@
                 </p>
             </div>
         </div>
-    
-    @RenderBody()
-</main>
-    
+        <div class="grid-row">
+            <div class="">
+                <div style="text-align: right; padding-top: 0.75em;">
+                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                    {
+                        <span>Hi @HttpContext.Current.User.Identity.Name</span>
+                        <span><a href="#">Log out</a></span>
+                    }
+                    else
+                    {
+                        <a href="#">Sign in / Register</a>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        @RenderBody()
+    </main>
+
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
 
