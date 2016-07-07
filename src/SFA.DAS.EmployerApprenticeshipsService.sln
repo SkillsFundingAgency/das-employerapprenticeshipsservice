@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{331690B3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.csproj", "{BED31C59-63BE-4F2A-A814-4FF848E3F440}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.EmployerApprenticeshipsService", "SFA.DAS.EmployerApprenticeshipsService\SFA.DAS.EmployerApprenticeshipsService.ccproj", "{97F77CF7-A13E-4441-8081-F941AC1B8BB1}"
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.CloudService", "SFA.DAS.CloudService\SFA.DAS.CloudService.ccproj", "{97F77CF7-A13E-4441-8081-F941AC1B8BB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
