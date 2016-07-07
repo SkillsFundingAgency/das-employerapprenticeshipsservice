@@ -700,3 +700,6 @@ button:focus,
         @media (min-width: 641px) {
           #footer .footer-meta .copyright a {
             text-align: right; } }
+        main { max-width: 960px; margin: 0 15px; }
+  @media (min-width: 641px) { main { margin: 0 30px; } }
+  @media (min-width: 1020px) { main { margin: 0 auto; } }

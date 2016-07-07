@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                       "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/elements.css",
                       "~/Content/site.css"));
         }
     }
