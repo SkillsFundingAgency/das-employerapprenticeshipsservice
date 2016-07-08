@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
@@ -17,9 +15,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task GetUsers()
+        public async Task<SignInUserViewModel> GetUsers()
         {
-            await _mediator.SendAsync(new GetUsersQuery());
+            var actual = await _mediator.SendAsync(new GetUsersQuery());
+
+            return new SignInUserViewModel
+            {
+                AvailableUsers = actual.Select(x =>
+                                                new SignInUserModel
+                                                {
+                                                    Email = x.Email,
+                                                    FirstName = x.FirstName,
+                                                    LastName = x.LastName,
+                                                    UserId = x.UserId
+                                                }).ToList()
+            };
         }
     }
 }
