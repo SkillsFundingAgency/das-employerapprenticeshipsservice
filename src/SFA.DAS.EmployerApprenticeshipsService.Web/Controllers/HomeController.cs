@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -37,12 +38,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             LoginUser(model.UserId,model.FirstName,model.LastName);
 
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         private void LoginUser(string id, string firstName, string lastName)
         {
-            _owinWrapper.IssueLoginCookie(id, $"{firstName} {lastName}");
+            var displayName = $"{firstName} {lastName}";
+            _owinWrapper.SignInUser(id,displayName,$"{firstName}.{lastName}@local.test");
+
+            _owinWrapper.IssueLoginCookie(id, displayName);
 
             _owinWrapper.RemovePartialLoginCookie();
         }

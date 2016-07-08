@@ -1,4 +1,6 @@
-﻿using IdentityServer3.Core.Extensions;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using Microsoft.Owin;
 
@@ -13,22 +15,38 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             _owinContext = owinContext;
         }
 
+        public void SignInUser(string id, string displayName, string email)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, displayName),
+                new Claim(ClaimTypes.Email, email),
+                new Claim("sub", email)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims,"Cookies");
+
+            var authenticationManager = _owinContext.Authentication;
+            authenticationManager.SignIn(claimsIdentity);
+            _owinContext.Authentication.User = new ClaimsPrincipal(claimsIdentity);
+        }
+
         public SignInMessage GetSignInMessage(string id)
         {
             return _owinContext.Environment.GetSignInMessage(id);
         }
         public void IssueLoginCookie(string id, string displayName)
         {
-            var env = _owinContext.Environment;
-            env.IssueLoginCookie(new AuthenticatedLogin
-            {
-                Subject = id,
-                Name = displayName
-            });
+            //var env = _owinContext.Environment;
+            //env.IssueLoginCookie(new AuthenticatedLogin
+            //{
+            //    Subject = id,
+            //    Name = displayName
+            //});
         }
         public void RemovePartialLoginCookie()
         {
-            _owinContext.Environment.RemovePartialLoginCookie();
+            //_owinContext.Environment.RemovePartialLoginCookie();
         }
     }
 }

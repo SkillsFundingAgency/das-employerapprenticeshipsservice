@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
         SignInMessage GetSignInMessage(string id);
         void IssueLoginCookie(string id, string displayName);
         void RemovePartialLoginCookie();
+        void SignInUser(string id, string displayName, string email);
     }
 }
