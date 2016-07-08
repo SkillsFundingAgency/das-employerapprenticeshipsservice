@@ -1,4 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.Azure;
+using Newtonsoft.Json;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
@@ -6,9 +11,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 {
     public class CompaniesHouseEmployerVerificationService : IEmployerVerificationService
     {
-        public Task<EmployerInformation> GetInformation(string id)
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private readonly string _apiKey;
+
+        public CompaniesHouseEmployerVerificationService()
         {
-            throw new System.NotImplementedException();
+            _apiKey = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(CloudConfigurationManager.GetSetting("CompaniesHouseApiKey")));
+        }
+
+        public async Task<EmployerInformation> GetInformation(string id)
+        {
+            var webClient = new WebClient();
+
+            webClient.Headers.Add($"Authorization: Basic {_apiKey}");
+            try
+            {
+                var result = await webClient.DownloadStringTaskAsync($"https://api.companieshouse.gov.uk/company/{id}");
+
+                return JsonConvert.DeserializeObject<EmployerInformation>(result);
+            }
+            catch (WebException ex)
+            {
+                Logger.Error(ex, "There was a problem with the call to Companies House");
+            }
+
+            return null;
         }
     }
 }
