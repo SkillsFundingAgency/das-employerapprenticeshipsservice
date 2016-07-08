@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             {
                 new Claim(ClaimTypes.Name, displayName),
                 new Claim(ClaimTypes.Email, email),
-                new Claim("sub", email)
+                new Claim("sub", id)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims,"Cookies");
