@@ -71,7 +71,4 @@
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
-  </ItemGroup>
 </Project>
