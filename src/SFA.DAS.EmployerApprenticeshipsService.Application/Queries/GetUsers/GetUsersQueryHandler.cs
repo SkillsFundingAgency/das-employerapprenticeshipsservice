@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
-    class GetUSersQueryQueryHandler
+    class GetUsersQueryHandler
     {
     }
 }
