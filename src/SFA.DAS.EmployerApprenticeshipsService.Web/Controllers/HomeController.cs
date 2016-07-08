@@ -41,6 +41,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index");
         }
 
+
+
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";
@@ -49,6 +51,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _owinWrapper.IssueLoginCookie(id, displayName);
 
             _owinWrapper.RemovePartialLoginCookie();
+        }
+
+        public ActionResult SignOut()
+        {
+            _owinWrapper.SignOutUser();
+
+            return RedirectToAction("Index");
         }
     }
 }

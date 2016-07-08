@@ -31,6 +31,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             _owinContext.Authentication.User = new ClaimsPrincipal(claimsIdentity);
         }
 
+        public void SignOutUser()
+        {
+            var authenticationManager = _owinContext.Authentication;
+            authenticationManager.SignOut("Cookies");
+        }
+
         public SignInMessage GetSignInMessage(string id)
         {
             return _owinContext.Environment.GetSignInMessage(id);

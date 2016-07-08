@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginInAUser.cs" />
+    <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
