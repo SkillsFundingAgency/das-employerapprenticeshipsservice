@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Web;
+using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -41,6 +42,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             //For<IExample>().Use<Example>();
 
             For<IUserRepository>().Use<FileSystemUserRepository>();
+
+            AddMediatrRegistrations();
+        }
+
+        private void AddMediatrRegistrations()
+        {
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            For<IMediator>().Use<Mediator>();
         }
 
         #endregion
