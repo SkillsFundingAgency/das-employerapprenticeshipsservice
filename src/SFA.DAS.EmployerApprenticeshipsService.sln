@@ -19,8 +19,6 @@ Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.CloudService", "SFA
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EmployerApprenticeshipsService.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{D864064A-7D17-4AE4-8C68-F4E02BCC216B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,10 +43,6 @@ Global
 		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{927A0BEA-B043-4A03-9311-F49CB60541D5}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{D864064A-7D17-4AE4-8C68-F4E02BCC216B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D864064A-7D17-4AE4-8C68-F4E02BCC216B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D864064A-7D17-4AE4-8C68-F4E02BCC216B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D864064A-7D17-4AE4-8C68-F4E02BCC216B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
