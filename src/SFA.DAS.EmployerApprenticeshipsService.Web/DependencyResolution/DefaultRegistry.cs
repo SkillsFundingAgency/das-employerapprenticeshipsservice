@@ -16,6 +16,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Web;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using StructureMap.Web.Pipeline;
 
@@ -36,6 +38,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
             //For<IExample>().Use<Example>();
+
+            For<IUserRepository>().Use<FileSystemUserRepository>();
         }
 
         #endregion
