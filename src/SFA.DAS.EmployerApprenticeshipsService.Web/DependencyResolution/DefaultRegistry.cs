@@ -32,10 +32,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
         public DefaultRegistry() {
             Scan(
-                scan => {
-                    scan.TheCallingAssembly();
-                    scan.WithDefaultConventions();
-					scan.With(new ControllerConvention());
+                scan =>
+                {
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService")
+                        && !a.GetName().Name.Equals("SFA.DAS.EmployerApprenticeshipsService.Infrastructure"));
+                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());

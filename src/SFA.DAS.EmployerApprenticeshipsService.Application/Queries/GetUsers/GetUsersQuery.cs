@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
-    class GetUsersQuery
+    public class GetUsersQuery : IAsyncRequest<List<User>>
     {
     }
 }
