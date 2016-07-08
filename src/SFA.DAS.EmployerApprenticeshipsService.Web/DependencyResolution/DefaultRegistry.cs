@@ -17,7 +17,9 @@
 
 using System.Web;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using StructureMap.Web.Pipeline;
 
@@ -40,6 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             //For<IExample>().Use<Example>();
 
             For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>();
         }
 
         #endregion
