@@ -22,10 +22,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUsersQuery>()))
-                .ReturnsAsync(new List<User>
+                .ReturnsAsync(new Users {UserList = new List<User>
                 {
                     new User {Email = "test@local.com", FirstName = "test", LastName = "tester", UserId = "1"}
-                });
+                }});
             _homeOrchestrator = new HomeOrchestrator(_mediator.Object);
 
         }

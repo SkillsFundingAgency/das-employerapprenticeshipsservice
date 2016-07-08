@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return new SignInUserViewModel
             {
-                AvailableUsers = actual.Select(x =>
+                AvailableUsers = actual.UserList.Select(x =>
                                                 new SignInUserModel
                                                 {
                                                     Email = x.Email,
