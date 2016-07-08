@@ -9,4 +9,4 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-INSERT INTO [Database1].[dbo].[Role] (Id, Name) VALUES (1, 'Owner');
+INSERT INTO [Database1].[dbo].[Role] (Name) VALUES ('Owner');
