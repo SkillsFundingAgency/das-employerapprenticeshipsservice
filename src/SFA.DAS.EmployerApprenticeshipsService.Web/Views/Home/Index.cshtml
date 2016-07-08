@@ -1,4 +1,4 @@
-﻿
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SignInUserViewModel
 
 <div class="grid-row">
     <div class="column-half">
@@ -8,24 +8,33 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Choose your user to impersonate</h2>
-        <form method="POST" action="@Url.Content("~/home/SignInUser")">
-            <div class="form-group">
-                <label class="form-label">Id: 12345</label>
-                <input type="hidden" name="UserId" value="12345" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">Test</label>
-                <input type="hidden" name="FirstName" value="Test"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label">User</label>
-                <input type="hidden" name="LastName" value="User"/>
-            </div>
-            <div class="form-group">
+
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <h2 class="heading-medium">Create your apprenticeship account</h2>
+            <a href="#" class="button">Create Account</a>
+        }
+        else
+        {
+            <h2 class="heading-medium">Choose your user to impersonate</h2>
+            <form method="POST" action="@Url.Content("~/home/SignInUser")">
+                @for (var i = 0; i < Model.AvailableUsers.Count; i++)
+                {
+                    <div class="form-group">
+
+                        <label class="form-label"><input type="radio" name="AvailableUsers[@i].UserSelected" value="@Model.AvailableUsers[i].UserId"/> 
+                            @Model.AvailableUsers[i].FirstName @Model.AvailableUsers[i].LastName</label>
+                        <input type="hidden" name="AvailableUsers[@i].UserId" value="@Model.AvailableUsers[i].UserId" />
+                        <input type="hidden" name="AvailableUsers[@i].FirstName" value=" @Model.AvailableUsers[i].FirstName" />
+                        <input type="hidden" name="AvailableUsers[@i].LastName" value="@Model.AvailableUsers[i].LastName" />
+                        <input type="hidden" name="AvailableUsers[@i].Email" value="@Model.AvailableUsers[i].Email" />
+                    </div>
+                }
                 <button type="submit" class="button">Sign in</button>
-            </div>
-        </form>
+                <p></p>
+            </form>
+        }
+
     </div>
 </div>
 

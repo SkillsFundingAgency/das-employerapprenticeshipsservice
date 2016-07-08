@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -41,9 +42,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SignInUser(SignInUserModel model)
+        public ActionResult SignInUser(SignInUserViewModel model)
         {
-            LoginUser(model.UserId,model.FirstName,model.LastName);
+
+            var selected = model.AvailableUsers.FirstOrDefault(x => x.UserSelected == x.UserId);
+
+            if (selected != null)
+            {
+                LoginUser(selected.UserId, selected.FirstName, selected.LastName);
+            }
 
             return RedirectToAction("Index");
         }
