@@ -21,6 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
         public async Task<EmployerInformation> GetInformation(string id)
         {
+            Logger.Info($"GetInformation({id})");
+
             var webClient = new WebClient();
 
             webClient.Headers.Add($"Authorization: Basic {_apiKey}");
