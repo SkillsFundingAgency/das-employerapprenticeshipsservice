@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.
             _userRepository = new Mock<IUserRepository>();
             _user = new User { Email = "test@local.com", FirstName = "Test", LastName = "Tester", UserId = Guid.NewGuid().ToString() };
             _users = new List<User> { _user };
-            _userRepository.Setup(x => x.GetAllUsers()).ReturnsAsync(_users);
+            _userRepository.Setup(x => x.GetAllUsers()).ReturnsAsync(new Users {UserList = _users});
 
             _getUsersQueryHandler = new GetUsersQueryHandler(_userRepository.Object);
         }
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.
             var actual = await _getUsersQueryHandler.Handle(new GetUsersQuery());
 
             //Assert    
-            Assert.IsAssignableFrom<List<User>>(actual);
+            Assert.IsAssignableFrom<Users>(actual);
         }
 
         [Test]
@@ -54,9 +54,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.
             var actual = await _getUsersQueryHandler.Handle(new GetUsersQuery());
 
             //Assert
-            Assert.IsNotEmpty(actual);
-            Assert.AreEqual(1, actual.Count);
-            Assert.Contains(_user,actual);
+            Assert.IsNotEmpty(actual.UserList);
+            Assert.AreEqual(1, actual.UserList.Count);
+            Assert.Contains(_user,actual.UserList);
         }
     }
 }
