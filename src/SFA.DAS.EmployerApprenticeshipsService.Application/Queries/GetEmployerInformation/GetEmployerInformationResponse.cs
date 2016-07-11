@@ -9,5 +9,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
         public string CompanyNumber { get; set; }
 
         public DateTime DateOfIncorporation { get; set; }
+
+        public string AddressLine1 { get; set; }
+
+        public string AddressLine2 { get; set; }
+
+        public string AddressPostcode { get; set; }
     }
 }

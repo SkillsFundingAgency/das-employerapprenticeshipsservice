@@ -10,20 +10,22 @@
     </Sites>
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="CompaniesHouseApiKey" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Endpoint1" 
-                     protocol="http" 
-                     port="80" />
-      <InputEndpoint name="HttpsIn" 
-                     protocol="https" 
-                     port="443" 
-                     certificate="WebSslCert" />
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
     </Endpoints>
     <Certificates>
-      <Certificate name="WebSslCert" 
-                   storeLocation="LocalMachine" 
-                   storeName="My" />
+      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
   </WebRole>
+  <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

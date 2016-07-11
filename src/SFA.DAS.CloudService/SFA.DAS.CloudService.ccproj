@@ -38,9 +38,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
+    <Folder Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="SFA.DAS.EmployerApprenticeshipsService.WebContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
@@ -49,6 +51,14 @@
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EmployerApprenticeshipsService.Web</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj">
+      <Name>SFA.DAS.LevyDeclarationProvider.Worker</Name>
+      <Project>{386adb6f-ce56-4afd-b762-de93e74afd41}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>SFA.DAS.LevyDeclarationProvider.Worker</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
   </ItemGroup>

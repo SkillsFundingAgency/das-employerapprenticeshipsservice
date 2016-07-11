@@ -13,5 +13,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 
         [JsonProperty("date_of_creation")]
         public DateTime DateOfIncorporation { get; set; }
+
+        [JsonProperty("registered_office_address")]
+        public Address RegisteredAddress { get; set; }
+    }
+
+    public class Address
+    {
+        [JsonProperty("address_line_1")]
+        public string Line1 { get; set; }
+        [JsonProperty("address_line_2")]
+        public string Line2 { get; set; }
+        [JsonProperty("postal_code")]
+        public string PostCode { get; set; }
     }
 }

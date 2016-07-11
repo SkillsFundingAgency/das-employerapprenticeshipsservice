@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -30,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return new SignInUserViewModel
             {
-                AvailableUsers = actual.UserList.Select(x =>
+                AvailableUsers = actual.Users.Select(x =>
                                                 new SignInUserModel
                                                 {
                                                     Email = x.Email,

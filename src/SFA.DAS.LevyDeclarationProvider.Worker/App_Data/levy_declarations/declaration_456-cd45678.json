@@ -1,0 +1,34 @@
+﻿{
+  "empref": "456/CD45678",
+  "schemeCessationDate": "2016-03-17",
+  "declarations": [
+    {
+      "submissionType": "original",
+      "submissionDate": "2016-02-21",
+      "payrollMonth": {
+        "year": 2016,
+        "month": 2
+      },
+      "amount": 1000.95
+    },
+    {
+      "submissionType": "original",
+      "submissionDate": "2016-01-21",
+      "payrollMonth": {
+        "year": 2016,
+        "month": 1
+      },
+      "amount": 2000.25
+    },
+    {
+      "submissionType": "original",
+      "submissionDate": "2015-12-21",
+      "payrollMonth": {
+        "year": 2015,
+        "month": 12
+      },
+      "amount": 500
+    }
+  ] 
+
+}

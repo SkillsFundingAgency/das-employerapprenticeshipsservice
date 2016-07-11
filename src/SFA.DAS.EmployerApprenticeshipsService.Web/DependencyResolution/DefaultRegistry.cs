@@ -15,8 +15,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Configuration;
 using System.Web;
 using MediatR;
+using Microsoft.Azure;
+using SFA.DAS.Configuration;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
@@ -29,30 +36,60 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     using StructureMap.Graph;
 	
     public class DefaultRegistry : Registry {
+        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+        private const string DevEnv = "LOCAL";
+
         #region Constructors and Destructors
 
         public DefaultRegistry() {
+            var environment = Environment.GetEnvironmentVariable("DASENV");
+            if (string.IsNullOrEmpty(environment))
+            {
+                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            }
+
             Scan(
                 scan =>
                 {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService")
-                        && !a.GetName().Name.Equals("SFA.DAS.EmployerApprenticeshipsService.Infrastructure"));
-                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    //scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService")
+                    //    && !a.GetName().Name.Equals("SFA.DAS.EmployerApprenticeshipsService.Infrastructure"));
+                    //scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.WithDefaultConventions();
+                    scan.AssemblyContainingType<IEmployerVerificationService>();
+                    scan.AssemblyContainingType<GetUsersQuery>();
+                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
+                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
                 });
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
 
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
             //For<IExample>().Use<Example>();
 
-            For<IUserRepository>().Use<FileSystemUserRepository>();
+            IConfigurationRepository configurationRepository;
             For<IUserAccountRepository>().Use<UserAccountRepository>();
-            For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>();
-			AddMediatrRegistrations();
-        }
 
-        private void AddMediatrRegistrations()
-        {
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+            {
+                configurationRepository = new FileStorageConfigurationRepository();
+            }
+            else
+            {
+                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            }
+
+            var configurationService = new ConfigurationService(
+                configurationRepository,
+                new ConfigurationOptions(ServiceName, environment, "1.0"));
+            For<IConfigurationService>().Use(configurationService);
+
+            var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+
+            For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
+
+            For<IUserRepository>().Use<FileSystemUserRepository>();
             For<IMediator>().Use<Mediator>();
         }
 
