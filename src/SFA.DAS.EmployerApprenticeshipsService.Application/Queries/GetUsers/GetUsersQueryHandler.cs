@@ -6,7 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
-    public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, List<User>>
+    public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, Users>
     {
         private readonly IUserRepository _userRepository;
 
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
             _userRepository = userRepository;
         }
 
-        public async Task<List<User>> Handle(GetUsersQuery message)
+        public async Task<Users> Handle(GetUsersQuery message)
         {
             var users = await _userRepository.GetAllUsers();
 

@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public void Arrange()
         {
             _owinWrapper = new Mock<IOwinWrapper>();
-            _homeController = new HomeController(_owinWrapper.Object);
+            _homeController = new HomeController(_owinWrapper.Object,null);
         }
 
         [Test]

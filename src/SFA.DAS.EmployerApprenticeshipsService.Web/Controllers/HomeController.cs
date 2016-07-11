@@ -1,21 +1,29 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IOwinWrapper _owinWrapper;
+        private readonly HomeOrchestrator _homeOrchestrator;
 
-        public HomeController(IOwinWrapper owinWrapper)
+        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator)
         {
             _owinWrapper = owinWrapper;
+            _homeOrchestrator = homeOrchestrator;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+
+            var users = await _homeOrchestrator.GetUsers();
+
+            return View(users);
         }
 
         public ActionResult About()
@@ -34,9 +42,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SignInUser(SignInUserModel model)
+        public ActionResult SignInUser(SignInUserViewModel model)
         {
-            LoginUser(model.UserId,model.FirstName,model.LastName);
+
+            var selected = model.AvailableUsers.FirstOrDefault(x => x.UserSelected == x.UserId);
+
+            if (selected != null)
+            {
+                LoginUser(selected.UserId, selected.FirstName, selected.LastName);
+            }
 
             return RedirectToAction("Index");
         }

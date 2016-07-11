@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -18,27 +19,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         {
             _owinWrapper = new Mock<IOwinWrapper>();
 
-            _homeController = new HomeController(_owinWrapper.Object);
+            _homeController = new HomeController(_owinWrapper.Object,null);
         }
 
         [Test]
-        public void ThenTheOwinWrapperIsCalled()
+        public void ThenTheOwinWrapperIsNotCalledIfTheUserIsNotSelected()
         {
             //Act
-            _homeController.SignInUser(new SignInUserModel());
+            _homeController.SignInUser(new SignInUserViewModel {AvailableUsers = new List<SignInUserModel>()});
 
             //Assert
-            _owinWrapper.Verify(x => x.IssueLoginCookie(It.IsAny<string>(), It.IsAny<string>()));
+            _owinWrapper.Verify(x => x.IssueLoginCookie(It.IsAny<string>(), It.IsAny<string>()),Times.Never);
         }
 
         [Test]
-        public void ThenThePartialLoginCookieIsRemoved()
+        public void ThenThePartialLoginCookieIsNotRemovedIfTheUserIsNull()
         {
             //Act
-            _homeController.SignInUser(new SignInUserModel());
+            _homeController.SignInUser(new SignInUserViewModel { AvailableUsers = new List<SignInUserModel>() });
 
             //Assert
-            _owinWrapper.Verify(x => x.RemovePartialLoginCookie());
+            _owinWrapper.Verify(x => x.RemovePartialLoginCookie(),Times.Never);
         }
 
         [Test]
@@ -50,13 +51,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             var id = Guid.NewGuid().ToString();
 
             //Act
-            _homeController.SignInUser(new SignInUserModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                UserId = id
-            });
-
+            _homeController.SignInUser(GetModel(firstName, lastName, id));
+            
             //Assert
             _owinWrapper.Verify(x => x.IssueLoginCookie(id, $"{firstName} {lastName}"));
         }
@@ -70,15 +66,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             var id = Guid.NewGuid().ToString();
 
             //Act
-            _homeController.SignInUser(new SignInUserModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                UserId = id
-            });
+            _homeController.SignInUser(GetModel(firstName, lastName, id));
 
             //Assert
             _owinWrapper.Verify(x => x.SignInUser(id, $"{firstName} {lastName}", $"{firstName}.{lastName}@local.test"));
+        }
+
+        private static SignInUserViewModel GetModel(string firstName, string lastName, string id)
+        {
+            return new SignInUserViewModel
+            {
+                AvailableUsers = new List<SignInUserModel>
+                {
+                    new SignInUserModel
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        UserId = id,
+                       UserSelected = id
+                    }
+                }
+            };
         }
     }
 }

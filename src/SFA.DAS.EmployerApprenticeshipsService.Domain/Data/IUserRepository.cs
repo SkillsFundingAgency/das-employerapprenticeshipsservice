@@ -10,6 +10,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task Create(User registerUser);
         Task Update(User user);
 
-        Task<List<User>> GetAllUsers();
+        Task<Users> GetAllUsers();
     }
 }

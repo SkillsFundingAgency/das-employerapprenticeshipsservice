@@ -44,9 +44,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<Users> GetAllUsers()
         {
-            return await ReadFileById<List<User>>(UserDataFileName);
+            return await ReadFileById<Users>(UserDataFileName);
         }
     }
 }

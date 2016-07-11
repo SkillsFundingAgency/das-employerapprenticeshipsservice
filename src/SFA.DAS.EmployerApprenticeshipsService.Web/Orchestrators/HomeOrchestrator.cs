@@ -10,18 +10,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
 
+        //Required for running tests
+        public HomeOrchestrator()
+        {
+            
+        }
+
         public HomeOrchestrator(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public async Task<SignInUserViewModel> GetUsers()
+        public virtual async Task<SignInUserViewModel> GetUsers()
         {
             var actual = await _mediator.SendAsync(new GetUsersQuery());
 
             return new SignInUserViewModel
             {
-                AvailableUsers = actual.Select(x =>
+                AvailableUsers = actual.UserList.Select(x =>
                                                 new SignInUserModel
                                                 {
                                                     Email = x.Email,
