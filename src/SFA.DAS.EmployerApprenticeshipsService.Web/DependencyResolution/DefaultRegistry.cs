@@ -88,9 +88,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
 
-            //var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
-            //                              "UseDevelopmentStorage=true";
-
             For<IUserRepository>().Use<FileSystemUserRepository>();
             For<IMediator>().Use<Mediator>();
         }
