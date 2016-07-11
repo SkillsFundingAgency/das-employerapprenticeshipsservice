@@ -18,12 +18,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _homeOrchestrator = homeOrchestrator;
         }
 
+        [Authorize]
         public async Task<ActionResult> Index()
         {
 
-            var users = await _homeOrchestrator.GetUsers();
+            var accounts = await _homeOrchestrator.GetUserAccounts();
 
-            return View(users);
+            return View(accounts);
         }
 
         public ActionResult About()
@@ -44,8 +45,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public ActionResult SignInUser(SignInUserViewModel model)
         {
-
-            var selected = model.AvailableUsers.FirstOrDefault(x => x.UserSelected == x.UserId);
+            var selectedUser = this.Request.Params["SelectedUserId"];
+            var selected = model.AvailableUsers.FirstOrDefault(x => selectedUser == x.UserId);
 
             if (selected != null)
             {
@@ -53,6 +54,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+
+        public async Task<ActionResult> FakeUserSignIn()
+        {
+            var users = await _homeOrchestrator.GetUsers();
+
+            return View(users);
         }
 
 

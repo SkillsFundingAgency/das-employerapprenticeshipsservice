@@ -44,6 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             //For<IExample>().Use<Example>();
 
             For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IUserAccountRepository>().Use<UserAccountRepository>();
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>();
 			AddMediatrRegistrations();
         }

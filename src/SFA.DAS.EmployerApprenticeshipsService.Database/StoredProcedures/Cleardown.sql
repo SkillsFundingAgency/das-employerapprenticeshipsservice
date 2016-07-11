@@ -2,8 +2,9 @@
 AS
 	DELETE FROM [dbo].[Membership];
 	DELETE FROM [dbo].[User];
-	DBCC CHECKIDENT("[dbo].[User]", RESEED, 0);
+	--DBCC CHECKIDENT("[dbo].[User]", RESEED, 0);
 	DELETE FROM [dbo].[Paye];
 	DELETE FROM [dbo].[Account];
-	DBCC CHECKIDENT("[dbo].[Account]", RESEED, 0);
+	DELETE FROM [dbo].[Role];
+	--DBCC CHECKIDENT("[dbo].[Account]", RESEED, 0);
 RETURN 0
