@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
-    public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, Users>
+    public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, GetUsersQueryResponse>
     {
         private readonly IUserRepository _userRepository;
 
@@ -15,11 +13,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
             _userRepository = userRepository;
         }
 
-        public async Task<Users> Handle(GetUsersQuery message)
+        public async Task<GetUsersQueryResponse> Handle(GetUsersQuery message)
         {
             var users = await _userRepository.GetAllUsers();
 
-            return users;
+            return new GetUsersQueryResponse
+            {
+                Users = users.UserList
+            };
         }
     }
 }

@@ -55,8 +55,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index");
         }
 
-
-
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";

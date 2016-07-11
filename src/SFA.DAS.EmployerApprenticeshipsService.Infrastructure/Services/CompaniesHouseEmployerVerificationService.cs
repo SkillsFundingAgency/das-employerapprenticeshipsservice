@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _apiKey;
 
-        public CompaniesHouseEmployerVerificationService()
+        public CompaniesHouseEmployerVerificationService(string apiKey)
         {
-            _apiKey = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(CloudConfigurationManager.GetSetting("CompaniesHouseApiKey")));
+            _apiKey = apiKey;
         }
 
         public async Task<EmployerInformation> GetInformation(string id)
