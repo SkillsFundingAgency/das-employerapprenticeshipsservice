@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.
             var actual = await _getUsersQueryHandler.Handle(new GetUsersQuery());
 
             //Assert    
-            Assert.IsAssignableFrom<Users>(actual);
+            Assert.IsAssignableFrom<GetUsersQueryResponse>(actual);
         }
 
         [Test]
