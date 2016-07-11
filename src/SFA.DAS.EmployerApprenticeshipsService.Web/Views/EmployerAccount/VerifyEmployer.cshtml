@@ -11,7 +11,7 @@
         <p>Your company number <b>@Model.CompanyNumber</b> is associated with:
         </p>
         <h2 class="heading-medium">@Model.CompanyName</h2>
-        <p>company address placeholder</p>
+        <p>@Model.RegisteredAddress</p>
         <h3 class="heading-small">Use @Model.CompanyName on your contract?</h3>
         <form method="POST" action="@Url.Action("SelectEmployer")">
             <button type="submit" class="button">Continue</button>

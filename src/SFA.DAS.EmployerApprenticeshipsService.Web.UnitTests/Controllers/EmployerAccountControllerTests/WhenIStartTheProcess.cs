@@ -4,19 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
     public class WhenIStartTheProcess
     {
         private EmployerAccountController _employerAccountController;
+        private EmployerAccountOrchestrator _orchestrator;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
         {
-            _employerAccountController = new EmployerAccountController();
+            _mediator = new Mock<IMediator>();
+            _orchestrator = new EmployerAccountOrchestrator(_mediator.Object);
+            _employerAccountController = new EmployerAccountController(_orchestrator);
         }
 
         [Test]

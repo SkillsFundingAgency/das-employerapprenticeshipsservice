@@ -38,23 +38,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                                                 }).ToList()
             };
         }
-
-        public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
-        {
-            var response = await _mediator.SendAsync(new GetEmployerInformationRequest
-            {
-                Id = model.EmployerRef
-            });
-
-            if (response == null)
-                return new SelectEmployerViewModel();
-
-            return new SelectEmployerViewModel
-            {
-                CompanyNumber = response.CompanyNumber,
-                CompanyName = response.CompanyName,
-                DateOfIncorporation = response.DateOfIncorporation
-            };
-        }
     }
 }
