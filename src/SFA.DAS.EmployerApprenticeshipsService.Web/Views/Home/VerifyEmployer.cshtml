@@ -2,24 +2,18 @@
 
 <div class="grid-row">
     <div class="column-half">
-        <h1 class="heading-xlarge">Employer Apprenticeships Service</h1>
+        <h1 class="heading-xlarge">Confirm your company name</h1>
     </div>
 </div>
 
 <div class="grid-row">
     <div class="column-two-thirds">
-
-        <h2 class="heading-medium">Verify your Employer Reference</h2>
+        <p>Your company number <b>@Model.CompanyNumber</b> is associated with:
+        </p>
+        <h2 class="heading-medium">@Model.CompanyName</h2>
+        <p>company address placeholder</p>
+        <h3 class="heading-small">Use @Model.CompanyName on your contract?</h3>
         <form method="POST" action="@Url.Action("SelectEmployer")">
-            <label>Company Number</label>
-            <label>@Model.CompanyNumber</label>
-            <p></p>
-            <label>Company Name</label>
-            <label>@Model.CompanyName</label>
-            <p></p>
-            <label>Date of Incorporation</label>
-            <label>@Model.DateOfIncorporation</label>
-            <p></p>
             <button type="submit" class="button">Continue</button>
             <p></p>
         </form>
