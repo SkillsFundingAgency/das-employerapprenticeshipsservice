@@ -1,0 +1,27 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SelectEmployerViewModel
+
+<div class="grid-row">
+    <div class="column-half">
+        <h1 class="heading-xlarge">Employer Apprenticeships Service</h1>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h2 class="heading-medium">Verify your Employer Reference</h2>
+        <form method="POST" action="@Url.Action("SelectEmployer")">
+            <label>Company Number</label>
+            <label>@Model.CompanyNumber</label>
+            <label>Company Name</label>
+            <label>@Model.CompanyNumber</label>
+            <label>Date of Incorporation</label>
+            <label>@Model.DateOfIncorporation</label>
+            <button type="submit" class="button">Continue</button>
+            <p></p>
+        </form>
+
+
+    </div>
+</div>
+

@@ -58,6 +58,7 @@
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
+    <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">

@@ -54,9 +54,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.
             var actual = await _getUsersQueryHandler.Handle(new GetUsersQuery());
 
             //Assert
-            Assert.IsNotEmpty(actual.UserList);
-            Assert.AreEqual(1, actual.UserList.Count);
-            Assert.Contains(_user,actual.UserList);
+            Assert.IsNotEmpty(actual.Users);
+            Assert.AreEqual(1, actual.Users.Count);
+            Assert.Contains(_user,actual.Users);
         }
     }
 }

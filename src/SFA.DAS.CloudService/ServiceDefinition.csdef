@@ -10,6 +10,10 @@
     </Sites>
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="CompaniesHouseApiKey" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" 
