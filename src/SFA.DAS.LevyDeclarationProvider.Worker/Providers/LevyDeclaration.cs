@@ -3,14 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 {
     public class LevyDeclaration : ILevyDeclaration
     {
-        public Task Handle()
+        private readonly IPollingMessageReceiver _pollingMessageReceiver;
+
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver)
         {
-            throw new NotImplementedException();
+            _pollingMessageReceiver = pollingMessageReceiver;
+        }
+
+        public async Task Handle()
+        {
+            var message = await _pollingMessageReceiver.ReceiveAsAsync<QueueMessage>();
+
+            
         }
     }
 }

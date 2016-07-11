@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application.Tests", "SFA.DAS.EmployerApprenticeshipsService.Application.Tests\SFA.DAS.EmployerApprenticeshipsService.Application.Tests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EmployerApprenticeshipsService.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
@@ -71,6 +71,10 @@ Global
 		{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,5 +82,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{BED31C59-63BE-4F2A-A814-4FF848E3F440} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{9DD77DF0-827E-4C14-B14B-B991BF26FD8C} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal
