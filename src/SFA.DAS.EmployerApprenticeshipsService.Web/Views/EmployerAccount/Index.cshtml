@@ -25,7 +25,11 @@
                 <li>the PAYE schemes you want to link to the apprenticeship account</li>
             </ul>
         </p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Start</a>
+        <form method="POST" action="employeraccount/index">
+            <input type="hidden" name="accepted" value="true"/>
+            <button type="submit" class="button">Start</button>
+        </form>
+        
         <p></p>
     </div>
 </div>

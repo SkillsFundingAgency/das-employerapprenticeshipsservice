@@ -12,7 +12,7 @@
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
             <h2 class="heading-medium">Create your apprenticeship account</h2>
-            <a href="#" class="button">Create Account</a>
+            <a href="@Url.Action("Index","EmployerAccount")" class="button">Create Account</a>
         }
         else
         {
@@ -31,10 +31,10 @@
                     </div>
                 }
                 <button type="submit" class="button">Sign in</button>
-                <p></p>
+                
             </form>
         }
-
+        <p></p>
     </div>
 </div>
 

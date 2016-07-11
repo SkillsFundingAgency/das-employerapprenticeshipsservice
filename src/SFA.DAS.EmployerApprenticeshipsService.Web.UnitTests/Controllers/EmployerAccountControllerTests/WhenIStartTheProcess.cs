@@ -31,5 +31,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual(string.Empty,actualViewResult.ViewName);
         }
+
+        [Test]
+        public void ThenICanProceedToTheGovernmentGatewayConfirmationPage()
+        {
+            //Act
+            var actual = _employerAccountController.Index(true);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualRedirectResult = actual as RedirectToRouteResult;
+            Assert.IsNotNull(actualRedirectResult);
+            Assert.AreEqual("GovernmentGatewayConfirm",actualRedirectResult.RouteValues["Action"]);
+        }
     }
 }
