@@ -55,7 +55,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult SelectEmployer()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<ActionResult> SelectEmployer(SelectEmployerModel model)
+        {
+            var response = await _homeOrchestrator.GetCompanyDetails(model);
+
+            if (string.IsNullOrWhiteSpace(response.CompanyNumber))
+                return View();
+
+            return RedirectToAction("VerifyEmployer", response);
+        }
+
+        public ActionResult VerifyEmployer(SelectEmployerViewModel model)
+        {
+            return View(model);
+        }
 
         private void LoginUser(string id, string firstName, string lastName)
         {

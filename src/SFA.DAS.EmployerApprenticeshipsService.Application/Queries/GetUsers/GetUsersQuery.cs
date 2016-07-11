@@ -4,7 +4,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
-    public class GetUsersQuery : IAsyncRequest<Users>
+    public class GetUsersQuery : IAsyncRequest<GetUsersQueryResponse>
     {
     }
 }
