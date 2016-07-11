@@ -53,7 +53,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 CompanyNumber = response.CompanyNumber,
                 CompanyName = response.CompanyName,
-                DateOfIncorporation = response.DateOfIncorporation
+                DateOfIncorporation = response.DateOfIncorporation,
+                RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
             };
         }
     }

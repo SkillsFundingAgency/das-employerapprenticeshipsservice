@@ -27,7 +27,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
             {
                 CompanyNumber = employer.CompanyNumber,
                 CompanyName = employer.CompanyName,
-                DateOfIncorporation = employer.DateOfIncorporation
+                DateOfIncorporation = employer.DateOfIncorporation,
+                AddressLine1 = employer.RegisteredAddress.Line1,
+                AddressLine2 = employer.RegisteredAddress.Line2,
+                AddressPostcode = employer.RegisteredAddress.PostCode
             };
         }
     }
