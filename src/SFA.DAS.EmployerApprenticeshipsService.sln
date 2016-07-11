@@ -29,6 +29,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProvider.Worker.UnitTests", "SFA.DAS.LevyDeclarationProvider.Worker.UnitTests\SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.csproj", "{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
