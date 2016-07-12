@@ -1,5 +1,7 @@
 # Employer Apprenticeships Service (BETA)
 
+This solution represents the Employer Apprenticeships Server (currently pre private BETA) code base.
+
 ## Running locally
 
 ### Requirements
