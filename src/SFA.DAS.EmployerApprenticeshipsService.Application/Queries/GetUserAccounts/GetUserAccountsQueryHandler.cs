@@ -9,7 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts
 {
-    public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQuery, List<Account>>
+    public class GetUserAccountsQueryHandler : IAsyncRequestHandler<GetUserAccountsQuery, GetUserAccountsQueryResponse>
     {
         private readonly IUserAccountRepository _userAccountsRepository;
 
@@ -18,12 +18,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAcco
             _userAccountsRepository = userAcountRepository;
         }
 
-        public Task<List<Account>> Handle(GetUserAccountsQuery message)
+        public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
         {
             var userId = message.UserId;
 
-            var accounts = _userAccountsRepository.GetAccountsByUserId(userId);
-            return accounts;
+            var accounts =  _userAccountsRepository.GetAccountsByUserId(userId);
+            return new GetUserAccountsQueryResponse {Accounts = accounts};
         }
+    }
+
+    public class GetUserAccountsQueryResponse
+    {
+        public Accounts Accounts { get; set; }
     }
 }

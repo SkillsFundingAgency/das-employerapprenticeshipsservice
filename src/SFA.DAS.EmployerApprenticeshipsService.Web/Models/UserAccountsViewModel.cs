@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class UserAccountsViewModel
     {
-        public List<Account> Accounts;
+        public Accounts Accounts;
     }
 
 

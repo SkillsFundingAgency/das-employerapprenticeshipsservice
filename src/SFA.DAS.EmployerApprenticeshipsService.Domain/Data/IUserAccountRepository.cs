@@ -8,6 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public interface IUserAccountRepository : IRepository
     {
-        Task<List<Account>> GetAccountsByUserId(string userId);
+        Accounts GetAccountsByUserId(string userId);
     }
 }

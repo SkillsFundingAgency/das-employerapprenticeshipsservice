@@ -59,6 +59,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
+    <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
   </ItemGroup>
   <ItemGroup>

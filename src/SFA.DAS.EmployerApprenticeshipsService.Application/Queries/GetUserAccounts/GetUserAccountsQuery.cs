@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts
 {
-    public class GetUserAccountsQuery : IAsyncRequest<List<Account>>
+    public class GetUserAccountsQuery : IAsyncRequest<GetUserAccountsQueryResponse>
     {
         public string UserId { get; set; }
     }

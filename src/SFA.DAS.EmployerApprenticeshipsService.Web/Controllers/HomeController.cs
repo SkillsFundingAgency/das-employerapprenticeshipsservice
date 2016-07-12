@@ -43,10 +43,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SignInUser(SignInUserViewModel model)
+        public ActionResult SignInUser(string selectedUserId, SignInUserViewModel model)
         {
-            var selectedUser = this.Request.Params["SelectedUserId"];
-            var selected = model.AvailableUsers.FirstOrDefault(x => selectedUser == x.UserId);
+            
+            var selected = model.AvailableUsers.FirstOrDefault(x => selectedUserId == x.UserId);
 
             if (selected != null)
             {

@@ -44,11 +44,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public virtual async Task<UserAccountsViewModel> GetUserAccounts()
         {
-            var userId =
-                ((ClaimsIdentity) HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub").Value;
-            var actual = await _mediator.SendAsync(new GetUserAccountsQuery() {UserId = userId });
+            var userIdClaim = ((ClaimsIdentity) HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim != null)
+            {
+                var userId =  userIdClaim.Value;
+                var actual = await _mediator.SendAsync(new GetUserAccountsQuery() {UserId = userId });
 
-            return new UserAccountsViewModel {Accounts = actual};
+                return new UserAccountsViewModel {Accounts = actual.Accounts};
+            }
+            return null;
         }
     }
 }

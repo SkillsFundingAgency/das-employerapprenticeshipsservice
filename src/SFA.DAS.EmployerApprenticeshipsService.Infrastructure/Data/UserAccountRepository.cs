@@ -12,20 +12,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class UserAccountRepository : IUserAccountRepository
     {
-        string _connectionString = String.Empty;
+        readonly string _connectionString = String.Empty;
         public UserAccountRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
-        public async Task<List<Account>> GetAccountsByUserId(string userId)
+
+         Accounts  IUserAccountRepository.GetAccountsByUserId(string userId)
         {
             var connection = new SqlConnection(_connectionString);
             var sql = @"select a.* from [dbo].[User] u 
                         left join[dbo].[Membership] m on m.UserId = u.Id
                         left join[dbo].[Account]  a on m.AccountId = a.Id
                         where u.PireanKey = @Id";
-           var accounts =  connection.Query<Account>(sql, new {Id = userId});
-            return (List<Account>) accounts;
+            var accounts = connection.Query<Account>(sql, new { Id = userId });
+            return  new Accounts {AccountList = (List<Account>) accounts};
         }
     }
 }
