@@ -12,9 +12,11 @@ In order to run this solution locally you will need the following installed:
 * Azure SDK 2.9
 * Azure Storage Explorer
 
+You should run Visual Studio as an Administrator.
+
 ### Setup
 
-* Running the RunBuild.bat will expose any dependeny issues
+* Running the RunBuild.bat will expose any dependency issues
 * Running the Database project (SFA.DAS.EmployerApprenticeshipsService.Database) will provision the local DB instance with relevent seed data.
 * In the Azure Storage Explorer create a new local table named "Configuration" and load the following row data:
   * PartitionKey => LOCAL
