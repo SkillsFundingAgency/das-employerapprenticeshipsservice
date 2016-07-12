@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="Accounts.cs" />
+    <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
+    <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

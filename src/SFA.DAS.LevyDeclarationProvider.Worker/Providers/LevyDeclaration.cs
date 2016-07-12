@@ -26,6 +26,10 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
             {
                 var levyDeclarationQueryResult = await _mediator.SendAsync(new GetLevyDeclarationQuery {Id = message.Content.Id});
                 
+                /*
+                 TODO
+                 Add call to do the command    RefreshEmployerLevyDataCommand
+             */
             }
         }
     }

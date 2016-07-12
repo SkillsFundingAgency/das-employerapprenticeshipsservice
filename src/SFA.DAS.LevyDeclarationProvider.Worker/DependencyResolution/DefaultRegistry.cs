@@ -20,6 +20,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
+            //TODO add config service and use Azure service bus queue instead
             For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
             For<ILevyDeclaration>().Use<LevyDeclaration>();
 
