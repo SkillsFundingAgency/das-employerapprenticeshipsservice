@@ -113,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="App_Data\english_fractions\english_fractions_456-cd45678.json" />
+    <None Include="App_Data\english_fractions\english_fractions_123-ab12345.json" />
     <None Include="App_Data\levy_declarations\declaration_456-cd45678.json" />
     <None Include="App_Data\levy_declarations\declaration_123-ab12345.json" />
     <None Include="packages.config" />
