@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetUs
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _account = new Account {Name = "Test", Id = 1};
             _accounts = new List<Account> {_account};
-            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).Returns(new Accounts {AccountList = _accounts});
+            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts {AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
 
         }

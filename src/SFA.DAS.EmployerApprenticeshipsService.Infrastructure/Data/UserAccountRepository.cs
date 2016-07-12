@@ -18,15 +18,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             _connectionString = connectionString;
         }
 
-         Accounts  IUserAccountRepository.GetAccountsByUserId(string userId)
+        public async Task<Accounts> GetAccountsByUserId(string userId)
         {
-            var connection = new SqlConnection(_connectionString);
-            var sql = @"select a.* from [dbo].[User] u 
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var sql = @"select a.* from [dbo].[User] u 
                         left join[dbo].[Membership] m on m.UserId = u.Id
                         left join[dbo].[Account]  a on m.AccountId = a.Id
                         where u.PireanKey = @Id";
-            var accounts = connection.Query<Account>(sql, new { Id = userId });
-            return  new Accounts {AccountList = (List<Account>) accounts};
+                var accounts = connection.Query<Account>(sql, new { Id = userId });
+
+                connection.Close();
+                return new Accounts { AccountList = (List<Account>)accounts };
+            }
+       
         }
     }
 }

@@ -60,6 +60,7 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
+    <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />

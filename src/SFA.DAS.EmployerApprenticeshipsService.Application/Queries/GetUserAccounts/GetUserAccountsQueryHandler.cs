@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts
@@ -22,13 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAcco
         {
             var userId = message.UserId;
 
-            var accounts =  _userAccountsRepository.GetAccountsByUserId(userId);
+            var accounts = await _userAccountsRepository.GetAccountsByUserId(userId);
             return new GetUserAccountsQueryResponse {Accounts = accounts};
         }
-    }
-
-    public class GetUserAccountsQueryResponse
-    {
-        public Accounts Accounts { get; set; }
     }
 }
