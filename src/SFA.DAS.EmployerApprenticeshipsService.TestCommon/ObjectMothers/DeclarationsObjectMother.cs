@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
