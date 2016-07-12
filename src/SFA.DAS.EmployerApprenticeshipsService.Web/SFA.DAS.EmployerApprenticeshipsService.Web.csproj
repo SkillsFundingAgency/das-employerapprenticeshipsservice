@@ -267,6 +267,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Data\EmpRefs\empref_data.json" />
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
     <Content Include="assets\images\apple-touch-icon-152x152.png" />
     <Content Include="assets\images\apple-touch-icon-60x60.png" />
@@ -344,6 +345,7 @@
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
+    <Content Include="Views\EmployerAccount\Gateway.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

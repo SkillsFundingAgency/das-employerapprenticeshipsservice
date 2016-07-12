@@ -77,5 +77,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(model);
         }
+
+        public ActionResult Gateway()
+        {
+            return View();
+        }
     }
 }
