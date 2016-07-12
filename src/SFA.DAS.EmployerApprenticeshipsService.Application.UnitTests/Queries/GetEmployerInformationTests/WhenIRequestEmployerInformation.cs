@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -7,7 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInfo
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.QueriesTests.GetEmployerInformationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetEmployerInformationTests
 {
     [TestFixture]
     public class WhenIRequestEmployerInformation

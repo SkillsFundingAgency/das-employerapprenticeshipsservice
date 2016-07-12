@@ -34,7 +34,6 @@
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -43,8 +42,6 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-=======
->>>>>>> 4876dddfdad676ccdc5851f63b81631bafb34181
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,31 +52,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
+    <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
+    <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-=======
->>>>>>> 4876dddfdad676ccdc5851f63b81631bafb34181
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
     </ProjectReference>
   </ItemGroup>
-<<<<<<< HEAD
-=======
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
->>>>>>> 4876dddfdad676ccdc5851f63b81631bafb34181
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
