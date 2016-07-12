@@ -56,12 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
+    <Compile Include="Queries\GetLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
   </ItemGroup>
   <ItemGroup>
