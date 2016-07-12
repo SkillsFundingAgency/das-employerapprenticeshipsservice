@@ -52,7 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="Accounts.cs" />
     <Compile Include="Data\IRepository.cs" />
+    <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />

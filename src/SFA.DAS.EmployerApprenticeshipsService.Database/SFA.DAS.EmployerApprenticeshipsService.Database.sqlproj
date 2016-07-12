@@ -70,5 +70,6 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
+    <None Include="SeedData\DevDataFloyd.sql" />
   </ItemGroup>
 </Project>

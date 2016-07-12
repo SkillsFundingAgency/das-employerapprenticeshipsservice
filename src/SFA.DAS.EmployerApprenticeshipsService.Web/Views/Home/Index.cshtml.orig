@@ -1,0 +1,60 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
+
+<div class="grid-row">
+    <div class="column-half">
+        <h1 class="heading-xlarge">Choose Account</h1>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+<<<<<<< HEAD
+        <p >You have several accounts registered to : xxx</p>
+        <p>Please choose the account you wish to view.</p>
+        <table>
+            <thead>
+            <tr>
+                <th>Account Name</th>
+                <th>Account Number</th>
+                <th> </th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var account in Model.Accounts)
+=======
+
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <h2 class="heading-medium">Create your apprenticeship account</h2>
+            <a href="@Url.Action("Index","EmployerAccount")" class="button">Create Account</a>
+        }
+        else
+        {
+            <h2 class="heading-medium">Choose your user to impersonate</h2>
+            <form method="POST" action="@Url.Content("~/home/SignInUser")">
+                @for (var i = 0; i < Model.AvailableUsers.Count; i++)
+>>>>>>> origin/AML-139_refresh_levy_declarations
+                {
+                    <tr>
+                        <td>@account.Name</td>
+                        <td>@account.Id</td>
+                        <td><a href="#?id=@account.Id">View</a></td>
+                    </tr>
+                }
+<<<<<<< HEAD
+            </tbody>
+        </table>
+        <p></p>
+                <a href="#" class="button">New</a>
+                <p></p>
+        
+=======
+                <button type="submit" class="button">Sign in</button>
+                
+            </form>
+        }
+        <p></p>
+>>>>>>> origin/AML-139_refresh_levy_declarations
+    </div>
+</div>
+

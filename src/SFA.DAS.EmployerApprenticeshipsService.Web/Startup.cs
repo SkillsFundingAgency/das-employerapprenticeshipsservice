@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
-                LoginPath = new PathString("/home/index")
+                LoginPath = new PathString("/home/FakeUserSignIn")
             });
         }
     }

@@ -262,6 +262,7 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
+    <Compile Include="Models\UserAccountsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Startup.cs" />
@@ -341,7 +342,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
+    <None Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
