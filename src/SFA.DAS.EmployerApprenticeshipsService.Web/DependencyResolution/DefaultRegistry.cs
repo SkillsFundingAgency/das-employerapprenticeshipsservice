@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             //For<IExample>().Use<Example>();
 
             IConfigurationRepository configurationRepository;
-            For<IUserAccountRepository>().Use<UserAccountRepository>();
+            
 
             if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
             {
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
-
+            For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IUserRepository>().Use<FileSystemUserRepository>();
             For<IMediator>().Use<Mediator>();
         }
