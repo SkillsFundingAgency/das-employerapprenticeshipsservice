@@ -1,40 +1,52 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SignInUserViewModel
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
 
 <div class="grid-row">
     <div class="column-half">
-        <h1 class="heading-xlarge">Employer Apprenticeships Service</h1>
+        @if (Model.Accounts.AccountList.Count == 0)
+        {
+            <h1 class="heading-xlarge">Create an Account</h1>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Choose Account</h1>
+        }
+        
     </div>
 </div>
 
 <div class="grid-row">
     <div class="column-two-thirds">
-
-        @if (HttpContext.Current.User.Identity.IsAuthenticated)
-        {
-            <h2 class="heading-medium">Create your apprenticeship account</h2>
-            <a href="@Url.Action("Index","EmployerAccount")" class="button">Create Account</a>
+        @if (Model.Accounts.AccountList.Count == 0)  {
+            <p>Create a new Employer Account</p>
         }
         else
         {
-            <h2 class="heading-medium">Choose your user to impersonate</h2>
-            <form method="POST" action="@Url.Content("~/home/SignInUser")">
-                @for (var i = 0; i < Model.AvailableUsers.Count; i++)
-                {
-                    <div class="form-group">
+            <p>You have several accounts registered</p>
+            <p>Please choose the account you wish to view.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Account Number</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                        <label class="form-label"><input type="radio" name="AvailableUsers[@i].UserSelected" value="@Model.AvailableUsers[i].UserId"/> 
-                            @Model.AvailableUsers[i].FirstName @Model.AvailableUsers[i].LastName</label>
-                        <input type="hidden" name="AvailableUsers[@i].UserId" value="@Model.AvailableUsers[i].UserId" />
-                        <input type="hidden" name="AvailableUsers[@i].FirstName" value=" @Model.AvailableUsers[i].FirstName" />
-                        <input type="hidden" name="AvailableUsers[@i].LastName" value="@Model.AvailableUsers[i].LastName" />
-                        <input type="hidden" name="AvailableUsers[@i].Email" value="@Model.AvailableUsers[i].Email" />
-                    </div>
-                }
-                <button type="submit" class="button">Sign in</button>
-                
-            </form>
+                    @foreach (var account in Model.Accounts.AccountList)
+                    {
+                        <tr>
+                            <td>@account.Name</td>
+                            <td>@account.Id</td>
+                            <td><a href="#?id=@account.Id">View</a></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
         }
+        <p></p>
+        <a href="#" class="button">New</a>
         <p></p>
     </div>
 </div>
-

@@ -62,6 +62,7 @@
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenValidatingTheRequest.cs" />
+    <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
   </ItemGroup>
   <ItemGroup>

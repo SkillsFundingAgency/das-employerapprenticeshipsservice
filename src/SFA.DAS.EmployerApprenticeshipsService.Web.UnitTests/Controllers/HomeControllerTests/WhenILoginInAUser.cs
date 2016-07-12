@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public void ThenTheOwinWrapperIsNotCalledIfTheUserIsNotSelected()
         {
             //Act
-            _homeController.SignInUser(new SignInUserViewModel {AvailableUsers = new List<SignInUserModel>()});
+            _homeController.SignInUser(null, new SignInUserViewModel {AvailableUsers = new List<SignInUserModel>()});
 
             //Assert
             _owinWrapper.Verify(x => x.IssueLoginCookie(It.IsAny<string>(), It.IsAny<string>()),Times.Never);
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public void ThenThePartialLoginCookieIsNotRemovedIfTheUserIsNull()
         {
             //Act
-            _homeController.SignInUser(new SignInUserViewModel { AvailableUsers = new List<SignInUserModel>() });
+            _homeController.SignInUser(null, new SignInUserViewModel { AvailableUsers = new List<SignInUserModel>() });
 
             //Assert
             _owinWrapper.Verify(x => x.RemovePartialLoginCookie(),Times.Never);
@@ -49,9 +49,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             var firstName = "test";
             var lastName = "tester";
             var id = Guid.NewGuid().ToString();
-
+            var model = GetModel(firstName, lastName, id);
             //Act
-            _homeController.SignInUser(GetModel(firstName, lastName, id));
+            _homeController.SignInUser(id, model);
             
             //Assert
             _owinWrapper.Verify(x => x.IssueLoginCookie(id, $"{firstName} {lastName}"));
@@ -64,9 +64,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             var firstName = "test";
             var lastName = "tester";
             var id = Guid.NewGuid().ToString();
+            var model = GetModel(firstName, lastName, id);
 
             //Act
-            _homeController.SignInUser(GetModel(firstName, lastName, id));
+            _homeController.SignInUser(id, model);
 
             //Assert
             _owinWrapper.Verify(x => x.SignInUser(id, $"{firstName} {lastName}", $"{firstName}.{lastName}@local.test"));

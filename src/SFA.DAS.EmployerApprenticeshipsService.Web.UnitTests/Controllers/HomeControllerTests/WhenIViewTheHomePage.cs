@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public async Task ThenTheUsersAreReturnedFromTheOrchestrator()
         {
             //Act
-            await _homeController.Index();
+            await _homeController.FakeUserSignIn();
 
             //Assert
             _homeOrchestrator.Verify(x=>x.GetUsers());
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public async Task ThenTheModelIsPassedToTheView()
         {
             //Act
-            var actual = await _homeController.Index();
+            var actual = await _homeController.FakeUserSignIn();
 
             //Assert
             Assert.IsNotNull(actual);
