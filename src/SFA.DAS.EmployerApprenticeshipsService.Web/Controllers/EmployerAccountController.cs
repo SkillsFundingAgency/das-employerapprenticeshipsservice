@@ -96,13 +96,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (selected == null)
                 return View();
 
-            var cookie = (string)_cookieService.Get(HttpContext, CookieName);
+            var enteredData = GetCookieData();
 
-            var json = JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
+            enteredData.EmployerRef = selected.EmpRef;
 
-            json.EmployerRef = selected.EmpRef;
-
-            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(json));
+            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(enteredData));
 
             return RedirectToAction("Summary");
         }
@@ -110,11 +108,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Summary()
         {
+            var enteredData = GetCookieData();
+
+            var model = new SummaryViewModel
+            {
+                CompanyName = enteredData.CompanyName,
+                CompanyNumber = enteredData.CompanyNumber,
+                DateOfIncorporation = enteredData.DateOfIncorporation,
+                EmployerRef = enteredData.EmployerRef
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult CreateAccount()
+        {
+            var enteredData = GetCookieData();
+
+            //TODO: save data to database
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        private EmployerAccountData GetCookieData()
+        {
             var cookie = (string)_cookieService.Get(HttpContext, CookieName);
 
-            var json = JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
-
-            return View();
+            return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
         }
 
         private GatewayEmployers GetEmployerAccountData()
