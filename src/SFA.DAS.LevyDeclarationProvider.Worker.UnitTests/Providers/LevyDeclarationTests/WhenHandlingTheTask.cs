@@ -1,23 +1,36 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.FileSystem;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclarationTests
 {
     public class WhenHandlingTheTask
     {
+        private const string ExpecetedEmpref = "123456";
         private LevyDeclaration _levyDeclaration;
         private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
         {
-            _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
+            var stubDataFile = new FileInfo(@"C:\SomeFile.txt");
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object);
+            _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
+                ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile, 
+                new EmployerRefreshLevyQueueMessage { Id = ExpecetedEmpref }));
+            _mediator = new Mock<IMediator>();
+            _mediator.Setup(x => x.SendAsync(new GetLevyDeclarationQuery {Id = ExpecetedEmpref})).ReturnsAsync(new GetLevyDeclarationResponse());
+
+            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object,_mediator.Object);
         }
 
         [Test]
@@ -27,22 +40,22 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             await _levyDeclaration.Handle();
 
             //Assert
-            _pollingMessageReceiver.Verify(x=>x.ReceiveAsAsync<QueueMessage>(),Times.Once);
+            _pollingMessageReceiver.Verify(x=>x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(),Times.Once);
         }
 
         [Test]
-        public async Task ThenTheDeclarationDataIsReceivedForTheQueueMessage()
+        public async Task ThenTheDeclarationDataIsReceivedForTheQueueMessageId()
         {
-            //Act
+            //Act   
             await _levyDeclaration.Handle();
 
             //Assert
-
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetLevyDeclarationQuery>(c=>c.Id.Equals(ExpecetedEmpref))), Times.Once());
 
         }
 
         [Test]
-        public async Task ThenTheRebuildDeclarationCommandIsCalled()
+        public async Task ThenTheRebuildDeclarationCommandIsCalledIfThereIsData()
         {
             //Act
             await _levyDeclaration.Handle();
@@ -62,9 +75,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
         [Test]
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
         {
+            //Arrange
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(It.IsAny<FileInfo>(), It.IsAny<FileInfo>(), new EmployerRefreshLevyQueueMessage{Id=""}));
+
             //Act
             await _levyDeclaration.Handle();
 
+            //Assert
+            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetLevyDeclarationQuery>()),Times.Never());
         }
     }
 }

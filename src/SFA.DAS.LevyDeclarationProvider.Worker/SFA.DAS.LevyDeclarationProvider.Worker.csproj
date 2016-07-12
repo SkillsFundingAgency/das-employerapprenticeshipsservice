@@ -124,6 +124,14 @@
       <Project>{0226f97a-704e-49b0-a100-b75feec9c8ad}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EmployerApprenticeshipsService.Infrastructure.csproj">
+      <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
