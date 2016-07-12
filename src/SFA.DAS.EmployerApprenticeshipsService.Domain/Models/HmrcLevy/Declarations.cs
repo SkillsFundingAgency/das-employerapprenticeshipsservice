@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
 {
     public class Declarations
     {
