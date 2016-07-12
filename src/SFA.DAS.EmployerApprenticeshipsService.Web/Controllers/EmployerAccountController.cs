@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -78,9 +80,62 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public ActionResult Gateway()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Gateway(GatewayModel model)
+        {
+            var data = GetEmployerAccountData();
+
+            var selected = data.Data.FirstOrDefault(x => x.Email == model.Email);
+
+            if (selected == null)
+                return View();
+
+            var cookie = (string)_cookieService.Get(HttpContext, CookieName);
+
+            var json = JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
+
+            json.EmployerRef = selected.EmpRef;
+
+            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(json));
+
+            return RedirectToAction("Summary");
+        }
+
+        [HttpGet]
+        public ActionResult Summary()
+        {
+            var cookie = (string)_cookieService.Get(HttpContext, CookieName);
+
+            var json = JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
+
+            return View();
+        }
+
+        private GatewayEmployers GetEmployerAccountData()
+        {
+            var path = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/EmpRefs/empref_data.json");
+
+            var json = System.IO.File.ReadAllText(path);
+
+            return JsonConvert.DeserializeObject<GatewayEmployers>(json);
+        }
+
+        public class GatewayEmployers
+        {
+            public List<GatewayEmployer> Data { get; set; }
+        }
+
+        public class GatewayEmployer
+        {
+            public string Email { get; set; }
+            public string Password { get; set; }
+            public string EmpRef { get; set; }
         }
     }
 }

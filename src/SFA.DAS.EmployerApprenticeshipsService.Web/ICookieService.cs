@@ -8,6 +8,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         void Create(HttpContextBase context, string name, string content, int expireDays);
         void Update(HttpContextBase context, string name, string content);
         void Delete(HttpContextBase context, string name);
+        object Get(HttpContextBase context, string name);
     }
 
     public class HttpCookieService : ICookieService
@@ -43,6 +44,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                 context.Response.SetCookie(user);
             }
         }
+
+        public object Get(HttpContextBase context, string name)
+        {
+            return context.Request.Cookies[name].Value;
+        }
     }
 
     public class EmployerAccountData
@@ -53,5 +59,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 
         public string RegisteredAddress { get; set; }
 
+        public string EmployerRef { get; set; }
     }
 }

@@ -1,16 +1,23 @@
 ﻿<div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Goverment gateway ID</h1>
-        <p class="first-para-spacing">You need your goverment gateway ID for at least one of the PAYE schemes you intend to link to this apprenticeship account.</p>
-        <p class="bold-small">Do you have at least one goverment gateway ID ready?</p>
+        <p class="first-para-spacing">Enter your goverment gateway for the PAYE scheme you intend to link to this apprenticeship account.</p>
 
         <div class="grid-row">
-            <div class="column-one-third">
-                <p></p>
-                <a class="button" href="@Url.Action("SelectEmployer")">Continue</a>
-            </div>
-
-        </div>
+            <form method="POST" action="@Url.Action("Gateway")">
+                <div class="form-group">
+                    <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
+                           aria-required="true" />
+                </div>
+                <div class="form-group">
+                    <input class="form-control form-control-3-4" id="Password" name="Password" type="password"
+                           aria-required="true" />
+                </div>
+                <div class="column-one-third">
+                    <button type="submit" class="button">Continue</button>
+                </div>
+            </form>
+</div>
 
         <div style="margin-top:50px"></div>
 
