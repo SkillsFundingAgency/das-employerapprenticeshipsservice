@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
 
             if (!validationResult.IsValid())
             {
-                return null;
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
             var declarations = await _levyDeclarationService.GetLevyDeclarations(message.Id);

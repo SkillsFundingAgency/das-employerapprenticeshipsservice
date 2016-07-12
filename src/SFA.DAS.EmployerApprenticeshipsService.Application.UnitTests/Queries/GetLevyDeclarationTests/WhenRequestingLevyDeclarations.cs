@@ -41,16 +41,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetLe
         }
 
         [Test]
-        public async Task ThenNullIsReturnedIfTheQueryIsNotValid()
+        public void ThenAnInvalidRequestExceptionIsThrownIfTheQueryIsNotValid()
         {
             //Arrange
             _validator.Setup(x => x.Validate(It.IsAny<GetLevyDeclarationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            var actual = await _getLevyDeclarationQueryHandler.Handle(new GetLevyDeclarationQuery());
-
-            //Assert
-            Assert.IsNull(actual);
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _getLevyDeclarationQueryHandler.Handle(new GetLevyDeclarationQuery()));
         }
 
         [Test]
