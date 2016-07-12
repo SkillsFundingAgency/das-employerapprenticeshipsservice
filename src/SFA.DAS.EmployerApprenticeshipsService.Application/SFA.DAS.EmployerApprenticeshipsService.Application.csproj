@@ -58,9 +58,14 @@
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
+    <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
