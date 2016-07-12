@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.ObjectMothers
+namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class EnglishFractionObjectMother
     {

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Tests.ObjectMothers;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetLevyDeclarationTests
 {
