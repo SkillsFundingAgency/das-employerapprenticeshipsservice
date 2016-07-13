@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -122,13 +124,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateAccount()
+        public async Task<ActionResult> CreateAccount()
         {
             var enteredData = GetCookieData();
 
-            //TODO: save data to database
+            await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
+            {
+                UserId = GetUserId(),
+                CompanyNumber = enteredData.CompanyNumber,
+                CompanyName = enteredData.CompanyName,
+                EmployerRef = enteredData.EmployerRef
+            });
 
             return RedirectToAction("Index", "Home");
+        }
+
+        private string GetUserId()
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+
+            return (userIdClaim != null) ? userIdClaim.Value: "";
         }
 
         private EmployerAccountData GetCookieData()

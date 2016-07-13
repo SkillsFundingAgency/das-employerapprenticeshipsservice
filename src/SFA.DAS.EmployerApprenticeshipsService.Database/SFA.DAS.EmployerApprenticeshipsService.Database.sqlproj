@@ -67,6 +67,7 @@
     <Build Include="Membership.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="Paye.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
