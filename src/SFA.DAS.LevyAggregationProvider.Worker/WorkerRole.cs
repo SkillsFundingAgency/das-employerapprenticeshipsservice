@@ -3,6 +3,9 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution;
+using SFA.DAS.LevyAggregationProvider.Worker.Providers;
+using StructureMap;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker
 {
@@ -10,9 +13,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private Container _container;
 
         public override void Run()
         {
+            var registry = new DefaultRegistry();
+
+            _container = new Container(registry);
+
+            _container.AssertConfigurationIsValid();
+
             Trace.TraceInformation("SFA.DAS.LevyAggregationProvider.Worker is running");
 
             try
@@ -54,9 +64,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
+            var manager = _container.GetInstance<LevyAggregationManager>();
+
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
+                //TODO: Replace with queue process stuff
+                var empref = "";
+
+                await manager.Process(empref);
+
                 Trace.TraceInformation("Working");
                 await Task.Delay(1000);
             }
