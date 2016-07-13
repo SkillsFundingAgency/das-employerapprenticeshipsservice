@@ -117,12 +117,6 @@
     <None Include="App_Data\levy_declarations\declaration_123-ab12345.json" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
-      <Project>{0226f97a-704e-49b0-a100-b75feec9c8ad}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
