@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
         {
 
             var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
-            {employerId = 1,
+            {EmployerId = 1,
                 EmployerLevyData = new List<EmployerLevyData> {
                     new EmployerLevyData
                 {

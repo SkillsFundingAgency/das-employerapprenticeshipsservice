@@ -67,9 +67,13 @@
     <Build Include="Membership.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="Paye.sql" />
+    <Build Include="LevyDeclaration.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
     <None Include="SeedData\DevDataFloyd.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
   </ItemGroup>
 </Project>

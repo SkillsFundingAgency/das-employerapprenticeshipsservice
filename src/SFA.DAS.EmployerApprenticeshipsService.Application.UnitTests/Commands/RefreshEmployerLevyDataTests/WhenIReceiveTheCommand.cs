@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Refr
             await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef));
 
             //Assert
-            _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>()));
+            _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), It.IsAny<string>()));
         }
     }
 }

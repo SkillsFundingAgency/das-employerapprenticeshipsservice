@@ -60,7 +60,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\GetEmployerLevyQueue"));
             For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
             For<ILevyDeclaration>().Use<LevyDeclaration>();
-            var rootDir = Path.Combine(Environment.GetEnvironmentVariable("RoleRoot") + @"\", @"approot\TEMP\");
+            var rootDir = Path.Combine(Environment.GetEnvironmentVariable("RoleRoot") + @"\", @"approot\App_Data\");
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>().Ctor<string>().Is(rootDir);
 
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);

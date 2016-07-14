@@ -38,7 +38,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
                     if (declaration == null)
                     {
-                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration);
+                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef);
+                        sendLevyDataChanged = true;
                     }
                 }
 
@@ -46,13 +47,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
                 if (fraction == null)
                 {
-                    await _dasLevyRepository.CreateEmployerFraction(employerLevyData.Fractions);
+                    await _dasLevyRepository.CreateEmployerFraction(employerLevyData.Fractions, employerLevyData.EmpRef);
+                    sendLevyDataChanged = true;
                 }
             }
 
             if (sendLevyDataChanged)
             {
-                _messagePublisher.PublishAsync(new EmployerRefreshLevyViewsQueueMessage {Id = message.employerId});
+                await _messagePublisher.PublishAsync(new EmployerRefreshLevyViewsQueueMessage {Id = message.EmployerId});
             }
 
 

@@ -3,6 +3,7 @@
   "schemeCessationDate": "2016-03-17",
   "declarations": [
     {
+      "submissionId": "a1",
       "submissionType": "original",
       "submissionDate": "2016-02-21",
       "payrollMonth": {
@@ -12,6 +13,7 @@
       "amount": 1000.95
     },
     {
+      "submissionId": "a2",
       "submissionType": "original",
       "submissionDate": "2016-01-21",
       "payrollMonth": {
@@ -21,6 +23,7 @@
       "amount": 2000.25
     },
     {
+      "submissionId": "a3",
       "submissionType": "original",
       "submissionDate": "2015-12-21",
       "payrollMonth": {
