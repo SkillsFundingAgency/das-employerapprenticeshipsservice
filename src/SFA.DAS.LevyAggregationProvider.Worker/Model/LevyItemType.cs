@@ -1,7 +1,8 @@
 ﻿namespace SFA.DAS.LevyAggregationProvider.Worker.Model
 {
-    public enum LevyDataSource
+    public enum LevyItemType
     {
-        Declaration = 0
+        Declaration = 1,
+        TopUp = 2
     }
 }

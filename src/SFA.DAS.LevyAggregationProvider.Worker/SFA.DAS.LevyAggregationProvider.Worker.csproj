@@ -88,8 +88,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="Model\AggregationLine.cs" />
+    <Compile Include="Model\AggregationLineItem.cs" />
     <Compile Include="Model\DestinationData.cs" />
-    <Compile Include="Model\LevyDataSource.cs" />
+    <Compile Include="Model\LevyItemType.cs" />
     <Compile Include="Model\SourceData.cs" />
     <Compile Include="Model\SourceDataItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

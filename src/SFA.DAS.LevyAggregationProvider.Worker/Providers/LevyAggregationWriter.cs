@@ -6,7 +6,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     {
         public void Update(DestinationData data)
         {
-            throw new System.NotImplementedException();
+            //TODO: Convert to json
+            //TODO: Paging [Not Sprint 1]
+            //TODO: Write to Azure Table Storage
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Model
 {
-    public class SourceDataItem
+    public class AggregationLineItem
     {
         public string Id { get; set; }
         public string EmpRef { get; set; }
