@@ -15,6 +15,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
+        public FileSystemUserRepository(string rootPath)
+            : base(rootPath, "Users")
+        {
+        }
+
         public async Task<User> GetById(string id)
         {
             return await ReadFileById<User>(id);

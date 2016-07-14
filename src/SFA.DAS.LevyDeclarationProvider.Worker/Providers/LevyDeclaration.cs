@@ -21,11 +21,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
         public async Task Handle()
         {
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
-
-            if (!string.IsNullOrEmpty(message.Content.Id))
+            if (!string.IsNullOrEmpty(message?.Content.Id))
             {
-                var levyDeclarationQueryResult = await _mediator.SendAsync(new GetLevyDeclarationQuery {Id = message.Content.Id});
+                var levyDeclarationQueryResult =
+                    await _mediator.SendAsync(new GetLevyDeclarationQuery {Id = message.Content.Id});
                 
+                
+
+
                 /*
                  TODO
                  Add call to do the command    RefreshEmployerLevyDataCommand

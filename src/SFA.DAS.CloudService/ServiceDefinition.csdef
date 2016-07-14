@@ -27,5 +27,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
+    <LocalResources>
+    </LocalResources>
   </WorkerRole>
 </ServiceDefinition>

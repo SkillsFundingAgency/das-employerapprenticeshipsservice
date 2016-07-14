@@ -9,6 +9,9 @@ using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
+using SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution;
+using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
+using StructureMap;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker
 {
@@ -16,6 +19,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private IContainer _container;
 
         public override void Run()
         {
@@ -38,6 +42,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
 
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
+            _container = new Container(new DefaultRegistry());
+            _container.AssertConfigurationIsValid();
 
             bool result = base.OnStart();
 
@@ -64,10 +70,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
             while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working");
-                /*
-                 TODO
-                 This needs to call the LevyDeclaration
-            */
+                var levyDeclaration =   _container.GetInstance<ILevyDeclaration>();
+                await levyDeclaration.Handle();
                 await Task.Delay(1000);
             }
         }

@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         private const string DeclarationDataFileName = "declaration_{0}";
         private const string EnglishFractionsDataFileName = "english_fractions_{0}";
 
-        public LevyDeclarationFileBasedService() : base("levy_data")
+        public LevyDeclarationFileBasedService(string rootPath) : base(rootPath, "levy_data")
         {
 
         }
