@@ -115,7 +115,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.ActivityDate.Month));
             Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.ActivityDate.Year));
             Assert.That(aggregateLine.LevyItemType, Is.EqualTo(sourceItem.LevyItemType));
-            Assert.That(aggregateLine.Amount, Is.EqualTo(sourceItem.Amount));
+            Assert.That(aggregateLine.Amount, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
             Assert.That(aggregateLine.Balance, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
         }
 
@@ -199,7 +199,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.ActivityDate.Month));
             Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.ActivityDate.Year));
             Assert.That(aggregateLine.LevyItemType, Is.EqualTo(sourceItem.LevyItemType));
-            Assert.That(aggregateLine.Amount, Is.EqualTo(sourceItem.Amount));
+            Assert.That(aggregateLine.Amount, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
             Assert.That(aggregateLine.Balance, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
         }
 

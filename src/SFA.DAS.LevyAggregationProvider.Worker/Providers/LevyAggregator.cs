@@ -9,10 +9,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     {
         public DestinationData BuildAggregate(SourceData input)
         {
-            var clone = Clone(input.Data);
-
-            //Build aggregate structures
-            var aggregates = BuildAggregate(input.Data);
+            var aggregates = DoWork(input.Data);
 
             return new DestinationData
             {
@@ -21,7 +18,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             };
         }
 
-        private List<AggregationLine> BuildAggregate(List<SourceDataItem> source)
+        private List<AggregationLine> DoWork(List<SourceDataItem> source)
         {
             var output = new List<AggregationLine>();
 
@@ -51,6 +48,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 }
                 else
                 {
+                    existing.Amount += item.Amount;
                     existing.Balance = balance;
                     existing.Items.Add(MapFrom(item));
                 }
