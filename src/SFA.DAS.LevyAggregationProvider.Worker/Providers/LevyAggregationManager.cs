@@ -22,11 +22,15 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         {
             var sourceData = await _levyDeclarationReader.GetData(empRef);
 
+            if (sourceData.AccountId == 0)
+                return;
+
             var aggregator = new LevyAggregator();
 
             var destinationData = aggregator.BuildAggregate(sourceData);
 
-            await _levyAggregationWriter.UpdateAsync(destinationData);
+            if (destinationData != null)
+                await _levyAggregationWriter.UpdateAsync(destinationData);
         }
     }
 }

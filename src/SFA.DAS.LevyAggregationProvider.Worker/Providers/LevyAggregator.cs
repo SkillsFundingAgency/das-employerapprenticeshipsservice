@@ -9,6 +9,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     {
         public AggregationData BuildAggregate(SourceData input)
         {
+            if (input == null)
+                return null;
+
             var aggregates = DoWork(input.Data);
 
             return new AggregationData
