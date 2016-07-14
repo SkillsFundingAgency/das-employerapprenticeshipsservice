@@ -1,18 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.LevyAggregationProvider.Worker.Model;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public class LevyDeclarationReader : ILevyDeclarationReader
     {
-        public async Task<SourceData> GetData(string empRef)
+        private readonly IAccountRepository _accountRepository;
+
+        public LevyDeclarationReader(IAccountRepository accountRepository)
         {
-            //Get Account that empRef is associated with
+            if (accountRepository == null)
+                throw new ArgumentNullException(nameof(accountRepository));
+            _accountRepository = accountRepository;
+        }
 
-            //Get data for the Account
+        public async Task<SourceData> GetData(int accountId)
+        {
+            //TODO: Get data for the Account
+            //_accountRepository
 
-            return new SourceData();
+            //TODO: Convert stored data into format required by Aggregator
+            return new SourceData
+            {
+                AccountId = accountId,
+                Data = new List<SourceDataItem>()
+            };
         }
     }
 }

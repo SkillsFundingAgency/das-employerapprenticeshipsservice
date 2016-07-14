@@ -57,6 +57,7 @@
     <Compile Include="AggregationData.cs" />
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
+    <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAggregationRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IRepository.cs" />

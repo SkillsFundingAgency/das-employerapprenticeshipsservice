@@ -69,10 +69,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
-                //TODO: Replace with queue process stuff
-                var empref = "";
-
-                await manager.Process(empref);
+                await manager.Process();
 
                 Trace.TraceInformation("Working");
                 await Task.Delay(1000);

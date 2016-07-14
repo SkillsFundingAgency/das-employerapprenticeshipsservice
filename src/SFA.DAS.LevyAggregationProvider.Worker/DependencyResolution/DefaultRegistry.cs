@@ -8,6 +8,7 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
+using SFA.DAS.Messaging;
 using StructureMap;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
@@ -59,6 +60,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
                                           "UseDevelopmentStorage=true";
 
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
 
             For<ILevyDeclarationReader>().Use<LevyDeclarationReader>();
             For<ILevyAggregationWriter>().Use<LevyAggregationWriter>();

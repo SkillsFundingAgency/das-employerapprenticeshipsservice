@@ -5,6 +5,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public interface ILevyDeclarationReader
     {
-        Task<SourceData> GetData(string empRef);
+        Task<SourceData> GetData(int accountId);
     }
 }
