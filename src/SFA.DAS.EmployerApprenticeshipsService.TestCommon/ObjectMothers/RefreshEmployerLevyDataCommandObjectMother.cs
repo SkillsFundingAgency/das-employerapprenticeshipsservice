@@ -14,7 +14,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
         {
 
             var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
-            {
+            {employerId = 1,
+                EmployerLevyData = new List<EmployerLevyData> {
+                    new EmployerLevyData
+                {
                 EmpRef = empRef,
                 Declarations = new DasDeclarations
                 {
@@ -40,6 +43,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                     Id = "1",
                     DateCalculated = DateTime.UtcNow
                 }
+                }
+               }
+
             };
 
 

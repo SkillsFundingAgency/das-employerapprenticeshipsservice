@@ -45,9 +45,9 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             IConfigurationRepository configurationRepository;
 
 
-        
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            
+
+            configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+
 
             var configurationService = new ConfigurationService(
                 configurationRepository,
@@ -57,7 +57,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
             //TODO add config service and use Azure service bus queue instead
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\GetEmployerLevyQueue"));
+            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
             For<ILevyDeclaration>().Use<LevyDeclaration>();
             var rootDir = Path.Combine(Environment.GetEnvironmentVariable("RoleRoot") + @"\", @"approot\TEMP\");
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>().Ctor<string>().Is(rootDir);
@@ -68,6 +69,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IEmployerSchemesRepository>().Use<EmployerSchemesRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+
             For<IMediator>().Use<Mediator>();
         }
 

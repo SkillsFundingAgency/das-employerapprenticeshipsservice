@@ -25,5 +25,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateEmployerFraction(DasEnglishFractions fractions)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
