@@ -56,9 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
+    <Compile Include="Queries\GetLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
+    <Compile Include="Queries\GetLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
   </ItemGroup>
@@ -74,10 +76,12 @@
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+      <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\GetLevyDeclarationTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

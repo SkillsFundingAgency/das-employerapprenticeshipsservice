@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using NLog;
+﻿using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using StructureMap.Configuration.DSL;
-using StructureMap.Pipeline;
+using StructureMap.Graph;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
 {
@@ -17,8 +13,18 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
 
         public DefaultRegistry()
         {
-            For<IPollingMessageReceiver>().Use(()=>new Messaging.FileSystem.FileSystemMessageService(""));
+            Scan(scan =>
+            {
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService")
+                    && !a.GetName().Name.Equals("SFA.DAS.EmployerApprenticeshipsService.Infrastructure"));
+                scan.RegisterConcreteTypesAgainstTheFirstInterface();
+            });
+
+            //TODO add config service and use Azure service bus queue instead
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
             For<ILevyDeclaration>().Use<LevyDeclaration>();
+
+            For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
 
             AddMediatrRegistrations();
         }
@@ -27,9 +33,9 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
         {
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-            
+
             For<IMediator>().Use<Mediator>();
         }
     }
-    
+
 }
