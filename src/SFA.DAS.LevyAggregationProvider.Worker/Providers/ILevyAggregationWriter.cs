@@ -1,9 +1,11 @@
-﻿using SFA.DAS.LevyAggregationProvider.Worker.Model;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public interface ILevyAggregationWriter
     {
-        void Update(DestinationData data);
+        Task UpdateAsync(AggregationData data);
+        Task<AggregationData> GetAsync(int accountId, int pageNumber);
     }
 }

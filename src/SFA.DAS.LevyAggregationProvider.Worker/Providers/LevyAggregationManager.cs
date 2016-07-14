@@ -26,7 +26,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             var destinationData = aggregator.BuildAggregate(sourceData);
 
-            _levyAggregationWriter.Update(destinationData);
+            await _levyAggregationWriter.UpdateAsync(destinationData);
         }
     }
 }

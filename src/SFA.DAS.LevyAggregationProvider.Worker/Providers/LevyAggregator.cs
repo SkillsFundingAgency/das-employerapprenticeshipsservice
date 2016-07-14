@@ -1,17 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.LevyAggregationProvider.Worker.Model;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public class LevyAggregator
     {
-        public DestinationData BuildAggregate(SourceData input)
+        public AggregationData BuildAggregate(SourceData input)
         {
             var aggregates = DoWork(input.Data);
 
-            return new DestinationData
+            return new AggregationData
             {
                 AccountId = input.AccountId,
                 Data = aggregates
@@ -67,13 +67,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 Amount = item.Amount,
                 LevyItemType = item.LevyItemType
             };
-        }
-
-        private List<SourceDataItem> Clone(List<SourceDataItem> source)
-        {
-            var json = JsonConvert.SerializeObject(source);
-
-            return JsonConvert.DeserializeObject<List<SourceDataItem>>(json);
         }
     }
 }

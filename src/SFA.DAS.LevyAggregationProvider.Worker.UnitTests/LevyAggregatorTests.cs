@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.LevyAggregationProvider.Worker.Model;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 

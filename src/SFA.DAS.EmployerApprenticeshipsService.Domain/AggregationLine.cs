@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.Model
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
     public class AggregationLine
     {

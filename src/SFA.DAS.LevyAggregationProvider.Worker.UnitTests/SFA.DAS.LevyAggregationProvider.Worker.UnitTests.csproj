@@ -51,6 +51,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.LevyAggregationProvider.Worker.csproj">
       <Project>{C1AB252E-8041-41CC-B192-CF543F4AEB13}</Project>
       <Name>SFA.DAS.LevyAggregationProvider.Worker</Name>

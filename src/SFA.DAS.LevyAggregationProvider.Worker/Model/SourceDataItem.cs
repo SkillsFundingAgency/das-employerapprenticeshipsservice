@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Model
 {

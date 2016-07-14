@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 using StructureMap;
 
@@ -22,6 +24,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
 
+            For<IAggregationRepository>().Use<LevyAggregationRepository>();
             For<ILevyDeclarationReader>().Use<LevyDeclarationReader>();
             For<ILevyAggregationWriter>().Use<LevyAggregationWriter>();
 

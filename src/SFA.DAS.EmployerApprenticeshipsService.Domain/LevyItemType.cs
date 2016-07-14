@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.LevyAggregationProvider.Worker.Model
+﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
     public enum LevyItemType
     {

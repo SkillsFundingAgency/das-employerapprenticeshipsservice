@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.Model
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
-    public class DestinationData
+    public class AggregationData
     {
         public int AccountId { get; set; }
 
