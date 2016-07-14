@@ -18,20 +18,19 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute()]
-    public partial class FakeLandingPageFeature
+    public partial class GeneralBrowsingFeature
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "FakeLandingPage.feature"
+#line 1 "GeneralBrowsing.feature"
 #line hidden
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.ClassInitializeAttribute()]
         public static void FeatureSetup(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext testContext)
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner(null, 0);
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "FakeLandingPage", "\tAs a AML User\r\n\tI want\tto be able to choose the user i\'m logged in as\r\n\tSo that\t" +
-                    "i can use the system", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "General Browsing", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -46,9 +45,9 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features
         public virtual void TestInitialize()
         {
             if (((testRunner.FeatureContext != null) 
-                        && (testRunner.FeatureContext.FeatureInfo.Title != "FakeLandingPage")))
+                        && (testRunner.FeatureContext.FeatureInfo.Title != "General Browsing")))
             {
-                SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features.FakeLandingPageFeature.FeatureSetup(null);
+                SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features.GeneralBrowsingFeature.FeatureSetup(null);
             }
         }
         
@@ -69,34 +68,18 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Second Page")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FakeLandingPage")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Sprint1")]
-        public virtual void BrowseSecondPage()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Proof")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "General Browsing")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Proof")]
+        public virtual void Proof()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Second Page", new string[] {
-                        "Sprint1"});
-#line 11
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Proof", new string[] {
+                        "Proof"});
+#line 8
 this.ScenarioSetup(scenarioInfo);
-#line 12
- testRunner.Given("I Navigated to 2nd Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 13
- testRunner.Then("Browser can be closed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Landing Page")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FakeLandingPage")]
-        public virtual void BrowseLandingPage()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Landing Page", ((string[])(null)));
-#line 15
-this.ScenarioSetup(scenarioInfo);
-#line 16
- testRunner.Given("I have Navigated to Landing Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 17
+#line 9
+ testRunner.Given("I Navigated to URL \"https://www.test-direct.com/\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 10
  testRunner.Then("Browser can be closed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

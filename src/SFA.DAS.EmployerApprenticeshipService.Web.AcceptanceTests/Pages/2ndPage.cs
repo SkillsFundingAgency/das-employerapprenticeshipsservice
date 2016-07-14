@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Pages
 {
-    public class HomePage:BasePage
+    public class _2ndPage:BasePage
     {
-        public string HomepageAddress = HomePage.BaseUrl + "/";
+        public string Url = _2ndPage.BaseUrl + "/second";
     }
 }

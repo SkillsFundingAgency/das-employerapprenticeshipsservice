@@ -108,17 +108,30 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FakeLandingPage.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\GeneralBrowsing.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneralBrowsing.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\2ndPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Setup\CoreSettings.cs" />
     <Compile Include="Shared\BasePage.cs" />
+    <Compile Include="Steps\FakeLandingPageSteps.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Features\FakeLandingPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>FakeLandingPage.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\GeneralBrowsing.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GeneralBrowsing.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
@@ -131,9 +144,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Steps\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

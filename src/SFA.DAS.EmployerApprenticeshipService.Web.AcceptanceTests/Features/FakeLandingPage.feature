@@ -1,11 +1,17 @@
 ﻿Feature: FakeLandingPage
-	In order to avoid silly mistakes
-	As a math idiot
-	I want to be told the sum of two numbers
+	As a AML User
+	I want	to be able to choose the user i'm logged in as
+	So that	i can use the system
 
-@mytag
-Scenario: Add two numbers
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+#NOTE This is a FAKE landing page that 
+#enables to use of the "Create Employer Account" and "View Transactions" epics while we are waiting for 
+#light registration integration. 
+
+@Sprint1
+Scenario: Browse Second Page	
+	Given I Navigated to 2nd Page
+	Then Browser can be closed
+
+Scenario: Browse Landing Page	
+	Given I have Navigated to Landing Page
+	Then Browser can be closed
