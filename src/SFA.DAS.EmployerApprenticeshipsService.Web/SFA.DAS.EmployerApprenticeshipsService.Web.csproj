@@ -340,7 +340,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <None Include="Views\Home\FakeUserSignIn.cshtml" />
+    <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
