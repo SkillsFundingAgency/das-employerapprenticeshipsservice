@@ -60,7 +60,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
                                           "UseDevelopmentStorage=true";
 
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
+
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
 
             For<IMediator>().Use<Mediator>();
         }
