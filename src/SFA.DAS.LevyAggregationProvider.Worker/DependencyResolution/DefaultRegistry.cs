@@ -62,9 +62,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
             For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\Queue"));
 
-            For<ILevyDeclarationReader>().Use<LevyDeclarationReader>();
-            For<ILevyAggregationWriter>().Use<LevyAggregationWriter>();
-
             For<IMediator>().Use<Mediator>();
         }
     }

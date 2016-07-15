@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.LevyAggregationProvider.Worker.Commands;
+using SFA.DAS.LevyAggregationProvider.Worker.Commands.CreateLevyAggregation;
+using SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
@@ -8,40 +12,39 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     public class LevyAggregationManager
     {
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
-        private readonly ILevyDeclarationReader _levyDeclarationReader;
-        private readonly ILevyAggregationWriter _levyAggregationWriter;
+        private readonly IMediator _mediator;
 
-        public LevyAggregationManager(IPollingMessageReceiver pollingMessageReceiver, ILevyDeclarationReader levyDeclarationReader, ILevyAggregationWriter levyAggregationWriter)
+        public LevyAggregationManager(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator)
         {
             if (pollingMessageReceiver == null)
                 throw new ArgumentNullException(nameof(pollingMessageReceiver));
-            if (levyDeclarationReader == null)
-                throw new ArgumentNullException(nameof(levyDeclarationReader));
-            if (levyAggregationWriter == null)
-                throw new ArgumentNullException(nameof(levyAggregationWriter));
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
             _pollingMessageReceiver = pollingMessageReceiver;
-            _levyDeclarationReader = levyDeclarationReader;
-            _levyAggregationWriter = levyAggregationWriter;
+            _mediator = mediator;
         }
 
         public async Task Process()
         {
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyAggregationQueueMessage>();
 
-            if (message.Content.AccountId == 0)
+            if (message?.Content == null || message.Content.AccountId == 0)
                 return;
 
-            var sourceData = await _levyDeclarationReader.GetData(message.Content.AccountId);
-
-            if (sourceData.AccountId == 0)
-                return;
+            var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
+            {
+                AccountId = message.Content.AccountId
+            });
 
             var aggregator = new LevyAggregator();
 
-            var destinationData = aggregator.BuildAggregate(sourceData);
+            var destinationData = aggregator.BuildAggregate(response.Data);
 
             if (destinationData != null)
-                await _levyAggregationWriter.UpdateAsync(destinationData);
+                await _mediator.SendAsync(new CreateLevyAggregationCommand
+                {
+                    Data = destinationData
+                });
         }
     }
 }

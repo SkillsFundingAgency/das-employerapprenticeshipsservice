@@ -108,16 +108,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
+    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="Model\SourceData.cs" />
     <Compile Include="Model\SourceDataItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\ILevyAggregationWriter.cs" />
-    <Compile Include="Providers\ILevyDeclarationReader.cs" />
-    <Compile Include="Providers\LevyAggregationWriter.cs" />
     <Compile Include="Providers\LevyAggregator.cs" />
     <Compile Include="Providers\LevyAggregationManager.cs" />
-    <Compile Include="Providers\LevyDeclarationReader.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +139,7 @@
       <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
