@@ -71,9 +71,11 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
-    <None Include="SeedData\DevDataFloyd.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SFA.DAS.EmployerApprenticeshipsService.Database.publish.xml" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
+  </PropertyGroup>
 </Project>
