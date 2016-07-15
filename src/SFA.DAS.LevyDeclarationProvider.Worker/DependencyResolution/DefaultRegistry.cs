@@ -30,14 +30,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             }
             Scan(scan =>
             {
-                scan.WithDefaultConventions();
+               // scan.WithDefaultConventions();
 
                 scan.AssemblyContainingType<GetLevyDeclarationQuery>();
-                scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
-                scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
-                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>));
+//                scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
+//                scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
+//                scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
+//                scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
+//                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>));
             });
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
