@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
             return new TransactionViewResult
             {
-                Account = null,
+                Account = employerAccountResult.Account,
                 Model = new TransactionViewModel
                 {
                     Data = data.Data
