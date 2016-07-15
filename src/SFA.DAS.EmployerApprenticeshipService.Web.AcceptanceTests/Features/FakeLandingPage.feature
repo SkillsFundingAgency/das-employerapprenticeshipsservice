@@ -8,10 +8,7 @@
 #light registration integration. 
 
 @Sprint1
-Scenario: Browse Second Page	
-	Given I Navigated to 2nd Page
-	Then Browser can be closed
-
 Scenario: Browse Landing Page	
 	Given I have Navigated to Landing Page
-	Then Browser can be closed
+	When I wait "3" seconds until "SelectedUserId" found by "Name" is displayed
+	#Then Browser can be closed

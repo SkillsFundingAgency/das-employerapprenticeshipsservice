@@ -1,7 +1,9 @@
 ﻿using SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Pages;
 using SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Shared;
 using System;
+using OpenQA.Selenium;
 using TechTalk.SpecFlow;
+using OpenQA.Selenium.Support.UI;
 
 namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
 {
@@ -10,6 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
     {
         BasePage TestPage = new BasePage();
         _2ndPage Test_2ndPage = new _2ndPage();
+        
 
         [Given(@"I have Navigated to Landing Page")]
         [When(@"I have Navigated to Landing Page")]
@@ -35,8 +38,6 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
         {
             Test_2ndPage.NavigateSpecificUrl(Test_2ndPage.Url);
         }
-
-
 
         [Given(@"I Check for ""(.*)"" found by ""(.*)"" it will read ""(.*)""")]
         [When(@"I Check for ""(.*)"" found by ""(.*)"" it will read ""(.*)""")]
@@ -78,6 +79,13 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
             TestPage.CloseBrowser();
         }
 
+        [Given(@"I wait ""(.*)"" seconds until ""(.*)"" found by ""(.*)"" is displayed")]
+        [When(@"I wait ""(.*)"" seconds until ""(.*)"" found by ""(.*)"" is displayed")]
+        [Then(@"I wait ""(.*)"" seconds until ""(.*)"" found by ""(.*)"" is displayed")]
+        public void WhenIWaitSecondsUntilFoundByIsDisplayed(int Time, string element, string selector)
+        {
+            TestPage.WaitForUntil(Time, element, selector);
+        }
 
 
 

@@ -177,7 +177,7 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Setup
         }
         #endregion
 
-            #region Check Current Page Title
+        #region Check Current Page Title
         public void CheckCurrentPageTitle(string Title)
         {
             try
@@ -229,10 +229,42 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Setup
 
         #endregion
         #region Waiting
-        public void WaitForUntil(int Time,string element)
+        public void WaitForUntil(int Time,string element, string selector)
         {
-            WebDriverWait wait = new WebDriverWait(Browser, TimeSpan.FromSeconds(Time));
-            var elementNowVisible = wait.Until(ExpectedConditions.ElementIsVisible(By.Name(element)));
+            try
+            {
+                if (selector=="Name")
+                {
+                    WebDriverWait wait = new WebDriverWait(Browser, TimeSpan.FromSeconds(Time));
+                    var elementNowVisible = wait.Until(ExpectedConditions.ElementIsVisible(By.Name(element)));
+                }
+
+                else if (selector == "Id")
+                {
+                    WebDriverWait wait = new WebDriverWait(Browser, TimeSpan.FromSeconds(Time));
+                    var elementNowVisible = wait.Until(ExpectedConditions.ElementIsVisible(By.Id(element)));
+                }
+
+                else if (selector == "Css")
+                {
+                    WebDriverWait wait = new WebDriverWait(Browser, TimeSpan.FromSeconds(Time));
+                    var elementNowVisible = wait.Until(ExpectedConditions.ElementIsVisible(By.CssSelector(element)));
+                }
+
+                else if (selector == "Xpath")
+                {
+                    WebDriverWait wait = new WebDriverWait(Browser, TimeSpan.FromSeconds(Time));
+                    var elementNowVisible = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(element)));
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            
         }
         #endregion
 

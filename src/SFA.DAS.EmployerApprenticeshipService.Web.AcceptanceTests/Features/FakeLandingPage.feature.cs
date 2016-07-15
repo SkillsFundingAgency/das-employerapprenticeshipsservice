@@ -69,35 +69,19 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Second Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Landing Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FakeLandingPage")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Sprint1")]
-        public virtual void BrowseSecondPage()
+        public virtual void BrowseLandingPage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Second Page", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Landing Page", new string[] {
                         "Sprint1"});
 #line 11
 this.ScenarioSetup(scenarioInfo);
 #line 12
- testRunner.Given("I Navigated to 2nd Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 13
- testRunner.Then("Browser can be closed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Landing Page")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FakeLandingPage")]
-        public virtual void BrowseLandingPage()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Landing Page", ((string[])(null)));
-#line 15
-this.ScenarioSetup(scenarioInfo);
-#line 16
  testRunner.Given("I have Navigated to Landing Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 17
- testRunner.Then("Browser can be closed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 13
+ testRunner.When("I wait \"3\" seconds until \"SelectedUserId\" found by \"Name\" is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             this.ScenarioCleanup();
         }
