@@ -26,25 +26,28 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         public async Task Process()
         {
-            var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
-
-            if (message?.Content == null || message.Content.AccountId == 0)
-                return;
-
-            var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
+            while (true)
             {
-                AccountId = message.Content.AccountId
-            });
+                var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
-            var aggregator = new LevyAggregator();
+                if (message?.Content == null || message.Content.AccountId == 0)
+                    return;
 
-            var destinationData = aggregator.BuildAggregate(response.Data);
-
-            if (destinationData != null)
-                await _mediator.SendAsync(new CreateLevyAggregationCommand
+                var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
                 {
-                    Data = destinationData
+                    AccountId = message.Content.AccountId
                 });
+
+                var aggregator = new LevyAggregator();
+
+                var destinationData = aggregator.BuildAggregate(response.Data);
+
+                if (destinationData != null)
+                    await _mediator.SendAsync(new CreateLevyAggregationCommand
+                    {
+                        Data = destinationData
+                    });
+            }
         }
     }
 }

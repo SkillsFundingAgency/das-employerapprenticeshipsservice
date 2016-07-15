@@ -9,13 +9,13 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration
 {
     public class GetLevyDeclarationQueryHandler : IAsyncRequestHandler<GetLevyDeclarationRequest, GetLevyDeclarationResponse>
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IDasLevyRepository _repository;
 
-        public GetLevyDeclarationQueryHandler(IAccountRepository accountRepository)
+        public GetLevyDeclarationQueryHandler(IDasLevyRepository repository)
         {
-            if (accountRepository == null)
-                throw new ArgumentNullException(nameof(accountRepository));
-            _accountRepository = accountRepository;
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository));
+            _repository = repository;
         }
 
         public async Task<GetLevyDeclarationResponse> Handle(GetLevyDeclarationRequest message)

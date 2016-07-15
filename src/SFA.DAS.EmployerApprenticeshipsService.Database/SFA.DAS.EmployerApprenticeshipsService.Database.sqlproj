@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
     <Folder Include="SeedData" />
     <Folder Include="StoredProcedures" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Account.sql" />
@@ -69,6 +70,7 @@
     <Build Include="Paye.sql" />
     <Build Include="LevyDeclaration.sql" />
     <Build Include="EnglishFraction.sql" />
+    <Build Include="Views\GetLevyDeclarations.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
