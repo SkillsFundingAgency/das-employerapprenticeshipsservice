@@ -26,12 +26,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 await connection.OpenAsync();
 
                 var sql = @"select a.* from [dbo].[Account] a where a.Id = @Id";
-                var account = connection.QueryFirst<Account>(sql, new { Id = id });
+                var account = await connection.QueryFirstOrDefaultAsync<Account>(sql, new { Id = id });
 
                 connection.Close();
-                return new Account { Id = account.Id, Name = account.Name};
+                 return account;
+                //return new Account { Id = account.Id, Name = account.Name};
             }
 
         }
     }
 }
+

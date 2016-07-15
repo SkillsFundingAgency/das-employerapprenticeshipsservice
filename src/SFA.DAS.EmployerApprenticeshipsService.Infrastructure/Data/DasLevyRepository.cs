@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             _connectionString = connectionString;
         }
 
-        public async  Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
+        public async Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var sql = @"select ld.* from  [dbo].[LevyDeclaration] ld where ld.empRef = @EmpRef and ld.SubmissionId = @Id";
                 var account = connection.QueryFirstOrDefault(sql, new { Id = id, EmpRef = empRef });
-                
+
                 connection.Close();
                 if (account == null)
                 {
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                         Date = account.SubmissionDate
                     };
                 }
-                
+
             }
 
         }
@@ -54,22 +54,52 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 await connection.OpenAsync();
                 var sql = @"insert into [dbo].LevyDeclaration (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) values (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType)";
-                
-                await connection.ExecuteAsync(sql, new {dasDeclaration.Amount, SubmissionDate = dasDeclaration.Date, SubmissionId = dasDeclaration.Id, EmpRef = empRef, dasDeclaration.SubmissionType});
+
+                await connection.ExecuteAsync(sql, new { dasDeclaration.Amount, SubmissionDate = dasDeclaration.Date, SubmissionId = dasDeclaration.Id, EmpRef = empRef, dasDeclaration.SubmissionType });
                 connection.Close();
             }
         }
 
-        public Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
+        public async Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var sql = @"select ef.* from  [dbo].[EnglishFraction] ef where ef.EmpRef = @EmpRef and ef.DateCalculated = @DateCalculated";
+                var fraction = connection.QueryFirstOrDefault(sql, new { DateCalculated = dateCalculated, EmpRef = empRef });
+
+                connection.Close();
+                if (fraction == null)
+                {
+                    return fraction;
+                }
+                else
+                {
+                    return new DasEnglishFractions
+                    {
+                        Amount = fraction.Amount,
+                        DateCalculated = fraction.DateCalculated
+                    };
+                }
+
+            }
+
         }
 
-        public Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
+        public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
         {
-            throw new NotImplementedException();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var sql = @"insert into [dbo].EnglishFraction (EmpRef, DateCalculated, Amount) values (@EmpRef, @DateCalculated, @Amount)";
+
+                await connection.ExecuteAsync(sql, new { fractions.Amount, EmpRef = empRef, fractions.DateCalculated });
+                connection.Close();
+            }
         }
 
-     
+
     }
 }
+
