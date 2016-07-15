@@ -68,15 +68,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
             //For<IExample>().Use<Example>();
 
-<<<<<<< HEAD
-            For<IUserRepository>().Use<FileSystemUserRepository>();
-            For<IUserAccountRepository>().Use<UserAccountRepository>();
-            For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>();
-			AddMediatrRegistrations();
-        }
-=======
             IConfigurationRepository configurationRepository;
->>>>>>> origin/AML-139_refresh_levy_declarations
+            
 
             if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
             {
@@ -95,7 +88,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
-
+<<<<<<< HEAD
+            For<ICookieService>().Use<HttpCookieService>();
+=======
+            For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+>>>>>>> master
             For<IUserRepository>().Use<FileSystemUserRepository>();
             For<IMediator>().Use<Mediator>();
         }
