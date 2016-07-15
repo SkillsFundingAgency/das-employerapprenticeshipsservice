@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\DasLevyRepository.cs" />
+    <Compile Include="Data\EmployerSchemesRepository.cs" />
+    <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\LevyAggregationRepository.cs" />

@@ -67,12 +67,14 @@
     <Build Include="Membership.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="Paye.sql" />
+    <Build Include="LevyDeclaration.sql" />
+    <Build Include="EnglishFraction.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
     <None Include="SeedData\DevDataFloyd.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SFA.DAS.EmployerApprenticeshipsService.Database.publish.xml" />
+    <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
   </ItemGroup>
 </Project>

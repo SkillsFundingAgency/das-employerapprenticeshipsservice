@@ -26,7 +26,11 @@
   <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
     </ConfigurationSettings>
+    <LocalResources>
+    </LocalResources>
   </WorkerRole>
   <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="Small">
     <ConfigurationSettings>

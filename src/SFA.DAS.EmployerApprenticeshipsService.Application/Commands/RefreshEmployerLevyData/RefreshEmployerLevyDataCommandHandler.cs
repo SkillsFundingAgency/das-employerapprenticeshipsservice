@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData
 {
@@ -9,11 +11,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
     {
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
+        private readonly IMessagePublisher _messagePublisher; 
 
-        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository)
+        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IMessagePublisher messagePublisher)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -24,17 +28,36 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
-
-
-            foreach (var dasDeclaration in message.Declarations.Declarations)
+            
+            bool sendLevyDataChanged = false; 
+            foreach (var employerLevyData in message.EmployerLevyData)
             {
-                var declaration = await _dasLevyRepository.GetEmployerDeclaration(dasDeclaration.Id, message.EmpRef);
-
-                if (declaration == null)
+                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations)
                 {
-                    await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration);
+                    var declaration = await _dasLevyRepository.GetEmployerDeclaration(dasDeclaration.Id, employerLevyData.EmpRef);
+
+                    if (declaration == null)
+                    {
+                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef);
+                        sendLevyDataChanged = true;
+                    }
+                }
+
+                var fraction = await _dasLevyRepository.GetEmployerFraction(employerLevyData.Fractions.DateCalculated, employerLevyData.EmpRef);
+
+                if (fraction == null)
+                {
+                    await _dasLevyRepository.CreateEmployerFraction(employerLevyData.Fractions, employerLevyData.EmpRef);
+                    sendLevyDataChanged = true;
                 }
             }
+
+            if (sendLevyDataChanged)
+            {
+                await _messagePublisher.PublishAsync(new EmployerRefreshLevyViewsQueueMessage {Id = message.EmployerId});
+            }
+
+
 
 
             /*

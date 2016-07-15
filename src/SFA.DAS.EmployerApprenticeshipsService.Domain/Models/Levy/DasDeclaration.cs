@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
         public decimal Amount { get; set; }
 
         public DateTime Date { get; set; }
+        public string SubmissionType { get; set; }
     }
 }

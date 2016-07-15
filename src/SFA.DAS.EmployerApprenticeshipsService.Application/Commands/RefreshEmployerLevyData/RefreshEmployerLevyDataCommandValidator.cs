@@ -11,8 +11,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
     {
         public ValidationResult Validate(RefreshEmployerLevyDataCommand item)
         {
-            //TODO
-            throw new NotImplementedException();
+            var validationResult = new ValidationResult();
+
+            return validationResult;
         }
     }
 }

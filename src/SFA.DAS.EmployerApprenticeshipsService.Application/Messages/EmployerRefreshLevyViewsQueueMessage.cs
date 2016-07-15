@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerApprenticeshipsService.Application.Messages
 {
-    public class EmployerRefreshLevyQueueMessage 
+    public class EmployerRefreshLevyViewsQueueMessage 
     {
         public int Id { get; set; }
     }

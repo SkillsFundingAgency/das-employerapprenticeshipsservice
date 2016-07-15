@@ -33,3 +33,11 @@ GO
 
 INSERT INTO [dbo].Membership (RoleId, UserId, AccountId) VALUES (1, 1, 1);
 
+
+INSERT INTO [dbo].[Paye] (AccountId, Ref) VALUES (1, '123-ab12345');
+INSERT INTO [dbo].[Paye] (AccountId, Ref) VALUES (1, '456-cd45678');
+
+
+Go
+
+

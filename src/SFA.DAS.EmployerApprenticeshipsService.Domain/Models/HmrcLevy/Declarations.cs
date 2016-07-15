@@ -20,7 +20,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
         public string submissionType { get; set; }
         public string submissionDate { get; set; }
         public PayrollMonth payrollMonth { get; set; }
-        public int amount { get; set; }
+        public decimal amount { get; set; }
+        public string submissionId { get; set; }
+    
     }
     
 }
