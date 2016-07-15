@@ -27,7 +27,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
             _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
                 ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile, 
-                new EmployerRefreshLevyQueueMessage { Id = ExpecetedEmpref }));
+                new EmployerRefreshLevyQueueMessage { AccountId = ExpecetedEmpref }));
             _messagePublisher = new Mock<IMessagePublisher>();
 
             _mediator = new Mock<IMediator>();
@@ -79,7 +79,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
         {
             //Arrange
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(It.IsAny<FileInfo>(), It.IsAny<FileInfo>(), new EmployerRefreshLevyQueueMessage{Id=0}));
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(It.IsAny<FileInfo>(), It.IsAny<FileInfo>(), new EmployerRefreshLevyQueueMessage{AccountId=0}));
 
             //Act
             await _levyDeclaration.Handle();

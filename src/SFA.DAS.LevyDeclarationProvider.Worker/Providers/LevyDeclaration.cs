@@ -33,7 +33,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
             if (message?.Content != null)
             {
 
-                var employerAccountId = message.Content.Id;
+                var employerAccountId = message.Content.AccountId;
 
                 var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = employerAccountId });
                 if (employerAccountResult?.Account == null) return;
