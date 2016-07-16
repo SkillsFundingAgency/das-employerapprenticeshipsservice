@@ -82,6 +82,8 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.Given("I have Navigated to Landing Page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 13
  testRunner.When("I wait \"3\" seconds until \"SelectedUserId\" found by \"Name\" is displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 14
+ testRunner.Then("Browser can be closed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -108,11 +108,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FakeLandingPage.feature</DependentUpon>
     </Compile>
-    <Compile Include="Features\GeneralBrowsing.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GeneralBrowsing.feature</DependentUpon>
-    </Compile>
     <Compile Include="Pages\2ndPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Setup\CoreSettings.cs" />
@@ -128,10 +123,6 @@
     <None Include="Features\FakeLandingPage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>FakeLandingPage.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Features\GeneralBrowsing.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GeneralBrowsing.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

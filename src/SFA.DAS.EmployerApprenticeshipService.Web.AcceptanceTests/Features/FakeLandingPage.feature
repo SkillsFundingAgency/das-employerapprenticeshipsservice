@@ -11,4 +11,4 @@
 Scenario: Browse Landing Page	
 	Given I have Navigated to Landing Page
 	When I wait "3" seconds until "SelectedUserId" found by "Name" is displayed
-	#Then Browser can be closed
+	Then Browser can be closed
