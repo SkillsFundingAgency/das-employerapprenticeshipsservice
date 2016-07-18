@@ -33,5 +33,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             return View(transactionViewResult.Model);
         }
+
+        public async Task<ActionResult> Detail(int accountId, string itemId)
+        {
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId);
+
+            if (transactionViewResult.Account == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (transactionViewResult.Model.LineItem == null)
+            {
+                return RedirectToAction("Index", "EmployerAccountTransactions", new {accountId = accountId});
+            }
+           
+            return View(transactionViewResult.Model);
+        }
     }
 }

@@ -22,6 +22,43 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, string lineItemId)
+        {
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = accountId });
+            if (employerAccountResult.Account == null)
+            {
+                return new TransactionLineItemViewResult();
+            }
+
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery { AccountId = accountId });
+            var latestLineItem = data.Data.Data.FirstOrDefault();
+            decimal currentBalance;
+            DateTime currentBalanceCalcultedOn;
+
+            if (latestLineItem != null)
+            {
+                currentBalance = latestLineItem.Balance;
+                currentBalanceCalcultedOn = new DateTime(latestLineItem.Year, latestLineItem.Month, 1);
+            }
+            else
+            {
+                currentBalance = 0;
+                currentBalanceCalcultedOn = DateTime.Today;
+            }
+
+            var selectedLineItem = data.Data.Data.FirstOrDefault(line => line.Id == lineItemId);
+            return new TransactionLineItemViewResult
+            {
+                Account = employerAccountResult.Account,
+                Model = new TransactionLineItemViewModel
+                {
+                    CurrentBalance = currentBalance,
+                    CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
+                    LineItem = selectedLineItem
+                }
+            };
+        }
+
         public async Task<TransactionViewResult> GetAccountTransactions(int accountId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery {Id = accountId});
@@ -62,6 +99,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             return data;
         }
+    }
+
+    public class TransactionLineItemViewResult
+    {
+        public Account Account   { get; set; }
+        public TransactionLineItemViewModel Model { get; set; }
+    }
+
+    public class TransactionLineItemViewModel
+    {
+        public AggregationLine LineItem { get; set; }
+        public decimal CurrentBalance { get; set; }
+        public DateTime CurrentBalanceCalcultedOn { get; set; }
     }
 
     public class TransactionViewResult

@@ -31,9 +31,9 @@
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Description</th>
-                        <th scope="col" style="text-align: center">Credit</th>
-                        <th class="" scope="col" style="text-align: center">Debit</th>
-                        <th class="" scope="col" style="text-align: center">Balance</th>
+                        <th scope="col">Credit</th>
+                        <th class="" scope="col">Debit</th>
+                        <th class="" scope="col">Balance</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
@@ -43,7 +43,7 @@
 
                         <tr>
                             <td>@{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date</td>
-                            <td>@aggregationLine.LevyItemType</td>
+                            <td>Levy Credit</td>
                             <td>
                                 @{
                                     var credit = aggregationLine.Amount > (decimal) 0.0 ? aggregationLine.Amount : (decimal) 0.0;
@@ -57,7 +57,7 @@
                                 @debit
                             </td>
                             <td>@aggregationLine.Balance</td>
-                            <td></td>
+                            <td><a href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a></td>
 
                         </tr>
                     }

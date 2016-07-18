@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.LevyAggregationProvider.Worker.Model;
@@ -42,6 +43,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                         LevyItemType = item.LevyItemType,
                         Amount = item.Amount,
                         Balance = balance,
+                        Id = Guid.NewGuid().ToString(),
                         Items = new List<AggregationLineItem>
                         {
                             MapFrom(item)

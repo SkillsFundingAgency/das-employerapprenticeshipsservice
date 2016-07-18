@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
         public List<AggregationLineItem> Items { get; set; }
+        public string Id { get; set; }
     }
 }
