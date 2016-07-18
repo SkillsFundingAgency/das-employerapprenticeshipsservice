@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.LevyAggregationProvider.Worker.Model;
 
@@ -20,18 +22,48 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration
 
         public async Task<GetLevyDeclarationResponse> Handle(GetLevyDeclarationRequest message)
         {
-            //TODO: Get data for the Account
-            //_accountRepository
+            var declarations = await _repository.GetAccountLevyDeclarations(message.AccountId);
 
-            //TODO: Convert stored data into format required by Aggregator
             return new GetLevyDeclarationResponse
             { 
                 Data = new SourceData
                 {
                     AccountId = message.AccountId,
-                    Data = new List<SourceDataItem>()
+                    Data = declarations.Select(item => new SourceDataItem
+                    {
+                        Id = item.Id,
+                        EmpRef = item.EmpRef,
+                        ActivityDate = item.SubmissionDate,
+                        Amount = item.Amount,
+                        LevyItemType = GetLevyItemType(item.SubmissionType)
+                    }).ToList()
                 }
             };
+        }
+
+        private List<SourceDataItem> MapFrom(List<LevyDeclarationView> source)
+        {
+            return source.Select(item => new SourceDataItem
+            {
+                Id = item.Id,
+                EmpRef = item.EmpRef,
+                ActivityDate = item.SubmissionDate,
+                Amount = item.Amount,
+                LevyItemType = GetLevyItemType(item.SubmissionType)
+            }).ToList();
+        }
+
+        private LevyItemType GetLevyItemType(string input)
+        {
+            switch (input)
+            {
+                case "Levy":
+                    return LevyItemType.Declaration;
+                case "TopUp":
+                    return LevyItemType.TopUp;
+                default:
+                    return LevyItemType.Unknown;
+            }
         }
     }
 }

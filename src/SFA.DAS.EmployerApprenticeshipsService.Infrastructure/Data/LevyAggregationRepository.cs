@@ -11,11 +11,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
     {
         private readonly CloudStorageAccount _storageAccount;
 
-        public LevyAggregationRepository() 
-            : this(CloudConfigurationManager.GetSetting("StorageConnectionString"))
-        {
+        //public LevyAggregationRepository() 
+        //    : this(CloudConfigurationManager.GetSetting("StorageConnectionString"))
+        //{
             
-        }
+        //}
 
         public LevyAggregationRepository(string storageConnectionString)
         {

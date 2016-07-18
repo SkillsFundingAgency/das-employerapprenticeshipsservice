@@ -30,7 +30,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             }
             Scan(scan =>
             {
-                scan.WithDefaultConventions();
+                //scan.WithDefaultConventions();
 
                 scan.AssemblyContainingType<GetLevyDeclarationQuery>();
                 scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));

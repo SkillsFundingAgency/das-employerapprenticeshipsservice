@@ -30,8 +30,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
                 scan =>
                 {
                     scan.WithDefaultConventions();
-                    //scan.AssemblyContainingType<IEmployerVerificationService>();
-                    //scan.AssemblyContainingType<GetUsersQuery>();
+                    scan.AssemblyContainingType<LevyAggregator>();
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
@@ -59,7 +58,10 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
                                           "UseDevelopmentStorage=true";
 
+            var config = configurationService.Get<LevyAggregationConfiguration>();
+
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
+            For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 
             For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
 

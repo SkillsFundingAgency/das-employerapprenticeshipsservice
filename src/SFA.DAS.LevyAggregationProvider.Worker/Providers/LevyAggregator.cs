@@ -68,6 +68,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 EmpRef = item.EmpRef,
                 ActivityDate = item.ActivityDate,
                 Amount = item.Amount,
+                EnglishFraction = item.EnglishFraction,
                 LevyItemType = item.LevyItemType
             };
         }
