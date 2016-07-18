@@ -56,6 +56,8 @@
     <Compile Include="Accounts.cs" />
     <Compile Include="AggregationData.cs" />
     <Compile Include="AggregationLine.cs" />
+    <Compile Include="Data\BaseRepository.cs" />
+    <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Data\IAggregationRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
@@ -68,6 +70,8 @@
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="LevyDeclarationView.cs" />
+    <Compile Include="Membership.cs" />
+    <Compile Include="Paye.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />

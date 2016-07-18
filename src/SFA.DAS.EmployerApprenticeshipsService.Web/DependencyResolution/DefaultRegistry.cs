@@ -89,6 +89,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+            For<IAccountRepository>().Use<AccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+            For<ICookieService>().Use<HttpCookieService>();
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");

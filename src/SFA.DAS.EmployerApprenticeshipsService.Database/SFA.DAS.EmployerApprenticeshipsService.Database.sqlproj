@@ -68,6 +68,7 @@
     <Build Include="Membership.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="Paye.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="LevyDeclaration.sql" />
     <Build Include="EnglishFraction.sql" />
     <Build Include="Views\GetLevyDeclarations.sql" />
@@ -79,4 +80,7 @@
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
   </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent />
+  </PropertyGroup>
 </Project>
