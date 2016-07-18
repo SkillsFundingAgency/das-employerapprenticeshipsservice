@@ -1,0 +1,14 @@
+﻿{
+  "Data": [
+    {
+      "Email": "daniel.ashton@test.local",
+      "Password": "1234567890",
+      "EmpRef": "123/QWERTY"
+    },
+    {
+      "Email": "ian.russell@test.local",
+      "Password": "1234567890",
+      "EmpRef": "987/ASDFGH"
+    }
+  ]
+}

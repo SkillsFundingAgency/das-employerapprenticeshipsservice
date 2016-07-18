@@ -13,12 +13,13 @@
         <h2 class="heading-medium">@Model.CompanyName</h2>
         <p>@Model.RegisteredAddress</p>
         <h3 class="heading-small">Use @Model.CompanyName on your contract?</h3>
-        <form method="POST" action="@Url.Action("SelectEmployer")">
+        <form method="GET" action="@Url.Action("Gateway")">
             <button type="submit" class="button">Continue</button>
             <p></p>
         </form>
 
 
     </div>
+    <div style="margin-top:50px"></div>
 </div>
 

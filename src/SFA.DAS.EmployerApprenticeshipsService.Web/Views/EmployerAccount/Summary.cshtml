@@ -1,0 +1,41 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SummaryViewModel
+
+<div class="grid-row">
+    <div class="column-half">
+        <h1 class="heading-xlarge">Summary</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>
+            Your company number <b>@Model.CompanyNumber</b> is associated with:
+        </p>
+        <h2 class="heading-medium">@Model.CompanyName</h2>
+        <p>@Model.RegisteredAddress</p>
+        <h2 class="heading-medium">@Model.EmployerRef</h2>
+        <h3 class="heading-small">Create an Account based on these details?</h3>
+        <form method="POST" action="@Url.Action("CreateAccount")">
+            <fieldset>
+                <div class="grid-row">
+                    <div class="column-one-quarter">
+                        <label class="block-label" for="radio1">
+                            <input id="radio1" type="radio" name="radio-group" value="yes">
+                            Yes
+                        </label>
+                    </div>
+                    <div class="column-one-quarter">
+                        <label class="block-label" for="radio2">
+                            <input id="radio2" type="radio" name="radio-group" value="no">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+            <button type="submit" class="button">Continue</button>
+            <p></p>
+        </form>
+
+
+    </div>
+    <div style="margin-top:50px"></div>
+</div>
