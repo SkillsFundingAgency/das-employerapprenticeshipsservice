@@ -69,12 +69,12 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Features
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Landing Page")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Browse Fake Landing Page")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "FakeLandingPage")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("Sprint1")]
-        public virtual void BrowseLandingPage()
+        public virtual void BrowseFakeLandingPage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Landing Page", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Browse Fake Landing Page", new string[] {
                         "Sprint1"});
 #line 11
 this.ScenarioSetup(scenarioInfo);
