@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.TransactionViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -11,9 +11,60 @@
         <div>
             <div class="home-figures">
                 <h2 class="heading-small">This is your current balance:</h2>
-                <h2 class="bold-xlarge" data-bind="text: displayBalance"></h2> <!--style="color:#08c"-->
-                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate"></span></p>
+                <h2 class="bold-xlarge" data-bind="text: displayBalance">@Model.CurrentBalance</h2> <!--style="color:#08c"-->
+                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToString("d MMM yyyy")</span></p>
             </div>
+        </div>
+        <div>
+            <h2 class="heading-medium">Transactions</h2>
+            @if (Model.Data.Data.Count == 0)
+            {
+                <p class="panel panel-info">
+                    No transaction data exists for this account, please try again later.
+                </p>
+            }
+            else
+            {
+                <table id="transactions">
+
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" style="text-align: center">Credit</th>
+                        <th class="" scope="col" style="text-align: center">Debit</th>
+                        <th class="" scope="col" style="text-align: center">Balance</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var aggregationLine in Model.Data.Data)
+                    {
+
+                        <tr>
+                            <td>@{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date</td>
+                            <td>@aggregationLine.LevyItemType</td>
+                            <td>
+                                @{
+                                    var credit = aggregationLine.Amount > (decimal) 0.0 ? aggregationLine.Amount : (decimal) 0.0;
+                                }
+                                @credit
+                            </td>
+                            <td>
+                                @{
+                                    var debit = aggregationLine.Amount <= (decimal)0.0 ? aggregationLine.Amount : (decimal)0.0;
+                                }
+                                @debit
+                            </td>
+                            <td>@aggregationLine.Balance</td>
+                            <td></td>
+
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            }
+            
         </div>
     </div>
 </div>

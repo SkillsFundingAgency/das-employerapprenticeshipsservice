@@ -7,6 +7,7 @@ using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
@@ -30,17 +31,42 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
 
             var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = accountId});
-            
+            var latestLineItem = data.Data.Data.FirstOrDefault();
+            decimal currentBalance;
+            DateTime currentBalanceCalcultedOn;
+
+            if (latestLineItem != null)
+            {
+                currentBalance = latestLineItem.Balance;
+                currentBalanceCalcultedOn = new DateTime(latestLineItem.Year, latestLineItem.Month, 1);
+            }
+            else
+            {
+                currentBalance = 0;
+                currentBalanceCalcultedOn = DateTime.Today;
+            }
             return new TransactionViewResult
             {
                 Account = employerAccountResult.Account,
                 Model = new TransactionViewModel
                 {
-                    Data = data.Data
+                    CurrentBalance = currentBalance,
+                    CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
+                    Data = this.SortDataForViewModel(data.Data)
                 }
                 
             };
             
+        }
+
+        private decimal CurrentBalanceForViewModel(AggregationData data)
+        {
+            throw new NotImplementedException();
+        }
+
+        private AggregationData SortDataForViewModel(AggregationData data)
+        {
+            return data;
         }
     }
 
@@ -48,10 +74,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     {
         public Account Account { get; set; }
         public TransactionViewModel Model { get; set; }
-    }
-
-    public class TransactionViewModel   
-    {
-        public AggregationData Data { get; set; }
     }
 }
