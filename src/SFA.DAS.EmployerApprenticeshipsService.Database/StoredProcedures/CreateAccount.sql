@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[CreateAccount]
+﻿
+
+CREATE PROCEDURE [dbo].[CreateAccount]
 (
 	@userRef UNIQUEIDENTIFIER,
 	@employerNumber NVARCHAR(50), 

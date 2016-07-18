@@ -18,18 +18,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("userRef", new Guid(userRef), DbType.Guid);
-                parameters.Add("employerNumber", employerNumber, DbType.String);
-                parameters.Add("employerName", employerName, DbType.String);
-                parameters.Add("employerRef", employerRef, DbType.String);
-                parameters.Add("accountId", null, DbType.String, ParameterDirection.Output);
+                parameters.Add("@userRef", new Guid(userRef), DbType.Guid);
+                parameters.Add("@employerNumber", employerNumber, DbType.String);
+                parameters.Add("@employerName", employerName, DbType.String);
+                parameters.Add("@employerRef", employerRef, DbType.String);
+                parameters.Add("@accountId", null, DbType.Int32, ParameterDirection.Output, 4);
 
                 await c.ExecuteAsync(
                     sql: "[dbo].[CreateAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
 
-                return parameters.Get<int>("accountId");
+                return parameters.Get<int>("@accountId");
             });
         }
     }
