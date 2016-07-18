@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public async Task<TransactionViewResult> GetAccountTransactions(int accountId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery {Id = accountId});
-            if (employerAccountResult == null)
+            if (employerAccountResult.Account == null)
             {
                 return new TransactionViewResult();
             }

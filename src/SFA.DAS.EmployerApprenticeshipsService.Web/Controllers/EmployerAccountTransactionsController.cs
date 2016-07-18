@@ -27,8 +27,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             
             var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(accountId);
 
-            if (transactionViewResult.Account == null) { Response.Redirect("/");}
-
+            if (transactionViewResult.Account == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View(transactionViewResult.Model);
         }
     }
