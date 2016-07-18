@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests", "SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests\SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.csproj", "{74686336-D12F-459C-B25E-0CCACF8D206E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,6 +79,10 @@ Global
 		{74686336-D12F-459C-B25E-0CCACF8D206E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74686336-D12F-459C-B25E-0CCACF8D206E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74686336-D12F-459C-B25E-0CCACF8D206E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
