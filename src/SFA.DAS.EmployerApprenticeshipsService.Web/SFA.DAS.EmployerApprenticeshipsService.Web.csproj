@@ -258,10 +258,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ICookieService.cs" />
+    <Compile Include="Models\CreateAccountModel.cs" />
+    <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\SelectEmployerModel.cs" />
     <Compile Include="Models\SelectEmployerViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
+    <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
@@ -271,6 +275,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Data\EmpRefs\empref_data.json" />
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
     <Content Include="assets\images\apple-touch-icon-152x152.png" />
     <Content Include="assets\images\apple-touch-icon-60x60.png" />
@@ -344,10 +349,13 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
+    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <None Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
+    <Content Include="Views\EmployerAccount\Gateway.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

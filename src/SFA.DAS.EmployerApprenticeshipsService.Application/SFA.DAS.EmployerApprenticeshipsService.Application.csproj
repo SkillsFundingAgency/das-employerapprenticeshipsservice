@@ -55,12 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
+    <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
+    <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerRefreshLevyViewsQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
+    <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
