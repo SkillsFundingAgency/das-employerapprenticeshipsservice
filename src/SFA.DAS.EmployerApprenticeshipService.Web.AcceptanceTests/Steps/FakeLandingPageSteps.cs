@@ -4,13 +4,14 @@ using System;
 using OpenQA.Selenium;
 using TechTalk.SpecFlow;
 using OpenQA.Selenium.Support.UI;
+using System.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
 {
     [Binding]
     public class FakeLandingPageSteps
     {
-        BasePage TestPage = new BasePage();
+        BasePage TestPage = new BasePage(ConfigurationManager.AppSettings.Get("BrowserType"));        
         _2ndPage Test_2ndPage = new _2ndPage();
         
 
@@ -19,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Steps
         [Then(@"I have Navigated to Landing Page")]
         public void GivenIHaveNavigatedToLandingPage()
         {
-            TestPage.NavigatetoBasePage();
+            TestPage.NavigatetoBasePage();          
             
         }
 

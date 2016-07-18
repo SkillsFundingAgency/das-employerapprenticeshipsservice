@@ -15,7 +15,9 @@ namespace SFA.DAS.EmployerApprenticeshipService.Web.AcceptanceTests.Setup
 {
     public abstract class CoreSettings
     {
-        public static IWebDriver Browser = new PhantomJSDriver();
+        public  IWebDriver Browser ;
+        //public static IWebDriver Browser = new ChromeDriver();
+
         public static string BaseUrl = ConfigurationManager.AppSettings.Get("BaseUrl");
 
         #region Navigation
