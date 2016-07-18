@@ -245,6 +245,7 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
+    <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
@@ -261,8 +262,10 @@
     <Compile Include="Models\SelectEmployerViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
+    <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="Models\UserAccountsViewModel.cs" />
@@ -346,6 +349,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <None Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />

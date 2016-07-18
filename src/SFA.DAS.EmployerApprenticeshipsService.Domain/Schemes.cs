@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
-    public class Class1
+    public class Schemes
     {
+        public List<Scheme> SchemesList { get; set; }
+
     }
 }

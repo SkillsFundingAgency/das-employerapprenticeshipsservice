@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
+@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
 
 <div class="grid-row">
     <div class="column-half">
@@ -38,7 +39,7 @@
                         <tr>
                             <td>@account.Name</td>
                             <td>@account.Id</td>
-                            <td><a href="#?id=@account.Id">View</a></td>
+                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View</a></td>
                         </tr>
                     }
 

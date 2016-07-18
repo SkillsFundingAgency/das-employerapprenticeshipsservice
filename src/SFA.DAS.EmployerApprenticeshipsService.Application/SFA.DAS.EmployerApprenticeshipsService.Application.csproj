@@ -42,6 +42,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Messaging">
+      <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.5827\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,18 +58,38 @@
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
-    <Compile Include="Messages\QueueMessage.cs" />
+    <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
+    <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
+    <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
+    <Compile Include="InvalidRequestException.cs" />
+    <Compile Include="Messages\EmployerRefreshLevyAggregationQueueMessage.cs" />
+    <Compile Include="Messages\EmployerRefreshLevyViewsQueueMessage.cs" />
+    <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
+    <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesHandler.cs" />
+    <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesQuery.cs" />
+    <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
+    <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">

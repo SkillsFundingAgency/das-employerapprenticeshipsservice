@@ -54,16 +54,33 @@
   <ItemGroup>
     <Compile Include="Account.cs" />
     <Compile Include="Accounts.cs" />
+    <Compile Include="AggregationData.cs" />
+    <Compile Include="AggregationLine.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
+    <Compile Include="AggregationLineItem.cs" />
+    <Compile Include="Data\IAggregationRepository.cs" />
+    <Compile Include="Data\IDasLevyRepository.cs" />
+    <Compile Include="Data\IEmployerAccountRepository.cs" />
+    <Compile Include="Data\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
+    <Compile Include="Interfaces\ILevyDeclarationService.cs" />
+    <Compile Include="LevyDeclarationView.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="Paye.cs" />
+    <Compile Include="Models\HmrcLevy\Declarations.cs" />
+    <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
+    <Compile Include="Models\Levy\DasDeclaration.cs" />
+    <Compile Include="Models\Levy\DasDeclarations.cs" />
+    <Compile Include="Models\Levy\DasEnglishFractions.cs" />
+    <Compile Include="LevyItemType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scheme.cs" />
+    <Compile Include="Schemes.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />
   </ItemGroup>

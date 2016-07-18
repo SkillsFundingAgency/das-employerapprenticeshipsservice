@@ -9,9 +9,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
     {
         protected readonly string Directory;
 
+        protected FileSystemRepository(string rootPath, string appDataFolderName)
+        {
+            Directory = Path.Combine(rootPath, appDataFolderName);
+        }
         protected FileSystemRepository(string appDataFolderName)
         {
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+
             Directory = Path.Combine(appData, appDataFolderName);
         }
 

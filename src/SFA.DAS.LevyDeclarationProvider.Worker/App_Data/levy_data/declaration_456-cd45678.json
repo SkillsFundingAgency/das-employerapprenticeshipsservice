@@ -1,33 +1,36 @@
 ﻿{
-  "empref": "123/AB12345",
+  "empref": "456/CD45678",
   "schemeCessationDate": "2016-03-17",
   "declarations": [
     {
+      "submissionId": "a1",
       "submissionType": "original",
       "submissionDate": "2016-02-21",
       "payrollMonth": {
         "year": 2016,
         "month": 2
       },
-      "amount": 1000
+      "amount": 1000.95
     },
     {
+      "submissionId": "a2",
       "submissionType": "original",
       "submissionDate": "2016-01-21",
       "payrollMonth": {
         "year": 2016,
         "month": 1
       },
-      "amount": 500
+      "amount": 2000.25
     },
     {
+      "submissionId": "a3",
       "submissionType": "original",
       "submissionDate": "2015-12-21",
       "payrollMonth": {
         "year": 2015,
         "month": 12
       },
-      "amount": 600
+      "amount": 500
     }
   ] 
 
