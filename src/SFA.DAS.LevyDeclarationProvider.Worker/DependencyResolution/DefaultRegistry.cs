@@ -44,10 +44,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
 
             IConfigurationRepository configurationRepository;
 
-
-
             configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-
 
             var configurationService = new ConfigurationService(
                 configurationRepository,
@@ -64,6 +61,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>().Ctor<string>().Is(rootDir);
 
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+            For<IAccountRepository>().Use<AccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IUserRepository>().Use<FileSystemUserRepository>().Ctor<string>().Is(rootDir);
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
