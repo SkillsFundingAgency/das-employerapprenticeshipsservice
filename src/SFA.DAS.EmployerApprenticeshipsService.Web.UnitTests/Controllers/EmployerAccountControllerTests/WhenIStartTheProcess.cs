@@ -12,15 +12,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private EmployerAccountController _employerAccountController;
         private EmployerAccountOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _cookieService = new Mock<ICookieService>();
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object);
-            _employerAccountController = new EmployerAccountController(_orchestrator, _cookieService.Object);
+            _employerAccountController = new EmployerAccountController(_orchestrator);
         }
 
         [Test]

@@ -1,23 +1,22 @@
 ﻿<div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-half">
         <h1 class="heading-xlarge">Search for your company</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
         <p>
             We need to add a company name to the contract between you and the Skills Funding Agency.
             To find your company enter the company number of your organisation that is registered with Companies House.
         </p>
-        <div class="grid-row">
-            <h2 class="heading-medium">Companies House number</h2>
-            <form method="POST" action="@Url.Action("SelectEmployer")">
-                <div class="form-group">
-                    <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text"
-                           aria-required="true" />
-                </div>
-                <button type="submit" class="button">Continue</button>
-            </form>
-        </div>
-        <div style="margin-top:50px"></div>
-    </div>
-    <div class="column-one-third">
-
+        <h2 class="heading-medium">Companies House number</h2>
+        <form method="POST" action="@Url.Action("SelectEmployer")">
+            <div class="form-group">
+                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text"
+                       aria-required="true" />
+            </div>
+            <button type="submit" class="button">Continue</button>
+        </form>
     </div>
 </div>
+

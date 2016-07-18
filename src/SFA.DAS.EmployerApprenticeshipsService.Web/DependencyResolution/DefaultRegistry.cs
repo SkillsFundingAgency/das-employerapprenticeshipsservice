@@ -90,7 +90,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             For<IUserRepository>().Use<FileSystemUserRepository>().Ctor<string>().Is(appData);
-			For<ICookieService>().Use<HttpCookieService>();
             For<IMediator>().Use<Mediator>();
         }
 

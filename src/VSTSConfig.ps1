@@ -15,7 +15,7 @@ if($testPath)
 	$sourceDir = Get-ChildItem $SourcePath -recurse
 	
 	
-	$List = $sourceDir | where {$_.extension -eq ".cscfg" -or $_.name -like "*.config" -or $_.name -like "*.json" -or $_.Name -like "*.csdef" -or $_.Name -like "*.publish.xml"} 
+	$List = $sourceDir | where {$_.extension -eq ".cscfg" -or $_.name -like "*.config" -or $_.name -like "*.json" -or $_.Name -like "*.csdef"} 
 	
 	
 	Foreach($file in $list)

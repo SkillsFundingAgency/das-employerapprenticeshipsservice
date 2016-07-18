@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -35,17 +34,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 DateOfIncorporation = response.DateOfIncorporation,
                 RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
             };
-        }
-
-        public async Task CreateAccount(CreateAccountModel model)
-        {
-            await _mediator.SendAsync(new CreateAccountCommand
-            {
-                UserId = model.UserId,
-                CompanyNumber = model.CompanyNumber,
-                CompanyName = model.CompanyName,
-                EmployerRef = model.EmployerRef
-            });
         }
     }
 }

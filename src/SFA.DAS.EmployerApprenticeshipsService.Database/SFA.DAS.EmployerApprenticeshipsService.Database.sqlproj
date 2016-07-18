@@ -67,7 +67,6 @@
     <Build Include="User.sql" />
     <Build Include="Membership.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
-    <Build Include="StoredProcedures\CreateAccount.sql" />    
     <Build Include="Paye.sql" />
     <Build Include="LevyDeclaration.sql" />
     <Build Include="EnglishFraction.sql" />
