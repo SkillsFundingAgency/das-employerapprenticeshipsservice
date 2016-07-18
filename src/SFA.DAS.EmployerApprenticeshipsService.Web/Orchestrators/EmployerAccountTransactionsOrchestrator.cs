@@ -22,9 +22,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionViewResult>  GetAccountTransactions(int accountId)
+        public async Task<TransactionViewResult> GetAccountTransactions(int accountId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = accountId });
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery {Id = accountId});
             if (employerAccountResult == null)
             {
                 return new TransactionViewResult();
@@ -54,15 +54,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
                     Data = this.SortDataForViewModel(data.Data)
                 }
-                
             };
-            
         }
 
-        private decimal CurrentBalanceForViewModel(AggregationData data)
-        {
-            throw new NotImplementedException();
-        }
 
         private AggregationData SortDataForViewModel(AggregationData data)
         {
