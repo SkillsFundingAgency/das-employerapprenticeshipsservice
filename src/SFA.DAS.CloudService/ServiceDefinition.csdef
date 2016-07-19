@@ -35,6 +35,7 @@
   <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
