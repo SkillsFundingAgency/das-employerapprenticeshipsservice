@@ -38,10 +38,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
+    <Folder Include="SFA.DAS.LevyAggregationProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="SFA.DAS.EmployerApprenticeshipsService.WebContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.LevyAggregationProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +53,14 @@
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EmployerApprenticeshipsService.Web</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.LevyAggregationProvider.Worker.csproj">
+      <Name>SFA.DAS.LevyAggregationProvider.Worker</Name>
+      <Project>{c1ab252e-8041-41cc-b192-cf543f4aeb13}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>SFA.DAS.LevyAggregationProvider.Worker</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj">

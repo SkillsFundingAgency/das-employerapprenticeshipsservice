@@ -1,16 +1,18 @@
-﻿CREATE PROCEDURE [dbo].[CreateAccount]
+﻿
+
+CREATE PROCEDURE [dbo].[CreateAccount]
 (
 	@userRef UNIQUEIDENTIFIER,
 	@employerNumber NVARCHAR(50), 
 	@employerName NVARCHAR(100), 
-	@employerRef NVARCHAR(10)
+	@employerRef NVARCHAR(10),
+	@accountId int OUTPUT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @userId INT;
-	DECLARE @accountId INT;
 
 	INSERT INTO [dbo].[User](PireanKey, Email) VALUES (@userRef, 'test@test.org');
 	SELECT @userId = SCOPE_IDENTITY();

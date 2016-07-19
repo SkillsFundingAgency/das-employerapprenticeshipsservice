@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using MediatR;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
 {
