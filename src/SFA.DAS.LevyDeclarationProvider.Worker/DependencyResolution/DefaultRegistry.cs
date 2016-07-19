@@ -54,8 +54,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
             //TODO add config service and use Azure service bus queue instead
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\GetEmployerLevyQueue"));
-            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
+            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+
             For<ILevyDeclaration>().Use<LevyDeclaration>();
             var rootDir = Path.Combine(Environment.GetEnvironmentVariable("RoleRoot") + @"\", @"approot\App_Data\");
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>().Ctor<string>().Is(rootDir);
