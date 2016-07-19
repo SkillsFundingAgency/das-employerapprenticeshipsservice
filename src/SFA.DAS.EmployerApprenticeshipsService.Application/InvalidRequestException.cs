@@ -4,7 +4,11 @@ using System.Linq;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application
 {
-    public class InvalidRequestException : Exception
+    public interface INoRegistration
+    {
+    }
+
+    public class InvalidRequestException : Exception, INoRegistration
     {
         public Dictionary<string, string> ErrorMessages { get; private set; }
 

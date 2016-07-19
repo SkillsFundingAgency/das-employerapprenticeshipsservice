@@ -43,7 +43,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
             _container = new Container(new DefaultRegistry());
-            _container.AssertConfigurationIsValid();
+            //_container.AssertConfigurationIsValid();
 
             bool result = base.OnStart();
 

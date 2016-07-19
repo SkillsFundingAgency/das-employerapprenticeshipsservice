@@ -1,0 +1,71 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators.TransactionLineItemViewModel
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Credit details</h1>
+            <div>
+                <p>
+                    The following shows details of the payment into your account.
+                </p>
+                <div class="">
+
+                    <table class="table-19-font">
+                        <thead>
+                            <tr>
+                                <th colspan="2">
+                                    <h2 class="heading-medium">Overview</h2>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td class="rjTableName">Payment type</td>
+                                <td class="">Levy Credit</td>
+
+                            </tr>
+                            <tr>
+                                <td class="rjTableName">Date</td>
+                                <td class="">@{ var date = new DateTime(Model.LineItem.Year, Model.LineItem.Month, 1); }@date.ToString("d MMM yyyy")</td>
+
+                            </tr>
+                            <tr>
+                                <td class="rjTableName">Payment amount</td>
+                                <td class="">£@Model.LineItem.Amount</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table-19-font">
+                        <thead>
+                            <tr>
+                                <h2 class="heading-medium">Payroll</h2>
+                                <th scope="col">Payroll number</th>
+                                <th class="numeric" scope="col">English percentage</th>
+                                <th scope="col" class="numeric">Amount</th>
+                         
+                            </tr>
+                        </thead>
+                        <tbody>
+                    
+
+                            @foreach (var aggregationLineItem in Model.LineItem.Items)
+                            {
+                                <tr>
+                                    <td class="rjTableName">@aggregationLineItem.EmpRef</td>
+                                    <td class="numeric">100%</td>
+                                    <td class="numeric">@aggregationLineItem.Amount</td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
