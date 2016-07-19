@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -43,9 +44,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(),1.ToString());
             var result = await table.ExecuteAsync(fetchOperation);
             var row = (LevyAggregationEntity) result.Result;
-            var obj = JsonConvert.DeserializeObject<AggregationData>(row.Data);
-            return obj;
 
+            if (row == null)
+                return new AggregationData
+                {
+                    AccountId = accountId,
+                    Data = new List<AggregationLine>()
+                };
+
+            return JsonConvert.DeserializeObject<AggregationData>(row.Data);
         }
     }
 }
