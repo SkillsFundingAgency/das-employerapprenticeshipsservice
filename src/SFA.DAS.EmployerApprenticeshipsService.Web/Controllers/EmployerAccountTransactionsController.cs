@@ -9,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
+    [Authorize]
     public class EmployerAccountTransactionsController : Controller
     {
         private readonly IOwinWrapper _owinWrapper;
@@ -19,12 +20,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _owinWrapper = owinWrapper;
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
-
-        // GET: EmployerAccountTransactions
-        [Authorize]
+        
         public async Task<ActionResult> Index(int accountId)
         {
-            
             var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(accountId);
 
             if (transactionViewResult.Account == null)

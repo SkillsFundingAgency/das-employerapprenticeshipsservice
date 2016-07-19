@@ -7,13 +7,16 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>
+        <h2 class="heading-small">
             Your company number <b>@Model.CompanyNumber</b> is associated with:
-        </p>
-        <h2 class="heading-medium">@Model.CompanyName</h2>
-        <p>@Model.RegisteredAddress</p>
-        <h2 class="heading-medium">@Model.EmployerRef</h2>
-        <h3 class="heading-small">Create an Account based on these details?</h3>
+        </h2>
+        <h2 class="bold-xlarge">@Model.CompanyName</h2>
+        <h2 class="heading-small">
+            With PAYE scheme ref:
+        </h2>
+      
+        <h2 class="bold-medium">@Model.EmployerRef</h2>
+        <h3 style="margin-top: 100px;" class="heading-small">Create an Account based on these details?</h3>
         <form method="POST" action="@Url.Action("CreateAccount")">
             <fieldset>
                 <div class="grid-row">
@@ -23,7 +26,7 @@
                             Yes
                         </label>
                     </div>
-                    <div class="column-one-quarter">
+                    <div  class="column-one-quarter">
                         <label class="block-label" for="radio2">
                             <input id="radio2" type="radio" name="radio-group" value="no">
                             No
@@ -31,6 +34,7 @@
                     </div>
                 </div>
             </fieldset>
+            <p></p>
             <button type="submit" class="button">Continue</button>
             <p></p>
         </form>

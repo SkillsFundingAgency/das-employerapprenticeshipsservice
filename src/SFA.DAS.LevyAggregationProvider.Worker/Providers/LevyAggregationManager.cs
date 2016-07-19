@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
@@ -28,6 +29,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         {
             while (true)
             {
+                Thread.Sleep(5000);
                 var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
                 if (message?.Content == null || message.Content.AccountId == 0)
