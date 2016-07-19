@@ -29,6 +29,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+using SFA.DAS.Messaging;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
@@ -51,9 +52,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             Scan(
                 scan =>
                 {
-                    //scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService")
-                    //    && !a.GetName().Name.Equals("SFA.DAS.EmployerApprenticeshipsService.Infrastructure"));
-                    //scan.RegisterConcreteTypesAgainstTheFirstInterface();
                     scan.WithDefaultConventions();
                     scan.AssemblyContainingType<IEmployerVerificationService>();
                     scan.AssemblyContainingType<GetUsersQuery>();
@@ -66,7 +64,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
 
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
-            //For<IExample>().Use<Example>();
 
             IConfigurationRepository configurationRepository;
             
@@ -87,10 +84,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
+            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\GetEmployerLevyQueue"));
+
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IAccountRepository>().Use<AccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-            For<ICookieService>().Use<HttpCookieService>();
+			For<ICookieService>().Use<HttpCookieService>();
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");

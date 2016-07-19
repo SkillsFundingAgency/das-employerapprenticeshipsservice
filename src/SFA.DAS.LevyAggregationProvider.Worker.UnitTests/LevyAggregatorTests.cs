@@ -47,10 +47,11 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 {
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 1,
                         EmpRef = empRef,
                         ActivityDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     }
                 }
@@ -86,18 +87,20 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 {
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 1,
                         EmpRef = empRef,
                         ActivityDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 2,
                         EmpRef = empRef,
                         ActivityDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
+                        EnglishFraction = 0.85m,
                         LevyItemType = LevyItemType.Declaration
                     }
                 }
@@ -133,18 +136,20 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 {
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 1,
                         EmpRef = empRef,
                         ActivityDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 2,
                         EmpRef = empRef,
                         ActivityDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
+                        EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.TopUp
                     }
                 }
@@ -170,18 +175,20 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 {
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 1,
                         EmpRef = empRef1,
                         ActivityDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = Guid.NewGuid().ToString(),
+                        Id = 2,
                         EmpRef = empRef2,
                         ActivityDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
+                        EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
                     }
                 }
@@ -218,15 +225,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 {
                     new SourceDataItem
                     {
-                        Id = "Item1",
+                        Id = 1,
                         EmpRef = empRef2,
                         ActivityDate = DateTime.Today.AddMonths(-3),
                         Amount = 250.0m,
+                        EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = "Item2",
+                        Id = 2,
                         EmpRef = empRef2,
                         ActivityDate = DateTime.Today.AddMonths(-3),
                         Amount = 25.0m,
@@ -234,15 +242,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     },
                     new SourceDataItem
                     {
-                        Id = "Item3",
+                        Id = 3,
                         EmpRef = empRef1,
                         ActivityDate = DateTime.Today.AddMonths(-2),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = "Item4",
+                        Id = 4,
                         EmpRef = empRef1,
                         ActivityDate = DateTime.Today.AddMonths(-2),
                         Amount = 10.0m,
@@ -250,15 +259,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     },
                     new SourceDataItem
                     {
-                        Id = "Item5",
+                        Id = 5,
                         EmpRef = empRef1,
                         ActivityDate = DateTime.Today.AddMonths(-1),
                         Amount = 100.0m,
+                        EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = "Item6",
+                        Id = 6,
                         EmpRef = empRef1,
                         ActivityDate = DateTime.Today.AddMonths(-1),
                         Amount = 10.0m,
@@ -266,15 +276,16 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     },
                     new SourceDataItem
                     {
-                        Id = "Item7",
+                        Id = 7,
                         EmpRef = empRef2,
                         ActivityDate = DateTime.Today.AddMonths(-1),
                         Amount = 250.0m,
+                        EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
                     },
                     new SourceDataItem
                     {
-                        Id = "Item8",
+                        Id = 8,
                         EmpRef = empRef2,
                         ActivityDate = DateTime.Today.AddMonths(-1),
                         Amount = 25.0m,
