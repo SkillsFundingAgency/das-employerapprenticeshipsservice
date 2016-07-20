@@ -3,7 +3,7 @@
   <Role name="SFA.DAS.EmployerApprenticeshipsService.Web">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=dasateasstr;AccountKey=/vp7N8AyGuXFDnPi3IFgTMdYm14OYHiCJUX2AQ8t2Ndsl8TrImVN7Jcm9tgXALNbpmsUyC+ybwgEh/F5RyvUuw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
@@ -21,7 +21,7 @@
   <Role name="SFA.DAS.LevyDeclarationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=dasateasstr;AccountKey=/vp7N8AyGuXFDnPi3IFgTMdYm14OYHiCJUX2AQ8t2Ndsl8TrImVN7Jcm9tgXALNbpmsUyC+ybwgEh/F5RyvUuw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
@@ -37,7 +37,7 @@
   <Role name="SFA.DAS.LevyAggregationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=dasateasstr;AccountKey=/vp7N8AyGuXFDnPi3IFgTMdYm14OYHiCJUX2AQ8t2Ndsl8TrImVN7Jcm9tgXALNbpmsUyC+ybwgEh/F5RyvUuw==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
