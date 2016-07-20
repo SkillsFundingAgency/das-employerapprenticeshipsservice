@@ -22,6 +22,9 @@
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+    </Imports>
   </WebRole>
   <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
@@ -31,6 +34,10 @@
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
   </WorkerRole>
   <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
@@ -38,5 +45,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EnvironmentName" />
     </ConfigurationSettings>
+    <Imports>
+      <Import moduleName="RemoteAccess" />
+    </Imports>
   </WorkerRole>
 </ServiceDefinition>

@@ -37,6 +37,7 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Profiles" />
     <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
     <Folder Include="SFA.DAS.LevyAggregationProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\" />
@@ -71,6 +72,9 @@
       <RoleName>SFA.DAS.LevyDeclarationProvider.Worker</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\das-at-eas-cs (stage).azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
