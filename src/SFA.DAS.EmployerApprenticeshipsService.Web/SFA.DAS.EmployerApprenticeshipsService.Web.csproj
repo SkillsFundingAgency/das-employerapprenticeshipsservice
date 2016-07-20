@@ -361,7 +361,7 @@
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Detail.cshtml" />
-    <None Include="Views\Home\FakeUserSignIn.cshtml" />
+    <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
