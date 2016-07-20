@@ -36,6 +36,7 @@
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
