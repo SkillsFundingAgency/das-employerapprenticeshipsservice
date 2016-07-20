@@ -29,7 +29,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         {
             while (true)
             {
-                Thread.Sleep(5000);
                 var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
                 if (message?.Content == null || message.Content.AccountId == 0)
