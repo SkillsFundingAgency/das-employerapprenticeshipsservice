@@ -4,7 +4,7 @@
   "declarations": [
     {
       "submissionId":  "a1", 
-      "submissionType": "original",
+      "submissionType": "Levy",
       "submissionDate": "2016-02-21",
       "payrollMonth": {
         "year": 2016,
@@ -14,7 +14,7 @@
     },
     {
       "submissionId": "a2",
-      "submissionType": "original",
+      "submissionType": "Levy",
       "submissionDate": "2016-01-21",
       "payrollMonth": {
         "year": 2016,
@@ -24,7 +24,7 @@
     },
     {
       "submissionId": "a3",
-      "submissionType": "original",
+      "submissionType": "Levy",
       "submissionDate": "2015-12-21",
       "payrollMonth": {
         "year": 2015,

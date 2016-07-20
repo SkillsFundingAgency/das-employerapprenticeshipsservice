@@ -18,7 +18,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             return new AggregationData
             {
                 AccountId = input.AccountId,
-                Data = aggregates
+                Data = aggregates.OrderByDescending(c => c.Year).ThenByDescending(n => n.Month).ToList()
             };
         }
 

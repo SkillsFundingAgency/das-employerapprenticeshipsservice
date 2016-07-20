@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 await connection.OpenAsync();
 
-                var sql = @"SELECT * from [dbo].[GetLevyDeclarations] WHERE AccountId = @accountId";
+                var sql = @"SELECT * from [dbo].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC";
                 declarations = connection.Query<LevyDeclarationView>(sql, new { accountId = accountId }).ToList();
 
                 connection.Close();

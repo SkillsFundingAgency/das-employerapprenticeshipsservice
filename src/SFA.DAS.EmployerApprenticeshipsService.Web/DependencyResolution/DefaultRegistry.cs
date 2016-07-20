@@ -17,6 +17,7 @@
 
 using System;
 using System.Configuration;
+using System.IO;
 using System.Web;
 using MediatR;
 using Microsoft.Azure;
@@ -84,7 +85,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\GetEmployerLevyQueue"));
+            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);

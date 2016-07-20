@@ -5,7 +5,7 @@ CREATE PROCEDURE [dbo].[CreateAccount]
 	@userRef UNIQUEIDENTIFIER,
 	@employerNumber NVARCHAR(50), 
 	@employerName NVARCHAR(100), 
-	@employerRef NVARCHAR(10),
+	@employerRef NVARCHAR(16),
 	@accountId int OUTPUT
 )
 AS

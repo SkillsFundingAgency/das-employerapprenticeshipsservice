@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -62,8 +63,10 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
 
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
             For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-            
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(@".\RefreshEmployerLevyQueue"));
+
+            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
 
             For<IMediator>().Use<Mediator>();
         }

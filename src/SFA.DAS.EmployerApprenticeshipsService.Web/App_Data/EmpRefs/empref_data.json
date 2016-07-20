@@ -3,12 +3,12 @@
     {
       "Email": "daniel.ashton@test.local",
       "Password": "1234567890",
-      "EmpRef": "123/QWERTY"
+      "EmpRef": "456/CD45678"
     },
     {
       "Email": "ian.russell@test.local",
       "Password": "1234567890",
-      "EmpRef": "987/ASDFGH"
+      "EmpRef": "123/AB12345"
     }
   ]
 }
