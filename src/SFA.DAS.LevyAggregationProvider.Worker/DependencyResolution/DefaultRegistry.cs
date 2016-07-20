@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
@@ -59,14 +62,21 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
                                           "UseDevelopmentStorage=true";
 
-            var config = configurationService.Get<LevyAggregationConfiguration>();
+            var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
             For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 
-            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+            if (environment == DevEnv)
+            {
+                var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+            }
+            else
+            {
+                var queueConfig = config.ServiceBusConfiguration;
+                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "RefreshEmployerLevyQueue").QueueName));
+            }
 
             For<IMediator>().Use<Mediator>();
         }

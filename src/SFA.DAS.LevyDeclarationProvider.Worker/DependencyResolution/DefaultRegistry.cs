@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -7,12 +8,14 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
@@ -50,11 +53,18 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
                         var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
                                           "UseDevelopmentStorage=true";
-            //TODO add config service and use Azure service bus queue instead
-            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
-            For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+            if (environment == DevEnv)
+            {
+                var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+            }
+            else
+            {
+                var queueConfig = config.ServiceBusConfiguration;
+                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "GetEmployerLevyQueue").QueueName));
+                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "RefreshEmployerLevyQueue").QueueName));
+            }
 
             For<ILevyDeclaration>().Use<LevyDeclaration>();
             var rootDir = Path.Combine(Environment.GetEnvironmentVariable("RoleRoot") + @"\", @"approot\App_Data\");
