@@ -278,7 +278,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App_Data\EmpRefs\empref_data.json" />
+    <None Include="App_Data\EmpRefs\empref_data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
     <Content Include="assets\images\apple-touch-icon-152x152.png" />
     <Content Include="assets\images\apple-touch-icon-60x60.png" />
@@ -325,7 +327,9 @@
     <Content Include="assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportWebsite.eot" />
-    <Content Include="App_Data\Users\user_data.json" />
+    <Content Include="App_Data\Users\user_data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
