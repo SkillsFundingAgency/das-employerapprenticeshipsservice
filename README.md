@@ -22,6 +22,9 @@ You should run Visual Studio as an Administrator.
   * PartitionKey => LOCAL
   * RowKey => SFA.DAS.EmployerApprenticeshipsService_1.0
   * Data => Contents of the environment configuration JSON document (see private configuration repository)
+  * PartitionKey => LOCAL
+  * RowKey => SFA.DAS.LevyAggregationProvider_1.0
+  * Data => Contents of the environment configuration JSON document (see private configuration repository)
 
 ### Running
 
