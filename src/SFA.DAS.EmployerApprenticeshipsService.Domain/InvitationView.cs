@@ -11,6 +11,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public DateTime ExpiryDate { get; set; }
         public InvitationStatus Status { get; set; }
         public int InternalUserId { get; set; }
-        public string ExternalUserId { get; set; }
+        public Guid ExternalUserId { get; set; }
     }
 }
