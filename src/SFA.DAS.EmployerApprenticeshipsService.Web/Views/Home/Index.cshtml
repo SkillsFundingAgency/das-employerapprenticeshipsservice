@@ -54,38 +54,35 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        @if (Model.Accounts.AccountList.Count == 0)
+        @if (Model.Invitations.InvitationList.Count == 0)
         {
-            <p>Create a new Employer Account</p>
+            <p>You do not have any invitations</p>
         }
         else
         {
-            <p>You have several accounts registered</p>
-            <p>Please choose the account you wish to view.</p>
+            <p>You have several invitations</p>
+            <p>Please choose the invitation you wish to view.</p>
             <table>
                 <thead>
                     <tr>
                         <th>Account Name</th>
-                        <th>Account Number</th>
+                        <th>Expiry Date</th>
                         <th> </th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach (var account in Model.Accounts.AccountList)
+                    @foreach (var invitation in Model.Invitations.InvitationList)
                     {
                         <tr>
-                            <td>@account.Name</td>
-                            <td>@account.Id</td>
-                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View</a></td>
+                            <td>@invitation.AccountName</td>
+                            <td>@invitation.ExpiryDate.ToShortDateString()</td>
+                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {invitationId = invitation.Id})">View</a></td>
                         </tr>
                     }
 
                 </tbody>
             </table>
         }
-        <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">New</a>
-        <p></p>
     </div>
 </div>
