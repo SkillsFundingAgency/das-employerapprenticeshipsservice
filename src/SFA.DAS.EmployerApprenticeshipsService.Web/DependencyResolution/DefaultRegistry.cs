@@ -18,6 +18,7 @@
 using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Web;
 using MediatR;
 using Microsoft.Azure;
@@ -25,12 +26,14 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Messaging;
+using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
@@ -85,9 +88,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-            var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+            if (environment == DevEnv)
+            {
+                var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+            }
+            else
+            {
+                var queueConfig = config.ServiceBusConfiguration;
+                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "GetEmployerLevyQueue").QueueName));
+            }
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
             For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
