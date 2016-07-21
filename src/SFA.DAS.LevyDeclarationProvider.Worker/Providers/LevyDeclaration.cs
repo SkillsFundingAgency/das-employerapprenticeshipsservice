@@ -72,7 +72,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 await _mediator.SendAsync(new RefreshEmployerLevyDataCommand() { EmployerId = employerAccountId, EmployerLevyData = employerDataList });
 
-
+                await message.CompleteAsync();
 
             }
         }
