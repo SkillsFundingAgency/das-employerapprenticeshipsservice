@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
             if (sendLevyDataChanged)
             {
-                await _messagePublisher.PublishAsync(new EmployerRefreshLevyViewsQueueMessage {AccountId = message.EmployerId});
+                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = message.EmployerId});
             }
 
 

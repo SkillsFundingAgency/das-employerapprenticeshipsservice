@@ -67,10 +67,12 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
         private async Task RunAsync(CancellationToken cancellationToken)
         {
             // TODO: Replace the following with your own logic.
+            var levyDeclaration = _container.GetInstance<ILevyDeclaration>();
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working");
-                var levyDeclaration =   _container.GetInstance<ILevyDeclaration>();
+                
                 await levyDeclaration.Handle();
                 await Task.Delay(1000);
             }
