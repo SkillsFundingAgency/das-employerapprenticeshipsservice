@@ -71,7 +71,8 @@
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Invitation.cs" />
-    <Compile Include="Invitations.cs" />
+    <Compile Include="InvitationStatus.cs" />
+    <Compile Include="InvitationView.cs" />
     <Compile Include="LevyDeclarationView.cs" />
     <Compile Include="LevyItemType.cs" />
     <Compile Include="Membership.cs" />

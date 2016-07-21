@@ -11,12 +11,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<Invitations> Get(string userId)
+        public async Task<List<InvitationView>> Get(string userId)
         {
-            return new Invitations
-            {
-                InvitationList = new List<Invitation>()
-            };
+            return new List<InvitationView>();
         }
     }
 }

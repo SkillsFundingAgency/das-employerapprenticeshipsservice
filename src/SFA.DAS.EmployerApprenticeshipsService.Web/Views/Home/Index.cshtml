@@ -54,7 +54,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        @if (Model.Invitations.InvitationList.Count == 0)
+        @if (Model.Invitations.Count == 0)
         {
             <p>You do not have any invitations</p>
         }
@@ -72,7 +72,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var invitation in Model.Invitations.InvitationList)
+                    @foreach (var invitation in Model.Invitations)
                     {
                         <tr>
                             <td>@invitation.AccountName</td>
