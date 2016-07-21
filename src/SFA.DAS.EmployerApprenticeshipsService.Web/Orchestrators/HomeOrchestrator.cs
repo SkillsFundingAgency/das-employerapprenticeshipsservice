@@ -5,6 +5,7 @@ using System.Web;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -49,7 +50,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 var userId =  userIdClaim.Value;
                 var actual = await _mediator.SendAsync(new GetUserAccountsQuery() {UserId = userId });
-
+                var invitations = await _mediator.SendAsync(new GetUserInvitationsRequest
+                {
+                    UserId = userId
+                });
                 return new UserAccountsViewModel {Accounts = actual.Accounts};
             }
             return null;

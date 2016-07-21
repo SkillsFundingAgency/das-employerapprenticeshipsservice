@@ -2,8 +2,8 @@
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
-    public class Accounts
+    public class Invitations
     {
-        public List<Account> AccountList { get; set; }
+        public List<Invitation> InvitationList { get; set; }
     }
 }
