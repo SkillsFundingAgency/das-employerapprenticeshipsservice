@@ -30,6 +30,7 @@
                         <th>Account Name</th>
                         <th>Account Number</th>
                         <th> </th>
+                        <th> </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +40,9 @@
                         <tr>
                             <td>@account.Name</td>
                             <td>@account.Id</td>
-                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View</a></td>
+                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></td>
+                            <td><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></td>
+
                         </tr>
                     }
 

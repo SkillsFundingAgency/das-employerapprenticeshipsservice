@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AccountRepository.cs" />
+    <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\DasLevyRepository.cs" />
     <Compile Include="Data\EmployerSchemesRepository.cs" />
     <Compile Include="Data\EmployerAccountRepository.cs" />
