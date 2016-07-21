@@ -51,3 +51,42 @@
         <p></p>
     </div>
 </div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (Model.Invitations.Count == 0)
+        {
+            <p>You do not have any invitations</p>
+        }
+        else
+        {
+            <p>You have several invitations</p>
+            <p>Please choose the invitation you wish to view.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Expiry Date</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var invitation in Model.Invitations)
+                    {
+                        <tr>
+                            <td>@invitation.AccountName</td>
+                            <td>@invitation.ExpiryDate.ToShortDateString()</td>
+                            <td>@invitation.RoleName</td>
+                            <td>@invitation.Status.ToString()</td>
+                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {invitationId = invitation.Id})">View</a></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
