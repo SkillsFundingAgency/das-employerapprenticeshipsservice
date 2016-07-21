@@ -67,6 +67,8 @@
                     <tr>
                         <th>Account Name</th>
                         <th>Expiry Date</th>
+                        <th>Role</th>
+                        <th>Status</th>
                         <th> </th>
                     </tr>
                 </thead>
@@ -77,6 +79,8 @@
                         <tr>
                             <td>@invitation.AccountName</td>
                             <td>@invitation.ExpiryDate.ToShortDateString()</td>
+                            <td>@invitation.RoleName</td>
+                            <td>@invitation.Status.ToString()</td>
                             <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {invitationId = invitation.Id})">View</a></td>
                         </tr>
                     }

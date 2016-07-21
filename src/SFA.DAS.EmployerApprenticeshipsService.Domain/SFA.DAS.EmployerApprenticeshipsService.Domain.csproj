@@ -83,6 +83,7 @@
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Paye.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
     <Compile Include="Schemes.cs" />
     <Compile Include="User.cs" />
