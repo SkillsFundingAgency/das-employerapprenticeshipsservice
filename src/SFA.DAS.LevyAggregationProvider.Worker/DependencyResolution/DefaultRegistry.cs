@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -67,15 +66,14 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
             For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 
-            if (environment == DevEnv)
+            if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
             {
                 var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, nameof(QueueNames.das_at_eas_refresh_employer_levy))));
             }
             else
             {
-                var queueConfig = config.ServiceBusConfiguration;
-                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "RefreshEmployerLevyQueue").QueueName));
+                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_refresh_employer_levy)));
             }
 
             For<IMediator>().Use<Mediator>();

@@ -62,7 +62,6 @@
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
-    <Compile Include="Messages\EmployerRefreshLevyViewsQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

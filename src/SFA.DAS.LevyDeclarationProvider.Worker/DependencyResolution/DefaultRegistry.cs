@@ -53,17 +53,17 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
                         var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
                                           "UseDevelopmentStorage=true";
-            if (environment == DevEnv)
+
+            if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
             {
                 var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
-                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "RefreshEmployerLevyQueue")));
+                For<IPollingMessageReceiver>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, nameof(QueueNames.das_at_eas_get_employer_levy))));
+                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, nameof(QueueNames.das_at_eas_refresh_employer_levy))));
             }
             else
             {
-                var queueConfig = config.ServiceBusConfiguration;
-                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "GetEmployerLevyQueue").QueueName));
-                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "RefreshEmployerLevyQueue").QueueName));
+                For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_get_employer_levy)));
+                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_refresh_employer_levy)));
             }
 
             For<ILevyDeclaration>().Use<LevyDeclaration>();

@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
     {
         public CompaniesHouseConfiguration CompaniesHouse { get; set; }
         public EmployerConfiguration Employer { get; set; }
-        public AzureServiceBusMessageSubSystemConfiguration ServiceBusConfiguration { get; set; }
+        public string  ServiceBusConnectionString { get; set; }
     }
 
     public class EmployerConfiguration
@@ -18,16 +18,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
     {
         public string ApiKey { get; set; }
     }
-
-    public class AzureServiceBusMessageSubSystemConfiguration
+    
+    public static class QueueNames
     {
-        public string ConnectionString { get; set; }
-        public List<QueueData> Queues { get; set; }
-    }
-
-    public class QueueData
-    {
-        public string QueueType { get; set; }
-        public string QueueName { get; set; }
+        public static string das_at_eas_refresh_employer_levy { get; set; }
+        public static string das_at_eas_get_employer_levy  { get; set; }
+        
     }
 }
