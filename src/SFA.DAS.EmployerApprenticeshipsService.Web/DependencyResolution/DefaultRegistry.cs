@@ -90,15 +90,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
 
-            if (environment == DevEnv)
+            if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
             {
                 var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, "GetEmployerLevyQueue")));
+                For<IMessagePublisher>().Use(() => new Messaging.FileSystem.FileSystemMessageService(Path.Combine(queueFolder, nameof(QueueNames.das_at_eas_get_employer_levy))));
             }
             else
             {
-                var queueConfig = config.ServiceBusConfiguration;
-                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(queueConfig.ConnectionString, queueConfig.Queues.First(q => q.QueueType == "GetEmployerLevyQueue").QueueName));
+                For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_get_employer_levy)));
             }
 
             For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
@@ -107,6 +106,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 			For<ICookieService>().Use<HttpCookieService>();
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IAccountTeamRepository>().Use<AccountTeamRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+            For<IInvitationRepository>().Use<InvitationRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             For<IUserRepository>().Use<FileSystemUserRepository>().Ctor<string>().Is(appData);
             

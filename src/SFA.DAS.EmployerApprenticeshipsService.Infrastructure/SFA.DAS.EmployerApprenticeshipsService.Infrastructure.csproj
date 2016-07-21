@@ -84,6 +84,7 @@
     <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
+    <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\LevyAggregationRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />

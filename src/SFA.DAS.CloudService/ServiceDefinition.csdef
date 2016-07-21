@@ -31,6 +31,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
@@ -44,6 +45,7 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <Imports>
       <Import moduleName="RemoteAccess" />

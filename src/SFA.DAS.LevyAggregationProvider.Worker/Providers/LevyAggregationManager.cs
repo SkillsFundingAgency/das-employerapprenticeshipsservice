@@ -27,6 +27,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         public async Task Process()
         {
+            //TODO review
             while (true)
             {
                 var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
@@ -48,6 +49,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     {
                         Data = destinationData
                     });
+
+                await message.CompleteAsync();
             }
         }
     }
