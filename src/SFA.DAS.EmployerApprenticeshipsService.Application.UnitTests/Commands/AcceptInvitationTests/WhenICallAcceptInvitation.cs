@@ -93,5 +93,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Acce
 
             _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == _invitation.Id && z.Status == InvitationStatus.Accepted)), Times.Never);
         }
+
+        [Test]
+        public void IfInvalidRequest()
+        {
+            var command = new AcceptInvitationCommand();
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
     }
 }

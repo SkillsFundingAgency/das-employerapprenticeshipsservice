@@ -10,17 +10,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
     public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
+        private readonly AcceptInvitationCommandValidator _validator;
 
         public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
             _invitationRepository = invitationRepository;
+            _validator = new AcceptInvitationCommandValidator();
         }
 
         protected override async Task HandleCore(AcceptInvitationCommand message)
         {
-            //TODO: Validation
+            var validationResult = _validator.Validate(message);
+
+            if (!validationResult.IsValid())
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
 
             var existing = await _invitationRepository.Get(message.Id);
 

@@ -6,7 +6,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
     {
         public ValidationResult Validate(AcceptInvitationCommand item)
         {
-            throw new System.NotImplementedException();
+            var validationResult = new ValidationResult();
+
+            if (item.Id == 0)
+                validationResult.AddError("Id", "No Id supplied");
+
+            return validationResult;
         }
     }
 }
