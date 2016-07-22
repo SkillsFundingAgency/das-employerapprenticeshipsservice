@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
+    <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="FakeTimeProvider.cs" />
     <Compile Include="Commands\AcceptInvitationTests\WhenICallAcceptInvitation.cs" />
     <Compile Include="Commands\CreateEmployerAccountTests\WhenICallCreateEmployerAccount.cs" />
@@ -95,9 +96,7 @@
       <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Commands\DeleteInvitationTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
