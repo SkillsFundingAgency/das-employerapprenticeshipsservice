@@ -8,5 +8,7 @@
         public string UserRef { get; set; }
         public int AccountId { get; set; }
         public string Role { get; set; }
+
+        public InvitationStatus Status { get; set; }
     }
 }
