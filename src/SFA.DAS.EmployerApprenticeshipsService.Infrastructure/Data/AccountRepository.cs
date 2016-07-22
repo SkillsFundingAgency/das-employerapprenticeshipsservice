@@ -2,19 +2,25 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(string connectionString)
-            : base(connectionString)
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        public override string ConnectionString { get; set; }
+
+        protected AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
+            _configuration = configuration;
         }
 
         public async Task<int> CreateAccount(string userRef, string employerNumber, string employerName, string employerRef)
         {
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
+
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
