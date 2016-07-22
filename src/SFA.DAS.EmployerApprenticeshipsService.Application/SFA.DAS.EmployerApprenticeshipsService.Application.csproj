@@ -58,6 +58,9 @@
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />

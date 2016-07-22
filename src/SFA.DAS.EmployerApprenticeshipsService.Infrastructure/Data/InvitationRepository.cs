@@ -30,5 +30,40 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.ToList();
         }
+
+        public async Task Create(Invitation invitation)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", invitation.AccountId, DbType.Int32);
+                parameters.Add("@name", invitation.Name, DbType.String);
+                parameters.Add("@email", invitation.Email, DbType.String);
+                parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
+                parameters.Add("@statusId", invitation.Status, DbType.Int16);
+                parameters.Add("@roleId", invitation.RoleId, DbType.Int32);
+
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [dbo].[Invitation] ([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) VALUES (@accountId, @name, @email, @expiryDate, @statusId, @roleId)",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
+
+        public async Task<Invitation> Get(long id)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int32);
+
+                return await c.QueryAsync<Invitation>(
+                    sql: "SELECT * FROM [dbo].[Invitation] WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
     }
 }
