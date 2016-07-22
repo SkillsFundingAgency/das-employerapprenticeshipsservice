@@ -9,8 +9,9 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 {
+    
     public class ConfigurationPolicy<T> : ConfiguredInstancePolicy
     {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
