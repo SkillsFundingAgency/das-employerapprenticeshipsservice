@@ -6,7 +6,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
     {
         public ValidationResult Validate(CreateAccountCommand item)
         {
-            throw new System.NotImplementedException();
+            var validationResult = new ValidationResult();
+
+            if (string.IsNullOrWhiteSpace(item.UserId))
+                validationResult.AddError("UserId", "No UserId supplied");
+
+            if (string.IsNullOrWhiteSpace(item.CompanyNumber))
+                validationResult.AddError("CompanyNumber", "No CompanyNumber supplied");
+
+            if (string.IsNullOrWhiteSpace(item.CompanyName))
+                validationResult.AddError("CompanyName", "No CompanyName supplied");
+
+            if (string.IsNullOrWhiteSpace(item.EmployerRef))
+                validationResult.AddError("EmployerRef", "No EmployerRef supplied");
+
+            return validationResult;
         }
     }
 }

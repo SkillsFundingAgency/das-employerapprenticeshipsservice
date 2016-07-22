@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@userId", userId, DbType.String);
 
                 return await c.QueryAsync<InvitationView>(
-                    sql: "SELECT * FROM [dbo].[GetInvitations] WHERE ExternalUserId = @userId;",
+                    sql: "SELECT * FROM [dbo].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
