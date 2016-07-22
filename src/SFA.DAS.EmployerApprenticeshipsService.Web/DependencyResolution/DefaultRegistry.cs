@@ -18,22 +18,19 @@
 using System;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Web;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
+using StructureMap;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
@@ -42,8 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 	
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-        private const string DevEnv = "LOCAL";
-
+        
         #region Constructors and Destructors
 
         public DefaultRegistry() {
@@ -56,38 +52,46 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             Scan(
                 scan =>
                 {
-                    scan.WithDefaultConventions();
-                    scan.AssemblyContainingType<IEmployerVerificationService>();
-                    scan.AssemblyContainingType<GetUsersQuery>();
-                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
+                    scan.AssembliesFromApplicationBaseDirectory(
+                        a => a.GetName().Name.StartsWith(ServiceName));
+                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-
+            
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
 
-            IConfigurationRepository configurationRepository;
-            
+            For<IUserRepository>().Use<FileSystemUserRepository>();
 
+            var configurationRepository = GetConfigurationRepository();
+            
+            RegisterMessageQueues(configurationRepository, environment);
+
+            RegisterMediator();
+        }
+
+        private static IConfigurationRepository GetConfigurationRepository()
+        {
+            IConfigurationRepository configurationRepository;
             if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
             {
                 configurationRepository = new FileStorageConfigurationRepository();
             }
             else
             {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+                configurationRepository =
+                    new AzureTableStorageConfigurationRepository(
+                        CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
             }
+            return configurationRepository;
+        }
 
+        private void RegisterMessageQueues(IConfigurationRepository configurationRepository, string environment)
+        {
             var configurationService = new ConfigurationService(
                 configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
             For<IConfigurationService>().Use(configurationService);
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
             if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
             {
                 var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -97,22 +101,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             {
                 For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_get_employer_levy)));
             }
-
-            For<IEmployerVerificationService>().Use<CompaniesHouseEmployerVerificationService>().Ctor<string>().Is(config.CompaniesHouse.ApiKey);
-            For<IUserAccountRepository>().Use<UserAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-            For<IAccountRepository>().Use<AccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-			For<ICookieService>().Use<HttpCookieService>();
-            For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-
-            var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
-            For<IUserRepository>().Use<FileSystemUserRepository>().Ctor<string>().Is(appData);
-            
-            var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
-                                          "UseDevelopmentStorage=true";
-            For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
-            For<IMediator>().Use<Mediator>();
         }
 
+        private void RegisterMediator()
+        {
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+
+            For<IMediator>().Use<Mediator>();
+        }
         #endregion
     }
 }

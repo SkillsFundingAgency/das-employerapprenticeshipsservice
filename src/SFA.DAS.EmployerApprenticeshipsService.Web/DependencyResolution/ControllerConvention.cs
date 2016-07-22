@@ -15,6 +15,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using StructureMap;
+using StructureMap.Graph.Scanning;
+
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     using System;
     using System.Web.Mvc;
@@ -34,5 +37,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
         }
 
         #endregion
+
+        public void ScanTypes(TypeSet types, Registry registry)
+        {
+            foreach (var type in types.AllTypes())
+            {
+                Process(type,registry);
+            }
+            
+        }
     }
 }
