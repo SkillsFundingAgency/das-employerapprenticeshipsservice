@@ -5,6 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
 {
     public class CreateInvitationCommand : IAsyncRequest
     {
+        public string ExternalUserId { get; set; }
         public long AccountId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }

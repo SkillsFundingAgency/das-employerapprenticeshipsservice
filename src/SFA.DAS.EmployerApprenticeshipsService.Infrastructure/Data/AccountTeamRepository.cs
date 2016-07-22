@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -30,7 +28,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
+        public async Task<Membership> GetMembership(long accountId, string userId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.String);
 
+                return await c.QueryAsync<Membership>(
+                    sql: "SELECT m.* FROM [dbo].[Membership] m INNER JOIN [dbo].[User] u ON u.Id = m.UserId WHERE m.AccountId = @accountId AND u.PireanKey = @userId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
+            return result.FirstOrDefault();
+        }
     }
 }

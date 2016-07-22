@@ -12,13 +12,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
     public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
+        private readonly IAccountTeamRepository _accountTeamRepository;
         private readonly IValidator<CreateInvitationCommand> _validator;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
+            if (accountTeamRepository == null)
+                throw new ArgumentNullException(nameof(accountTeamRepository));
             _invitationRepository = invitationRepository;
+            _accountTeamRepository = accountTeamRepository;
             _validator = new CreateInvitationCommandValidator();
         }
 
@@ -32,6 +36,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
             if (existing != null)
+                return;
+
+            var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
+
+            if (owner == null || (Role)owner.RoleId != Role.Owner)
                 return;
 
             await _invitationRepository.Create(new Invitation

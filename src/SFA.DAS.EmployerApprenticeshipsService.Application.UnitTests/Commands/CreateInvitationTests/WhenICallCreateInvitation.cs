@@ -15,12 +15,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
         private Mock<IInvitationRepository> _invitationRepository;
         private CreateInvitationCommandHandler _handler;
         private CreateInvitationCommand _command;
+        private Mock<IAccountTeamRepository> _accountTeamRepository;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object);
+            _accountTeamRepository = new Mock<IAccountTeamRepository>();
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object);
             _command = new CreateInvitationCommand
             {
                 AccountId = 101,
@@ -38,13 +40,42 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
         }
 
         [Test]
-        public async Task ValidCommandCreatesInvitation()
+        public async Task ValidCommandFromAccountOwnerCreatesInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
+            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            {
+                RoleId = (int)Role.Owner
+            });
 
             await _handler.Handle(_command);
 
             _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == _command.AccountId && m.Email == _command.Email && m.Name == _command.Name && m.Status == InvitationStatus.Pending && m.RoleId == _command.RoleId && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
+        }
+
+        [Test]
+        public async Task ValidCommandFromNonAccountOwnerDoesNotCreateInvitation()
+        {
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
+            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            {
+                RoleId = 0
+            });
+
+            await _handler.Handle(_command);
+
+            _invitationRepository.Verify(x => x.Create(It.IsAny<Invitation>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ValidCommandFromNonAccountUserDoesNotCreateInvitation()
+        {
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
+            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
+
+            await _handler.Handle(_command);
+
+            _invitationRepository.Verify(x => x.Create(It.IsAny<Invitation>()), Times.Never);
         }
 
         [Test]
