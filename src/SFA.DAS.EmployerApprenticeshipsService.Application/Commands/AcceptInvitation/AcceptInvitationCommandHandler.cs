@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -10,13 +11,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
     public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
+        private readonly IAccountTeamRepository _accountTeamRepository;
+        private readonly IUserAccountRepository _userAccountRepository;
         private readonly AcceptInvitationCommandValidator _validator;
 
-        public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository)
+        public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IUserAccountRepository userAccountRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
+            if (accountTeamRepository == null)
+                throw new ArgumentNullException(nameof(accountTeamRepository));
+            if (userAccountRepository == null)
+                throw new ArgumentNullException(nameof(userAccountRepository));
             _invitationRepository = invitationRepository;
+            _accountTeamRepository = accountTeamRepository;
+            _userAccountRepository = userAccountRepository;
             _validator = new AcceptInvitationCommandValidator();
         }
 
@@ -30,13 +39,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
             var existing = await _invitationRepository.Get(message.Id);
 
             if (existing == null)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
 
-            //TODO: What happens if status not Pending and/or expired
+            var user = await _userAccountRepository.Get(existing.Email);
+
+            if (user == null)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User not found" } });
+
+            var membership = await _accountTeamRepository.GetMembership(existing.AccountId, user.UserRef);
+
+            if (membership != null)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User already member of Account" } });
+
             if (existing.Status != InvitationStatus.Pending)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation is not pending" } });
             if (existing.ExpiryDate < DateTimeProvider.Current.UtcNow)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation has expired" } });
 
             existing.Status = InvitationStatus.Accepted;
 

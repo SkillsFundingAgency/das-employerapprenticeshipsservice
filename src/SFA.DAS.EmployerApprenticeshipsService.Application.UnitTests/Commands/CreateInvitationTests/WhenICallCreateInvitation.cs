@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
         }
 
         [Test]
-        public async Task ValidCommandFromNonAccountOwnerDoesNotCreateInvitation()
+        public void ValidCommandFromNonAccountOwnerDoesNotCreateInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
             _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
@@ -62,20 +62,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
                 RoleId = 0
             });
 
-            await _handler.Handle(_command);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
-            _invitationRepository.Verify(x => x.Create(It.IsAny<Invitation>()), Times.Never);
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         [Test]
-        public async Task ValidCommandFromNonAccountUserDoesNotCreateInvitation()
+        public void ValidCommandFromNonAccountUserDoesNotCreateInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
             _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
 
-            await _handler.Handle(_command);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
-            _invitationRepository.Verify(x => x.Create(It.IsAny<Invitation>()), Times.Never);
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
         }
 
         [Test]
-        public async Task ValidCommandButExistingDoesNotCreateInvitation()
+        public void ValidCommandButExistingDoesNotCreateInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new Invitation
             {
@@ -98,9 +98,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
                 Email = _command.Email
             });
 
-            await _handler.Handle(_command);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
-            _invitationRepository.Verify(x => x.Create(It.IsAny<Invitation>()), Times.Never);
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
     }
 }

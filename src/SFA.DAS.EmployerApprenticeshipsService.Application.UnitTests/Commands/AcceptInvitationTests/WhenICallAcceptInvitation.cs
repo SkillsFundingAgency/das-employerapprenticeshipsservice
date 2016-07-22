@@ -11,15 +11,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Acce
     [TestFixture]
     public class WhenICallAcceptInvitation
     {
-        private Mock<IInvitationRepository> _invitationRepository;
         private AcceptInvitationCommandHandler _handler;
         private Invitation _invitation;
+        private Mock<IInvitationRepository> _invitationRepository;
+        private Mock<IAccountTeamRepository> _accountTeamRepository;
+        private Mock<IUserAccountRepository> _userAccountRepository;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _handler = new AcceptInvitationCommandHandler(_invitationRepository.Object);
+            _accountTeamRepository = new Mock<IAccountTeamRepository>();
+            _userAccountRepository = new Mock<IUserAccountRepository>();
+            _handler = new AcceptInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _userAccountRepository.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -40,6 +44,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Acce
         public async Task IfExistsAndStatusIsPending()
         {
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
+            _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
 
             await _handler.Handle(new AcceptInvitationCommand
             {
@@ -50,48 +56,87 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Acce
         }
 
         [Test]
-        public async Task IfNotExists()
+        public void IfUserEmailNotFound()
+        {
+            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(null);
+
+            var command = new AcceptInvitationCommand
+            {
+                Id = _invitation.Id
+            };
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void IfAlreadyAMember()
+        {
+            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
+            _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new Membership());
+
+            var command = new AcceptInvitationCommand
+            {
+                Id = _invitation.Id
+            };
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void IfNotExists()
         {
             const long invitationId = 1;
 
             _invitationRepository.Setup(x => x.Get(invitationId)).ReturnsAsync(null);
 
-            await _handler.Handle(new AcceptInvitationCommand
+            var command = new AcceptInvitationCommand
             {
-                Id = invitationId
-            });
+                Id = _invitation.Id
+            };
 
-            _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == invitationId && z.Status == InvitationStatus.Accepted)), Times.Never);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         [Test]
-        public async Task IfStatusIsNotPending()
+        public void IfStatusIsNotPending()
         {
             _invitation.Status = InvitationStatus.Accepted;
 
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
 
-            await _handler.Handle(new AcceptInvitationCommand
+            var command = new AcceptInvitationCommand
             {
                 Id = _invitation.Id
-            });
+            };
 
-            _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == _invitation.Id && z.Status == InvitationStatus.Accepted)), Times.Never);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         [Test]
-        public async Task IfHasExpired()
+        public void IfHasExpired()
         {
             _invitation.ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-2);
 
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
 
-            await _handler.Handle(new AcceptInvitationCommand
+            var command = new AcceptInvitationCommand
             {
                 Id = _invitation.Id
-            });
+            };
 
-            _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == _invitation.Id && z.Status == InvitationStatus.Accepted)), Times.Never);
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         [Test]

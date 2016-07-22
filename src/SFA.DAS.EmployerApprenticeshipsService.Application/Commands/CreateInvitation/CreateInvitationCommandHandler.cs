@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
@@ -36,12 +36,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
             if (existing != null)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
 
             var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
 
             if (owner == null || (Role)owner.RoleId != Role.Owner)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner for this Account" } });
 
             await _invitationRepository.Create(new Invitation
             {

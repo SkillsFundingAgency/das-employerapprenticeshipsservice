@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -33,12 +34,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
             var existing = await _invitationRepository.Get(message.Id);
 
             if (existing == null)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
 
             var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
 
             if (owner == null || (Role)owner.RoleId != Role.Owner)
-                return;
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
 
             existing.Status = InvitationStatus.Deleted;
 

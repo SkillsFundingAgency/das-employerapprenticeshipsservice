@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -10,30 +8,45 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class UserAccountRepository : IUserAccountRepository
+    public class UserAccountRepository : BaseRepository, IUserAccountRepository
     {
-        readonly string _connectionString = String.Empty;
-        public UserAccountRepository(string connectionString)
+        public UserAccountRepository(string connectionString) : base(connectionString)
         {
-            _connectionString = connectionString;
         }
 
         public async Task<Accounts> GetAccountsByUserId(string userId)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@userId", userId, DbType.String);
 
-                var sql = @"select a.* from [dbo].[User] u 
+                return await c.QueryAsync<Account>(
+                    sql: @"select a.* from [dbo].[User] u 
                         left join[dbo].[Membership] m on m.UserId = u.Id
                         left join[dbo].[Account]  a on m.AccountId = a.Id
-                        where u.PireanKey = @Id";
-                var accounts = connection.Query<Account>(sql, new { Id = userId });
+                        where u.PireanKey = @Id",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
-                connection.Close();
-                return new Accounts { AccountList = (List<Account>)accounts };
-            }
-       
+            return new Accounts { AccountList = (List<Account>)result };
+        }
+
+        public async Task<User> Get(string email)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", email, DbType.String);
+
+                return await c.QueryAsync<User>(
+                    sql: "SELECT * FROM [dbo].[User] WHERE Email = @email;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
         }
     }
 }
