@@ -6,7 +6,7 @@ select a.Id as 'AccountId', u.Id ,'' as Name,  u.Email,CONVERT(varchar(64), u.Pi
                             left join [Role] r on r.Id = m.RoleId
                             left join [Account] a on a.Id = m.AccountId
 
-Union	
+Union all
 SELECT 
 	i.AccountId,
 	i.Id,
