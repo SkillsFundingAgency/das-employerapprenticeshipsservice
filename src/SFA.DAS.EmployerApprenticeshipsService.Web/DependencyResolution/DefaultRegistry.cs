@@ -31,12 +31,11 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap;
+using StructureMap.Graph;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
-    using StructureMap.Configuration.DSL;
-    using StructureMap.Graph;
-	
+    
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         
@@ -52,9 +51,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             Scan(
                 scan =>
                 {
-                    scan.AssembliesFromApplicationBaseDirectory(
-                        a => a.GetName().Name.StartsWith(ServiceName));
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.WithDefaultConventions();
                 });
             
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
