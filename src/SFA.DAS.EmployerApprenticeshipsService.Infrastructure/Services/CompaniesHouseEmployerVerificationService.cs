@@ -1,22 +1,22 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
-using Microsoft.Azure;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 {
     public class CompaniesHouseEmployerVerificationService : IEmployerVerificationService
     {
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private readonly string _apiKey;
+        
 
-        public CompaniesHouseEmployerVerificationService(string apiKey)
+        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _apiKey = apiKey;
+            _configuration = configuration;
         }
 
         public async Task<EmployerInformation> GetInformation(string id)
@@ -24,8 +24,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             Logger.Info($"GetInformation({id})");
 
             var webClient = new WebClient();
-
-            webClient.Headers.Add($"Authorization: Basic {_apiKey}");
+            
+            webClient.Headers.Add($"Authorization: Basic {_configuration.CompaniesHouse.ApiKey}");
             try
             {
                 var result = await webClient.DownloadStringTaskAsync($"https://api.companieshouse.gov.uk/company/{id}");
