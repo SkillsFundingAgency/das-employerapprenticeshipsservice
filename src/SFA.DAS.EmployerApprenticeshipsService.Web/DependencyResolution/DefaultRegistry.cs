@@ -26,6 +26,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -59,6 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                     scan.WithDefaultConventions();
                     scan.AssemblyContainingType<IEmployerVerificationService>();
                     scan.AssemblyContainingType<GetUsersQuery>();
+                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
                     scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
@@ -103,8 +105,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             For<IAccountRepository>().Use<AccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
 			For<ICookieService>().Use<HttpCookieService>();
             For<IEmployerAccountRepository>().Use<EmployerAccountRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
+            For<IAccountTeamRepository>().Use<AccountTeamRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
             For<IInvitationRepository>().Use<InvitationRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-
             var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
             For<IUserRepository>().Use<FileSystemUserRepository>().Ctor<string>().Is(appData);
             
