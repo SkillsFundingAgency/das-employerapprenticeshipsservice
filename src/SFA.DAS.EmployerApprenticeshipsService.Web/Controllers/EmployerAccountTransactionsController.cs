@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             if (transactionViewResult.Account == null)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "AccessDenied");
             }
             return View(transactionViewResult.Model);
         }
