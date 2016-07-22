@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
     {
         private readonly CloudStorageAccount _storageAccount;
 
-        public LevyAggregationRepository(string storageConnectionString)
+        public LevyAggregationRepository()
         {
-            _storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+            _storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
         }
 
         public async Task Update(int accountId, int pageNumber, string json)
