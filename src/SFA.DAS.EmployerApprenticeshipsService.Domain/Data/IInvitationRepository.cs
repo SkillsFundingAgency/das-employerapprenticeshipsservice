@@ -8,5 +8,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<List<InvitationView>> Get(string userId);
         Task Create(Invitation invitation);
         Task<Invitation> Get(long id);
+        Task<Invitation> Get(long accountId, string email);
+        Task ChangeStatus(Invitation invitation);
     }
 }

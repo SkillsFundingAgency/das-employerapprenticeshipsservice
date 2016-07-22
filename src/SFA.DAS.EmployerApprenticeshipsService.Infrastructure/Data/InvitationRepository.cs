@@ -65,5 +65,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.FirstOrDefault();
         }
+
+        public async Task<Invitation> Get(long accountId, string email)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@email", email, DbType.String);
+
+                return await c.QueryAsync<Invitation>(
+                    sql: "SELECT * FROM [dbo].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
+
+        public async Task ChangeStatus(Invitation invitation)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@statusId", invitation.Status, DbType.Int16);
+
+                return await c.ExecuteAsync(
+                    sql: "UPDATE [dbo].[Invitation] SET StatusId = @statusId WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }

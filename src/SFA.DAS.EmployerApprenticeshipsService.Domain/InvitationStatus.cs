@@ -2,6 +2,7 @@
 {
     public enum InvitationStatus : byte
     {
-        Pending = 1
+        Pending = 1,
+        Accepted = 2
     }
 }
