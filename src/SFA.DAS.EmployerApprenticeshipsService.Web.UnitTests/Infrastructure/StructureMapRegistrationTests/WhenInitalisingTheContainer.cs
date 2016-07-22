@@ -31,6 +31,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             Assert.IsNotNull(item.Configuration);
         }
 
+        [Test]
+        public void ThenANonRegisteredClassWithADefaultConstructorDoesNotError()
+        {
+            //Act
+            var item = _container.GetInstance<TestController>();
+
+            //Assert
+            Assert.IsNotNull(item);
+        }
+
         public class TestRegistry : Registry
         {
             public TestRegistry()
@@ -39,6 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             }
         }
 
+        
         public interface ITestClass
         {
             
@@ -51,6 +62,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             public TestClass(EmployerApprenticeshipsServiceConfiguration configuration)
             {
                 Configuration = configuration;
+            }
+        }
+
+        public class TestController
+        {
+            
+            public TestController()
+            {
+            }
+
+            public TestController(ITestClass something)
+            {
+                
             }
         }
     }

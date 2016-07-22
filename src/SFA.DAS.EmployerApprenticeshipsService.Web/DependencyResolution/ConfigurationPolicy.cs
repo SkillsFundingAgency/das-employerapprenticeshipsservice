@@ -16,9 +16,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var serviceConfigurationParamater =
-                instance?.Constructor.GetParameters()
-                    .FirstOrDefault(x => x.ParameterType == typeof(T));
+            
+            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
 
             if (serviceConfigurationParamater != null)
             {
@@ -29,7 +28,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution
                 }
 
                 var configurationRepository = GetConfigurationRepository();
-                var configurationService = new ConfigurationService(configurationRepository, new ConfigurationOptions(ServiceName, environment, "1.0"));
+                var configurationService = new ConfigurationService(configurationRepository,
+                    new ConfigurationOptions(ServiceName, environment, "1.0"));
 
                 var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
                 if (result != null)
@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution
                     instance.Dependencies.AddForConstructorParameter(serviceConfigurationParamater, result);
                 }
             }
+            
         }
         
         private static IConfigurationRepository GetConfigurationRepository()
