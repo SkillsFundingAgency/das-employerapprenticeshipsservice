@@ -20,11 +20,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             return await WithConnection(async connection =>
             {
-                var sql = @"select u.Id , u.Email,CONVERT(varchar(64), u.PireanKey) as 'UserRef', r.Name as 'Role' from [User] u
-                            left join [Membership] m on m.UserId = u.Id
-                            left join [Role] r on r.Id = m.RoleId
-                            left join [Account] a on a.Id = m.AccountId
-                            where u.PireanKey = @userId and a.Id = @accountId";
+                var sql = @"select tm.* from [GetTeamMembers] tm 
+join [Membership] m on m.AccountId = tm.AccountId
+join [User] u on u.Id = m.UserId
+where u.PireanKey = @userId and tm.AccountId = @accountId";
                 var members = await connection.QueryAsync<TeamMember>(sql, new { accountId = accountId, userId = userId });
                 return new List<TeamMember>(members);
             });

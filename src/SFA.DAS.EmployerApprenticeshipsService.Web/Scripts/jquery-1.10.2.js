@@ -3407,7 +3407,7 @@ jQuery.support = (function( support ) {
 	support.reliableMarginRight = true;
 	support.boxSizingReliable = true;
 
-	// Make sure checked status is properly cloned
+	// Make sure checked Status is properly cloned
 	input.checked = true;
 	support.noCloneChecked = input.cloneNode( true ).checked;
 
@@ -8230,7 +8230,7 @@ jQuery.extend({
 				}
 			} else {
 				// We extract error from statusText
-				// then normalize statusText and status for non-aborts
+				// then normalize statusText and Status for non-aborts
 				error = statusText;
 				if ( status || !statusText ) {
 					statusText = "error";
@@ -8768,7 +8768,7 @@ if ( xhrSupported ) {
 										statusText = "";
 									}
 
-									// Filter status for non standard behaviors
+									// Filter Status for non standard behaviors
 
 									// If the request is local and we have data: assume a success
 									// (success with no data won't get notified, that's the best we
