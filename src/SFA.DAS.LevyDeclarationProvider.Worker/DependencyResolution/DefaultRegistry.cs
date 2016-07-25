@@ -32,13 +32,9 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             }
             Scan(scan =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(
-                    a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
                    a.GetName().Name.StartsWith("SFA.DAS.LevyDeclarationProvider"));
-                    
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                scan.WithDefaultConventions();
-                
             });
 
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
@@ -47,8 +43,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             var configurationRepository = GetConfigurationRepository();
 
             RegisterMessageQueues(configurationRepository, environment);
-
-
+            
             AddMediatrRegistrations();
         }
 

@@ -37,8 +37,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
 
             _container = new Container(c =>
             {
-                c.AddRegistry<DefaultRegistry>();
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                c.AddRegistry<DefaultRegistry>();
             });
 
 

@@ -11,7 +11,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         
         protected FileSystemRepository(string appDataFolderName)
         {
-            var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+            var appData = !string.IsNullOrEmpty((string)AppDomain.CurrentDomain.GetData("DataDirectory"))
+                ? (string)AppDomain.CurrentDomain.GetData("DataDirectory")
+                : Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "App_Data");
 
             Directory = Path.Combine(appData, appDataFolderName);
         }
