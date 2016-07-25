@@ -24,7 +24,6 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
@@ -33,7 +32,6 @@ using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap;
 using StructureMap.Graph;
-using StructureMap.Graph.Scanning;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
