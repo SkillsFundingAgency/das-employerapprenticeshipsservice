@@ -6,5 +6,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     public interface IInvitationRepository
     {
         Task<List<InvitationView>> Get(string userId);
+        Task<InvitationView> GetView(long id);
+        Task Create(Invitation invitation);
+        Task<Invitation> Get(long id);
+        Task<Invitation> Get(long accountId, string email);
+        Task ChangeStatus(Invitation invitation);
     }
 }

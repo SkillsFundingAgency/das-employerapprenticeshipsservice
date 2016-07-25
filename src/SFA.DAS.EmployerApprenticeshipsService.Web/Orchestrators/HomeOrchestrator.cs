@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                                                     Email = x.Email,
                                                     FirstName = x.FirstName,
                                                     LastName = x.LastName,
-                                                    UserId = x.UserId
+                                                    UserId = x.UserRef
                                                 }).ToList()
             };
         }

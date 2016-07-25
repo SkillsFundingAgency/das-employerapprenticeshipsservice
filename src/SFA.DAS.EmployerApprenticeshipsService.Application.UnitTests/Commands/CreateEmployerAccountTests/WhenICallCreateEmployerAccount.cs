@@ -45,5 +45,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
 
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
         }
+
+        [Test]
+        public void InvalidRequest()
+        {
+            var command = new CreateAccountCommand();
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
+        }
     }
 }

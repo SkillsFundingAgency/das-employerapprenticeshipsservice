@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetUs
         public void Arrange()
         {
             _userRepository = new Mock<IUserRepository>();
-            _user = new User { Email = "test@local.com", FirstName = "Test", LastName = "Tester", UserId = Guid.NewGuid().ToString() };
+            _user = new User { Email = "test@local.com", FirstName = "Test", LastName = "Tester", UserRef = Guid.NewGuid().ToString() };
             _users = new List<User> { _user };
             _userRepository.Setup(x => x.GetAllUsers()).ReturnsAsync(new Users {UserList = _users});
 

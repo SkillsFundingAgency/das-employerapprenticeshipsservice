@@ -45,7 +45,12 @@
     <Reference Include="SFA.DAS.Messaging">
       <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.5827\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -55,9 +60,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
+    <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandHandler.cs" />
+    <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandValidator.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
+    <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
+    <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
+    <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
+    <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
@@ -81,6 +95,9 @@
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesHandler.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesQuery.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesResponse.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationRequest.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />

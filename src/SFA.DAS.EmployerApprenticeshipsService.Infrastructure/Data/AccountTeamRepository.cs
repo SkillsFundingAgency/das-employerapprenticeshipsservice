@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -19,11 +17,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _configuration = configuration;
+
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
         }
         public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string userId)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             return await WithConnection(async connection =>
             {
                 var sql = @"select tm.* from [GetTeamMembers] tm 
@@ -35,7 +33,21 @@ where u.PireanKey = @userId and tm.AccountId = @accountId";
             });
         }
 
+        public async Task<Membership> GetMembership(long accountId, string userId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.String);
 
+                return await c.QueryAsync<Membership>(
+                    sql: "SELECT m.* FROM [dbo].[Membership] m INNER JOIN [dbo].[User] u ON u.Id = m.UserId WHERE m.AccountId = @accountId AND u.PireanKey = @userId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
+            return result.FirstOrDefault();
+        }
     }
 }
