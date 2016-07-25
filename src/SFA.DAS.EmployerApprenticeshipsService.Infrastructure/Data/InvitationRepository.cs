@@ -4,18 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class InvitationRepository : BaseRepository, IInvitationRepository
     {
-        public InvitationRepository(string connectionString) : base(connectionString)
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        public override string ConnectionString { get; set; }
+
+        public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
+            _configuration = configuration;
         }
 
         public async Task<List<InvitationView>> Get(string userId)
         {
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
+
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();

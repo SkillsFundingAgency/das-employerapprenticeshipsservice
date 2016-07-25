@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
 using SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 using StructureMap;
@@ -17,11 +19,11 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
 
         public override void Run()
         {
-            var registry = new DefaultRegistry();
-
-            _container = new Container(registry);
-
-            _container.AssertConfigurationIsValid();
+            _container = new Container(c =>
+            {
+                c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                c.AddRegistry<DefaultRegistry>();
+            });
 
             Trace.TraceInformation("SFA.DAS.LevyAggregationProvider.Worker is running");
 
@@ -37,12 +39,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
 
         public override bool OnStart()
         {
-            // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
-
-            // For information on handling configuration changes
-            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
-
+            
             bool result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.LevyAggregationProvider.Worker has been started");
@@ -66,7 +64,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
         {
             var manager = _container.GetInstance<LevyAggregationManager>();
 
-            // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
                 await manager.Process();

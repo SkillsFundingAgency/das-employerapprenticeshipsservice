@@ -10,13 +10,13 @@ using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Entities;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class LevyAggregationRepository : IAggregationRepository
+    public class AggregationRepository : IAggregationRepository
     {
         private readonly CloudStorageAccount _storageAccount;
 
-        public LevyAggregationRepository(string storageConnectionString)
+        public AggregationRepository()
         {
-            _storageAccount = CloudStorageAccount.Parse(storageConnectionString);
+            _storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
         }
 
         public async Task Update(int accountId, int pageNumber, string json)

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
@@ -12,15 +13,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class DasLevyRepository : IDasLevyRepository
     {
-        readonly string _connectionString = String.Empty;
-        public DasLevyRepository(string connectionString)
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+
+        public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
         public async Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
 
@@ -49,7 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
                 var sql = @"insert into [dbo].LevyDeclaration (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) values (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType)";
@@ -61,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         public async Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
 
@@ -88,7 +90,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
                 var sql = @"insert into [dbo].EnglishFraction (EmpRef, DateCalculated, Amount) values (@EmpRef, @DateCalculated, @Amount)";
@@ -102,7 +104,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             var declarations = new List<LevyDeclarationView>();
 
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
 
