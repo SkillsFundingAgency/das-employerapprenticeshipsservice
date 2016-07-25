@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,110 +12,95 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class DasLevyRepository : IDasLevyRepository
+    public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-
         public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            :base(configuration)
         {
-            _configuration = configuration;
         }
 
         public async Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
         {
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@empRef", empRef, DbType.String);
 
-                var sql = @"select ld.* from  [dbo].[LevyDeclaration] ld where ld.empRef = @EmpRef and ld.SubmissionId = @Id";
-                var account = connection.QueryFirstOrDefault(sql, new { Id = id, EmpRef = empRef });
+                return await c.QueryAsync<DasDeclaration>(
+                    sql: "SELECT Amount, SubmissionId AS Id, SubmissionType, SubmissionDate AS [Date] FROM [dbo].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
-                connection.Close();
-                if (account == null)
-                {
-                    return account;
-                }
-                else
-                {
-                    return new DasDeclaration
-                    {
-                        Amount = account.Amount,
-                        Id = account.SubmissionId,
-                        SubmissionType = account.SubmissionType,
-                        Date = account.SubmissionDate
-                    };
-                }
-
-            }
-
+            return result.FirstOrDefault();
         }
 
         public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef)
         {
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            await WithConnection(async c =>
             {
-                await connection.OpenAsync();
-                var sql = @"insert into [dbo].LevyDeclaration (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) values (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType)";
+                var parameters = new DynamicParameters();
+                parameters.Add("@Amount", dasDeclaration.Amount, DbType.Decimal);
+                parameters.Add("@EmpRef", empRef, DbType.String);
+                parameters.Add("@SubmissionDate", dasDeclaration.Date, DbType.DateTime);
+                parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
+                parameters.Add("@SubmissionType", dasDeclaration.SubmissionType, DbType.String);
 
-                await connection.ExecuteAsync(sql, new { dasDeclaration.Amount, SubmissionDate = dasDeclaration.Date, SubmissionId = dasDeclaration.Id, EmpRef = empRef, dasDeclaration.SubmissionType });
-                connection.Close();
-            }
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [dbo].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType);",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
         {
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@dateCalculated", dateCalculated, DbType.DateTime);
+                parameters.Add("@empRef", empRef, DbType.String);
 
-                var sql = @"select ef.* from  [dbo].[EnglishFraction] ef where ef.EmpRef = @EmpRef and ef.DateCalculated = @DateCalculated";
-                var fraction = connection.QueryFirstOrDefault(sql, new { DateCalculated = dateCalculated, EmpRef = empRef });
+                return await c.QueryAsync<DasEnglishFractions>(
+                    sql: "SELECT * FROM [dbo].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
-                connection.Close();
-                if (fraction == null)
-                {
-                    return fraction;
-                }
-                else
-                {
-                    return new DasEnglishFractions
-                    {
-                        Amount = fraction.Amount,
-                        DateCalculated = fraction.DateCalculated
-                    };
-                }
-
-            }
-
+            return result.FirstOrDefault();
         }
 
         public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
         {
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            await WithConnection(async c =>
             {
-                await connection.OpenAsync();
-                var sql = @"insert into [dbo].EnglishFraction (EmpRef, DateCalculated, Amount) values (@EmpRef, @DateCalculated, @Amount)";
+                var parameters = new DynamicParameters();
+                parameters.Add("@EmpRef", empRef, DbType.String);
+                parameters.Add("@Amount", fractions.Amount, DbType.Decimal);
+                parameters.Add("@SubmissionDate", fractions.DateCalculated, DbType.DateTime);
 
-                await connection.ExecuteAsync(sql, new { fractions.Amount, EmpRef = empRef, fractions.DateCalculated });
-                connection.Close();
-            }
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [dbo].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(int accountId)
         {
-            var declarations = new List<LevyDeclarationView>();
-
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
 
-                var sql = @"SELECT * from [dbo].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC";
-                declarations = connection.Query<LevyDeclarationView>(sql, new { accountId = accountId }).ToList();
+                return await c.QueryAsync<LevyDeclarationView>(
+                    sql: "SELECT * from [dbo].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
-                connection.Close();
-            }
-
-            return declarations;
+            return result.ToList();
         }
     }
 }

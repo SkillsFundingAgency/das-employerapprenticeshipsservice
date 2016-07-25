@@ -9,18 +9,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-        public override string ConnectionString { get; set; }
-
         public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            :base(configuration)
         {
-            _configuration = configuration;
         }
 
         public async Task<int> CreateAccount(string userRef, string employerNumber, string employerName, string employerRef)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
