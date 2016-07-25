@@ -11,20 +11,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class UserAccountRepository : BaseRepository, IUserAccountRepository
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-
-        public override string ConnectionString { get; set; }
-
         public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            :base(configuration)
         {
-            _configuration = configuration;
-            
         }
 
         public async Task<Accounts> GetAccountsByUserId(string userId)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
@@ -44,8 +37,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         public async Task<User> Get(string email)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();

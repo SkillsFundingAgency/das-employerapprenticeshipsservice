@@ -11,14 +11,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class InvitationRepository : BaseRepository, IInvitationRepository
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-        public override string ConnectionString { get; set; }
-
         public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            :base(configuration)
         {
-            _configuration = configuration;
-
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
         }
 
         public async Task<List<InvitationView>> Get(string userId)

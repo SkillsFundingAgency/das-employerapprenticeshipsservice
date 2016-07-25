@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.Configuration;
@@ -12,29 +13,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IConfigurationService _configurationService;
-        public override string ConnectionString { get; set; }
 
         public EmployerAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            :base(configuration)
         {
-            _configuration = configuration;
         }
 
         public async Task<Account> GetAccountById(int id)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
-            using (var connection = new SqlConnection(ConnectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int32);
 
-                var sql = @"select a.* from [dbo].[Account] a where a.Id = @Id";
-                var account = await connection.QueryFirstOrDefaultAsync<Account>(sql, new { Id = id });
-
-                connection.Close();
-                 return account;
-                //return new Account { Id = account.Id, Name = account.Name};
-            }
-
+                return await c.QueryAsync<Account>(
+                    sql: "select a.* from [dbo].[Account] a where a.Id = @Id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+            return result.FirstOrDefault();
         }
     }
 }
