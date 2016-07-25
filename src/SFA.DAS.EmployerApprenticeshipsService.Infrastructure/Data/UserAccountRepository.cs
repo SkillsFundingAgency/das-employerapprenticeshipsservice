@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT * FROM [dbo].[User] WHERE Email = @email;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [dbo].[User] WHERE Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
