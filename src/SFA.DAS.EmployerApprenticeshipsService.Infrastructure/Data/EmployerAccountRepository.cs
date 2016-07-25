@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
+﻿using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class EmployerAccountRepository : IEmployerAccountRepository
+    public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
     {
-        readonly string _connectionString = String.Empty;
-        public EmployerAccountRepository(string connectionString)
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        private readonly IConfigurationService _configurationService;
+        public override string ConnectionString { get; set; }
+
+        public EmployerAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
         public async Task<Account> GetAccountById(int id)
         {
-        
-            using (var connection = new SqlConnection(_connectionString))
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
+
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
 

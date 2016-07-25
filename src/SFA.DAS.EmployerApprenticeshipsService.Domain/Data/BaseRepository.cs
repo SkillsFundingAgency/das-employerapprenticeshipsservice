@@ -7,18 +7,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public abstract class BaseRepository
     {
-        private readonly string _connectionString;
-
-        protected BaseRepository(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
+        public abstract string ConnectionString { get; set; }
+        
         protected async Task<T> WithConnection<T>(Func<IDbConnection, Task<T>> getData)
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                using (var connection = new SqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync(); // Asynchronously open a connection to the database
                     return await getData(connection); // Asynchronously execute getData, which has been passed in as a Func<IDBConnection, Task<T>>

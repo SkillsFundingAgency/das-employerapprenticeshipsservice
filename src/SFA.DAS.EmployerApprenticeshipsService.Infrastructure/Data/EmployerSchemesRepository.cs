@@ -6,22 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class EmployerSchemesRepository : IEmployerSchemesRepository
     {
-        readonly string _connectionString = String.Empty;
-        public EmployerSchemesRepository(string connectionString)
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _connectionString = connectionString;
+            _configuration = configuration;
         }
 
         public async Task<Schemes> GetSchemesByEmployerId(int employerId)
         {
 
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
             {
                 await connection.OpenAsync();
 

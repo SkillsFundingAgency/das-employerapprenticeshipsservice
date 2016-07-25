@@ -4,18 +4,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class AccountTeamRepository : BaseRepository, IAccountTeamRepository
     {
-        public AccountTeamRepository(string connectionString) : base(connectionString)
-        {
-        }
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        public override string ConnectionString { get; set; }
 
+        public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string userId)
         {
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
+
             return await WithConnection(async connection =>
             {
                 var sql = @"select tm.* from [GetTeamMembers] tm 

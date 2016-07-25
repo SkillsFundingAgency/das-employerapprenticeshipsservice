@@ -13,6 +13,8 @@ using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap;
+using StructureMap.Configuration.DSL;
+using StructureMap.Graph;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
 {
@@ -32,40 +34,43 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             Scan(
                 scan =>
                 {
-                    scan.WithDefaultConventions();
-                    scan.AssemblyContainingType<LevyAggregator>();
-                    scan.ConnectImplementationsToTypesClosing(typeof(IRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncRequestHandler<,>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(INotificationHandler<>));
-                    scan.ConnectImplementationsToTypesClosing(typeof(IAsyncNotificationHandler<>));
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
+                        a.GetName().Name.StartsWith(ServiceName));
+                    scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
-            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
-            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
 
+            For<IUserRepository>().Use<FileSystemUserRepository>();
+
+            var configurationRepository = GetConfigurationRepository();
+
+            RegisterMessageQueues(configurationRepository, environment);
+
+            RegisterMediator();
+
+        }
+        private static IConfigurationRepository GetConfigurationRepository()
+        {
             IConfigurationRepository configurationRepository;
-
             if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
             {
                 configurationRepository = new FileStorageConfigurationRepository();
             }
             else
             {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+                configurationRepository =
+                    new AzureTableStorageConfigurationRepository(
+                        CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
             }
+            return configurationRepository;
+        }
 
+        private void RegisterMessageQueues(IConfigurationRepository configurationRepository, string environment)
+        {
             var configurationService = new ConfigurationService(
                 configurationRepository,
                 new ConfigurationOptions(ServiceName, environment, "1.0"));
             For<IConfigurationService>().Use(configurationService);
-
-            var storageConnectionString = CloudConfigurationManager.GetSetting("StorageConnectionString") ??
-                                          "UseDevelopmentStorage=true";
-
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
-            For<IAggregationRepository>().Use<LevyAggregationRepository>().Ctor<string>().Is(storageConnectionString);
-            For<IDasLevyRepository>().Use<DasLevyRepository>().Ctor<string>().Is(config.Employer.DatabaseConnectionString);
-
             if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
             {
                 var queueFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -75,6 +80,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
             {
                 For<IPollingMessageReceiver>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_refresh_employer_levy)));
             }
+        }
+
+        private void RegisterMediator()
+        {
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
 
             For<IMediator>().Use<Mediator>();
         }
