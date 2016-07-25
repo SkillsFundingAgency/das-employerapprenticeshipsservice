@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         public override string ConnectionString { get; set; }
 
-        protected AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _configuration = configuration;
         }
