@@ -72,6 +72,9 @@
     <Build Include="LevyDeclaration.sql" />
     <Build Include="EnglishFraction.sql" />
     <Build Include="Views\GetLevyDeclarations.sql" />
+    <Build Include="Invitation.sql" />
+    <Build Include="Views\GetInvitations.sql" />
+    <Build Include="Views\GetTeamMembers.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

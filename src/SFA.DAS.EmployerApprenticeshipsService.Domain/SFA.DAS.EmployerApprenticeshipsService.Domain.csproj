@@ -105,10 +105,12 @@
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
+    <Compile Include="Data\IAccountTeamRepository.cs" />
     <Compile Include="Data\IAggregationRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IEmployerAccountRepository.cs" />
     <Compile Include="Data\IEmployerSchemesRepository.cs" />
+    <Compile Include="Data\IInvitationRepository.cs" />
     <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
@@ -116,6 +118,9 @@
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
+    <Compile Include="Invitation.cs" />
+    <Compile Include="InvitationStatus.cs" />
+    <Compile Include="InvitationView.cs" />
     <Compile Include="LevyDeclarationView.cs" />
     <Compile Include="LevyItemType.cs" />
     <Compile Include="Membership.cs" />
@@ -126,8 +131,10 @@
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Paye.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
     <Compile Include="Schemes.cs" />
+    <Compile Include="TeamMember.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />
   </ItemGroup>

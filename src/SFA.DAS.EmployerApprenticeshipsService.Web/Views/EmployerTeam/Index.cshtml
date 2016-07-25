@@ -1,0 +1,59 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.EmployerTeamMembersViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">Team Members</h1>
+
+
+
+    </div>
+    <div class="column-one-third">
+        <form >
+            <div style="margin-top:30px; float:right"><input class="button" id="addNewUser" type="submit" value="Invite team member"></div>
+        </form>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (Model.TeamMembers.Count == 0)
+        {
+            <p>TODO : EMPTY STATE</p>
+        }
+        else
+        {
+            <p class="lede">This is the list of people who can access this account or have been invited
+  to be a team member on this account. </p>
+          
+            <table>
+                <thead>
+                    <tr>
+                        
+                        <th scope="col" style="padding-top:0">Email address</th>
+
+                        <th scope="col" class="" style="padding-top:0">Role</th>
+                        <th scope="col" class="" style="padding-top:0">Status</th>
+
+                        <th scope="col" style="padding-top:0"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var teamMember in Model.TeamMembers)
+                    {
+                        <tr>
+                            <td>@teamMember.Email</td>
+                            <td>@teamMember.Role</td>
+                            <td>@teamMember.Status</td>
+                            <td><a href="#">View</a></td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        <p></p>
+     
+    </div>
+</div>

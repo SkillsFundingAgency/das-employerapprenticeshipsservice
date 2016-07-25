@@ -24,6 +24,7 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
@@ -53,6 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                 scan =>
                 {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
+
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
             
@@ -106,7 +108,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
         {
             For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
-
             For<IMediator>().Use<Mediator>();
         }
         #endregion

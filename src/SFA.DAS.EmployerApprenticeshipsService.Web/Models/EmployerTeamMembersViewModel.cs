@@ -3,9 +3,9 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public class UserAccountsViewModel
+    public class EmployerTeamMembersViewModel
     {
-        public Accounts Accounts;
-        public List<InvitationView> Invitations;
+        public List<TeamMember> TeamMembers { get; set; }
+        public int AccountId { get; set; }
     }
 }

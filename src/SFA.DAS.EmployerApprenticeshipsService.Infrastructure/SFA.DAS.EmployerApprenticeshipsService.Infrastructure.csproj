@@ -82,11 +82,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AccountRepository.cs" />
+    <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\DasLevyRepository.cs" />
     <Compile Include="Data\EmployerSchemesRepository.cs" />
     <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
+    <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\AggregationRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />
