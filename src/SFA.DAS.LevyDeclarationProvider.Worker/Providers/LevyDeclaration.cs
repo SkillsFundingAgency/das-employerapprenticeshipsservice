@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
@@ -18,22 +17,27 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
     {
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
         private IMessagePublisher _messagePublisher;
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMessagePublisher messagePublisher, IMediator mediator)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMessagePublisher messagePublisher, IMediator mediator, ILogger logger)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
+            _logger = logger;
             _messagePublisher = messagePublisher;
         }
 
         public async Task Handle()
         {
+
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
 
                 var employerAccountId = message.Content.AccountId;
+
+                _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
 
                 var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = employerAccountId });
                 if (employerAccountResult?.Account == null) return;

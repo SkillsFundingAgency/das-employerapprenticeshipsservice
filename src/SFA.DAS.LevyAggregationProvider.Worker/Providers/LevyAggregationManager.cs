@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.LevyAggregationProvider.Worker.Commands;
 using SFA.DAS.LevyAggregationProvider.Worker.Commands.CreateLevyAggregation;
 using SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration;
 using SFA.DAS.Messaging;
@@ -14,8 +13,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     {
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
 
-        public LevyAggregationManager(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator)
+        public LevyAggregationManager(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger)
         {
             if (pollingMessageReceiver == null)
                 throw new ArgumentNullException(nameof(pollingMessageReceiver));
@@ -23,6 +23,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 throw new ArgumentNullException(nameof(mediator));
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
+            _logger = logger;
         }
 
         public async Task Process()
@@ -34,6 +35,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
                 if (message?.Content == null || message.Content.AccountId == 0)
                     return;
+
+
+                _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
 
                 var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
                 {

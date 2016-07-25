@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -10,12 +11,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     public class EmployerAccountOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
 
-        public EmployerAccountOrchestrator(IMediator mediator)
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _logger = logger;
         }
 
         public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
@@ -24,9 +27,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 Id = model.EmployerRef
             });
-
+            
             if (response == null)
+            {
+                _logger.Warn("No response from SelectEmployerViewModel");
                 return new SelectEmployerViewModel();
+            }
+
+            _logger.Info($"Returning Data for {model.EmployerRef}");
 
             return new SelectEmployerViewModel
             {
