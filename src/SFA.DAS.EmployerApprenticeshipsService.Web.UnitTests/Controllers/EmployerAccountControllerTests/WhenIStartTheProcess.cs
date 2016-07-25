@@ -21,6 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         {
             _mediator = new Mock<IMediator>();
             _cookieService = new Mock<ICookieService>();
+            _logger = new Mock<ILogger>();
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);
             _employerAccountController = new EmployerAccountController(_orchestrator, _cookieService.Object);
         }
