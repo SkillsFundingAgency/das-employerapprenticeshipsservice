@@ -3,5 +3,11 @@
     "DatabaseConnectionString": "Server=.;Database=SFA.DAS.EmployerApprenticeshipsService.Database;Integrated Security=True;Trusted_Connection=True;Connection Timeout=30;"
   },
   "CompaniesHouse": { "ApiKey": "" },
-  "ServiceBusConnectionString": ""
+  "ServiceBusConnectionString": "",
+  "Identity": {
+    "UseFake": "false",
+    "ClientId": "000123",
+    "ClientSecret": "7wKJNYFaKKg4FxUdi8_R75GGYsiWezvAbcdN1uSumE4",
+    "BaseAddress": "https://ppidentity.apprenticeships.sfa.bis.gov.uk"
+  }
 }

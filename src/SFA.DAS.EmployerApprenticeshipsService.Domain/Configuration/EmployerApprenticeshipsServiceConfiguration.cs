@@ -7,6 +7,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public CompaniesHouseConfiguration CompaniesHouse { get; set; }
         public EmployerConfiguration Employer { get; set; }
         public string  ServiceBusConnectionString { get; set; }
+        public IdentityServerConfiguration Identity { get; set; }
+    }
+
+    public class IdentityServerConfiguration
+    {
+        public bool UseFake { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string BaseAddress { get; set; }
     }
 
     public class EmployerConfiguration
