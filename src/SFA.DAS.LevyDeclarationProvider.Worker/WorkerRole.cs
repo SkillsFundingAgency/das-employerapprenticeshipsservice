@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
 using SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using StructureMap;
@@ -19,6 +20,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
 
         public override void Run()
         {
+            LoggingConfig.ConfigureLogging();
+
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker is running");
 
             try
@@ -38,6 +41,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
             _container = new Container(c =>
             {
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                c.Policies.Add<LoggingPolicy>();
                 c.AddRegistry<DefaultRegistry>();
             });
 
