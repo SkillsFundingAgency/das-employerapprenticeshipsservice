@@ -355,9 +355,6 @@
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Orchestrators\ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="assets\stylesheets\fonts\GDSTransportTabular-Bold.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
@@ -368,6 +365,7 @@
     <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService.Web_1.0.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ApplicationInsights.config" />
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
