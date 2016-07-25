@@ -1,0 +1,25 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Domain.InvitationView
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h2 class="heading-medium">Invitations</h2>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h2 class="heading-medium">Accept invitation</h2>
+        <form method="POST" action="@Url.Action("Accept")">
+            <div class="form-group">
+
+                <label class="form-label">
+                    <input type="text" name="Email" value="@Model.Email"/>
+                </label>
+            </div>
+            <input type="hidden" id="invitationId" name="invitationId" value="@Model.Id"/>
+            <button type="submit" class="button">Accept</button>
+            <p></p>
+        </form>
+    </div>
+</div>
+

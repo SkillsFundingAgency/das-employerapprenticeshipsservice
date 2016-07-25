@@ -30,6 +30,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
+        public async Task<InvitationView> GetView(long id)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int32);
+
+                return await c.QueryAsync<InvitationView>(
+                    sql: "SELECT * FROM [dbo].[GetInvitations] WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
+
         public async Task Create(Invitation invitation)
         {
             await WithConnection(async c =>
@@ -91,7 +107,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET StatusId = @statusId WHERE Id = @id;",
+                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     sql: @"select a.* from [dbo].[User] u 
                         left join[dbo].[Membership] m on m.UserId = u.Id
                         left join[dbo].[Account]  a on m.AccountId = a.Id
-                        where u.PireanKey = @Id",
+                        where u.PireanKey = @UserId",
                     param: parameters,
                     commandType: CommandType.Text);
             });

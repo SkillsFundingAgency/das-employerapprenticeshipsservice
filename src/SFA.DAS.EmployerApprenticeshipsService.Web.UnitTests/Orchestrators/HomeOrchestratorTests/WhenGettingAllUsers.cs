@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,19 +16,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
     {
         private HomeOrchestrator _homeOrchestrator;
         private Mock<IMediator> _mediator;
+        private User _user;
 
         [SetUp]
         public void Arrange()
         {
+            _user = new User
+            {
+                UserId = "1",
+                Email = "test@local.com",
+                FirstName = "test",
+                LastName = "tester",
+                UserRef = Guid.NewGuid().ToString()
+            };
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUsersQuery>()))
                 .ReturnsAsync(new GetUsersQueryResponse
                 {
                     Users = new List<User>
-                {
-                    new User {Email = "test@local.com", FirstName = "test", LastName = "tester", UserId = "1"}
-                }});
+                    {
+                        _user
+                    }
+                });
             _homeOrchestrator = new HomeOrchestrator(_mediator.Object);
 
         }
@@ -39,7 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
             await _homeOrchestrator.GetUsers();
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetUsersQuery>()));
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetUsersQuery>()));
         }
 
         [Test]
@@ -60,8 +71,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
 
             //Assert
             Assert.AreEqual(1, actual.AvailableUsers.Count);
-            Assert.IsTrue(actual.AvailableUsers.Any(x=>x.UserId.Equals("1") && x.Email.Equals("test@local.com") && x.FirstName.Equals("test")&& x.LastName.Equals("tester")));
-            
+            Assert.IsTrue(actual.AvailableUsers.Any(x => x.UserId.Equals(_user.UserId.ToString()) && x.Email.Equals(_user.Email) && x.FirstName.Equals(_user.FirstName) && x.LastName.Equals(_user.LastName)));
+
         }
     }
 }

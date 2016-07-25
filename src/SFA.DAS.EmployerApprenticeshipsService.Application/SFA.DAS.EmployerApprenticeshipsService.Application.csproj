@@ -95,6 +95,9 @@
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesHandler.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesQuery.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesResponse.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationRequest.cs" />
+    <Compile Include="Queries\GetInvitation\GetInvitationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
