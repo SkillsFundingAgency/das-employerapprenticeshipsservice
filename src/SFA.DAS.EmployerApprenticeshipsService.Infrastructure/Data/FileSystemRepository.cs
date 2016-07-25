@@ -8,14 +8,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
     public abstract class FileSystemRepository
     {
         protected readonly string Directory;
-
-        protected FileSystemRepository(string rootPath, string appDataFolderName)
-        {
-            Directory = Path.Combine(rootPath, appDataFolderName);
-        }
+        
         protected FileSystemRepository(string appDataFolderName)
         {
-            var appData = (string)AppDomain.CurrentDomain.GetData("DataDirectory");
+            var appData = !string.IsNullOrEmpty((string)AppDomain.CurrentDomain.GetData("DataDirectory"))
+                ? (string)AppDomain.CurrentDomain.GetData("DataDirectory")
+                : Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), "App_Data");
 
             Directory = Path.Combine(appData, appDataFolderName);
         }
