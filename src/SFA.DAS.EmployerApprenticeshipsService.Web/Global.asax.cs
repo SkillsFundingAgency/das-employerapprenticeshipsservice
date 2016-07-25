@@ -5,6 +5,7 @@ using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
