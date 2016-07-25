@@ -258,6 +258,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
+    <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -379,6 +380,7 @@
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
+    <None Include="Views\AccessDenied\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
