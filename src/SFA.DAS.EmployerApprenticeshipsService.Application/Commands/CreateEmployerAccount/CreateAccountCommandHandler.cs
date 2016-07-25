@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly CreateAccountCommandValidator _validator;
 
         public CreateAccountCommandHandler(IAccountRepository accountRepository, IMessagePublisher messagePublisher)
         {
@@ -20,11 +21,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
                 throw new ArgumentNullException(nameof(messagePublisher));
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
+            _validator = new CreateAccountCommandValidator();
         }
 
         protected override async Task HandleCore(CreateAccountCommand message)
         {
-            //TODO: Validate
+            var validationResult = _validator.Validate(message);
+
+            if (!validationResult.IsValid())
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
 
             var accountId = await _accountRepository.CreateAccount(message.UserId, message.CompanyNumber, message.CompanyName, message.EmployerRef);
 
