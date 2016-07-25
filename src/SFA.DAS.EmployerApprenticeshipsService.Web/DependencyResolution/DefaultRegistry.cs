@@ -32,6 +32,7 @@ using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Graph.Scanning;
 using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
@@ -53,13 +54,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                 {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                    scan.WithDefaultConventions();
                 });
             
             For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
 
             For<IUserRepository>().Use<FileSystemUserRepository>();
-
+            
             var configurationRepository = GetConfigurationRepository();
             
             RegisterMessageQueues(configurationRepository, environment);
@@ -111,4 +111,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
         }
         #endregion
     }
+    
 }
