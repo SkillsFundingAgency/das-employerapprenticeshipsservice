@@ -17,12 +17,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _configuration = configuration;
+
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
         }
 
         public async Task<List<InvitationView>> Get(string userId)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();

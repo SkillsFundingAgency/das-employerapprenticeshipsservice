@@ -17,11 +17,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _configuration = configuration;
+
+            ConnectionString = _configuration.Employer.DatabaseConnectionString;
         }
         public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string userId)
         {
-            ConnectionString = _configuration.Employer.DatabaseConnectionString;
-
             return await WithConnection(async connection =>
             {
                 var sql = @"select tm.* from [GetTeamMembers] tm 
