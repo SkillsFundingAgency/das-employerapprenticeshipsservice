@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
@@ -37,6 +38,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
             await _invitationOrchestrator.AcceptInvitation(invitationId, _userIdClaim.Value);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
+        {
+            if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            await _invitationOrchestrator.CreateInvitation(model, _userIdClaim.Value);
 
             return RedirectToAction("Index", "Home");
         }
