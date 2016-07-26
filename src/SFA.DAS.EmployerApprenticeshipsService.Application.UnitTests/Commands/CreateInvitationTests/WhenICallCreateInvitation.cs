@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.CreateInvitationTests
@@ -16,13 +19,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
         private CreateInvitationCommandHandler _handler;
         private CreateInvitationCommand _command;
         private Mock<IAccountTeamRepository> _accountTeamRepository;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
             _accountTeamRepository = new Mock<IAccountTeamRepository>();
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object);
+
+            _mediator = new Mock<IMediator>();
+
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _mediator.Object);
             _command = new CreateInvitationCommand
             {
                 AccountId = 101,
@@ -101,6 +108,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Crea
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ThenTheSendNotificationCommandIsInvoked()
+        {
+            var userId = 1;
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
+            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            {
+                RoleId = (int)Role.Owner,
+                UserId = userId
+            });
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x=>x.SendAsync(It.Is<SendNotificationCommand>(c=>c.ForceFormat 
+                                                                                && c.UserId.Equals(userId) 
+                                                                                && c.Data.RecipientsAddress.Equals(_command.Email)
+                                                                                && c.Data.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                                && c.MessageFormat.Equals(MessageFormat.Email))));
         }
     }
 }

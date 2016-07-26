@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation
@@ -13,9 +15,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
     {
         private readonly IInvitationRepository _invitationRepository;
         private readonly IAccountTeamRepository _accountTeamRepository;
+        private readonly IMediator _mediator;
         private readonly IValidator<CreateInvitationCommand> _validator;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IMediator mediator)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -23,8 +26,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 throw new ArgumentNullException(nameof(accountTeamRepository));
             _invitationRepository = invitationRepository;
             _accountTeamRepository = accountTeamRepository;
+            _mediator = mediator;
             _validator = new CreateInvitationCommandValidator();
         }
+
 
         protected override async Task HandleCore(CreateInvitationCommand message)
         {
@@ -51,6 +56,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 RoleId = message.RoleId,
                 Status = InvitationStatus.Pending,
                 ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8)
+            });
+
+            await _mediator.SendAsync(new SendNotificationCommand
+            {
+                UserId =owner.UserId,
+                Data = new EmailContent
+                {
+                    RecipientsAddress = message.Email,
+                    ReplyToAddress = "noreply@sfa.gov.uk",
+                    Data = new Dictionary<string, string> { { "",""} }
+                },
+                DateTime = DateTime.UtcNow,
+                MessageFormat = MessageFormat.Email,
+                ForceFormat = true,
+                TemplatedId = ""
             });
         }
     }
