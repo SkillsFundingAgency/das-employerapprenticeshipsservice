@@ -55,12 +55,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
-            
-            For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
+
+            var configurationRepository = GetConfigurationRepository();
+
+            For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext(), GetConfigurationService(configurationRepository, environment).Get<EmployerApprenticeshipsServiceConfiguration>())).SetLifecycleTo(new HttpContextLifecycle());
 
             For<IUserRepository>().Use<FileSystemUserRepository>();
             
-            var configurationRepository = GetConfigurationRepository();
+            
             
             RegisterMessageQueues(configurationRepository, environment);
 
@@ -85,10 +87,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
         private void RegisterMessageQueues(IConfigurationRepository configurationRepository, string environment)
         {
-            var configurationService = new ConfigurationService(
-                configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
-            For<IConfigurationService>().Use(configurationService);
+            var configurationService = GetConfigurationService(configurationRepository, environment);
 
             var config = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
             if (string.IsNullOrEmpty(config.ServiceBusConnectionString))
@@ -100,6 +99,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             {
                 For<IMessagePublisher>().Use(() => new AzureServiceBusMessageService(config.ServiceBusConnectionString, nameof(QueueNames.das_at_eas_get_employer_levy)));
             }
+        }
+
+        private ConfigurationService GetConfigurationService(IConfigurationRepository configurationRepository,
+            string environment)
+        {
+            var configurationService = new ConfigurationService(
+                configurationRepository,
+                new ConfigurationOptions(ServiceName, environment, "1.0"));
+            For<IConfigurationService>().Use(configurationService);
+            return configurationService;
         }
 
         private void RegisterMediator()
