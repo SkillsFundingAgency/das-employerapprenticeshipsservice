@@ -79,9 +79,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public ActionResult SignOut()
         {
-            _owinWrapper.SignOutUser();
+            return _owinWrapper.SignOutUser();
 
-            return RedirectToAction("Index");
+            
         }
     }
 }
