@@ -406,6 +406,7 @@
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\EmployerTeam\Invite.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
