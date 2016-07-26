@@ -14,6 +14,7 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
+      <Setting name="LogLevel" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
@@ -32,6 +33,7 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
@@ -46,6 +48,7 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
     </ConfigurationSettings>
     <Imports>
       <Import moduleName="RemoteAccess" />

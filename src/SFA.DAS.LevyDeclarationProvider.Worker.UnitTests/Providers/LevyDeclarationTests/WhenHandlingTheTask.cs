@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
@@ -19,6 +20,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
         private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
         private Mock<IMediator> _mediator;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<ILogger> _logger;
+
         [SetUp]
         public void Arrange()
         {
@@ -33,7 +36,9 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { Id = ExpecetedEmpref})).ReturnsAsync(new GetEmployerAccountResponse());
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object,_messagePublisher.Object, _mediator.Object);
+            _logger = new Mock<ILogger>();
+
+            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object,_messagePublisher.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]

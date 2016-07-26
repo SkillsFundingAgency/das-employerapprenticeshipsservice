@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
 using SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 using StructureMap;
@@ -19,9 +20,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
 
         public override void Run()
         {
+            LoggingConfig.ConfigureLogging();
+
             _container = new Container(c =>
             {
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                c.Policies.Add<LoggingPolicy>();
                 c.AddRegistry<DefaultRegistry>();
             });
 

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
     {
         protected void Application_Start()
         {
+            LoggingConfig.ConfigureLogging();
 
             TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
             

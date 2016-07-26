@@ -11,17 +11,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
     public class CompaniesHouseEmployerVerificationService : IEmployerVerificationService
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        
+        private readonly ILogger _logger;
 
-        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration)
+        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task<EmployerInformation> GetInformation(string id)
         {
-            Logger.Info($"GetInformation({id})");
+            _logger.Info($"GetInformation({id})");
 
             var webClient = new WebClient();
             
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             }
             catch (WebException ex)
             {
-                Logger.Error(ex, "There was a problem with the call to Companies House");
+                _logger.Error(ex, "There was a problem with the call to Companies House");
             }
 
             return null;

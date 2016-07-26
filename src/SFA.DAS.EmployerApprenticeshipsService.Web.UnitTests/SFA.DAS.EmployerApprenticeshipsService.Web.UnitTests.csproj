@@ -46,6 +46,10 @@
       <HintPath>..\packages\Moq.4.5.10\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -97,6 +101,7 @@
     <Compile Include="Controllers\HomeControllerTests\WhenILoginInAUser.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
+    <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
