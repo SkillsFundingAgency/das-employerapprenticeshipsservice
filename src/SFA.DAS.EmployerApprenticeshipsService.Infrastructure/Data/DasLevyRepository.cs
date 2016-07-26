@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -24,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.String);
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
