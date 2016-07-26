@@ -285,6 +285,7 @@
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
+    <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' "/>
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -405,6 +406,7 @@
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\VisualTest\Index.cshtml" Condition=" '$(Configuration)' == 'Debug' " />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

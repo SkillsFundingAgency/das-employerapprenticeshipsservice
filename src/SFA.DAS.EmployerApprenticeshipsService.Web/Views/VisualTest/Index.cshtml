@@ -1,0 +1,138 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+@using SFA.DAS.EmployerApprenticeshipsService.Domain 
+
+@helper DisplayPage(string pagePath, string caption, object model = null) {
+        <div class="special">
+            <h2 class="special">@caption</h2>
+            @Html.Partial(pagePath, model)            
+        </div>
+}
+
+@DisplayPage("~/Views/AccessDenied/Index.cshtml", "Access denied")
+@DisplayPage("~/Views/EmployerAccount/Gateway.cshtml", "Employer account - Gateway")
+@DisplayPage("~/Views/EmployerAccount/GovernmentGatewayConfirm.cshtml", "Employer account - Gov't gateway confirm")
+@DisplayPage("~/Views/EmployerAccount/Summary.cshtml", "Employer account - Summary", new SummaryViewModel()
+    {
+        CompanyName = "sushiCorp Ltd.",
+        CompanyNumber = "1234567890",
+        DateOfIncorporation = new DateTime(2016, 05, 16),
+        EmployerRef = "emp-123",
+        RegisteredAddress = "123 Fake St."
+    })
+@DisplayPage("~/Views/EmployerAccount/Index.cshtml", "Employer account")
+@DisplayPage("~/Views/EmployerAccount/SelectEmployer.cshtml", "Employer account - select employer")
+@DisplayPage("~/Views/EmployerAccount/VerifyEmployer.cshtml", "Employer account - verify employer", new SelectEmployerViewModel()
+    {
+        CompanyName = "sushiCorp Ltd.",
+        CompanyNumber = "0123456789",
+        DateOfIncorporation = new DateTime(2016, 05, 16),
+        RegisteredAddress = "123 Fake St."
+    })
+@{ 
+    var aggregationLineItem = new AggregationLineItem()
+    {
+        Id = 2,
+        ActivityDate = new DateTime(2016, 05, 02),
+        Amount = 12,
+        EmpRef = "emp-123",
+        EnglishFraction = 0.3m,
+        LevyItemType = LevyItemType.TopUp
+    };
+
+    var aggregationLine = new AggregationLine
+    {
+        Amount = 12m,
+        Id = "1",
+        Balance = 12m,
+        LevyItemType = LevyItemType.TopUp,
+        Year = 2016,
+        Month = 5,
+        Items = new List<AggregationLineItem>
+        {
+            aggregationLineItem,
+            aggregationLineItem,
+            aggregationLineItem
+        }
+    };
+
+    var invitationView = new InvitationView() {
+        AccountName = "My account",
+        Name = "Bojack Horseman",
+        Status = InvitationStatus.Pending,
+        Id = 123, Email = "a@b.com",
+        ExpiryDate = new DateTime(2017, 1, 1),
+        ExternalUserId = Guid.NewGuid(),
+        InternalUserId = 123,
+        RoleId = 213,
+        RoleName = "Chief Executor"
+    };
+
+}
+
+
+@DisplayPage("~/Views/EmployerAccountTransactions/Index.cshtml", "Employer account transactions", new TransactionViewModel() {
+    CurrentBalance = 12m,
+    CurrentBalanceCalcultedOn = new DateTime(2016,05,16),
+    Data = new AggregationData()
+    {
+        AccountId = 1234567890,
+        Data = new List<AggregationLine>
+        {
+            aggregationLine,
+            aggregationLine,
+            aggregationLine   
+        }
+    }
+})
+@DisplayPage("~/Views/EmployerAccountTransactions/Detail.cshtml", "Employer account transactions - Detail", new TransactionLineItemViewModel()
+{
+    CurrentBalance = 12.0m,
+    CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
+    LineItem = aggregationLine
+})
+@DisplayPage("~/Views/EmployerTeam/Index.cshtml", "Employer team", new EmployerTeamMembersViewModel()
+{
+    AccountId = 1234567890,
+    TeamMembers = new List<TeamMember>()
+    {
+        new TeamMember() {AccountId = 1234567890, Email = "a.b@com", Id=123, Role = "Chief Executor", Status = InvitationStatus.Pending, UserRef = "ab-123" }
+    }
+})
+@DisplayPage("~/Views/Home/FakeUserSignin.cshtml", "Home - signin", new SignInUserViewModel ()
+{
+    AvailableUsers = new List<SignInUserModel>() {
+        new SignInUserModel() {Email = "a@b.com", FirstName = "Bojack", LastName = "Horseman", UserId="123", UserSelected= "foo" }
+    }
+})
+
+@DisplayPage("~/Views/Home/Index.cshtml", "Home - signin", new UserAccountsViewModel()
+{
+    Accounts = new Accounts()
+    {
+        AccountList = new List<Account>() {
+            new Account() {Id = 123, Name= "My account" }
+        }
+    },
+    Invitations = new List<InvitationView>()
+    {
+        invitationView,
+        invitationView,
+        invitationView
+    }
+})
+
+@DisplayPage("~/Views/Invitation/Index.cshtml", "Invitation", invitationView)
+
+
+
+
+
+<style>
+    h2.special {
+        color: red;
+        margin: 30px 0;
+        font-weight: bold;
+        font-family: 'Comic Sans MS';
+    }
+</style>
