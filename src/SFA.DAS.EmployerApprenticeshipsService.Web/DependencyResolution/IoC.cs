@@ -23,11 +23,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     using StructureMap;
 	
     public static class IoC {
+        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+
         public static IContainer Initialize() {
             return new Container(c =>
             {
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
                 c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add(new MessagePolicy(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });
         }
