@@ -5,7 +5,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitati
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.DeleteInvitationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.DeleteInvitationTests
 {
     [TestFixture]
     public class WhenICallDeleteInvitation

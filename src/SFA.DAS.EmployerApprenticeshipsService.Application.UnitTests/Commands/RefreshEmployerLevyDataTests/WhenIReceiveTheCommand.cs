@@ -9,7 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.RefreshEmployerLevyDataTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
     public class WhenIReceiveTheCommand
     {

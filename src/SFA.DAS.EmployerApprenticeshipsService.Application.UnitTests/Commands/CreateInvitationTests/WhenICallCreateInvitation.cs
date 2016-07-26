@@ -10,7 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.CreateInvitationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.CreateInvitationTests
 {
     [TestFixture]
     public class WhenICallCreateInvitation

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetLevyDeclarationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetLevyDeclarationTests
 {
     public class WhenValidatingTheRequest
     {
