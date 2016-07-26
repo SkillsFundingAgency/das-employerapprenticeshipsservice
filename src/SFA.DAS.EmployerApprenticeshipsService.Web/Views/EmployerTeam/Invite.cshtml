@@ -3,11 +3,18 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h2 class="heading-medium">Create invitation</h2>
+        @if (!ViewContext.ViewData.ModelState.IsValid)
+        {
+            <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
+                <p class="error-message">@ViewContext.ViewData.ModelState.First().Value</p>
+            </div>
+        }
         <form method="POST" action="@Url.Action("Invite")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="Email">Name</label>
                 <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
-                       aria-required="true" value="@Model.Name" />
+                       aria-required="true" value="@Model.Name"/>
             </div>
             <div class="form-group">
                 <label class="form-label" for="Email">Email</label>

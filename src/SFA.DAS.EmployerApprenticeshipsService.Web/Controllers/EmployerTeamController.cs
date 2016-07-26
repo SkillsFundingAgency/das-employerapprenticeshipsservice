@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -36,6 +37,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Invite(long accountId)
         {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
             var model = new InviteTeamMemberViewModel
             {
                 AccountId = accountId
@@ -45,6 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -56,10 +61,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             catch (InvalidRequestException ex)
             {
+                AddErrorsToModelState(ex.ErrorMessages);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                AddExceptionToModelError(ex);
                 return View(model);
             }
 
             return RedirectToAction("Index", new { accountId = model.AccountId });
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> errors)
+        {
+            foreach (var error in errors)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+        }
+
+        private void AddExceptionToModelError(Exception ex)
+        {
+            ModelState.AddModelError("", $"Unexpected exception: {ex.Message}");
         }
     }
 }
