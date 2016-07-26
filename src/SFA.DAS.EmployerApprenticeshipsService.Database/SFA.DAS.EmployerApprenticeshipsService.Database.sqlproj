@@ -60,6 +60,7 @@
     <Folder Include="SeedData" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Views" />
+    <Folder Include="Tables" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Account.sql" />
@@ -75,6 +76,7 @@
     <Build Include="Invitation.sql" />
     <Build Include="Views\GetInvitations.sql" />
     <Build Include="Views\GetTeamMembers.sql" />
+    <Build Include="Tables\Notification.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
