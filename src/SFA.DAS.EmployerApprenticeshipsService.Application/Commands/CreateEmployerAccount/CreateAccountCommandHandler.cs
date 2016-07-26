@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.Messaging;
 
@@ -9,6 +10,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
 {
     public class CreateAccountCommandHandler : AsyncRequestHandler<CreateAccountCommand>
     {
+        [QueueName]
+        private string das_at_eas_get_employer_levy { get; set; }
+
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly CreateAccountCommandValidator _validator;
