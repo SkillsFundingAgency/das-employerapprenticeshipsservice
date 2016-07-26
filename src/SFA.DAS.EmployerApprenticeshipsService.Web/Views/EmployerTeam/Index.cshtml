@@ -36,6 +36,7 @@
                         <th scope="col" class="" style="padding-top:0">Status</th>
 
                         <th scope="col" style="padding-top:0"></th>
+                        <th scope="col" style="padding-top:0"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +47,7 @@
                             <td>@teamMember.Email</td>
                             <td>@teamMember.Role</td>
                             <td>@teamMember.Status</td>
-                            <td><a href="#">View</a></td>
+                            <td><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></td>
                         </tr>
                     }
 

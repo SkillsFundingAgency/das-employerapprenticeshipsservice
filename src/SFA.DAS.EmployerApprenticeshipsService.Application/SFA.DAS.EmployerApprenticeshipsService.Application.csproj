@@ -102,6 +102,9 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetMember\GetMemberQueryHandler.cs" />
+    <Compile Include="Queries\GetMember\GetMemberRequest.cs" />
+    <Compile Include="Queries\GetMember\GetMemberResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
