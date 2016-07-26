@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Application;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -42,7 +43,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var model = new InviteTeamMemberViewModel
             {
-                AccountId = accountId
+                AccountId = accountId,
+                Role = Role.Viewer
             };
 
             return View(model);
