@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
             if (existing != null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
 
             var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
 
