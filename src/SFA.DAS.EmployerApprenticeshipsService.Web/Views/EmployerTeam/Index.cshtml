@@ -9,8 +9,10 @@
 
     </div>
     <div class="column-one-third">
-        <form >
-            <div style="margin-top:30px; float:right"><input class="button" id="addNewUser" type="submit" value="Invite team member"></div>
+        <form action="@Url.Action("Invite")" method="get">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId"/>
+            <div style="margin-top: 30px; float: right"><input class="button" id="addNewUser" type="submit" value="Invite team member">
+            </div>
         </form>
     </div>
 </div>
