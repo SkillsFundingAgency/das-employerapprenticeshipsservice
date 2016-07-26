@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Send
         public async Task ThenTheNotificationIsWrittenToTheRepostiory()
         {
             //Arrange
-            var userId = "123abc";
+            var userId = 1;
             var datetime = new DateTime(2015,01,30);
             var forceFormat = true;
             var templatedId = "678FVR";

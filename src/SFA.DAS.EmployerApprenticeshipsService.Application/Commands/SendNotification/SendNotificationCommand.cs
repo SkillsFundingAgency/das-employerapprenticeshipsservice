@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
 {
     public class SendNotificationCommand : IAsyncRequest
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public DateTime DateTime { get; set; }
         public bool ForceFormat { get; set; }
         public string TemplatedId { get; set; }
