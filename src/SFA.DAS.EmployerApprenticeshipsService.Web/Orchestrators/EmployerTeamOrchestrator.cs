@@ -4,6 +4,7 @@ using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -45,14 +46,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Email = email
             });
 
+            return MapFrom(response.TeamMember);
+        }
+
+        private InvitationViewModel MapFrom(TeamMember teamMember)
+        {
             return new InvitationViewModel
             {
-                Id = response.TeamMember.Id,
-                AccountId = accountId,
-                Email = response.TeamMember.Email,
-                Name = "", //response.TeamMember.Name,
-                Role = response.TeamMember.Role,
-                Status = response.TeamMember.Status
+                IsUser = teamMember.IsUser,
+                Id = teamMember.Id,
+                AccountId = teamMember.AccountId,
+                Email = teamMember.Email,
+                Name = teamMember.Name,
+                Role = teamMember.Role,
+                Status = teamMember.Status,
+                ExpiryDate = teamMember.ExpiryDate
             };
         }
     }

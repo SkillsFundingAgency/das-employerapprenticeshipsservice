@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string userId);
         Task<Membership> GetMembership(long accountId, string userId);
+        Task<TeamMember> GetMember(long accountId, string email);
     }
 }
