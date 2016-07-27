@@ -76,6 +76,9 @@
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommand.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandHandler.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
