@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
+    <Compile Include="Commands\ProcessNotificationTests\WhenIProcessNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="FakeTimeProvider.cs" />

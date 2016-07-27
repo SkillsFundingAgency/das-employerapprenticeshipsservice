@@ -138,6 +138,7 @@
     <Compile Include="DepedencyResolution\LoggingPolicy.cs" />
     <Compile Include="DepedencyResolution\MessagePolicy.cs" />
     <Compile Include="EmployerInformation.cs" />
+    <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Invitation.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
+    <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
     <Compile Include="Paye.cs" />
