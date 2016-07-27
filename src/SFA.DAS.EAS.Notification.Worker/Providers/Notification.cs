@@ -3,12 +3,16 @@ using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Notification.Worker.Providers
 {
     public class Notification : INotification
     {
+        [QueueName]
+        public string das_at_eas_send_notification { get; set; }
+
         private readonly ILogger _logger;
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
@@ -33,6 +37,8 @@ namespace SFA.DAS.EAS.Notification.Worker.Providers
                 await _mediator.SendAsync(new ProcessNotificationCommand {Id = messageId});
 
                 await message.CompleteAsync();
+
+                _logger.Info($"Completed processing notification id: {messageId}");
             }
         }
     }
