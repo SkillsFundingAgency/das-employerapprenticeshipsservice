@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using NLog;
@@ -32,6 +33,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 return parameters.Get<int>("@Id");
             });
+        }
+
+        public async Task<NotificationMessage> GetById(int expectedMessageId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Id", expectedMessageId, DbType.Int32);
+
+                return await c.QueryAsync<NotificationMessage>("[dbo].[GetNotification]", parameters, commandType: CommandType.StoredProcedure);
+
+            });
+
+            return result.SingleOrDefault();
         }
     }
 }
