@@ -54,4 +54,14 @@
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="7B77CC553BAB7B9EEB78D941FFE2707F461E8831" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
+  <Role name="SFA.DAS.EmployerApprenticeshipsService.Notification.Worker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
+      <Setting name="LogLevel" value="Warn" />
+    </ConfigurationSettings>
+  </Role>
 </ServiceConfiguration>
