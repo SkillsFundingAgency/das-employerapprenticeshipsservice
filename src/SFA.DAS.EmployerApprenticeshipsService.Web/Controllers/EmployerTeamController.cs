@@ -103,7 +103,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             return RedirectToAction("Index", new { accountId = accountId });
         }
-        
+
+        public async Task<ActionResult> Resend(long id, long accountId)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            await _employerTeamOrchestrator.Resend(id, accountId, userIdClaim.Value);
+
+            return RedirectToAction("Index", new { accountId = accountId });
+        }
+
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {
             foreach (var error in errors)

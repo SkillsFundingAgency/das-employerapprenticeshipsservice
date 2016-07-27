@@ -39,7 +39,12 @@
         {
             <p>This user has not accepted the invitation to be a team member.
                 Their invitation will expire at Midnight on @Model.ExpiryDate.ToString("dddd d MMMM yyyy")</p>
-            <form action="@Url.Action("Cancel")" method="GET">
+                <form action="@Url.Action("Resend")" method="POST">
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
+                    <button type="submit" class="button">Cancel Invitation</button>
+                </form>
+             <form action="@Url.Action("Cancel")" method="GET">
                 <input type="hidden" id="Id" name="Id" value="@Model.Id"/>
                 <button type="submit" class="button">Cancel Invitation</button>
             </form>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
@@ -64,6 +65,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public async Task Cancel(long id, long accountId, string externalUserId)
         {
             await _mediator.SendAsync(new DeleteInvitationCommand
+            {
+                Id = id,
+                AccountId = accountId,
+                ExternalUserId = externalUserId
+            });
+        }
+
+        public async Task Resend(long id, long accountId, string externalUserId)
+        {
+            await _mediator.SendAsync(new ResendInvitationCommand
             {
                 Id = id,
                 AccountId = accountId,
