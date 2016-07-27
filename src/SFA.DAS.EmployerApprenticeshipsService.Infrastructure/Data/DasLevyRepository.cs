@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@EmpRef", empRef, DbType.String);
                 parameters.Add("@Amount", fractions.Amount, DbType.Decimal);
-                parameters.Add("@SubmissionDate", fractions.DateCalculated, DbType.DateTime);
+                parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
 
                 return await c.ExecuteAsync(
                     sql: "INSERT INTO [dbo].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
