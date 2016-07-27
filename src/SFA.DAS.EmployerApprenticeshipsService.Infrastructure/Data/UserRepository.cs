@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -11,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
+        public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration, logger)
         {
         }
         public async Task<User> GetById(string id)
