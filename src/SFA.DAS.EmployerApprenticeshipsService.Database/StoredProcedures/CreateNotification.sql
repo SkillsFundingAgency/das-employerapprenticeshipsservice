@@ -1,19 +1,19 @@
 ﻿
 
 CREATE PROCEDURE [dbo].[CreateNotification]
-	@id INT OUTPUT,
 	@UserId INT, 
 	@DateTime DATETIME ,
-	@ForecFormat BIT = 0,
+	@ForceFormat BIT = 0,
 	@TemplateId VARCHAR(20),
 	@Data NVARCHAR(MAX),
-	@MessageFormat TINYINT
+	@MessageFormat TINYINT,
+	@Id INT OUTPUT
 as
 BEGIN
 	INSERT INTO [dbo].[Notification]
 		(UserId, DateTime, ForecFormat, TemplateId,Data,MessageFormat)
 	VALUES
-		(@UserId,@DateTime, @ForecFormat, @TemplateId, @Data, @MessageFormat)
+		(@UserId,@DateTime, @ForceFormat, @TemplateId, @Data, @MessageFormat)
 
 	SELECT @Id = SCOPE_IDENTITY()
 END
