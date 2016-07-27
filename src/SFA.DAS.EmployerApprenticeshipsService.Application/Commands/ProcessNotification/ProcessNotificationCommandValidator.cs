@@ -1,5 +1,4 @@
-﻿using System;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNotification
 {
@@ -7,7 +6,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNot
     {
         public ValidationResult Validate(ProcessNotificationCommand item)
         {
-            throw new NotImplementedException();
+            var validationResult = new ValidationResult();
+
+            if (item.Id == 0)
+            {
+                validationResult.AddError(nameof(item.Id),"No value supplied for the Notificaiton Command Id");
+            }
+
+            return validationResult;
         }
     }
 }
