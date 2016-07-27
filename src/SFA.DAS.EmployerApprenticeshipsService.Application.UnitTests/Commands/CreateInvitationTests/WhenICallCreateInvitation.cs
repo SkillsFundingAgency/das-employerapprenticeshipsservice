@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.TimeProvider;
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private CreateInvitationCommand _command;
         private Mock<IAccountTeamRepository> _accountTeamRepository;
         private Mock<IMediator> _mediator;
+        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
 
         [SetUp]
         public void Setup()
@@ -29,7 +31,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _mediator = new Mock<IMediator>();
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _mediator.Object);
+            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _mediator.Object, _configuration.Object);
             _command = new CreateInvitationCommand
             {
                 AccountId = 101,

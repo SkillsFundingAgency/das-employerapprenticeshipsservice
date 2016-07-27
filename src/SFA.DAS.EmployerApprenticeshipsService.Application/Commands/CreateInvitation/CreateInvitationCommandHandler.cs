@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.TimeProvider;
@@ -16,9 +17,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
         private readonly IInvitationRepository _invitationRepository;
         private readonly IAccountTeamRepository _accountTeamRepository;
         private readonly IMediator _mediator;
+        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IMediator mediator)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -27,6 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             _invitationRepository = invitationRepository;
             _accountTeamRepository = accountTeamRepository;
             _mediator = mediator;
+            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = new CreateInvitationCommandValidator();
         }
 
@@ -65,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 {
                     RecipientsAddress = message.Email,
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Data = new Dictionary<string, string> { { "",""} }
+                    Data = new Dictionary<string, string> { { "InviteeName",message.Name}, {"ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
                 },
                 DateTime = DateTime.UtcNow,
                 MessageFormat = MessageFormat.Email,
