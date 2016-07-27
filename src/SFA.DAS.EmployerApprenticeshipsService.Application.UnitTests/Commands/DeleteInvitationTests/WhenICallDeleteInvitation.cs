@@ -5,7 +5,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitati
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.DeleteInvitationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.DeleteInvitationTests
 {
     [TestFixture]
     public class WhenICallDeleteInvitation
@@ -39,6 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.Dele
         [Test]
         public async Task SuccessfullyDeleteInvitation()
         {
+            _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
             _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new Membership
             {

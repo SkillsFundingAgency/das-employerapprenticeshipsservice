@@ -41,9 +41,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
             if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
 
+            if (IsWrongStatusToDelete(existing.Status))
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Wrong status to be deleted" } });
+
             existing.Status = InvitationStatus.Deleted;
 
             await _invitationRepository.ChangeStatus(existing);
+        }
+
+        private bool IsWrongStatusToDelete(InvitationStatus status)
+        {
+            switch (status)
+            {
+                case InvitationStatus.Pending:
+                case InvitationStatus.Expired:
+                    return false;
+                default:
+                    return true;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.Messaging;
 
@@ -15,17 +16,18 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 {
     public class LevyDeclaration : ILevyDeclaration
     {
+        [QueueName]
+        public string das_at_eas_get_employer_levy { get; set; }
+
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
-        private IMessagePublisher _messagePublisher;
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMessagePublisher messagePublisher, IMediator mediator, ILogger logger)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
             _logger = logger;
-            _messagePublisher = messagePublisher;
         }
 
         public async Task Handle()

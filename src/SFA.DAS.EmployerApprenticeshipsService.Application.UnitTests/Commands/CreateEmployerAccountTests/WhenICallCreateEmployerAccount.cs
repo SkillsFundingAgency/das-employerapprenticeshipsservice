@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.CreateEmployerAccountTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.CreateEmployerAccountTests
 {
     [TestFixture]
     public class WhenICallCreateEmployerAccount

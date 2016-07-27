@@ -42,6 +42,10 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Messaging">
       <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.5827\lib\net45\SFA.DAS.Messaging.dll</HintPath>
     </Reference>
@@ -72,15 +76,26 @@
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommand.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandHandler.cs" />
+    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
+<Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommandHandler.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommandValidator.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
+   
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
+    <Compile Include="Messages\SendNotificationQueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersHandler.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
@@ -105,6 +120,9 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetMember\GetMemberQueryHandler.cs" />
+    <Compile Include="Queries\GetMember\GetMemberRequest.cs" />
+    <Compile Include="Queries\GetMember\GetMemberResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
