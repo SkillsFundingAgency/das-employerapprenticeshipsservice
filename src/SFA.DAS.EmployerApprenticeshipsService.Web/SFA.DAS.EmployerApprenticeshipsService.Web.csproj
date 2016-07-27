@@ -297,6 +297,7 @@
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
+    <Compile Include="Models\InvitationViewModel.cs" />
     <Compile Include="Models\SelectEmployerModel.cs" />
     <Compile Include="Models\SelectEmployerViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
@@ -407,6 +408,8 @@
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
+    <Content Include="Views\EmployerTeam\Review.cshtml" />
+    <Content Include="Views\EmployerTeam\Cancel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

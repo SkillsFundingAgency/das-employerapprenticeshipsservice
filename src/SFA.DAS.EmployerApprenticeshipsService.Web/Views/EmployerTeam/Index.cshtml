@@ -32,11 +32,13 @@
                 <thead>
                     <tr>
                         
+                        <th scope="col" style="padding-top:0">Name</th>
                         <th scope="col" style="padding-top:0">Email address</th>
 
                         <th scope="col" class="" style="padding-top:0">Role</th>
                         <th scope="col" class="" style="padding-top:0">Status</th>
 
+                        <th scope="col" style="padding-top:0"></th>
                         <th scope="col" style="padding-top:0"></th>
                     </tr>
                 </thead>
@@ -45,10 +47,11 @@
                     @foreach (var teamMember in Model.TeamMembers)
                     {
                         <tr>
+                            <td>@teamMember.Name</td>
                             <td>@teamMember.Email</td>
                             <td>@teamMember.Role</td>
                             <td>@teamMember.Status</td>
-                            <td><a href="#">View</a></td>
+                            <td><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></td>
                         </tr>
                     }
 

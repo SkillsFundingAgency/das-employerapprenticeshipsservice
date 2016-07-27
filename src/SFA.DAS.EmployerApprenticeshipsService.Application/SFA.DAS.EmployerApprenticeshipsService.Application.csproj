@@ -75,6 +75,9 @@
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
+    <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
@@ -102,6 +105,9 @@
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetMember\GetMemberQueryHandler.cs" />
+    <Compile Include="Queries\GetMember\GetMemberRequest.cs" />
+    <Compile Include="Queries\GetMember\GetMemberResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
