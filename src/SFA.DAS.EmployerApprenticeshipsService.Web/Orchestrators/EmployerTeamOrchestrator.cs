@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -25,11 +25,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return new EmployerTeamMembersViewModel { TeamMembers = accountTeamMemberReponse.TeamMembers, AccountId = accountId };
         }
 
+        public async Task InviteTeamMember(InviteTeamMemberViewModel model, string externalUserId)
         {
+            await _mediator.SendAsync(new CreateInvitationCommand
             {
                 ExternalUserId = externalUserId,
+                AccountId = model.AccountId,
                 Name = model.Name,
+                Email = model.Email,
                 RoleId = model.Role
+            });
+        }
+
+        public async Task<InvitationViewModel> Review(long accountId, string email)
+        {
+            var response = await _mediator.SendAsync(new GetMemberRequest
+            {
+                AccountId = accountId,
+                Email = email
             });
 
             return new InvitationViewModel

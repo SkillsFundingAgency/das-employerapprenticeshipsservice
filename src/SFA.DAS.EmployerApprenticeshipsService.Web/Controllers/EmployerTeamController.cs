@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.ApplicationInsights.Web;
 using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -37,19 +36,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult Invite(long accountId)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
+            var model = new InviteTeamMemberViewModel
             {
                 AccountId = accountId,
                 Role = Role.Viewer
             };
 
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
@@ -70,6 +73,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             return RedirectToAction("Index", new { accountId = model.AccountId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Review(long accountId, string email)
+        {
+            var model = await _employerTeamOrchestrator.Review(accountId, email);
+
+            return View(model);
         }
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)

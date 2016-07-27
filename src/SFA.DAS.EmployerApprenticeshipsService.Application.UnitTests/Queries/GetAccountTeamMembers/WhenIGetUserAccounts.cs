@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetAc
                 Id = 1,
                 Email = "floyd@price.com",
                 AccountId = _account.Id,
-                Role = "Owner",
+                Role = Role.Owner,
                 UserRef = "kaka-kakah"
             };
             _teamMembers = new List<TeamMember> { _teamMember };
