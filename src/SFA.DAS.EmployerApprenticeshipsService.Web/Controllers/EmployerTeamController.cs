@@ -83,6 +83,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Cancel(long id, long accountId)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            //var model = await _employerTeamOrchestrator.Review(accountId, email);
+
+            return RedirectToAction("Index");
+        }
+
+
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {
             foreach (var error in errors)
