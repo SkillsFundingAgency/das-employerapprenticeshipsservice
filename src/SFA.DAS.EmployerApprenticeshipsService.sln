@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Notification.Worker", "SFA.DAS.EmployerApprenticeshipsService.Notification.Worker\SFA.DAS.EmployerApprenticeshipsService.Notification.Worker.csproj", "{275B7C02-04EA-4064-867D-C15025A55D7D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Notification.Worker", "SFA.DAS.EmployerApprenticeshipsService.Notification.Worker\SFA.DAS.EAS.Notification.Worker.csproj", "{275B7C02-04EA-4064-867D-C15025A55D7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

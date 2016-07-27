@@ -1,21 +1,20 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
+using SFA.DAS.EAS.Notification.Worker.DependencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using StructureMap;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Notification.Worker
+namespace SFA.DAS.EAS.Notification.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private IContainer _container;
 
         public override void Run()
         {
@@ -35,6 +34,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Notification.Worker
         {
             // Set the maximum number of concurrent connections
             ServicePointManager.DefaultConnectionLimit = 12;
+
+            _container = new Container(c =>
+            {
+                c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                c.AddRegistry<DefaultRegistry>();
+            });
 
             // For information on handling configuration changes
             // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
@@ -60,10 +67,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Notification.Worker
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
+            var provider = _container.GetInstance<Providers.INotification>();
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working");
+
+                await provider.Handle();
+
                 await Task.Delay(1000);
             }
         }

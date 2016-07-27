@@ -54,7 +54,7 @@
       <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="7B77CC553BAB7B9EEB78D941FFE2707F461E8831" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.EmployerApprenticeshipsService.Notification.Worker">
+  <Role name="SFA.DAS.EAS.Notification.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
