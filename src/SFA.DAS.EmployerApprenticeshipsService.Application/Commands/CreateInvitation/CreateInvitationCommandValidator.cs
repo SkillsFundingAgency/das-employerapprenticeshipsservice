@@ -15,9 +15,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
 
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Email", "No Email supplied");
-
-            if (!IsValidEmailFormat(item.Email))
-                validationResult.AddError("Email", "Email is not valid format");
+            else
+            {
+                if (!IsValidEmailFormat(item.Email))
+                {
+                    validationResult.AddError("Email", "Email is not valid format");
+                }
+            }
 
             if (string.IsNullOrWhiteSpace(item.Name))
                 validationResult.AddError("Name", "No Name supplied");

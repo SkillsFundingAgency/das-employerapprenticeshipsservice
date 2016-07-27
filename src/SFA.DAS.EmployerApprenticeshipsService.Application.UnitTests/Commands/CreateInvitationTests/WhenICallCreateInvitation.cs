@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 RoleId = 0
             });
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
             _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new CreateInvitationCommand();
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
         }
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Email = _command.Email
             });
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
         }
