@@ -2,16 +2,19 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public abstract class BaseRepository
     {
+        private readonly ILogger _logger;
         private readonly string _connectionString;
 
-        protected BaseRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+        protected BaseRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
         {
+            _logger = logger;
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
 
@@ -30,10 +33,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
             }
             catch (TimeoutException ex)
             {
+                _logger.Error(ex);
                 throw new Exception($"{GetType().FullName}.WithConnection() experienced a SQL timeout", ex);
             }
             catch (SqlException ex)
             {
+                _logger.Error(ex);
                 throw new Exception(
                     $"{GetType().FullName}.WithConnection() experienced a SQL exception (not a timeout)", ex);
             }

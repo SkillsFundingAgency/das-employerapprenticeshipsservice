@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -13,8 +14,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            :base(configuration)
+        public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+            : base(configuration, logger)
         {
         }
 
