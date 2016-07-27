@@ -27,7 +27,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var messagePublisher = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(IMessagePublisher) || x.ParameterType == typeof(IPollingMessageReceiver));
+            var messagePublisher = instance?.Constructor?
+                    .GetParameters().FirstOrDefault(x => x.ParameterType == typeof(IMessagePublisher) || x.ParameterType == typeof(IPollingMessageReceiver));
 
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))

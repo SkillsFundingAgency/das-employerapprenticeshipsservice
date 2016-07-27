@@ -9,5 +9,12 @@
     "ClientId": "000123",
     "ClientSecret": "7wKJNYFaKKg4FxUdi8_R75GGYsiWezvAbcdN1uSumE4",
     "BaseAddress": "https://ppidentity.apprenticeships.sfa.bis.gov.uk"
-  }
+  },
+  "SmtpServer": {
+    "ServerName": "localhost",
+    "UserName": "",
+    "Password": "",
+    "Port": "25"
+  },
+  "DashboardUrl": "http://localhost:57196/"
 }
