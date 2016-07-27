@@ -6,7 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Commands.AcceptInvitationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AcceptInvitationTests
 {
     [TestFixture]
     public class WhenICallAcceptInvitation

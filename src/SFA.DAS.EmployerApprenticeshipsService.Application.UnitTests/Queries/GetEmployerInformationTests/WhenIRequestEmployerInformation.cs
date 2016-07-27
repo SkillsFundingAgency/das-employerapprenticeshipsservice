@@ -6,7 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInfo
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetEmployerInformationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEmployerInformationTests
 {
     [TestFixture]
     public class WhenIRequestEmployerInformation

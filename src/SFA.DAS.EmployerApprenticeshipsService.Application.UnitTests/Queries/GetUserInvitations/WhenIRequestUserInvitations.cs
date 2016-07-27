@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitati
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetUserInvitations
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUserInvitations
 {
     [TestFixture]
     public class WhenIRequestUserInvitations

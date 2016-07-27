@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.LevyAggregationProvider.Worker.Commands.CreateLevyAggregation;
 using SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration;
 using SFA.DAS.Messaging;
@@ -11,6 +12,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public class LevyAggregationManager
     {
+        [QueueName]
+        public string das_at_eas_refresh_employer_levy { get; set; }
+
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
         private readonly ILogger _logger;

@@ -38,7 +38,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
 
             _logger = new Mock<ILogger>();
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object,_messagePublisher.Object, _mediator.Object, _logger.Object);
+            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]

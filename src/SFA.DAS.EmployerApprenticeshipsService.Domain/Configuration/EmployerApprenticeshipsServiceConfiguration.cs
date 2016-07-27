@@ -8,6 +8,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public EmployerConfiguration Employer { get; set; }
         public string  ServiceBusConnectionString { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
+        public SmtpConfiguration SmtpServer { get; set; }
+
+        public string DashboardUrl { get; set; }
     }
 
     public class IdentityServerConfiguration
@@ -33,5 +36,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public static string das_at_eas_refresh_employer_levy { get; set; }
         public static string das_at_eas_get_employer_levy  { get; set; }
         
+    }
+
+    public class SmtpConfiguration
+    {
+        public string ServerName { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Port { get; set; }
     }
 }
