@@ -28,6 +28,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 );
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _container.Dispose();
+        }
+
         [Test]
         public void ThenTheMessageQueueIsTakenFromTheQueueNameAttribute()
         {
@@ -79,6 +85,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             Assert.AreEqual(expectedDirectory, storageDirectoryField.GetValue(actualMessageService));
         }
 
+        [Test]
+        public void ThenThePollingReceiverIsResolvedThroughThePolicy()
+        {
+            //Arrange
+            _container = new Container(
+                c =>
+                    {
+                        c.AddRegistry<TestRegistryPolling>();
+                        c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                    }
+                );
+
+            //Act
+            var actual = _container.GetInstance<TestClassPolling>();
+
+            Assert.IsAssignableFrom<AzureServiceBusMessageService>(actual.PollingMessageReceiver);
+            var actualMessageService = actual.PollingMessageReceiver as AzureServiceBusMessageService;
+
+            Assert.IsNotNull(actualMessageService);
+            var queueNameField = actualMessageService
+                                    .GetType()
+                                    .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .ToList()
+                                    .FirstOrDefault(c => c.Name == "_queueName");
+            Assert.IsNotNull(queueNameField);
+            Assert.AreEqual(nameof(TestClassPolling.das_polling_queue_name), queueNameField.GetValue(actualMessageService));
+        }
+
         public interface ITestClass
         {
 
@@ -96,11 +130,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 MessagePublisher = messagePublisher;
             }
         }
+
+        public class TestClassPolling : ITestClass
+        {
+            [QueueName]
+            public string das_polling_queue_name { get; set; }
+
+            public readonly IPollingMessageReceiver PollingMessageReceiver;
+
+            public TestClassPolling(IPollingMessageReceiver pollingMessageReceiver)
+            {
+                PollingMessageReceiver = pollingMessageReceiver;
+            }
+        }
+
         public class TestRegistry : Registry
         {
             public TestRegistry()
             {
                 For<ITestClass>().Use<TestClass>();
+            }
+        }
+
+        public class TestRegistryPolling : Registry
+        {
+            public TestRegistryPolling()
+            {
+                For<ITestClass>().Use<TestClassPolling>();
             }
         }
     }
