@@ -78,6 +78,7 @@
     <Build Include="Views\GetTeamMembers.sql" />
     <Build Include="Tables\Notification.sql" />
     <Build Include="StoredProcedures\CreateNotification.sql" />
+    <Build Include="StoredProcedures\GetNotification.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
