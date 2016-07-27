@@ -16,18 +16,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string userId)
+        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string externalUserId)
         {
             var result = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int32);
-                parameters.Add("@userId", userId, DbType.String);
+                parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 const string sql = @"select tm.* from [GetTeamMembers] tm 
                             join [Membership] m on m.AccountId = tm.AccountId
                             join [User] u on u.Id = m.UserId
-                            where u.PireanKey = @userId and tm.AccountId = @accountId";
+                            where u.PireanKey = @externalUserId and tm.AccountId = @accountId";
                 return await connection.QueryAsync<TeamMember>(
                     sql: sql,
                     param: parameters,
@@ -43,10 +43,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int32);
-                parameters.Add("@userId", userId, DbType.String);
+                parameters.Add("@externalUserId", userId, DbType.String);
 
                 return await c.QueryAsync<Membership>(
-                    sql: "SELECT m.* FROM [dbo].[Membership] m INNER JOIN [dbo].[User] u ON u.Id = m.UserId WHERE m.AccountId = @accountId AND u.PireanKey = @userId;",
+                    sql: "SELECT m.* FROM [dbo].[Membership] m INNER JOIN [dbo].[User] u ON u.Id = m.UserId WHERE m.AccountId = @accountId AND u.PireanKey = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

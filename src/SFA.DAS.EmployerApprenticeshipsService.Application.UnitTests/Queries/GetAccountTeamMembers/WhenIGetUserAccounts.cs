@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetAc
         public async Task ThenTheUserRepositoryIsCalledToGetAllUsers()
         {
             //Act
-             await _getAccountTeamMembersQueryHandler.Handle(new GetAccountTeamMembersQuery() {UserId = "kaka-kakah", Id = 1});
+             await _getAccountTeamMembersQueryHandler.Handle(new GetAccountTeamMembersQuery() {ExternalUserId = "kaka-kakah", Id = 1});
 
             //Assert
             _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId(1, "kaka-kakah"), Times.Once);

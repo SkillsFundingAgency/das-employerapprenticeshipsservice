@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
         public ValidationResult Validate(GetAccountTeamMembersQuery item)
         {
             var validationResult = new ValidationResult();
-            if (string.IsNullOrEmpty(item.UserId))
+            if (string.IsNullOrEmpty(item.ExternalUserId))
             {
-                validationResult.AddError("UserId", "can't be null");
+                validationResult.AddError("ExternalUserId", "can't be null");
             }
             return validationResult;
         }

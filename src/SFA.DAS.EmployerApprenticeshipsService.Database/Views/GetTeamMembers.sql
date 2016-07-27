@@ -27,4 +27,4 @@ SELECT
 FROM [dbo].[Invitation] i
 	JOIN [dbo].[Account] a
 		ON a.Id = i.AccountId
-WHERE i.Status <> 2
+WHERE i.Status NOT IN (2, 4)
