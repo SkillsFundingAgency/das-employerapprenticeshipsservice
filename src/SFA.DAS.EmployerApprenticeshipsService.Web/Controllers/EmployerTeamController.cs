@@ -83,18 +83,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Cancel(long id, long accountId)
+        [HttpGet]
+        public async Task<ActionResult> Cancel(long id)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            var invitation = await _employerTeamOrchestrator.GetInvitation(id);
 
-            //var model = await _employerTeamOrchestrator.Review(accountId, email);
-
-            return RedirectToAction("Index");
+            return View(invitation);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Cancel(long id, long accountId, int cancel)
+        {
+            if (cancel == 1)
+            {
+                var userIdClaim = ((ClaimsIdentity) System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+                if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
+                await _employerTeamOrchestrator.Cancel(id, accountId, userIdClaim.Value);
+            }
+            return RedirectToAction("Index", new { accountId = accountId });
+        }
+        
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {
             foreach (var error in errors)

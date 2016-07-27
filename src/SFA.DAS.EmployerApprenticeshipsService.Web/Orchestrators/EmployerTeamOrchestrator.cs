@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -47,6 +49,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
 
             return MapFrom(response.TeamMember);
+        }
+
+        public async Task<InvitationView> GetInvitation(long id)
+        {
+            var response = await _mediator.SendAsync(new GetInvitationRequest
+            {
+                Id = id
+            });
+
+            return response.Invitation;
+        }
+
+        public async Task Cancel(long id, long accountId, string externalUserId)
+        {
+            await _mediator.SendAsync(new DeleteInvitationCommand
+            {
+                Id = id,
+                AccountId = accountId,
+                ExternalUserId = externalUserId
+            });
         }
 
         private InvitationViewModel MapFrom(TeamMember teamMember)

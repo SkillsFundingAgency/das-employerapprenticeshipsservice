@@ -409,6 +409,7 @@
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
+    <Content Include="Views\EmployerTeam\Cancel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
