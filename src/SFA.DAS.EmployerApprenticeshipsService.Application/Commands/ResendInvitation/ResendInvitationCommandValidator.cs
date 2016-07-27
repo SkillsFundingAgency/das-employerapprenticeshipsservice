@@ -6,7 +6,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
     {
         public ValidationResult Validate(ResendInvitationCommand item)
         {
-            throw new System.NotImplementedException();
+            var validationResult = new ValidationResult();
+
+            if (item.Id == 0)
+                validationResult.AddError("Id", "No Id supplied");
+
+            if (item.AccountId == 0)
+                validationResult.AddError("AccountId", "No AccountId supplied");
+
+            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+                validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
+
+            return validationResult;
         }
     }
 }

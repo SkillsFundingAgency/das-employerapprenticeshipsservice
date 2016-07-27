@@ -125,7 +125,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId AND ExpiryDate = @expiryDate WHERE Id = @id;",
+                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
