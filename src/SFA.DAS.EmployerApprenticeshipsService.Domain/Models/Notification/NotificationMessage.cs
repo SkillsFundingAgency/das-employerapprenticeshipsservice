@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification
 {
     public class NotificationMessage
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public DateTime DateTime { get; set; }
         public bool ForceFormat { get; set; }
