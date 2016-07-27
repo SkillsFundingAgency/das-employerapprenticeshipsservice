@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Azure;
@@ -13,6 +14,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.OidcMiddleware;
 
 [assembly: OwinStartup(typeof(SFA.DAS.EmployerApprenticeshipsService.Web.Startup))]
@@ -21,7 +23,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class Startup
     {
+      
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+
+
         public void Configuration(IAppBuilder app)
         {
             var config = GetConfigurationObject();
@@ -36,6 +41,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             }
             else
             {
+                var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+
+                
+
                 JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -59,11 +68,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                     TokenEndpoint = constants.TokenEndpoint(),
                     UserInfoEndpoint = constants.UserInfoEndpoint(),
                     AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    AuthenticatedCallback = identity => { identity.AddClaim(new Claim("CustomClaim", "new claim added")); }
+                    AuthenticatedCallback = identity =>
+                    {
+                        PostAuthentiationAction(identity, authenticationOrchestrator);
+                    }
                 });
             }
+        }
 
-
+        private static void PostAuthentiationAction(ClaimsIdentity identity,AuthenticationOrchestraor authenticationOrchestrator)
+        {
+            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == @"sub")?.Value;
+            var email = identity.Claims.FirstOrDefault(claim => claim.Type == @"email")?.Value;
+            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
+            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
+            authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()

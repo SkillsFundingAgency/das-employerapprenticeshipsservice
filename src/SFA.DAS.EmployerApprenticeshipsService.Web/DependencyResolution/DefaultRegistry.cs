@@ -57,13 +57,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                 });
 
             var configurationRepository = GetConfigurationRepository();
+            var config =
+                GetConfigurationService(configurationRepository, environment)
+                    .Get<EmployerApprenticeshipsServiceConfiguration>();
+            For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext(), config)).SetLifecycleTo(new HttpContextLifecycle());
+            if (config.Identity.UseFake)
+            {
+                For<IUserRepository>().Use<FileSystemUserRepository>();
+            }
+            else
+            {
+                For<IUserRepository>().Use<UserRepository>();
+            }
 
-            For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext(), GetConfigurationService(configurationRepository, environment).Get<EmployerApprenticeshipsServiceConfiguration>())).SetLifecycleTo(new HttpContextLifecycle());
 
-            For<IUserRepository>().Use<FileSystemUserRepository>();
-            
-            
-            
+
             RegisterMessageQueues(configurationRepository, environment);
 
             RegisterMediator();

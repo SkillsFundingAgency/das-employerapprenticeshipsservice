@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
@@ -22,6 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
 
         public void SignInUser(string id, string displayName, string email)
         {
+            if (!_configuration.Identity.UseFake) { throw new NotImplementedException(); }
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, displayName),
@@ -29,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
                 new Claim("sub", id)
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims,"Cookies");
+            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
 
             var authenticationManager = _owinContext.Authentication;
             authenticationManager.SignIn(claimsIdentity);
@@ -46,7 +48,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             }
             else
             {
-                return new RedirectResult(@"http://www.bbc.co.uk/sport");
+                var authenticationManager = _owinContext.Authentication;
+                authenticationManager.SignOut("Cookies");
+                return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/sfa/wflow/logout?returnUrl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
             }
         }
 
