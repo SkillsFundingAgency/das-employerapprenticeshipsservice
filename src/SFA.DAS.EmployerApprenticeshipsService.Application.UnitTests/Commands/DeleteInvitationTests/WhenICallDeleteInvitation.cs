@@ -39,6 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task SuccessfullyDeleteInvitation()
         {
+            _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
             _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new Membership
             {

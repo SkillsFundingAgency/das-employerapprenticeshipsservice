@@ -1,6 +1,7 @@
 ﻿CREATE VIEW [dbo].[GetInvitations]
 AS 
 SELECT i.Id,
+	i.AccountId,
 	a.Name AS AccountName,
 	i.Name,
 	i.Email,

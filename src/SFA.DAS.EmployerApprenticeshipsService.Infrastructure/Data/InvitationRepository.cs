@@ -115,5 +115,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
         }
+
+        public async Task Resend(Invitation invitation)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@statusId", invitation.Status, DbType.Int16);
+                parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
+
+                return await c.ExecuteAsync(
+                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }

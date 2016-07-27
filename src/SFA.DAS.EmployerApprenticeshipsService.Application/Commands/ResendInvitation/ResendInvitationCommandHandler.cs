@@ -4,16 +4,17 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation
 {
-    public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitationCommand>
+    public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
         private readonly IAccountTeamRepository _accountTeamRepository;
-        private readonly DeleteInvitationCommandValidator _validator;
+        private ResendInvitationCommandValidator _validator;
 
-        public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
+        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -21,10 +22,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
                 throw new ArgumentNullException(nameof(accountTeamRepository));
             _invitationRepository = invitationRepository;
             _accountTeamRepository = accountTeamRepository;
-            _validator = new DeleteInvitationCommandValidator();
+            _validator = new ResendInvitationCommandValidator();
         }
 
-        protected override async Task HandleCore(DeleteInvitationCommand message)
+        protected override async Task HandleCore(ResendInvitationCommand message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -41,15 +42,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
             if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
 
-            if (IsWrongStatusToDelete(existing.Status))
+            if (IsWrongStatusToResend(existing.Status))
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Wrong status to be deleted" } });
 
-            existing.Status = InvitationStatus.Deleted;
+            existing.Status = InvitationStatus.Pending;
+            existing.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
 
-            await _invitationRepository.ChangeStatus(existing);
+            await _invitationRepository.Resend(existing);
         }
 
-        private bool IsWrongStatusToDelete(InvitationStatus status)
+        private bool IsWrongStatusToResend(InvitationStatus status)
         {
             switch (status)
             {

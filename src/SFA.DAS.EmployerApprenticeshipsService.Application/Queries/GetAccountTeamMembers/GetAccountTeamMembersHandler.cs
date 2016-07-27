@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
             var validationResult = _validator.Validate(message);
             if (validationResult.IsValid())
             {
-                var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.UserId);
+                var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
                 return new GetAccountTeamMembersResponse {TeamMembers = accounts};
             }
             return new GetAccountTeamMembersResponse();
