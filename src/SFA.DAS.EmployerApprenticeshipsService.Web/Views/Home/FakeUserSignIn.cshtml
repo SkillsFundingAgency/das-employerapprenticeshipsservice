@@ -16,7 +16,7 @@
                     <div class="form-group">
 
                         <label class="form-label">
-                            <input type="radio" name="selectedExternalUserId" value="@Model.AvailableUsers[i].UserId" />
+                            <input type="radio" name="SelectedUserId" value="@Model.AvailableUsers[i].UserId" />
                             @Model.AvailableUsers[i].FirstName @Model.AvailableUsers[i].LastName
                         </label>
                         <input type="hidden" name="AvailableUsers[@i].UserId" value="@Model.AvailableUsers[i].UserId" />

@@ -2,8 +2,8 @@
 {
     public class Membership
     { 
-        public int AccountId { get; set; }
-        public int UserId { get; set; }
+        public long AccountId { get; set; }
+        public long UserId { get; set; }
         public int RoleId { get; set; }
     }
 }

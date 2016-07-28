@@ -410,6 +410,7 @@
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
+    <Content Include="Views\EmployerTeam\Remove.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

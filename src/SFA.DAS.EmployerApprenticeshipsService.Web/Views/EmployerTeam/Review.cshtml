@@ -51,5 +51,14 @@
             </form>
             <p></p>
         }
+        @if (@Model.IsUser)
+        {
+            <form action="@Url.Action("Remove")" method="GET">
+                <input type="hidden" id="Email" name="Email" value="@Model.Email" />
+                <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
+                <button type="submit" class="button">Delete user</button>
+            </form>
+            <p></p>
+        }
     </div>
 </div>
