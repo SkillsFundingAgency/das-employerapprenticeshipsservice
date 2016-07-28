@@ -123,14 +123,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Remove(long userId, long accountId, int remove)
+        public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
         {
             if (remove == 1)
             {
                 var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
                 if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
-                await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
+                try
+                {
+                    await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
+                }
+                catch (InvalidRequestException ex)
+                {
+                    AddErrorsToModelState(ex.ErrorMessages);
+                    var model = await _employerTeamOrchestrator.Review(accountId, email);
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    AddExceptionToModelError(ex);
+                    var model = await _employerTeamOrchestrator.Review(accountId, email);
+                    return View(model);
+                }
             }
             return RedirectToAction("Index", new { accountId = accountId });
         }

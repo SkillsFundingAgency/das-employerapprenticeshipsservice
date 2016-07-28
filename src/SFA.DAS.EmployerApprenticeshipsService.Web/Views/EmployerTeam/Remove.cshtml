@@ -6,6 +6,18 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h2 class="heading-medium">Delete Team Member</h2>
+        @if (!ViewContext.ViewData.ModelState.IsValid)
+        {
+            foreach (var state in ViewContext.ViewData.ModelState.Values)
+            {
+                foreach (var error in state.Errors)
+                {
+                    <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
+                        <p class="error-message">@error.ErrorMessage</p>
+                    </div>
+                }
+            }
+        }
         <p>Are you sure that you want to delete @name?</p>
         <form action="@Url.Action("Remove")" method="POST">
             <div class="form-group">
@@ -22,6 +34,7 @@
             </div>
             <input type="hidden" id="UserId" name="UserId" value="@Model.Id" />
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
+            <input type="hidden" id="Email" name="Email" value="@Model.Email" />
             <button type="submit" class="button">Continue</button>
         </form>
         <p></p>
