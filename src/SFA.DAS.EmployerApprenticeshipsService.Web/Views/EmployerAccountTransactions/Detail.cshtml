@@ -37,6 +37,38 @@
                         </tbody>
                     </table>
                     <h2 class="heading-medium">Payroll</h2>
+                    <div class="responsive-table table-19-font">
+                        <div class="responsive-thead">
+                            <div class="responsive-tr">
+                                <div class="responsive-th" scope="col">Payroll number</div>
+                                <div class="responsive-th numeric" scope="col">English percentage</div>
+                                <div class="responsive-th numeric" scope="col">Amount</div>
+
+                            </div>
+                        </div>
+                        <div class="responsive-tbody">
+
+
+                            @foreach (var aggregationLineItem in Model.LineItem.Items)
+                            {
+                                <div class="responsive-tr">
+                                    <div class="responsive-td rjTableName">
+                                        <div class="responsive-inner-caption">Payroll number</div>
+                                        <div>@aggregationLineItem.EmpRef</div>
+                                    </div>
+                                    <div class="responsive-td numeric">
+                                        <div class="responsive-inner-caption">English percentage</div>
+                                        <div>100%</div>
+                                    </div>
+                                    <div class="responsive-td numeric">
+                                        <div class="responsive-inner-caption">Amount</div>
+                                        <div>@aggregationLineItem.Amount</div>                                    
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
                     <table class="table-19-font">
                         <thead>
                             <tr>

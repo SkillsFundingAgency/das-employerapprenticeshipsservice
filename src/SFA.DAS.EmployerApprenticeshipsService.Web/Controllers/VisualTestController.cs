@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         AccountId = 1234567890,
                         TeamMembers = new List<TeamMember>()
                         {
-                            new TeamMember() {AccountId = 1234567890, Email = "a.b@com", Id=123, Role = Role.Owner, Status = InvitationStatus.Pending, UserRef = "ab-123" }
+                            new TeamMember() {Name = "Bojack Horseman", AccountId = 1234567890, Email = "a.b@com", Id=123, Role = Role.Owner, Status = InvitationStatus.Pending, UserRef = "ab-123" }
                         }
                     }},
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
