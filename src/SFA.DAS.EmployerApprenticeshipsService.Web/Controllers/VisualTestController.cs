@@ -65,6 +65,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 }
 
             };
+
+            var invitationViewModel = new InvitationViewModel()
+            {
+                AccountId = 123,
+                Email = "bojack.horseman@horsingaround.com",
+                Name = "Bocjack Horseman",
+                Role = Role.Owner,
+                Id = 1234,
+                ExpiryDate = new DateTime(2017, 4, 1),
+                IsUser = false,
+                Status = InvitationStatus.Pending
+            };
+
             _viewToModel = new Dictionary<string, object>
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
@@ -117,16 +130,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         Name = "Bocjack Horseman",
                         Role = Role.Owner
                 } },
-                {"~/Views/EmployerTeam/Review.cshtml", new InvitationViewModel() {
-                    AccountId = 123,
-                    Email = "bojack.horseman@horsingaround.com",
-                    Name = "Bocjack Horseman",
-                    Role = Role.Owner,
-                    Id = 1234,
-                    ExpiryDate = new DateTime(2017,4,1),
-                    IsUser = false,
-                    Status = InvitationStatus.Pending
-                } },
+                {"~/Views/EmployerTeam/Review.cshtml", invitationViewModel },
+                {"~/Views/EmployerTeam/Remove.cshtml", invitationViewModel },
                 {"~/Views/Home/FakeUserSignIn.cshtml", new SignInUserViewModel ()
                     {
                         AvailableUsers = new List<SignInUserModel>() {
