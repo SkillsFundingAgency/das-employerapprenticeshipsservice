@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 c.AddRegistry<DependencyResolution.DefaultRegistry>();
             });
 
-            var cleanDownDb = _container.GetInstance<ICleanUpDatabase>();
+            var cleanDownDb = _container.GetInstance<ICleanDatabase>();
             cleanDownDb.Execute().Wait();
         }
 
