@@ -14,7 +14,7 @@ using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.InviteMember
 {
-    [Binding]
+    [Binding, Explicit]
     public class InviteMemberSteps
     {
         private IContainer _container;
