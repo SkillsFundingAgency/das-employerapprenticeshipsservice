@@ -66,36 +66,8 @@
                                     </div>
                                 </div>
                             }
-
                         </div>
                     </div>
-                    <table class="table-19-font">
-                        <thead>
-                            <tr>
-                                <th scope="col">Payroll number</th>
-                                <th class="numeric" scope="col">English percentage</th>
-                                <th scope="col" class="numeric">Amount</th>
-                         
-                            </tr>
-                        </thead>
-                        <tbody>
-                    
-
-                            @foreach (var aggregationLineItem in Model.LineItem.Items)
-                            {
-                                <tr>
-                                    <td class="rjTableName">@aggregationLineItem.EmpRef</td>
-                                    <td class="numeric">100%</td>
-                                    <td class="numeric">@aggregationLineItem.Amount</td>
-
-                                </tr>
-                            }
-
-                        </tbody>
-                    </table>
-
-                    <p></p>
-
                 </div>
             </div>
         </div>
