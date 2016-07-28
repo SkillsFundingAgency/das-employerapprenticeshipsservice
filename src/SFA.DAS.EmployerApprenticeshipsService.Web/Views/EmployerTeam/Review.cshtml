@@ -51,5 +51,13 @@
             </form>
             <p></p>
         }
+        @if (@Model.IsUser)
+        {
+            <form action="@Url.Action("Remove")" method="POST">
+                <input type="hidden" id="UserId" name="UserId" value="@Model.Id" />
+                <button type="submit" class="button">Resend Invitation</button>
+            </form>
+            <p></p>
+        }
     </div>
 </div>
