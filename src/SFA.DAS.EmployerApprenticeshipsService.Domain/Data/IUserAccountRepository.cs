@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<Accounts> GetAccountsByUserId(string userId);
         Task<User> Get(string email);
+        Task<User> Get(long id);
     }
 }

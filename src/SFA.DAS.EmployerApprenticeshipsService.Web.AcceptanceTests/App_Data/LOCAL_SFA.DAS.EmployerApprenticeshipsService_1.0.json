@@ -1,0 +1,20 @@
+﻿{
+  "Employer": {
+    "DatabaseConnectionString": "Server=.;Database=SFA.DAS.EmployerApprenticeshipsService.Database;Integrated Security=True;Trusted_Connection=True;Connection Timeout=30;"
+  },
+  "CompaniesHouse": { "ApiKey": "" },
+  "ServiceBusConnectionString": "",
+  "Identity": {
+    "UseFake": "true",
+    "ClientId": "000123",
+    "ClientSecret": "",
+    "BaseAddress": ""
+  },
+  "SmtpServer": {
+    "ServerName": "localhost",
+    "UserName": "",
+    "Password": "",
+    "Port": "25"
+  },
+  "DashboardUrl": "http://localhost:57196/"
+}

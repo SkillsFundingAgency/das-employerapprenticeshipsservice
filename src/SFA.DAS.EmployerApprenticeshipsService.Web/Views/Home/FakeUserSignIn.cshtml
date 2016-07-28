@@ -16,10 +16,10 @@
                     <div class="form-group">
 
                         <label class="form-label">
-                            <input type="radio" name="SelectedExternalUserId" value="@Model.AvailableUsers[i].UserId" />
+                            <input type="radio" name="SelectedUserId" value="@Model.AvailableUsers[i].UserId" />
                             @Model.AvailableUsers[i].FirstName @Model.AvailableUsers[i].LastName
                         </label>
-                        <input type="hidden" name="AvailableUsers[@i].ExternalUserId" value="@Model.AvailableUsers[i].UserId" />
+                        <input type="hidden" name="AvailableUsers[@i].UserId" value="@Model.AvailableUsers[i].UserId" />
                         <input type="hidden" name="AvailableUsers[@i].FirstName" value=" @Model.AvailableUsers[i].FirstName " />
                         <input type="hidden" name="AvailableUsers[@i].LastName" value="@Model.AvailableUsers[i].LastName" />
                         <input type="hidden" name="AvailableUsers[@i].Email" value="@Model.AvailableUsers[i].Email" />

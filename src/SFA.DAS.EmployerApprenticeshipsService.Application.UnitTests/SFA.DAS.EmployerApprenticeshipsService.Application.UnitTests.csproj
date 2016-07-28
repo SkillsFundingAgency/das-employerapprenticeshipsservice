@@ -75,6 +75,7 @@
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIProcessNotificationCommand.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIValidateProcessNotificationCommand.cs" />
+    <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="FakeTimeProvider.cs" />

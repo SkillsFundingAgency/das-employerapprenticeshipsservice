@@ -51,5 +51,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.FirstOrDefault();
         }
+
+        public async Task<User> Get(long id)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int32);
+
+                return await c.QueryAsync<User>(
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [dbo].[User] WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
     }
 }

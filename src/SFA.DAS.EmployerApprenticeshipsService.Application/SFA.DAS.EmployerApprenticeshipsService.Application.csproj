@@ -82,16 +82,18 @@
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
+    <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommand.cs" />
+    <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandHandler.cs" />
+    <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
-<Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
+    <Compile Include="Commands\SendNotification\SendNotificationCommand.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandHandler.cs" />
     <Compile Include="Commands\SendNotification\SendNotificationCommandValidator.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
-   
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
