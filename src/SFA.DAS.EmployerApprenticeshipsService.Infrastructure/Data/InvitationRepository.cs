@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -11,8 +12,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class InvitationRepository : BaseRepository, IInvitationRepository
     {
-        public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            :base(configuration)
+        public InvitationRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+            : base(configuration, logger)
         {
         }
 
@@ -110,6 +111,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 return await c.ExecuteAsync(
                     sql: "UPDATE [dbo].[Invitation] SET Status = @statusId WHERE Id = @id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
+
+        public async Task Resend(Invitation invitation)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@statusId", invitation.Status, DbType.Int16);
+                parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
+
+                return await c.ExecuteAsync(
+                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetUsersTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUsersTests
 {
     public class WhenIGetUsers
     {

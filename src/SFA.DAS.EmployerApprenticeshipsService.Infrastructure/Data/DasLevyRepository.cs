@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -14,8 +14,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration)
-            :base(configuration)
+        public DasLevyRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+            : base(configuration, logger)
         {
         }
 
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.String);
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@EmpRef", empRef, DbType.String);
                 parameters.Add("@Amount", fractions.Amount, DbType.Decimal);
-                parameters.Add("@SubmissionDate", fractions.DateCalculated, DbType.DateTime);
+                parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
 
                 return await c.ExecuteAsync(
                     sql: "INSERT INTO [dbo].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",

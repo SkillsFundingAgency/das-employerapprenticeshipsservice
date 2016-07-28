@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetAccountTeamMembers
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetAccountTeamMembers
 {
     class WhenIGetUserAccountTeamMembers
     {
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetAc
                 Id = 1,
                 Email = "floyd@price.com",
                 AccountId = _account.Id,
-                Role = "Owner",
+                Role = Role.Owner,
                 UserRef = "kaka-kakah"
             };
             _teamMembers = new List<TeamMember> { _teamMember };
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Tests.Queries.GetAc
         public async Task ThenTheUserRepositoryIsCalledToGetAllUsers()
         {
             //Act
-             await _getAccountTeamMembersQueryHandler.Handle(new GetAccountTeamMembersQuery() {UserId = "kaka-kakah", Id = 1});
+             await _getAccountTeamMembersQueryHandler.Handle(new GetAccountTeamMembersQuery() {ExternalUserId = "kaka-kakah", Id = 1});
 
             //Assert
             _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId(1, "kaka-kakah"), Times.Once);

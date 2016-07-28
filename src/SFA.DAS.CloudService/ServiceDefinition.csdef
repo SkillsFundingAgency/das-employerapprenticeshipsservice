@@ -54,4 +54,13 @@
       <Import moduleName="RemoteAccess" />
     </Imports>
   </WorkerRole>
+  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>

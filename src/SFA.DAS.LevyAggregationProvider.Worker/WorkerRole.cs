@@ -26,6 +26,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
             {
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
                 c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
                 c.AddRegistry<DefaultRegistry>();
             });
 

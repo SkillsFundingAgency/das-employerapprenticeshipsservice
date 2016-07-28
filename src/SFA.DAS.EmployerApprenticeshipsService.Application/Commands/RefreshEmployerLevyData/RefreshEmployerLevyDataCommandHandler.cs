@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.Messaging;
 
@@ -9,6 +10,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 {
     public class RefreshEmployerLevyDataCommandHandler : AsyncRequestHandler<RefreshEmployerLevyDataCommand>
     {
+        [QueueName]
+        public string das_at_eas_refresh_employer_levy { get; set; }
+
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IMessagePublisher _messagePublisher; 

@@ -18,12 +18,9 @@ You should run Visual Studio as an Administrator.
 
 * Running the RunBuild.bat will expose any dependency issues
 * Running the Database project (SFA.DAS.EmployerApprenticeshipsService.Database) will provision the local DB instance with relevent seed data.
-* In the Azure Storage Explorer create a new local table named "Configuration" and load the following row data:
+* In the Azure Storage Explorer, connect to local storage, create a new local table named "Configuration" and load the following row data:
   * PartitionKey => LOCAL
   * RowKey => SFA.DAS.EmployerApprenticeshipsService_1.0
-  * Data => Contents of the environment configuration JSON document (see private configuration repository)
-  * PartitionKey => LOCAL
-  * RowKey => SFA.DAS.LevyAggregationProvider_1.0
   * Data => Contents of the environment configuration JSON document (see private configuration repository)
 
 ### Running

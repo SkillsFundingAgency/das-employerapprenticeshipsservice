@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Notification]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[UserId] INT NOT NULL,
+	[DateTime] DATETIME NOT NULL,
+	[ForecFormat] BIT NOT NULL DEFAULT(0),
+	[TemplateId] VARCHAR(20),
+	[Data] NVARCHAR(MAX),
+	[MessageFormat] TINYINT  NOT NULL DEFAULT(0)
+)

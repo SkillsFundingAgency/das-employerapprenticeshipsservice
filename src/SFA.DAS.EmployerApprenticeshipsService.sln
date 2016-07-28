@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Notification.Worker", "SFA.DAS.EAS.Notification.Worker\SFA.DAS.EAS.Notification.Worker.csproj", "{275B7C02-04EA-4064-867D-C15025A55D7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Notification.Worker.UnitTests", "SFA.DAS.EAS.Notification.Worker.UnitTests\SFA.DAS.EAS.Notification.Worker.UnitTests.csproj", "{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +105,14 @@ Global
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{275B7C02-04EA-4064-867D-C15025A55D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{275B7C02-04EA-4064-867D-C15025A55D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{275B7C02-04EA-4064-867D-C15025A55D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{275B7C02-04EA-4064-867D-C15025A55D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,5 +123,6 @@ Global
 		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{74686336-D12F-459C-B25E-0CCACF8D206E} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{88E7DB8E-7A95-4EA1-8CDF-7406188D642D} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

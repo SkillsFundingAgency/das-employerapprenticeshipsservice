@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
@@ -34,6 +36,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 Id = invitationId,
                 ExternalUserId = externalUserId
+            });
+        }
+
+        public async Task CreateInvitation(InviteTeamMemberViewModel model, string externalUserId)
+        {
+            await _mediator.SendAsync(new CreateInvitationCommand
+            {
+                AccountId = model.AccountId,
+                ExternalUserId = externalUserId,
+                Name = model.Name,
+                Email = model.Email,
+                RoleId = model.Role
             });
         }
     }
