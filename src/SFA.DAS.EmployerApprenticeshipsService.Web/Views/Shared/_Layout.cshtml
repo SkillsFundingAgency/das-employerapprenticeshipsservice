@@ -66,18 +66,17 @@
             </div>
         </div>
         <div class="grid-row">
-            <div class="">
-                <div style="text-align: right; padding-top: 0.75em;">
-                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
-                        <span>Hi @HttpContext.Current.User.Identity.Name</span>
-                        <span><a href="@Url.Action("SignOut","Home")">Log out</a></span>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Index","Home")">Sign in / Register</a>
-                    }
-                </div>
+            <div class="column-one-third"></div>
+            <div class="column-two-thirds rightalign">
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    <span>Hi @HttpContext.Current.User.Identity.Name</span>
+                    <span><a href="@Url.Action("SignOut","Home")">Log out</a></span>
+                }
+                else
+                {
+                    <a href="@Url.Action("Index","Home")">Sign in / Register</a>
+                }
             </div>
         </div>
 

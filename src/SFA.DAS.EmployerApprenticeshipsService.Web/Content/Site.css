@@ -1,1 +1,20 @@
-﻿
+﻿/* GOV.UK OVERRIDES */
+main {
+    padding-bottom: 3em;
+}
+a.button {
+    text-align: center;
+}
+
+.service-info {
+    margin-bottom: 0.75em;
+}
+
+/* LAYOUT CONVENIENCES*/
+.rightalign {
+    text-align:right;
+}
+
+table.th-nopadding th {
+    padding-top:0;
+}

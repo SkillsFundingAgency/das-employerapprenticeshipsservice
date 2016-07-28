@@ -8,11 +8,10 @@
 
 
     </div>
-    <div class="column-one-third">
+    <div class="column-one-third rightalign">
         <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId"/>
-            <div style="margin-top: 30px; float: right"><input class="button" id="addNewUser" type="submit" value="Invite team member">
-            </div>
+            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
+            <input class="button" id="addNewUser" type="submit" value="Invite team member">            
         </form>
     </div>
 </div>
@@ -28,18 +27,17 @@
             <p class="lede">This is the list of people who can access this account or have been invited
   to be a team member on this account. </p>
           
-            <table>
+            <table class="th-nopadding">
                 <thead>
                     <tr>
                         
-                        <th scope="col" style="padding-top:0">Name</th>
-                        <th scope="col" style="padding-top:0">Email address</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email address</th>
 
-                        <th scope="col" class="" style="padding-top:0">Role</th>
-                        <th scope="col" class="" style="padding-top:0">Status</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
 
-                        <th scope="col" style="padding-top:0"></th>
-                        <th scope="col" style="padding-top:0"></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,8 +55,6 @@
 
                 </tbody>
             </table>
-        }
-        <p></p>
-     
+        }     
     </div>
 </div>
