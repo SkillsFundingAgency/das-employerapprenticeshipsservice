@@ -9,7 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class MembershipRepository : BaseRepository
+    public class MembershipRepository : BaseRepository, IMembershipRepository
     {
         public MembershipRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration,logger)
         {
@@ -32,5 +32,36 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.FirstOrDefault();
         }
 
+        public async Task<Membership> Get(long userId, long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.Int32);
+
+                return await c.QueryAsync<Membership>(
+                    sql: "SELECT * FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
+
+        public async Task Remove(long userId, long accountId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userId", userId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int32);
+
+                return await c.ExecuteAsync(
+                    sql: "DELETE FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+        }
     }
 }
