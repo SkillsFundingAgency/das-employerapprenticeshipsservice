@@ -79,6 +79,7 @@
     <Build Include="Tables\Notification.sql" />
     <Build Include="StoredProcedures\CreateNotification.sql" />
     <Build Include="StoredProcedures\GetNotification.sql" />
+    <Build Include="StoredProcedures\SeedDataForRoles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

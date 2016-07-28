@@ -54,8 +54,8 @@
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=2.0.0.5827, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.5827\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6029, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.6029\lib\net45\SFA.DAS.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
