@@ -5,10 +5,10 @@
   "CompaniesHouse": { "ApiKey": "" },
   "ServiceBusConnectionString": "",
   "Identity": {
-    "UseFake": "false",
+    "UseFake": "true",
     "ClientId": "000123",
-    "ClientSecret": "7wKJNYFaKKg4FxUdi8_R75GGYsiWezvAbcdN1uSumE4",
-    "BaseAddress": "https://ppidentity.apprenticeships.sfa.bis.gov.uk"
+    "ClientSecret": "",
+    "BaseAddress": ""
   },
   "SmtpServer": {
     "ServerName": "localhost",

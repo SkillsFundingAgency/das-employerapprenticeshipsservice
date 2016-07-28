@@ -7,7 +7,7 @@
 Scenario Outline: Add team member
 	Given I am an account owner
 	When I invite a team member with email address "<email>" and name "<name>"
-	Then A user invite is "<result>" with pending status
+	Then A user invite is "<result>"
 Examples:
 	| email             | name		| result	  |
 	| test@test.com     | tester	| created	  |

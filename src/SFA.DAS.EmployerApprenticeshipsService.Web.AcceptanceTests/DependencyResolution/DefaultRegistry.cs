@@ -1,5 +1,7 @@
 ﻿using System.Web;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.Web.Pipeline;
@@ -13,12 +15,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
         {
             Scan(scan =>
             {
-                scan.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService"));
-                
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService"));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                
             });
             
-            //For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IUserRepository>().Use<FileSystemUserRepository>();
             
             AddMediatrRegistrations();
         }

@@ -88,7 +88,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 9
  testRunner.When(string.Format("I invite a team member with email address \"{0}\" and name \"{1}\"", email, name), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10
- testRunner.Then(string.Format("A user invite is \"{0}\" with pending status", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("A user invite is \"{0}\"", result), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
