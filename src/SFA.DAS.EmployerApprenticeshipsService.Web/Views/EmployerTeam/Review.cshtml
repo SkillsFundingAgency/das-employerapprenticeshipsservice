@@ -10,6 +10,7 @@
             <tr>
                 <th scope="col" style="padding-top: 0"></th>
                 <th scope="col" class="" style="padding-top: 0"></th>
+                <th scope="col" class="" style="padding-top: 0"></th>
             </tr>
             </thead>
             <tbody>
@@ -18,19 +19,30 @@
                 <tr>
                     <td>Name</td>
                     <td>@Model.Name</td>
+                    <td></td>
                 </tr>
             }
             <tr>
                 <td>Email</td>
                 <td>@Model.Email</td>
+                <td></td>
             </tr>
             <tr>
                 <td>Role</td>
                 <td>@Model.Role.ToString()</td>
+                @if (Model.IsUser)
+                {
+                    <td>@Url.Action("ChangeRole", new { Id = Model.Id })</td>
+                }
+                else
+                {
+                    <td></td>
+                }
             </tr>
             <tr>
                 <td>Status</td>
                 <td>@Model.Status.ToString()</td>
+                <td></td>
             </tr>
             </tbody>
         </table>

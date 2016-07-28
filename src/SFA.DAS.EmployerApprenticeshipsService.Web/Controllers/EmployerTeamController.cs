@@ -104,6 +104,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index", new { accountId = accountId });
         }
 
+        [HttpPost]
         public async Task<ActionResult> Resend(long id, long accountId)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -148,6 +149,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 }
             }
             return RedirectToAction("Index", new { accountId = accountId });
+        }
+
+        [HttpGet]
+        public ActionResult ChangeRole(long accountId, long userId)
+        {
+
+
+            return View();
         }
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)
