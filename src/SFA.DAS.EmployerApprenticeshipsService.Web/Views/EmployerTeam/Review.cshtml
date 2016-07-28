@@ -53,9 +53,10 @@
         }
         @if (@Model.IsUser)
         {
-            <form action="@Url.Action("Remove")" method="POST">
-                <input type="hidden" id="UserId" name="UserId" value="@Model.Id" />
-                <button type="submit" class="button">Resend Invitation</button>
+            <form action="@Url.Action("Remove")" method="GET">
+                <input type="hidden" id="Email" name="Email" value="@Model.Email" />
+                <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
+                <button type="submit" class="button">Delete user</button>
             </form>
             <p></p>
         }

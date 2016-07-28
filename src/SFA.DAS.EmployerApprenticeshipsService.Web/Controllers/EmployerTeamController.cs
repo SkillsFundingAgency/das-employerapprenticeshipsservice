@@ -115,11 +115,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Remove(long userId)
+        public async Task<ActionResult> Remove(long accountId, string email)
         {
-            var invitation = await _employerTeamOrchestrator.GetInvitation(userId);
+            var model = await _employerTeamOrchestrator.Review(accountId, email);
 
-            return View(invitation);
+            return View(model);
         }
 
         [HttpPost]
