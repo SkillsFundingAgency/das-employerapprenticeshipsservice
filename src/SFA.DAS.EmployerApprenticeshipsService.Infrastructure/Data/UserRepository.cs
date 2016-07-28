@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userRef", id, DbType.String);
+                parameters.Add("@userRef", new Guid(id), DbType.Guid);
                 
                 var res = await c.QueryAsync<User>(
                     sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [dbo].[User] WHERE PireanKey = @userRef",
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", user.UserRef, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
                 parameters.Add("@lastName", user.FirstName, DbType.String);
                 parameters.Add("@firstName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
-                parameters.Add("@userRef", user.UserRef, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
                 parameters.Add("@lastName", user.FirstName, DbType.String);
                 parameters.Add("@firstName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(

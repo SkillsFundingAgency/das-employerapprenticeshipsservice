@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
+using IdentityModel;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -83,6 +85,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
             var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
             authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
+            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path,true);
+            
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()

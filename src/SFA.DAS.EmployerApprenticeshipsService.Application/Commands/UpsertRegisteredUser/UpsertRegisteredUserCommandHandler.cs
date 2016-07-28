@@ -23,29 +23,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegi
 
         protected override async Task HandleCore(UpsertRegisteredUserCommand message)
         {
-            
-            var user = await _userRepository.GetById(message.UserRef);
-            
-            if (user == null)
+
+            var user = await _userRepository.GetById(message.UserRef).ContinueWith(async task =>
             {
-                await _userRepository.Create(new User
+                if (task.Result == null)
                 {
-                    Email = message.EmailAddress,
-                    FirstName = message.FirstName,
-                    LastName = message.LastName,
-                    UserRef = message.UserRef
-                });
-            }
-            else
-            {
-                await _userRepository.Update(new User
+                    await _userRepository.Create(new User
+                    {
+                        Email = message.EmailAddress,
+                        FirstName = message.FirstName,
+                        LastName = message.LastName,
+                        UserRef = message.UserRef
+                    });
+                }
+                else
                 {
-                    Email = message.EmailAddress,
-                    FirstName = message.FirstName,
-                    LastName = message.LastName,
-                    UserRef = message.UserRef
-                });
-            }
+                    await _userRepository.Update(new User
+                    {
+                        Email = message.EmailAddress,
+                        FirstName = message.FirstName,
+                        LastName = message.LastName,
+                        UserRef = message.UserRef
+                    });
+                }
+            });
+
+
+
         }
     }
 }
