@@ -38,23 +38,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task<Membership> GetMembership(long accountId, string userId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
-                parameters.Add("@externalUserId", userId, DbType.String);
-
-                return await c.QueryAsync<Membership>(
-                    sql: "SELECT m.* FROM [dbo].[Membership] m INNER JOIN [dbo].[User] u ON u.Id = m.UserId WHERE m.AccountId = @accountId AND u.PireanKey = @externalUserId;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
-
-            return result.FirstOrDefault();
-        }
-
         public async Task<TeamMember> GetMember(long accountId, string email)
         {
             var result = await WithConnection(async connection =>

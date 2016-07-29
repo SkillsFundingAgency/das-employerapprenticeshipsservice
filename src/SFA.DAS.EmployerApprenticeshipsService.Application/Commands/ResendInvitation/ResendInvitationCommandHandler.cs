@@ -11,17 +11,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
     public class ResendInvitationCommandHandler : AsyncRequestHandler<ResendInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
-        private readonly IAccountTeamRepository _accountTeamRepository;
-        private ResendInvitationCommandValidator _validator;
+        private readonly IMembershipRepository _membershipRepository;
+        private readonly ResendInvitationCommandValidator _validator;
 
-        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
+        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
-            if (accountTeamRepository == null)
-                throw new ArgumentNullException(nameof(accountTeamRepository));
+            if (membershipRepository == null)
+                throw new ArgumentNullException(nameof(membershipRepository));
             _invitationRepository = invitationRepository;
-            _accountTeamRepository = accountTeamRepository;
+            _membershipRepository = membershipRepository;
             _validator = new ResendInvitationCommandValidator();
         }
 
@@ -32,15 +32,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
+            var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+
+            if (owner == null || (Role)owner.RoleId != Role.Owner)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
+
             var existing = await _invitationRepository.Get(message.Id);
 
             if (existing == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
-
-            var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
-
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
 
             if (IsWrongStatusToResend(existing.Status))
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Wrong status to be deleted" } });

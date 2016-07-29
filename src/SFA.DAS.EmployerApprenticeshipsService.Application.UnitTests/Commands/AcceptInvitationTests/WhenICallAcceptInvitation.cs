@@ -14,16 +14,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private AcceptInvitationCommandHandler _handler;
         private Invitation _invitation;
         private Mock<IInvitationRepository> _invitationRepository;
-        private Mock<IAccountTeamRepository> _accountTeamRepository;
+        private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IUserAccountRepository> _userAccountRepository;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _accountTeamRepository = new Mock<IAccountTeamRepository>();
+            _membershipRepository = new Mock<IMembershipRepository>();
             _userAccountRepository = new Mock<IUserAccountRepository>();
-            _handler = new AcceptInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _userAccountRepository.Object);
+            _handler = new AcceptInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _userAccountRepository.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
             _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
-            _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
 
             await _handler.Handle(new AcceptInvitationCommand
             {
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
             _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
-            _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new Membership());
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView());
 
             var command = new AcceptInvitationCommand
             {
