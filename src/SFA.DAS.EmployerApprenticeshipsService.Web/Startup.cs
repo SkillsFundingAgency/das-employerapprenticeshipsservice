@@ -54,6 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
                 {
                     AuthenticationType = "Cookies"
+
                 });
 
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -88,8 +89,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
             var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
             logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email,  firstName,  lastName);
-            authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
-            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
+
+            Task.Run(async ()  =>
+            {
+                await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
+            }).Wait();
+           
+            //HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
             
         }
 
