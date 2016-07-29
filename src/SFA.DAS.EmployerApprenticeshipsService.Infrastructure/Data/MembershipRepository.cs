@@ -79,5 +79,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
         }
+
+        public async Task<MembershipView> GetCaller(long accountId, string externalUserId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@externalUserId", externalUserId, DbType.String);
+
+                return await c.QueryAsync<MembershipView>(
+                    sql: "SELECT * FROM [dbo].[MembershipView] WHERE AccountId = @accountId AND UserRef = @externalUserId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
     }
 }

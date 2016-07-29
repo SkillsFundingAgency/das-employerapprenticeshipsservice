@@ -10,17 +10,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
     public class DeleteInvitationCommandHandler : AsyncRequestHandler<DeleteInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
-        private readonly IAccountTeamRepository _accountTeamRepository;
+        private readonly IMembershipRepository _membershipRepository;
         private readonly DeleteInvitationCommandValidator _validator;
 
-        public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository)
+        public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
-            if (accountTeamRepository == null)
-                throw new ArgumentNullException(nameof(accountTeamRepository));
+            if (membershipRepository == null)
+                throw new ArgumentNullException(nameof(membershipRepository));
             _invitationRepository = invitationRepository;
-            _accountTeamRepository = accountTeamRepository;
+            _membershipRepository = membershipRepository;
             _validator = new DeleteInvitationCommandValidator();
         }
 
@@ -31,15 +31,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
+            var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+
+            if (owner == null || (Role)owner.RoleId != Role.Owner)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not an Owner on this Account" } });
+
             var existing = await _invitationRepository.Get(message.Id);
 
             if (existing == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
-
-            var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
-
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
 
             if (IsWrongStatusToDelete(existing.Status))
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Wrong status to be deleted" } });

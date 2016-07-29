@@ -13,15 +13,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenICallChangeTeamMemberRole
     {
         private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<IAccountTeamRepository> _accountTeamRepository;
         private ChangeTeamMemberRoleCommandHandler _handler;
 
         [SetUp]
         public void Setup()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _accountTeamRepository = new Mock<IAccountTeamRepository>();
-            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object, _accountTeamRepository.Object);
+            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object);
         }
 
         [Test]
@@ -35,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -54,14 +52,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            var callerMembership = new Membership
+            var callerMembership = new MembershipView
             {
                 AccountId = command.AccountId,
                 UserId = 1,
                 RoleId = (int)Role.Viewer
             };
 
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -80,14 +78,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            var callerMembership = new Membership
+            var callerMembership = new MembershipView
             {
                 AccountId = command.AccountId,
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
 
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
@@ -107,7 +105,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            var callerMembership = new Membership
+            var callerMembership = new MembershipView
             {
                 AccountId = command.AccountId,
                 UserId = 1,
@@ -121,7 +119,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Role = (Role)callerMembership.RoleId
             };
 
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(userMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
@@ -141,7 +139,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            var callerMembership = new Membership
+            var callerMembership = new MembershipView
             {
                 AccountId = command.AccountId,
                 UserId = 1,
@@ -155,7 +153,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Role = (Role)command.RoleId
             };
 
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(userMembership);
 
             await _handler.Handle(command);
