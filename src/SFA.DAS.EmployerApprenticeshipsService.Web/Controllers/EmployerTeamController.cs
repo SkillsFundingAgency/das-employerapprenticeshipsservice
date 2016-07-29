@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int accountId)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            var userIdClaim = _owinWrapper.GetPersistantUserIdClaimFromProvider();
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
             var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim.Value);

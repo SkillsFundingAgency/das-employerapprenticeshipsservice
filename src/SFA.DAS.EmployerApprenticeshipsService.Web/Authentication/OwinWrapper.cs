@@ -1,22 +1,32 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.Web;
+using System.Web.Mvc;
 using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using Microsoft.Owin;
+using SFA.DAS.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
 {
     public class OwinWrapper : IOwinWrapper
     {
         private readonly IOwinContext _owinContext;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public OwinWrapper(IOwinContext owinContext)
+        public OwinWrapper(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _owinContext = owinContext;
+            _configuration = configuration;
+            _owinContext = HttpContext.Current.GetOwinContext();
+           
         }
 
         public void SignInUser(string id, string displayName, string email)
         {
+            if (!_configuration.Identity.UseFake) { throw new NotImplementedException(); }
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, displayName),
@@ -24,17 +34,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
                 new Claim("sub", id)
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims,"Cookies");
+            var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
 
             var authenticationManager = _owinContext.Authentication;
             authenticationManager.SignIn(claimsIdentity);
             _owinContext.Authentication.User = new ClaimsPrincipal(claimsIdentity);
         }
 
-        public void SignOutUser()
+        public ActionResult SignOutUser()
         {
-            var authenticationManager = _owinContext.Authentication;
-            authenticationManager.SignOut("Cookies");
+            if (_configuration.Identity.UseFake)
+            {
+                var authenticationManager = _owinContext.Authentication;
+                authenticationManager.SignOut("Cookies");
+                return new RedirectResult("/");
+            }
+            else
+            {
+                var authenticationManager = _owinContext.Authentication;
+                authenticationManager.SignOut("Cookies");
+                return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/sfa/wflow/logout?returnUrl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
+            }
+        }
+
+        public Claim GetPersistantUserIdClaimFromProvider()
+        {
+            return ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
         }
 
         public SignInMessage GetSignInMessage(string id)

@@ -15,8 +15,15 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Configuration;
 using System.Web;
 using MediatR;
+using Microsoft.Azure;
+using SFA.DAS.Configuration;
+using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -40,15 +47,52 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
-            
-            For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
+           
 
-            For<IUserRepository>().Use<FileSystemUserRepository>();
-            
+            //For<IOwinWrapper>().Transient().Use(() => new OwinWrapper(HttpContext.Current.GetOwinContext())).SetLifecycleTo(new HttpContextLifecycle());
+            var config = this.GetConfiguration();
+            if (config.Identity.UseFake)
+            {
+                For<IUserRepository>().Use<FileSystemUserRepository>();
+            }
+            else
+            {
+                For<IUserRepository>().Use<UserRepository>();
+            }
 
             RegisterMediator();
         }
-        
+
+        private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
+        {
+            var environment = Environment.GetEnvironmentVariable("DASENV");
+            if (string.IsNullOrEmpty(environment))
+            {
+                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            }
+
+            var configurationRepository = GetConfigurationRepository();
+            var configurationService = new ConfigurationService(configurationRepository,
+                new ConfigurationOptions(ServiceName, environment, "1.0"));
+
+            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+
+            return result;
+        }
+
+        private static IConfigurationRepository GetConfigurationRepository()
+        {
+            IConfigurationRepository configurationRepository;
+            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
+            {
+                configurationRepository = new FileStorageConfigurationRepository();
+            }
+            else
+            {
+                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
+            }
+            return configurationRepository;
+        }
 
         private void RegisterMediator()
         {
