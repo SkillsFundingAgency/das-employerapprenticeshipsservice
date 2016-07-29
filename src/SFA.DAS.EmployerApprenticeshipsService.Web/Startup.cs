@@ -11,6 +11,7 @@ using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using NLog;
 using Owin;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
@@ -44,8 +45,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             else
             {
                 var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+                var logger = LogManager.GetLogger("Startup");
+            
 
-                
 
                 JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
@@ -72,20 +74,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                     AuthorizeEndpoint = constants.AuthorizeEndpoint(),
                     AuthenticatedCallback = identity =>
                     {
-                        PostAuthentiationAction(identity, authenticationOrchestrator);
+                        PostAuthentiationAction(identity, authenticationOrchestrator, logger);
                     }
                 });
             }
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity,AuthenticationOrchestraor authenticationOrchestrator)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger)
         {
+            logger.Info("PostAuthenticationAction called");
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == @"sub")?.Value;
             var email = identity.Claims.FirstOrDefault(claim => claim.Type == @"email")?.Value;
             var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
             var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
+            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email,  firstName,  lastName);
             authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
-            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path,true);
+            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
             
         }
 
