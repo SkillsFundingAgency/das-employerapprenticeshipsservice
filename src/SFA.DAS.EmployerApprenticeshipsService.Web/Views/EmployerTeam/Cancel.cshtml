@@ -2,7 +2,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Cancel Invitation</h2>
+        <h1 class="heading-medium">Cancel Invitation</h1>
         <p>Are you sure that you want to cancel the invitation for @Model.Name?</p>
         <form action="@Url.Action("Cancel")" method="POST">
             <div class="form-group">
@@ -21,6 +21,5 @@
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
             <button type="submit" class="button">Continue</button>
         </form>
-        <p></p>
     </div>
 </div>

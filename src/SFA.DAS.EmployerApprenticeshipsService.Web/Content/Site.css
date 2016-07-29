@@ -1,1 +1,149 @@
-﻿
+﻿/* GOV.UK OVERRIDES */
+main {
+    padding-bottom: 3em;
+}
+a.button {
+    text-align: center;
+}
+
+button, a.button {
+    margin-bottom: 0.75em;
+}
+
+.service-info {
+    margin-bottom: 0.75em;
+}
+
+/* RESPONSIVE TABLES */
+.responsive-table {
+    display:table;
+}
+
+.responsive-thead {
+    display:table-header-group;
+}
+
+.responsive-tr {
+    display: table-row;
+}
+
+.responsive-th {
+    display: table-cell;
+}
+
+.responsive-td {
+    display: table-cell;
+}
+
+.responsive-tbody {
+    display: table-row-group;
+}
+
+.responsive-inner-caption {
+    display: none;
+}
+
+.responsive-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.responsive-table .responsive-th,
+.responsive-table .responsive-td {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  padding: 0.75em 1.25em 0.5625em 0;
+  text-align: left;
+  color: #0b0c0c;
+  border-bottom: 1px solid #bfc1c3;
+}
+
+@media (min-width: 641px) {
+  .responsive-table .responsive-th,
+  .responsive-table .responsive-td {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+.responsive-table .responsive-th {
+  font-weight: 700;
+}
+
+.responsive-table .responsive-th.numeric {
+  text-align: right;
+}
+
+.responsive-table .responsive-td.numeric {
+  font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  text-align: right;
+}
+
+@media (min-width: 641px) {
+  .responsive-table .responsive-td.numeric {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+
+@media (max-width: 640px) {
+    .responsive-thead, .responsive-th {
+        display:none;
+    }
+
+    .responsive-tr {
+        display:table;
+        width:100%;
+        margin-bottom: 1.5em;
+    }
+
+    /*.responsive-table, .responsive-tr, .responsive-tbody, */
+    .responsive-td {
+        display: table-row;
+    }
+        
+    responsive-td .responsive-inner-caption, .responsive-td div {
+        display: table-cell;
+        
+        /* TODO: address duplication */
+        font-family: "nta", Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.1428571429;
+        font-weight: 400;
+        text-transform: none;
+        padding: 0.75em 1.25em 0.5625em 0;
+        text-align: left;
+        color: #0b0c0c;
+        border-bottom: 1px solid #bfc1c3;
+    }
+
+    .responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
+        font-weight:700;
+    }
+
+    .responsive-td:first-child .responsive-inner-caption {
+        display: none;
+    }
+
+    .responsive-table .responsive-td.numeric, .responsive-table .responsive-th.numeric {
+        text-align: left;
+    }
+}
+
+/* LAYOUT CONVENIENCES*/
+.rightalign {
+    text-align:right;
+}
+
+table.th-nopadding th {
+    padding-top:0;
+}
