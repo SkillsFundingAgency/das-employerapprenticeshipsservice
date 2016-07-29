@@ -19,26 +19,35 @@
         <form method="POST" action="@Url.Action("ChangeRole")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="Email">Email</label>
-                <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
-                       aria-required="true" value="@Model.Email" />
+                <label class="form-label" for="Email">Team member access for @Model.Email</label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
-                    Owner
+                    <input id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "") />
+                    <b>Viewer</b><br />
+                    A "Viewer" is a team member with limited access to the organisation's account.
+                    They can view contracts and account information, but not make changes to it.
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio2">
                     <input id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "") />
-                    Transactor
+                    <b>Transactor</b><br/>
+                    A "Transactor" is a team member who can:<br/>
+                    - create new contracts<br/>
+                    - approve in-progress contracts<br/>
+                    - pause training payments
+                    - stop training payments
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio3">
-                    <input id="radio3" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "") />
-                    Viewer
+                    <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
+                    <b>Owner</b><br/>
+                    An "Owner" is a team member with full access to the organisation's account.
+                    They can do everything a viewer or doer can and also<br/>
+                    - manage team members<br/>
+                    - manage PAYE schemes
                 </label>
             </div>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
