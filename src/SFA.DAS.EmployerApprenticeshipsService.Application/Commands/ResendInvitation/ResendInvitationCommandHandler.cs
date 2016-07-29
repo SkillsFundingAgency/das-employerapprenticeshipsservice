@@ -35,32 +35,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
             var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
             if (owner == null || (Role)owner.RoleId != Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner" } });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
             var existing = await _invitationRepository.Get(message.Id);
 
             if (existing == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });
 
-            if (IsWrongStatusToResend(existing.Status))
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Wrong status to be deleted" } });
+            if (existing.Status == InvitationStatus.Accepted)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Accepted invitations cannot be resent" } });
 
             existing.Status = InvitationStatus.Pending;
             existing.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
 
             await _invitationRepository.Resend(existing);
-        }
-
-        private bool IsWrongStatusToResend(InvitationStatus status)
-        {
-            switch (status)
-            {
-                case InvitationStatus.Pending:
-                case InvitationStatus.Expired:
-                    return false;
-                default:
-                    return true;
-            }
         }
     }
 }
