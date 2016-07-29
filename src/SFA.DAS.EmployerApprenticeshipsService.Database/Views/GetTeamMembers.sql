@@ -3,7 +3,7 @@
 	
 select 1 AS IsUser,
 	a.Id as 'AccountId', 
-	u.Id ,'' as Name,  
+	u.Id ,CONCAT(u.FirstName, ' ', u.LastName) as Name,  
 	u.Email,
 	CONVERT(varchar(64), u.PireanKey) as 'UserRef', 
 	m.RoleId as 'Role', 

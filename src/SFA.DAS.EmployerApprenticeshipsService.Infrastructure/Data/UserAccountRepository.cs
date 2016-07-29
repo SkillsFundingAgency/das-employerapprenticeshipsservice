@@ -26,8 +26,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 return await c.QueryAsync<Account>(
                     sql: @"select a.* from [dbo].[User] u 
-                        left join[dbo].[Membership] m on m.UserId = u.Id
-                        left join[dbo].[Account]  a on m.AccountId = a.Id
+                         join[dbo].[Membership] m on m.UserId = u.Id
+                         join[dbo].[Account]  a on m.AccountId = a.Id
                         where u.PireanKey = @UserId",
                     param: parameters,
                     commandType: CommandType.Text);
