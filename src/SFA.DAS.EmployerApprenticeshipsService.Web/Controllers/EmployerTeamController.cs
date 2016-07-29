@@ -152,12 +152,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChangeRole(long accountId, long userId)
+        public async Task<ActionResult> ChangeRole(long accountId, string email)
         {
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
-
-            return View();
+            return View(teamMember);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeRole(long accountId, string email, int role)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            try
+            {
+                await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+                return View(teamMember);
+            }
+        }
+
+
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {

@@ -32,7 +32,7 @@
                 <td>@Model.Role.ToString()</td>
                 @if (Model.IsUser)
                 {
-                    <td>@Url.Action("ChangeRole", new { Id = Model.Id })</td>
+                    <td>@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.AccountId, Email = Model.Email })</td>
                 }
                 else
                 {
