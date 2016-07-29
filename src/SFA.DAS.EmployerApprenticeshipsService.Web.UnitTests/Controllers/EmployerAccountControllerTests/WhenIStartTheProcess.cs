@@ -1,7 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using System.Web.Routing;
+using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -11,11 +15,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
     public class WhenIStartTheProcess : ControllerTestBase
     {
         private EmployerAccountController _employerAccountController;
-        private Mock<EmployerAccountOrchestrator> _orchestrator;
+        private EmployerAccountOrchestrator _orchestrator;
         private Mock<ICookieService> _cookieService;
         private Mock<IOwinWrapper> _owinWrapper;
         private string ExpectedRedirectUrl = "http://redirect.local.test";
-        
+        private Mock<IMediator> _mediator;
+        private Mock<ILogger> _logger;
+
 
         [SetUp]
         public void Arrange()
@@ -23,13 +29,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             base.Arrange(ExpectedRedirectUrl);
             
             _cookieService = new Mock<ICookieService>();
+            _mediator = new Mock<IMediator>();
+            _logger = new Mock<ILogger>();
 
-            _orchestrator =  new Mock<EmployerAccountOrchestrator>();
-            _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).Returns(ExpectedRedirectUrl);
-
+            _orchestrator =  new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);
+            
             _owinWrapper = new Mock<IOwinWrapper>();
 
-            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator.Object, _cookieService.Object);
+            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator, _cookieService.Object);
             _employerAccountController.ControllerContext = _controllerContext.Object;
             _employerAccountController.Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes);
         }
@@ -61,13 +68,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         }
 
         [Test]
-        public void ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
+        public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayInformationQuery>())).ReturnsAsync(new GetGatewayInformationResponse { Url = ExpectedRedirectUrl });
+
             //Act
-            var actual = _employerAccountController.Gateway();
+            var actual = await _employerAccountController.Gateway();
 
             //Assert
-            _orchestrator.Verify(x=>x.GetGatewayUrl(It.IsAny<string>()));
             Assert.IsNotNull(actual);
             var actualResult = actual as RedirectResult;
             Assert.IsNotNull(actualResult);

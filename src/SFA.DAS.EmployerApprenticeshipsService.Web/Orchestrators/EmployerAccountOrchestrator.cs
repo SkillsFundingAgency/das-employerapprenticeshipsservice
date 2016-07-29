@@ -4,6 +4,7 @@ using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -12,12 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
-
-        public EmployerAccountOrchestrator()
-        {
-            
-        }
-
+        
         public EmployerAccountOrchestrator(IMediator mediator, ILogger logger)
         {
             if (mediator == null)
@@ -25,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
             _logger = logger;
         }
-
+        
         public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
@@ -61,9 +57,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public virtual string GetGatewayUrl(string redirectUrl)
+        public async Task<string> GetGatewayUrl(string redirectUrl)
         {
-            throw new NotImplementedException();
+            var response = await _mediator.SendAsync(new GetGatewayInformationQuery
+            {
+                ReturnUrl = redirectUrl
+            });
+
+            return response.Url;
         }
     }
 }
