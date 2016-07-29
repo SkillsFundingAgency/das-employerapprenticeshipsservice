@@ -3,9 +3,9 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Manage Team member</h2>
+        <h1 class="heading-medium">Manage Team member</h1>
 
-        <table>
+        <table class="th-nopadding">
             <thead>
             <tr>
                 <th scope="col" style="padding-top: 0"></th>
@@ -61,7 +61,6 @@
                 <input type="hidden" id="Id" name="Id" value="@Model.Id"/>
                 <button type="submit" class="button">Cancel Invitation</button>
             </form>
-            <p></p>
         }
         @if (@Model.IsUser)
         {

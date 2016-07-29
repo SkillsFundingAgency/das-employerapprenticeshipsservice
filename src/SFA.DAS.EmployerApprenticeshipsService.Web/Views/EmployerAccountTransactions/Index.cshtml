@@ -15,6 +15,10 @@
                 <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToString("d MMM yyyy")</span></p>
             </div>
         </div>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
         <div>
             <h2 class="heading-medium">Transactions</h2>
             @if (Model.Data.Data.Count == 0)
@@ -22,48 +26,71 @@
                 <p class="panel panel-info">
                     No transaction data exists for this account, please try again later.
                 </p>
-            }
-            else
-            {
-                <table id="transactions">
+            } else {
+                <div class="responsive-table" id="transactions">
 
-                    <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Credit</th>
-                        <th class="" scope="col">Debit</th>
-                        <th class="" scope="col">Balance</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                    <div class="responsive-thead">
+                    <div class="responsive-tr">
+                        <div class="responsive-th" scope="col">Date</div>
+                        <div class="responsive-th" scope="col">Description</div>
+                        <div class="responsive-th" scope="col">Credit</div>
+                        <div class="responsive-th" scope="col">Debit</div>
+                        <div class="responsive-th" scope="col">Balance</div>
+                        <div class="responsive-th" scope="col"></div>
+                    </div>
+                    </div>
+                    <div class="responsive-tbody">
                     @foreach (var aggregationLine in Model.Data.Data)
                     {
 
-                        <tr>
-                            <td>@{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date</td>
-                            <td>Levy Credit</td>
-                            <td>
-                                @{
-                                    var credit = aggregationLine.Amount > (decimal) 0.0 ? aggregationLine.Amount : (decimal) 0.0;
-                                }
-                                @credit
-                            </td>
-                            <td>
-                                @{
-                                    var debit = aggregationLine.Amount <= (decimal) 0.0 ? aggregationLine.Amount : (decimal) 0.0;
-                                }
-                                @debit
-                            </td>
-                            <td>@aggregationLine.Balance</td>
-                            <td><a href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a></td>
+                        <div class="responsive-tr">
+                            <div class="responsive-td">
+                                <div>
+                                    @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Description</div>
+                                <div>
+                                    Levy Credit
+                                </div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Credit</div>
+                                <div>
+                                    @{
+                                        var credit = aggregationLine.Amount > (decimal)0.0 ? aggregationLine.Amount : (decimal)0.0;
+                                    }
+                                    @credit
+                                </div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Debit</div>
+                                <div>
+                                    @{
+                                        var debit = aggregationLine.Amount <= (decimal)0.0 ? aggregationLine.Amount : (decimal)0.0;
+                                    }
+                                    @debit
+                                </div>
+                            </div>
 
-                        </tr>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Balance</div>
+                                <div>
+                                    @aggregationLine.Balance
+                                </div>
+                            </div>
+                            <div class="responsive-td">
+                                <div>
+                                    <a href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                        </div>
                     }
-                    </tbody>
-                </table>
-                <p> </p>
+                    </div>
+                </div>
             }
             
         </div>

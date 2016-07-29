@@ -102,12 +102,12 @@
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6029, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.6029\lib\net45\SFA.DAS.Messaging.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.6450\lib\net45\SFA.DAS.Messaging.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=2.0.0.5827, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.2.0.0.5827\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.Messaging.AzureServiceBus, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.2.0.0.6450\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
@@ -144,8 +144,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbCleanup\CleanUpDatabase.cs" />
-    <Compile Include="DbCleanup\ICleanUpDatabase.cs" />
+    <Compile Include="DbCleanup\CleanDatabase.cs" />
+    <Compile Include="DbCleanup\ICleanDatabase.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="Features\InviteMember.feature.cs">
       <AutoGen>True</AutoGen>

@@ -2,7 +2,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Accept invitation</h2>
+        <h1 class="heading-medium">Accept invitation</h1>
         <form method="POST" action="@Url.Action("Accept")">
             <div class="form-group">
                 <label class="form-label" for="Email">Email</label>
@@ -21,7 +21,6 @@
             </div>
             <input type="hidden" id="invitationId" name="invitationId" value="@Model.Id"/>
             <button type="submit" class="button">Accept</button>
-            <p></p>
         </form>
     </div>
 </div>

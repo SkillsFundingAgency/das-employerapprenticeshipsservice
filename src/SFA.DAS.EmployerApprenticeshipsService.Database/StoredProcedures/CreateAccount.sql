@@ -14,8 +14,12 @@ BEGIN
 
 	DECLARE @userId INT;
 
-	INSERT INTO [dbo].[User](PireanKey, Email) VALUES (@userRef, 'test@test.org');
-	SELECT @userId = SCOPE_IDENTITY();
+	select @userId = Id from [dbo].[User] where PireanKey = @userRef;
+	if (@userId is null)
+	begin
+		INSERT INTO [dbo].[User](PireanKey, Email) VALUES (@userRef, 'test@test.org');
+		SELECT @userId = SCOPE_IDENTITY();
+	end
 
 	INSERT INTO [dbo].[Account](Name) VALUES (@employerName);
 	SELECT @accountId = SCOPE_IDENTITY();

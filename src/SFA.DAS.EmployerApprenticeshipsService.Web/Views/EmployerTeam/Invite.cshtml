@@ -3,7 +3,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Create invitation</h2>
+        <h1 class="heading-medium">Create invitation</h1>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -48,7 +48,6 @@
             </div>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
             <button type="submit" class="button">Create</button>
-            <p></p>
         </form>
     </div>
 </div>

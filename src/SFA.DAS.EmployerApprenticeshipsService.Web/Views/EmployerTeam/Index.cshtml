@@ -8,17 +8,16 @@
 
 
     </div>
-    <div class="column-one-third">
+    <div class="column-one-third rightalign">
         <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId"/>
-            <div style="margin-top: 30px; float: right"><input class="button" id="addNewUser" type="submit" value="Invite team member">
-            </div>
+            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
+            <input class="button" id="addNewUser" type="submit" value="Invite team member">            
         </form>
     </div>
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
@@ -28,37 +27,51 @@
             <p class="lede">This is the list of people who can access this account or have been invited
   to be a team member on this account. </p>
           
-            <table>
-                <thead>
-                    <tr>
+            <div class="responsive-table th-nopadding">
+                <div class="responsive-thead">
+                    <div class="responsive-tr">
                         
-                        <th scope="col" style="padding-top:0">Name</th>
-                        <th scope="col" style="padding-top:0">Email address</th>
+                        <div class="responsive-th" scope="col">Name</div>
+                        <div class="responsive-th" scope="col">Email address</div>
 
-                        <th scope="col" class="" style="padding-top:0">Role</th>
-                        <th scope="col" class="" style="padding-top:0">Status</th>
+                        <div class="responsive-th" scope="col">Role</div>
+                        <div class="responsive-th" scope="col">Status</div>
 
-                        <th scope="col" style="padding-top:0"></th>
-                        <th scope="col" style="padding-top:0"></th>
-                    </tr>
-                </thead>
-                <tbody>
+                        <div class="responsive-th" scope="col"></div>
+                    </div>
+                </div>
+                <div class="responsive-tbody">
 
                     @foreach (var teamMember in Model.TeamMembers)
                     {
-                        <tr>
-                            <td>@teamMember.Name</td>
-                            <td>@teamMember.Email</td>
-                            <td>@teamMember.Role</td>
-                            <td>@teamMember.Status</td>
-                            <td><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></td>
-                        </tr>
+                        <div class="responsive-tr">
+                            <div class="responsive-td">
+                                <div>
+                                    @teamMember.Name
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Email address</div>
+                                <div>@teamMember.Email</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Role</div>
+                                <div>@teamMember.Role</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Status</div>
+                                <div>@teamMember.Status</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div ><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                        </div>
                     }
 
-                </tbody>
-            </table>
-        }
-        <p></p>
-     
+                </div>
+            </div>
+        }     
     </div>
 </div>

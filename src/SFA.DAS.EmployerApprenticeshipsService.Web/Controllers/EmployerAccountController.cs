@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -15,15 +16,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     {
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
+        private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ICookieService _cookieService;
 
-        public EmployerAccountController(EmployerAccountOrchestrator employerAccountOrchestrator, ICookieService cookieService)
+        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, ICookieService cookieService)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
             if (cookieService == null)
                 throw new ArgumentNullException(nameof(cookieService));
+            _owinWrapper = owinWrapper;
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _cookieService = cookieService;
         }
@@ -140,8 +143,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-
+            var userIdClaim = _owinWrapper.GetPersistantUserIdClaimFromProvider();
             return (userIdClaim != null) ? userIdClaim.Value: "";
         }
 

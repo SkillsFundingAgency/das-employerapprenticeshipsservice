@@ -3,6 +3,7 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -15,6 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private Mock<IMediator> _mediator;
         private Mock<ICookieService> _cookieService;
         private Mock<ILogger> _logger;
+        private Mock<IOwinWrapper> _owinWrapper;
 
         [SetUp]
         public void Arrange()
@@ -23,7 +25,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             _cookieService = new Mock<ICookieService>();
             _logger = new Mock<ILogger>();
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);
-            _employerAccountController = new EmployerAccountController(_orchestrator, _cookieService.Object);
+            _owinWrapper = new Mock<IOwinWrapper>();
+            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator, _cookieService.Object);
         }
 
         [Test]

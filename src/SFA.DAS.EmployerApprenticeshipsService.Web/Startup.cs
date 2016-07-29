@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
+using IdentityModel;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using NLog;
 using Owin;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.OidcMiddleware;
 
 [assembly: OwinStartup(typeof(SFA.DAS.EmployerApprenticeshipsService.Web.Startup))]
@@ -21,7 +26,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class Startup
     {
+      
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+
+
         public void Configuration(IAppBuilder app)
         {
             var config = GetConfigurationObject();
@@ -36,6 +44,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             }
             else
             {
+                var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+                var logger = LogManager.GetLogger("Startup");
+            
+
+
                 JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -59,11 +72,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                     TokenEndpoint = constants.TokenEndpoint(),
                     UserInfoEndpoint = constants.UserInfoEndpoint(),
                     AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    AuthenticatedCallback = identity => { identity.AddClaim(new Claim("CustomClaim", "new claim added")); }
+                    AuthenticatedCallback = identity =>
+                    {
+                        PostAuthentiationAction(identity, authenticationOrchestrator, logger);
+                    }
                 });
             }
+        }
 
-
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger)
+        {
+            logger.Info("PostAuthenticationAction called");
+            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == @"sub")?.Value;
+            var email = identity.Claims.FirstOrDefault(claim => claim.Type == @"email")?.Value;
+            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
+            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
+            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email,  firstName,  lastName);
+            authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
+            HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
+            
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()

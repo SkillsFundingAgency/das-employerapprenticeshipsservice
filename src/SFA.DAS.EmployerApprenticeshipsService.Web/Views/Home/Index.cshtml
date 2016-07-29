@@ -16,7 +16,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.Accounts.AccountList.Count == 0)  {
             <p>Create a new Employer Account</p>
         }
@@ -24,30 +24,41 @@
         {
             <p>You have several accounts registered</p>
             <p>Please choose the account you wish to view.</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Account Name</th>
-                        <th>Account Number</th>
-                        <th> </th>
-                        <th> </th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div class="responsive-table">
+                <div class="responsive-thead">
+                    <div class="responsive-tr">
+                        <div class="responsive-th">Account Name</div>
+                        <div class="responsive-th">Account Number</div>
+                        <div class="responsive-th"> </div>
+                        <div class="responsive-th"> </div>
+                    </div>
+                </div>
+                <div class="responsive-tbody">
 
                     @foreach (var account in Model.Accounts.AccountList)
                     {
-                        <tr>
-                            <td>@account.Name</td>
-                            <td>@account.Id</td>
-                            <td><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></td>
-                            <td><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></td>
-
-                        </tr>
+                        <div class="responsive-tr">
+                            <div class="responsive-td">
+                                <div>@account.Name</div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Account Number</div>
+                                <div>@account.Id</div>
+                            </div>
+                            <div class="responsive-td">
+                                <div><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                        </div>
                     }
 
-                </tbody>
-            </table>
+                </div>
+            </div>
         }
         <p></p>
         <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create a new Employer Account</a>
@@ -56,7 +67,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">View Invitations</h1>
         @if (Model.Invitations.Count == 0)
         {
@@ -66,31 +77,46 @@
         {
             <p>You have several invitations</p>
             <p>Please choose the invitation you wish to view.</p>
-            <table>
-                <thead>
-                <tr>
-                    <th>Account Name</th>
-                    <th>Expiry Date</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th> </th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="responsive-table">
+                <div class="responsive-thead">
+                <div class="responsive-tr">
+                    <div class="responsive-th">Account Name</div>
+                    <div class="responsive-th">Expiry Date</div>
+                    <div class="responsive-th">Role</div>
+                    <div class="responsive-th">Status</div>
+                    <div class="responsive-th"> </div>
+                </div>
+                </div>
+                <div class="responsive-tbody">
 
                 @foreach (var invitation in Model.Invitations)
                 {
-                    <tr>
-                        <td>@invitation.AccountName</td>
-                        <td>@invitation.ExpiryDate.ToShortDateString()</td>
-                        <td>@invitation.RoleName</td>
-                        <td>@invitation.Status.ToString()</td>
-                        <td><a href="@Url.Action("Index", "Invitation", new {invitationId = invitation.Id})">View</a></td>
-                    </tr>
+                    <div class="responsive-tr">
+                        <div class="responsive-td">
+                            <div>@invitation.AccountName</div>
+                            <div class="responsive-inner-caption"></div>
+                        </div>
+                        <div class="responsive-td">
+                            <div class="responsive-inner-caption">Expiry Date</div>
+                            <div>@invitation.ExpiryDate.ToShortDateString()</div>
+                        </div>
+                        <div class="responsive-td">
+                            <div class="responsive-inner-caption">Role</div>
+                            <div>@invitation.RoleName</div>
+                        </div>
+                        <div class="responsive-td">
+                            <div class="responsive-inner-caption">Status</div>
+                            <div>@invitation.Status.ToString()</div>
+                        </div>
+                        <div class="responsive-td">
+                            <div><a href="@Url.Action("Index", "Invitation", new {invitationId = invitation.Id})">View</a></div>
+                            <div class="responsive-inner-caption"></div>
+                        </div>
+                    </div>
                 }
 
-                </tbody>
-            </table>
+                </div>
+            </div>
         }
     </div>
 </div>
