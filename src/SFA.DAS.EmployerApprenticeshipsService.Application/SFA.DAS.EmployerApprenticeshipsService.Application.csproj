@@ -129,6 +129,9 @@
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationHandler.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationRequest.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationResponse.cs" />
+    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenHandler.cs" />
+    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenQuery.cs" />
+    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenQueryResponse.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationRequest.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationResponse.cs" />
