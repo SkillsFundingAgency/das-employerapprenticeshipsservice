@@ -39,8 +39,8 @@
                     {
                         <div class="responsive-tr">
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Account Name</div>
                                 <div>@account.Name</div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Account Number</div>
@@ -48,9 +48,11 @@
                             </div>
                             <div class="responsive-td">
                                 <div><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
                     }
@@ -91,8 +93,8 @@
                 {
                     <div class="responsive-tr">
                         <div class="responsive-td">
-                            <div class="responsive-inner-caption">Account Name</div>
                             <div>@invitation.AccountName</div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Expiry Date</div>
@@ -108,6 +110,7 @@
                         </div>
                         <div class="responsive-td">
                             <div><a href="@Url.Action("Index", "Invitation", new {invitationId = invitation.Id})">View</a></div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                     </div>
                 }

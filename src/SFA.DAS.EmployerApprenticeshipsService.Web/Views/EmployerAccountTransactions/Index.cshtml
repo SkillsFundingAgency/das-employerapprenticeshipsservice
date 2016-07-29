@@ -41,10 +41,10 @@
 
                         <div class="responsive-tr">
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Date</div>
                                 <div>
                                     @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date
                                 </div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Description</div>
@@ -81,6 +81,7 @@
                                 <div>
                                     <a href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a>
                                 </div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
                     }

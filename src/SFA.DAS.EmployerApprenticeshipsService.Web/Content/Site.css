@@ -100,10 +100,13 @@ button, a.button {
         display:none;
     }
 
-    .responsive-tr {
+    .responsive-tbody {
         display:table;
         width:100%;
-        margin-bottom: 1.5em;
+    }
+
+    .responsive-tr {
+        display:table-row-group;
     }
 
     /*.responsive-table, .responsive-tr, .responsive-tbody, */
@@ -128,10 +131,11 @@ button, a.button {
 
     .responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
         font-weight:700;
+        padding-top:2em;
     }
 
     .responsive-td:first-child .responsive-inner-caption {
-        display: none;
+        visibility: hidden;
     }
 
     .responsive-table .responsive-td.numeric, .responsive-table .responsive-th.numeric {

@@ -40,16 +40,16 @@
                         <div class="responsive-th" scope="col"></div>
                     </div>
                 </div>
-                <div class="responsve-tbody">
+                <div class="responsive-tbody">
 
                     @foreach (var teamMember in Model.TeamMembers)
                     {
                         <div class="responsive-tr">
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Name</div>
                                 <div>
                                     @teamMember.Name
                                 </div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Email address</div>
@@ -64,7 +64,8 @@
                                 <div>@teamMember.Status</div>
                             </div>
                             <div class="responsive-td">
-                                <div><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></div>
+                                <div ><a href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a></div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
                     }
