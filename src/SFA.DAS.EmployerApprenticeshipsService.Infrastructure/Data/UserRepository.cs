@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
         public async Task Create(User user)
         {
-            await WithConnection(async c =>
+            var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -61,12 +61,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
-
+            Console.WriteLine(result);
         }
 
         public async Task Update(User user)
         {
-            await WithConnection(async c =>
+            var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -78,6 +78,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
+            Console.WriteLine(result);
         }
 
         public Task<Users> GetAllUsers()

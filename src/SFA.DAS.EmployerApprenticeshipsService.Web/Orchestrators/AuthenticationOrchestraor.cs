@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using NLog;
@@ -22,9 +23,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        internal void SaveIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        public async Task SaveIdentityAttributes(string userRef, string email, string firstName, string lastName)
         {
-            _mediator.SendAsync(new UpsertRegisteredUserCommand
+            await _mediator.SendAsync(new UpsertRegisteredUserCommand
             {
                 EmailAddress = email,
                 UserRef = userRef,
