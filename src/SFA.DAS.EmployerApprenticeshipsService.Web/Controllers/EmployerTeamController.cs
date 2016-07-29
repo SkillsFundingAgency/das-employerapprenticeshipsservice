@@ -172,11 +172,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception)
+            catch (InvalidRequestException ex)
             {
-                var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
-                return View(teamMember);
+                AddErrorsToModelState(ex.ErrorMessages);
             }
+            catch (Exception ex)
+            {
+                AddExceptionToModelError(ex);
+            }
+
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            return View(teamMember);
         }
 
 
