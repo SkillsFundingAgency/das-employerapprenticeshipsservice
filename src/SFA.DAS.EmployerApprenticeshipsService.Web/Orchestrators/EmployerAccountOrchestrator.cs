@@ -13,6 +13,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
 
+        public EmployerAccountOrchestrator()
+        {
+            
+        }
+
         public EmployerAccountOrchestrator(IMediator mediator, ILogger logger)
         {
             if (mediator == null)
@@ -54,6 +59,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 CompanyName = model.CompanyName,
                 EmployerRef = model.EmployerRef
             });
+        }
+
+        public virtual string GetGatewayUrl(string redirectUrl)
+        {
+            throw new NotImplementedException();
         }
     }
 }

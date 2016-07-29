@@ -87,7 +87,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Gateway()
         {
-            return View();
+
+            return Redirect(_employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse")));
+            
+        }
+
+        public ActionResult GateWayResponse()
+        {
+            return RedirectToAction("Gateway", new GatewayModel());
         }
 
         [HttpPost]
