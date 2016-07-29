@@ -126,6 +126,7 @@
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesHandler.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesQuery.cs" />
     <Compile Include="Queries\GetEmployerSchemes\GetEmployerSchemesResponse.cs" />
+    <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationHandler.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationRequest.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationResponse.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
