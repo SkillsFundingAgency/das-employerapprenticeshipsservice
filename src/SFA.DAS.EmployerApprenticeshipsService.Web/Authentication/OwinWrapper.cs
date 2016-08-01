@@ -57,9 +57,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             }
         }
 
-        public Claim GetPersistantUserIdClaimFromProvider()
+        public string GetClaimValue(string claimKey)
         {
-            return ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            return ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == claimKey).Value;
         }
 
         public SignInMessage GetSignInMessage(string id)

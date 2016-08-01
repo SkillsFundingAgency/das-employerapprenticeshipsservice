@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";
-            _owinWrapper.SignInUser(id,displayName,$"{firstName}.{lastName}@local.test");
+            _owinWrapper.SignInUser(id,displayName,$"{firstName.Trim()}.{lastName.Trim()}@test.local");
 
             _owinWrapper.IssueLoginCookie(id, displayName);
 
