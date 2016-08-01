@@ -8,10 +8,10 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="__RemoteAccess.Enabled__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="__rdpuser__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="__rdppasswordenc__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="__rdpexp__" />
       <Setting name="LogLevel" value="Warn" />
     </ConfigurationSettings>
     <Certificates>
@@ -26,10 +26,10 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="__RemoteAccess.Enabled__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="__rdpuser__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="__rdppasswordenc__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="__rdpexp__" />
       <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="" />
       <Setting name="LogLevel" value="Warn" />
     </ConfigurationSettings>
@@ -44,10 +44,10 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="__RemoteAccess.Enabled__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="__rdpuser__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="__rdppasswordenc__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="__rdpexp__" />
       <Setting name="LogLevel" value="Warn" />
     </ConfigurationSettings>
     <Certificates>
