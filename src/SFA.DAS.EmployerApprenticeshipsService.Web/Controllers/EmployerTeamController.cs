@@ -28,18 +28,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int accountId)
         {
-            var userIdClaim = _owinWrapper.GetPersistantUserIdClaimFromProvider();
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim.Value);
+            var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
             return View(teamVieWModel);
         }
 
         [HttpGet]
         public ActionResult Invite(long accountId)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var model = new InviteTeamMemberViewModel
             {
@@ -54,12 +54,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (userIdClaim == null) return RedirectToAction("Index", "Home");
 
             try
             {
-                await _employerTeamOrchestrator.InviteTeamMember(model, userIdClaim.Value);
+                await _employerTeamOrchestrator.InviteTeamMember(model, userIdClaim);
             }
             catch (InvalidRequestException ex)
             {

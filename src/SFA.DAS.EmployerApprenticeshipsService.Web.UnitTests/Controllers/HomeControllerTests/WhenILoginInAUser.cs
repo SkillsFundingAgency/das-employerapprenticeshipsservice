@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _homeController.SignInUser(id, model);
 
             //Assert
-            _owinWrapper.Verify(x => x.SignInUser(id, $"{firstName} {lastName}", $"{firstName}.{lastName}@local.test"));
+            _owinWrapper.Verify(x => x.SignInUser(id, $"{firstName} {lastName}", $"{firstName}.{lastName}@test.local"));
         }
 
         private static SignInUserViewModel GetModel(string firstName, string lastName, string id)

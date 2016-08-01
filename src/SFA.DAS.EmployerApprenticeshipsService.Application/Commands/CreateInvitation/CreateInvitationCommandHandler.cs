@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
 
             var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
-            if (existing.Status != InvitationStatus.Deleted)
+            if (existing != null && existing.Status != InvitationStatus.Deleted)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
 
             await _invitationRepository.Create(new Invitation

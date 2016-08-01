@@ -84,13 +84,15 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
         {
             //Arrange
-            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(It.IsAny<FileInfo>(), It.IsAny<FileInfo>(), new EmployerRefreshLevyQueueMessage{AccountId=0}));
+            var mockFileMessage = new Mock<Message<EmployerRefreshLevyQueueMessage>>();
+            _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).ReturnsAsync(mockFileMessage.Object);
 
             //Act
             await _levyDeclaration.Handle();
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.IsAny<GetLevyDeclarationQuery>()),Times.Never());
+            mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
         }
     }
 }
