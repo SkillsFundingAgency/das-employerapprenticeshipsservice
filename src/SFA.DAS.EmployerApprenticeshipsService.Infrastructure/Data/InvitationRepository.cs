@@ -131,5 +131,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
         }
+
+        public async Task Accept(string email, long accountId, int roleId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", email, DbType.String);
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@roleId", roleId, DbType.Int16);
+
+                return await c.ExecuteAsync(
+                    sql: "[dbo].[AcceptInvitation]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
     }
 }

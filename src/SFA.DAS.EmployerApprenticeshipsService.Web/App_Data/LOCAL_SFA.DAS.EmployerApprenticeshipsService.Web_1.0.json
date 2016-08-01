@@ -16,5 +16,11 @@
     "Password": "",
     "Port": "25"
   },
-  "DashboardUrl": "http://localhost:57196/"
+  "DashboardUrl": "http://localhost:57196/",
+  "Hmrc": {
+    "BaseUrl": "",
+    "ClientId": "",
+    "Scope": "",
+    "ClientSecret" : "" 
+  } 
 }
