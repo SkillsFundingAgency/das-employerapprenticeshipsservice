@@ -64,21 +64,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.Invitation;
         }
 
-        public async Task Cancel(long id, long accountId, string externalUserId)
+        public async Task Cancel(string email, long accountId, string externalUserId)
         {
             await _mediator.SendAsync(new DeleteInvitationCommand
             {
-                Id = id,
+                Email = email,
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });
         }
 
-        public async Task Resend(long id, long accountId, string externalUserId)
+        public async Task Resend(string email, long accountId, string externalUserId)
         {
             await _mediator.SendAsync(new ResendInvitationCommand
             {
-                Id = id,
+                Email = email,
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });

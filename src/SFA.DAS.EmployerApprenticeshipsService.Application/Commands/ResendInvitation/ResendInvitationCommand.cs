@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
 {
     public class ResendInvitationCommand : IAsyncRequest
     {
-        public long Id { get; set; }
+        public string Email { get; set; }
         public long AccountId { get; set; }
         public string ExternalUserId { get; set; }
     }
