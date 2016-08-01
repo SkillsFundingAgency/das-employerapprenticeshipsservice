@@ -5,6 +5,8 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -65,6 +67,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
 
             return response.Url;
+        }
+
+        public async Task<HmrcTokenResponse> GetGatewayTokenResponse(string accessCode, string returnUrl)
+        {
+            var response = await _mediator.SendAsync(new GetGatewayTokenQuery
+            {
+                RedirectUrl= returnUrl,
+                AccessCode = accessCode
+            });
+
+            return response.HmrcTokenResponse;
         }
     }
 }
