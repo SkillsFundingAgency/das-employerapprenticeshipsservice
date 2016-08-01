@@ -26,13 +26,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             {
                 using (var httpClient = CreateHttpClient())
                 {
+
                     var serializeObject = JsonConvert.SerializeObject(content);
                     var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url)
                     {
                         Content = new StringContent(serializeObject, Encoding.UTF8, "application/json")
                     });
 
-                    return response.Content.ToString();
+                    return await response.Content.ReadAsStringAsync();
                 }
             }
             catch (Exception ex)
