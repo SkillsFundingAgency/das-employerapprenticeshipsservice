@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenICallDeleteInvitation
     {
         private Mock<IInvitationRepository> _invitationRepository;
-        private Mock<IAccountTeamRepository> _accountTeamRepository;
+        private Mock<IMembershipRepository> _membershipRepository;
         private DeleteInvitationCommandHandler _handler;
         private Invitation _invitation;
         private DeleteInvitationCommand _command;
@@ -20,8 +20,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _accountTeamRepository = new Mock<IAccountTeamRepository>();
-            _handler = new DeleteInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object);
+            _membershipRepository = new Mock<IMembershipRepository>();
+            _handler = new DeleteInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
-            _accountTeamRepository.Setup(x => x.GetMembership(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new Membership
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner
             });
@@ -65,9 +65,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void ThrowExceptionWhenCallerIsNotAccountOwner()
         {
             _invitationRepository.Setup(x => x.Get(_command.Id)).ReturnsAsync(_invitation);
-            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = 0
+                RoleId = (int)Role.Viewer
             });
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));

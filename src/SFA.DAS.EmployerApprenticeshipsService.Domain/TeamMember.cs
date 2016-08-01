@@ -5,8 +5,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
     public class TeamMember
     {
         public bool IsUser { get; set; }
-        public int Id { get; set; }
-        public int AccountId { get; set; }
+        public long Id { get; set; }
+        public long AccountId { get; set; }
 
         public string Email { get; set; }
         public string Name { get; set; }

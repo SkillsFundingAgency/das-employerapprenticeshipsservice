@@ -16,7 +16,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.Accounts.AccountList.Count == 0)  {
             <p>Create a new Employer Account</p>
         }
@@ -39,18 +39,24 @@
                     {
                         <div class="responsive-tr">
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Account Name</div>
                                 <div>@account.Name</div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Account Number</div>
                                 <div>@account.Id</div>
                             </div>
                             <div class="responsive-td">
-                                <div><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div><a aria-label="View transactions for @account.Name" 
+                                        title="View transactions for @account.Name"
+                                        href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
-                                <div><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div><a aria-label="View team for @account.Name" 
+                                        label="View team for @account.Name"
+                                        href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
                     }
@@ -65,7 +71,7 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">View Invitations</h1>
         @if (Model.Invitations.Count == 0)
         {
@@ -91,8 +97,8 @@
                 {
                     <div class="responsive-tr">
                         <div class="responsive-td">
-                            <div class="responsive-inner-caption">Account Name</div>
                             <div>@invitation.AccountName</div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Expiry Date</div>
@@ -108,6 +114,7 @@
                         </div>
                         <div class="responsive-td">
                             <div><a href="@Url.Action("Index", "Invitation", new {invitationId = invitation.Id})">View</a></div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                     </div>
                 }

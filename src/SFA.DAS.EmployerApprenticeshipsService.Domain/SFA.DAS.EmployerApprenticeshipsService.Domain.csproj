@@ -151,6 +151,7 @@
     <Compile Include="LevyItemType.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Membership.cs" />
+    <Compile Include="MembershipView.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
     <Compile Include="Models\HmrcLevy\HmrcTokenResponse.cs" />

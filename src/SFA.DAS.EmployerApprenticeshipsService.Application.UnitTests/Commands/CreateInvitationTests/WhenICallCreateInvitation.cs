@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IInvitationRepository> _invitationRepository;
         private CreateInvitationCommandHandler _handler;
         private CreateInvitationCommand _command;
-        private Mock<IAccountTeamRepository> _accountTeamRepository;
+        private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
 
@@ -27,13 +27,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _accountTeamRepository = new Mock<IAccountTeamRepository>();
+            _membershipRepository = new Mock<IMembershipRepository>();
 
             _mediator = new Mock<IMediator>();
 
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _accountTeamRepository.Object, _mediator.Object, _configuration.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration.Object);
             _command = new CreateInvitationCommand
             {
                 AccountId = 101,
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public async Task ValidCommandFromAccountOwnerCreatesInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner
             });
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void ValidCommandFromNonAccountOwnerDoesNotCreateInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = 0
             });
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void ValidCommandFromNonAccountUserDoesNotCreateInvitation()
         {
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 
@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var userId = 1;
             _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _accountTeamRepository.Setup(x => x.GetMembership(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new Membership
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner,
                 UserId = userId

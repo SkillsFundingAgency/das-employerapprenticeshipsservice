@@ -15,6 +15,10 @@
                 <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToString("d MMM yyyy")</span></p>
             </div>
         </div>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
         <div>
             <h2 class="heading-medium">Transactions</h2>
             @if (Model.Data.Data.Count == 0)
@@ -41,10 +45,10 @@
 
                         <div class="responsive-tr">
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Date</div>
                                 <div>
                                     @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date
                                 </div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Description</div>
@@ -79,8 +83,11 @@
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <a href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a>
+                                    <a aria-label="View details for the transaction on @date"
+                                       title="View details for the transaction on @date" 
+                                       href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a>
                                 </div>
+                                <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
                     }
