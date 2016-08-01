@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.TimeProvider;
 
@@ -16,13 +18,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IInvitationRepository> _invitationRepository;
         private ResendInvitationCommandHandler _handler;
+        private Mock<IMediator> _mediator;
+        private Mock<EmployerApprenticeshipsServiceConfiguration> _config;
 
         [SetUp]
         public void Setup()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
             _invitationRepository = new Mock<IInvitationRepository>();
-            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object);
+            _mediator = new Mock<IMediator>();
+            _config = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config.Object);
         }
 
         [TearDown]
