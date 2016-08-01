@@ -102,13 +102,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var emailFirstPart = email.Split('@')[0];
 
             var selected = data.Data.FirstOrDefault(x => string.Equals(x.Email.Split('@')[0], emailFirstPart, StringComparison.CurrentCultureIgnoreCase));
-
-            if (selected == null)
-                return View("Gateway");
-
+            
             var enteredData = GetCookieData();
-
-            enteredData.EmployerRef = selected.EmpRef;
+            
+            enteredData.EmployerRef = selected!=null ? selected.EmpRef : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
             enteredData.AccessToken = response.AccessToken;
             enteredData.RefreshToken = response.RefreshToken;
 
