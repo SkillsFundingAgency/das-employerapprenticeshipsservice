@@ -97,10 +97,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var data = GetEmployerAccountData();
 
-            var email = _owinWrapper.GetClaimValue(ClaimTypes.Email);
-            
+            var email = _owinWrapper.GetClaimValue("email");
 
-            var selected = data.Data.FirstOrDefault(x => string.Equals(x.Email, email, StringComparison.CurrentCultureIgnoreCase));
+            var emailFirstPart = email.Split('@')[0];
+
+            var selected = data.Data.FirstOrDefault(x => string.Equals(x.Email.Split('@')[0], emailFirstPart, StringComparison.CurrentCultureIgnoreCase));
 
             if (selected == null)
                 return View("Gateway");
