@@ -25,50 +25,61 @@ table {
 /* RESPONSIVE TABLES */
 .responsive-table {
     display:table;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;  
+    max-width: 640px;
+
+    font-family: "nta", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.1428571429;
+    font-weight: 400;
+    text-transform: none;
+    text-align: left;
+    color: #0b0c0c;
 }
 
-.responsive-thead {
-    display:table-header-group;
-}
-
-.responsive-tr {
-    display: table-row;
-}
-
-.responsive-th {
-    display: table-cell;
-}
-
-.responsive-td {
-    display: table-cell;
+.responsive-thead, .responsive-th {
+    display:none;
 }
 
 .responsive-tbody {
-    display: table-row-group;
+    display:table;
+    width:100%;
 }
 
-.responsive-inner-caption {
-    display: none;
+.responsive-tr {
+    display:table-row-group;
 }
 
-.responsive-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;  
-  max-width: 640px;
+/*.responsive-table, .responsive-tr, .responsive-tbody, */
+.responsive-td {
+    display: table-row;
 }
 
-.responsive-table .responsive-th,
-.responsive-table .responsive-td {
-  font-family: "nta", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.1428571429;
-  font-weight: 400;
-  text-transform: none;
-  padding: 0.75em 1.25em 0.5625em 0;
-  text-align: left;
-  color: #0b0c0c;
-  border-bottom: 1px solid #bfc1c3;
+.responsive-inner-caption, .responsive-td div {
+    display: table-cell;
+    border-bottom: 1px solid #bfc1c3;
+    padding: 0.75em 1.25em 0.5625em 0;
+    
+}
+
+.responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
+    font-weight:700;
+    padding-top:2em;
+}
+
+.responsive-td:first-child .responsive-inner-caption {
+    visibility: hidden;
+}
+
+.responsive-table .responsive-td.numeric, .responsive-table .responsive-th.numeric {
+    font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
+	text-align: left;
+}
+
+.responsive-table .responsive-th {
+  font-weight: 700;
 }
 
 @media (min-width: 641px) {
@@ -77,82 +88,62 @@ table {
     font-size: 16px;
     line-height: 1.25;
   }
-}
-
-.responsive-table .responsive-th {
-  font-weight: 700;
-}
-
-.responsive-table .responsive-th.numeric {
-  text-align: right;
-}
-
-.responsive-table .responsive-td.numeric {
-  font-family: "ntatabularnumbers", "nta", Arial, sans-serif;
-  font-size: 14px;
-  line-height: 1.1428571429;
-  font-weight: 400;
-  text-transform: none;
-  text-align: right;
-}
-
-@media (min-width: 641px) {
-  .responsive-table .responsive-td.numeric {
-    font-size: 16px;
-    line-height: 1.25;
-  }
-}
-
-
-@media (max-width: 640px) {
-    .responsive-thead, .responsive-th {
-        display:none;
-    }
-
-    .responsive-tbody {
-        display:table;
-        width:100%;
+  
+    .responsive-thead {
+        display:table-header-group;
     }
 
     .responsive-tr {
-        display:table-row-group;
-    }
-
-    /*.responsive-table, .responsive-tr, .responsive-tbody, */
-    .responsive-td {
         display: table-row;
     }
-        
-    responsive-td .responsive-inner-caption, .responsive-td div {
+
+    .responsive-th {
         display: table-cell;
-        
-        /* TODO: address duplication */
-        font-family: "nta", Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.1428571429;
-        font-weight: 400;
-        text-transform: none;
-        padding: 0.75em 1.25em 0.5625em 0;
-        text-align: left;
-        color: #0b0c0c;
-        border-bottom: 1px solid #bfc1c3;
     }
 
-    .responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
-        font-weight:700;
-        padding-top:2em;
+    .responsive-td {
+        display: table-cell;
     }
 
-    .responsive-td:first-child .responsive-inner-caption {
-        visibility: hidden;
+    .responsive-tbody {
+        display: table-row-group;
     }
+	
+	.responsive-inner-caption, .responsive-td div {
+		border: none;
+		padding: 0;		
+	}
 
-    .responsive-table .responsive-td.numeric, .responsive-table .responsive-th.numeric {
-        text-align: left;
+    .responsive-table .responsive-inner-caption {
+        display: none;
     }
+	
+	.responsive-td div {
+		display:block;
+	}
+	
+	.responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
+		font-weight:normal;
+		padding-top:0;
+	}
+
+    .responsive-table .responsive-th,
+    .responsive-table .responsive-td {
+      padding: 0.75em 1.25em 0.5625em 0;
+      border-bottom: 1px solid #bfc1c3;
+    }
+	
+	.responsive-table .responsive-th.numeric, 
+	.responsive-table .responsive-td.numeric {
+	  text-align: right;
+	}
+	
 }
 
 /* LAYOUT CONVENIENCES*/
+h1, h2, p {
+    max-width: 630px;
+}
 .rightalign {
     text-align:right;
 }

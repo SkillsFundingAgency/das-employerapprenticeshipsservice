@@ -47,11 +47,15 @@
                                 <div>@account.Id</div>
                             </div>
                             <div class="responsive-td">
-                                <div><a href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div><a aria-label="View transactions for @account.Name" 
+                                        title="View transactions for @account.Name"
+                                        href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
-                                <div><a href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div><a aria-label="View team for @account.Name" 
+                                        label="View team for @account.Name"
+                                        href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
