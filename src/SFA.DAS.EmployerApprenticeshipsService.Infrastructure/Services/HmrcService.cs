@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
 
-            return $"{_configuration.Hmrc.BaseUrl}/authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
+            return $"{_configuration.Hmrc.BaseUrl}authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
             
         }
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         {
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
 
-            var url = $"/token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
+            var url = $"token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
 
             var response = await _httpClientWrapper.SendMessage("", url);
 
