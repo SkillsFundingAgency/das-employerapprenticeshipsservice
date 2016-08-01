@@ -56,9 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
             if (existing.ExpiryDate < DateTimeProvider.Current.UtcNow)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation has expired" } });
 
-            existing.Status = InvitationStatus.Accepted;
-
-            await _invitationRepository.ChangeStatus(existing);
+            await _invitationRepository.Accept(existing.Email, existing.AccountId, (int) existing.RoleId);
         }
     }
 }
