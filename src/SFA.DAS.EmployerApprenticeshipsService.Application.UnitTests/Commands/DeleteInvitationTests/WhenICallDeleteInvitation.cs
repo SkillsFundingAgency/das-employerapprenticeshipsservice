@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             };
             _command = new DeleteInvitationCommand
             {
-                Id = _invitation.Id,
+                Email = _invitation.Email,
                 AccountId = _invitation.AccountId,
                 ExternalUserId = "EXT_USER"
             };
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public async Task SuccessfullyDeleteInvitation()
         {
             _invitation.Status = InvitationStatus.Pending;
-            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThrowExceptionWhenInvitationNotFound()
         {
-            _invitationRepository.Setup(x => x.Get(_command.Id)).ReturnsAsync(_invitation);
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(_invitation);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThrowExceptionWhenCallerIsNotAccountOwner()
         {
-            _invitationRepository.Setup(x => x.Get(_command.Id)).ReturnsAsync(_invitation);
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(_invitation);
             _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Viewer

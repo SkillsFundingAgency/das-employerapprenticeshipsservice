@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ResendInvitationCommand
             {
-                Id = 1,
+                Email = "test.user@test.local",
                 AccountId = 2,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ResendInvitationCommand
             {
-                Id = 1,
+                Email = "test.user@test.local",
                 AccountId = 2,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.Id)).ReturnsAsync(null);
+            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ResendInvitationCommand
             {
-                Id = 1,
+                Email = "test.user@test.local",
                 AccountId = 2,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
@@ -123,13 +123,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var invitation = new Invitation
             {
-                Id = command.Id,
+                Id = 12,
                 AccountId = command.AccountId,
                 Status = InvitationStatus.Accepted
             };
 
             _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.Id)).ReturnsAsync(invitation);
+            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(invitation);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -141,11 +141,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ShouldResendInvitation()
         {
+            const long invitationId = 12;
             DateTimeProvider.Current = new FakeTimeProvider(DateTime.Now);
 
             var command = new ResendInvitationCommand
             {
-                Id = 1,
+                Email = "test.user@test.local",
                 AccountId = 2,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
@@ -159,18 +160,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var invitation = new Invitation
             {
-                Id = command.Id,
+                Id = invitationId,
                 AccountId = command.AccountId,
                 Status = InvitationStatus.Deleted,
                 ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
             };
 
             _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.Id)).ReturnsAsync(invitation);
+            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(invitation);
 
             await _handler.Handle(command);
 
-            _invitationRepository.Verify(x => x.Resend(It.Is<Invitation>(c => c.Id == command.Id && c.Status == InvitationStatus.Pending && c.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
+            _invitationRepository.Verify(x => x.Resend(It.Is<Invitation>(c => c.Id == invitationId && c.Status == InvitationStatus.Pending && c.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
         }
     }
 }

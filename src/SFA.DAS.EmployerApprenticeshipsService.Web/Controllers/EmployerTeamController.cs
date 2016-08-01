@@ -26,12 +26,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId)
+        public async Task<ActionResult> Index(int accountId, string successMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+
+            teamVieWModel.SuccessMessage = successMessage;
+
             return View(teamVieWModel);
         }
 
@@ -72,7 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", new { accountId = model.AccountId });
+            return RedirectToAction("Index", new { accountId = model.AccountId, successMessage = $"Invite sent to {model.Email}" });
         }
 
         [HttpGet]
@@ -92,27 +95,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Cancel(long id, long accountId, int cancel)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Cancel(string email, long accountId, int cancel)
         {
             if (cancel == 1)
             {
                 var userIdClaim = ((ClaimsIdentity) System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
                 if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
-                await _employerTeamOrchestrator.Cancel(id, accountId, userIdClaim.Value);
+                await _employerTeamOrchestrator.Cancel(email, accountId, userIdClaim.Value);
             }
-            return RedirectToAction("Index", new { accountId = accountId });
+            return RedirectToAction("Index", new { accountId = accountId, successMessage = $"Cancelled invitation to {email}" });
         }
 
         [HttpPost]
-        public async Task<ActionResult> Resend(long id, long accountId)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Resend(long accountId, string email)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
-            await _employerTeamOrchestrator.Resend(id, accountId, userIdClaim.Value);
+            await _employerTeamOrchestrator.Resend(email, accountId, userIdClaim.Value);
 
-            return RedirectToAction("Index", new { accountId = accountId });
+            return RedirectToAction("Index", new { accountId = accountId, successMessage = $"Invitation resent to {email}" });
         }
 
         [HttpGet]

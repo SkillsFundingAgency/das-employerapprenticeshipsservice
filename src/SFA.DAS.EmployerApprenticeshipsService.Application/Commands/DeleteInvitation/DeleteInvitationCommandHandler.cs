@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
             if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not an Owner on this Account" } });
 
-            var existing = await _invitationRepository.Get(message.Id);
+            var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
             if (existing == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation not found" } });

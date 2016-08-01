@@ -8,8 +8,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvi
         {
             var validationResult = new ValidationResult();
 
-            if (item.Id == 0)
-                validationResult.AddError("Id", "No Id supplied");
+            if (string.IsNullOrWhiteSpace(item.Email))
+                validationResult.AddError("Email", "No Id supplied");
 
             if (item.AccountId == 0)
                 validationResult.AddError("AccountId", "No AccountId supplied");

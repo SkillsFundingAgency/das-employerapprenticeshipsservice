@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
         {
             var validationResult = new ValidationResult();
 
-            if (item.Id == 0)
+            if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Id", "No Id supplied");
 
             if (item.AccountId == 0)
