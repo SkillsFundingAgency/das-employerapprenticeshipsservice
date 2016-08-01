@@ -30,7 +30,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 AccountId = 101,
                 Email = "test.user@test.local",
                 Status = InvitationStatus.Pending,
-                ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(2)
+                ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(2),
+                RoleId = Role.Owner
             };
         }
 
@@ -52,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Id = _invitation.Id
             });
 
-            _invitationRepository.Verify(x => x.ChangeStatus(It.Is<Invitation>(z => z.Id == _invitation.Id && z.Status == InvitationStatus.Accepted)), Times.Once);
+            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (int)_invitation.RoleId), Times.Once);
         }
 
         [Test]

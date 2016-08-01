@@ -81,6 +81,7 @@
     <Build Include="StoredProcedures\GetNotification.sql" />
     <Build Include="StoredProcedures\SeedDataForRoles.sql" />
     <Build Include="Views\MembershipView.sql" />
+    <Build Include="StoredProcedures\AcceptInvitation.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

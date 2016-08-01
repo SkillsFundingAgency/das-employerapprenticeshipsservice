@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@userId", userId, DbType.Int32);
                 parameters.Add("@accountId", accountId, DbType.Int32);
-                parameters.Add("@roleId", accountId, DbType.Int16);
+                parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
                     sql: "UPDATE [dbo].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
@@ -95,6 +95,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
 
             return result.FirstOrDefault();
+        }
+
+        public async Task Create(long userId, long accountId, int roleId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@userId", userId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@roleId", roleId, DbType.Int16);
+
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [dbo].[Membership] ([AccountId], [UserId], [RoleId]) VALUES(@accountId, @userId, @roleId); ",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
     }
 }

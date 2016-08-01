@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task Remove(long userId, long accountId);
         Task ChangeRole(long userId, long accountId, int roleId);
         Task<MembershipView> GetCaller(long accountId, string externalUserId);
+        Task Create(long userId, long accountId, int roleId);
     }
 }
