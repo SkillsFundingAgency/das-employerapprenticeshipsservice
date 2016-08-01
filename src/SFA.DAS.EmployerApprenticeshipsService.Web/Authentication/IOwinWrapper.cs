@@ -12,6 +12,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
         void RemovePartialLoginCookie();
         void SignInUser(string id, string displayName, string email);
         ActionResult SignOutUser();
-        Claim GetPersistantUserIdClaimFromProvider();
+        string GetClaimValue(string claimKey);
     }
 }

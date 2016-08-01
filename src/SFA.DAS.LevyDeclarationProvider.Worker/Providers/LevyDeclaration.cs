@@ -42,10 +42,18 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
 
                 var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = employerAccountId });
-                if (employerAccountResult?.Account == null) return;
+                if (employerAccountResult?.Account == null)
+                {
+                    await message.CompleteAsync();
+                    return;
+                }
 
                 var employerSchemesResult = await _mediator.SendAsync(new GetEmployerSchemesQuery { Id = employerAccountResult.Account.Id });
-                if (employerSchemesResult?.Schemes?.SchemesList == null) return;
+                if (employerSchemesResult?.Schemes?.SchemesList == null)
+                {
+                    await message.CompleteAsync();
+                    return;
+                }
 
                 List<EmployerLevyData> employerDataList = new List<EmployerLevyData>();
 
@@ -78,9 +86,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 await _mediator.SendAsync(new RefreshEmployerLevyDataCommand() { EmployerId = employerAccountId, EmployerLevyData = employerDataList });
 
-                await message.CompleteAsync();
+                
 
             }
+            if (message != null)
+            {
+                await message.CompleteAsync();
+            }
+            
         }
     }
 }

@@ -11,6 +11,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public SmtpConfiguration SmtpServer { get; set; }
 
         public string DashboardUrl { get; set; }
+
+        public HmrcConfiguration Hmrc { get; set; }
+    }
+
+    public class HmrcConfiguration
+    {
+        public string BaseUrl { get; set; }
+        public string ClientId { get; set; }
+        public string Scope { get; set; }
+        public string ClientSecret { get; set; }
     }
 
     public class IdentityServerConfiguration

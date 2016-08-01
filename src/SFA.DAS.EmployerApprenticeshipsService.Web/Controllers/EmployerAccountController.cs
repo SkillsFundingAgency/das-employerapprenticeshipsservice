@@ -85,9 +85,36 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Gateway()
+        public async Task<ActionResult> Gateway()
         {
-            return View();
+            return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse","EmployerAccount",null,Request.Url.Scheme)));
+        }
+
+        public async Task<ActionResult> GateWayResponse()
+        {
+            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
+
+
+            var data = GetEmployerAccountData();
+
+            var email = _owinWrapper.GetClaimValue(ClaimTypes.Email);
+            
+
+            var selected = data.Data.FirstOrDefault(x => string.Equals(x.Email, email, StringComparison.CurrentCultureIgnoreCase));
+
+            if (selected == null)
+                return View("Gateway");
+
+            var enteredData = GetCookieData();
+
+            enteredData.EmployerRef = selected.EmpRef;
+            enteredData.AccessToken = response.AccessToken;
+            enteredData.RefreshToken = response.RefreshToken;
+
+            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(enteredData));
+
+
+            return RedirectToAction("Summary");
         }
 
         [HttpPost]
@@ -143,8 +170,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = _owinWrapper.GetPersistantUserIdClaimFromProvider();
-            return (userIdClaim != null) ? userIdClaim.Value: "";
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            return userIdClaim ?? "";
         }
 
         private EmployerAccountData GetCookieData()
