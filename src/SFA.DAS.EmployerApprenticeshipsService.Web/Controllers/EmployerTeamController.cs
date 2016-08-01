@@ -26,12 +26,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId)
+        public async Task<ActionResult> Index(int accountId, string successMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+
+            teamVieWModel.SuccessMessage = successMessage;
+
             return View(teamVieWModel);
         }
 
@@ -72,7 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", new { accountId = model.AccountId });
+            return RedirectToAction("Index", new { accountId = model.AccountId, successMessage = $"Invite sent to {model.Email}" });
         }
 
         [HttpGet]

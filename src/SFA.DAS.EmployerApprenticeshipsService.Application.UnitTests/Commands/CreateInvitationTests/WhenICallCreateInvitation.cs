@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -87,6 +88,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ValidCommandFromExistingMemberDoesNotCreateInvitation()
+        {
+            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            {
+                RoleId = (int)Role.Owner
+            });
+            _membershipRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new TeamMember());
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+            Assert.That(exception.ErrorMessages.FirstOrDefault().Key, Is.EqualTo("ExistingMember"));
         }
 
         [Test]

@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public List<TeamMember> TeamMembers { get; set; }
         public int AccountId { get; set; }
+        public string SuccessMessage { get; set; }
     }
 }
