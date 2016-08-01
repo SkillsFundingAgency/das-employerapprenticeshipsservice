@@ -11,20 +11,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
     public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
-        private readonly IAccountTeamRepository _accountTeamRepository;
+        private readonly IMembershipRepository _membershipRepository;
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly AcceptInvitationCommandValidator _validator;
 
-        public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IUserAccountRepository userAccountRepository)
+        public AcceptInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IUserAccountRepository userAccountRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
-            if (accountTeamRepository == null)
-                throw new ArgumentNullException(nameof(accountTeamRepository));
+            if (membershipRepository == null)
+                throw new ArgumentNullException(nameof(membershipRepository));
             if (userAccountRepository == null)
                 throw new ArgumentNullException(nameof(userAccountRepository));
             _invitationRepository = invitationRepository;
-            _accountTeamRepository = accountTeamRepository;
+            _membershipRepository = membershipRepository;
             _userAccountRepository = userAccountRepository;
             _validator = new AcceptInvitationCommandValidator();
         }
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
             if (user == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User not found" } });
 
-            var membership = await _accountTeamRepository.GetMembership(existing.AccountId, user.UserRef);
+            var membership = await _membershipRepository.GetCaller(existing.AccountId, user.UserRef);
 
             if (membership != null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User already member of Account" } });

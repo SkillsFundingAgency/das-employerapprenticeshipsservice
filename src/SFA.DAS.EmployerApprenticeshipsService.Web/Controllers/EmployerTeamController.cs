@@ -104,6 +104,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index", new { accountId = accountId });
         }
 
+        [HttpPost]
         public async Task<ActionResult> Resend(long id, long accountId)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -125,30 +126,64 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
         {
-            if (remove == 1)
-            {
-                var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-                if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
-                try
-                {
+            try
+            {
+                if (remove == 1)
                     await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
-                }
-                catch (InvalidRequestException ex)
-                {
-                    AddErrorsToModelState(ex.ErrorMessages);
-                    var model = await _employerTeamOrchestrator.Review(accountId, email);
-                    return View(model);
-                }
-                catch (Exception ex)
-                {
-                    AddExceptionToModelError(ex);
-                    var model = await _employerTeamOrchestrator.Review(accountId, email);
-                    return View(model);
-                }
+
+                return RedirectToAction("Index", new { accountId = accountId });
             }
-            return RedirectToAction("Index", new { accountId = accountId });
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex.ErrorMessages);
+            }
+            catch (Exception ex)
+            {
+                AddExceptionToModelError(ex);
+            }
+
+            var model = await _employerTeamOrchestrator.Review(accountId, email);
+            return View(model);
         }
+
+        [HttpGet]
+        public async Task<ActionResult> ChangeRole(long accountId, string email)
+        {
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+
+            return View(teamMember);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeRole(long accountId, string email, int role)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            try
+            {
+                await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
+
+                return RedirectToAction("Index");
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex.ErrorMessages);
+            }
+            catch (Exception ex)
+            {
+                AddExceptionToModelError(ex);
+            }
+
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            return View(teamMember);
+        }
+
+
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {

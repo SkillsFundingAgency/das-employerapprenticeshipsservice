@@ -13,17 +13,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
     public class WhenICallRemoveTeamMember
     {
         private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<IAccountTeamRepository> _accountTeamRepository;
         private RemoveTeamMemberCommandHandler _handler;
-        private Mock<IUserAccountRepository> _userRepository;
 
         [SetUp]
         public void Setup()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _accountTeamRepository = new Mock<IAccountTeamRepository>();
-            _userRepository = new Mock<IUserAccountRepository>();
-            _handler = new RemoveTeamMemberCommandHandler(_membershipRepository.Object, _accountTeamRepository.Object, _userRepository.Object);
+            _handler = new RemoveTeamMemberCommandHandler(_membershipRepository.Object);
         }
 
         [Test]
@@ -44,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 RoleId = (int)Role.Owner
             };
 
-            var ownerMembership = new Membership
+            var ownerMembership = new MembershipView
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
@@ -59,8 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
-            _accountTeamRepository.Setup(x => x.GetMembership(cmd.AccountId, cmd.ExternalUserId)).ReturnsAsync(ownerMembership);
-            _userRepository.Setup(x => x.Get(ownerUser.Id)).ReturnsAsync(ownerUser);
+            _membershipRepository.Setup(x => x.GetCaller(cmd.AccountId, cmd.ExternalUserId)).ReturnsAsync(ownerMembership);
 
             await _handler.Handle(cmd);
 
@@ -129,7 +124,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 RoleId = (int)Role.Owner
             };
 
-            var nonOwnerMembership = new Membership
+            var nonOwnerMembership = new MembershipView
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
@@ -144,7 +139,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(nonOwnerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(nonOwnerMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -155,7 +150,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
-        public async Task IfTryingToRemoveYourselfThenMembershipIsNotRemoved()
+        public void IfTryingToRemoveYourselfThenMembershipIsNotRemoved()
         {
             const long accountId = 2;
 
@@ -172,7 +167,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 RoleId = (int)Role.Owner
             };
 
-            var ownerMembership = new Membership
+            var ownerMembership = new MembershipView
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
@@ -187,8 +182,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
-            _accountTeamRepository.Setup(x => x.GetMembership(command.AccountId, command.ExternalUserId)).ReturnsAsync(ownerMembership);
-            _userRepository.Setup(x => x.Get(ownerUser.Id)).ReturnsAsync(ownerUser);
+            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(ownerMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 

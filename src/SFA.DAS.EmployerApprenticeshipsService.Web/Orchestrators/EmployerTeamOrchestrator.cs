@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
@@ -93,6 +94,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        public async Task<TeamMember> GetTeamMember(long accountId, string email)
+        {
+            var response = await _mediator.SendAsync(new GetMemberRequest
+            {
+                AccountId = accountId,
+                Email = email
+            });
+
+            return response.TeamMember;
+        }
+
         private InvitationViewModel MapFrom(TeamMember teamMember)
         {
             return new InvitationViewModel
@@ -106,6 +118,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
+        }
+
+        public async Task ChangeRole(long accountId, string email, int role, string externalUserId)
+        {
+            await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+            {
+                AccountId = accountId,
+                Email = email,
+                RoleId = role,
+                ExternalUserId = externalUserId
+            });
         }
     }
 }

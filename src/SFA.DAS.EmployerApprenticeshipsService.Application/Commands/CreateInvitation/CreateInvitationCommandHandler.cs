@@ -15,24 +15,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
     public class CreateInvitationCommandHandler : AsyncRequestHandler<CreateInvitationCommand>
     {
         private readonly IInvitationRepository _invitationRepository;
-        private readonly IAccountTeamRepository _accountTeamRepository;
+        private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IAccountTeamRepository accountTeamRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
-            if (accountTeamRepository == null)
-                throw new ArgumentNullException(nameof(accountTeamRepository));
+            if (membershipRepository == null)
+                throw new ArgumentNullException(nameof(membershipRepository));
             _invitationRepository = invitationRepository;
-            _accountTeamRepository = accountTeamRepository;
+            _membershipRepository = membershipRepository;
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = new CreateInvitationCommandValidator();
         }
-
 
         protected override async Task HandleCore(CreateInvitationCommand message)
         {
@@ -41,15 +40,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
+            var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+
+            if (owner == null)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
+            if ((Role)owner.RoleId != Role.Owner)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
+
             var existing = await _invitationRepository.Get(message.AccountId, message.Email);
 
-            if (existing != null)
+            if (existing.Status != InvitationStatus.Deleted)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
-
-            var owner = await _accountTeamRepository.GetMembership(message.AccountId, message.ExternalUserId);
-
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "User is not an Owner for this Account" } });
 
             await _invitationRepository.Create(new Invitation
             {
