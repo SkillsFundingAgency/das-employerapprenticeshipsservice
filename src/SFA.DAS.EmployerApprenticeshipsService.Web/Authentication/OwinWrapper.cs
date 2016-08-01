@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, displayName),
-                new Claim(ClaimTypes.Email, email),
+                new Claim("email", email),
                 new Claim("sub", id)
             };
 

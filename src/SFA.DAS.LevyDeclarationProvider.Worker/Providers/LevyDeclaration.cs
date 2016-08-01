@@ -63,24 +63,28 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetLevyDeclarationQuery { Id = scheme.Ref });
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions(), Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
-                    var fraction = levyDeclarationQueryResult.Fractions.FractionCalculations[0]; //TODO Make some sence of this!
-                    if (fraction != null)
+                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.Declarations != null)
                     {
-                        employerData.Fractions.DateCalculated = DateTime.Parse(fraction.calculatedAt);
-                        employerData.Fractions.Amount = decimal.Parse(fraction.fractions.Find(fr => fr.region == "England").value);
-                    }
-                    foreach (var declaration in levyDeclarationQueryResult.Declarations.declarations)
-                    {
-                        var dasDeclaration = new DasDeclaration();
-                        dasDeclaration.Amount = declaration.amount;
-                        dasDeclaration.Date = DateTime.Parse(declaration.submissionDate);
-                        dasDeclaration.SubmissionType = declaration.submissionType;
-                        dasDeclaration.Id = declaration.submissionId;
-                        employerData.EmpRef = scheme.Ref;
-                        employerData.Declarations.Declarations.Add(dasDeclaration);
-                    }
+                        var fraction = levyDeclarationQueryResult.Fractions.FractionCalculations[0]; //TODO Make some sence of this!
+                        if (fraction != null)
+                        {
+                            employerData.Fractions.DateCalculated = DateTime.Parse(fraction.calculatedAt);
+                            employerData.Fractions.Amount = decimal.Parse(fraction.fractions.Find(fr => fr.region == "England").value);
+                        }
+                        foreach (var declaration in levyDeclarationQueryResult.Declarations.declarations)
+                        {
+                            var dasDeclaration = new DasDeclaration();
+                            dasDeclaration.Amount = declaration.amount;
+                            dasDeclaration.Date = DateTime.Parse(declaration.submissionDate);
+                            dasDeclaration.SubmissionType = declaration.submissionType;
+                            dasDeclaration.Id = declaration.submissionId;
+                            employerData.EmpRef = scheme.Ref;
+                            employerData.Declarations.Declarations.Add(dasDeclaration);
+                        }
 
-                    employerDataList.Add(employerData);
+                        employerDataList.Add(employerData);
+                    }
+                    
                 }
 
 
