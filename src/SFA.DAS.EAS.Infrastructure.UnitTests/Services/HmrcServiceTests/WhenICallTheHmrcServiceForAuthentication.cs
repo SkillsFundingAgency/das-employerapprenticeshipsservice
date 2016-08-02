@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using Moq;
 using Newtonsoft.Json;
@@ -15,7 +11,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
-    public class WhenICallTheHmrcService
+    public class WhenICallTheHmrcServiceForAuthentication
     {
         private HmrcService _hmrcService;
         private Mock<ILogger> _logger;
@@ -25,7 +21,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private string ExpectedScope = "emp_ref";
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private string ExpectedClientSecret = "my_secret";
-
+        
         [SetUp]
         public void Arrange()
         {
