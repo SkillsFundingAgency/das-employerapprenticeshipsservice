@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             //Verify the email is not used by an existing invitation for the account
             var existingInvitation = await _invitationRepository.Get(message.AccountId, message.Email);
 
-            if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted)
+            if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted && existingInvitation.Status != InvitationStatus.Accepted)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
 
             if (existingInvitation == null)
