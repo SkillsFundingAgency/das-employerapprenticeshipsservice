@@ -100,6 +100,7 @@
     <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetGatewayInformationTests\WhenGettingGatewayQuery.cs" />
     <Compile Include="Queries\GetGatewayTokenTests\WhenGettingTokenResponseFromHmrc.cs" />
+    <Compile Include="Queries\GetHmrcEmployerInformation\WhenRequestingEmployerInformation.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
