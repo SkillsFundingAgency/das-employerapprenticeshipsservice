@@ -1,14 +1,18 @@
 ﻿using System.Linq;
 using MediatR;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
+using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.MockPolicy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -20,15 +24,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         private IContainer _container;
         private string ExternalUserId;
         private int _accountId;
+        private Mock<IMessagePublisher> _messagePublisher;
+
 
         [BeforeScenario]
         public void Arrange()
         {
+            _messagePublisher = new Mock<IMessagePublisher>();
+
             _container = new Container(c =>
             {
                 c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
                 c.Policies.Add<LoggingPolicy>();
-                c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new MockMessagePolicy(_messagePublisher));
                 c.AddRegistry<DependencyResolution.DefaultRegistry>();
             });
 
@@ -72,10 +80,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             if (createdStatus.ToLower() == "created")
             {
                 Assert.AreEqual(2,teamMembers.TeamMembers.Count);
+                _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Once);
+
             }
             else
             {
                 Assert.AreEqual(1, teamMembers.TeamMembers.Count);
+                _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
         }
 
