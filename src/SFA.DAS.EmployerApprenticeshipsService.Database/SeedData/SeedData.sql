@@ -77,15 +77,30 @@ IF (NOT EXISTS(SELECT * FROM [dbo].[User] WHERE Id = 1
 	AND PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B'
     AND Email = 'floyd.price@test.local'))
 BEGIN 
-    INSERT INTO [dbo].[User](Id, PireanKey, Email) 
-    VALUES(1,'758943A5-86AA-4579-86AF-FB3D4A05850B','floyd.price@test.local') 
+    INSERT INTO [dbo].[User](Id, PireanKey, Email, FirstName, LastName) 
+    VALUES(1,'758943A5-86AA-4579-86AF-FB3D4A05850B','floyd.price@test.local', 'Floyd', 'Price') 
 END 
 ELSE 
 BEGIN 
     UPDATE [dbo].[User] 
-    SET PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B', Email = 'floyd.price@test.local'
+    SET PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B', Email = 'floyd.price@test.local', FirstName = 'Floyd', LastName = 'Price'
     WHERE Id = 1
 END 
+
+IF (NOT EXISTS(SELECT * FROM [dbo].[User] WHERE Id = 2
+	AND PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37'
+    AND Email = 'ian.russell@test.local'))
+BEGIN 
+    INSERT INTO [dbo].[User](Id, PireanKey, Email, FirstName, LastName) 
+    VALUES(2,'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37','ian.russell@test.local', 'Ian', 'Russell') 
+END 
+ELSE 
+BEGIN 
+    UPDATE [dbo].[User] 
+    SET PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37', Email = 'ian.russell@test.local', FirstName = 'Ian', LastName = 'Russell'
+    WHERE Id = 2
+END 
+
 SET IDENTITY_INSERT  [dbo].[User] OFF
 GO
 

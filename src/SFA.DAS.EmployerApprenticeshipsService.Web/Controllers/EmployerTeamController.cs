@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { accountId = accountId });
             }
             catch (InvalidRequestException ex)
             {
