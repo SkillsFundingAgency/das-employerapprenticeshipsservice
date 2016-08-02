@@ -155,6 +155,7 @@
     <Compile Include="DbCleanup\CleanDatabase.cs" />
     <Compile Include="DbCleanup\ICleanDatabase.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Features\InviteMember.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
