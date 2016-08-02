@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 if (remove == 1)
                     await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
 
-                return RedirectToAction("Index", new { accountId = accountId });
+                return RedirectToAction("Index", new { accountId = accountId, successMessage = $"Removed {email} from the Account" });
             }
             catch (InvalidRequestException ex)
             {
