@@ -110,7 +110,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId WHERE Id = @id;",
+                    sql: "UPDATE [dbo].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
