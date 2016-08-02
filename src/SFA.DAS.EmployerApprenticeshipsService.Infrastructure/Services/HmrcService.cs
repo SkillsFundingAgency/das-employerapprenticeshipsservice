@@ -41,5 +41,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
 
         }
+
+        public async Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
+        {   
+            var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}";
+
+            return await _httpClientWrapper.Get<EmpRefLevyInformation>(authToken, url);   
+        }
     }
 }

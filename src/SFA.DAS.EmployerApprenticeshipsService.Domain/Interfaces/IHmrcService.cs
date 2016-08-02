@@ -8,5 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
         string GenerateAuthRedirectUrl(string redirectUrl);
 
         Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode);
+        Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef);
     }
 }
