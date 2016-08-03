@@ -64,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForAuthentication.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmpref.cs" />
+    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefDiscovery.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -41,12 +43,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
 
         }
-
+        
         public async Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
         {   
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}";
 
             return await _httpClientWrapper.Get<EmpRefLevyInformation>(authToken, url);   
+        }
+
+        public async Task<string> DiscoverEmpref(string authToken)
+        {
+            var json = await _httpClientWrapper.Get<string>(authToken, "apprenticeship-levy");
+
+            return JObject.Parse(json)["_links"].Children<JProperty>().ToList().Last().Name;
         }
     }
 }
