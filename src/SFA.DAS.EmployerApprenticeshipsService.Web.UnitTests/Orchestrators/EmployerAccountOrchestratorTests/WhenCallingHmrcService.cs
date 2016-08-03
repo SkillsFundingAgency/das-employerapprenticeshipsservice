@@ -4,6 +4,8 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
@@ -35,6 +37,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetGatewayInformationQuery>(c=>c.ReturnUrl.Equals(redirectUrl))));
+        }
+
+        [Test]
+        public async Task ThenICanRetrieveEmployerInformationWithMyAccessToken()
+        {
+            //Arrange
+            var expectedAuthToken = "123";
+            var expectedEmpref = "456";
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformatioQuery>())).ReturnsAsync(new GetHmrcEmployerInformatioResponse { EmployerLevyInformation = new EmpRefLevyInformation()});
+
+            //Act
+            await _employerAccountOrchestrator.GetHmrcEmployerInformation(expectedAuthToken, expectedEmpref);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformatioQuery>(c => c.AuthToken.Equals(expectedAuthToken) && c.Empref.Equals(expectedEmpref))));
         }
     }
 }

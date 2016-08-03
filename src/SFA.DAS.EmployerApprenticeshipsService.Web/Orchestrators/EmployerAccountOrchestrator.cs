@@ -6,6 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployer
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -78,6 +79,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
 
             return response.HmrcTokenResponse;
+        }
+
+
+        public async Task<EmpRefLevyInformation> GetHmrcEmployerInformation(string authToken, string empref)
+        {
+
+            var response = await _mediator.SendAsync(new GetHmrcEmployerInformatioQuery()
+            {
+                AuthToken = authToken,
+                Empref = empref
+            });
+
+            return response.EmployerLevyInformation;
         }
     }
 }
