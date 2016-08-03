@@ -54,8 +54,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@lastName", user.FirstName, DbType.String);
-                parameters.Add("@firstName", user.LastName, DbType.String);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
                     sql: "INSERT INTO [dbo].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
                     param: parameters,
