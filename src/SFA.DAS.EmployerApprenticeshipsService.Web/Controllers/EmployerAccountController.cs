@@ -94,6 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
 
+            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.AccessToken);
 
             var data = GetEmployerAccountData();
 

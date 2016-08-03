@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
                 using (var httpClient = CreateHttpClient())
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",authToken);
-                    
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json"));
                     var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
 
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());

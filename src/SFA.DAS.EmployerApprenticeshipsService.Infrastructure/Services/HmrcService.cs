@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
 
-            return $"{_configuration.Hmrc.BaseUrl}authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
+            return $"{_configuration.Hmrc.BaseUrl}oauth/authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
             
         }
 
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         {
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
 
-            var url = $"token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
+            var url = $"oauth/token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
 
             var response = await _httpClientWrapper.SendMessage("", url);
 
@@ -53,9 +54,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
         public async Task<string> DiscoverEmpref(string authToken)
         {
-            var json = await _httpClientWrapper.Get<string>(authToken, "apprenticeship-levy");
+            var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy");
 
-            return JObject.Parse(json)["_links"].Children<JProperty>().ToList().Last().Name;
+            return json.emprefs.SingleOrDefault();
+        }
+
+        public class EmprefDiscovery
+        {
+            public List<string> emprefs { get; set; }
         }
     }
 }

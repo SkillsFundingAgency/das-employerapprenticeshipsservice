@@ -25,7 +25,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, message.Empref);
+            var empref = await _hmrcService.DiscoverEmpref(message.AuthToken);
+
+            var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, empref);
             
             return new GetHmrcEmployerInformationResponse {EmployerLevyInformation = emprefInformation};
         }

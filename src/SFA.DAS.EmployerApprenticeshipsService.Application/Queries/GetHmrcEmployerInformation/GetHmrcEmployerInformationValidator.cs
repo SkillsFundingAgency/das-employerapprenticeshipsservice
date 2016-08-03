@@ -12,12 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
             {
                 validationResult.AddError(nameof(item.AuthToken),"AuthToken has not been supplied");
             }
-
-            if (string.IsNullOrWhiteSpace(item.Empref))
-            {
-                validationResult.AddError(nameof(item.Empref), "Empref has not been supplied");
-            }
-
+            
             return validationResult;
         }
     }

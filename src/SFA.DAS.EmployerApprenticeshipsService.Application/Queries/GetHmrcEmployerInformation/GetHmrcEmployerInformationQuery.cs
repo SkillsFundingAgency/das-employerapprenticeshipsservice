@@ -4,7 +4,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
 {
     public class GetHmrcEmployerInformationQuery :IAsyncRequest<GetHmrcEmployerInformationResponse>
     {
-        public string Empref { get; set; }
         public string AuthToken { get; set; }
     }
 }

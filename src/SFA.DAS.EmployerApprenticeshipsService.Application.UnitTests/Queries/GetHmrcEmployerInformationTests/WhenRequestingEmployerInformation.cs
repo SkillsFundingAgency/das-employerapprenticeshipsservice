@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformation
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
     public class WhenRequestingEmployerInformation
     {
@@ -55,9 +55,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Arrange
             var expectedAuthToken = "token1";
             var expectedEmpref = "123/avf123";
+            _hmrcService.Setup(x => x.DiscoverEmpref(expectedAuthToken)).ReturnsAsync(expectedEmpref);
+
 
             //Act
-            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = expectedAuthToken, Empref = expectedEmpref });
+            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = expectedAuthToken });
 
             //Assert
             _hmrcService.Verify(x => x.GetEmprefInformation(expectedAuthToken, expectedEmpref), Times.Once);
@@ -70,10 +72,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             var expectedAuthToken = "token1";
             var expectedEmpref = "123/avf123";
             var expectedEmprefAssociatedName = "test company";
+            _hmrcService.Setup(x => x.DiscoverEmpref(expectedAuthToken)).ReturnsAsync(expectedEmpref);
             _hmrcService.Setup(x => x.GetEmprefInformation(expectedAuthToken, expectedEmpref)).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = expectedEmprefAssociatedName } }, Links = new Links() });
 
             //Act
-            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = expectedAuthToken, Empref = expectedEmpref });
+            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = expectedAuthToken});
 
             //Assert
             Assert.AreEqual(expectedEmprefAssociatedName, actual.EmployerLevyInformation.Employer.Name.EmprefAssociatedName);

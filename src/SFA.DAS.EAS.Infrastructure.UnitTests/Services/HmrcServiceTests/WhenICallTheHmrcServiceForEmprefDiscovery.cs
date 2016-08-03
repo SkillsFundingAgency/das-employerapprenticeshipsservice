@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _logger = new Mock<ILogger>();
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.Get<string>(It.IsAny<string>(), "apprenticeship-levy")).ReturnsAsync("{\"_links\": {\"self\": {\"href\": \"/\"},\"123/AB12345\": {\"href\": \"/epaye/123%2FAB12345\"}}}");
+            _httpClientWrapper.Setup(x => x.Get<string>(It.IsAny<string>(), "apprenticeship-levy")).ReturnsAsync("{\"_links\": {\"self\": {\"href\": \"/\"},\"123/AB12345\": {\"href\": \"/epaye/123%2FAB12345\"}},\"emprefs\": [\"123/AB12345\"]}");
 
             _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
         }

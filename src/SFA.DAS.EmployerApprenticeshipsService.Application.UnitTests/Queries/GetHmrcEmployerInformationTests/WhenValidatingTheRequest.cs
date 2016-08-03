@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformation
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
     public class WhenValidatingTheRequest
     {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenMessageIsValidWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetHmrcEmployerInformationQuery {AuthToken = "someValue", Empref = "someValue"});
+            var actual = _validator.Validate(new GetHmrcEmployerInformationQuery {AuthToken = "someValue"});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("AuthToken","AuthToken has not been supplied"),actual.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("Empref","Empref has not been supplied"),actual.ValidationDictionary);
         }
     }
 }

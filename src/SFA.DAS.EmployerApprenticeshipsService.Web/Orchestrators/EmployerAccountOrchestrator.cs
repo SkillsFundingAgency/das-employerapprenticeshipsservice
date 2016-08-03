@@ -82,13 +82,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
 
-        public async Task<EmpRefLevyInformation> GetHmrcEmployerInformation(string authToken, string empref)
+        public async Task<EmpRefLevyInformation> GetHmrcEmployerInformation(string authToken)
         {
 
             var response = await _mediator.SendAsync(new GetHmrcEmployerInformationQuery()
             {
-                AuthToken = authToken,
-                Empref = empref
+                AuthToken = authToken
+                
             });
 
             return response.EmployerLevyInformation;
