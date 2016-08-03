@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenMessageIsValidWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetHmrcEmployerInformatioQuery {AuthToken = "someValue", Empref = "someValue"});
+            var actual = _validator.Validate(new GetHmrcEmployerInformationQuery {AuthToken = "someValue", Empref = "someValue"});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenTheDictionaryIsPopulatedWithEmptyFields()
         {
             //Act
-            var actual = _validator.Validate(new GetHmrcEmployerInformatioQuery());
+            var actual = _validator.Validate(new GetHmrcEmployerInformationQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());

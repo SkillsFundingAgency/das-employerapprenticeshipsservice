@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation
 {
-    public class GetHmrcEmployerInformationValidator : IValidator<GetHmrcEmployerInformatioQuery>
+    public class GetHmrcEmployerInformationValidator : IValidator<GetHmrcEmployerInformationQuery>
     {
-        public ValidationResult Validate(GetHmrcEmployerInformatioQuery item)
+        public ValidationResult Validate(GetHmrcEmployerInformationQuery item)
         {
             var validationResult = new ValidationResult();
 

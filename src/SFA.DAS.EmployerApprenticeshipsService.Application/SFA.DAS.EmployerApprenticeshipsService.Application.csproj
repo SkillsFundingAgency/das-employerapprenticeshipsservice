@@ -137,8 +137,8 @@
     <Compile Include="Queries\GetGatewayToken\GetGatewayTokenQueryResponse.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationHandler.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationValidator.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformatioQuery.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformatioResponse.cs" />
+    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationQuery.cs" />
+    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationResponse.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationRequest.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationResponse.cs" />

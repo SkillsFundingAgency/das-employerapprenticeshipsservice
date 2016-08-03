@@ -5,18 +5,18 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation
 {
-    public class GetHmrcEmployerInformationHandler : IAsyncRequestHandler<GetHmrcEmployerInformatioQuery, GetHmrcEmployerInformatioResponse>
+    public class GetHmrcEmployerInformationHandler : IAsyncRequestHandler<GetHmrcEmployerInformationQuery, GetHmrcEmployerInformationResponse>
     {
-        private readonly IValidator<GetHmrcEmployerInformatioQuery> _validator;
+        private readonly IValidator<GetHmrcEmployerInformationQuery> _validator;
         private readonly IHmrcService _hmrcService;
 
-        public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformatioQuery> validator, IHmrcService hmrcService)
+        public GetHmrcEmployerInformationHandler(IValidator<GetHmrcEmployerInformationQuery> validator, IHmrcService hmrcService)
         {
             _validator = validator;
             _hmrcService = hmrcService;
         }
 
-        public async Task<GetHmrcEmployerInformatioResponse> Handle(GetHmrcEmployerInformatioQuery message)
+        public async Task<GetHmrcEmployerInformationResponse> Handle(GetHmrcEmployerInformationQuery message)
         {
             var result = _validator.Validate(message);
             
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
 
             var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, message.Empref);
             
-            return new GetHmrcEmployerInformatioResponse {EmployerLevyInformation = emprefInformation};
+            return new GetHmrcEmployerInformationResponse {EmployerLevyInformation = emprefInformation};
         }
     }
 }

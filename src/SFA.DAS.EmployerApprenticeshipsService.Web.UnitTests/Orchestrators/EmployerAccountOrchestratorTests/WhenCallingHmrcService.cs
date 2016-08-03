@@ -45,13 +45,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Arrange
             var expectedAuthToken = "123";
             var expectedEmpref = "456";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformatioQuery>())).ReturnsAsync(new GetHmrcEmployerInformatioResponse { EmployerLevyInformation = new EmpRefLevyInformation()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation()});
 
             //Act
             await _employerAccountOrchestrator.GetHmrcEmployerInformation(expectedAuthToken, expectedEmpref);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformatioQuery>(c => c.AuthToken.Equals(expectedAuthToken) && c.Empref.Equals(expectedEmpref))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals(expectedAuthToken) && c.Empref.Equals(expectedEmpref))));
         }
     }
 }
