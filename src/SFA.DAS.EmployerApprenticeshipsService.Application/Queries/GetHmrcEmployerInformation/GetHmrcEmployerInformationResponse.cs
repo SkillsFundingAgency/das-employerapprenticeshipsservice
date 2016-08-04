@@ -5,5 +5,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
     public class GetHmrcEmployerInformationResponse
     {
         public EmpRefLevyInformation EmployerLevyInformation { get; set; }
+        public string Empref { get; set; }
     }
 }

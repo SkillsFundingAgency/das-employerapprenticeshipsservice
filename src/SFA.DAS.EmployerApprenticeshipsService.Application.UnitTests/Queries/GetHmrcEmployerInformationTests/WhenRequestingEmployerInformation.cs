@@ -80,6 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
 
             //Assert
             Assert.AreEqual(expectedEmprefAssociatedName, actual.EmployerLevyInformation.Employer.Name.EmprefAssociatedName);
+            Assert.AreEqual(expectedEmpref, actual.Empref);
         }
     }
 }

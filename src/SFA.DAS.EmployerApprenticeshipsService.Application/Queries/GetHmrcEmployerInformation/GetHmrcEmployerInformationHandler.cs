@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
 
             var emprefInformation = await _hmrcService.GetEmprefInformation(message.AuthToken, empref);
             
-            return new GetHmrcEmployerInformationResponse {EmployerLevyInformation = emprefInformation};
+            return new GetHmrcEmployerInformationResponse {EmployerLevyInformation = emprefInformation, Empref = empref};
         }
     }
 }
