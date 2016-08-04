@@ -7,6 +7,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
@@ -22,15 +23,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.String);
+                parameters.Add("@id", userId, DbType.Guid);
 
                 return await c.QueryAsync<Account>(
-                    sql: @"select a.* from [dbo].[User] u 
-                         join[dbo].[Membership] m on m.UserId = u.Id
-                         join[dbo].[Account]  a on m.AccountId = a.Id
-                        where u.PireanKey = @UserId",
+                    sql: @"[dbo].[GetAccounts_ByUserId]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return new Accounts { AccountList = (List<Account>)result };

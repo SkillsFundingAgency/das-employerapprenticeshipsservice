@@ -6,6 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamM
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetAccountTeamMembers
 {

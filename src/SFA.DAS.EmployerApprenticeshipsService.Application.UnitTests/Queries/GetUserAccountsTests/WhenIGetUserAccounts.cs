@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUserAccountsTests
 {
@@ -20,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void Arrange()
         {
             _userAccountRepository = new Mock<IUserAccountRepository>();
-            _account = new Account {Name = "Test", Id = 1};
+            _account = new Account {Name = "Test", RoleId = 1};
             _accounts = new List<Account> {_account};
             _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts {AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
@@ -35,6 +37,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
 
             //Assert
             _userAccountRepository.Verify(x => x.GetAccountsByUserId("1"), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheRoleNameIsCorrectlMapped()
+        {
+            //Act
+            var actual = await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery { UserId = "1" });
+
+            //Assert
+            var account = actual.Accounts.AccountList.FirstOrDefault();
+            Assert.IsNotNull(account);
+            Assert.AreEqual("Owner",account.RoleName);
         }
 
     }
