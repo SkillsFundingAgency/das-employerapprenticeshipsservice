@@ -1,41 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class EmployerSchemesRepository : IEmployerSchemesRepository
+    public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-        
-        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+            : base(configuration, logger)
         {
-            _configuration = configuration;
         }
 
-        public async Task<Schemes> GetSchemesByEmployerId(int employerId)
+        public async Task<Schemes> GetSchemesByEmployerId(long employerId)
         {
-
-            using (var connection = new SqlConnection(_configuration.Employer.DatabaseConnectionString))
+            var result = await WithConnection(async c =>
             {
-                await connection.OpenAsync();
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", employerId, DbType.Int32);
 
-                var sql = @"select a.* from [dbo].[Paye] a where a.AccountId = @Id";
-                var schemes = connection.Query<Scheme>(sql, new { Id = employerId });
+                return await c.QueryAsync<Scheme>(
+                    sql: "SELECT * FROM [dbo].[Paye] WHERE AccountId = @Id;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
 
-                connection.Close();
-                return new Schemes { SchemesList =  (List<Scheme>) schemes};
-            }
-
+            return new Schemes
+            {
+                SchemesList = result.ToList()
+            };
         }
-
-     
     }
 }

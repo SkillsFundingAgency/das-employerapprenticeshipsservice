@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef)
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)

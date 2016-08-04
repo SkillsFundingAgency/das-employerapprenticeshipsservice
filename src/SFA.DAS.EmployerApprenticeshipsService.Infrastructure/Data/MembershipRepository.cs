@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<Membership> Get(long userId, long accountId)
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task Remove(long userId, long accountId)
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task Create(long userId, long accountId, int roleId)

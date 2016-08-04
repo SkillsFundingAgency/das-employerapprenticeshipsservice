@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task Create(Invitation invitation)
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<Invitation> Get(long accountId, string email)
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task ChangeStatus(Invitation invitation)

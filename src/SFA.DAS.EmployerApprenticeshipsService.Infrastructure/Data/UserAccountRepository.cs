@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<User> Get(long id)
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
     }
 }

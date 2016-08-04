@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
                 return res;
             });
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<User> GetByEmailAddress(string emailAddress)
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
 
