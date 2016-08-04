@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -150,9 +151,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public Task<int> GetNumberOfInvites(string userId)
+        public async Task<int> GetNumberOfInvites(string userId)
         {
-            throw new System.NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
+
+                return await c.QueryAsync<int>(
+                    sql: "[dbo].[GetNumberOfInvitations_ByUserId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
         }
     }
 }
