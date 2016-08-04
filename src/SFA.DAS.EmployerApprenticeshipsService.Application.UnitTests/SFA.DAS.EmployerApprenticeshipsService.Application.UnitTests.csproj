@@ -105,6 +105,7 @@
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
+    <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
   </ItemGroup>
   <ItemGroup>

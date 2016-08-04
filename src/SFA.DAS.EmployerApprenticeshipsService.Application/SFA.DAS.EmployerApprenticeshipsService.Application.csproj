@@ -151,6 +151,7 @@
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsHandler.cs" />
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsQuery.cs" />
     <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsResponse.cs" />
+    <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsValidator.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsQueryHandler.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsRequest.cs" />
     <Compile Include="Queries\GetUserInvitations\GetUserInvitationsResponse.cs" />
