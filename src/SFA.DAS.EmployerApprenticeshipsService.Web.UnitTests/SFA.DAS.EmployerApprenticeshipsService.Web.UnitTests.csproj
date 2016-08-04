@@ -126,6 +126,7 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCallingHmrcService.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenGettingTheTokenResponse.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
+    <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

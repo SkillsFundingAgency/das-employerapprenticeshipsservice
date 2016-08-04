@@ -59,7 +59,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
 
         public string GetClaimValue(string claimKey)
         {
-            return ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == claimKey).Value;
+            var claimIdentity = ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == claimKey);
+
+            return claimIdentity == null ? "" : claimIdentity.Value;
+            
         }
 
         public SignInMessage GetSignInMessage(string id)

@@ -7,6 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     public class UserAccountsViewModel
     {
         public Accounts Accounts;
-        public List<InvitationView> Invitations;
+        public int Invitations;
     }
 }

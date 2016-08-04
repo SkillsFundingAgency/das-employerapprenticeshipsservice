@@ -1,35 +1,50 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
-@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
-
-<div class="grid-row">
-    <div class="column-half">
-        @if (Model.Accounts.AccountList.Count == 0)
-        {
-            <h1 class="heading-xlarge">Create an Account</h1>
-        }
-        else
-        {
-            <h1 class="heading-xlarge">Choose Account</h1>
-        }
-        
-    </div>
-</div>
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
 
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Accounts.AccountList.Count == 0)  {
-            <p>Create a new Employer Account</p>
+        <h1 class="heading-xlarge">@HttpContext.Current.User.Identity.Name</h1>
+        <span class="text-secondary bold-small">User account</span>
+        <hr />
+    </div>
+    
+</div>
+
+@if (Model.Invitations != 0)
+{
+    <div class="grid-row">
+        <div class="column-full">
+
+            <h2 class="heading-medium">Invitations</h2>
+            @if (Model.Invitations == 1)
+            {
+                <p>You have @Model.Invitations pending invitation to an employer account.</p>
+            }
+            else
+            {
+                <p>You have @Model.Invitations pending invitations to employer accounts.</p>
+            }
+            
+            <a href="#" class="link">View Invitations</a>
+
+            <hr/>
+        </div>
+    </div>
+}
+<div class="grid-row">
+    <div class="column-full">
+        <h2 class="heading-medium">Employer Accounts</h2>
+        @if (Model.Accounts.AccountList.Count == 0)
+        {
+            <p>You have no employer accounts assoicated with this account. To use your account you will either need to create a new employer account or be invited to an existing one.</p>
         }
         else
         {
-            <p>You have several accounts registered</p>
-            <p>Please choose the account you wish to view.</p>
+            <p>Choose an employer account to action</p>
             <div class="responsive-table">
                 <div class="responsive-thead">
                     <div class="responsive-tr">
-                        <div class="responsive-th">Account Name</div>
-                        <div class="responsive-th">Account Number</div>
-                        <div class="responsive-th"> </div>
+                        <div class="responsive-th">Name</div>
+                        <div class="responsive-th">Role</div>
                         <div class="responsive-th"> </div>
                     </div>
                 </div>
@@ -43,84 +58,28 @@
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Account Number</div>
-                                <div>@account.Id</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div><a aria-label="View transactions for @account.Name" 
-                                        title="View transactions for @account.Name"
-                                        href="@Url.Action("Index", "EmployerAccountTransactions", new {accountId = account.Id})">View Transactions</a></div>
+                                <div>@account.RoleName
+                                </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
-                                <div><a aria-label="View team for @account.Name" 
-                                        label="View team for @account.Name"
-                                        href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">View Team</a></div>
+                                <div>
+                                    <a aria-label="View transactions for @account.Name"
+                                       title="View transactions for @account.Name"
+                                       href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">Open</a>
+                                </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
+                        
                     }
 
                 </div>
             </div>
         }
         <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create a new Employer Account</a>
+        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create a new employer account</a>
         <p></p>
     </div>
 </div>
 
-<div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">View Invitations</h1>
-        @if (Model.Invitations.Count == 0)
-        {
-            <p>You do not have any invitations</p>
-        }
-        else
-        {
-            <p>You have several invitations</p>
-            <p>Please choose the invitation you wish to view.</p>
-            <div class="responsive-table">
-                <div class="responsive-thead">
-                <div class="responsive-tr">
-                    <div class="responsive-th">Account Name</div>
-                    <div class="responsive-th">Expiry Date</div>
-                    <div class="responsive-th">Role</div>
-                    <div class="responsive-th">Status</div>
-                    <div class="responsive-th"> </div>
-                </div>
-                </div>
-                <div class="responsive-tbody">
-
-                @foreach (var invitation in Model.Invitations)
-                {
-                    <div class="responsive-tr">
-                        <div class="responsive-td">
-                            <div>@invitation.AccountName</div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Expiry Date</div>
-                            <div>@invitation.ExpiryDate.ToShortDateString()</div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Role</div>
-                            <div>@invitation.RoleName</div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Status</div>
-                            <div>@invitation.Status.ToString()</div>
-                        </div>
-                        <div class="responsive-td">
-                            <div><a href="@Url.Action("Index", "Invitation", new {invitationId = invitation.Id})">View</a></div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                    </div>
-                }
-
-                </div>
-            </div>
-        }
-    </div>
-</div>

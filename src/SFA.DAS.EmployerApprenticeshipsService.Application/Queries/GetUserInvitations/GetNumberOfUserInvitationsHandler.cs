@@ -5,7 +5,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations
 {
-    public class GetNumberOfUserInvitationsHandler : IAsyncRequestHandler<GetNumberOfUserInvitationsQuery,GetNumberOfUserInvitationsResponse>
+    public class GetNumberOfUserInvitationsHandler : IAsyncRequestHandler<GetNumberOfUserInvitationsQuery, GetNumberOfUserInvitationsResponse>
     {
         private readonly IValidator<GetNumberOfUserInvitationsQuery> _validator;
         private readonly IInvitationRepository _invitationRepository;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvi
             var repositoryValue = await _invitationRepository.GetNumberOfInvites(message.UserId);
 
 
-            return new GetNumberOfUserInvitationsResponse {NumberOfInvites = repositoryValue};
+            return new GetNumberOfUserInvitationsResponse { NumberOfInvites = repositoryValue };
         }
     }
 }

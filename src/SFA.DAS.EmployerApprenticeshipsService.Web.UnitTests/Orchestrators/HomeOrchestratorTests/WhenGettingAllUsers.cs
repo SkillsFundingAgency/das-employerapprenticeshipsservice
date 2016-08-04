@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -17,6 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
         private HomeOrchestrator _homeOrchestrator;
         private Mock<IMediator> _mediator;
         private User _user;
+        private Mock<IOwinWrapper> _owinWrapper;
 
         [SetUp]
         public void Arrange()
@@ -30,6 +32,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
                 UserRef = Guid.NewGuid().ToString()
             };
 
+            _owinWrapper = new Mock<IOwinWrapper>();
+
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUsersQuery>()))
                 .ReturnsAsync(new GetUsersQueryResponse
@@ -39,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hom
                         _user
                     }
                 });
-            _homeOrchestrator = new HomeOrchestrator(_mediator.Object);
+            _homeOrchestrator = new HomeOrchestrator(_mediator.Object, _owinWrapper.Object);
 
         }
 
