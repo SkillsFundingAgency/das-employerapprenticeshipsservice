@@ -175,7 +175,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeRole(long accountId, string email, int role)
+        public async Task<ActionResult> ChangeRole(long accountId, string email, short role)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");

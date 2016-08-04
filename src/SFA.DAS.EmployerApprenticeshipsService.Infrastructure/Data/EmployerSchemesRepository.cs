@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", employerId, DbType.Int32);
+                parameters.Add("@id", employerId, DbType.Int64);
 
                 return await c.QueryAsync<Scheme>(
                     sql: "SELECT * FROM [dbo].[Paye] WHERE AccountId = @id;",

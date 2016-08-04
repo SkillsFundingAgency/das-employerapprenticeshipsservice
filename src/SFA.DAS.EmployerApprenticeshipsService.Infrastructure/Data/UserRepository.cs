@@ -86,7 +86,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

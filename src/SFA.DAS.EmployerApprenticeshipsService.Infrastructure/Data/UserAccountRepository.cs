@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
                     sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [dbo].[User] WHERE Id = @id;",

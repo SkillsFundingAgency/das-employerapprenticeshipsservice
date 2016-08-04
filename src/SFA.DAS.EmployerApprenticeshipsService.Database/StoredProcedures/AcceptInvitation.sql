@@ -1,14 +1,14 @@
 ﻿CREATE PROCEDURE [dbo].[AcceptInvitation]
 (
 	@email NVARCHAR(100),
-	@accountId INT,
+	@accountId BIGINT,
 	@roleId TINYINT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @userId INT;
+	DECLARE @userId BIGINT;
 
 	SELECT @userId = Id
 	FROM [dbo].[User]

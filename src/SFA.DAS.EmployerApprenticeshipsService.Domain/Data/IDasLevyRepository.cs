@@ -12,6 +12,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef);
         Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef);
 
-        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(int accountId);
+        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[LevyDeclaration]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [empRef] NVARCHAR(50) NOT NULL, 
     [Amount] DECIMAL(18, 4) NULL, 
     [SubmissionDate] DATETIME NULL, 

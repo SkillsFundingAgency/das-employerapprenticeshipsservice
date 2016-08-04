@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<int> CreateAccount(string userRef, string employerNumber, string employerName, string employerRef)
+        public async Task<long> CreateAccount(string userRef, string employerNumber, string employerName, string employerRef)
         {
             return await WithConnection(async c =>
             {
@@ -24,14 +24,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerNumber", employerNumber, DbType.String);
                 parameters.Add("@employerName", employerName, DbType.String);
                 parameters.Add("@employerRef", employerRef, DbType.String);
-                parameters.Add("@accountId", null, DbType.Int32, ParameterDirection.Output, 4);
+                parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
 
                 await c.ExecuteAsync(
                     sql: "[dbo].[CreateAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
 
-                return parameters.Get<int>("@accountId");
+                return parameters.Get<long>("@accountId");
             });
         }
     }
