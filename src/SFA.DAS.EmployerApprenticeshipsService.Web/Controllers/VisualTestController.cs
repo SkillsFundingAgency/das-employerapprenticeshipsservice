@@ -78,6 +78,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 Status = InvitationStatus.Pending
             };
 
+            var teamMember = new TeamMember()
+            {
+                Name = "Bojack Horseman",
+                AccountId = 1234567890,
+                Email = "a.b@com",
+                Id = 123,
+                Role = Role.Owner,
+                Status = InvitationStatus.Pending,
+                UserRef = "ab-123"
+            };
+
             _viewToModel = new Dictionary<string, object>
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
@@ -120,10 +131,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         AccountId = 1234567890,
                         TeamMembers = new List<TeamMember>()
                         {
-                            new TeamMember() {Name = "Bojack Horseman", AccountId = 1234567890, Email = "a.b@com", Id=123, Role = Role.Owner, Status = InvitationStatus.Pending, UserRef = "ab-123" }
+                            teamMember
                         }
                     }},
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
+                {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
                         AccountId = 123,
                         Email = "bojack.horseman@horsingaround.com",
