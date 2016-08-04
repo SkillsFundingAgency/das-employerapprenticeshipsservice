@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             if (userIdClaim != null)
             {
                 var userId =  userIdClaim.Value;
-                var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery() {UserId = userId });
+                var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery {UserId = userId });
                 var getUserInvitationsResponse = await _mediator.SendAsync(new GetUserInvitationsRequest
                 {
                     UserId = userId
