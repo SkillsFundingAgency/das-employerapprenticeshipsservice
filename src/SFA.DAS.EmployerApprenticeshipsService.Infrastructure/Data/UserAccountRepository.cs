@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", userId, DbType.Guid);
+                parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<Account>(
                     sql: @"[dbo].[GetAccounts_ByUserId]",
