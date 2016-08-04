@@ -13,7 +13,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     public class LevyAggregationManager
     {
         [QueueName]
-        public string das_at_eas_refresh_employer_levy { get; set; }
+        public string refresh_employer_levy { get; set; }
 
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;

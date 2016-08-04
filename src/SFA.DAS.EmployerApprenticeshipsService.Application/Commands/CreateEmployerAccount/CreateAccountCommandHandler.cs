@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
     public class CreateAccountCommandHandler : AsyncRequestHandler<CreateAccountCommand>
     {
         [QueueName]
-        public string das_at_eas_get_employer_levy { get; set; }
+        public string get_employer_levy { get; set; }
 
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
