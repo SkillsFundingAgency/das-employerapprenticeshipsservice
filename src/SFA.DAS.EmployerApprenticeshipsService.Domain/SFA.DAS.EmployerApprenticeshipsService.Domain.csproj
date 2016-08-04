@@ -152,6 +152,7 @@
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
     <Compile Include="Models\HmrcLevy\Employer.cs" />
     <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />

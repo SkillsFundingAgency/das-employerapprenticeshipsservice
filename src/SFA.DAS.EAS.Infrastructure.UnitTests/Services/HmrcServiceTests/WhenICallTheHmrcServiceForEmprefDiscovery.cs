@@ -1,15 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
     public class WhenICallTheHmrcServiceForEmprefDiscovery
     {
+        private const string ExpectedEmpref = "123/AB12345";
         private HmrcService _hmrcService;
         private Mock<ILogger> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -36,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _logger = new Mock<ILogger>();
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.Get<string>(It.IsAny<string>(), "apprenticeship-levy")).ReturnsAsync("{\"_links\": {\"self\": {\"href\": \"/\"},\"123/AB12345\": {\"href\": \"/epaye/123%2FAB12345\"}},\"emprefs\": [\"123/AB12345\"]}");
+            _httpClientWrapper.Setup(x => x.Get<EmprefDiscovery>(It.IsAny<string>(), "apprenticeship-levy")).ReturnsAsync(new EmprefDiscovery {Emprefs = new List<string> {ExpectedEmpref} });
 
             _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
         }
@@ -51,7 +54,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             await _hmrcService.DiscoverEmpref(authToken);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<string>(authToken, "apprenticeship-levy"), Times.Once);
+            _httpClientWrapper.Verify(x => x.Get<EmprefDiscovery>(authToken, "apprenticeship-levy"), Times.Once);
         }
 
         [Test]
@@ -64,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             var actual = await _hmrcService.DiscoverEmpref(authToken);
 
             //Assert
-            Assert.AreEqual("123/AB12345", actual);
+            Assert.AreEqual(ExpectedEmpref, actual);
         }
     }
 }

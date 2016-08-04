@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -7,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
@@ -56,12 +56,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         {
             var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy");
 
-            return json.emprefs.SingleOrDefault();
+            return json.Emprefs.SingleOrDefault();
         }
-
-        public class EmprefDiscovery
-        {
-            public List<string> emprefs { get; set; }
-        }
+        
     }
 }
