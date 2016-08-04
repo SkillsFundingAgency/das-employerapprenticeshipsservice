@@ -33,12 +33,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             _cookieService = new Mock<ICookieService>();
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
+           
 
-            _orchestrator =  new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);
+            _orchestrator =  new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object);
             
             _owinWrapper = new Mock<IOwinWrapper>();
 
-            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator, _cookieService.Object);
+            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator);
             _employerAccountController.ControllerContext = _controllerContext.Object;
             _employerAccountController.Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes);
         }

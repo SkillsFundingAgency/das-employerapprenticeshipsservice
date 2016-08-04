@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Moq;
@@ -10,12 +6,13 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
-    public class WhenICallTheHmrcService
+    public class WhenICallTheHmrcServiceForEmpref
     {
         private HmrcService _hmrcService;
         private Mock<ILogger> _logger;
@@ -25,6 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private string ExpectedScope = "emp_ref";
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private string ExpectedClientSecret = "my_secret";
+        private string ExpectedName = "My Company Name";
 
         [SetUp]
         public void Arrange()
@@ -42,40 +40,37 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _logger = new Mock<ILogger>();
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
+            _httpClientWrapper.Setup(x => x.Get<EmpRefLevyInformation>(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer {Name= new Name {EmprefAssociatedName = ExpectedName} }, Links = new Links() });
 
             _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
         }
 
         [Test]
-        public void ThenTheAuthUrlIsGeneratedFromTheStoredConfigValues()
+        public async Task ThenTheCorrectUrlIsUsedToGetTheEmprefInformation()
         {
             //Arrange
-            var redirectUrl = "http://mytestUrl.to.redirectto?a=564kjg";
-            var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
+            var authToken = "123FGV";
+            var empRef = "123/AB12345";
+
+            //Act
+            await _hmrcService.GetEmprefInformation(authToken, empRef);
 
             //Assert
-            var actual = _hmrcService.GenerateAuthRedirectUrl(redirectUrl);
-
-            //Assert
-            Assert.AreEqual($"{ExpectedBaseUrl}authorize?response_type=code&client_id={ExpectedClientId}&scope={ExpectedScope}&redirect_uri={urlFriendlyRedirectUrl}", actual);
+            _httpClientWrapper.Verify(x => x.Get<EmpRefLevyInformation>(authToken, $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}"), Times.Once);
+            
         }
 
         [Test]
-        public async Task ThenTheCodeIsExchangedForTheAccessToken()
+        public async Task ThenTheLevInformationIsReturned()
         {
             //Arrange
-            var redirectUrl = "http://mytestUrl.to.redirectto?a=564kjg";
-            var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
-            var code = "ghj567";
+            var authToken = "123FGV";
+            var empRef = "123/AB12345";
 
             //Act
-            var actual = await _hmrcService.GetAuthenticationToken(redirectUrl,code);
-
-            //Assert
-            _httpClientWrapper.Verify(x => x.SendMessage("", $"token?client_secret={ExpectedClientSecret}&client_id={ExpectedClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={code}"), Times.Once);
-            Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
-
+            var actual = await _hmrcService.GetEmprefInformation(authToken, empRef);
+            Assert.IsAssignableFrom<EmpRefLevyInformation>(actual);
+            Assert.AreEqual(ExpectedName,actual.Employer.Name.EmprefAssociatedName);
         }
     }
 }
