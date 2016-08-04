@@ -17,7 +17,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
     public class LevyDeclaration : ILevyDeclaration
     {
         [QueueName]
-        public string das_at_eas_get_employer_levy { get; set; }
+        public string get_employer_levy { get; set; }
 
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;

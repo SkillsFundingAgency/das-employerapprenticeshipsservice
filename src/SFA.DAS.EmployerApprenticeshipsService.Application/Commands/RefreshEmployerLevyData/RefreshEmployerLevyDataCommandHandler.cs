@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
     public class RefreshEmployerLevyDataCommandHandler : AsyncRequestHandler<RefreshEmployerLevyDataCommand>
     {
         [QueueName]
-        public string das_at_eas_refresh_employer_levy { get; set; }
+        public string refresh_employer_levy { get; set; }
 
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;

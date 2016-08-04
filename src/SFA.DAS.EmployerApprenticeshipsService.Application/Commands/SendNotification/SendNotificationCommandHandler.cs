@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
     {
 
         [QueueName]
-        public string das_at_eas_send_notification { get; set; }
+        public string send_notification { get; set; }
 
         private readonly IValidator<SendNotificationCommand> _validator;
         private readonly ILogger _logger;
