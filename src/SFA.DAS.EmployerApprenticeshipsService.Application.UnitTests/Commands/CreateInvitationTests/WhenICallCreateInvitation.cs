@@ -98,7 +98,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             {
                 RoleId = (int)Role.Owner
             });
-            _membershipRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new TeamMember());
+            _membershipRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new TeamMember
+            {
+                IsUser = true
+            });
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
 

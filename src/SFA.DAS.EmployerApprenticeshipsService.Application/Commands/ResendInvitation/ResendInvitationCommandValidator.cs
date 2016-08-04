@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
             var validationResult = new ValidationResult();
 
             if (string.IsNullOrWhiteSpace(item.Email))
-                validationResult.AddError("Id", "No Id supplied");
+                validationResult.AddError("Email", "No Email supplied");
 
             if (item.AccountId == 0)
                 validationResult.AddError("AccountId", "No AccountId supplied");

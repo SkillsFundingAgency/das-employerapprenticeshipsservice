@@ -110,7 +110,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId WHERE Id = @id;",
+                    sql: "UPDATE [dbo].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -122,11 +122,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@name", invitation.Name, DbType.String);
+                parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                    sql: "UPDATE [dbo].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

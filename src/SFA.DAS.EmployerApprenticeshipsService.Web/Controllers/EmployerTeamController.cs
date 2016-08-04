@@ -98,14 +98,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Cancel(string email, long accountId, int cancel)
         {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            var successMessage = "";
             if (cancel == 1)
             {
-                var userIdClaim = ((ClaimsIdentity) System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-                if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
                 await _employerTeamOrchestrator.Cancel(email, accountId, userIdClaim.Value);
+
+                successMessage = $"Cancelled invitation to {email}";
             }
-            return RedirectToAction("Index", new { accountId = accountId, successMessage = $"Cancelled invitation to {email}" });
+
+            return RedirectToAction("Index", new { accountId = accountId, successMessage = successMessage });
         }
 
         [HttpPost]
@@ -129,6 +133,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -136,10 +141,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             try
             {
+                var successMessage = "";
+
                 if (remove == 1)
+                {
                     await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
 
-                return RedirectToAction("Index", new { accountId = accountId });
+                    successMessage = $"Removed {email} from the Account";
+                }
+
+                return RedirectToAction("Index", new { accountId = accountId, successMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {
@@ -173,7 +184,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { accountId = accountId });
             }
             catch (InvalidRequestException ex)
             {

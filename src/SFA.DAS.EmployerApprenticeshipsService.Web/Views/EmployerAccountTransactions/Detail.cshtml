@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td class="rjTableName">Payment amount</td>
-                        <td class="">£@Model.LineItem.Amount</td>
+                        <td class="">£@($"{Model.LineItem.Amount:n0}")</td>
                     </tr>
                 </tbody>
             </table>
@@ -66,7 +66,7 @@
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">Amount</div>
-                                <div>@aggregationLineItem.Amount</div>                                    
+                                <div>@($"{aggregationLineItem.Amount:n0}")</div>                                    
                             </div>
                         </div>
                     }
