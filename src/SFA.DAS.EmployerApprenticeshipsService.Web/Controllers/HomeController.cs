@@ -27,22 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(accounts);
         }
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        [Authorize]
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+        
         [HttpPost]
         public ActionResult SignInUser(string selectedUserId, SignInUserViewModel model)
         {
@@ -80,7 +65,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public ActionResult SignOut()
         {
             return _owinWrapper.SignOutUser();
-
             
         }
     }
