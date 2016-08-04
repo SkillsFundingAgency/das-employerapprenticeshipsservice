@@ -149,5 +149,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
         }
+
+        public Task<int> GetNumberOfInvites(string userId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
