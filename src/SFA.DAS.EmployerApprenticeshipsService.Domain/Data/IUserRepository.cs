@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
@@ -9,7 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<User> GetByEmailAddress(string emailAddress);
         Task Create(User registerUser);
         Task Update(User user);
-
         Task<Users> GetAllUsers();
     }
 }

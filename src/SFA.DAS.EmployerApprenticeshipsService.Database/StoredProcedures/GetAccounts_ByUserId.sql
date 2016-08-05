@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[GetAccounts_ByUserId]
-	@id UNIQUEIDENTIFIER
+	@userId UNIQUEIDENTIFIER
 	
 AS
 select 
@@ -11,4 +11,4 @@ inner join
 inner join
 	[dbo].[Account]  a on m.AccountId = a.Id
 where 
-u.PireanKey = @id
+u.PireanKey = @userId

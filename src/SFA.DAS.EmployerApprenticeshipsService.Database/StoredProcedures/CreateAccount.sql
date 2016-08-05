@@ -6,13 +6,13 @@ CREATE PROCEDURE [dbo].[CreateAccount]
 	@employerNumber NVARCHAR(50), 
 	@employerName NVARCHAR(100), 
 	@employerRef NVARCHAR(16),
-	@accountId int OUTPUT
+	@accountId BIGINT OUTPUT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @userId INT;
+	DECLARE @userId BIGINT;
 
 	select @userId = Id from [dbo].[User] where PireanKey = @userRef;
 	if (@userId is null)

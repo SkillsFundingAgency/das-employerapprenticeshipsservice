@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 {
     public class RefreshEmployerLevyDataCommand : IAsyncRequest
     {
-        public int EmployerId { get; set; }
+        public long EmployerId { get; set; }
         public List<EmployerLevyData> EmployerLevyData { get; set; }
    
     }

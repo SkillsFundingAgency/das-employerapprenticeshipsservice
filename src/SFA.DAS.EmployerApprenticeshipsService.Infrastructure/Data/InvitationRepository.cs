@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.String);
+                parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<InvitationView>(
                     sql: "SELECT * FROM [dbo].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<InvitationView>(
                     sql: "SELECT * FROM [dbo].[GetInvitations] WHERE Id = @id;",
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task Create(Invitation invitation)
@@ -55,12 +55,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", invitation.AccountId, DbType.Int32);
+                parameters.Add("@accountId", invitation.AccountId, DbType.Int64);
                 parameters.Add("@name", invitation.Name, DbType.String);
                 parameters.Add("@email", invitation.Email, DbType.String);
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
-                parameters.Add("@roleId", invitation.RoleId, DbType.Int32);
+                parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
                     sql: "INSERT INTO [dbo].[Invitation] ([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) VALUES (@accountId, @name, @email, @expiryDate, @statusId, @roleId)",
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Invitation>(
                     sql: "SELECT * FROM [dbo].[Invitation] WHERE Id = @id;",
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<Invitation> Get(long accountId, string email)
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<Invitation>(
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task ChangeStatus(Invitation invitation)
@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@id", invitation.Id, DbType.Int64);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
@@ -122,7 +122,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", invitation.Id, DbType.Int32);
+                parameters.Add("@id", invitation.Id, DbType.Int64);
                 parameters.Add("@name", invitation.Name, DbType.String);
                 parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
@@ -135,13 +135,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task Accept(string email, long accountId, int roleId)
+        public async Task Accept(string email, long accountId, short roleId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", email, DbType.String);
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(

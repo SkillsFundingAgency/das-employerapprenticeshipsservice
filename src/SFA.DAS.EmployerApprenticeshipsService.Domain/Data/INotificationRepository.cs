@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public interface INotificationRepository
     {
-        Task<int> Create(NotificationMessage message);
-        Task<NotificationMessage> GetById(int expectedMessageId);
+        Task<long> Create(NotificationMessage message);
+        Task<NotificationMessage> GetById(long expectedMessageId);
     }
 }

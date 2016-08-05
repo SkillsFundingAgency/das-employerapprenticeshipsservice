@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Id = _invitation.Id
             });
 
-            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (int)_invitation.RoleId), Times.Once);
+            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (short)_invitation.RoleId), Times.Once);
         }
 
         [Test]

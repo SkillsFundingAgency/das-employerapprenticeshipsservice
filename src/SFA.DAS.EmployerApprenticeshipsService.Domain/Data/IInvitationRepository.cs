@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<Invitation> Get(long accountId, string email);
         Task ChangeStatus(Invitation invitation);
         Task Resend(Invitation invitation);
-        Task Accept(string email, long accountId, int roleId);
+        Task Accept(string email, long accountId, short roleId);
         Task<int> GetNumberOfInvites(string userId);
     }
 }
