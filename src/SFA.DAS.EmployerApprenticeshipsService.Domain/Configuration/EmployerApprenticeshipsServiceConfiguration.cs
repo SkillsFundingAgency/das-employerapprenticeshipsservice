@@ -40,14 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
     {
         public string ApiKey { get; set; }
     }
-    
-    public static class QueueNames
-    {
-        public static string das_at_eas_refresh_employer_levy { get; set; }
-        public static string das_at_eas_get_employer_levy  { get; set; }
-        
-    }
-
+   
     public class SmtpConfiguration
     {
         public string ServerName { get; set; }

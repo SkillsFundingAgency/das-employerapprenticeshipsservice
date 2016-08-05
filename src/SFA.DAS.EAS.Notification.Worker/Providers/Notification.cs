@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Notification.Worker.Providers
     public class Notification : INotification
     {
         [QueueName]
-        public string das_at_eas_send_notification { get; set; }
+        public string send_notification { get; set; }
 
         private readonly ILogger _logger;
         private readonly IPollingMessageReceiver _pollingMessageReceiver;

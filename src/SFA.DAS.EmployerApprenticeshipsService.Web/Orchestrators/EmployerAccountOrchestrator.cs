@@ -1,11 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Web;
 using MediatR;
+using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -13,15 +15,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountOrchestrator
     {
+        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly ICookieService _cookieService;
         
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger)
+
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
             _logger = logger;
+            _cookieService = cookieService;
         }
         
         public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
@@ -79,5 +84,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return response.HmrcTokenResponse;
         }
+
+
+        public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken)
+        {
+
+            var response = await _mediator.SendAsync(new GetHmrcEmployerInformationQuery
+            {
+                AuthToken = authToken
+                
+            });
+
+            return response;
+        }
+
+        public EmployerAccountData GetCookieData(HttpContextBase context)
+        {
+            var cookie = (string)_cookieService.Get(context, CookieName);
+
+            return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
+        }
+
+        public void CreateCookieData(HttpContextBase context, object data)
+        {
+            var json = JsonConvert.SerializeObject(data);
+            _cookieService.Create(context, CookieName, json, 365);
+        }
+
+        public void UpdateCookieData(HttpContextBase context, object data)
+        {
+            _cookieService.Update(context, CookieName, JsonConvert.SerializeObject(data));
+        }
+        
     }
 }

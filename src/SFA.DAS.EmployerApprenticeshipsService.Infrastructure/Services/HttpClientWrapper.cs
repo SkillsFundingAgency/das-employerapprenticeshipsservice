@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -44,11 +45,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return null;
         }
 
+        public async Task<T> Get<T>(string authToken, string url)
+        {
+            try
+            {
+                using (var httpClient = CreateHttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",authToken);
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json"));
+                    var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+
+                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+
+            return default(T);
+        }
+
         private HttpClient CreateHttpClient()
         {
             return new HttpClient
             {
                 BaseAddress = new Uri(_configuration.Hmrc.BaseUrl)
+                
             };
         }
     }

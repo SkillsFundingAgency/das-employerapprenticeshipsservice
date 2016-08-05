@@ -13,7 +13,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
     public class LevyAggregationManager
     {
         [QueueName]
-        public string das_at_eas_refresh_employer_levy { get; set; }
+        public string refresh_employer_levy { get; set; }
 
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
@@ -33,8 +33,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         public async Task Process()
         {
             //TODO review
-            while (true)
-            {
+            
                 var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
                 if (message?.Content == null || message.Content.AccountId == 0)
@@ -59,7 +58,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     });
 
                 await message.CompleteAsync();
-            }
+            
         }
     }
 }

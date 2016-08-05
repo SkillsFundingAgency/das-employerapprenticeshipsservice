@@ -14,14 +14,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<ILogger> _logger;
         private Mock<IMediator> _mediator;
+        private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
         {
             _logger = new Mock<ILogger>();
             _mediator = new Mock<IMediator>();
+            _cookieService = new Mock<ICookieService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object);
         }
 
         [Test]

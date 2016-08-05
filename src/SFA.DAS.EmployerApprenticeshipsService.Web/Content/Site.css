@@ -1,4 +1,10 @@
 ﻿/* GOV.UK OVERRIDES */
+label.form-label {
+    margin-bottom: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
 main {
     padding-bottom: 3em;
 }
