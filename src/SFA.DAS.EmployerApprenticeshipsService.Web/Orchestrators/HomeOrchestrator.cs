@@ -6,6 +6,7 @@ using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -13,6 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     public class HomeOrchestrator : IOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly IOwinWrapper _owinWrapper;
 
         //Required for running tests
         public HomeOrchestrator()
@@ -20,9 +22,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public HomeOrchestrator(IMediator mediator)
+        public HomeOrchestrator(IMediator mediator, IOwinWrapper owinWrapper)
         {
             _mediator = mediator;
+            _owinWrapper = owinWrapper;
         }
 
         public virtual async Task<SignInUserViewModel> GetUsers()
@@ -44,19 +47,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public virtual async Task<UserAccountsViewModel> GetUserAccounts()
         {
-            var userIdClaim = ((ClaimsIdentity) HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim != null)
+            var userIdClaim =  _owinWrapper.GetClaimValue("sub");
+            if (!string.IsNullOrEmpty(userIdClaim))
             {
-                var userId =  userIdClaim.Value;
-                var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery() {UserId = userId });
-                var getUserInvitationsResponse = await _mediator.SendAsync(new GetUserInvitationsRequest
+                var userId =  userIdClaim;
+                var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery {UserId = userId });
+                var getUserInvitationsResponse = await _mediator.SendAsync(new GetNumberOfUserInvitationsQuery
                 {
                     UserId = userId
                 });
                 return new UserAccountsViewModel
                 {
                     Accounts = getUserAccountsQueryResponse.Accounts,
-                    Invitations = getUserInvitationsResponse.Invitations
+                    Invitations = getUserInvitationsResponse.NumberOfInvites
                 };
             }
             return null;

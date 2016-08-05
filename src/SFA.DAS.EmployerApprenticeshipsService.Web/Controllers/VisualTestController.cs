@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
@@ -158,12 +159,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 new Account() {Id = 123, Name= "My account" }
                             }
                         },
-                        Invitations = new List<InvitationView>()
-                        {
-                            invitationView,
-                            invitationView,
-                            invitationView
-                        }
+                        Invitations = 3
+                        //Invitations = new List<InvitationView>()
+                        //{
+                        //    invitationView,
+                        //    invitationView,
+                        //    invitationView
+                        //}
                     }},
                 {"~/Views/Invitation/Index.cshtml", invitationView}
             };

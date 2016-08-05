@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators

@@ -115,8 +115,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="Accounts.cs" />
     <Compile Include="AggregationData.cs" />
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
@@ -139,6 +137,8 @@
     <Compile Include="DepedencyResolution\LoggingPolicy.cs" />
     <Compile Include="DepedencyResolution\MessagePolicy.cs" />
     <Compile Include="EmployerInformation.cs" />
+    <Compile Include="Entities\Account\Account.cs" />
+    <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />

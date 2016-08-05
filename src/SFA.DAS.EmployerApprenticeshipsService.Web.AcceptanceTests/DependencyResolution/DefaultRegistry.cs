@@ -1,17 +1,17 @@
-﻿using System.Web;
-using MediatR;
+﻿using MediatR;
+using Moq;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using StructureMap;
 using StructureMap.Graph;
-using StructureMap.Web.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {
 
-        public DefaultRegistry()
+        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock)
         {
             Scan(scan =>
             {
@@ -21,6 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
             });
             
             For<IUserRepository>().Use<FileSystemUserRepository>();
+
+            For<IOwinWrapper>().Use(() => owinWrapperMock.Object);
             
             AddMediatrRegistrations();
         }

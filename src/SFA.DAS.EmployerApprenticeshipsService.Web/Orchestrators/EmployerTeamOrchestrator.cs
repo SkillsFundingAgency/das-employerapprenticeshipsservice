@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
         
-        public async Task<EmployerTeamMembersViewModel> GetTeamMembers(int accountId, string userId)
+        public async Task<EmployerTeamMembersViewModel> GetTeamMembers(long accountId, string userId)
         {
             var accountTeamMemberReponse = await _mediator.SendAsync(new GetAccountTeamMembersQuery { Id = accountId, ExternalUserId = userId });
             return new EmployerTeamMembersViewModel { TeamMembers = accountTeamMemberReponse.TeamMembers, AccountId = accountId };

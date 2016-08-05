@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
 {
     public class Accounts
     {

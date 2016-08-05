@@ -150,5 +150,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
         }
+
+        public async Task<int> GetNumberOfInvites(string userId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
+
+                return await c.QueryAsync<int>(
+                    sql: "[dbo].[GetNumberOfInvitations_ByUserId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
 {
     public class GetAccountTeamMembersQuery : IAsyncRequest<GetAccountTeamMembersResponse>
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ExternalUserId { get; set; }
     }
 }
