@@ -31,8 +31,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "InviteTeamMember", "\tIn to add more people to my account\r\n\tAs an account owner\r\n\tI want to be able to" +
-                    " add more people", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "InviteTeamMember", "\tIn order to increase the size of my team\r\n\tAs an account owner\r\n\tI want to be ab" +
+                    "le to add more people", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         

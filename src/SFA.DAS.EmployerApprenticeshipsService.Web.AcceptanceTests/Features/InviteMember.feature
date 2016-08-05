@@ -1,5 +1,5 @@
 ﻿Feature: InviteTeamMember
-	In to add more people to my account
+	In order to increase the size of my team
 	As an account owner
 	I want to be able to add more people
 
