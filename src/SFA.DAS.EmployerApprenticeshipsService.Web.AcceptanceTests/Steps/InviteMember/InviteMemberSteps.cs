@@ -7,6 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.Messaging;
@@ -23,14 +24,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         private int _accountId;
         private Mock<IMessagePublisher> _messagePublisher;
         private ICleanDatabase _cleanDownDb;
+        private Mock<IOwinWrapper> _owinWrapper;
 
 
         [BeforeScenario]
         public void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
+            _owinWrapper = new Mock<IOwinWrapper>();
 
-            _container = IoC.CreateContainer(_messagePublisher);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
 
             _cleanDownDb = _container.GetInstance<ICleanDatabase>();
             _cleanDownDb.Execute().Wait();
