@@ -60,23 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
             {
                 await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = message.EmployerId});
             }
-
-
-
-
-            /*
-             TODO
-             Check to see if it exists in the Levy Dec store
-             Check to see if it exists in the Fraction store
-
-             if we need to insert
-                Then transform dates - from Tax year to calendar year
-                Insert new rows for dec and fraction
-                
-             Trigger an event for refresh of data for the BuildTransaction view -> put a message in a queue
-
-             */
-
+            
         }
     }
 }

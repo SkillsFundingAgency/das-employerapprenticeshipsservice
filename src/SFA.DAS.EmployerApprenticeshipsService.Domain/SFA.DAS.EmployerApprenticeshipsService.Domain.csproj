@@ -153,9 +153,15 @@
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
+    <Compile Include="Models\HmrcLevy\Employer.cs" />
+    <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
     <Compile Include="Models\HmrcLevy\HmrcTokenResponse.cs" />
+    <Compile Include="Models\HmrcLevy\Link.cs" />
+    <Compile Include="Models\HmrcLevy\Links.cs" />
+    <Compile Include="Models\HmrcLevy\Name.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />

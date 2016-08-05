@@ -4,6 +4,8 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
@@ -13,14 +15,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<ILogger> _logger;
         private Mock<IMediator> _mediator;
+        private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
         {
             _logger = new Mock<ILogger>();
             _mediator = new Mock<IMediator>();
+            _cookieService = new Mock<ICookieService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object);   
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object);   
         }
 
         [Test]
@@ -35,6 +39,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetGatewayInformationQuery>(c=>c.ReturnUrl.Equals(redirectUrl))));
+        }
+
+        [Test]
+        public async Task ThenICanRetrieveEmployerInformationWithMyAccessToken()
+        {
+            //Arrange
+            var expectedAuthToken = "123";
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation()});
+
+            //Act
+            await _employerAccountOrchestrator.GetHmrcEmployerInformation(expectedAuthToken);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c => c.AuthToken.Equals(expectedAuthToken))));
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -14,21 +10,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAccountController : Controller
     {
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
-
+        
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
-        private readonly ICookieService _cookieService;
-
-        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, ICookieService cookieService)
+        
+        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
-            if (cookieService == null)
-                throw new ArgumentNullException(nameof(cookieService));
+            
             _owinWrapper = owinWrapper;
             _employerAccountOrchestrator = employerAccountOrchestrator;
-            _cookieService = cookieService;
         }
 
         // GET: EmployerAccount
@@ -77,10 +69,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 RegisteredAddress = model.RegisteredAddress
             };
 
-            var json = JsonConvert.SerializeObject(data);
-
-            _cookieService.Create(HttpContext, CookieName, json, 365);
-
+            _employerAccountOrchestrator.CreateCookieData(HttpContext,data);
+            
             return View(model);
         }
 
@@ -94,50 +84,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
 
-
-            var data = GetEmployerAccountData();
-
-            var email = _owinWrapper.GetClaimValue("email");
-
-            var emailFirstPart = email.Split('@')[0];
-
-            var selected = data.Data.FirstOrDefault(x => string.Equals(x.Email.Split('@')[0], emailFirstPart, StringComparison.CurrentCultureIgnoreCase));
+            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.AccessToken);
             
-            var enteredData = GetCookieData();
-            
-            enteredData.EmployerRef = selected!=null ? selected.EmpRef : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+            enteredData.EmployerRef = empref != null ? empref.Empref : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
             enteredData.AccessToken = response.AccessToken;
             enteredData.RefreshToken = response.RefreshToken;
+            if (empref != null)
+            {
+                enteredData.CompanyName = $"{enteredData.CompanyName} - {empref.EmployerLevyInformation.Employer.Name.EmprefAssociatedName}";
+            }
 
-            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(enteredData));
-
-
-            return RedirectToAction("Summary");
-        }
-
-        [HttpPost]
-        public ActionResult Gateway(GatewayModel model)
-        {
-            var data = GetEmployerAccountData();
-
-            var selected = data.Data.FirstOrDefault(x => x.Email == model.Email);
-
-            if (selected == null)
-                return View();
-
-            var enteredData = GetCookieData();
-
-            enteredData.EmployerRef = selected.EmpRef;
-
-            _cookieService.Update(HttpContext, CookieName, JsonConvert.SerializeObject(enteredData));
+            _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
             return RedirectToAction("Summary");
         }
+        
 
         [HttpGet]
         public ActionResult Summary()
         {
-            var enteredData = GetCookieData();
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             var model = new SummaryViewModel
             {
@@ -153,7 +121,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAccount()
         {
-            var enteredData = GetCookieData();
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
             {
@@ -171,33 +139,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
-
-        private EmployerAccountData GetCookieData()
-        {
-            var cookie = (string)_cookieService.Get(HttpContext, CookieName);
-
-            return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
-        }
-
-        private GatewayEmployers GetEmployerAccountData()
-        {
-            var path = System.Web.HttpContext.Current.Server.MapPath("~/App_Data/EmpRefs/empref_data.json");
-
-            var json = System.IO.File.ReadAllText(path);
-
-            return JsonConvert.DeserializeObject<GatewayEmployers>(json);
-        }
-
-        public class GatewayEmployers
-        {
-            public List<GatewayEmployer> Data { get; set; }
-        }
-
-        public class GatewayEmployer
-        {
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public string EmpRef { get; set; }
-        }
+        
+        
     }
 }
