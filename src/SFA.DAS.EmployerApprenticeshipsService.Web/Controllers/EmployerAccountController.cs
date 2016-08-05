@@ -131,6 +131,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 EmployerRef = enteredData.EmployerRef
             });
 
+            TempData["successMessage"] = $"{enteredData.CompanyName} is now available in your list of associated employer accounts";
+
             return RedirectToAction("Index", "Home");
         }
 
