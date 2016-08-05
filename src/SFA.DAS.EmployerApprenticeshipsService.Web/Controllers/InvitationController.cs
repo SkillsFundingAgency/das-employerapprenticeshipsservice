@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
-    [Authorize]
+    
     public class InvitationController : Controller
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
@@ -22,8 +22,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
         }
 
+
+        
         [HttpGet]
-        public async Task<ActionResult> Index(long invitationId)
+        [Authorize]
+        public async Task<ActionResult> View(long invitationId)
         {
             if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
@@ -33,6 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Accept(long invitationId)
         {
             if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
@@ -43,6 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
             if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");

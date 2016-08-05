@@ -407,7 +407,7 @@
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
-    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\VisualTest\Index.cshtml" Condition=" '$(Configuration)' == 'Debug' " />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
