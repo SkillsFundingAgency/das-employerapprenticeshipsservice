@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
     {
         private IContainer _container;
         private string _externalUserId;
-        private int _accountId;
+        private long _accountId;
         private Mock<IMessagePublisher> _messagePublisher;
         private ICleanDatabase _cleanDownDb;
         private Mock<IOwinWrapper> _owinWrapper;
