@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Account>(
-                    sql: "select a.* from [dbo].[Account] a where a.Id = @Id;",
+                    sql: "select a.* from [dbo].[Account] a where a.Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
