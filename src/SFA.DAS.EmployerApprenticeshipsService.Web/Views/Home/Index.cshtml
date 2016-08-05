@@ -1,5 +1,18 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
 
+@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="panel panel-info  ">
+                <h2>Account Created</h2>
+                @Model.SuccessMessage
+            </div>
+        </div>
+    </div>
+}
+
+
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">@HttpContext.Current.User.Identity.Name</h1>
