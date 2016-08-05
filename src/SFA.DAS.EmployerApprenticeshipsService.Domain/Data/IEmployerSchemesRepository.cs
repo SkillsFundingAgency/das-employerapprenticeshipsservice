@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public interface IEmployerSchemesRepository
     {
-        Task<Schemes> GetSchemesByEmployerId(int employerId);
+        Task<Schemes> GetSchemesByEmployerId(long employerId);
     }
 }

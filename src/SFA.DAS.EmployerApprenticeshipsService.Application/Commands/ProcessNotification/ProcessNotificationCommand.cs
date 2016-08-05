@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNot
 {
     public class ProcessNotificationCommand : IAsyncRequest
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

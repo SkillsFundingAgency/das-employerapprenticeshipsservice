@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
+        
         public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration, logger)
         {
         }
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
                 return res;
             });
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<User> GetByEmailAddress(string emailAddress)
@@ -43,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
 
@@ -54,8 +55,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@lastName", user.FirstName, DbType.String);
-                parameters.Add("@firstName", user.LastName, DbType.String);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
                     sql: "INSERT INTO [dbo].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
                     param: parameters,
@@ -71,8 +72,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
-                parameters.Add("@lastName", user.FirstName, DbType.String);
-                parameters.Add("@firstName", user.LastName, DbType.String);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
                     sql: "UPDATE [dbo].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where PireanKey = @userRef",
                     param: parameters,
@@ -85,7 +86,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

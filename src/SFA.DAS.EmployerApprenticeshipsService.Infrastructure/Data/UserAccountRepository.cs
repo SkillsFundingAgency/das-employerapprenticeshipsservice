@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.String);
+                parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<Account>(
                     sql: @"select a.* from [dbo].[User] u 
@@ -49,7 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<User> Get(long id)
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
                     sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [dbo].[User] WHERE Id = @id;",
@@ -65,7 +66,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
     }
 }

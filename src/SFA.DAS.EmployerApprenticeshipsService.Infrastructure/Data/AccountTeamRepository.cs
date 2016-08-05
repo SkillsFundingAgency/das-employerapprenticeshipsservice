@@ -17,12 +17,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(int accountId, string externalUserId)
+        public async Task<List<TeamMember>> GetAccountTeamMembersForUserId(long accountId, string externalUserId)
         {
             var result = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 const string sql = @"select tm.* from [GetTeamMembers] tm 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@email", email, DbType.String);
 
                 return await connection.QueryAsync<TeamMember>(
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
     }
 }

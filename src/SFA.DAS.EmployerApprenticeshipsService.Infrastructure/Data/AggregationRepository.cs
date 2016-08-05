@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             _storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
         }
 
-        public async Task Update(int accountId, int pageNumber, string json)
+        public async Task Update(long accountId, int pageNumber, string json)
         {
             var tableClient = _storageAccount.CreateCloudTableClient();
 
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await table.ExecuteAsync(insertOperation);
         }
 
-        public async Task<AggregationData> GetByAccountId(int accountId)
+        public async Task<AggregationData> GetByAccountId(long accountId)
         {
             var tableClient = _storageAccount.CreateCloudTableClient();
 

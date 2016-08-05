@@ -17,19 +17,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<Account> GetAccountById(int id)
+        public async Task<Account> GetAccountById(long id)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int32);
+                parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Account>(
-                    sql: "select a.* from [dbo].[Account] a where a.Id = @Id;",
+                    sql: "select a.* from [dbo].[Account] a where a.Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
     }
 }

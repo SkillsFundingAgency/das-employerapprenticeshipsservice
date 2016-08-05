@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef)
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
@@ -87,12 +87,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(int accountId)
+        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<LevyDeclarationView>(
                     sql: "SELECT * from [dbo].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC;",

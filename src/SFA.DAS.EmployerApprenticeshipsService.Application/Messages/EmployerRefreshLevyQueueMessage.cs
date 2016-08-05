@@ -2,6 +2,6 @@
 {
     public class EmployerRefreshLevyQueueMessage 
     {
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
     }
 }

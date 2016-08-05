@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Entities
             
         }
 
-        public LevyAggregationEntity(int accountId, int pageNumber)
+        public LevyAggregationEntity(long accountId, int pageNumber)
             :base(accountId.ToString(), pageNumber.ToString())
         {
             

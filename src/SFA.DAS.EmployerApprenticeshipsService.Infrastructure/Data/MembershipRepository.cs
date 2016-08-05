@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<TeamMember>(
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task<Membership> Get(long userId, long accountId)
@@ -37,8 +37,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
-                parameters.Add("@userId", userId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@userId", userId, DbType.Int64);
 
                 return await c.QueryAsync<Membership>(
                     sql: "SELECT * FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
         public async Task Remove(long userId, long accountId)
@@ -54,8 +54,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.Int32);
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.Int64);
+                parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.ExecuteAsync(
                     sql: "DELETE FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
@@ -64,13 +64,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task ChangeRole(long userId, long accountId, int roleId)
+        public async Task ChangeRole(long userId, long accountId, short roleId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.Int32);
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.Int64);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
@@ -94,16 +94,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.FirstOrDefault();
+            return result.SingleOrDefault();
         }
 
-        public async Task Create(long userId, long accountId, int roleId)
+        public async Task Create(long userId, long accountId, short roleId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", userId, DbType.Int32);
-                parameters.Add("@accountId", accountId, DbType.Int32);
+                parameters.Add("@userId", userId, DbType.Int64);
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
