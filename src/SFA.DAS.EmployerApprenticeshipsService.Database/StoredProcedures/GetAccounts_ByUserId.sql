@@ -3,7 +3,7 @@
 	
 AS
 select 
-	a.Name, m.RoleId 
+	a.Id, a.Name, m.RoleId 
 from 
 	[dbo].[User] u 
 inner join 
