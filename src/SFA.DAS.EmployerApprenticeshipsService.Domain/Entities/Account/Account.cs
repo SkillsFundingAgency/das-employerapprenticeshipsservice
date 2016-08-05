@@ -5,6 +5,6 @@
         public string Name { get; set; }
         public long Id { get; set; }
         public int RoleId { get; set; }
-        public string RoleName => ((RoleName)RoleId).ToString();
+        public string RoleName => ((Role)RoleId).ToString();
     }
 }

@@ -139,7 +139,6 @@
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
-    <Compile Include="Entities\Account\RoleName.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
