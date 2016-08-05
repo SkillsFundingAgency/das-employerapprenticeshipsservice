@@ -26,14 +26,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId, string successMessage)
+        public async Task<ActionResult> Index(int accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
 
-            teamVieWModel.SuccessMessage = successMessage;
+            teamVieWModel.SuccessMessage = (string)TempData["successMessage"];
 
             return View(teamVieWModel);
         }
@@ -75,7 +75,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", new { accountId = model.AccountId, successMessage = $"Invite sent to {model.Email}" });
+            TempData["successMessage"] = $"Invite sent to {model.Email}";
+
+            return RedirectToAction("Index", new { accountId = model.AccountId });
         }
 
         [HttpGet]
@@ -109,7 +111,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 successMessage = $"Cancelled invitation to {email}";
             }
 
-            return RedirectToAction("Index", new { accountId = accountId, successMessage = successMessage });
+            TempData["successMessage"] = successMessage;
+
+            return RedirectToAction("Index", new { accountId = accountId });
         }
 
         [HttpPost]
@@ -121,7 +125,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             await _employerTeamOrchestrator.Resend(email, accountId, userIdClaim.Value);
 
-            return RedirectToAction("Index", new { accountId = accountId, successMessage = $"Invitation resent to {email}" });
+            TempData["successMessage"] = $"Invitation resent to {email}";
+
+            return RedirectToAction("Index", new { accountId = accountId });
         }
 
         [HttpGet]
@@ -150,7 +156,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     successMessage = $"Removed {email} from the Account";
                 }
 
-                return RedirectToAction("Index", new { accountId = accountId, successMessage = successMessage });
+                TempData["successMessage"] = successMessage;
+
+                return RedirectToAction("Index", new { accountId = accountId });
             }
             catch (InvalidRequestException ex)
             {
