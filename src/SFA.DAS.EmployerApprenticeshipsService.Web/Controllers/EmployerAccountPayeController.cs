@@ -32,8 +32,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(new EmployerAccountPayeListViewModel
             {
+                AccountId = accountid,
                 PayeSchemes = schemes
             });
         }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(long accountId, string empRef)
+        {
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Add(long accountId)
+        {
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+
+            return View();
+        }
+
     }
 }

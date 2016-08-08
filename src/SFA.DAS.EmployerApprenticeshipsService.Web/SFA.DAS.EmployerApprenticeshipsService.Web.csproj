@@ -420,6 +420,8 @@
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

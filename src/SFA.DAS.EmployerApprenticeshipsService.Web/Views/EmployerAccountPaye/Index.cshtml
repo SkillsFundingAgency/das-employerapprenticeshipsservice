@@ -6,12 +6,18 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">PAYE Schemes</h1>
     </div>
+    <div class="column-one-third rightalign">
+        <form action="@Url.Action("Add")" method="GET">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
+            <input class="button" id="addNewPaye" type="submit" value="Add new scheme">
+        </form>
+    </div>
     <div class="responsive-table">
         <div class="responsive-thead">
             <div class="responsive-tr">
                 <div class="responsive-th">Scheme ID</div>
                 <div class="responsive-th">Legal Entity</div>
-                @*<div class="responsive-th"> </div>*@
+                <div class="responsive-th"> </div>
             </div>
         </div>
         <div class="responsive-tbody">
@@ -29,14 +35,14 @@
                         </div>
                         <div class="responsive-inner-caption"></div>
                     </div>
-                    @*<div class="responsive-td">
+                    <div class="responsive-td">
                         <div>
-                            <a aria-label="View transactions for @account.Name"
-                               title="View transactions for @account.Name"
-                               href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">Open</a>
+                            <a aria-label="View PAYE scheme @scheme.EmpRef"
+                               title="View PAYE scheme @scheme.EmpRef"
+                               href="@Url.Action("Details", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">View</a>
                         </div>
                         <div class="responsive-inner-caption"></div>
-                    </div>*@
+                    </div>
                 </div>
 
             }
