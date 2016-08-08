@@ -310,6 +310,7 @@
     <Compile Include="Models\SelectEmployerViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
+    <Compile Include="Models\SuccessMessageViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -403,8 +404,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
@@ -416,7 +415,7 @@
     <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
-    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\VisualTest\Index.cshtml" Condition=" '$(Configuration)' == 'Debug' " />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
@@ -424,8 +423,11 @@
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
+    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
+    <Content Include="Views\Home\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
