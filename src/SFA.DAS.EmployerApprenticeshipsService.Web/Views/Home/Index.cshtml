@@ -1,15 +1,8 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
 
-@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
+@if (Model.SuccessMessage != null)
 {
-    <div class="grid-row">
-        <div class="column-full">
-            <div class="panel panel-info  ">
-                <h2>Account Created</h2>
-                @Model.SuccessMessage
-            </div>
-        </div>
-    </div>
+    @Html.Partial("_SuccessMessage",Model.SuccessMessage)
 }
 
 
@@ -37,7 +30,7 @@
                 <p>You have @Model.Invitations pending invitations to employer accounts.</p>
             }
             
-            <a href="#" class="link">View Invitations</a>
+            <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
 
             <hr/>
         </div>

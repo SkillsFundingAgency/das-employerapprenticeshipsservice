@@ -176,6 +176,7 @@
     <Compile Include="TeamMember.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />
+    <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

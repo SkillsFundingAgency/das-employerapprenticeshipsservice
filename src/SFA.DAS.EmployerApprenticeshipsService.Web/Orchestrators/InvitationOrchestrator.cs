@@ -6,7 +6,9 @@ using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -61,6 +63,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 _logger.Info(ex);
             }
             
+        }
+
+        public async Task<UserInvitationsViewModel> GetAllInvitationsForUser(string externalUserId)
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetUserInvitationsRequest
+                {
+                    UserId = externalUserId
+                });
+
+                return new UserInvitationsViewModel {Invitations = response.Invitations };
+            }
+            catch (InvalidRequestException ex)
+            {
+                
+                _logger.Info(ex);
+            }
+
+            return null;
         }
     }
 }

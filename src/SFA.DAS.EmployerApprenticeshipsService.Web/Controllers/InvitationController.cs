@@ -1,31 +1,51 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
-    [Authorize]
+    
     public class InvitationController : Controller
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
-        private Claim _userIdClaim;
+        private readonly string _userIdClaim;
 
-        public InvitationController(InvitationOrchestrator invitationOrchestrator)
+        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));
             _invitationOrchestrator = invitationOrchestrator;
-            _userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            _userIdClaim = owinWrapper.GetClaimValue("sub");
+        }
+
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> All()
+        {
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var model = await _invitationOrchestrator.GetAllInvitationsForUser(_userIdClaim);
+
+            return View(model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long invitationId)
+        [Authorize]
+        public async Task<ActionResult> View(long invitationId)
         {
-            if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             var invitation = await _invitationOrchestrator.GetInvitation(invitationId);
 
@@ -33,21 +53,51 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Accept(long invitationId)
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
-            if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationId, _userIdClaim.Value);
+            var invitationItem = model.Invitations.SingleOrDefault(c => c.Id == invitation);
+
+            if (invitationItem == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
+
+            TempData["successHeader"] = "Invitation Created";
+            TempData["successCompany"] = invitationItem.AccountName;
 
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
-            if (_userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return RedirectToAction("Index", "Home");     
+            }
 
-            await _invitationOrchestrator.CreateInvitation(model, _userIdClaim.Value);
+            await _invitationOrchestrator.CreateInvitation(model, _userIdClaim);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Index()
+        {
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return View();
+            }
 
             return RedirectToAction("Index", "Home");
         }
