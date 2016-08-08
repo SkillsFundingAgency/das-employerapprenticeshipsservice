@@ -414,6 +414,7 @@
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

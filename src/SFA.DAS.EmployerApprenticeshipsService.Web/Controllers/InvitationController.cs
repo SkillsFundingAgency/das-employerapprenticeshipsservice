@@ -21,7 +21,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _userIdClaim = owinWrapper.GetClaimValue("sub");
         }
 
-        
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult> All()
+        {
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            var model = await _invitationOrchestrator.GetAllInvitationsForUser(_userIdClaim);
+
+            return View(model);
+        }
 
         [HttpGet]
         [Authorize]
@@ -39,6 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Accept(long invitationId)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
@@ -53,6 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
