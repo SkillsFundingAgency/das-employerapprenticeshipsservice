@@ -280,6 +280,7 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -416,6 +418,7 @@
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
