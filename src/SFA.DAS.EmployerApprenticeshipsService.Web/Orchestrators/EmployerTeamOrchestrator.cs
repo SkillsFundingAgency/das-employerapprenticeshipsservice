@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
@@ -27,20 +28,54 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<Account> GetAccount(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<Account>> GetAccount(long accountId, string externalUserId)
         {
-            var response = await _mediator.SendAsync(new GetEmployerAccountQuery
+            try
             {
-                Id = accountId
-            });
+                var response = await _mediator.SendAsync(new GetEmployerAccountQuery
+                {
+                    AccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
 
-            return response.Account;
+                return new OrchestratorResponse<Account>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = response.Account
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrchestratorResponse<Account>
+                {
+                    Exception = ex
+                };
+            }
         }
         
-        public async Task<EmployerTeamMembersViewModel> GetTeamMembers(long accountId, string userId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(long accountId, string userId)
         {
-            var accountTeamMemberReponse = await _mediator.SendAsync(new GetAccountTeamMembersQuery { Id = accountId, ExternalUserId = userId });
-            return new EmployerTeamMembersViewModel { TeamMembers = accountTeamMemberReponse.TeamMembers, AccountId = accountId };
+            try
+            {
+                var response = await _mediator.SendAsync(new GetAccountTeamMembersQuery { Id = accountId, ExternalUserId = userId });
+
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new EmployerTeamMembersViewModel
+                    {
+                        AccountId = accountId,
+                        TeamMembers = response.TeamMembers
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Exception = ex
+                };
+            }
         }
 
         public async Task InviteTeamMember(InviteTeamMemberViewModel model, string externalUserId)

@@ -41,7 +41,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
 
-                var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = employerAccountId });
+                var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+                {
+                    AccountId = employerAccountId,
+                    IsSystemUser = true
+                });
                 if (employerAccountResult?.Account == null)
                 {
                     await message.CompleteAsync();

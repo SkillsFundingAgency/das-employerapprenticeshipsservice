@@ -4,6 +4,17 @@
 {
     @Html.Partial("_SuccessMessage",Model.SuccessMessage)
 }
+@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="panel panel-error  ">
+                @Model.ErrorMessage
+            </div>
+        </div>
+    </div>
+}
+
 
 
 <div class="grid-row">

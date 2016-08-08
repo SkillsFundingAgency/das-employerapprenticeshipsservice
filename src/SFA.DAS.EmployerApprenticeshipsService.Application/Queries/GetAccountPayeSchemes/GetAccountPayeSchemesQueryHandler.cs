@@ -5,24 +5,24 @@ using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes
 {
-    public class GetEmployerAccountHandler : IAsyncRequestHandler<GetEmployerAccountQuery, GetEmployerAccountResponse>
+    public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesRequest, GetAccountPayeSchemesResponse>
     {
-        private readonly IEmployerAccountRepository _employerAccountRepository   ;
+        private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetEmployerAccountHandler(IEmployerAccountRepository employerAccountRepository, IMembershipRepository membershipRepository)
+        public GetAccountPayeSchemesQueryHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository)
         {
-            if (employerAccountRepository == null)
-                throw new ArgumentNullException(nameof(employerAccountRepository));
+            if (accountRepository == null)
+                throw new ArgumentNullException(nameof(accountRepository));
             if (membershipRepository == null)
                 throw new ArgumentNullException(nameof(membershipRepository));
-            _employerAccountRepository = employerAccountRepository;
+            _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
         }
 
-        public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountQuery message)
+        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesRequest message)
         {
             var membership = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
@@ -31,11 +31,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
             if (membership.RoleId != (short)Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
 
-            var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
+            var payeSchemes = await _accountRepository.GetPayeSchemes(message.AccountId);
 
-            return new GetEmployerAccountResponse
+            return new GetAccountPayeSchemesResponse
             {
-                Account = employerAccount
+                PayeSchemes = payeSchemes
             };
         }
     }
