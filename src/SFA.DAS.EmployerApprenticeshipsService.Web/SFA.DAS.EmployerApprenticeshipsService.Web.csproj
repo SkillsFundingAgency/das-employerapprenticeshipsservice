@@ -280,6 +280,7 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -295,6 +296,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
+    <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -308,6 +310,7 @@
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -417,6 +420,9 @@
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Home\_SuccessMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
