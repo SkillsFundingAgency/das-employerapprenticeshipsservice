@@ -169,6 +169,7 @@
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
     <Compile Include="Paye.cs" />
+    <Compile Include="PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
