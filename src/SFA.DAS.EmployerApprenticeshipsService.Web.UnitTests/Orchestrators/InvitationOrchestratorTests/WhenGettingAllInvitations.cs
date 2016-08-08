@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -22,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Inv
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView>()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView> {new InvitationView()} });
 
             _logger = new Mock<ILogger>();
 
@@ -41,6 +43,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Inv
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetUserInvitationsRequest>(c=>c.UserId.Equals(userId))), Times.Once);
             Assert.IsAssignableFrom<UserInvitationsViewModel>(actual);
+        }
+
+        [TestCase(1, "Today")]
+        [TestCase(2, "1 day")]
+        [TestCase(4, "3 days")]
+        public async Task ThenTheExpiresInDayIsCorrectlyCalculated(int days, string expectedValue)
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse
+            {
+                Invitations = new List<InvitationView> {new InvitationView
+            {
+                ExpiryDate = DateTime.UtcNow.AddDays(days).Date
+            } }
+            });
+
+            //Act
+            var actual = await _invitationOrchestrator.GetAllInvitationsForUser("123abc");
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual.Invitations.FirstOrDefault().ExpiryDays());
         }
 
         [Test]
