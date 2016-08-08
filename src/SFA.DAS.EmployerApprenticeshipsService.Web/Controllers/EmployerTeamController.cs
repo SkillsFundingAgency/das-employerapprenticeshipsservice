@@ -31,9 +31,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var accountViewModel = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
+            var response = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
-            return View(accountViewModel);
+            if (response.Status == OrchestratorResponseStatus.Success)
+                return View(response.Data);
+
+            if (response.Exception != null)
+                TempData["errorMessage"] = response.Exception.Message;
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -42,9 +48,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var viewModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+            var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
 
-            return View(viewModel);
+            if (response.Status == OrchestratorResponseStatus.Success)
+                return View(response.Data);
+
+            if (response.Exception != null)
+                TempData["errorMessage"] = response.Exception.Message;
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

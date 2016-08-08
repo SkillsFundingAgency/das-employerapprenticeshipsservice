@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var accounts = await _homeOrchestrator.GetUserAccounts();
 
             accounts.SuccessMessage = (string)TempData["successMessage"];
+            accounts.ErrorMessage = (string)TempData["errorMessage"];
 
             return View(accounts);
         }

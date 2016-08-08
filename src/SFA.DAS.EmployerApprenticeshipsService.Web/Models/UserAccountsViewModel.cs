@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public Accounts Accounts;
         public int Invitations;
         public string SuccessMessage;
+        public string ErrorMessage;
     }
 }
