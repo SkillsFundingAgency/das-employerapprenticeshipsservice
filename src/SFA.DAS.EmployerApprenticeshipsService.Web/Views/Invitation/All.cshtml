@@ -23,9 +23,9 @@
                 <div class="responsive-table">
                     <div class="responsive-thead">
                         <div class="responsive-tr">
-                            <div class="responsive-th">Account Name</div>
-                            <div class="responsive-th">Role</div>
-                            <div class="responsive-th">Expiry Date</div>
+                            <div class="responsive-th">Name</div>
+                            <div class="responsive-th">Role assigned</div>
+                            <div class="responsive-th">Expires in</div>
                             <div class="responsive-th"> </div>
                         </div>
                     </div>
@@ -43,8 +43,8 @@
                                     <div>@invitation.RoleName</div>
                                 </div>
                                 <div class="responsive-td">
-                                    <div class="responsive-inner-caption">Expiry Date</div>
-                                    <div>@invitation.ExpiryDate.ToShortDateString()</div>
+                                    <div class="responsive-inner-caption">Expires in</div>
+                                    <div>@invitation.ExpiryDays()</div>
                                 </div>
                                 <div class="responsive-td">
                                     <div>
