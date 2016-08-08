@@ -296,6 +296,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
+    <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />

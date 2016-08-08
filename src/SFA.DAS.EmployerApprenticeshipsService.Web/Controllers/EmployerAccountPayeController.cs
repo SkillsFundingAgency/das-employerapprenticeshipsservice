@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
@@ -27,9 +28,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var viewModel = await _employerAccountPayeOrchestrator.Get(accountid, userIdClaim);
+            var schemes = await _employerAccountPayeOrchestrator.Get(accountid, userIdClaim);
 
-            return View(viewModel);
+            return View(new EmployerAccountPayeListViewModel
+            {
+                PayeSchemes = schemes
+            });
         }
     }
 }

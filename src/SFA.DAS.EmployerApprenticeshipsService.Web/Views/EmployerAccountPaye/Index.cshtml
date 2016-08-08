@@ -1,2 +1,46 @@
-﻿@model System.Collections.Generic.List<SFA.DAS.EmployerApprenticeshipsService.Domain.PayeView>
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
+@model EmployerAccountPayeListViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">PAYE Schemes</h1>
+    </div>
+    <div class="responsive-table">
+        <div class="responsive-thead">
+            <div class="responsive-tr">
+                <div class="responsive-th">Scheme ID</div>
+                <div class="responsive-th">Legal Entity</div>
+                @*<div class="responsive-th"> </div>*@
+            </div>
+        </div>
+        <div class="responsive-tbody">
+
+            @foreach (var scheme in Model.PayeSchemes)
+            {
+                <div class="responsive-tr">
+                    <div class="responsive-td">
+                        <div>@scheme.EmpRef</div>
+                        <div class="responsive-inner-caption"></div>
+                    </div>
+                    <div class="responsive-td">
+                        <div>
+                            @scheme.AccountName
+                        </div>
+                        <div class="responsive-inner-caption"></div>
+                    </div>
+                    @*<div class="responsive-td">
+                        <div>
+                            <a aria-label="View transactions for @account.Name"
+                               title="View transactions for @account.Name"
+                               href="@Url.Action("Index", "EmployerTeam", new {accountId = account.Id})">Open</a>
+                        </div>
+                        <div class="responsive-inner-caption"></div>
+                    </div>*@
+                </div>
+
+            }
+
+        </div>
+    </div>
+</div>
