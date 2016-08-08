@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.InteropServices;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class OrchestratorResponse
     {
-        public OrchestratorResponseStatus Status { get; set; }
+        public HttpStatusCode Status { get; set; }
         public Exception Exception { get; set; }
     }
 
@@ -14,11 +15,4 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         public T Data { get; set; }
     }
 
-    public enum OrchestratorResponseStatus
-    {
-        Unknown = 0,
-        Success,
-        NotAMember,
-        NotAnOwner
-    }
 }

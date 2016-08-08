@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
                 return new OrchestratorResponse<Account>
                 {
-                    Status = OrchestratorResponseStatus.Success,
+                    Status = HttpStatusCode.OK,
                     Data = response.Account
                 };
             }
@@ -60,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
-                    Status = OrchestratorResponseStatus.Success,
+                    Status = HttpStatusCode.OK,
                     Data = new EmployerTeamMembersViewModel
                     {
                         AccountId = accountId,
