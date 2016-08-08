@@ -31,11 +31,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var teamVieWModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+            var accountViewModel = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
-            teamVieWModel.SuccessMessage = (string)TempData["successMessage"];
+            return View(accountViewModel);
+        }
 
-            return View(teamVieWModel);
+        [HttpGet]
+        public async Task<ActionResult> View(int accountId)
+        {
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+
+            var viewModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -77,7 +86,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             TempData["successMessage"] = $"Invite sent to {model.Email}";
 
-            return RedirectToAction("Index", new { accountId = model.AccountId });
+            return RedirectToAction("View", new { accountId = model.AccountId });
         }
 
         [HttpGet]
@@ -113,7 +122,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             TempData["successMessage"] = successMessage;
 
-            return RedirectToAction("Index", new { accountId = accountId });
+            return RedirectToAction("View", new { accountId = accountId });
         }
 
         [HttpPost]
@@ -127,7 +136,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             TempData["successMessage"] = $"Invitation resent to {email}";
 
-            return RedirectToAction("Index", new { accountId = accountId });
+            return RedirectToAction("View", new { accountId = accountId });
         }
 
         [HttpGet]
@@ -158,7 +167,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 TempData["successMessage"] = successMessage;
 
-                return RedirectToAction("Index", new { accountId = accountId });
+                return RedirectToAction("View", new { accountId = accountId });
             }
             catch (InvalidRequestException ex)
             {
@@ -192,7 +201,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
 
-                return RedirectToAction("Index", new { accountId = accountId });
+                return RedirectToAction("View", new { accountId = accountId });
             }
             catch (InvalidRequestException ex)
             {

@@ -7,9 +7,11 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitati
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -23,6 +25,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+        }
+
+        public async Task<Account> GetAccount(long accountId, string externalUserId)
+        {
+            var response = await _mediator.SendAsync(new GetEmployerAccountQuery
+            {
+                Id = accountId
+            });
+
+            return response.Account;
         }
         
         public async Task<EmployerTeamMembersViewModel> GetTeamMembers(long accountId, string userId)

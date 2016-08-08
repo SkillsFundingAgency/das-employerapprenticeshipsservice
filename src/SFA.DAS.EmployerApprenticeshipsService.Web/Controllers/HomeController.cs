@@ -22,8 +22,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Index()
         {
-
             var accounts = await _homeOrchestrator.GetUserAccounts();
+
+            accounts.SuccessMessage = (string)TempData["successMessage"];
 
             return View(accounts);
         }

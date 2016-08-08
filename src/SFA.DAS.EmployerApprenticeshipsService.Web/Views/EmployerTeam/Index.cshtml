@@ -1,93 +1,28 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.EmployerTeamMembersViewModel
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account.Account
 
-@if (!string.IsNullOrWhiteSpace(Model.SuccessMessage))
-{
-    <div class="grid-row">
-        <div class="column-full">
-            <div class="panel panel-info  ">
-                @Model.SuccessMessage
+<h1 class="heading-xlarge" id="company-Name">@Model.Name</h1>
+
+<div class="grid-row">
+<div class="column-two-thirds">
+    <div style="max-width: 90%">
+        <div class="grid-row">
+            <div class="column-half">
+                <h3 class="heading-medium" style="margin-top: 0;">
+                    <a href="@Url.Action("View", new { accountId = Model.Id })">Team</a>
+                </h3>
+                <p>Invite new users and manage existing ones</p>
             </div>
+            <div class="column-half ">
+                <h3 class="heading-medium" style="margin-top: 0">
+                    <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Id })">Funding</a>
+                </h3>
+                <p>Manage your funds including how much you have available to spend, your transactions and funds you could lose</p>
+            </div>
+
         </div>
-    </div>
-}
-<div class="grid-row">
-    <div class="column-two-thirds">
-
-        <h1 class="heading-xlarge">Team Members</h1>
-
-
 
     </div>
-    <div class="column-one-third rightalign">
-        <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
-            <input class="button" id="addNewUser" type="submit" value="Invite team member">
-        </form>
-    </div>
+
+
 </div>
-
-<div class="grid-row">
-    <div class="column-full">
-        @if (Model.TeamMembers.Count == 0)
-        {
-            <p>TODO : EMPTY STATE</p>
-        }
-        else
-        {
-            <p class="lede">
-                This is the list of people who can access this account or have been invited
-                to be a team member on this account.
-            </p>
-
-                    <div class="responsive-table th-nopadding">
-                        <div class="responsive-thead">
-                            <div class="responsive-tr">
-
-                                <div class="responsive-th" scope="col">Name</div>
-                                <div class="responsive-th" scope="col">Email address</div>
-
-                                <div class="responsive-th" scope="col">Role</div>
-                                <div class="responsive-th" scope="col">Status</div>
-
-                                <div class="responsive-th" scope="col"></div>
-                            </div>
-                        </div>
-                        <div class="responsive-tbody">
-
-                            @foreach (var teamMember in Model.TeamMembers)
-                            {
-                                <div class="responsive-tr">
-                                    <div class="responsive-td">
-                                        <div>
-                                            @teamMember.Name
-                                        </div>
-                                        <div class="responsive-inner-caption"></div>
-                                    </div>
-                                    <div class="responsive-td">
-                                        <div class="responsive-inner-caption">Email address</div>
-                                        <div>@teamMember.Email</div>
-                                    </div>
-                                    <div class="responsive-td">
-                                        <div class="responsive-inner-caption">Role</div>
-                                        <div>@teamMember.Role</div>
-                                    </div>
-                                    <div class="responsive-td">
-                                        <div class="responsive-inner-caption">Status</div>
-                                        <div>@teamMember.Status</div>
-                                    </div>
-                                    <div class="responsive-td">
-                                        <div>
-                                            <a aria-label="View details for @teamMember.Name"
-                                               title="View details for @teamMember.Name"
-                                               href="@Url.Action("Review", new {accountId = Model.AccountId, email = teamMember.Email})">View</a>
-                                        </div>
-                                        <div class="responsive-inner-caption"></div>
-                                    </div>
-                                </div>
-                            }
-
-                        </div>
-                    </div>
-        }
-    </div>
 </div>
