@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -53,14 +55,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Accept(long invitationId)
+        public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationId, _userIdClaim);
+            var invitationItem = model.Invitations.SingleOrDefault(c => c.Id == invitation);
+
+            if (invitationItem == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
+
+            TempData["successHeader"] = "Invitation Created";
+            TempData["successCompany"] = invitationItem.AccountName;
 
             return RedirectToAction("Index", "Home");
         }

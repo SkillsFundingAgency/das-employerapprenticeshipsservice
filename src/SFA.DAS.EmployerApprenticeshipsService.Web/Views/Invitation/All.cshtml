@@ -31,11 +31,13 @@
                     </div>
 
                     <div class="responsive-tbody">
-                        @foreach (var invitation in Model.Invitations)
+                        @for (var index = 0; index < Model.Invitations.Count; index++)
                         {
+                            var invitation = Model.Invitations[index];
                             <div class="responsive-tr">
                                 <div class="responsive-td">
                                     <div>@invitation.AccountName</div>
+                                    <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName"/>
                                     <div class="responsive-inner-caption"></div>
                                 </div>
                                 <div class="responsive-td">
@@ -48,7 +50,8 @@
                                 </div>
                                 <div class="responsive-td">
                                     <div>
-                                        <button type="submit" id="invitationId" value="@invitation.Id" name="invitationId" class="button">Accept</button>
+                                        <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
+                                        <button type="submit" id="invitationId" value="@invitation.Id" name="invitation" class="button">Accept</button>
                                     </div>
                                     <div class="responsive-inner-caption"></div>
                                 </div>
