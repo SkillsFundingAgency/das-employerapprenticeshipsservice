@@ -91,11 +91,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             enteredData.EmployerRef = empref != null ? empref.Empref : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
             enteredData.AccessToken = response.AccessToken;
             enteredData.RefreshToken = response.RefreshToken;
-            if (empref != null)
-            {
-                enteredData.CompanyName = $"{enteredData.CompanyName} - {empref.EmployerLevyInformation.Employer.Name.EmprefAssociatedName}";
-            }
-
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
             return RedirectToAction("Summary");
