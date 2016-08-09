@@ -1,21 +1,23 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
-    public abstract class HmrcOrchestratorBase
+    public abstract class EmployerVerificationOrchestratorBase
     {
 
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
 
-        protected HmrcOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
         {
             Mediator = mediator;
             Logger = logger;
@@ -55,6 +57,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
 
             return response;
+        }
+
+        public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
+        {
+            var response = await Mediator.SendAsync(new GetEmployerInformationRequest
+            {
+                Id = model.EmployerRef
+            });
+            
+            if (response == null)
+            {
+                Logger.Warn("No response from SelectEmployerViewModel");
+                return new SelectEmployerViewModel();
+            }
+
+            Logger.Info($"Returning Data for {model.EmployerRef}");
+
+            return new SelectEmployerViewModel
+            {
+                CompanyNumber = response.CompanyNumber,
+                CompanyName = response.CompanyName,
+                DateOfIncorporation = response.DateOfIncorporation,
+                RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+            };
         }
     }
 }

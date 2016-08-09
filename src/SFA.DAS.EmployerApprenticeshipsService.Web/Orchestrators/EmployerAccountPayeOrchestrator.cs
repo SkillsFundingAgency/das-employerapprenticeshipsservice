@@ -11,7 +11,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
-    public class EmployerAccountPayeOrchestrator : HmrcOrchestratorBase
+    public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
 
         public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService) : base(mediator, logger, cookieService)
