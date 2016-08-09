@@ -8,8 +8,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrWhiteSpace(item.UserId))
-                validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
+            if (string.IsNullOrWhiteSpace(item.ExternalUserId))
+                validationResult.AddError("UserId", "No UserId supplied");
 
             if (string.IsNullOrWhiteSpace(item.CompanyNumber))
                 validationResult.AddError("CompanyNumber", "No CompanyNumber supplied");

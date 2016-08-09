@@ -85,6 +85,7 @@
     <Build Include="StoredProcedures\GetAccounts_ByUserId.sql" />
     <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserId.sql" />
     <Build Include="Views\GetAccountPayeSchemes.sql" />
+    <Build Include="Tables\LegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

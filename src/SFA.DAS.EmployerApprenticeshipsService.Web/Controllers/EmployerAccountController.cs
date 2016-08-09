@@ -123,6 +123,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 UserId = GetUserId(),
                 CompanyNumber = enteredData.CompanyNumber,
                 CompanyName = enteredData.CompanyName,
+                CompanyRegisteredAddress = enteredData.RegisteredAddress,
+                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef
             });
 

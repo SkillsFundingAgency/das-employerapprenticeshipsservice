@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.0\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.1.11.0\lib\net45\IdentityModel.dll</HintPath>
       <Private>True</Private>
@@ -280,6 +284,7 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
@@ -309,6 +314,7 @@
     <Compile Include="Models\SuccessMessageViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
+    <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
@@ -423,10 +429,12 @@
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
+    <Content Include="Views\Home\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
-    <Content Include="Views\Home\_SuccessMessage.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\Shared\GenericError.cshtml" />
+    <Content Include="Views\Shared\AccessDenied.cshtml" />
+  <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
   </ItemGroup>
   <ItemGroup>
