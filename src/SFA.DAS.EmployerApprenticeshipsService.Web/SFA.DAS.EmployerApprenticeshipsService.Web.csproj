@@ -295,6 +295,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ICookieService.cs" />
+    <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
@@ -425,6 +426,8 @@
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Home\_SuccessMessage.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

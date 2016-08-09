@@ -7,12 +7,14 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
+    [Authorize]
     public class EmployerAccountPayeController : Controller
     {
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
-        public EmployerAccountPayeController(IOwinWrapper owinWrapper, EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator)
+        public EmployerAccountPayeController(IOwinWrapper owinWrapper,
+            EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
@@ -47,12 +49,36 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add(long accountId)
+        public ActionResult Add(long accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            return View();
+            return View(accountId);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetGateway(long accountId)
+        {
+            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new {accountId = accountId}, Request.Url.Scheme)));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ConfirmPayeScheme(long accountId)
+        {
+
+            var gatewayResponseModel = _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId);
+
+            return View(gatewayResponseModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
+        {
+            var availableLegalEntites = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId);
+
+            return View("ChooseCompany",model);
         }
 
     }

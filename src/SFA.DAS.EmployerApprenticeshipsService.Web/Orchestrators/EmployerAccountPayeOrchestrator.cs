@@ -5,37 +5,43 @@ using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
-    public class EmployerAccountPayeOrchestrator
+    public class EmployerAccountPayeOrchestrator : HmrcOrchestratorBase
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger _logger;
-        private readonly ICookieService _cookieService;
 
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService) : base(mediator, logger, cookieService)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-            if (cookieService == null)
-                throw new ArgumentNullException(nameof(cookieService));
-            _mediator = mediator;
-            _logger = logger;
-            _cookieService = cookieService;
         }
 
         public async Task<List<PayeView>> Get(long accountId, string externalUserId)
         {
-            var response = await _mediator.SendAsync(new GetAccountPayeSchemesRequest
+            var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
             {
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });
 
             return response.PayeSchemes;
+        }
+
+        public AddNewPayeScheme GetPayeConfirmModel(long accountId)
+        {
+            //TODO to be replaced with the call to the HmrcGetEmpref Discovery call
+            var empRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+
+            return new AddNewPayeScheme
+            {
+                AccountId = accountId,
+                PayeScheme = empRef
+            };
+        }
+
+        public async Task<List<dynamic>>  GetLegalEntities(long accountId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
