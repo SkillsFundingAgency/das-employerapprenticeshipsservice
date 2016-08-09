@@ -42,7 +42,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task<GetAccountLegalEntitiesResponse> GetLegalEntities(long accountId, string userId)
         {
-            throw new NotImplementedException();
+            var response = await Mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                Id = accountId,
+                UserId = userId
+            });
+
+            return response;
         }
     }
 }
