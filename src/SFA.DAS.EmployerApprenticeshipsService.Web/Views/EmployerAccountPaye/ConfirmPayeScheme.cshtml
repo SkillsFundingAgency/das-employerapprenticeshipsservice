@@ -1,0 +1,22 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.AddNewPayeScheme
+    
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm PAYE Scheme</h1>
+
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <p>Do you want to associate @Model.PayeScheme with your account?</p>
+
+            <input type="hidden" value="@Model.AccountId" name="AccountId" />
+            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
+
+            <button type="submit" class="button">Accept</button>
+        </form>
+
+
+        <a class="" href="@Url.Action("GetGateway", "EmployerAccountPaye", new {accountId = Model.AccountId})">Search Again</a>
+    </div>
+</div>

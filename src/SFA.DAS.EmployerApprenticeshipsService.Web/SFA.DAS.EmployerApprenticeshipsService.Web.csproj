@@ -300,6 +300,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ICookieService.cs" />
+    <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
+    <Compile Include="Orchestrators\HmrcOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
@@ -432,6 +434,8 @@
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
+  <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

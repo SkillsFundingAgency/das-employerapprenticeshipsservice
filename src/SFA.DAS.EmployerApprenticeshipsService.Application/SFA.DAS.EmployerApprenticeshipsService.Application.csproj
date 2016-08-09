@@ -113,6 +113,10 @@
     <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Messages\SendNotificationQueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesRequest.cs" />
     <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesResponse.cs" />

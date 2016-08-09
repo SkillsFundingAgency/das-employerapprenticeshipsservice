@@ -31,11 +31,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
 
+                var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
                     sql: "[dbo].[CreateAccount]",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
-
+                    commandType: CommandType.StoredProcedure, transaction: trans);
+                trans.Commit();
+                
                 return parameters.Get<long>("@accountId");
             });
         }
