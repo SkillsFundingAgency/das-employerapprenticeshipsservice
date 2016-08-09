@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+﻿using System.Collections.Generic;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
@@ -6,6 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public string PayeScheme { get; set; }
         public long AccountId { get; set; }
-        public LegalEntities LegalEntities { get; set; }
+        public List<LegalEntity> LegalEntities { get; set; }
     }
 }

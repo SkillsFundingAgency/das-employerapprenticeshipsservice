@@ -80,5 +80,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View("ChooseCompany",model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChooseCompany(AddNewPayeScheme model)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

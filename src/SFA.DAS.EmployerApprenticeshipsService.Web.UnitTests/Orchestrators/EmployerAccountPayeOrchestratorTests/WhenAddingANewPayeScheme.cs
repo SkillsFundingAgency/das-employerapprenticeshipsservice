@@ -8,6 +8,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
@@ -23,9 +24,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
+            
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
+
+            _mediator = new Mock<IMediator>();
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
+                .ReturnsAsync(new GetAccountLegalEntitiesResponse
+                {
+                    Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}
+                });
 
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object,_logger.Object, _cookieService.Object);
         }
