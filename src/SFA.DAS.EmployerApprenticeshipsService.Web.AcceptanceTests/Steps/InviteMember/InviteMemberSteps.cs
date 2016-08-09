@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -122,7 +123,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 CompanyName = "TestCompany",
                 CompanyNumber = "123456",
                 EmployerRef = "123/ABC123",
-                UserId = user.UserId
+                UserId = user.UserId,
+                CompanyDateOfIncorporation = new DateTime(2016,01,01),
+                CompanyRegisteredAddress = "Test Address"
             }).Wait();
         }
     }
