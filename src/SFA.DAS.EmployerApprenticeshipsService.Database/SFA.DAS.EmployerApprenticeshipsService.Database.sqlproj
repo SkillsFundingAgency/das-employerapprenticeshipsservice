@@ -86,6 +86,11 @@
     <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserId.sql" />
     <Build Include="Views\GetAccountPayeSchemes.sql" />
     <Build Include="Tables\LegalEntity.sql" />
+    <Build Include="StoredProcedures\AddPayeForExistingLegalEntity.sql" />
+    <Build Include="Tables\EmployerAgreementTemplate.sql" />
+    <Build Include="Tables\EmployerAgreement.sql" />
+    <Build Include="Tables\AccountEmployerAgreement.sql" />
+    <Build Include="Tables\EmployerAgreementStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
