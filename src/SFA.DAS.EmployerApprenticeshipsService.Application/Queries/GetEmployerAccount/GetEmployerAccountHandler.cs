@@ -24,12 +24,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 
         public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountQuery message)
         {
-            var membership = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            if (!message.IsSystemUser)
+            {
+                var membership = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
-            if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
-            if (membership.RoleId != (short)Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
+                if (membership == null)
+                    throw new InvalidRequestException(new Dictionary<string, string>
+                    {
+                        {"Membership", "Caller is not a member of this account"}
+                    });
+                if (membership.RoleId != (short) Role.Owner)
+                    throw new InvalidRequestException(new Dictionary<string, string>
+                    {
+                        {"Membership", "Caller is not an owner of this account"}
+                    });
+            }
 
             var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 

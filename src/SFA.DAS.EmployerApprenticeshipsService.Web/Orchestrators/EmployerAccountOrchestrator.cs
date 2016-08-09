@@ -57,9 +57,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             await _mediator.SendAsync(new CreateAccountCommand
             {
-                UserId = model.UserId,
+                ExternalUserId = model.UserId,
                 CompanyNumber = model.CompanyNumber,
                 CompanyName = model.CompanyName,
+                CompanyRegisteredAddress = model.CompanyRegisteredAddress,
+                CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                 EmployerRef = model.EmployerRef
             });
         }

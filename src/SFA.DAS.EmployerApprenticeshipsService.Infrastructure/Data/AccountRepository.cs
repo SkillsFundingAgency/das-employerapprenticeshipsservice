@@ -18,14 +18,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<long> CreateAccount(string userRef, string employerNumber, string employerName, string employerRef)
+        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef)
         {
             return await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userRef", new Guid(userRef), DbType.Guid);
+                parameters.Add("@userId", userId, DbType.Int64);
                 parameters.Add("@employerNumber", employerNumber, DbType.String);
                 parameters.Add("@employerName", employerName, DbType.String);
+                parameters.Add("@employerRegisteredAddress", employerRegisteredAddress, DbType.String);
+                parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
 

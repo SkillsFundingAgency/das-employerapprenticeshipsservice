@@ -7,4 +7,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="empRef" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="fe9b231c-0df1-4e4f-806d-c9ab75d85ebf" ChangeDateTime="08/09/2016 07:50:19">
+    <Property Name="ElementName" Value="[dbo].[LegalEntity].[PostCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegisrteredAddress" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8faef627-c0d3-4755-9d90-b39a881be570" ChangeDateTime="08/09/2016 07:50:51">
+    <Property Name="ElementName" Value="[dbo].[LegalEntity].[RegisrteredAddress]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[LegalEntity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RegisteredAddress" />
+  </Operation>
 </Operations>
