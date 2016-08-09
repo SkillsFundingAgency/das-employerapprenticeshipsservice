@@ -6,8 +6,8 @@
         <h1 class="heading-xlarge">Invitations</h1>
         @if (Model.Invitations.Count == 0)
         {
-            <p>You do not have any pending invitations. It is possible that you had an invitation that has expired or been deleted.</p>
-            <a class="button" href="@Url.Action("Index","Home")">Return to account home</a>
+            <p>You have no invitations. Invitations expire after 7 days.</p>
+            <a class="button" href="@Url.Action("Index","Home")">Return to your account</a>
         }
         else
         {
