@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetGateway(long accountId)
         {
-            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new {accountId = accountId}, Request.Url.Scheme)));
+            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new {accountId}, Request.Url.Scheme)));
         }
 
         [HttpGet]
@@ -76,8 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
         {
-            var availableLegalEntites = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, _owinWrapper.GetClaimValue(@"sub"));
-
+            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, _owinWrapper.GetClaimValue(@"sub"));
             return View("ChooseCompany",model);
         }
 

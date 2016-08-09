@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities
 {
@@ -21,8 +23,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountL
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
+            //TODO call account repository to make sure we are part of the account
 
-            return new GetAccountLegalEntitiesResponse();
+            //TODO call repository
+            return new GetAccountLegalEntitiesResponse {Entites = new LegalEntities {LegalEntityList = new List<LegalEntity> {new LegalEntity {Id=1,Name="My Test Company"} } } };
         }
     }
 }
