@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Index(int accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+
             var response = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
             return View(response);

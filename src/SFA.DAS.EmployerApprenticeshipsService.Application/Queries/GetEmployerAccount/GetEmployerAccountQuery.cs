@@ -6,6 +6,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
     {
         public long AccountId { get; set; }
         public string ExternalUserId { get; set; }
-        public bool IsSystemUser { get; set; }      
     }
 }
