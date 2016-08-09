@@ -28,8 +28,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 
             if (membership == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
-            if (membership.RoleId != (short)Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
 
             var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 
