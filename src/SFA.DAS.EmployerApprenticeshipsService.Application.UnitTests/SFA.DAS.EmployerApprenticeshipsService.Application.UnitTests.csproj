@@ -109,6 +109,7 @@
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
+    <Compile Include="Queries\QueryBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
