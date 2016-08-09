@@ -82,9 +82,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChooseCompany(AddNewPayeScheme model)
+        public ActionResult ChooseCompany(int selectedCompanyId, AddNewPayeScheme model)
         {
-            throw new NotImplementedException();
+            if (selectedCompanyId == -1)
+            {
+                return View("AddNewLegalEntity");
+            }
+            else
+            {
+                return View("ConfirmLink");
+            }
+            
         }
 
     }

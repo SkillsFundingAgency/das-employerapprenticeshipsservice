@@ -434,8 +434,10 @@
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-  <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ConfirmLink.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
