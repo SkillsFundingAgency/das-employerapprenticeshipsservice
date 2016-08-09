@@ -157,3 +157,12 @@ h1, h2, p {
 table.th-nopadding th {
     padding-top:0;
 }
+
+
+p.access-denied {
+    margin-bottom: 60px;
+}
+
+h1.access-denied {
+    margin-bottom: 5px; 
+}
