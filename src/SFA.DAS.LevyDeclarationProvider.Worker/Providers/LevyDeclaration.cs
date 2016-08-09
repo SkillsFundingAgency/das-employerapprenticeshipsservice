@@ -45,8 +45,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
                 {
                     AccountId = employerAccountId,
-                    ExternalUserId = Guid.Empty.ToString(),
-                    IsSystemUser = true
+                    ExternalUserId = Guid.Empty.ToString()
                 });
 
                 if (employerAccountResult?.Account == null)

@@ -2,6 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -11,6 +12,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.Messaging;
+using SFA.DAS.TimeProvider;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -53,6 +55,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             var user = GetExistingUserAccount();
             _externalUserId = user.UserId;
 
+            UpsertUser(user);
+
             CreateDasAccount(user);
         }
 
@@ -84,6 +88,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 //Check to make sure an email has not been sent
                 _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
+        }
+
+        private void UpsertUser(SignInUserModel user)
+        {
+            var mediator = _container.GetInstance<IMediator>();
+            mediator.SendAsync(new UpsertRegisteredUserCommand
+            {
+                UserRef = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                EmailAddress = user.Email
+            }).Wait();
         }
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
@@ -122,6 +138,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 CompanyName = "TestCompany",
                 CompanyNumber = "123456",
                 EmployerRef = "123/ABC123",
+                CompanyDateOfIncorporation = DateTimeProvider.Current.UtcNow.AddDays(-1000),
+                CompanyRegisteredAddress = "The Strand, W1 2QQ",
                 UserId = user.UserId
             }).Wait();
         }
