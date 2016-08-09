@@ -118,3 +118,48 @@ BEGIN
     SET [UserId] = 1, AccountId = 1
     WHERE RoleId = 1
 END 
+
+-- EmployerAgreement Status
+SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] ON 
+IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 1
+	AND Name = 'Pending'))
+BEGIN 
+	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	VALUES(1, 'Pending') 
+END 
+ELSE 
+BEGIN 
+	UPDATE [dbo].[EmployerAgreementStatus] 
+	SET Name = 'Pending'
+	WHERE Id = 1
+END 
+IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 2
+	AND Name = 'Signed'))
+BEGIN 
+	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	VALUES(2, 'Signed') 
+END 
+ELSE 
+BEGIN 
+	UPDATE [dbo].[EmployerAgreementStatus] 
+	SET Name = 'Signed'
+	WHERE Id = 2
+END 
+SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] OFF
+
+-- EmployerAgreement Template
+SET IDENTITY_INSERT  [dbo].[EmployerAgreementTemplate] ON 
+IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementTemplate] WHERE Id = 1
+	AND [Text] = 'I am a template'))
+BEGIN 
+	INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text]) 
+	VALUES(1, 'I am a template') 
+END 
+ELSE 
+BEGIN 
+	UPDATE [dbo].[EmployerAgreementTemplate] 
+	SET [Text] = 'I am a template'
+	WHERE Id = 1
+END 
+
+SET IDENTITY_INSERT  [dbo].[EmployerAgreementTemplate] OFF
