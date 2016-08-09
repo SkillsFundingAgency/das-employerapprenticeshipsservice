@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
@@ -20,14 +21,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             "~/Views/VisualTest/Index.cshtml"
         };
 
-        private AggregationLineItem aggregationLineItem;
-        private AggregationLine aggregationLine;
-        private InvitationView invitationView;
         private Dictionary<string, object> _viewToModel;
 
         public VisualTestController()
         {
-            aggregationLineItem = new AggregationLineItem()
+            var aggregationLineItem = new AggregationLineItem()
             {
                 Id = 2,
                 ActivityDate = new DateTime(2016, 05, 02),
@@ -37,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 LevyItemType = LevyItemType.TopUp
             };
 
-            invitationView = new InvitationView()
+            var invitationView = new InvitationView()
             {
                 AccountName = "My account",
                 Name = "Bojack Horseman",
@@ -50,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 RoleId = 213,
                 RoleName = "Chief Executor"
             };
-            aggregationLine = new AggregationLine
+            var aggregationLine = new AggregationLine
             {
                 Amount = 12m,
                 Id = "1",
@@ -90,6 +88,53 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 UserRef = "ab-123"
             };
 
+            var payeView = new PayeView()
+            {
+                AccountId = 1234567890,
+                AccountName = "My account",
+                EmpRef = "empref-39520"
+            };
+
+            var employerAccountPayeListViewModel = new EmployerAccountPayeListViewModel()
+            {
+                AccountId = 1234567890,
+                PayeSchemes = new List<PayeView>()
+                {
+                    payeView,
+                    payeView,
+                    payeView
+                }
+            };
+
+            var userInvitationsViewModel = new UserInvitationsViewModel()
+            {
+                Invitations = new List<InvitationView>
+                {
+                    invitationView,
+                    invitationView,
+                    invitationView
+                }
+            };
+
+            var orchestratorResponse = new OrchestratorResponse()
+            {
+                Status = System.Net.HttpStatusCode.Forbidden,
+                Exception = new Exception("Too many spiders")
+            };
+
+            var employerTeamMembersViewModel = new EmployerTeamMembersViewModel()
+            {
+                AccountId = 1234567890,
+                SuccessMessage = "It successfully applied the cream",
+                TeamMembers = new List<TeamMember>
+                {
+                    teamMember,
+                    teamMember,
+                    teamMember
+                }
+            };
+
+
             _viewToModel = new Dictionary<string, object>
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
@@ -127,13 +172,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
                         LineItem = aggregationLine
                     }},
-                {"~/Views/EmployerTeam/Index.cshtml", new EmployerTeamMembersViewModel()
-                    {
-                        AccountId = 1234567890,
-                        TeamMembers = new List<TeamMember>()
-                        {
-                            teamMember
-                        }
+                {"~/Views/EmployerTeam/Index.cshtml", new Account() {
+                    Id = 1234567890,
+                    Name = "My account",
+                    RoleId = 2
                     }},
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
@@ -145,6 +187,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 } },
                 {"~/Views/EmployerTeam/Review.cshtml", invitationViewModel },
                 {"~/Views/EmployerTeam/Remove.cshtml", invitationViewModel },
+                {"~/Views/EmployerTeam/View.cshtml",  employerTeamMembersViewModel},
                 {"~/Views/Home/FakeUserSignIn.cshtml", new SignInUserViewModel ()
                     {
                         AvailableUsers = new List<SignInUserModel>() {
@@ -167,7 +210,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         //    invitationView
                         //}
                     }},
-                {"~/Views/Invitation/Index.cshtml", invitationView}
+                {"~/Views/Invitation/Index.cshtml", invitationView },
+                {"~/Views/EmployerAccountPaye/Index.cshtml",  employerAccountPayeListViewModel},
+                {"~/Views/Invitation/All.cshtml", userInvitationsViewModel },
+                {"~/Views/Invitation/View.cshtml", invitationView },
+                {"~/Views/Shared/GenericError.cshtml", orchestratorResponse }
             };
         }
         

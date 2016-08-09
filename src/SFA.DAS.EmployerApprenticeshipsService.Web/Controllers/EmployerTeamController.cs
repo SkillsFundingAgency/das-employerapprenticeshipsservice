@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             var response = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
-            return View(response);
+            return View(response.Data);
       
         }
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
 
-               return View(response);
+               return View(response.Data);
         }
 
         [HttpGet]
