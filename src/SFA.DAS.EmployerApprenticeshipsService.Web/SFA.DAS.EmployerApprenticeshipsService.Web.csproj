@@ -437,7 +437,7 @@
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ConfirmLink.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Confirm.cshtml" />
     <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
   </ItemGroup>
   <ItemGroup>

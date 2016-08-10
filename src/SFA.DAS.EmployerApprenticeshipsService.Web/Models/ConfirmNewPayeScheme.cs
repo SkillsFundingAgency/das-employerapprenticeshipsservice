@@ -1,9 +1,13 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+﻿using System;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class ConfirmNewPayeScheme : AddNewPayeScheme
     {
+        public ConfirmNewPayeScheme()
+        {
+        }
+
         public ConfirmNewPayeScheme(AddNewPayeScheme model)
         {
             AccountId = model.AccountId;
@@ -11,7 +15,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
             RefreshToken = model.RefreshToken;
             PayeScheme = model.PayeScheme;
         }
-        public LegalEntity SelectedEntity { get; set; }
-        
+
+        public long LegalEntityId { get; set; }
+
+        public string LegalEntityCompanyNumber { get; set; }
+
+        public string LegalEntityName { get; set; }
+
+        public string LegalEntityRegisteredAddress { get; set; }
+
+        public DateTime LegalEntityDateOfIncorporation { get; set; }
+
     }
 }

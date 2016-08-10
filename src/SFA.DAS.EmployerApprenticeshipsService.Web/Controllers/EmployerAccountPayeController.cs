@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -72,7 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> ConfirmPayeScheme(long accountId)
         {
-            var response = await _employerAccountPayeOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
+            var response = await _employerAccountPayeOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme));
             var gatewayResponseModel = _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, response);
 
             return View(gatewayResponseModel);
@@ -98,12 +97,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             else
             {
+                var legalEntity = model.LegalEntities.SingleOrDefault(c => c.Id == selectedCompanyId);
                 var modelConfirm = new ConfirmNewPayeScheme(model)
                 {
-                    SelectedEntity = model.LegalEntities.SingleOrDefault(c => c.Id == selectedCompanyId)
+                    LegalEntityCompanyNumber = legalEntity.CompanyNumber,
+                    LegalEntityDateOfIncorporation = legalEntity.DateOfIncorporation,
+                    LegalEntityName = legalEntity.Name
+
                 };
 
-                return View("ConfirmLink", modelConfirm);
+                return View("Confirm", modelConfirm);
             }
 
         }
@@ -111,7 +114,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult AddNewLegalEntity(ConfirmNewPayeScheme model)
         {
-            model.SelectedEntity = new LegalEntity();
             return View(model);
         }
 
@@ -126,20 +128,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> SelectCompany(ConfirmNewPayeScheme model)
         {
 
-            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.SelectedEntity.CompanyNumber });
-
-            var modelConfirm = new ConfirmNewPayeScheme(model)
-            {
-                SelectedEntity = new LegalEntity
-                {
-                    CompanyNumber = result.CompanyNumber,
-                    DateOfIncorporation = result.DateOfIncorporation,
-                    Name = result.CompanyName,
-                    RegisteredAddress = result.RegisteredAddress
-                }
-            };
-
-            return View("ConfirmLink", modelConfirm);
+            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCompanyNumber });
+            
+            model.LegalEntityCompanyNumber = result.CompanyNumber;
+            model.LegalEntityDateOfIncorporation = result.DateOfIncorporation;
+            model.LegalEntityName = result.CompanyName;
+            model.LegalEntityRegisteredAddress = result.RegisteredAddress;
+            
+            return View("Confirm", model);
         }
 
         [HttpPost]
@@ -149,7 +145,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
 
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new { acccounId = model.AccountId });
+            return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
         }
 
     }
