@@ -6,7 +6,9 @@
 	@employerRef NVARCHAR(16),
 	@employerRegisteredAddress NVARCHAR(256),
 	@employerDateOfIncorporation DATETIME,
-	@accountId BIGINT OUTPUT
+	@accountId BIGINT OUTPUT,
+	@accessToken UNIQUEIDENTIFIER,
+	@refreshToken UNIQUEIDENTIFIER
 )
 AS
 BEGIN
@@ -35,6 +37,6 @@ BEGIN
 
 	INSERT INTO [dbo].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
-	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId) VALUES (@employerRef, @accountId, @legalEntityId);
+	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
 	INSERT INTO [dbo].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
 END

@@ -1,8 +1,10 @@
 ﻿CREATE PROCEDURE [dbo].[AddPayeToAccountForExistingLegalEntity]
 	@accountId BIGINT,
 	@legalEntityId BIGINT,
-	@employerRef NVARCHAR(16)
+	@employerRef NVARCHAR(16),
+	@accessToken UNIQUEIDENTIFIER,
+	@refreshToken UNIQUEIDENTIFIER
 AS
 BEGIN
-	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId) VALUES (@employerRef, @accountId, @legalEntityId);
+	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
 END
