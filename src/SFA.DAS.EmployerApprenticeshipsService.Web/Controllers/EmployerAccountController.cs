@@ -121,6 +121,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateAccount()
         {
+
+            if (Request.Params[@"confirm_create"] != @"1")
+            {
+                TempData["ErrorMessage"] = "You can start the create account proccess again";
+                return RedirectToAction("Index");
+            }
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel

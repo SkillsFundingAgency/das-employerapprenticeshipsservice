@@ -5,11 +5,11 @@ using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
@@ -41,11 +41,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
 
-                var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+                var employerAccountResult = await _mediator.SendAsync(new GetAccountRequest
                 {
-                    AccountId = employerAccountId,
-                    IsSystemUser = true
+                    AccountId = employerAccountId
                 });
+
                 if (employerAccountResult?.Account == null)
                 {
                     await message.CompleteAsync();

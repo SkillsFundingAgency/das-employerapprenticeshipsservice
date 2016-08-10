@@ -1,4 +1,16 @@
-﻿<div class="grid-row">
+﻿@if (TempData.Keys.Contains("ErrorMessage"))
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="panel panel-danger  ">
+                @TempData["ErrorMessage"]
+                or you can go back to the <a href="/">Service Home</a> page.
+            </div>
+        </div>
+    </div>
+}
+
+<div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Register your apprenticeship account</h1>
     </div>
