@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccountCreatedNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -15,9 +16,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
 
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly IMediator _mediator;
         private readonly CreateAccountCommandValidator _validator;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IMessagePublisher messagePublisher)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IMessagePublisher messagePublisher, IMediator mediator)
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
@@ -25,6 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
                 throw new ArgumentNullException(nameof(messagePublisher));
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
+            _mediator = mediator;
             _validator = new CreateAccountCommandValidator();
         }
 
@@ -38,6 +41,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
             var accountId = await _accountRepository.CreateAccount(message.UserId, message.CompanyNumber, message.CompanyName, message.EmployerRef);
 
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+            {
+                AccountId = accountId
+            });
+
+            await _mediator.SendAsync(new CreateEmployerAccountCreatedNotificationCommand
             {
                 AccountId = accountId
             });

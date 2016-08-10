@@ -366,7 +366,7 @@
     <Content Include="App_Data\Users\user_data.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService.Web_1.0.json">
+    <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ApplicationInsights.config" />
