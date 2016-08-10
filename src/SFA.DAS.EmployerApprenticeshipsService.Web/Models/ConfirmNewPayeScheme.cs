@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
         public long LegalEntityId { get; set; }
 
-        public string LegalEntityCompanyNumber { get; set; }
+        public string LegalEntityCode { get; set; }
 
         public string LegalEntityName { get; set; }
 

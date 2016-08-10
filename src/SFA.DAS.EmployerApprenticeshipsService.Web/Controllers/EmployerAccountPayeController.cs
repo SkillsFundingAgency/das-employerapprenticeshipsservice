@@ -144,7 +144,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Confirm(ConfirmNewPayeScheme model)
         {
 
+            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, _owinWrapper.GetClaimValue("sub"));
 
+            //TODO add the success message
 
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
         }

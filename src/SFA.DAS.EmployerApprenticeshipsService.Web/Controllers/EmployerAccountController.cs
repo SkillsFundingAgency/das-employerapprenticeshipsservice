@@ -125,7 +125,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 CompanyName = enteredData.CompanyName,
                 CompanyRegisteredAddress = enteredData.RegisteredAddress,
                 CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef
+                EmployerRef = enteredData.EmployerRef,
+                AccessToken = enteredData.AccessToken,
+                RefreshToken = enteredData.RefreshToken
             });
 
             TempData["successHeader"] = "Account Created";
