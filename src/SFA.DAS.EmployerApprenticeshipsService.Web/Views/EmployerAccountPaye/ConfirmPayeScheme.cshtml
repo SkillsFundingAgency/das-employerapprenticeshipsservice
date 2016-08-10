@@ -11,12 +11,14 @@
             <p>Do you want to associate @Model.PayeScheme with your account?</p>
 
             <input type="hidden" value="@Model.AccountId" name="AccountId" />
-            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
+            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme"/>
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
 
             <button type="submit" class="button">Accept</button>
         </form>
 
 
-        <a class="" href="@Url.Action("GetGateway", "EmployerAccountPaye", new {accountId = Model.AccountId})">Search Again</a>
+        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.AccountId})">Search Again</a>
     </div>
 </div>

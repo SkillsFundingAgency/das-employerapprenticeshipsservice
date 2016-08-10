@@ -302,6 +302,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
+    <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementListViewModel.cs" />
@@ -323,7 +324,7 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
-    <Compile Include="Orchestrators\HmrcOrchestratorBase.cs" />
+    <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
@@ -439,6 +440,8 @@
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Confirm.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
   </ItemGroup>

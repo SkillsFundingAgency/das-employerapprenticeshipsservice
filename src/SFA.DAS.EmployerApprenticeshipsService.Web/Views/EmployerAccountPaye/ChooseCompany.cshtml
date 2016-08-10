@@ -6,25 +6,34 @@
         <p>You can choose your existing company to be used for the legal agreement or search for a new one.</p>
 
 
-        <form>
+        <form method="post" action="@Url.Action("ChooseCompany")">
+            
             @Html.AntiForgeryToken()
 
-            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme"/>
+            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
             <input type="hidden" value="@Model.AccountId" name="AccountId"/>
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
 
-
-            @foreach (var entity in Model.LegalEntities.LegalEntityList)
+            @{ int index; }
+            @for (index = 0; index < Model.LegalEntities.Count; index++)
             {
+                var entity = Model.LegalEntities[index];
                 <div class="form-group">
-                    <label class="block-label" >
-                        <input type="radio" name="entity" value="@entity.Id" />
+                    <label class="block-label">
+                        <input type="radio" name="selectedCompanyId" value="@entity.Id"/>
+                        <input type="hidden" name="LegalEntities[@index].Id" value="@entity.Id"/>
+                        <input type="hidden" name="LegalEntities[@index].Name" value="@entity.Name"/>
                         <span class="heading-small">@entity.Name</span>
                     </label>
                 </div>
             }
+            
             <div class="form-group">
                 <label class="block-label">
-                    <input type="radio" name="entity" value="-1"/>
+                    <input type="radio" name="selectedCompanyId" value="-1"/>
+                    <input type="hidden" name="LegalEntities[@index].Id" value="-1" />
+                    <input type="hidden" name="LegalEntities[@index].Name" value="new-company" />
                     <span class="heading-small">Add new legal entity</span>
                 </label>
             </div>

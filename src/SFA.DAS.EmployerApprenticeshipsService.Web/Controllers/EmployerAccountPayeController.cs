@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -42,8 +43,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Details(long accountId, string empRef)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrWhiteSpace(_owinWrapper.GetClaimValue(@"sub")))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
         }
@@ -51,8 +54,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Add(long accountId)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+            if (string.IsNullOrWhiteSpace(_owinWrapper.GetClaimValue(@"sub")))
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View(accountId);
         }
@@ -60,14 +65,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> GetGateway(long accountId)
         {
-            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new {accountId}, Request.Url.Scheme)));
+            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
         }
 
         [HttpGet]
         public async Task<ActionResult> ConfirmPayeScheme(long accountId)
         {
-
-            var gatewayResponseModel = _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId);
+            var response = await _employerAccountPayeOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme));
+            var gatewayResponseModel = _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, response);
 
             return View(gatewayResponseModel);
         }
@@ -77,14 +82,70 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
         {
             model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, _owinWrapper.GetClaimValue(@"sub"));
-            return View("ChooseCompany",model);
+            return View("ChooseCompany", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChooseCompany(AddNewPayeScheme model)
+        public ActionResult ChooseCompany(int selectedCompanyId, AddNewPayeScheme model)
         {
-            throw new NotImplementedException();
+            if (selectedCompanyId == -1)
+            {
+                var modelConfirm = new ConfirmNewPayeScheme(model);
+
+                return RedirectToAction("AddNewLegalEntity", modelConfirm);
+            }
+            else
+            {
+                var legalEntity = model.LegalEntities.SingleOrDefault(c => c.Id == selectedCompanyId);
+                var modelConfirm = new ConfirmNewPayeScheme(model)
+                {
+                    LegalEntityCompanyNumber = legalEntity.CompanyNumber,
+                    LegalEntityDateOfIncorporation = legalEntity.DateOfIncorporation,
+                    LegalEntityName = legalEntity.Name
+
+                };
+
+                return View("Confirm", modelConfirm);
+            }
+
+        }
+
+        [HttpGet]
+        public ActionResult AddNewLegalEntity(ConfirmNewPayeScheme model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ChooseExistingLegalEntity(AddNewPayeScheme model)
+        {
+            return await ConfirmPayeScheme(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SelectCompany(ConfirmNewPayeScheme model)
+        {
+
+            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCompanyNumber });
+            
+            model.LegalEntityCompanyNumber = result.CompanyNumber;
+            model.LegalEntityDateOfIncorporation = result.DateOfIncorporation;
+            model.LegalEntityName = result.CompanyName;
+            model.LegalEntityRegisteredAddress = result.RegisteredAddress;
+            
+            return View("Confirm", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Confirm(ConfirmNewPayeScheme model)
+        {
+
+
+
+            return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
         }
 
     }
