@@ -48,6 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 return new OrchestratorResponse<Account>
                 {
+                    Status = HttpStatusCode.Unauthorized,
                     Exception = ex
                 };
             }

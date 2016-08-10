@@ -27,10 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
             var membership = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
             if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string>
-                {
-                    {"Membership", "Caller is not a member of this account"}
-                });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
 
             var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 
