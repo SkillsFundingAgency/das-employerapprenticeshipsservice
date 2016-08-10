@@ -34,6 +34,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             RequestHandler = new GetAccountLegalEntitiesQueryHandler(_membershipRepository.Object, _employerAgreementRepository.Object, RequestValidator.Object);
+            Query = new GetAccountLegalEntitiesRequest
+            {
+                Id = ExpectedAccountId,
+                UserId = _expectedUserId
+            };
 
             _membershipRepository.Setup(x => x.GetCaller(ExpectedAccountId, _expectedUserId)).ReturnsAsync(new MembershipView
             {
@@ -47,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(new GetAccountLegalEntitiesRequest {Id = ExpectedAccountId, UserId = _expectedUserId});
+            await RequestHandler.Handle(Query);
 
             //Assert
             _employerAgreementRepository.Verify(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId), Times.Once);
@@ -57,7 +62,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var response = await RequestHandler.Handle(new GetAccountLegalEntitiesRequest { Id = ExpectedAccountId, UserId = _expectedUserId });
+            var response = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.That(response.Entites.LegalEntityList.Count, Is.EqualTo(2));
