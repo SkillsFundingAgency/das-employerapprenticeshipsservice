@@ -203,10 +203,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                             }
                         },
                         Invitations = 3,
-                        SuccessMessage = new SuccessMessageViewModel() {
-                            CompanyName = "sushiCorp Ltd.",
-                            HeadingMessage = "You have reached peak tempura",
-                            CustomSuccessMessage = "Congratulation!!1",
+                        FlashMessage = new FlashMessageViewModel() {
+                            Headline = "sushiCorp Ltd.",
+                            Message = "You have reached peak tempura",
+                            SubMessage = "Congratulation!!1",
+                            Severity = FlashMessageSeverityLevel.Success
                         }
                     }},
                 {"~/Views/Invitation/Index.cshtml", invitationView },
