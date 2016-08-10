@@ -4,6 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 {
     public class GetEmployerAccountQuery : IAsyncRequest<GetEmployerAccountResponse>
     {
-        public long Id { get; set; }
+        public long AccountId { get; set; }
+        public string ExternalUserId { get; set; }
     }
 }

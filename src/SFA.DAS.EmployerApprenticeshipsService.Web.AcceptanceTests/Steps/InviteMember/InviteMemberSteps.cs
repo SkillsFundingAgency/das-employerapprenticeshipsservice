@@ -73,14 +73,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
 
             if (createdStatus.ToLower() == "created")
             {
-                Assert.AreEqual(2,teamMembers.TeamMembers.Count);
+                Assert.AreEqual(2,teamMembers.Data.TeamMembers.Count);
                 //Check to make sure an email has been sent
                 _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Once);
 
             }
             else
             {
-                Assert.AreEqual(1, teamMembers.TeamMembers.Count);
+                Assert.AreEqual(1, teamMembers.Data.TeamMembers.Count);
                 //Check to make sure an email has not been sent
                 _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
@@ -88,8 +88,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
         {
-            var orcehstrator = _container.GetInstance<InvitationOrchestrator>();
-            orcehstrator.CreateInvitation(new InviteTeamMemberViewModel
+            var orchestrator = _container.GetInstance<InvitationOrchestrator>();
+            orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
                 AccountId = _accountId,
                 Email = email,

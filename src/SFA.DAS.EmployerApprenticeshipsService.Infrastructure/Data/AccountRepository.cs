@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
@@ -33,6 +36,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 return parameters.Get<long>("@accountId");
             });
+        }
+
+        public async Task<List<PayeView>> GetPayeSchemes(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<PayeView>(
+                    sql: "SELECT * FROM [dbo].[GetAccountPayeSchemes] WHERE AccountId = @accountId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.ToList();
         }
     }
 }

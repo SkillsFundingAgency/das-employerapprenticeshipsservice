@@ -29,7 +29,16 @@
 {
     <div class="special">
         <h2 class="special">@view</h2>
-        @Html.Partial(view, viewToObject(view, null))
+        @try
+        {
+            @Html.Partial(view, viewToObject(view, null))
+        }
+        catch  (Exception e)
+        {
+            @e.Message
+
+            @e.StackTrace
+        }
     </div>
 }
 

@@ -12,6 +12,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public long AccountId { get; set; }
         public string AccountName { get; set; }
         public DateTime ExpiryDate { get; set; }
+
+        public string ExpiryDays()
+        {
+            var daycount = (ExpiryDate - DateTime.UtcNow).Days;
+
+            if (daycount > 1)
+            {
+                return $"{daycount} days";
+            }
+
+            if (daycount == 1)
+            {
+                return $"{daycount} day";
+            }
+
+            return "Today";
+            
+        } 
+
         public InvitationStatus Status { get; set; }
         public int InternalUserId { get; set; }
         public Guid ExternalUserId { get; set; }

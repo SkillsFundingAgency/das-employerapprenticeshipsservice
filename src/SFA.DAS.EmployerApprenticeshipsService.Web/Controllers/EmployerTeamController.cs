@@ -13,7 +13,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    public class EmployerTeamController : Controller
+    public class EmployerTeamController : BaseController
     {
 
         private readonly IOwinWrapper _owinWrapper;
@@ -29,11 +29,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Index(int accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var accountViewModel = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
+            var response = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
-            return View(accountViewModel);
+            return View(response.Data);
+      
         }
 
         [HttpGet]
@@ -42,9 +42,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var viewModel = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+            var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
 
-            return View(viewModel);
+               return View(response.Data);
         }
 
         [HttpGet]

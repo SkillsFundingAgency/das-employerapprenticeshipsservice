@@ -21,15 +21,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, string lineItemId)
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, string lineItemId, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery { Id = accountId });
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+            {
+                AccountId = accountId,
+                ExternalUserId = externalUserId
+            });
             if (employerAccountResult.Account == null)
             {
                 return new TransactionLineItemViewResult();
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery { AccountId = accountId });
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
+            {
+                AccountId = accountId
+            });
             var latestLineItem = data.Data.Data.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
@@ -58,9 +65,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<TransactionViewResult> GetAccountTransactions(int accountId)
+        public async Task<TransactionViewResult> GetAccountTransactions(int accountId, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery {Id = accountId});
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+            {
+                AccountId = accountId,
+                ExternalUserId = externalUserId
+            });
             if (employerAccountResult.Account == null)
             {
                 return new TransactionViewResult();

@@ -20,11 +20,11 @@
         <form method="POST" action="@Url.Action("CreateAccount")">
             <fieldset class="inline">
                 <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="radio-group" value="yes">
+                    <input id="radio1" type="radio" name="confirm_create" checked="checked" value="1">
                     Yes
                 </label>
                 <label class="block-label" for="radio2">
-                    <input id="radio2" type="radio" name="radio-group" value="no">
+                    <input id="radio2" type="radio" name="confirm_create"  value="0">
                     No
                 </label>
             </fieldset>

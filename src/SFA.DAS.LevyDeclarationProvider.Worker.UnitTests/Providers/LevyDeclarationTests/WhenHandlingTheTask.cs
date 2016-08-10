@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
+using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
 
@@ -34,7 +35,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             _messagePublisher = new Mock<IMessagePublisher>();
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { Id = ExpecetedEmpref})).ReturnsAsync(new GetEmployerAccountResponse());
+            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpecetedEmpref})).ReturnsAsync(new GetEmployerAccountResponse());
 
             _logger = new Mock<ILogger>();
 
@@ -58,7 +59,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             await _levyDeclaration.Handle();
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetEmployerAccountQuery>(c=>c.Id.Equals(ExpecetedEmpref))), Times.Once());
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountRequest>(c=>c.AccountId.Equals(ExpecetedEmpref))), Times.Once());
 
         }
 

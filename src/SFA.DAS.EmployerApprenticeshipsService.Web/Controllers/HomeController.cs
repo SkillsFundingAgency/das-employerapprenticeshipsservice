@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -24,15 +23,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts();
 
-            accounts.SuccessMessage = (string)TempData["successMessage"];
+            accounts.SuccessMessage  = GetHomePageSucessMessage();
+            accounts.ErrorMessage = (string)TempData["errorMessage"];
 
             return View(accounts);
         }
-        
+
         [HttpPost]
         public ActionResult SignInUser(string selectedUserId, SignInUserViewModel model)
         {
-            
+
             var selected = model.AvailableUsers.FirstOrDefault(x => selectedUserId == x.UserId);
 
             if (selected != null)
@@ -50,23 +50,44 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(users);
         }
+        
+        public ActionResult SignOut()
+        {
+            return _owinWrapper.SignOutUser();
 
-
+        }
 
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";
-            _owinWrapper.SignInUser(id,displayName,$"{firstName.Trim()}.{lastName.Trim()}@test.local");
+            _owinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
 
             _owinWrapper.IssueLoginCookie(id, displayName);
 
             _owinWrapper.RemovePartialLoginCookie();
         }
 
-        public ActionResult SignOut()
+        private SuccessMessageViewModel GetHomePageSucessMessage()
         {
-            return _owinWrapper.SignOutUser();
-            
+            if (TempData.ContainsKey("successHeader") || TempData.ContainsKey("successMessage"))
+            {
+                var successMessageViewModel = new SuccessMessageViewModel();
+                object message;
+                if (TempData.TryGetValue("successHeader", out message))
+                {
+                    successMessageViewModel.HeadingMessage = message.ToString();
+                }
+                if (TempData.TryGetValue("successCompany", out message))
+                {
+                    successMessageViewModel.CompanyName = message.ToString();
+                }
+                if (TempData.TryGetValue("successMessage", out message))
+                {
+                    successMessageViewModel.CustomSuccessMessage = message.ToString();
+                }
+                return successMessageViewModel;
+            }
+            return null;
         }
     }
 }

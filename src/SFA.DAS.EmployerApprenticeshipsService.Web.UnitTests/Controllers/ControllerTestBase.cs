@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MediatR;
 using Moq;
+using NLog;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers
 {
@@ -14,9 +16,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers
         protected Mock<ControllerContext> _controllerContext;
         private Mock<HttpResponseBase> _httpResponse;
         protected RouteCollection _routes;
+        protected Mock<ILogger> Logger;
+        protected Mock<IMediator> Mediator;
 
         public virtual void Arrange(string redirectUrl = "http://localhost/testpost")
         {
+
+            Logger = new Mock<ILogger>();
+            Mediator = new Mock<IMediator>();
+
             _routes = new RouteCollection();
             RouteConfig.RegisterRoutes(_routes);
 
