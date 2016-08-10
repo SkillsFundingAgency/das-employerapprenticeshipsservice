@@ -32,5 +32,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.ToList();
         }
+
+        public async Task CreateEmployerAgreementTemplate(string text)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@text", text, DbType.String);
+
+                var trans = c.BeginTransaction();
+                var result = await c.ExecuteAsync(
+                    sql: "[dbo].[]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure, transaction: trans);
+                trans.Commit();
+                return result;
+            });
+        }
     }
 }

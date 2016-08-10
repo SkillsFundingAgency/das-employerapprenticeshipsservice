@@ -87,6 +87,9 @@
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
+    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommand.cs" />
+    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandHandler.cs" />
+    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandValidator.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
