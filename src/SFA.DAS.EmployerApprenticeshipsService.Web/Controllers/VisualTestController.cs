@@ -202,13 +202,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 new Account() {Id = 123, Name= "My account" }
                             }
                         },
-                        Invitations = 3,
+                        Invitations = 3
                         FlashMessage = new FlashMessageViewModel() {
                             Headline = "sushiCorp Ltd.",
                             Message = "You have reached peak tempura",
                             SubMessage = "Congratulation!!1",
                             Severity = FlashMessageSeverityLevel.Success
-                        }
+                        //}
                     }},
                 {"~/Views/Invitation/Index.cshtml", invitationView },
                 {"~/Views/EmployerAccountPaye/Index.cshtml",  employerAccountPayeListViewModel},

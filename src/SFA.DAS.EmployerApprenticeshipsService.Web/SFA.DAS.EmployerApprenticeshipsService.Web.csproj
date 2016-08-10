@@ -427,7 +427,7 @@
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
-    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
+    <Content Include="Views\Home\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
