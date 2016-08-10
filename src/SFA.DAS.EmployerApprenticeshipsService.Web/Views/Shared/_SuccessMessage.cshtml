@@ -4,10 +4,10 @@
 
 <div class="grid-row">
     <div class="column-full">
-        <div class="panel panel-info  ">
+        <div class="govuk-box-highlight">
             @if (!string.IsNullOrWhiteSpace(Model.HeadingMessage))
             {
-                <h2>@Model.HeadingMessage</h2>
+                <h1 class="bold-large">@Model.HeadingMessage</h1>
             }
             @if (!string.IsNullOrEmpty(Model.CompanyName))
             {
