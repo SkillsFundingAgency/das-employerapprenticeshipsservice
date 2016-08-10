@@ -202,13 +202,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 new Account() {Id = 123, Name= "My account" }
                             }
                         },
-                        Invitations = 3
-                        //Invitations = new List<InvitationView>()
-                        //{
-                        //    invitationView,
-                        //    invitationView,
-                        //    invitationView
-                        //}
+                        Invitations = 3,
+                        SuccessMessage = new SuccessMessageViewModel() {
+                            CompanyName = "sushiCorp Ltd.",
+                            HeadingMessage = "You have reached peak tempura",
+                            CustomSuccessMessage = "Congratulation!!1",
+                        }
                     }},
                 {"~/Views/Invitation/Index.cshtml", invitationView },
                 {"~/Views/EmployerAccountPaye/Index.cshtml",  employerAccountPayeListViewModel},
