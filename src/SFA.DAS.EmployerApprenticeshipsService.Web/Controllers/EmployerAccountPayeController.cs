@@ -100,10 +100,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 var legalEntity = model.LegalEntities.SingleOrDefault(c => c.Id == selectedCompanyId);
                 var modelConfirm = new ConfirmNewPayeScheme(model)
                 {
-                    LegalEntityCompanyNumber = legalEntity.CompanyNumber,
+                    LegalEntityCode = legalEntity.Code,
                     LegalEntityDateOfIncorporation = legalEntity.DateOfIncorporation,
-                    LegalEntityName = legalEntity.Name
-
+                    LegalEntityName = legalEntity.Name,
+                    LegalEntityRegisteredAddress = legalEntity.RegisteredAddress,
+                    LegalEntityId = legalEntity.Id
                 };
 
                 return View("Confirm", modelConfirm);
@@ -128,9 +129,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> SelectCompany(ConfirmNewPayeScheme model)
         {
 
-            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCompanyNumber });
+            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
             
-            model.LegalEntityCompanyNumber = result.CompanyNumber;
+            model.LegalEntityCode = result.CompanyNumber;
             model.LegalEntityDateOfIncorporation = result.DateOfIncorporation;
             model.LegalEntityName = result.CompanyName;
             model.LegalEntityRegisteredAddress = result.RegisteredAddress;
