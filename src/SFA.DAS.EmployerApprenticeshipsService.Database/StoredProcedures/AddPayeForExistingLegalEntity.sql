@@ -1,5 +1,4 @@
 ﻿CREATE PROCEDURE [dbo].[AddPayeToAccountForExistingLegalEntity]
-	@userId BIGINT,
 	@accountId BIGINT,
 	@legalEntityId BIGINT,
 	@employerRef NVARCHAR(16)

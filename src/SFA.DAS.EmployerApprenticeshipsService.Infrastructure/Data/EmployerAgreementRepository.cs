@@ -10,7 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
-    public class EmployerAgreementRepository : BaseRepository
+    public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRepository
     {
         public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) 
             : base(configuration, logger)
@@ -32,6 +32,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.ToList();
         }
-
     }
 }

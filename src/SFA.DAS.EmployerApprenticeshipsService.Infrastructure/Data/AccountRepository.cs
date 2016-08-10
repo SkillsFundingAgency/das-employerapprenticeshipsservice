@@ -42,6 +42,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
+        public async Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+                parameters.Add("@employerRef", employerRef, DbType.String);
+
+                var trans = c.BeginTransaction();
+                var result = await c.ExecuteAsync(
+                    sql: "[dbo].[AddPayeToAccountForExistingLegalEntity]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure, transaction: trans);
+                trans.Commit();
+                return result;
+            });
+        }
+
         public async Task<List<PayeView>> GetPayeSchemes(long accountId)
         {
             var result = await WithConnection(async c =>
