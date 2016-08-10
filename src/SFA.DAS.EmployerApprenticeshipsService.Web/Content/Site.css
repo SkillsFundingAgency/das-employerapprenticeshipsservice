@@ -28,6 +28,21 @@ table {
     max-width: 640px;
 }
 
+.button-start {
+    background-image: url("/assets/images/icon-pointer-2x.png");
+}
+
+.inline .block-label {
+    margin-right: 0;
+}
+
+@media (min-width: 641px) {
+    .inline .block-label {
+        margin-right: 10px;
+    }
+}
+
+
 /* RESPONSIVE TABLES */
 .responsive-table {
     display:table;
