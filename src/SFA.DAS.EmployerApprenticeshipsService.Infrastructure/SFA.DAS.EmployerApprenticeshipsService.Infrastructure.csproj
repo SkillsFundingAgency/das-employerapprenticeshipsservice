@@ -85,6 +85,7 @@
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\DasLevyRepository.cs" />
+    <Compile Include="Data\EmployerAgreementRepository.cs" />
     <Compile Include="Data\EmployerSchemesRepository.cs" />
     <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
