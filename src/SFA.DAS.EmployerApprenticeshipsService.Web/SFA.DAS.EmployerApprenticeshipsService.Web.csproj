@@ -431,7 +431,7 @@
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\Home\_SuccessMessage.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
