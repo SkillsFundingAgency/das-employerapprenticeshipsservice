@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
@@ -15,13 +16,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IAccountRepository> _repository;
         private CreateAccountCommandHandler _handler;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Setup()
         {
             _repository = new Mock<IAccountRepository>();
             _messagePublisher = new Mock<IMessagePublisher>();
-            _handler = new CreateAccountCommandHandler(_repository.Object, _messagePublisher.Object);
+            _mediator = new Mock<IMediator>();
+            _handler = new CreateAccountCommandHandler(_repository.Object, _messagePublisher.Object, _mediator.Object);
         }
 
         [Test]
