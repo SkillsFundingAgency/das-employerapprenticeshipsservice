@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -54,6 +55,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
 
             return response.Entites.LegalEntityList;
+        }
+
+
+        public async Task AddPayeSchemeToAccount(ConfirmNewPayeScheme model, string userId)
+        {
+            await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
+            {
+                AccountId = model.AccountId,
+                ExternalUserId = userId,
+                EmpRef = model.PayeScheme,
+                LegalEntityId = model.LegalEntityId,
+                RefreshToken = model.RefreshToken,
+                AccessToken = model.AccessToken
+            });
         }
     }
 }
