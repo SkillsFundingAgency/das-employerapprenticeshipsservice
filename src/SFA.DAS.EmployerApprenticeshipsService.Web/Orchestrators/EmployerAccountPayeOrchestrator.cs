@@ -7,6 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegal
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -29,15 +30,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.PayeSchemes;
         }
 
-        public AddNewPayeScheme GetPayeConfirmModel(long accountId)
+        public AddNewPayeScheme GetPayeConfirmModel(long accountId, HmrcTokenResponse response)
         {
             //TODO to be replaced with the call to the HmrcGetEmpref Discovery call
             var empRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+            
 
             return new AddNewPayeScheme
             {
                 AccountId = accountId,
-                PayeScheme = empRef
+                PayeScheme = empRef,
+                AccessToken = response.AccessToken,
+                RefreshToken = response.RefreshToken
             };
         }
 

@@ -1,9 +1,41 @@
-﻿
-
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.ConfirmNewPayeScheme
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Link this scheme to this entity</h1>
+        <p>Confirm that you wish to link this legal entity, to this PAYE scheme ref to your account</p>
+        <form method="post" action="@Url.Action("Confirm")">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="form-label">PAYE Scheme <b>@Model.PayeScheme</b></label>
+                <input type="hidden" name="PayeScheme" value="@Model.PayeScheme" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">@Model.SelectedEntity.Name</label>
+                <input type="hidden" name="SelectedEntity.Name" value="@Model.SelectedEntity.Name" />
+                <input type="hidden" name="SelectedEntity.CompanyNumber" value="@Model.SelectedEntity.CompanyNumber" />
+                <input type="hidden" name="SelectedEntity.DateOfIncorporation" value="@Model.SelectedEntity.DateOfIncorporation" />
+                <input type="hidden" name="SelectedEntity.Id" value="@Model.SelectedEntity.Id" />
+                <input type="hidden" name="SelectedEntity.RegisteredAddress" value="@Model.SelectedEntity.RegisteredAddress" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">@Model.SelectedEntity.RegisteredAddress</label>
+            </div>
+            <input type="hidden" name="AccountId" value="@Model.AccountId"/>
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
+            <button type="submit" class="button">Create</button>
+        </form>
+
         
+
+
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <a href="@Url.Action("AddNewLegalEntity", Model)">Search Again?</a>
+
+        <a href="@Url.Action("ChooseExistingLegalEntity", Model)">Choose a different legal entity</a>
     </div>
 </div>

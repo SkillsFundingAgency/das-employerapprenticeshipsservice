@@ -11,7 +11,9 @@
             @Html.AntiForgeryToken()
 
             <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
-            <input type="hidden" value="@Model.AccountId" name="AccountId" />
+            <input type="hidden" value="@Model.AccountId" name="AccountId"/>
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
 
             @{ int index; }
             @for (index = 0; index < Model.LegalEntities.Count; index++)
