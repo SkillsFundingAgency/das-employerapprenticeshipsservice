@@ -5,7 +5,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT ea.Id,
-		ea.StatusId,
+		ea.StatusId AS [Status],
 		ea.LegalEntityId, 
 		le.Name AS LegalEntityName,
 		ea.TemplateId

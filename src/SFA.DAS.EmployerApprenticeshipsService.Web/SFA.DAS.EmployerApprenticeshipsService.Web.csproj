@@ -288,6 +288,7 @@
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
+    <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
+    <Compile Include="Models\EmployerAgreementListViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -319,6 +321,7 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\HmrcOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -434,8 +437,10 @@
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-  <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
+    <Content Include="Views\EmployerAgreement\Index.cshtml" />
+    <Content Include="Views\EmployerAgreement\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
