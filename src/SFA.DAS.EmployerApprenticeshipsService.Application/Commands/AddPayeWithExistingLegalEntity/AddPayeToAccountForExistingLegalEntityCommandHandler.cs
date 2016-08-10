@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             if (!isLinked)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "LegalEntity", "LegalEntity is not linked to this Account" } });
 
-            await _accountRepository.AddPayeToAccountForExistingLegalEntity(message.AccountId, message.LegalEntityId, message.EmpRef);
+            await _accountRepository.AddPayeToAccountForExistingLegalEntity(message.AccountId, message.LegalEntityId, message.EmpRef, message.AccessToken, message.RefreshToken);
         }
     }
 }

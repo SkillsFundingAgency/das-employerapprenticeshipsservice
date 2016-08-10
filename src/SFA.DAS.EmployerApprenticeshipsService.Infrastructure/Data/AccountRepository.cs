@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
 
-        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef)
+        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken)
         {
             return await WithConnection(async c =>
             {
@@ -30,6 +30,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
+                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.Guid);
+                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.Guid);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
@@ -42,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef)
+        public async Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef, string accessToken, string refreshToken)
         {
             await WithConnection(async c =>
             {
@@ -50,6 +52,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@employerRef", employerRef, DbType.String);
+                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.Guid);
+                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.Guid);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(

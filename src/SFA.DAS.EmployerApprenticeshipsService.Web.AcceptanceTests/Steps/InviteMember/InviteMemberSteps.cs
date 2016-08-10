@@ -141,7 +141,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 EmployerRef = "123/ABC123",
                 UserId = user.UserId,
                 CompanyDateOfIncorporation = new DateTime(2016,01,01),
-                CompanyRegisteredAddress = "Test Address"
+                CompanyRegisteredAddress = "Test Address",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
             }).Wait();
         }
     }

@@ -9,16 +9,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             var validationResult = new ValidationResult();
 
             if (item.AccountId == 0)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+                validationResult.AddError(nameof(item.AccountId), "No AccountId supplied");
 
             if (item.LegalEntityId == 0)
-                validationResult.AddError("LegalEntityId", "No LegalEntityId supplied");
+                validationResult.AddError(nameof(item.LegalEntityId), "No LegalEntityId supplied");
 
             if (string.IsNullOrWhiteSpace(item.EmpRef))
-                validationResult.AddError("EmpRef", "No EmpRef supplied");
+                validationResult.AddError(nameof(item.EmpRef), "No EmpRef supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
-                validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "No ExternalUserId supplied");
+
+            if (string.IsNullOrWhiteSpace(item.AccessToken))
+            {
+                validationResult.AddError(nameof(item.AccessToken),"Access token has not been supplied");
+            }
+
+            if (string.IsNullOrWhiteSpace(item.RefreshToken))
+            {
+                validationResult.AddError(nameof(item.RefreshToken), "Refresh token has not been supplied");
+            }
 
             return validationResult;
         }

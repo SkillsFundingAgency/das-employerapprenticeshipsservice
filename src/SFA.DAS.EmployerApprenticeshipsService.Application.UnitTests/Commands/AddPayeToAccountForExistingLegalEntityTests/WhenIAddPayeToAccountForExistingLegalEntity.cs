@@ -33,7 +33,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 AccountId = 1,
                 LegalEntityId = 2,
                 EmpRef = "123/ABC",
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid().ToString(),
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
@@ -49,12 +51,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var requestException = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
-            Assert.That(requestException.ErrorMessages.Count, Is.EqualTo(4));
+            Assert.That(requestException.ErrorMessages.Count, Is.EqualTo(6));
 
             Assert.True(requestException.ErrorMessages.ContainsKey("AccountId"));
             Assert.True(requestException.ErrorMessages.ContainsKey("LegalEntityId"));
             Assert.True(requestException.ErrorMessages.ContainsKey("EmpRef"));
             Assert.True(requestException.ErrorMessages.ContainsKey("ExternalUserId"));
+            Assert.True(requestException.ErrorMessages.ContainsKey("AccessToken"));
+            Assert.True(requestException.ErrorMessages.ContainsKey("RefreshToken"));
         }
 
         [Test]
@@ -102,7 +106,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             await _handler.Handle(_command);
 
-            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(_command.AccountId, _command.LegalEntityId, _command.EmpRef), Times.Once);
+            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(_command.AccountId, _command.LegalEntityId, _command.EmpRef, _command.AccessToken, _command.RefreshToken), Times.Once);
         }
     }
 }
