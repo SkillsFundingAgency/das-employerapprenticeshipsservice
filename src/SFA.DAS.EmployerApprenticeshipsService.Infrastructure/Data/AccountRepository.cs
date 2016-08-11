@@ -31,8 +31,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
-                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.String);
-                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.String);
+                parameters.Add("@accessToken", accessToken, DbType.String);
+                parameters.Add("@refreshToken", refreshToken, DbType.String);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
