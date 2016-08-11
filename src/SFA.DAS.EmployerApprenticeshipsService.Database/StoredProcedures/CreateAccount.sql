@@ -7,8 +7,8 @@
 	@employerRegisteredAddress NVARCHAR(256),
 	@employerDateOfIncorporation DATETIME,
 	@accountId BIGINT OUTPUT,
-	@accessToken UNIQUEIDENTIFIER,
-	@refreshToken UNIQUEIDENTIFIER
+	@accessToken VARCHAR(50),
+	@refreshToken VARCHAR(50)
 )
 AS
 BEGIN

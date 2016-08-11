@@ -30,8 +30,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
-                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.Guid);
-                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.Guid);
+                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.String);
+                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.String);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
@@ -52,8 +52,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@employerRef", employerRef, DbType.String);
-                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.Guid);
-                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.Guid);
+                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.String);
+                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.String);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
@@ -64,6 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 return result;
             });
         }
+        
 
         public async Task<List<PayeView>> GetPayeSchemes(long accountId)
         {

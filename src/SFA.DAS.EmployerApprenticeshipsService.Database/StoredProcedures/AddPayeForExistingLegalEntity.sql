@@ -2,8 +2,8 @@
 	@accountId BIGINT,
 	@legalEntityId BIGINT,
 	@employerRef NVARCHAR(16),
-	@accessToken UNIQUEIDENTIFIER,
-	@refreshToken UNIQUEIDENTIFIER
+	@accessToken VARCHAR(50),
+	@refreshToken VARCHAR(50)
 AS
 BEGIN
 	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
