@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AddPayeToAccountForExistingLegalEntityTests
 {
@@ -18,15 +20,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private AddPayeToAccountForExistingLegalEntityCommandHandler _handler;
         private AddPayeToAccountForExistingLegalEntityCommand _command;
+        private Mock<IMessagePublisher> _messagePublisher;
 
         [SetUp]
         public void Setup()
         {
-            _accountRepository = new Mock<IAccountRepository>(); 
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-
-            _handler = new AddPayeToAccountForExistingLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _employerAgreementRepository.Object);
 
             _command = new AddPayeToAccountForExistingLegalEntityCommand
             {
@@ -37,6 +35,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
             };
+
+            _messagePublisher = new Mock<IMessagePublisher>();
+
+            _accountRepository = new Mock<IAccountRepository>(); 
+            _membershipRepository = new Mock<IMembershipRepository>();
+            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(_command.AccountId))
+                .ReturnsAsync(new List<LegalEntity> { new LegalEntity { Id = 2 } });
+
+            _handler = new AddPayeToAccountForExistingLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _employerAgreementRepository.Object, _messagePublisher.Object);
+
+            
 
             _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
@@ -101,12 +111,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ThenISuccessfullyAddPaye()
         {
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(_command.AccountId))
-                .ReturnsAsync(new List<LegalEntity> { new LegalEntity {Id = 2} });
+            //Act
+            await _handler.Handle(_command);
+            
+            //Assert
+            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(_command.AccountId, _command.LegalEntityId, _command.EmpRef, _command.AccessToken, _command.RefreshToken), Times.Once);
+        }
 
+        [Test]
+        public async Task ThenAMessageIsQueuedToRefreshTheLevyData()
+        {
+            //Act
             await _handler.Handle(_command);
 
-            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(_command.AccountId, _command.LegalEntityId, _command.EmpRef, _command.AccessToken, _command.RefreshToken), Times.Once);
+            //Assert
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId.Equals(_command.AccountId))));
         }
     }
 }
