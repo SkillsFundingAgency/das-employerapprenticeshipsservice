@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation
 {
@@ -12,6 +13,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvi
                 validationResult.AddError("Id", "No Id supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(AcceptInvitationCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

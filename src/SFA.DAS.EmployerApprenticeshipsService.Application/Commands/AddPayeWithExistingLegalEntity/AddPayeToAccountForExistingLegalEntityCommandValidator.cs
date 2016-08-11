@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity
 {
@@ -31,6 +32,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             }
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(AddPayeToAccountForExistingLegalEntityCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

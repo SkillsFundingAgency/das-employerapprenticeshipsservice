@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount
 {
@@ -21,6 +22,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
                 validationResult.AddError("EmployerRef", "No EmployerRef supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(CreateAccountCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

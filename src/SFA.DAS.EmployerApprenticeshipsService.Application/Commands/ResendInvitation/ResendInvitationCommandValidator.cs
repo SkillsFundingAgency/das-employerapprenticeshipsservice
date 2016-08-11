@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation
 {
@@ -18,6 +19,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(ResendInvitationCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
