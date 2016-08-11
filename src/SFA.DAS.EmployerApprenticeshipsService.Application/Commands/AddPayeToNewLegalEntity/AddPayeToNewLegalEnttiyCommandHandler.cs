@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
 
         protected override async Task HandleCore(AddPayeToNewLegalEntityCommand message)
         {
-            var result = _validator.Validate(message);
+            var result = await _validator.ValidateAsync(message);
 
             if (!result.IsValid())
             {

@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _accountRepository = new Mock<IAccountRepository>();
             
             _validator = new Mock<IValidator<AddPayeToNewLegalEntityCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<AddPayeToNewLegalEntityCommand>())).Returns(new ValidationResult());
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToNewLegalEntityCommand>())).ReturnsAsync(new ValidationResult());
 
             _addPayeToNewLegalEnttiyCommandHandler = new AddPayeToNewLegalEnttiyCommandHandler(_validator.Object, _accountRepository.Object);
         }
@@ -33,13 +33,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void ThenTheValidatorIsCalled()
         {
             //Arrange
-            _validator.Setup(x => x.Validate(It.IsAny<AddPayeToNewLegalEntityCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> { { "",""} }});
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToNewLegalEntityCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> { { "",""} }});
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _addPayeToNewLegalEnttiyCommandHandler.Handle(new AddPayeToNewLegalEntityCommand()));
 
             //Assert
-            _validator.Verify(x => x.Validate(It.IsAny<AddPayeToNewLegalEntityCommand>()), Times.Once);
+            _validator.Verify(x => x.ValidateAsync(It.IsAny<AddPayeToNewLegalEntityCommand>()), Times.Once);
             _accountRepository.Verify(x => x.AddPayeToAccountForNewLegalEntity(It.IsAny<Paye>(), It.IsAny<LegalEntity>()), Times.Never);
         }
 
