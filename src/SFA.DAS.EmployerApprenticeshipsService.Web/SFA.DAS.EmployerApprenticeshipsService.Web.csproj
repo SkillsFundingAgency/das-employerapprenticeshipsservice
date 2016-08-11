@@ -446,6 +446,7 @@
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
