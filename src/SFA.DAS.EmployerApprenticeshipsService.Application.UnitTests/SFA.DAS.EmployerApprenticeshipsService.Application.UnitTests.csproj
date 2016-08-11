@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Commands\AddPayeToAccountForExistingLegalEntityTests\WhenIAddPayeToAccountForExistingLegalEntity.cs" />
     <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIAddPayeToAnAccountWithANewLegalEntity.cs" />
+    <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
