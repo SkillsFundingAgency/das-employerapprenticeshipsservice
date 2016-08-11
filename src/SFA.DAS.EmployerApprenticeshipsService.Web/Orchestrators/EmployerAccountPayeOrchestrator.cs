@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
@@ -62,15 +63,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task AddPayeSchemeToAccount(ConfirmNewPayeScheme model, string userId)
         {
-            await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
+            if (model.LegalEntityId == 0)
             {
-                AccountId = model.AccountId,
-                ExternalUserId = userId,
-                EmpRef = model.PayeScheme,
-                LegalEntityId = model.LegalEntityId,
-                RefreshToken = model.RefreshToken,
-                AccessToken = model.AccessToken
-            });
+                await Mediator.SendAsync(new AddPayeToNewLegalEntityCommand
+                {
+                    AccountId = model.AccountId,
+                    AccessToken = model.AccessToken,
+                    RefreshToken = model.RefreshToken,
+                    LegalEntityCode = model.LegalEntityCode,
+                    Empref = model.PayeScheme,
+                    ExternalUserId = userId,
+                    LegalEntityDate = model.LegalEntityDateOfIncorporation,
+                    LegalEntityAddress = model.LegalEntityRegisteredAddress,
+                    LegalEntityName = model.LegalEntityName
+                });
+            }
+            else
+            {
+                await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
+                {
+                    AccountId = model.AccountId,
+                    ExternalUserId = userId,
+                    EmpRef = model.PayeScheme,
+                    LegalEntityId = model.LegalEntityId,
+                    RefreshToken = model.RefreshToken,
+                    AccessToken = model.AccessToken
+                });
+            }
+            
         }
     }
 }

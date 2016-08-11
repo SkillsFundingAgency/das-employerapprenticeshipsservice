@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
@@ -15,12 +14,13 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
-    public class WhenAddingANewPayeScheme
+    public class WhenAddingAPayeScheme
     {
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
+        private ConfirmNewPayeScheme _model;
         private const long ExpectedAccountId = 73636363;
         private const string ExpectedEmpref = "123/DFDS";
         private const string ExpectedUserId = "someid";
@@ -28,7 +28,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         [SetUp]
         public void Arrange()
         {
-            
+            _model = new ConfirmNewPayeScheme
+            {
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
+                AccountId = ExpectedAccountId,
+                PayeScheme = ExpectedEmpref,
+                LegalEntityId = 1,
+                LegalEntityCode = "mycode",
+                LegalEntityName = "name",
+                LegalEntityDateOfIncorporation = new DateTime(2016,01,01),
+                LegalEntityRegisteredAddress = "Test Address"
+            };
+
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
 
@@ -58,21 +70,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         [Test]
         public async Task ThenTheAddPayeToAccountForExistingLegalEntityCommandIsCalledWhenTheLegalEntityIdIsNotZero()
         {
-            //Arrange
-            var model = new ConfirmNewPayeScheme
-            {
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString(),
-                AccountId = ExpectedAccountId,
-                PayeScheme = ExpectedEmpref,
-                LegalEntityId = 1
-            };
-
             //Act
-            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, ExpectedUserId);
+            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountForExistingLegalEntityCommand>(c=>c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityId.Equals(1))),Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToNewLegalEntityCommand>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenTheAddPayeToAccountForNewLegalEntityCommandIsCalledWhenTheLegalEntityIsZero()
+        {
+            //Arrange
+            _model.LegalEntityId = 0;
+
+            //Act
+            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToNewLegalEntityCommand>(c => c.AccountId.Equals(ExpectedAccountId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityCode.Equals(_model.LegalEntityCode))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToAccountForExistingLegalEntityCommand>()), Times.Never);
         }
     }
 }
