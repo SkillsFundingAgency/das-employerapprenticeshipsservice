@@ -1,7 +1,5 @@
 ﻿using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
@@ -45,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public virtual async Task<UserAccountsViewModel> GetUserAccounts()
+        public virtual async Task<OrchestratorResponse< UserAccountsViewModel>> GetUserAccounts()
         {
             var userIdClaim =  _owinWrapper.GetClaimValue("sub");
             if (!string.IsNullOrEmpty(userIdClaim))
@@ -56,10 +54,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     UserId = userId
                 });
-                return new UserAccountsViewModel
-                {
-                    Accounts = getUserAccountsQueryResponse.Accounts,
-                    Invitations = getUserInvitationsResponse.NumberOfInvites
+                return new OrchestratorResponse<UserAccountsViewModel>
+                {                 
+                    Data = new UserAccountsViewModel
+                    {
+                        Accounts = getUserAccountsQueryResponse.Accounts,
+                        Invitations = getUserInvitationsResponse.NumberOfInvites
+                    }
                 };
             }
             return null;
