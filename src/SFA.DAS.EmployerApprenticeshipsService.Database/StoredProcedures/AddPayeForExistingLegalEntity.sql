@@ -6,5 +6,6 @@
 	@refreshToken VARCHAR(50)
 AS
 BEGIN
-	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
+	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) 
+	VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
 END

@@ -72,10 +72,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", payeScheme.AccountId, DbType.Int64);
-                parameters.Add("@companyNumber", legalEntity.Code, DbType.Int64);
-                parameters.Add("@companyName", legalEntity.Name, DbType.Int64);
-                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.Int64);
-                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.Int64);
+                parameters.Add("@companyNumber", legalEntity.Code, DbType.String);
+                parameters.Add("@companyName", legalEntity.Name, DbType.String);
+                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
+                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", payeScheme.EmpRef, DbType.String);
                 parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
                 parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
