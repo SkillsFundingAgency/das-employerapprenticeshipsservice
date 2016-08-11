@@ -52,8 +52,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@employerRef", employerRef, DbType.String);
-                parameters.Add("@accessToken", Guid.Parse(accessToken), DbType.String);
-                parameters.Add("@refreshToken", Guid.Parse(refreshToken), DbType.String);
+                parameters.Add("@accessToken", accessToken, DbType.String);
+                parameters.Add("@refreshToken",refreshToken, DbType.String);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
