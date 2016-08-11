@@ -28,10 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(long accountid)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var schemes = await _employerAccountPayeOrchestrator.Get(accountid, userIdClaim);
+            var schemes = await _employerAccountPayeOrchestrator.Get(accountid, _owinWrapper.GetClaimValue(@"sub"));
 
             return View(new EmployerAccountPayeListViewModel
             {
@@ -41,24 +38,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Details(long accountId, string empRef)
+        public ActionResult Details(long accountId, string empRef)
         {
-            if (string.IsNullOrWhiteSpace(_owinWrapper.GetClaimValue(@"sub")))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             return View();
         }
 
         [HttpGet]
         public ActionResult Add(long accountId)
         {
-            if (string.IsNullOrWhiteSpace(_owinWrapper.GetClaimValue(@"sub")))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             return View(accountId);
         }
 
@@ -71,8 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> ConfirmPayeScheme(long accountId)
         {
-            var response = await _employerAccountPayeOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme));
-            var gatewayResponseModel = _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, response);
+            var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme));
 
             return View(gatewayResponseModel);
         }

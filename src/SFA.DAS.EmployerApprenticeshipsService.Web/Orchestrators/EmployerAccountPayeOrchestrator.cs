@@ -31,8 +31,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.PayeSchemes;
         }
 
-        public AddNewPayeScheme GetPayeConfirmModel(long accountId, HmrcTokenResponse response)
+        public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
         {
+            var response = await GetGatewayTokenResponse(code, redirectUrl);
+
             //TODO to be replaced with the call to the HmrcGetEmpref Discovery call
             var empRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
             
