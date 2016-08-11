@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public Accounts Accounts;
         public int Invitations;
-        public SuccessMessageViewModel SuccessMessage;
+        public FlashMessageViewModel FlashMessage;
         public string ErrorMessage;
     }
 }
