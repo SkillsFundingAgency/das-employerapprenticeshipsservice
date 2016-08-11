@@ -78,6 +78,9 @@
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandHandler.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandValidator.cs" />
+    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEntityCommand.cs" />
+    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEnttiyCommandHandler.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommand.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandValidator.cs" />

@@ -8,6 +8,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
@@ -58,6 +59,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
                     sql: "[dbo].[AddPayeToAccountForExistingLegalEntity]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure, transaction: trans);
+                trans.Commit();
+                return result;
+            });
+        }
+
+        public async Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", payeScheme.AccountId, DbType.Int64);
+                parameters.Add("@companyNumber", legalEntity.Code, DbType.Int64);
+                parameters.Add("@companyName", legalEntity.Name, DbType.Int64);
+                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.Int64);
+                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.Int64);
+                parameters.Add("@employerRef", payeScheme.EmpRef, DbType.String);
+                parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
+                parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
+
+                var trans = c.BeginTransaction();
+                var result = await c.ExecuteAsync(
+                    sql: "[dbo].[AddPayeToAccountForNewLegalEntity]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
