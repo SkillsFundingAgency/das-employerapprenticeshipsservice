@@ -139,6 +139,9 @@
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
+    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryHandler.cs" />
+    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementRequest.cs" />
+    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementResponse.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -34,6 +35,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 AccountId = accountId,
                 EmployerAgreements = response.EmployerAgreements
+            };
+        }
+
+        public async Task<EmployerAgreementViewModel> GetById(long agreementid, long accountId, string externalUserId)
+        {
+            var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
+            {
+                AgreementId = agreementid,
+                AccountId = accountId,
+                ExternalUserId = externalUserId
+            });
+
+            return new EmployerAgreementViewModel
+            {
+                EmployerAgreement = response.EmployerAgreement
             };
         }
     }

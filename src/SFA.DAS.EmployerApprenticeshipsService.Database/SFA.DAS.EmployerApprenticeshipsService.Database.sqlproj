@@ -94,6 +94,7 @@
     <Build Include="StoredProcedures\GetLegalEntitiesLinkedToAccount.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreementsLinkedToAccount.sql" />
     <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
+    <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

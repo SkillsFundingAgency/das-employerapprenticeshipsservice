@@ -9,7 +9,7 @@
     <div class="column-one-third rightalign">
         <form action="@Url.Action("Add")" method="GET">
             <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
-            <input class="button" id="addNewPaye" type="submit" value="Add new scheme">
+            <input class="button" id="addNewPaye" type="submit" value="New agreement">
         </form>
     </div>
 </div>
@@ -49,7 +49,7 @@
                             <div>
                                 <a aria-label="View Employer Agreement @employerAgreement.Id"
                                    title="View Employer Agreement @employerAgreement.Id"
-                                   href="#">View</a>
+                                   href="@Url.Action("View", new { agreementId = employerAgreement.Id, accountId = Model.AccountId })">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>

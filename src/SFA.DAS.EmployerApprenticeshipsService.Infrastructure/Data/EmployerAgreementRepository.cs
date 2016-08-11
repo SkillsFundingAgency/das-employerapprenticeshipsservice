@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
@@ -42,12 +43,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[]",
+                    sql: "[dbo].[CreateEmployerAgreementTemplate]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
                 return result;
             });
+        }
+
+        public async Task<EmployerAgreementView> GetEmployerAgreement(long agreementId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@agreementId", agreementId, DbType.Int64);
+
+                return await c.QueryAsync<EmployerAgreementView>(
+                    sql: "[dbo].[GetEmployerAgreement]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
         }
     }
 }

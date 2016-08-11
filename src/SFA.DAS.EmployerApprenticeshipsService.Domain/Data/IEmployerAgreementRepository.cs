@@ -8,5 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId);
         Task CreateEmployerAgreementTemplate(string text);
+        Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
     }
 }

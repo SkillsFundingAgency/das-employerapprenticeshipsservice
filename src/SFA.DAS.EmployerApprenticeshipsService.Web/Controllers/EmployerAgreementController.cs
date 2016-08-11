@@ -39,5 +39,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View();
         }
+
+        public async Task<ActionResult> View(long agreementid, long accountId)
+        {
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+
+            var agreement = await _orchestrator.GetById(agreementid, accountId, userIdClaim);
+
+            return View(agreement);
+        }
     }
 }

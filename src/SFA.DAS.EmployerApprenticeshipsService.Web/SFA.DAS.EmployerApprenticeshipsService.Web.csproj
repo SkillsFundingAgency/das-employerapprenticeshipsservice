@@ -306,6 +306,7 @@
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementListViewModel.cs" />
+    <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -444,6 +445,7 @@
     <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
+    <Content Include="Views\EmployerAgreement\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
