@@ -1,0 +1,98 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
+
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AddPayeToNewLegalEntity
+{
+    public class WhenIValidateTheCommand
+    {
+        private AddPayeToNewLegalEntityCommandValidator _validator;
+        private Mock<IMembershipRepository> _membershiprepository;
+        private const string ExpectedOwnerUserId = "123ABC";
+        private const string ExpectedNonOwnerUserId = "543FDC";
+
+        [SetUp]
+        public void Arrange()
+        {
+            _membershiprepository = new Mock<IMembershipRepository>();
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
+
+            _validator = new AddPayeToNewLegalEntityCommandValidator(_membershiprepository.Object);
+        }
+
+        [Test]
+        public async Task ThenTheCommandIsInvalidIfTheFieldsArentPopulated()
+        {
+            //Act
+            var actual = await _validator.ValidateAsync(new AddPayeToNewLegalEntityCommand());
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+            _membershiprepository.Verify(x => x.Get(It.IsAny<long>(), It.IsAny<long>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenTheMembershipRepositoryIsCheckedToMakeSureTheUserIsAnAccountOwner()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+
+            //Act
+            await _validator.ValidateAsync(command);
+
+            //Assert
+            _membershiprepository.Verify(x=>x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheCommandIsInvalidIfTheUserIsNotPartOfTheAccount()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create("ABC");
+
+            //Act
+            var actual = await _validator.ValidateAsync(command);
+
+            //Assert
+            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User not connected to account"), actual.ValidationDictionary);
+        }
+
+        [Test]
+        public async Task ThenTheCommandIsInvalidIfTheUserIsNotAnOwner()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(ExpectedNonOwnerUserId);
+
+            //Act
+            var actual = await _validator.ValidateAsync(command);
+
+            //Assert
+            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User is not an owner"), actual.ValidationDictionary);
+        }
+
+        [Test]
+        public async Task ThenTheCommandIsValidIfAllFieldsArePopulatedAndTheUserIsAnOwner()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(ExpectedOwnerUserId);
+
+            //Act
+            var actual = await _validator.ValidateAsync(command);
+
+            //Assert
+            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            Assert.IsTrue(actual.IsValid());
+        }
+    }
+}

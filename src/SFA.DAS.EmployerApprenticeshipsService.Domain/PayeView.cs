@@ -4,6 +4,6 @@
     {
         public string EmpRef { get; set; }
         public int AccountId { get; set; }
-        public string AccountName { get; set; } 
+        public string LegalEntityName { get; set; } 
     }
 }

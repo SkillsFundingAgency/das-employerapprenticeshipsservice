@@ -126,6 +126,7 @@
     <Compile Include="Data\IAggregationRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IEmployerAccountRepository.cs" />
+    <Compile Include="Data\IEmployerAgreementRepository.cs" />
     <Compile Include="Data\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\IInvitationRepository.cs" />
     <Compile Include="Data\IMembershipRepository.cs" />
@@ -136,9 +137,13 @@
     <Compile Include="DepedencyResolution\ConfigurationPolicy.cs" />
     <Compile Include="DepedencyResolution\LoggingPolicy.cs" />
     <Compile Include="DepedencyResolution\MessagePolicy.cs" />
+    <Compile Include="EmployerAgreementStatus.cs" />
+    <Compile Include="EmployerAgreementView.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
+    <Compile Include="Entities\Account\LegalEntities.cs" />
+    <Compile Include="Entities\Account\LegalEntity.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />

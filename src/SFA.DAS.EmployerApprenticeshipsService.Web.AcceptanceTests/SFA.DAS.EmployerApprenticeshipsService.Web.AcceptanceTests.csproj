@@ -118,6 +118,10 @@
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.2.0.0.6450\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
       <Private>True</Private>
@@ -156,6 +160,11 @@
     <Compile Include="DbCleanup\ICleanDatabase.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="Features\AddPayeScheme.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddPayeScheme.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\InviteMember.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,6 +172,9 @@
     </Compile>
     <Compile Include="MockPolicy\MockMessagePolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Steps\AppPayeScheme\AddPayeSchemeSteps.cs" />
+    <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
+    <Compile Include="Steps\CommonSteps\UserCreationSteps.cs" />
     <Compile Include="Steps\InviteMember\InviteMemberSteps.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +188,10 @@
     <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Features\AddPayeScheme.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddPayeScheme.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\InviteMember.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>InviteMember.feature.cs</LastGenOutput>

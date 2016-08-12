@@ -82,9 +82,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             Console.WriteLine(result);
         }
 
-        public Task<Users> GetAllUsers()
+        public async Task<Users> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+
+                return await c.QueryAsync<User>(
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [dbo].[User];",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+            return new Users
+            {
+                UserList = result.ToList()
+            };
         }
     }
 }

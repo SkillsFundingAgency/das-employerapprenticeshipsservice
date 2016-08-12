@@ -15,10 +15,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup
 
         public async Task Execute()
         {
-
+            var parameters = new DynamicParameters();
+            parameters.Add("@INCLUDEUSERTABLE", 1, DbType.Int16);
             await WithConnection(async c => await c.ExecuteAsync(
                 "[dbo].[Cleardown]",
-                null,
+                parameters,
                 commandType: CommandType.StoredProcedure));
 
             await WithConnection(async c => await c.ExecuteAsync(

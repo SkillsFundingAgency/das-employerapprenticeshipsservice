@@ -33,6 +33,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
                 return "panel panel-info";
             }
         }
+
+        public string RedirectButtonMessage { get; set; }
     }
 
     public enum FlashMessageSeverityLevel

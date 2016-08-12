@@ -18,12 +18,7 @@
 
 
     </div>
-    <div class="column-one-third rightalign">
-        <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
-            <input class="button" id="addNewUser" type="submit" value="Invite team member">
-        </form>
-    </div>
+
 </div>
 
 <div class="grid-row">
@@ -89,5 +84,12 @@
                 </div>
             </div>
         }
+    </div>
+    <p></p>
+    <div class="column-one-third ">
+        <form action="@Url.Action("Invite")" method="get">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
+            <input class="button" id="addNewUser" type="submit" value="Invite team member">
+        </form>
     </div>
 </div>

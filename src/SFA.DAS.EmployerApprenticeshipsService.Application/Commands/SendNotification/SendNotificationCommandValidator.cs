@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification
@@ -27,6 +28,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
             }
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(SendNotificationCommand item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
