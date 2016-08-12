@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
+using System.Data;
+using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using NLog;
@@ -6,7 +9,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInfo
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -22,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         //Needed for tests
         protected EmployerVerificationOrchestratorBase()
         {
-            
+
         }
 
         protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
@@ -31,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             Logger = logger;
             CookieService = cookieService;
         }
-        
+
 
         public virtual async Task<string> GetGatewayUrl(string redirectUrl)
         {
@@ -43,9 +45,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.Url;
         }
 
-        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl)
+        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl, NameValueCollection nameValueCollection)
         {
-            var errorResponse = HttpContext.Current?.Request.QueryString["error"];
+            var errorResponse = nameValueCollection?["error"];
             if (errorResponse != null)
             {
                 return new OrchestratorResponse<HmrcTokenResponse>
@@ -55,10 +57,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     {
                         Severity = FlashMessageSeverityLevel.Danger,
                         Message = "Unexpected response from HMRC Government Gateway:",
-                        SubMessage = HttpContext.Current.Request.QueryString["error_description"]
-            }
+                        SubMessage = nameValueCollection["error_description"]
+                    }
                 };
-            } 
+            }
 
             var response = await Mediator.SendAsync(new GetGatewayTokenQuery
             {
@@ -66,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 AccessCode = accessCode
             });
 
-            return new OrchestratorResponse<HmrcTokenResponse> {Data = response.HmrcTokenResponse};
+            return new OrchestratorResponse<HmrcTokenResponse> { Data = response.HmrcTokenResponse };
         }
 
 
@@ -88,13 +90,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse< SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
                 Id = model.EmployerRef
             });
-            
+
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
@@ -102,8 +104,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     FlashMessage = new FlashMessageViewModel()
                     {
-                       Message = "No companies match the identifier you entered.",
-                       SubMessage = "Please try again."
+                        Message = "No companies match the identifier you entered.",
+                        SubMessage = "Please try again."
                     },
                     Data = new SelectEmployerViewModel()
                 };

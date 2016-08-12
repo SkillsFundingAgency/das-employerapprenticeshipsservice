@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using Moq;
 using NLog;
@@ -111,7 +112,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
 
             //Act
-            await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "");
+            await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1"))), Times.Once);
@@ -126,7 +127,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "");
+            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
 
             //Assert
             Assert.IsEmpty(actual.Data.PayeScheme);

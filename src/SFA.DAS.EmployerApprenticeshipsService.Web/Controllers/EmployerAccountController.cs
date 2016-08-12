@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> GateWayResponse()
         {
-            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
+            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
             if (response.Status != HttpStatusCode.OK)
             {
                 response.Status = HttpStatusCode.OK;
