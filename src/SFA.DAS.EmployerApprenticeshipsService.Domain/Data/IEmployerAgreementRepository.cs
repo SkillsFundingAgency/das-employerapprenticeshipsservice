@@ -7,5 +7,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     public interface IEmployerAgreementRepository
     {
         Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId);
+        Task CreateEmployerAgreementTemplate(string text);
+        Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
+        Task SignAgreement(long agreementId, long signedById, string signedByName);
     }
 }

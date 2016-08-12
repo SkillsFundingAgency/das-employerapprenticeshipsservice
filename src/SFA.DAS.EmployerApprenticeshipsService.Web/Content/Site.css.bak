@@ -28,10 +28,19 @@ table {
     max-width: 640px;
 }
 
+.form-group {
+    max-width: 640px;
+}
+
 .button-start {
     background-image: url("/assets/images/icon-pointer-2x.png");
 }
 
+.govuk-box-highlight h1, 
+.govuk-box-highlight p {
+    margin-left:auto;
+    margin-right:auto;
+}
 .inline .block-label {
     margin-right: 0;
 }
@@ -41,7 +50,6 @@ table {
         margin-right: 10px;
     }
 }
-
 
 /* RESPONSIVE TABLES */
 .responsive-table {
@@ -181,6 +189,3 @@ h1.access-denied {
     margin-bottom: 5px; 
 }
 
-hr.wide {
-    height:3px;
-}

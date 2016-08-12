@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    public class EmployerAccountController : Controller
+    public class EmployerAccountController : BaseController
     {
         
         private readonly IOwinWrapper _owinWrapper;
@@ -52,10 +52,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
-            if (string.IsNullOrWhiteSpace(response.CompanyNumber))
-                return View();
+            if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
+                return View(response);
 
-            return RedirectToAction("VerifyEmployer", response);
+            return RedirectToAction("VerifyEmployer", response.Data);
         }
 
         [HttpGet]
