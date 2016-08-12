@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNotification
 {
@@ -14,6 +15,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ProcessNot
             }
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(ProcessNotificationCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

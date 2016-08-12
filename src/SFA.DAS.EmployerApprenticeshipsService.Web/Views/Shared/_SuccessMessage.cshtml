@@ -6,7 +6,7 @@
    
 
 }
-@if (viewModel?.FlashMessage != null)
+@if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message))
 {
     <div class="grid-row">
         <div class="column-full">

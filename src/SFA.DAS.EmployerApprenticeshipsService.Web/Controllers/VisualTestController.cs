@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var payeView = new PayeView()
             {
                 AccountId = 1234567890,
-                AccountName = "My account",
+                LegalEntityName = "My account",
                 EmpRef = "empref-39520"
             };
 
