@@ -13,12 +13,13 @@ BEGIN
 	ORDER BY Id DESC;  
 
 	--create new template and get template id
-	INSERT INTO [dbo].[EmployerAgreementTemplate]([Text]) VALUES (@text);
+	INSERT INTO [dbo].[EmployerAgreementTemplate]([Text], CreatedDate) VALUES (@text, GETDATE());
 	SELECT @templateId = SCOPE_IDENTITY();
 
 	--mark agreements using previous template as expired
 	UPDATE [dbo].[EmployerAgreement]
-	SET ExpiredDate = GETDATE()
+	SET ExpiredDate = GETDATE(),
+		StatusId = 3
 	WHERE TemplateId = @lastTemplateId;
 
 	--insert new record for each legalentity with new template

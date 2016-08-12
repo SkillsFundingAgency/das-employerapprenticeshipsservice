@@ -3,6 +3,7 @@
     public enum EmployerAgreementStatus : short
     {
         Pending = 1,
-        Signed = 2
+        Signed = 2,
+        Expired = 3
     }
 }
