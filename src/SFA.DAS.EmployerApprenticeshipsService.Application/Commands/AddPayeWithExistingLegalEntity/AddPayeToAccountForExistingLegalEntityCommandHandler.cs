@@ -2,19 +2,26 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity
 {
     public class AddPayeToAccountForExistingLegalEntityCommandHandler : AsyncRequestHandler<AddPayeToAccountForExistingLegalEntityCommand>
     {
+        [QueueName]
+        public string get_employer_levy { get; set; }
+
         private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
+        private readonly IMessagePublisher _messagePublisher;
         private readonly AddPayeToAccountForExistingLegalEntityCommandValidator _validator;
 
-        public AddPayeToAccountForExistingLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository)
+        public AddPayeToAccountForExistingLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IMessagePublisher messagePublisher)
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
@@ -25,6 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
+            _messagePublisher = messagePublisher;
             _validator = new AddPayeToAccountForExistingLegalEntityCommandValidator();
         }
 
@@ -49,7 +57,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             if (!isLinked)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "LegalEntity", "LegalEntity is not linked to this Account" } });
 
-            await _accountRepository.AddPayeToAccountForExistingLegalEntity(message.AccountId, message.LegalEntityId, message.EmpRef);
+            await _accountRepository.AddPayeToAccountForExistingLegalEntity(message.AccountId, message.LegalEntityId, message.EmpRef, message.AccessToken, message.RefreshToken);
+
+            await _messagePublisher.PublishAsync(
+                new EmployerRefreshLevyQueueMessage
+                {
+                    AccountId = message.AccountId
+                });
         }
     }
 }

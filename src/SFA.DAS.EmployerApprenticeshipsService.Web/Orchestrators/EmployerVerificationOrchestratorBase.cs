@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
@@ -17,6 +18,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
 
+        //Needed for tests
+        protected EmployerVerificationOrchestratorBase()
+        {
+            
+        }
+
         protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
         {
             Mediator = mediator;
@@ -25,7 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
         
 
-        public async Task<string> GetGatewayUrl(string redirectUrl)
+        public virtual async Task<string> GetGatewayUrl(string redirectUrl)
         {
             var response = await Mediator.SendAsync(new GetGatewayInformationQuery
             {
@@ -59,7 +66,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
+        public async Task<OrchestratorResponse< SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -69,17 +76,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new SelectEmployerViewModel();
+                return new OrchestratorResponse<SelectEmployerViewModel>
+                {
+                    FlashMessage = new FlashMessageViewModel()
+                    {
+                       Message = "No companies match the identifier you entered.",
+                       SubMessage = "Please try again."
+                    },
+                    Data = new SelectEmployerViewModel()
+                };
             }
 
             Logger.Info($"Returning Data for {model.EmployerRef}");
 
-            return new SelectEmployerViewModel
+            return new OrchestratorResponse<SelectEmployerViewModel>
             {
-                CompanyNumber = response.CompanyNumber,
-                CompanyName = response.CompanyName,
-                DateOfIncorporation = response.DateOfIncorporation,
-                RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                Data = new SelectEmployerViewModel
+                {
+                    CompanyNumber = response.CompanyNumber,
+                    CompanyName = response.CompanyName,
+                    DateOfIncorporation = response.DateOfIncorporation,
+                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                }
+
             };
         }
     }

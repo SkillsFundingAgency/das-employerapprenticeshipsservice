@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
     {
         public long Id { get; set; }
 
-        public string CompanyNumber { get; set; }
+        public string Code { get; set; }
 
         public string Name { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole
 {
@@ -21,6 +22,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeam
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(ChangeTeamMemberRoleCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

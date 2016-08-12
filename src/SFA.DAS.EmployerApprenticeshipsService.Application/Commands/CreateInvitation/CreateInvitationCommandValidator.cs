@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation
@@ -30,6 +31,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 validationResult.AddError("RoleId", "No RoleId supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(CreateInvitationCommand item)
+        {
+            throw new NotImplementedException();
         }
 
         private bool IsValidEmailFormat(string email)

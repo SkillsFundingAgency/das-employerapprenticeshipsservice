@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
             if (user == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, message.EmployerRef);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, message.EmployerRef, message.AccessToken, message.RefreshToken);
 
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
             {

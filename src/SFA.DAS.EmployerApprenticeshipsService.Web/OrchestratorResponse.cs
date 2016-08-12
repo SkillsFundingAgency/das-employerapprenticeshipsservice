@@ -14,6 +14,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         public HttpStatusCode Status { get; set; }
         public Exception Exception { get; set; }
         public FlashMessageViewModel FlashMessage { get; set; }
+
+        public string RedirectUrl { get; set; }
+        public string RedirectButtonMessage { get; set; }
     }
 
     public class OrchestratorResponse<T> : OrchestratorResponse
