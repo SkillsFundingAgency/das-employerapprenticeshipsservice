@@ -1,0 +1,31 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@model dynamic
+@{
+    var viewModel = Model as OrchestratorResponse;
+   
+
+}
+@if (viewModel?.FlashMessage != null)
+{
+    <div class="grid-row">
+        <div class="column-full">
+
+            <div class="@viewModel.FlashMessage.SeverityCssClass">
+                @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
+                {
+                    <h1 class="bold-large">@viewModel.FlashMessage.Headline</h1>
+                }
+                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
+                {
+                    <p>@viewModel.FlashMessage.Message</p>
+                }
+                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
+                {
+                    <p>@viewModel.FlashMessage.SubMessage</p>
+                }
+            </div>
+
+        </div>
+    </div>
+}

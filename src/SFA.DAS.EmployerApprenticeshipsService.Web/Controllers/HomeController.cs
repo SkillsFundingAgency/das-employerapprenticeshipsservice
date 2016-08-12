@@ -7,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
         private readonly HomeOrchestrator _homeOrchestrator;
@@ -23,8 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts();
 
-            accounts.SuccessMessage  = GetHomePageSucessMessage();
-            accounts.ErrorMessage = (string)TempData["errorMessage"];
+            accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
 
             return View(accounts);
         }
@@ -67,27 +66,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _owinWrapper.RemovePartialLoginCookie();
         }
 
-        private SuccessMessageViewModel GetHomePageSucessMessage()
-        {
-            if (TempData.ContainsKey("successHeader") || TempData.ContainsKey("successMessage"))
-            {
-                var successMessageViewModel = new SuccessMessageViewModel();
-                object message;
-                if (TempData.TryGetValue("successHeader", out message))
-                {
-                    successMessageViewModel.HeadingMessage = message.ToString();
-                }
-                if (TempData.TryGetValue("successCompany", out message))
-                {
-                    successMessageViewModel.CompanyName = message.ToString();
-                }
-                if (TempData.TryGetValue("successMessage", out message))
-                {
-                    successMessageViewModel.CustomSuccessMessage = message.ToString();
-                }
-                return successMessageViewModel;
-            }
-            return null;
-        }
+       
     }
 }

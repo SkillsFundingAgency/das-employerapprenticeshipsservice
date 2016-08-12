@@ -1,15 +1,12 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
 
-@if (Model.SuccessMessage != null)
-{
-    @Html.Partial("_SuccessMessage",Model.SuccessMessage)
-}
-@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+
+@if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
     <div class="grid-row">
         <div class="column-full">
             <div class="panel panel-error  ">
-                @Model.ErrorMessage
+                @Model.Data.ErrorMessage
             </div>
         </div>
     </div>
@@ -26,19 +23,19 @@
     
 </div>
 
-@if (Model.Invitations != 0)
+@if (Model.Data.Invitations != 0)
 {
     <div class="grid-row">
         <div class="column-full">
 
             <h2 class="heading-medium">Invitations</h2>
-            @if (Model.Invitations == 1)
+            @if (Model.Data.Invitations == 1)
             {
-                <p>You have @Model.Invitations pending invitation to an employer account.</p>
+                <p>You have @Model.Data.Invitations pending invitation to an employer account.</p>
             }
             else
             {
-                <p>You have @Model.Invitations pending invitations to employer accounts.</p>
+                <p>You have @Model.Data.Invitations pending invitations to employer accounts.</p>
             }
             
             <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
@@ -50,7 +47,7 @@
 <div class="grid-row">
     <div class="column-full">
         <h2 class="heading-medium">Employer Accounts</h2>
-        @if (Model.Accounts.AccountList.Count == 0)
+        @if (Model.Data.Accounts.AccountList.Count == 0)
         {
             <p>You have no employer accounts assoicated with this account. To use your account you will either need to create a new employer account or be invited to an existing one.</p>
         }
@@ -67,17 +64,17 @@
                 </div>
                 <div class="responsive-tbody">
 
-                    @foreach (var account in Model.Accounts.AccountList)
+                    @foreach (var account in Model.Data.Accounts.AccountList)
                     {
                         <div class="responsive-tr">
                             <div class="responsive-td">
                                 <div>@account.Name</div>
-                                <div class="responsive-inner-caption"></div>
+                                <div class="responsive-inner-caption">Name</div>
                             </div>
                             <div class="responsive-td">
+                                <div class="responsive-inner-caption">Role</div>
                                 <div>@account.RoleName
                                 </div>
-                                <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div>

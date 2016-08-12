@@ -312,7 +312,7 @@
     <Compile Include="Models\SelectEmployerViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
-    <Compile Include="Models\SuccessMessageViewModel.cs" />
+    <Compile Include="Models\FlashMessageViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -430,7 +430,7 @@
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\View.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
-    <Content Include="Views\Home\_SuccessMessage.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
