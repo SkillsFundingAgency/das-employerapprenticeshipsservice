@@ -22,7 +22,7 @@ SELECT
 	i.Email,
 	NULL,
 	i.RoleId,
-	i.Status,
+	CASE WHEN i.Status = 1 AND i.ExpiryDate < GETDATE() THEN 3 ELSE i.Status END AS Status,
 	i.ExpiryDate
 FROM [dbo].[Invitation] i
 	JOIN [dbo].[Account] a
