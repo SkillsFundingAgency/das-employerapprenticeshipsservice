@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -65,6 +66,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
 
             return result.SingleOrDefault();
+        }
+
+        public async Task SignAgreement(long agreementId, string externalUserId, string signedByName)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@agreementId", agreementId, DbType.Int64);
+                parameters.Add("@signedById", Guid.Parse(externalUserId), DbType.Guid);
+                parameters.Add("@signedByName", signedByName, DbType.String);
+
+                var result = await c.ExecuteAsync(
+                    sql: "UPDATE [dbo].[EmployerAgreement] SET SignedById = @signedById, SignedByName, Status = 2 = @signedByName WHERE Id = @agreementId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+                return result;
+            });
         }
     }
 }

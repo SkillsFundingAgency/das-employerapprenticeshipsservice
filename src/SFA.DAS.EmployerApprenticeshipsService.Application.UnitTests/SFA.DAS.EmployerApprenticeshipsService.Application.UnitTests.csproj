@@ -92,6 +92,7 @@
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
+    <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
     <Compile Include="FakeTimeProvider.cs" />
     <Compile Include="Commands\AcceptInvitationTests\WhenICallAcceptInvitation.cs" />
     <Compile Include="Commands\CreateEmployerAccountTests\WhenICallCreateEmployerAccount.cs" />
