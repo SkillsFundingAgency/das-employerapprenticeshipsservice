@@ -1,19 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.CommonSteps;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 using SFA.DAS.Messaging;
-using SFA.DAS.TimeProvider;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -53,12 +52,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         [Given(@"I am an account owner")]
         public void GivenIAmAnAccountOwner()
         {
-            var user = GetExistingUserAccount();
+         
+            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
             _externalUserId = user.UserId;
 
-            UpsertUser(user);
-
-            CreateDasAccount(user);
+            UserCreationSteps.UpsertUser(user, _container.GetInstance<IMediator>());
+            
+            AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<IAccountRepository>(), _container.GetInstance<IUserRepository>());
         }
 
         [When(@"I invite a team member with email address ""(.*)"" and name ""(.*)""")]
@@ -91,17 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             }
         }
 
-        private void UpsertUser(SignInUserModel user)
-        {
-            var mediator = _container.GetInstance<IMediator>();
-            mediator.SendAsync(new UpsertRegisteredUserCommand
-            {
-                UserRef = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                EmailAddress = user.Email
-            }).Wait();
-        }
+        
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
         {
@@ -122,29 +112,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
 
             _accountId = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault().Id;
         }
-
-        private SignInUserModel GetExistingUserAccount()
-        {
-            var homeOrchestrator = _container.GetInstance<HomeOrchestrator>();
-            var user = homeOrchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault();
-            return user;
-        }
-
-        private void CreateDasAccount(SignInUserModel user)
-        {
-            var accountOrchestrator = _container.GetInstance<EmployerAccountOrchestrator>();
-
-            accountOrchestrator.CreateAccount(new CreateAccountModel
-            {
-                CompanyName = "TestCompany",
-                CompanyNumber = "123456",
-                EmployerRef = "123/ABC123",
-                UserId = user.UserId,
-                CompanyDateOfIncorporation = new DateTime(2016,01,01),
-                CompanyRegisteredAddress = "Test Address",
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
-            }).Wait();
-        }
+        
     }
 }
