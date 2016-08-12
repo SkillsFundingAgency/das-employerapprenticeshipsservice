@@ -34,5 +34,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 SchemesList = result.ToList()
             };
         }
+
+        public Task<Scheme> GetSchemeByRef(string empref)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
