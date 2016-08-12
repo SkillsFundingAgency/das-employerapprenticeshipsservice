@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -52,13 +53,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         [Given(@"I am an account owner")]
         public void GivenIAmAnAccountOwner()
         {
-         
+            var signInUserModel = new SignInUserModel
+            {
+                UserId = Guid.NewGuid().ToString(),
+                Email = "accountowner@test.com",
+                FirstName = "Test",
+                LastName = "Tester"
+            };
+            UserCreationSteps.UpsertUser(signInUserModel, _container.GetInstance<IMediator>());
+
             var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
             _externalUserId = user.UserId;
 
-            UserCreationSteps.UpsertUser(user, _container.GetInstance<IMediator>());
             
-            AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<IAccountRepository>(), _container.GetInstance<IUserRepository>());
+            
+            AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
         }
 
         [When(@"I invite a team member with email address ""(.*)"" and name ""(.*)""")]

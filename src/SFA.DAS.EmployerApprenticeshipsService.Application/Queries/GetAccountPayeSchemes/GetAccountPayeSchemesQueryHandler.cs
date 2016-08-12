@@ -11,6 +11,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountP
     {
         private readonly IAccountRepository _accountRepository;
 
+        //TODO needs validator. And tests.
+
         public GetAccountPayeSchemesQueryHandler(IAccountRepository accountRepository)
         {
             if (accountRepository == null)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
@@ -54,44 +55,48 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AppPa
         [Given(@"I am an account ""(.*)""")]
         public void GivenIAmAnAccount(string accountRole)
         {
-            var mediator = _container.GetInstance<IMediator>();
-            var userRepository = _container.GetInstance<IUserRepository>();
-            var membershipRepository = _container.GetInstance<IMembershipRepository>();
+            ScenarioContext.Current.Pending();
+            //CreateAccountWithOwner();
 
-            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
+            //SetAccountIdForUser();
 
-            UserCreationSteps.UpsertUser(user, mediator);
+            //var mediator = _container.GetInstance<IMediator>();
+            //var userRepository = _container.GetInstance<IUserRepository>();
+            //var membershipRepository = _container.GetInstance<IMembershipRepository>();
 
-            _accountId = AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<IAccountRepository>(), _container.GetInstance<IUserRepository>());
+            //var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
 
-            //Create a new user with passed in role
-            _externalUserId = Guid.NewGuid().ToString();
+            //UserCreationSteps.UpsertUser(user, mediator);
 
-            var signInModel = new SignInUserModel
-            {
-                Email = "test@test.com",
-                FirstName = "test",
-                LastName = "tester",
-                UserId = _externalUserId
-            };
+            //AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
 
-            UserCreationSteps.UpsertUser(signInModel, mediator);
-            Role roleOut;
-            Enum.TryParse(accountRole, out roleOut);
-            UserCreationSteps.CreateUserWithRole(
-                new User {Email = signInModel.Email, FirstName = signInModel.FirstName, LastName = signInModel.LastName, UserRef = _externalUserId}, 
-                roleOut,_accountId, userRepository,membershipRepository);
+            ////Create a new user with passed in role
+            //_externalUserId = Guid.NewGuid().ToString();
+
+            //var signInModel = new SignInUserModel
+            //{
+            //    Email = "test@test.com",
+            //    FirstName = "test",
+            //    LastName = "tester",
+            //    UserId = _externalUserId
+            //};
+
+            //UserCreationSteps.UpsertUser(signInModel, mediator);
+            //Role roleOut;
+            //Enum.TryParse(accountRole, out roleOut);
+            //UserCreationSteps.CreateUserWithRole(new User {Email = signInModel.Email, FirstName = signInModel.FirstName, LastName = signInModel.LastName, UserRef = _externalUserId}, roleOut,_accountId, userRepository,membershipRepository);
 
         }
 
         [Given(@"I am part of an account")]
         public void GivenIAmPartOfAnAccount()
         {
-            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
+            ScenarioContext.Current.Pending();
+            //var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
 
-            UserCreationSteps.UpsertUser(user, _container.GetInstance<IMediator>());
+            //UserCreationSteps.UpsertUser(user, _container.GetInstance<IMediator>());
 
-            _accountId = AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<IAccountRepository>(), _container.GetInstance<IUserRepository>());
+            //AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
         }
 
         [When(@"I view PAYE schemes")]
@@ -127,6 +132,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AppPa
             ScenarioContext.Current.Pending();
         }
 
+        private void CreateAccountWithOwner()
+        {
+            var signInUserModel = new SignInUserModel
+            {
+                UserId = Guid.NewGuid().ToString(),
+                Email = "accountowner@test.com",
+                FirstName = "Test",
+                LastName = "Tester"
+            };
+            UserCreationSteps.UpsertUser(signInUserModel, _container.GetInstance<IMediator>());
 
+            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
+            
+            AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
+        }
+
+        private void SetAccountIdForUser()
+        {
+            var mediator = _container.GetInstance<IMediator>();
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserId = _externalUserId }).Result;
+
+            _accountId = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault().Id;
+        }
     }
 }

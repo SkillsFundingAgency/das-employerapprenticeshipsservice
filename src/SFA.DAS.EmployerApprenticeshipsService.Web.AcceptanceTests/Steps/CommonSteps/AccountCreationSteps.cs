@@ -11,11 +11,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
 {
     public static class AccountCreationSteps
     {
-        public static long CreateDasAccount(SignInUserModel user, IAccountRepository accountRepository, IUserRepository userRepository)
+        public static void CreateDasAccount(SignInUserModel user, EmployerAccountOrchestrator orchestrator)
         {
-            var userRecord = userRepository.GetById(user.UserId).Result;
+
+            orchestrator.CreateAccount(new CreateAccountModel
+            {
+                UserId = user.UserId,
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
+                CompanyDateOfIncorporation = new DateTime(2016,01,01),
+                EmployerRef = "123/ABC",
+                CompanyName = "Test Company",
+                CompanyNumber = "123456TGB",
+                CompanyRegisteredAddress = "Address Line 1"
+            }).Wait();
             
-            return accountRepository.CreateAccount(userRecord.Id, "123456", "TestCompany", "Test Address", new DateTime(2016, 01, 01), "123/ABC123", Guid.NewGuid().ToString(), Guid.NewGuid().ToString()).Result;
             
         }
     }
