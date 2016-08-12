@@ -115,10 +115,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
             
-            model.LegalEntityCode = result.CompanyNumber;
-            model.LegalEntityDateOfIncorporation = result.DateOfIncorporation;
-            model.LegalEntityName = result.CompanyName;
-            model.LegalEntityRegisteredAddress = result.RegisteredAddress;
+            model.LegalEntityCode = result.Data.CompanyNumber;
+            model.LegalEntityDateOfIncorporation = result.Data.DateOfIncorporation;
+            model.LegalEntityName = result.Data.CompanyName;
+            model.LegalEntityRegisteredAddress = result.Data.RegisteredAddress;
             
             return View("Confirm", model);
         }
