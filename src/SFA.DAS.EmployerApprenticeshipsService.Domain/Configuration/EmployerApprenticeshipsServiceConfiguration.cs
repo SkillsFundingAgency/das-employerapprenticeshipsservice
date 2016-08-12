@@ -21,6 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public string ClientId { get; set; }
         public string Scope { get; set; }
         public string ClientSecret { get; set; }
+
+        public bool DuplicatesCheck { get; set; }
     }
 
     public class IdentityServerConfiguration
