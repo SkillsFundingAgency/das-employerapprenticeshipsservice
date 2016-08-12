@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var payeView = new PayeView()
             {
                 AccountId = 1234567890,
-                AccountName = "My account",
+                LegalEntityName = "My account",
                 EmpRef = "empref-39520"
             };
 
@@ -134,6 +134,43 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 }
             };
 
+            var legalEntity = new LegalEntity()
+            {
+                Code = "MyLegalEntityCode",
+                DateOfIncorporation = new DateTime(2009, 07, 01),
+                Id = 123,
+                Name = "My little legal entity",
+                RegisteredAddress = "123 Fake street"
+            };
+
+            var confirmNewPayeScheme = new ConfirmNewPayeScheme()
+            {
+                AccessToken = "MyAccessToken",
+                AccountId = 012345679,
+                LegalEntities = new List<LegalEntity>
+                        {
+                            legalEntity,
+                            legalEntity,
+                            legalEntity
+                        },
+                LegalEntityCode = "MyLegalEntityCode",
+                LegalEntityDateOfIncorporation = new DateTime(2009, 07, 01),
+                LegalEntityId = 123,
+                LegalEntityName = "My little legal entity",
+                LegalEntityRegisteredAddress = "123 Fake street",
+                PayeScheme = "mypaye-123",
+                RefreshToken = "refresh-123"
+            };
+
+            var addNewPayeScheme = new AddNewPayeScheme()
+            {
+                AccessToken = "MyAccessToken",
+                AccountId = 0123456789,
+                LegalEntities = new List<LegalEntity> { legalEntity, legalEntity, legalEntity },
+                PayeScheme = "mypaye-123",
+                RefreshToken = "refresh-123"
+            };
+            
 
             _viewToModel = new Dictionary<string, object>
             {
@@ -172,11 +209,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
                         LineItem = aggregationLine
                     }},
-                {"~/Views/EmployerTeam/Index.cshtml", new Account() {
-                    Id = 1234567890,
-                    Name = "My account",
-                    RoleId = 2
-                    }},
+                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<long> {Data = 3 } },
+                {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
+                {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
+                {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
+                {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", addNewPayeScheme },
+                {"~/Views/EmployerAccountPaye/Index.cshtml", new OrchestratorResponse<EmployerAccountPayeListViewModel>()
+                {
+                    Data = new EmployerAccountPayeListViewModel()
+                    {
+                        AccountId = 1234567890,
+                        PayeSchemes = new List<PayeView>()
+                        {
+                            payeView,
+                            payeView,
+                            payeView
+                        }
+                    }
+                }},
+                {"~/Views/EmployerTeam/Index.cshtml", new OrchestratorResponse<Account> {
+                    Data = new Account() {
+                        Id = 1234567890,
+                        Name = "My account",
+                        RoleId = 2
+                    }}
+                },
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
@@ -187,33 +244,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 } },
                 {"~/Views/EmployerTeam/Review.cshtml", invitationViewModel },
                 {"~/Views/EmployerTeam/Remove.cshtml", invitationViewModel },
-                {"~/Views/EmployerTeam/View.cshtml",  employerTeamMembersViewModel},
+                {"~/Views/EmployerTeam/View.cshtml", new OrchestratorResponse<EmployerTeamMembersViewModel> {Data= employerTeamMembersViewModel }},
                 {"~/Views/Home/FakeUserSignIn.cshtml", new SignInUserViewModel ()
                     {
                         AvailableUsers = new List<SignInUserModel>() {
                             new SignInUserModel() {Email = "a@b.com", FirstName = "Bojack", LastName = "Horseman", UserId="123", UserSelected= "foo" }
                         }
                     }},
-                {"~/Views/Home/Index.cshtml", new UserAccountsViewModel()
+                {"~/Views/Home/Index.cshtml", new OrchestratorResponse<UserAccountsViewModel>()
                     {
-                        Accounts = new Accounts()
-                        {
-                            AccountList = new List<Account>() {
-                                new Account() {Id = 123, Name= "My account" }
-                            }
-                        },
-                        Invitations = 3,
-                        SuccessMessage = new SuccessMessageViewModel() {
-                            CompanyName = "sushiCorp Ltd.",
-                            HeadingMessage = "You have reached peak tempura",
-                            CustomSuccessMessage = "Congratulation!!1",
-                        }
-                    }},
+                        Data = new UserAccountsViewModel() {
+                                Accounts = new Accounts()
+                                {
+                                    AccountList = new List<Account>() {
+                                        new Account() {Id = 123, Name= "My account" }
+                                    }
+                                },
+                                Invitations = 3
+                            },
+
+                    }
+                },
                 {"~/Views/Invitation/Index.cshtml", invitationView },
-                {"~/Views/EmployerAccountPaye/Index.cshtml",  employerAccountPayeListViewModel},
                 {"~/Views/Invitation/All.cshtml", userInvitationsViewModel },
                 {"~/Views/Invitation/View.cshtml", invitationView },
+                {"~/Views/Shared/AccessDenied.cshtml", new OrchestratorResponse()},
                 {"~/Views/Shared/GenericError.cshtml", orchestratorResponse }
+
             };
         }
         
@@ -234,6 +291,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             ViewData["ViewToModel"] = _viewToModel;
             return View();
+        }
+
+        //GET: Notification
+        public ActionResult Notification()
+        {
+            return View(new OrchestratorResponse() {
+                FlashMessage = new FlashMessageViewModel()
+                                {
+                                    Headline = "sushiCorp Ltd.",
+                                    Message = "You have reached peak tempura",
+                                    SubMessage = "Congratulation!!1",
+                                    Severity = FlashMessageSeverityLevel.Success
+                                }
+            });
         }
     }
 }

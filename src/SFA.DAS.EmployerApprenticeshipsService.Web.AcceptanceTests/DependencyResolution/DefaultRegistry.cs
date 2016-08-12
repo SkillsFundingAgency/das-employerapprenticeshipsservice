@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
                 
             });
             
-            For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IUserRepository>().Use<UserRepository>();
 
             For<IOwinWrapper>().Use(() => owinWrapperMock.Object);
             

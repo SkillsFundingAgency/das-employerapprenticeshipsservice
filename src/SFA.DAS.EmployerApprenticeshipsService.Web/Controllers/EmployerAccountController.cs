@@ -91,11 +91,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             enteredData.EmployerRef = empref != null ? empref.Empref : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
             enteredData.AccessToken = response.AccessToken;
             enteredData.RefreshToken = response.RefreshToken;
-            if (empref != null)
-            {
-                enteredData.CompanyName = $"{enteredData.CompanyName} - {empref.EmployerLevyInformation.Employer.Name.EmprefAssociatedName}";
-            }
-
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
             return RedirectToAction("Summary");
@@ -134,7 +129,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 UserId = GetUserId(),
                 CompanyNumber = enteredData.CompanyNumber,
                 CompanyName = enteredData.CompanyName,
-                EmployerRef = enteredData.EmployerRef
+                CompanyRegisteredAddress = enteredData.RegisteredAddress,
+                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
+                EmployerRef = enteredData.EmployerRef,
+                AccessToken = enteredData.AccessToken,
+                RefreshToken = enteredData.RefreshToken
             });
 
             TempData["successHeader"] = "Account Created";

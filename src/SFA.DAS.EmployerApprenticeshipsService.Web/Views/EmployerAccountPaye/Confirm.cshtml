@@ -1,0 +1,41 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.ConfirmNewPayeScheme
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Link this scheme to this entity</h1>
+        <p>Confirm that you wish to link this legal entity, to this PAYE scheme ref to your account</p>
+        <form method="post" action="@Url.Action("Confirm",Model)">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="form-label">PAYE Scheme <b>@Model.PayeScheme</b></label>
+                <input type="hidden" name="PayeScheme" value="@Model.PayeScheme" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">@Model.LegalEntityName</label>
+                <input type="hidden" name="LegalEntityName" value="@Model.LegalEntityName" />
+                <input type="hidden" name="LegalEntityCode" value="@Model.LegalEntityCode" />
+                <input type="hidden" name="LegalEntityDateOfIncorporation" value="@Model.LegalEntityDateOfIncorporation" />
+                <input type="hidden" name="LegalEntityId" value="@Model.LegalEntityId" />
+                <input type="hidden" name="LegalEntityRegisteredAddress" value="@Model.LegalEntityRegisteredAddress"/>
+            </div>
+            <div class="form-group">
+                <label class="form-label">@Model.LegalEntityRegisteredAddress</label>
+            </div>
+            <input type="hidden" name="AccountId" value="@Model.AccountId"/>
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
+            <button type="submit" class="button">Create</button>
+        </form>
+
+        
+
+
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <a href="@Url.Action("AddNewLegalEntity", Model)">Search Again?</a>
+
+        <a href="@Url.Action("ChooseExistingLegalEntity", Model)">Choose a different legal entity</a>
+    </div>
+</div>

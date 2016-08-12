@@ -1,22 +1,31 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
-@model SuccessMessageViewModel
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@model dynamic
+@{
+    var viewModel = Model as OrchestratorResponse;
 
 
-<div class="grid-row">
-    <div class="column-full">
-        <div class="govuk-box-highlight  ">
-            @if (!string.IsNullOrWhiteSpace(Model.HeadingMessage))
-            {
-                <h1 class="bold-large">@Model.HeadingMessage</h1>
-            }
-            @if (!string.IsNullOrEmpty(Model.CompanyName))
-            {
-                <p>@Model.CompanyName is now available in your list of associated employer accounts</p>
-            }
-            @if (!string.IsNullOrEmpty(Model.CustomSuccessMessage))
-            {
-                <p>@Model.CustomSuccessMessage</p>
-            }
+}
+@if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message))
+{
+    <div class="grid-row">
+        <div class="column-full">
+
+            <div class="@viewModel.FlashMessage.SeverityCssClass">
+                @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
+                {
+                    <h1 class="bold-large">@viewModel.FlashMessage.Headline</h1>
+                }
+                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
+                {
+                    <p>@viewModel.FlashMessage.Message</p>
+                }
+                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
+                {
+                    <p>@viewModel.FlashMessage.SubMessage</p>
+                }
+            </div>
+
         </div>
     </div>
-</div>
+}

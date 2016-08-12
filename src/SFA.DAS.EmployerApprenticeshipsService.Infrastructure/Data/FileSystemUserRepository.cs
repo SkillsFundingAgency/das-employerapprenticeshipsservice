@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -16,8 +17,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         
         public async Task<User> GetById(string id)
         {
-            return await ReadFileById<User>(id);
+            var users = await ReadFileById<Users>(UserDataFileName);
+
+            return users.UserList.SingleOrDefault(x => x.UserRef.Equals(id, StringComparison.OrdinalIgnoreCase));
         }
+
         public async Task<User> GetByEmailAddress(string emailAddress)
         {
             var userFiles = GetDataFiles();

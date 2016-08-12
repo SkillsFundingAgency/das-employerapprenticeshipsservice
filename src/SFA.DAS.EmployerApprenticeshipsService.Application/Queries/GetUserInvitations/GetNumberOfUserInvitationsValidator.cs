@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations
@@ -24,6 +25,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvi
             }
 
             return result;
+        }
+
+        public Task<ValidationResult> ValidateAsync(GetNumberOfUserInvitationsQuery item)
+        {
+            throw new NotImplementedException();
         }
     }
 }
