@@ -1,0 +1,11 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.AddNewPayeScheme>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Unable to confirm PAYE Scheme</h1>
+
+        <p>The response from HMRC Government Gateway was not expected.</p>
+
+        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.Data.AccountId})">Search Again</a>
+    </div>
+</div>

@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is< GetGatewayTokenQuery>(c=>c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
-            Assert.IsAssignableFrom<HmrcTokenResponse>(token);
+            Assert.IsAssignableFrom<HmrcTokenResponse>(token.Data);
         }
     }
 }

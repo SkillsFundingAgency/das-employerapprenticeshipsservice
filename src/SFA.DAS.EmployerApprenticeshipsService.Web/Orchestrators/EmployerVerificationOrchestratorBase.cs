@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
@@ -42,15 +43,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.Url;
         }
 
-        public async Task<HmrcTokenResponse> GetGatewayTokenResponse(string accessCode, string returnUrl)
+        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl)
         {
+            var errorResponse = HttpContext.Current?.Request.QueryString["error"];
+            if (errorResponse != null)
+            {
+                return new OrchestratorResponse<HmrcTokenResponse>
+                {
+                    Status = HttpStatusCode.NotAcceptable,
+                    FlashMessage = new FlashMessageViewModel
+                    {
+                        Severity = FlashMessageSeverityLevel.Danger,
+                        Message = "Unexpected response from HMRC Government Gateway:",
+                        SubMessage = HttpContext.Current.Request.QueryString["error_description"]
+            }
+                };
+            } 
+
             var response = await Mediator.SendAsync(new GetGatewayTokenQuery
             {
                 RedirectUrl = returnUrl,
                 AccessCode = accessCode
             });
 
-            return response.HmrcTokenResponse;
+            return new OrchestratorResponse<HmrcTokenResponse> {Data = response.HmrcTokenResponse};
         }
 
 
