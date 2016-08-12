@@ -170,7 +170,38 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 PayeScheme = "mypaye-123",
                 RefreshToken = "refresh-123"
             };
-            
+
+            var employerAgreement = new EmployerAgreementView()
+            {
+                AccountId = 0123456789,
+                ExpiredDate = new DateTime(2018, 7, 1),
+                Id = 012345678,
+                LegalEntityId = 123,
+                LegalEntityName = "My little legal entity",
+                LegalEntityRegisteredAddress = "123 Fake Street",
+                SignedByName = "Bojack Horseman",
+                SignedDate = new DateTime(2016, 8, 12),
+                Status = EmployerAgreementStatus.Signed,
+                TemplateId = 3,
+                TemplateText = "The good old template"
+            };
+
+            var employerAgreementViewModel = new EmployerAgreementViewModel()
+            {
+                EmployerAgreement = employerAgreement
+            };
+
+            var employerAgreementListViewModel = new EmployerAgreementListViewModel()
+            {
+                AccountId = 0123456789,
+                EmployerAgreements = new List<EmployerAgreementView>
+                {
+                    employerAgreement,
+                    employerAgreement,
+                    employerAgreement
+                }
+            };
+
 
             _viewToModel = new Dictionary<string, object>
             {
@@ -227,6 +258,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         }
                     }
                 }},
+                {"~/Views/EmployerAgreement/Index.cshtml", new OrchestratorResponse<EmployerAgreementListViewModel> {Data =  employerAgreementListViewModel } },
+                {"~/Views/EmployerAgreement/View.cshtml", new OrchestratorResponse<EmployerAgreementViewModel> {Data = employerAgreementViewModel } },
                 {"~/Views/EmployerTeam/Index.cshtml", new OrchestratorResponse<Account> {
                     Data = new Account() {
                         Id = 1234567890,
