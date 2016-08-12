@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmpl
             {
                 var schemeCheck = await _mediator.SendAsync(new GetPayeSchemeInUseQuery { Empref = empref });
 
-                if (schemeCheck != null)
+                if (schemeCheck.PayeScheme != null)
                 {
                     _logger.Warn($"PAYE scheme {empref} already in use.");
                     throw new ConstraintException("PAYE scheme already in use");

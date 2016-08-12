@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -45,9 +46,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
         public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
-        {
+        { 
             var response = await GetGatewayTokenResponse(code, redirectUrl);
-
+            
             string empRef;
             if (_configuration.Hmrc.IgnoreDuplicates)
             {
@@ -57,18 +58,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 var hmrcResponse = await GetHmrcEmployerInformation(response.AccessToken);
                 empRef = hmrcResponse.Empref;
-
-                var schemeCheck = await Mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref= empRef});
-
-                if (schemeCheck != null)
-                {
-                    empRef = "";
-                }
             }
 
             return new AddNewPayeScheme
             {
-                
+                 
                 AccountId = accountId,
                 PayeScheme = empRef,
                 AccessToken = !string.IsNullOrEmpty(empRef) ? response.AccessToken : "",

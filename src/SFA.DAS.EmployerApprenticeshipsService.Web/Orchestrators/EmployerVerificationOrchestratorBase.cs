@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Data;
+using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -55,12 +57,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken)
         {
-
-            var response = await Mediator.SendAsync(new GetHmrcEmployerInformationQuery
+            var response = new GetHmrcEmployerInformationResponse();
+            try
             {
-                AuthToken = authToken
-
-            });
+                response = await Mediator.SendAsync(new GetHmrcEmployerInformationQuery
+                {
+                    AuthToken = authToken
+                });
+            }
+            catch (ConstraintException)
+            {
+                response.Empref = "";
+            }
 
             return response;
         }

@@ -40,8 +40,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             _validator.Setup(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _mediator = new Mock<IMediator>();
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new Scheme { Ref = "123" } });
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration {Hmrc = new HmrcConfiguration {IgnoreDuplicates = false} };
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration { IgnoreDuplicates = true } };
 
             _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object, _configuration);
         }
@@ -83,8 +84,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         [Test]
         public async Task ThenTheResponseReturnsThePopulatedHmrcEmployerInformation()
         {
+            
             //Act
-            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken});
+            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
 
             //Assert
             Assert.AreEqual(ExpectedEmprefAssociatedName, actual.EmployerLevyInformation.Employer.Name.EmprefAssociatedName);
@@ -92,25 +94,42 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         }
 
         [Test]
-        public async Task ThenTheSuccesfulResponseIsCheckedToSeeIfItIsAlreadyRegistered()
+        public void ThenTheSuccesfulResponseIsCheckedToSeeIfItIsAlreadyRegistered()
         {
-            
+            //Arrange
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration { IgnoreDuplicates = false } };
+            _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object, _configuration);
+
             //Act
-            await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }));
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c=>c.Empref.Equals(ExpectedEmpref))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref.Equals(ExpectedEmpref))));
         }
 
         [Test]
         public void ThenTheMessageIsNotValidIfTheSchemeAlreadyExists()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse {PayeScheme = new Scheme()});
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration { IgnoreDuplicates = false } };
+            _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object, _configuration);
 
             //Act
-            Assert.ThrowsAsync<ConstraintException>(async ()=> await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }));
-            _logger.Verify(x=>x.Warn($"PAYE scheme {ExpectedEmpref} already in use."), Times.Once);
+            Assert.ThrowsAsync<ConstraintException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken }));
+            _logger.Verify(x => x.Warn($"PAYE scheme {ExpectedEmpref} already in use."), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheMessageIsValidIfTheSchemeDoesNotExist()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
+
+            //Act
+            var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
+
+            //Assert
+            Assert.IsNotNull(actual);
         }
 
         [Test]
@@ -118,7 +137,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         {
             //Arrange
             _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration { IgnoreDuplicates = true } };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new Scheme() });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
             _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object, _configuration);
 
             //Act

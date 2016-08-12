@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -115,32 +116,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1"))), Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheReturnedSchemeIsCheckedAgainstAllSchemes()
-        {
-            //Arrange
-            _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
-
-            //Act
-            await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "");
-
-            //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>()), Times.Once);
-        }
+        
 
         [Test]
         public async Task ThenIfTheSchemeExistsAConflictIsReturnedAndTheValuesAreCleared()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse {PayeScheme = new Scheme()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>()), Times.Once);
             Assert.IsEmpty(actual.PayeScheme);
             Assert.IsEmpty(actual.AccessToken);
             Assert.IsEmpty(actual.RefreshToken);
