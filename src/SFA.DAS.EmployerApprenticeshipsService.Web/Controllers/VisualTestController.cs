@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var payeView = new PayeView()
             {
                 AccountId = 1234567890,
-                AccountName = "My account",
+                LegalEntityName = "My account",
                 EmpRef = "empref-39520"
             };
 
@@ -202,14 +202,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 new Account() {Id = 123, Name= "My account" }
                             }
                         },
-                        Invitations = 3
-                        //Invitations = new List<InvitationView>()
-                        //{
-                        //    invitationView,
-                        //    invitationView,
-                        //    invitationView
-                        //}
-                    }},
+                        Invitations = 3,
+                        FlashMessage = new FlashMessageViewModel() {
+                            Headline = "sushiCorp Ltd.",
+                            Message = "You have reached peak tempura",
+                            SubMessage = "Congratulation!!1",
+                            Severity = FlashMessageSeverityLevel.Success
+                        }
+                    }
+                },
                 {"~/Views/Invitation/Index.cshtml", invitationView },
                 {"~/Views/EmployerAccountPaye/Index.cshtml",  employerAccountPayeListViewModel},
                 {"~/Views/Invitation/All.cshtml", userInvitationsViewModel },

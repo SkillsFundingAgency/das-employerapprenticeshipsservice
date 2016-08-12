@@ -17,6 +17,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
 
+        //Needed for tests
+        protected EmployerVerificationOrchestratorBase()
+        {
+            
+        }
+
         protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
         {
             Mediator = mediator;
@@ -25,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
         
 
-        public async Task<string> GetGatewayUrl(string redirectUrl)
+        public virtual async Task<string> GetGatewayUrl(string redirectUrl)
         {
             var response = await Mediator.SendAsync(new GetGatewayInformationQuery
             {

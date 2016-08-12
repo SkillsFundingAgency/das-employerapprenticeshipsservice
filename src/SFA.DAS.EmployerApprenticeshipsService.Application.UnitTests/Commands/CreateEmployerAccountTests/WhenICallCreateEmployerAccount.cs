@@ -44,16 +44,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 CompanyName = "Qwerty Corp",
                 CompanyRegisteredAddress = "Innovation Centre, Coventry, CV1 2TT",
                 CompanyDateOfIncorporation = DateTime.Today.AddDays(-1000),
-                EmployerRef = "120/QWERTY"
+                EmployerRef = "120/QWERTY",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
             };
 
             _userRepository.Setup(x => x.GetById(cmd.ExternalUserId)).ReturnsAsync(user);
-            _repository.Setup(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef)).ReturnsAsync(accountId);
+            _repository.Setup(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken)).ReturnsAsync(accountId);
 
             await _handler.Handle(cmd);
-
-            _repository.Verify(x => x.CreateAccount(It.Is<long>(c => c.Equals(user.Id)), It.Is<string>(c => c.Equals(cmd.CompanyNumber)), It.Is<string>(c => c.Equals(cmd.CompanyName)), It.Is<string>(c => c.Equals(cmd.CompanyRegisteredAddress)), It.Is<DateTime>(c => c.Equals(cmd.CompanyDateOfIncorporation)), It.Is<string>(c => c.Equals(cmd.EmployerRef))), Times.Once);
-
+            
+            _repository.Verify(x =>x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress,cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities
@@ -27,6 +28,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountL
             }
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(GetAccountLegalEntitiesRequest item)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -11,7 +11,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
-        
+
+        //Needed for tests
+        protected EmployerAccountOrchestrator()
+        {
+            
+        }
+
         public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService) : base(mediator,logger,cookieService)
         {
         }
@@ -25,7 +31,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 CompanyName = model.CompanyName,
                 CompanyRegisteredAddress = model.CompanyRegisteredAddress,
                 CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
-                EmployerRef = model.EmployerRef
+                EmployerRef = model.EmployerRef,
+                AccessToken = model.AccessToken,
+                RefreshToken = model.RefreshToken
             });
         }
 

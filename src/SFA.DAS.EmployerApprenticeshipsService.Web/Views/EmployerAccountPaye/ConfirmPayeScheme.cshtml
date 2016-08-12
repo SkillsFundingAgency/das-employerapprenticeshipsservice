@@ -4,19 +4,26 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Confirm PAYE Scheme</h1>
 
+        @if (!string.IsNullOrEmpty(Model.PayeScheme))
+        {
+            <form method="post">
+                @Html.AntiForgeryToken()
 
-        <form method="post">
-            @Html.AntiForgeryToken()
+                <p>Do you want to associate @Model.PayeScheme with your account?</p>
 
-            <p>Do you want to associate @Model.PayeScheme with your account?</p>
+                <input type="hidden" value="@Model.AccountId" name="AccountId"/>
+                <input type="hidden" value="@Model.PayeScheme" name="PayeScheme"/>
+                <input type="hidden" value="@Model.RefreshToken" name="RefreshToken"/>
+                <input type="hidden" value="@Model.AccessToken" name="AccessToken"/>
 
-            <input type="hidden" value="@Model.AccountId" name="AccountId" />
-            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme"/>
-            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
-            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
+                <button type="submit" class="button">Accept</button>
+            </form>
+        }
+        else
+        {
+            <p>The scheme is already in use, please use a new Gateway login</p>
+        }
 
-            <button type="submit" class="button">Accept</button>
-        </form>
 
 
         <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.AccountId})">Search Again</a>

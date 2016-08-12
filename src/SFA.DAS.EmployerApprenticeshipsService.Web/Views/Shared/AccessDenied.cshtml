@@ -10,8 +10,15 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <p class="">
-            If you are experiencing difficulty accessing the aread of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.           
+            If you are experiencing difficulty accessing the aread of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.
         </p>
-        <a class="button" href="/">Go back to the service home page</a>
+        @if (string.IsNullOrWhiteSpace(Model.RedirectUrl))
+        {
+            <a class="button" href="/">Go back to the service home page</a>
+        }
+        else
+        {
+            <a class="button" href="@Model.RedirectUrl">@Model.FlashMessage.RedirectButtonMessage</a>
+        }
     </div>
 </div>

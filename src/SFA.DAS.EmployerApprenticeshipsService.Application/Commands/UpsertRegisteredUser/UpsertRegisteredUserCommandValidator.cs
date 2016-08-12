@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegisteredUser
 {
@@ -18,6 +19,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegi
                 validationResult.AddError("LastName", "No LastName supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(UpsertRegisteredUserCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

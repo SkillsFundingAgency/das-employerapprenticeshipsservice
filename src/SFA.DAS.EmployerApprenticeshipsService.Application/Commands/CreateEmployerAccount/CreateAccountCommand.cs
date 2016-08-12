@@ -11,5 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
         public string CompanyRegisteredAddress { get; set; }
         public DateTime CompanyDateOfIncorporation { get; set; }
         public string EmployerRef { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
     {
         public int Id { get; set; }
         public string Ref { get; set; }
-        public int AccountId { get; set; }
+        public long AccountId { get; set; }
     }
 }
