@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAgreementTemplate
 {
@@ -12,6 +13,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
                 validationResult.AddError("Text", "No Text supplied");
 
             return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(CreateEmployerAgreementTemplateCommand item)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
