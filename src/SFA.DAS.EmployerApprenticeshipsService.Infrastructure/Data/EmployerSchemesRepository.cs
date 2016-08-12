@@ -35,9 +35,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             };
         }
 
-        public Task<Scheme> GetSchemeByRef(string empref)
+        public async Task<Scheme> GetSchemeByRef(string empref)
         {
-            throw new System.NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@ref", empref, DbType.String);
+
+                return await c.QueryAsync<Scheme>(
+                    sql: "SELECT * FROM [dbo].[Paye] WHERE Ref = @ref;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.SingleOrDefault();
+
         }
     }
 }
