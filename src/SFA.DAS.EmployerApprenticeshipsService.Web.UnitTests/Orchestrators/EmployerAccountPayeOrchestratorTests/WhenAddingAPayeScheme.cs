@@ -129,9 +129,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "");
 
             //Assert
-            Assert.IsEmpty(actual.PayeScheme);
-            Assert.IsEmpty(actual.AccessToken);
-            Assert.IsEmpty(actual.RefreshToken);
+            Assert.IsEmpty(actual.Data.PayeScheme);
+            Assert.IsEmpty(actual.Data.AccessToken);
+            Assert.IsEmpty(actual.Data.RefreshToken);
         }
 
         [Test]

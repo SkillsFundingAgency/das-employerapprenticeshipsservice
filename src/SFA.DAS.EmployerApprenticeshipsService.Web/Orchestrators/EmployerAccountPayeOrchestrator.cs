@@ -45,10 +45,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
+        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
         { 
             var response = await GetGatewayTokenResponse(code, redirectUrl);
-            
+            if (response.Status != HttpStatusCode.OK)
+            {
+                return new OrchestratorResponse<AddNewPayeScheme>
+                {
+                    Data = new AddNewPayeScheme
+                    {
+                        AccountId = accountId
+                    },
+                    Status = response.Status,
+                    FlashMessage = response.FlashMessage
+                };
+            }
             string empRef;
             if (_configuration.Hmrc.IgnoreDuplicates)
             {
@@ -56,18 +67,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
             else
             {
-                var hmrcResponse = await GetHmrcEmployerInformation(response.AccessToken);
+                var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
                 empRef = hmrcResponse.Empref;
             }
 
-            return new AddNewPayeScheme
+            return new OrchestratorResponse < AddNewPayeScheme > { 
+               Data = new AddNewPayeScheme
             {
                  
                 AccountId = accountId,
                 PayeScheme = empRef,
-                AccessToken = !string.IsNullOrEmpty(empRef) ? response.AccessToken : "",
-                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.RefreshToken : ""
-                
+                AccessToken = !string.IsNullOrEmpty(empRef) ? response.Data.AccessToken : "",
+                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.Data.RefreshToken : ""
+                }
             };
             
         }

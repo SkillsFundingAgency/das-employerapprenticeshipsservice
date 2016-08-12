@@ -1,5 +1,5 @@
-﻿using System.Data;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
@@ -43,15 +43,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.Url;
         }
 
-        public async Task<HmrcTokenResponse> GetGatewayTokenResponse(string accessCode, string returnUrl)
+        public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl)
         {
+            var errorResponse = HttpContext.Current?.Request.QueryString["error"];
+            if (errorResponse != null)
+            {
+                return new OrchestratorResponse<HmrcTokenResponse>
+                {
+                    Status = HttpStatusCode.NotAcceptable,
+                    FlashMessage = new FlashMessageViewModel
+                    {
+                        Severity = FlashMessageSeverityLevel.Danger,
+                        Message = "Unexpected response from HMRC Government Gateway:",
+                        SubMessage = HttpContext.Current.Request.QueryString["error_description"]
+            }
+                };
+            } 
+
             var response = await Mediator.SendAsync(new GetGatewayTokenQuery
             {
                 RedirectUrl = returnUrl,
                 AccessCode = accessCode
             });
 
-            return response.HmrcTokenResponse;
+            return new OrchestratorResponse<HmrcTokenResponse> {Data = response.HmrcTokenResponse};
         }
 
 
@@ -73,7 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<SelectEmployerViewModel> GetCompanyDetails(SelectEmployerModel model)
+        public async Task<OrchestratorResponse< SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -83,17 +98,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new SelectEmployerViewModel();
+                return new OrchestratorResponse<SelectEmployerViewModel>
+                {
+                    FlashMessage = new FlashMessageViewModel()
+                    {
+                       Message = "No companies match the identifier you entered.",
+                       SubMessage = "Please try again."
+                    },
+                    Data = new SelectEmployerViewModel()
+                };
             }
 
             Logger.Info($"Returning Data for {model.EmployerRef}");
 
-            return new SelectEmployerViewModel
+            return new OrchestratorResponse<SelectEmployerViewModel>
             {
-                CompanyNumber = response.CompanyNumber,
-                CompanyName = response.CompanyName,
-                DateOfIncorporation = response.DateOfIncorporation,
-                RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                Data = new SelectEmployerViewModel
+                {
+                    CompanyNumber = response.CompanyNumber,
+                    CompanyName = response.CompanyName,
+                    DateOfIncorporation = response.DateOfIncorporation,
+                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                }
+
             };
         }
     }
