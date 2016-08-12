@@ -8,11 +8,11 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLe
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -69,6 +69,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 
             };
             
+        }
+
+        public async Task<OrchestratorResponse<long>> CheckUserIsOwner(long accountId, string email)
+        {
+            HttpStatusCode status = HttpStatusCode.OK;
+
+            
+            var response = await Mediator.SendAsync(new GetMemberRequest
+            {
+                AccountId = accountId,
+                Email = email
+            });
+
+            if (response != null)
+            {
+                if (response.TeamMember.Role != Role.Owner)
+                {
+                    status = HttpStatusCode.Unauthorized;
+                }
+            }
+
+            return new OrchestratorResponse<long>
+            {
+                Data = accountId,
+                Status = status
+            };
         }
 
         public async Task<List<LegalEntity>> GetLegalEntities(long accountId, string userId)

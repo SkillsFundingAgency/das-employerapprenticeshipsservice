@@ -1,4 +1,4 @@
-﻿@model long
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<long>
 
 
 <div class="grid-row">
@@ -15,7 +15,7 @@
                 <li>the PAYE schemes you want to link to the apprenticeship account</li>
             </ul>
         </p>
-        <a class="button" href="@Url.Action("GetGateway","EmployerAccountPaye",new {accountId = Model})">Continue</a>
+        <a class="button" href="@Url.Action("GetGateway","EmployerAccountPaye",new {accountId = Model.Data})">Continue</a>
         
     </div>
 </div>

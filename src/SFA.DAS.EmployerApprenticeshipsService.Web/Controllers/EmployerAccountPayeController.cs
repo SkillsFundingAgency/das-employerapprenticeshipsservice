@@ -9,7 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    public class EmployerAccountPayeController : Controller
+    public class EmployerAccountPayeController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
@@ -44,9 +44,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Add(long accountId)
+        public async Task<ActionResult> Add(long accountId)
         {
-            return View(accountId);
+            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, _owinWrapper.GetClaimValue("email"));
+
+            return View(response);
         }
 
         [HttpGet]

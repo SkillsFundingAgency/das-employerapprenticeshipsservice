@@ -11,6 +11,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExi
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
@@ -56,11 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _cookieService = new Mock<ICookieService>();
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
-                .ReturnsAsync(new GetAccountLegalEntitiesResponse
-                {
-                    Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}
-                });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>())).ReturnsAsync(new GetAccountLegalEntitiesResponse{Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}});
             _mediator.Setup(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c=>c.AccessCode.Equals("1")))).ReturnsAsync(new GetGatewayTokenQueryResponse {HmrcTokenResponse = new HmrcTokenResponse {AccessToken = "1"} });
             _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "123/ABC"});
             _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("2")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "456/ABC"});
@@ -147,6 +144,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             Assert.IsEmpty(actual.PayeScheme);
             Assert.IsEmpty(actual.AccessToken);
             Assert.IsEmpty(actual.RefreshToken);
+        }
+
+        [Test]
+        public async Task ThenTheLoggedInUserIsCheckedToMakeSureThatTheyAreAnOwner()
+        {
+            //Act
+            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId);
+
+            //assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfNotAuthorisedItIsReturnedInTheResponse()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>())).ReturnsAsync(new GetMemberResponse {TeamMember = new TeamMember {Role=Role.Viewer} });
+
+            //Act
+            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId);
+
+            //act
+            Assert.IsAssignableFrom<OrchestratorResponse<long>>(actual);
+            Assert.AreEqual(HttpStatusCode.Unauthorized,actual.Status);
         }
     }
 }
