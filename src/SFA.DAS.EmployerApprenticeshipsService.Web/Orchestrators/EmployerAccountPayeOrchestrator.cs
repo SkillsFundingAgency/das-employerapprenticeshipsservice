@@ -37,12 +37,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response.PayeSchemes;
         }
 
-        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
+        public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
         {
             var response = await GetGatewayTokenResponse(code, redirectUrl);
 
             string empRef;
-            var status = HttpStatusCode.OK;
             if (_configuration.Hmrc.IgnoreDuplicates)
             {
                 empRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
@@ -56,22 +55,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
                 if (schemeCheck != null)
                 {
-                    status = HttpStatusCode.Conflict;
                     empRef = "";
-
                 }
             }
 
-            return new OrchestratorResponse<AddNewPayeScheme>
+            return new AddNewPayeScheme
             {
-                Status = status,
-                Data = new AddNewPayeScheme
-                {
-                    AccountId = accountId,
-                    PayeScheme = empRef,
-                    AccessToken = !string.IsNullOrEmpty(empRef) ? response.AccessToken : "",
-                    RefreshToken = !string.IsNullOrEmpty(empRef) ? response.RefreshToken : ""
-                }
+                
+                AccountId = accountId,
+                PayeScheme = empRef,
+                AccessToken = !string.IsNullOrEmpty(empRef) ? response.AccessToken : "",
+                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.RefreshToken : ""
+                
             };
             
         }

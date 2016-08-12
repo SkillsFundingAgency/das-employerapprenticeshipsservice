@@ -144,10 +144,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>()), Times.Once);
-            Assert.AreEqual(HttpStatusCode.Conflict,actual.Status);
-            Assert.IsEmpty(actual.Data.PayeScheme);
-            Assert.IsEmpty(actual.Data.AccessToken);
-            Assert.IsEmpty(actual.Data.RefreshToken);
+            Assert.IsEmpty(actual.PayeScheme);
+            Assert.IsEmpty(actual.AccessToken);
+            Assert.IsEmpty(actual.RefreshToken);
         }
     }
 }
