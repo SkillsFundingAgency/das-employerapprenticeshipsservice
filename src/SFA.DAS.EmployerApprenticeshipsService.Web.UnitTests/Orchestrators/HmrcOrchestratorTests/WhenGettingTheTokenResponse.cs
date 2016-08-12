@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using Moq;
 using NLog;
@@ -36,11 +37,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
                 .ReturnsAsync(new GetGatewayTokenQueryResponse {HmrcTokenResponse = new HmrcTokenResponse()});
 
             //Act
-            var token = await _employerAccountOrchestrator.GetGatewayTokenResponse(accessCode, returnUrl);
+            var token = await _employerAccountOrchestrator.GetGatewayTokenResponse(accessCode, returnUrl, null);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is< GetGatewayTokenQuery>(c=>c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
-            Assert.IsAssignableFrom<HmrcTokenResponse>(token);
+            Assert.IsAssignableFrom<HmrcTokenResponse>(token.Data);
         }
     }
 }
