@@ -10,14 +10,16 @@
 AS
 BEGIN
 	DECLARE @legalEntityId BIGINT
+	DECLARE @employerAgreementId BIGINT
 
 	EXEC [CreateLegalEntity] @companyNumber,@companyName,@CompanyAddress,@CompanyDateOfIncorporation,@legalEntityId OUTPUT
 
 	EXEC [AddPayeToAccountForExistingLegalEntity] @accountId, @legalEntityId,@employerRef,@accessToken, @refreshToken
 
-	EXEC [CreateEmployerAgreement] @legalEntityId
+	EXEC [CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
 
-
+	EXEC [CreateAccountEmployerAgreement] @accountId, @employerAgreementId
+	
 END
 
 

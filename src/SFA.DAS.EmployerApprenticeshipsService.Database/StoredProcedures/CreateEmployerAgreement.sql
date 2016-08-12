@@ -1,5 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[CreateEmployerAgreement]
-	@legalEntityId BIGINT
+	@legalEntityId BIGINT,
+	@employerAgreementId BIGINT OUTPUT
 AS
 BEGIN	
 	DECLARE @templateId INT
@@ -8,4 +9,6 @@ BEGIN
 
 	INSERT INTO [dbo].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) 
 	VALUES (@legalEntityId, @templateId, 1)
+
+	SELECT @employerAgreementId = SCOPE_IDENTITY();
 END
