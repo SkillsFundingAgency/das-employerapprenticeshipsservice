@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[SignEmployerAgreement]
 	@agreementId BIGINT,
-	@signedById UNIQUEIDENTIFIER,
+	@signedById BIGINT,
 	@signedByName NVARCHAR(100)
 AS
 	SET NOCOUNT ON;

@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
             if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
-            await _employerAgreementRepository.SignAgreement(message.AgreementId, owner.UserRef, $"{owner.FirstName} {owner.LastName}");
+            await _employerAgreementRepository.SignAgreement(message.AgreementId, owner.UserId, $"{owner.FirstName} {owner.LastName}");
         }
     }
 }

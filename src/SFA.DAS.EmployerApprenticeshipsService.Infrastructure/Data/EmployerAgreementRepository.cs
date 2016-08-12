@@ -68,13 +68,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task SignAgreement(long agreementId, string externalUserId, string signedByName)
+        public async Task SignAgreement(long agreementId, long signedById, string signedByName)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@agreementId", agreementId, DbType.Int64);
-                parameters.Add("@signedById", Guid.Parse(externalUserId), DbType.Guid);
+                parameters.Add("@signedById", signedById, DbType.Int64);
                 parameters.Add("@signedByName", signedByName, DbType.String);
 
                 var result = await c.ExecuteAsync(

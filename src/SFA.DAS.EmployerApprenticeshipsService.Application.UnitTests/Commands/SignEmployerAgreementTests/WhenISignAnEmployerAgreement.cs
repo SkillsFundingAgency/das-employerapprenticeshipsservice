@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _owner = new MembershipView
             {
-                UserRef = _command.ExternalUserId,
+                UserId = 1,
                 RoleId = (short) Role.Owner,
                 FirstName = "Fred",
                 LastName = "Bloggs"
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             await _handler.Handle(_command);
 
-            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _command.ExternalUserId, $"{_owner.FirstName} {_owner.LastName}"), Times.Once);
+            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}"), Times.Once);
         }
     }
 }

@@ -8,8 +8,9 @@
     [SignedDate] DATETIME NULL, 
     [SignByDate] DATETIME NULL, 
     [ExpiredDate] DATETIME NULL, 
-    [SignedById] UNIQUEIDENTIFIER NULL, 
+    [SignedById] BIGINT NULL, 
     CONSTRAINT [FK_EmployerAgreement_LegalEntity] FOREIGN KEY ([LegalEntityId]) REFERENCES [LegalEntity]([Id]), 
     CONSTRAINT [FK_EmployerAgreement_Template] FOREIGN KEY ([TemplateId]) REFERENCES [EmployerAgreementTemplate]([Id]), 
+    CONSTRAINT [FK_EmployerAgreement_SignedBy] FOREIGN KEY ([SignedById]) REFERENCES [User]([Id]),
     CONSTRAINT [FK_EmployerAgreement_Status] FOREIGN KEY ([StatusId]) REFERENCES [EmployerAgreementStatus]([Id])
 )

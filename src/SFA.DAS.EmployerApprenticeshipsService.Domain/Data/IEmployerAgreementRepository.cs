@@ -9,6 +9,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId);
         Task CreateEmployerAgreementTemplate(string text);
         Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
-        Task SignAgreement(long agreementId, string externalUserId, string signedByName);
+        Task SignAgreement(long agreementId, long signedById, string signedByName);
     }
 }
