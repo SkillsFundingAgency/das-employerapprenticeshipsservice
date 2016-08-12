@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -23,34 +25,88 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<EmployerAgreementListViewModel> Get(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(long accountId, string externalUserId)
         {
-            var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+            try
             {
-                AccountId = accountId,
-                ExternalUserId = externalUserId
-            });
+                var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                {
+                    AccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
 
-            return new EmployerAgreementListViewModel
+                return new OrchestratorResponse<EmployerAgreementListViewModel>
+                {
+                    Data = new EmployerAgreementListViewModel
+                    {
+                        AccountId = accountId,
+                        EmployerAgreements = response.EmployerAgreements
+                    }
+                };
+            }
+            catch (Exception)
             {
-                AccountId = accountId,
-                EmployerAgreements = response.EmployerAgreements
-            };
+                return new OrchestratorResponse<EmployerAgreementListViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
         }
 
-        public async Task<EmployerAgreementViewModel> GetById(long agreementid, long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(long agreementid, long accountId, string externalUserId)
         {
-            var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
+            try
             {
-                AgreementId = agreementid,
-                AccountId = accountId,
-                ExternalUserId = externalUserId
-            });
+                var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
+                {
+                    AgreementId = agreementid,
+                    AccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
 
-            return new EmployerAgreementViewModel
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel
+                    {
+                        EmployerAgreement = response.EmployerAgreement
+                    }
+                };
+            }
+            catch (Exception)
             {
-                EmployerAgreement = response.EmployerAgreement
-            };
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+        }
+
+        public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId)
+        {
+            try
+            {
+                await _mediator.SendAsync(new SignEmployerAgreementCommand
+                {
+                    AgreementId = agreementid,
+                    AccountId = accountId,
+                    ExternalUserId = externalUserId
+                });
+
+                return new OrchestratorResponse
+                {
+                    FlashMessage = new FlashMessageViewModel
+                    {
+                        Message = "Agreement has been signed"
+                    }
+                };
+            }
+            catch (Exception)
+            {
+                return new OrchestratorResponse
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
         }
     }
 }

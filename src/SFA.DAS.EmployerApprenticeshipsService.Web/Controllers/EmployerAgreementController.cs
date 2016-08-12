@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -6,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
-    public class EmployerAgreementController : Controller
+    public class EmployerAgreementController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAgreementOrchestrator _orchestrator;
@@ -56,9 +57,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            var agreement = await _orchestrator.GetById(agreementid, accountId, userIdClaim);
+            if (understood == "understood")
+            {
+                var response = await _orchestrator.SignAgreement(agreementid, accountId, userIdClaim);
 
-            return RedirectToAction("View");
+                if (response.Status == HttpStatusCode.OK)
+                {
+                    TempData["successMessage"] = $"Agreement {agreementid} has been signed";
+
+                    return RedirectToAction("Index", new {accountId = accountId});
+                }
+
+                return View("DeadView", response);
+            }
+
+            return RedirectToAction("Index", new { accountId = accountId });
         }
     }
 }

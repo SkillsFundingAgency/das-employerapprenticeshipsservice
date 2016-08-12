@@ -1,6 +1,7 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web;
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
-@model EmployerAgreementListViewModel
+@model OrchestratorResponse<EmployerAgreementListViewModel>
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -8,7 +9,7 @@
     </div>
     <div class="column-one-third rightalign">
         <form action="@Url.Action("Add")" method="GET">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
             <input class="button" id="addNewPaye" type="submit" value="New agreement">
         </form>
     </div>
@@ -26,7 +27,7 @@
             </div>
             <div class="responsive-tbody">
 
-                @foreach (var employerAgreement in Model.EmployerAgreements)
+                @foreach (var employerAgreement in Model.Data.EmployerAgreements)
             {
                     <div class="responsive-tr">
                         <div class="responsive-td">
@@ -49,7 +50,7 @@
                             <div>
                                 <a aria-label="View Employer Agreement @employerAgreement.Id"
                                    title="View Employer Agreement @employerAgreement.Id"
-                                   href="@Url.Action("View", new { agreementId = employerAgreement.Id, accountId = Model.AccountId })">View</a>
+                                   href="@Url.Action("View", new { agreementId = employerAgreement.Id, accountId = Model.Data.AccountId })">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>

@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@signedByName", signedByName, DbType.String);
 
                 var result = await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[EmployerAgreement] SET SignedById = @signedById, SignedByName, Status = 2 = @signedByName WHERE Id = @agreementId;",
+                    sql: "UPDATE [dbo].[EmployerAgreement] SET SignedById = @signedById, SignedByName = @signedByName, SignedDate = GETDATE(), StatusId = 2 WHERE Id = @agreementId;",
                     param: parameters,
                     commandType: CommandType.Text);
                 return result;
