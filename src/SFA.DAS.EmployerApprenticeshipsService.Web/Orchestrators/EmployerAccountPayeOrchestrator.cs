@@ -26,15 +26,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _configuration = configuration;
         }
 
-        public async Task<List<PayeView>> Get(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
         {
             var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
             {
                 AccountId = accountId,
                 ExternalUserId = externalUserId
             });
-
-            return response.PayeSchemes;
+            
+            return new OrchestratorResponse<EmployerAccountPayeListViewModel>
+            {
+                Data = new EmployerAccountPayeListViewModel
+                {
+                    AccountId = accountId,
+                    PayeSchemes = response.PayeSchemes
+                }
+            };
         }
 
         public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
@@ -94,7 +101,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 Data = accountId,
                 Status = status,
-                RedirectButtonMessage = "Return to PAYE schemes",
+                FlashMessage = new FlashMessageViewModel
+                {
+                    RedirectButtonMessage = "Return to PAYE schemes"
+                },
                 RedirectUrl = redirectUrl
             };
         }

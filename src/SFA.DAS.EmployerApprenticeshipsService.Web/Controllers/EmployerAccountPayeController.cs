@@ -28,13 +28,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(long accountid)
         {
-            var schemes = await _employerAccountPayeOrchestrator.Get(accountid, _owinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerAccountPayeOrchestrator.Get(accountid, _owinWrapper.GetClaimValue(@"sub"));
 
-            return View(new EmployerAccountPayeListViewModel
-            {
-                AccountId = accountid,
-                PayeSchemes = schemes
-            });
+            return View(model);
         }
 
         [HttpGet]
@@ -134,7 +130,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, _owinWrapper.GetClaimValue("sub"));
 
-            //TODO add the success message
+            TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
         }
