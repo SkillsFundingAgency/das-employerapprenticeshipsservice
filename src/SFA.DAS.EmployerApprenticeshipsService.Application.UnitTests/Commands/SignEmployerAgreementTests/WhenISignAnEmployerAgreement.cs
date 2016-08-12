@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -79,8 +80,54 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
+        public void ThenAgreementNotFoundThrowsExcption()
+        {
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+                .ReturnsAsync(null);
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ThenAgreementIsAlreadySignedThrowsExcption()
+        {
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Signed
+                });
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ThenAgreementHasExpiredThrowsExcption()
+        {
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Pending,
+                    ExpiredDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
+                });
+
+            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
         public async Task ThenAgreementIsSigned()
         {
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Pending
+                });
+
             await _handler.Handle(_command);
 
             _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}"), Times.Once);

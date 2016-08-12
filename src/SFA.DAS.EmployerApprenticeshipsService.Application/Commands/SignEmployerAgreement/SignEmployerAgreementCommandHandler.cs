@@ -33,8 +33,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
 
             var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
+            if (owner == null)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
+            if ((Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
+
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(message.AgreementId);
+
+            if (agreement == null)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", $"Agreement {message.AgreementId} does not exist" } });
+            if (agreement.Status == EmployerAgreementStatus.Signed)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", $"Agreement {message.AgreementId} has already been signed" } });
+            if (agreement.ExpiredDate.HasValue)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", $"Agreement {message.AgreementId} has expired" } });
 
             await _employerAgreementRepository.SignAgreement(message.AgreementId, owner.UserId, $"{owner.FirstName} {owner.LastName}");
         }
