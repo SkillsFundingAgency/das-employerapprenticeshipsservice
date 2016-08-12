@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<long>> CheckUserIsOwner(long accountId, string email)
+        public async Task<OrchestratorResponse<long>> CheckUserIsOwner(long accountId, string email, string redirectUrl)
         {
             HttpStatusCode status = HttpStatusCode.OK;
 
@@ -93,7 +93,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return new OrchestratorResponse<long>
             {
                 Data = accountId,
-                Status = status
+                Status = status,
+                RedirectButtonMessage = "Return to PAYE schemes",
+                RedirectUrl = redirectUrl
             };
         }
 

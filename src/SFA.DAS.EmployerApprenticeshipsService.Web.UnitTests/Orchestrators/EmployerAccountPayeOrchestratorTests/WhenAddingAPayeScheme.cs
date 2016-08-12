@@ -150,7 +150,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheLoggedInUserIsCheckedToMakeSureThatTheyAreAnOwner()
         {
             //Act
-            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId);
+            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId, "");
 
             //assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Once);
@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>())).ReturnsAsync(new GetMemberResponse {TeamMember = new TeamMember {Role=Role.Viewer} });
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId);
+            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId,"");
 
             //act
             Assert.IsAssignableFrom<OrchestratorResponse<long>>(actual);
