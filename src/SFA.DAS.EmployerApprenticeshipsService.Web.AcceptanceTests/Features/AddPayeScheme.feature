@@ -26,5 +26,4 @@ Examples:
 
 Scenario: View my available schemes
 	Given I am part of an account
-	When I view PAYE schemes
-	Then All schemes are returned
+	Then I can view all of my PAYE schemes
