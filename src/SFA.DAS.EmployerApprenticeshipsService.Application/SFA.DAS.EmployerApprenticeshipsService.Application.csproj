@@ -87,6 +87,8 @@
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
+    <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommand.cs" />
+    <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccount\CreateAccountCommandValidator.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
     <Compile Include="InvalidRequestException.cs" />
+    <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Messages\SendNotificationQueueMessage.cs" />
