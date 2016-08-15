@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -100,7 +101,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             }
         }
 
-        
+        [Then(@"I ""(.*)"" view team members")]
+        public void ThenIViewTeamMembers(string canView)
+        {
+            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
+            var teamMembers = orcehstrator.GetTeamMembers(_accountId, userId).Result;
+            
+            if (canView.ToLower().Equals("can"))
+            {
+                Assert.AreEqual(HttpStatusCode.OK, teamMembers.Status);
+            }
+            else
+            {
+                Assert.AreEqual(HttpStatusCode.Unauthorized, teamMembers.Status);
+            }
+        }
+
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
         {
