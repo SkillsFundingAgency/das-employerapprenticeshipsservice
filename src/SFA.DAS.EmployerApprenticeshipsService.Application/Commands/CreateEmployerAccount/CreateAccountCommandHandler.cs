@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccountCreatedNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -17,9 +18,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
         private readonly IAccountRepository _accountRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly IMediator _mediator;
         private readonly CreateAccountCommandValidator _validator;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator)
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
@@ -30,6 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
             _accountRepository = accountRepository;
             _userRepository = userRepository;
             _messagePublisher = messagePublisher;
+            _mediator = mediator;
             _validator = new CreateAccountCommandValidator();
         }
 
@@ -48,6 +51,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
             var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, message.EmployerRef, message.AccessToken, message.RefreshToken);
 
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
+            {
+                AccountId = accountId
+            });
+
+            await _mediator.SendAsync(new CreateEmployerAccountCreatedNotificationCommand
             {
                 AccountId = accountId
             });

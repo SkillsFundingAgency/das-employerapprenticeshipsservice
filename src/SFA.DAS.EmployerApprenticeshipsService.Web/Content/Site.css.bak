@@ -189,10 +189,3 @@ h1.access-denied {
     margin-bottom: 5px; 
 }
 
-.govuk-box-highlight p , .govuk-box-highlight  h1 {
-    max-width: 100%;
-}
-
-hr.wide {
-    height:3px;
-}
