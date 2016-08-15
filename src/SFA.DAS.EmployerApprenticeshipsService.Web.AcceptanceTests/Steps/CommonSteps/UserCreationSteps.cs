@@ -27,13 +27,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
             return user;
         }
 
-        public static void CreateUserWithRole(User user,Role role, long accountId, IUserRepository userRepository, IMembershipRepository membershipRepository)
+        public static long CreateUserWithRole(User user,Role role, long accountId, IUserRepository userRepository, IMembershipRepository membershipRepository)
         {
-            userRepository.Create(user).Wait();
-
             var userRecord = userRepository.GetById(user.UserRef).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short) role).Wait();
+
+            return userRecord.Id;
         }
     }
 }

@@ -24,7 +24,11 @@ Examples:
 	| Viewer       | not_created   |
 	| Transactor   | not_created   |
 
-Scenario: View my available schemes
-	Given I am part of an account
-	When I view PAYE schemes
-	Then All schemes are returned
+Scenario Outline: View my available schemes
+	Given I am an account "<account_role>"
+	Then I can view all of my PAYE schemes
+Examples:
+	| account_role |
+	| Owner        |
+	| Viewer       |
+	| Transactor   |
