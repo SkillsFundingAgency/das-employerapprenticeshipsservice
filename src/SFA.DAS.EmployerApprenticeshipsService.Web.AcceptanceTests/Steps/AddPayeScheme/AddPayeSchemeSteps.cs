@@ -65,21 +65,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             //Create a new user with passed in role
             CreateUserWithRole(accountRole);
         }
-
-        [Given(@"I am part of an account")]
-        public void GivenIAmPartOfAnAccount()
-        {
-            CreateAccountWithOwner();
-
-            SetAccountIdForUser();
-            
-        }
-
+        
         [Then(@"I can view all of my PAYE schemes")]
         public void ThenICanViewAllOfMyPAYESchemes()
         {
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.Get(_accountId, _accountOwnerUserId).Result;
+            var legalEntities = employerPayeOrchestrator.Get(_accountId, _externalUserId).Result;
 
             Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
         }

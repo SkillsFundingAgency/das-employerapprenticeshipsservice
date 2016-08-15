@@ -114,13 +114,16 @@ testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((strin
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("View my available schemes")]
-        public virtual void ViewMyAvailableSchemes()
+        [NUnit.Framework.TestCaseAttribute("Owner", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Viewer", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Transactor", new string[0])]
+        public virtual void ViewMyAvailableSchemes(string account_Role, string[] exampleTags)
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View my available schemes", ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View my available schemes", exampleTags);
 #line 27
 this.ScenarioSetup(scenarioInfo);
 #line 28
- testRunner.Given("I am part of an account", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 29
  testRunner.Then("I can view all of my PAYE schemes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
