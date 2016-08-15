@@ -100,6 +100,7 @@
     <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
     <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\ReleaseEmployerAgreementTemplate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

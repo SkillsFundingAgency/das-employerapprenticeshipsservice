@@ -105,6 +105,9 @@
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
+    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommand.cs" />
+    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandHandler.cs" />
+    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandValidator.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommand.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandHandler.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandValidator.cs" />

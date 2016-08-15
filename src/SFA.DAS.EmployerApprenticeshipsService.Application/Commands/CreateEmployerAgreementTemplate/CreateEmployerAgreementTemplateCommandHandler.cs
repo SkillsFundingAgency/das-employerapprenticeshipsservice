@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _employerAgreementRepository.CreateEmployerAgreementTemplate(message.Text);
+            await _employerAgreementRepository.CreateEmployerAgreementTemplate(message.TemplateRef, message.Text);
         }
     }
 }
