@@ -18,5 +18,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
             }
             return validationResult;
         }
+
+        public Task<ValidationResult> ValidateAsync(GetAccountTeamMembersQuery item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

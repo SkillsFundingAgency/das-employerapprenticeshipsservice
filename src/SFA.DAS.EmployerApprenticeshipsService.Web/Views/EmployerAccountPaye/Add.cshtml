@@ -1,5 +1,22 @@
-﻿<div class="grid-row">
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<long>
+
+
+<div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add PAYE Scheme</h1>
+        <p>You can add multiple PAYE schemes to your account.</p>
+
+        <h2 class="heading-medium">Before you start</h2>
+
+        <p>
+            You need:
+            <ul class="list-bullet">
+                <li>Government Gateway ID</li>
+                <li>the PAYE schemes you want to link to the apprenticeship account</li>
+            </ul>
+        </p>
+        <a class="button" href="@Url.Action("GetGateway","EmployerAccountPaye",new {accountId = Model.Data})">Continue</a>
+        
     </div>
 </div>
+

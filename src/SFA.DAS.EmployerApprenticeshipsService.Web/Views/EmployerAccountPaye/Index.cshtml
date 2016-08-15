@@ -1,20 +1,9 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-
-@model EmployerAccountPayeListViewModel
+﻿
+@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.EmployerAccountPayeListViewModel>
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">PAYE Schemes</h1>
-    </div>
-    <div class="column-one-third rightalign">
-        <form action="@Url.Action("Add")" method="GET">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.AccountId" />
-            <input class="button" id="addNewPaye" type="submit" value="Add new scheme">
-        </form>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-full">
         <div class="responsive-table">
             <div class="responsive-thead">
                 <div class="responsive-tr">
@@ -25,17 +14,17 @@
             </div>
             <div class="responsive-tbody">
 
-                @foreach (var scheme in Model.PayeSchemes)
-            {
+                @foreach (var scheme in Model.Data.PayeSchemes)
+                {
                     <div class="responsive-tr">
                         <div class="responsive-td">
                             <div>@scheme.EmpRef</div>
-                            <div class="responsive-inner-caption">Scheme ID</div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Legal Entity</div>
                             <div>
-                                @scheme.AccountName
+                                @scheme.LegalEntityName
                             </div>
                         </div>
                         <div class="responsive-td">
@@ -52,5 +41,17 @@
 
             </div>
         </div>
+    </div>
+
+</div>
+<div class="grid-row">
+    <br/>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form action="@Url.Action("Add")" method="GET">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
+            <input class="button" id="addNewPaye" type="submit" value="Add new scheme">
+        </form>
     </div>
 </div>

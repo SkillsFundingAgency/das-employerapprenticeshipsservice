@@ -1,6 +1,6 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account.Account
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account.Account>
 
-<h1 class="heading-xlarge" id="company-Name">@Model.Name</h1>
+<h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
 
 <div class="grid-row">
 <div class="column-two-thirds">
@@ -8,13 +8,13 @@
         <div class="grid-row">
             <div class="column-half">
                 <h3 class="heading-medium" style="margin-top: 0;">
-                    <a href="@Url.Action("View", new { accountId = Model.Id })">Team</a>
+                    <a href="@Url.Action("View", new { accountId = Model.Data.Id })">Team</a>
                 </h3>
                 <p>Invite new users and manage existing ones</p>
             </div>
             <div class="column-half ">
                 <h3 class="heading-medium" style="margin-top: 0">
-                    <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Id })">Funding</a>
+                    <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Data.Id })">Funding</a>
                 </h3>
                 <p>Manage your funds including how much you have available to spend, your transactions and funds you could lose</p>
             </div>
@@ -23,13 +23,13 @@
         <div class="grid-row">
             <div class="column-half ">
                 <h3 class="heading-medium" style="margin-top: 0">
-                    <a href="#">Agreements</a>
+                    <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.Id })">Agreements</a>
                 </h3>
                 <p>Manage your agreements</p>
             </div>
             <div class="column-half">
                 <h3 class="heading-medium" style="margin-top: 0;">
-                    <a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Id })">PAYE</a>
+                    <a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.Id })">PAYE</a>
                 </h3>
                 <p>Manage the PAYE schemes associated with your Account</p>
             </div>

@@ -1,29 +1,42 @@
-﻿
-
-CREATE PROCEDURE [dbo].[CreateAccount]
+﻿CREATE PROCEDURE [dbo].[CreateAccount]
 (
-	@userRef UNIQUEIDENTIFIER,
+	@userId BIGINT,
 	@employerNumber NVARCHAR(50), 
 	@employerName NVARCHAR(100), 
 	@employerRef NVARCHAR(16),
-	@accountId BIGINT OUTPUT
+	@employerRegisteredAddress NVARCHAR(256),
+	@employerDateOfIncorporation DATETIME,
+	@accountId BIGINT OUTPUT,
+	@accessToken VARCHAR(50),
+	@refreshToken VARCHAR(50)
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @userId BIGINT;
-
-	select @userId = Id from [dbo].[User] where PireanKey = @userRef;
-	if (@userId is null)
-	begin
-		INSERT INTO [dbo].[User](PireanKey, Email) VALUES (@userRef, 'test@test.org');
-		SELECT @userId = SCOPE_IDENTITY();
-	end
+	DECLARE @legalEntityId BIGINT;
+	DECLARE @employerAgreementId BIGINT;
 
 	INSERT INTO [dbo].[Account](Name) VALUES (@employerName);
 	SELECT @accountId = SCOPE_IDENTITY();
 
-	INSERT INTO [dbo].[Paye](Ref, AccountId) VALUES (@employerRef, @accountId);
+	SELECT @legalEntityId = Id FROM [dbo].[LegalEntity] WHERE Code = @employerNumber;
+	
+	IF (@legalEntityId IS NULL)
+	BEGIN
+		INSERT INTO [dbo].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+		SELECT @legalEntityId = SCOPE_IDENTITY();
+
+		DECLARE @templateId INT;
+
+		SELECT TOP 1 @templateId = Id FROM [dbo].[EmployerAgreementTemplate] ORDER BY Id ASC;
+
+		INSERT INTO [dbo].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
+		SELECT @employerAgreementId = SCOPE_IDENTITY();
+	END
+
+	INSERT INTO [dbo].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
+
+	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
 	INSERT INTO [dbo].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
 END

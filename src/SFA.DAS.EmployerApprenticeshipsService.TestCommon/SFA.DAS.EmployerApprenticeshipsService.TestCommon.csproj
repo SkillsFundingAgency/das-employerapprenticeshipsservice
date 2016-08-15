@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />

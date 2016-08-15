@@ -44,7 +44,7 @@
             </tbody>
         </table>
         <p></p>
-        @if (@Model.Status == InvitationStatus.Pending)
+        @if (@Model.Status == InvitationStatus.Pending  || @Model.Status == InvitationStatus.Expired)
         {
             <p>This user has not accepted the invitation to be a team member.
                 Their invitation will expire at Midnight on @Model.ExpiryDate.ToString("dddd d MMMM yyyy")</p>
