@@ -71,13 +71,13 @@ BEGIN
 	IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementTemplate] WHERE Id = 1
 		AND [Text] = 'I am a template'))
 	BEGIN 
-		INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text]) 
-		VALUES(1, 'I am a template') 
+		INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text],CreatedDate) 
+		VALUES(1, 'I am a template', GetDate()) 
 	END 
 	ELSE 
 	BEGIN 
 		UPDATE [dbo].[EmployerAgreementTemplate] 
-		SET [Text] = 'I am a template'
+		SET [Text] = 'I am a template', [CreatedDate] = GetDate()
 		WHERE Id = 1
 	END 
 
