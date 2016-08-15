@@ -157,21 +157,35 @@ BEGIN
 	SET Name = 'Expired'
 	WHERE Id = 3
 END 
+IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 4
+	AND Name = 'Superceded'))
+BEGIN 
+	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	VALUES(4, 'Superceded') 
+END 
+ELSE 
+BEGIN 
+	UPDATE [dbo].[EmployerAgreementStatus] 
+	SET Name = 'Superceded'
+	WHERE Id = 4
+END 
 SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] OFF
 
 -- EmployerAgreement Template
 SET IDENTITY_INSERT  [dbo].[EmployerAgreementTemplate] ON 
 IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementTemplate] WHERE Id = 1
-	AND [Text] = 'I am a template'))
+	AND [Ref] = 'T/1'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text], CreatedDate) 
-	VALUES(1, 'I am a template', GETDATE()) 
+	INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text], CreatedDate, Ref, ReleasedDate) 
+	VALUES(1, 'I am a template', GETDATE(), 'T/1', GETDATE()) 
 END 
 ELSE 
 BEGIN 
 	UPDATE [dbo].[EmployerAgreementTemplate] 
 	SET [Text] = 'I am a template',
-		CreatedDate = GETDATE()
+		CreatedDate = GETDATE(),
+		Ref = 'T/1',
+		ReleasedDate = GETDATE()
 	WHERE Id = 1
 END 
 

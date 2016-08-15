@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    TempData["successMessage"] = $"Agreement {agreementid} has been signed";
+                    TempData["successMessage"] = response.FlashMessage.Message;
 
                     return RedirectToAction("Index", new {accountId = accountId});
                 }
