@@ -10,20 +10,20 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetAccountTeamMembers
 {
-    class WhenIGetUserAccountTeamMembers
+    class WhenIGetUserAccountTeamMembers : QueryBaseTest<GetAccountTeamMembersHandler, GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>
     {
         private Mock<IAccountTeamRepository> _accountTeamMembersRepository;
-        private GetAccountTeamMembersHandler _getAccountTeamMembersQueryHandler;
         private List<TeamMember> _teamMembers;
         private Account _account;
         private TeamMember _teamMember;
-        private Mock<IValidator<GetAccountTeamMembersQuery>> _validator;
+        public override GetAccountTeamMembersQuery Query { get; set; }
+        public override GetAccountTeamMembersHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetAccountTeamMembersQuery>> RequestValidator { get; set; }
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new Mock<IValidator<GetAccountTeamMembersQuery>>();
-            _validator.Setup(x => x.Validate(It.IsAny<GetAccountTeamMembersQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
+            SetUp();
             _accountTeamMembersRepository = new Mock<IAccountTeamRepository>();
             _account = new Account {Name = "Test", Id = 1};
             _teamMember = new TeamMember
@@ -36,19 +36,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             };
             _teamMembers = new List<TeamMember> { _teamMember };
             _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId(1, _teamMember.UserRef)).ReturnsAsync(new List<TeamMember>( _teamMembers));
-            _getAccountTeamMembersQueryHandler = new GetAccountTeamMembersHandler(_validator.Object,_accountTeamMembersRepository.Object);
-
+            RequestHandler = new GetAccountTeamMembersHandler(RequestValidator.Object,_accountTeamMembersRepository.Object);
+            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", Id = 1};
         }
-
+        
         [Test]
-        public async Task ThenTheUserRepositoryIsCalledToGetAllUsers()
+        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-             await _getAccountTeamMembersQueryHandler.Handle(new GetAccountTeamMembersQuery() {ExternalUserId = "kaka-kakah", Id = 1});
+            await RequestHandler.Handle(Query);
 
             //Assert
             _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId(1, "kaka-kakah"), Times.Once);
         }
 
+        [Test]
+        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
+        {
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.IsNotEmpty(actual.TeamMembers);
+            Assert.AreEqual(1, actual.TeamMembers.Count);
+        }
     }
 }

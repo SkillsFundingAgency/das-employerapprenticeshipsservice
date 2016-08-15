@@ -18,13 +18,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
         {
-            var validationResult = _validator.Validate(message);
-            if (validationResult.IsValid())
+            var validationResult = await _validator.ValidateAsync(message);
+
+            if (!validationResult.IsValid())
             {
-                var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
-                return new GetAccountTeamMembersResponse {TeamMembers = accounts};
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
-            return new GetAccountTeamMembersResponse();
+            
+            var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
+            return new GetAccountTeamMembersResponse {TeamMembers = accounts};
+            
         }
     }
 }
