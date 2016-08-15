@@ -377,7 +377,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ApplicationInsights.config" />
-    <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json" />
+    <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
