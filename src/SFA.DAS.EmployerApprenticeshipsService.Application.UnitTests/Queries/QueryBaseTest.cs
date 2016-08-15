@@ -16,10 +16,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries
 
         public abstract Mock<IValidator<TRequest>> RequestValidator { get; set; }
 
+        private int _validationCallCount;
+
         protected void SetUp()
         {
+            _validationCallCount = 0;
             RequestValidator = new Mock<IValidator<TRequest>>();
-            RequestValidator.Setup(x => x.Validate(It.IsAny<TRequest>())).Returns(new ValidationResult());
+            RequestValidator.Setup(x => x.Validate(It.IsAny<TRequest>())).Returns(new ValidationResult()).Callback(()=>_validationCallCount++);
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<TRequest>())).ReturnsAsync(new ValidationResult()).Callback(()=>_validationCallCount++);
         }
 
         [Test]
@@ -44,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries
             await RequestHandler.Handle(Query);
 
             //Assert
-            RequestValidator.Verify(x => x.Validate(It.IsAny<TRequest>()), Times.Once);
+            Assert.AreEqual(1,_validationCallCount);
         }
 
         [Test]
@@ -52,6 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries
         {
             //Arrange
             RequestValidator.Setup(x => x.Validate(It.IsAny<TRequest>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<TRequest>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));

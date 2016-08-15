@@ -25,5 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Validation
 
             return !ValidationDictionary.Any();
         }
+
+        public bool IsUnauthorized { get; set; }
     }
 }

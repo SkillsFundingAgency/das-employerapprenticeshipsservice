@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation;
@@ -53,12 +54,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 };
             }
         }
-        
+
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(long accountId, string userId)
         {
             try
             {
-                var response = await _mediator.SendAsync(new GetAccountTeamMembersQuery { Id = accountId, ExternalUserId = userId });
+                var response =
+                    await _mediator.SendAsync(new GetAccountTeamMembersQuery { Id = accountId, ExternalUserId = userId });
 
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
@@ -70,10 +72,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     }
                 };
             }
-            catch (Exception ex)
+            catch (InvalidRequestException ex)
             {
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
                     Exception = ex
                 };
             }
