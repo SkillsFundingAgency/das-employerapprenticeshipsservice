@@ -7,30 +7,41 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-small">
-            Your company number <b>@Model.CompanyNumber</b> is associated with:
-        </h2>
-        <h2 class="bold-xlarge">@Model.CompanyName</h2>
-        <h2 class="heading-small">
-            With PAYE scheme ref:
-        </h2>
-      
-        <h2 class="bold-medium">@Model.EmployerRef</h2>
-        <h3 style="margin-top: 100px;" class="heading-small">Create an Account based on these details?</h3>
-        <form method="POST" action="@Url.Action("CreateAccount")">
-            <fieldset class="inline">
-                <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="confirm_create" checked="checked" value="1">
-                    Yes
-                </label>
-                <label class="block-label" for="radio2">
-                    <input id="radio2" type="radio" name="confirm_create"  value="0">
-                    No
-                </label>
-            </fieldset>
-            <p></p>
-            <button type="submit" class="button">Continue</button>
-            <p></p>
-        </form>
+
+        @if (string.IsNullOrEmpty(Model.EmployerRef))
+        {
+            <h2 class="heading-small">The PAYE scheme is already associated with an account. Please use a different gateway login</h2>
+            <a class="button" href="@Url.Action("Gateway","EmployerAccount")">Search Again</a>
+        }
+        else
+        {
+            <h2 class="heading-small">
+                Your company number <b>@Model.CompanyNumber</b> is associated with:
+            </h2>
+            <h2 class="bold-xlarge">@Model.CompanyName</h2>
+            <h2 class="heading-small">
+                With PAYE scheme ref:
+            </h2>
+
+            <h2 class="bold-medium">@Model.EmployerRef</h2>
+            <h3 style="margin-top: 100px;" class="heading-small">Create an Account based on these details?</h3>
+            <form method="POST" action="@Url.Action("CreateAccount")">
+                <fieldset class="inline">
+                    <label class="block-label" for="radio1">
+                        <input id="radio1" type="radio" name="confirm_create" checked="checked" value="1">
+                        Yes
+                    </label>
+                    <label class="block-label" for="radio2">
+                        <input id="radio2" type="radio" name="confirm_create" value="0">
+                        No
+                    </label>
+                </fieldset>
+                <p></p>
+                <button type="submit" class="button">Continue</button>
+                <p></p>
+            </form>
+        }
+
+        
     </div>
 </div>

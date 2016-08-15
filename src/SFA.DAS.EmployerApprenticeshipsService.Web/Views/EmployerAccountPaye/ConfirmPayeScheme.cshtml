@@ -1,20 +1,20 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.AddNewPayeScheme
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.AddNewPayeScheme>
     
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Confirm PAYE Scheme</h1>
 
-        @if (!string.IsNullOrEmpty(Model.PayeScheme))
+        @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
         {
             <form method="post">
                 @Html.AntiForgeryToken()
 
-                <p>Do you want to associate @Model.PayeScheme with your account?</p>
+                <p>Do you want to associate @Model.Data.PayeScheme with your account?</p>
 
-                <input type="hidden" value="@Model.AccountId" name="AccountId"/>
-                <input type="hidden" value="@Model.PayeScheme" name="PayeScheme"/>
-                <input type="hidden" value="@Model.RefreshToken" name="RefreshToken"/>
-                <input type="hidden" value="@Model.AccessToken" name="AccessToken"/>
+                <input type="hidden" value="@Model.Data.AccountId" name="AccountId"/>
+                <input type="hidden" value="@Model.Data.PayeScheme" name="PayeScheme"/>
+                <input type="hidden" value="@Model.Data.RefreshToken" name="RefreshToken"/>
+                <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
 
                 <button type="submit" class="button">Accept</button>
             </form>
@@ -26,6 +26,6 @@
 
 
 
-        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.AccountId})">Search Again</a>
+        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.Data.AccountId})">Search Again</a>
     </div>
 </div>

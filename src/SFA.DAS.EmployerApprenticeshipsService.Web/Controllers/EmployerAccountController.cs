@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -82,17 +83,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> GateWayResponse()
         {
-            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
+            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+            if (response.Status != HttpStatusCode.OK)
+            {
+                response.Status = HttpStatusCode.OK;
+                return View("InvalidSummary", response);
+            }
 
-            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.AccessToken);
+            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken);
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            enteredData.EmployerRef = empref != null ? empref.Empref : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
-            enteredData.AccessToken = response.AccessToken;
-            enteredData.RefreshToken = response.RefreshToken;
+            enteredData.EmployerRef = empref.Empref;
+            enteredData.AccessToken = response.Data.AccessToken;
+            enteredData.RefreshToken = response.Data.RefreshToken;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
+            
+         
             return RedirectToAction("Summary");
         }
         
