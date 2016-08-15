@@ -28,7 +28,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         private ICleanDatabase _cleanDownDb;
         private Mock<IOwinWrapper> _owinWrapper;
         private string _accountOwnerUserId;
-
+        private bool _newLegalEntity;
+        private int _exceptionCount;
 
         [BeforeScenario]
         public void Arrange()
@@ -45,6 +46,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         [AfterScenario]
         public void TearDown()
         {
+            _exceptionCount = 0;
+            _newLegalEntity = false;
+
             _cleanDownDb.Execute().Wait();
 
             _container.Dispose();
@@ -75,22 +79,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         public void ThenICanViewAllOfMyPAYESchemes()
         {
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.GetLegalEntities(_accountId, _accountOwnerUserId).Result;
+            var legalEntities = employerPayeOrchestrator.Get(_accountId, _accountOwnerUserId).Result;
 
-            Assert.AreEqual(1, legalEntities.Count);
+            Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
         }
 
         [When(@"I Add a new PAYE scheme to my existing legal entity")]
         public void WhenIAddANewPAYESchemeToMyExistingLegalEntity()
         {
+            _newLegalEntity = false;
+
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var legalEntity = employerPayeOrchestrator.GetLegalEntities(_accountId, _externalUserId).Result.FirstOrDefault();
+            var legalEntity = employerPayeOrchestrator.Get(_accountId, _externalUserId).Result.Data.PayeSchemes.FirstOrDefault();
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
                 AccountId = _accountId,
-                LegalEntityId = legalEntity.Id,
+                LegalEntityId = legalEntity.LegalEntityId,
                 PayeScheme = "654/ABC",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString()
@@ -101,13 +107,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             }
             catch (Exception)
             {
-                
+                _exceptionCount++;
             }
         }
 
         [When(@"I Add a new PAYE scheme to my new legal entity")]
         public void WhenIAddANewPAYESchemeToMyNewLegalEntity()
         {
+            _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
@@ -115,6 +122,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
                 AccountId = _accountId,
                 LegalEntityId = 0,
                 PayeScheme = "654/ABC",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
+                LegalEntityCode = "12345",
+                LegalEntityDateOfIncorporation = new DateTime(2016,10,30),
+                LegalEntityName = "Test Entity",
+                LegalEntityRegisteredAddress = "Test Address"
             };
             try
             {
@@ -122,7 +135,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             }
             catch (Exception)
             {
-                
+                _exceptionCount ++;
             }
             
         }
@@ -133,14 +146,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         {
             //Get the PAYE schemes
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.GetLegalEntities(_accountId, _externalUserId).Result;
+            var legalEntities = employerPayeOrchestrator.Get(_accountId, _externalUserId).Result;
+            var entities = legalEntities.Data.PayeSchemes.Select(c => c.LegalEntityId).Distinct().Count();
             if (schemeStatus.Equals("created", StringComparison.CurrentCultureIgnoreCase))
             {
-                Assert.AreEqual(2,legalEntities.Count);
+                Assert.AreEqual(_newLegalEntity ? 2 : 1, entities);
+                Assert.AreEqual(2, legalEntities.Data.PayeSchemes.Count);
+                Assert.AreEqual(0, _exceptionCount);
             }
             else
             {
-                Assert.AreEqual(1, legalEntities.Count);
+                Assert.AreEqual(1, entities);
+                Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
+                Assert.AreEqual(1, _exceptionCount);
             }
 
         }
