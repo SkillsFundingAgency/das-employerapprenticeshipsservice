@@ -196,3 +196,11 @@ h1.access-denied {
 hr.wide {
     height:3px;
 }
+
+.nextto-h1 {
+    margin-top: 60px;
+}
+
+table.full-width, .responsive-table.full-width {
+    max-width:100%;
+}

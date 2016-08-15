@@ -14,15 +14,6 @@
     <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">Team Members</h1>
-
-
-
-    </div>
-
-</div>
-
-<div class="grid-row">
-    <div class="column-two-thirds">
         @if (Model.Data.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
@@ -33,8 +24,21 @@
                 This is the list of people who can access this account or have been invited
                 to be a team member on this account.
             </p>
+        }
+    </div>  
+    <div class="column-one-third ">
+        <form action="@Url.Action("Invite")" method="get">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
+            <input class="button nextto-h1" id="addNewUser" type="submit" value="Invite team member">
+        </form>
+    </div>
+</div>
 
-            <div class="responsive-table th-nopadding">
+@if (Model.Data.TeamMembers.Count > 0)
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="responsive-table th-nopadding full-width">
                 <div class="responsive-thead">
                     <div class="responsive-tr">
 
@@ -73,8 +77,8 @@
                             <div class="responsive-td">
                                 <div>
                                     <a aria-label="View details for @teamMember.Name"
-                                       title="View details for @teamMember.Name"
-                                       href="@Url.Action("Review", new {accountId = Model.Data.AccountId, email = teamMember.Email})">View</a>
+                                        title="View details for @teamMember.Name"
+                                        href="@Url.Action("Review", new { accountId = Model.Data.AccountId, email = teamMember.Email })">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
@@ -83,13 +87,6 @@
 
                 </div>
             </div>
-        }
+        </div>
     </div>
-    <p></p>
-    <div class="column-one-third ">
-        <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
-            <input class="button" id="addNewUser" type="submit" value="Invite team member">
-        </form>
-    </div>
-</div>
+}
