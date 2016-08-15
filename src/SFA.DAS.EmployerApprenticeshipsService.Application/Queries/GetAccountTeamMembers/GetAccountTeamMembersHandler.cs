@@ -27,13 +27,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
                 {
                     throw new UnauthorizedAccessException("User not authorised");
                 }
-                else
-                {
-                    throw new InvalidRequestException(validationResult.ValidationDictionary);
-                }
-                
+
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
-            
+
             var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
             return new GetAccountTeamMembersResponse {TeamMembers = accounts};
             
