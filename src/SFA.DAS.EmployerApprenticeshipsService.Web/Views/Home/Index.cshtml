@@ -16,9 +16,11 @@
 
 <div class="grid-row">
     <div class="column-full">
-        <h1 class="heading-xlarge">@HttpContext.Current.User.Identity.Name</h1>
-        <span class="text-secondary bold-small">User account</span>
-        <hr />
+        <h1 class="heading-xlarge">
+            @HttpContext.Current.User.Identity.Name
+            <p class="text-secondary bold-small">User account</p>
+        </h1>
+        <hr class="wide"/>
     </div>
     
 </div>
@@ -26,7 +28,7 @@
 @if (Model.Data.Invitations != 0)
 {
     <div class="grid-row">
-        <div class="column-full">
+        <div class="column-two-thirds">
 
             <h2 class="heading-medium">Invitations</h2>
             @if (Model.Data.Invitations == 1)
@@ -45,7 +47,7 @@
     </div>
 }
 <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
         <h2 class="heading-medium">Employer Accounts</h2>
         @if (Model.Data.Accounts.AccountList.Count == 0)
         {
