@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -59,6 +60,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             Assert.IsNotEmpty(actual.TeamMembers);
             Assert.AreEqual(1, actual.TeamMembers.Count);
+        }
+
+        [Test]
+        public void ThenAnUnauthorizedExceptionsIsThrownWhenTheValidationResultIsMarkedAsNotAuthorized()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountTeamMembersQuery>()))
+                .ReturnsAsync(new ValidationResult
+                {
+                    IsUnauthorized = true,
+                    ValidationDictionary = new Dictionary<string, string> {{"", ""}}
+                });
+
+            //Act
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async ()=>  await RequestHandler.Handle(Query));
         }
     }
 }

@@ -105,8 +105,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         public void ThenIViewTeamMembers(string canView)
         {
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+            var accountId = (long)ScenarioContext.Current["AccountId"];
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
-            var teamMembers = orcehstrator.GetTeamMembers(_accountId, userId).Result;
+            var teamMembers = orcehstrator.GetTeamMembers(accountId, userId).Result;
             
             if (canView.ToLower().Equals("can"))
             {
