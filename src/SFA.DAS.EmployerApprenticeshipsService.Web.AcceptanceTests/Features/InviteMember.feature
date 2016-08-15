@@ -15,3 +15,12 @@ Examples:
 	| notanemail		| something | not_created |
 	|					| something | not_created |
 	| test@test.com		|           | not_created |
+
+Scenario Outline: View team members
+	Given I am an account "<account_role>"
+	Then I "<view>" view team members
+Examples:
+	| account_role | view   |
+	| Owner        | can    |
+	| Transactor   | cannot |
+	| Viewer       | cannot |

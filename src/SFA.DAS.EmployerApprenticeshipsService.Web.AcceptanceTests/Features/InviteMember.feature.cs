@@ -92,6 +92,24 @@ this.ScenarioSetup(scenarioInfo);
 #line hidden
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("View team members")]
+        [NUnit.Framework.TestCaseAttribute("Owner", "can", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Transactor", "cannot", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Viewer", "cannot", new string[0])]
+        public virtual void ViewTeamMembers(string account_Role, string view, string[] exampleTags)
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team members", exampleTags);
+#line 19
+this.ScenarioSetup(scenarioInfo);
+#line 20
+ testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 21
+ testRunner.Then(string.Format("I \"{0}\" view team members", view), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

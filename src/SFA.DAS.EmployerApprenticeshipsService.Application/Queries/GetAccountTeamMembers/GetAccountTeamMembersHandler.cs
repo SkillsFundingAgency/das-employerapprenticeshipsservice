@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -18,13 +19,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
         {
-            var validationResult = _validator.Validate(message);
-            if (validationResult.IsValid())
+            var validationResult = await _validator.ValidateAsync(message);
+
+            if (!validationResult.IsValid())
             {
-                var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
-                return new GetAccountTeamMembersResponse {TeamMembers = accounts};
+                if (validationResult.IsUnauthorized)
+                {
+                    throw new UnauthorizedAccessException("User not authorised");
+                }
+
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
-            return new GetAccountTeamMembersResponse();
+
+            var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
+            return new GetAccountTeamMembersResponse {TeamMembers = accounts};
+            
         }
     }
 }
