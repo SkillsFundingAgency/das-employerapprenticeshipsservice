@@ -17,4 +17,5 @@ AS
 	DELETE FROM [dbo].[LegalEntity];
 	DELETE FROM [dbo].[Account];
 	DELETE FROM [dbo].[Role];
+	DELETE FROM [dbo].[EmployerAgreementTemplate];
 RETURN 0

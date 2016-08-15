@@ -35,12 +35,17 @@
                 <input class="button" id="signAgreement" type="submit" value="Sign agreement">
             </form>
         }
-        else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed)
+        else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
         {
             <p>Signed By</p>
             <p>@Model.Data.EmployerAgreement.SignedByName</p>
             <p>Signed Date</p>
             <p>@Model.Data.EmployerAgreement.SignedDate</p>
+            if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
+            {
+                <p>Expired Date</p>
+                <p>@Model.Data.EmployerAgreement.ExpiredDate</p>
+            }
         }
     </div>
 </div>
