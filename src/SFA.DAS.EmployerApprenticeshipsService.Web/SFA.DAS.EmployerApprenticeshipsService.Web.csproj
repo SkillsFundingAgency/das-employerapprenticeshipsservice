@@ -288,6 +288,7 @@
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
+    <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
@@ -304,6 +305,8 @@
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
+    <Compile Include="Models\EmployerAgreementListViewModel.cs" />
+    <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -320,6 +323,7 @@
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -341,6 +345,7 @@
     <Content Include="assets\images\gov.uk_logotype_crown.svg" />
     <Content Include="assets\images\gov.uk_logotype_crown_invert.png" />
     <Content Include="assets\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="assets\images\icon-pointer-2x.png" />
     <Content Include="assets\images\opengraph-image.png" />
     <Content Include="assets\javascripts\govuk-template.js" />
     <Content Include="assets\javascripts\ie.js" />
@@ -439,6 +444,13 @@
     <Content Include="Views\EmployerAccountPaye\ChooseCompany.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Confirm.cshtml" />
     <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
+    <Content Include="Views\EmployerAgreement\Index.cshtml" />
+    <Content Include="Views\EmployerAgreement\Add.cshtml" />
+    <Content Include="Views\EmployerAgreement\View.cshtml" />
+    <Content Include="Views\Shared\_SuccessMessage.cshtml" />
+    <Content Include="Views\Shared\DeadView.cshtml" />
+    <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

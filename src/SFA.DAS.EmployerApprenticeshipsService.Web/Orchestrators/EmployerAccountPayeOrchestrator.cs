@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Data;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
@@ -44,10 +47,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<AddNewPayeScheme> GetPayeConfirmModel(long accountId, string code, string redirectUrl)
-        {
-            var response = await GetGatewayTokenResponse(code, redirectUrl);
-
+        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(long accountId, string code, string redirectUrl, NameValueCollection nameValueCollection)
+        { 
+            var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
+            if (response.Status != HttpStatusCode.OK)
+            {
+                return new OrchestratorResponse<AddNewPayeScheme>
+                {
+                    Data = new AddNewPayeScheme
+                    {
+                        AccountId = accountId
+                    },
+                    Status = response.Status,
+                    FlashMessage = response.FlashMessage
+                };
+            }
             string empRef;
             if (_configuration.Hmrc.IgnoreDuplicates)
             {
@@ -55,25 +69,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
             else
             {
-                var hmrcResponse = await GetHmrcEmployerInformation(response.AccessToken);
+                var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
                 empRef = hmrcResponse.Empref;
-
-                var schemeCheck = await Mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref= empRef});
-
-                if (schemeCheck != null)
-                {
-                    empRef = "";
-                }
             }
 
-            return new AddNewPayeScheme
+            return new OrchestratorResponse < AddNewPayeScheme > { 
+               Data = new AddNewPayeScheme
             {
-                
+                 
                 AccountId = accountId,
                 PayeScheme = empRef,
-                AccessToken = !string.IsNullOrEmpty(empRef) ? response.AccessToken : "",
-                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.RefreshToken : ""
-                
+                AccessToken = !string.IsNullOrEmpty(empRef) ? response.Data.AccessToken : "",
+                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.Data.RefreshToken : ""
+                }
             };
             
         }

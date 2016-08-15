@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -8,7 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    public class EmployerAccountController : Controller
+    public class EmployerAccountController : BaseController
     {
         
         private readonly IOwinWrapper _owinWrapper;
@@ -52,10 +53,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
-            if (string.IsNullOrWhiteSpace(response.CompanyNumber))
-                return View();
+            if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
+                return View(response);
 
-            return RedirectToAction("VerifyEmployer", response);
+            return RedirectToAction("VerifyEmployer", response.Data);
         }
 
         [HttpGet]
@@ -82,17 +83,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> GateWayResponse()
         {
-            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme));
+            var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+            if (response.Status != HttpStatusCode.OK)
+            {
+                response.Status = HttpStatusCode.OK;
+                return View("InvalidSummary", response);
+            }
 
-            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.AccessToken);
+            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken);
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            enteredData.EmployerRef = empref != null ? empref.Empref : $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
-            enteredData.AccessToken = response.AccessToken;
-            enteredData.RefreshToken = response.RefreshToken;
+            enteredData.EmployerRef = empref.Empref;
+            enteredData.AccessToken = response.Data.AccessToken;
+            enteredData.RefreshToken = response.Data.RefreshToken;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
+            
+         
             return RedirectToAction("Summary");
         }
         

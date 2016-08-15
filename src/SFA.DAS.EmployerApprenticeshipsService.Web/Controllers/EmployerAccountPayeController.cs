@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -56,8 +57,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> ConfirmPayeScheme(long accountId)
         {
-            var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme));
 
+            var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+            if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
+            {
+                gatewayResponseModel.Status = HttpStatusCode.OK;
+                return View("ErrorConfrimPayeScheme", gatewayResponseModel);
+            }
             return View(gatewayResponseModel);
         }
 
@@ -115,10 +121,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
             
-            model.LegalEntityCode = result.CompanyNumber;
-            model.LegalEntityDateOfIncorporation = result.DateOfIncorporation;
-            model.LegalEntityName = result.CompanyName;
-            model.LegalEntityRegisteredAddress = result.RegisteredAddress;
+            model.LegalEntityCode = result.Data.CompanyNumber;
+            model.LegalEntityDateOfIncorporation = result.Data.DateOfIncorporation;
+            model.LegalEntityName = result.Data.CompanyName;
+            model.LegalEntityRegisteredAddress = result.Data.RegisteredAddress;
             
             return View("Confirm", model);
         }
