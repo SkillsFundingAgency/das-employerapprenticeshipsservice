@@ -157,6 +157,18 @@ BEGIN
 	SET Name = 'Expired'
 	WHERE Id = 3
 END 
+IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 4
+	AND Name = 'Superceded'))
+BEGIN 
+	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	VALUES(4, 'Superceded') 
+END 
+ELSE 
+BEGIN 
+	UPDATE [dbo].[EmployerAgreementStatus] 
+	SET Name = 'Superceded'
+	WHERE Id = 4
+END 
 SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] OFF
 
 -- EmployerAgreement Template

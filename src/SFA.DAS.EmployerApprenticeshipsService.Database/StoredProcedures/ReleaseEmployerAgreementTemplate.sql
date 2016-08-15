@@ -5,17 +5,21 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @lastTemplateId BIGINT;
+	DECLARE @expiryDays INT;
 
 	--get the current template id
 	SELECT TOP 1 @lastTemplateId = Id 
 	FROM [dbo].[EmployerAgreementTemplate]
 	WHERE ReleasedDate IS NOT NULL
-	ORDER BY ReleasedDate DESC;  
+	ORDER BY ReleasedDate DESC; 
+	
+	SELECT @expiryDays = ExpiryDays
+	FROM [dbo].[EmployerAgreementTemplate]
+	WHERE Id = @lastTemplateId; 
 
-	--mark agreements using previous template as expired
+	--set expirydate for agreements using previous template
 	UPDATE [dbo].[EmployerAgreement]
-	SET ExpiredDate = GETDATE(),
-		StatusId = 3
+	SET ExpiredDate = GETDATE()+@expiryDays
 	WHERE TemplateId = @lastTemplateId;
 
 	--insert new record for each legalentity with new template
@@ -38,4 +42,8 @@ BEGIN
 		) t
 		ON t.LegalEntityId = ea.LegalEntityId
 	WHERE ea.TemplateId = @lastTemplateId;
+
+	UPDATE [dbo].[EmployerAgreementTemplate]
+	SET [ReleasedDate] = GETDATE()
+	WHERE Id = @templateId;
 END

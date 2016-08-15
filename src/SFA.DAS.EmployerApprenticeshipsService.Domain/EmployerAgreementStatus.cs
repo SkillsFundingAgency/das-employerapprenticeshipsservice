@@ -4,6 +4,7 @@
     {
         Pending = 1,
         Signed = 2,
-        Expired = 3
+        Expired = 3,
+        Superceded = 4
     }
 }
