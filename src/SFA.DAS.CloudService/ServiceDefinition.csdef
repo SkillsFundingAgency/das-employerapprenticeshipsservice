@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Small">
+  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Large">
     <Sites>
       <Site name="Web">
         <Bindings>
