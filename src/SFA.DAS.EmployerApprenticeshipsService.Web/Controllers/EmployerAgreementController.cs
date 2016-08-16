@@ -71,7 +71,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View("DeadView", response);
             }
 
-            return RedirectToAction("Index", new { accountId = accountId });
+            TempData["successMessage"] = "You must indicate that you have read and understood the terms";
+
+            return RedirectToAction("View", new { agreementId = agreementid, accountId = accountId });
         }
     }
 }
