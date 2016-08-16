@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Features
         [NUnit.Framework.TestCaseAttribute("test\'ing@test.com", "tester", "created", new string[0])]
         [NUnit.Framework.TestCaseAttribute("notanemail", "something", "not_created", new string[0])]
         [NUnit.Framework.TestCaseAttribute("", "something", "not_created", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("test@test.com", "", "not_created", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("test2@test.com", "", "not_created", new string[0])]
         public virtual void AddTeamMember(string email, string name, string result, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Features
 #line 7
 this.ScenarioSetup(scenarioInfo);
 #line 8
- testRunner.Given("I am an account owner", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 9
  testRunner.When(string.Format("I invite a team member with email address \"{0}\" and name \"{1}\"", email, name), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10

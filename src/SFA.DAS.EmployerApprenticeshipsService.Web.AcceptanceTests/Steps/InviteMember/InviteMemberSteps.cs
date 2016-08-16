@@ -7,10 +7,8 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.CommonSteps;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -23,16 +21,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
     [Binding, Explicit]
     public class InviteMemberSteps
     {
-        private IContainer _container;
-        private string _externalUserId;
+        private static IContainer _container;
         private long _accountId;
-        private Mock<IMessagePublisher> _messagePublisher;
-        private ICleanDatabase _cleanDownDb;
-        private Mock<IOwinWrapper> _owinWrapper;
+        private static Mock<IMessagePublisher> _messagePublisher;
+        private static ICleanDatabase _cleanDownDb;
+        private static Mock<IOwinWrapper> _owinWrapper;
 
 
-        [BeforeScenario]
-        public void Arrange()
+        [BeforeFeature]
+        public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
@@ -43,61 +40,43 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             _cleanDownDb.Execute().Wait();
         }
 
-        [AfterScenario]
-        public void TearDown()
+        [AfterFeature]
+        public static void TearDown()
         {
             _cleanDownDb.Execute().Wait();
 
             _container.Dispose();
         }
         
-        [Given(@"I am an account owner")]
-        public void GivenIAmAnAccountOwner()
-        {
-            var signInUserModel = new SignInUserModel
-            {
-                UserId = Guid.NewGuid().ToString(),
-                Email = "accountowner@test.com",
-                FirstName = "Test",
-                LastName = "Tester"
-            };
-            UserCreationSteps.UpsertUser(signInUserModel, _container.GetInstance<IMediator>());
-
-            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
-            _externalUserId = user.UserId;
-
-            
-            
-            AccountCreationSteps.CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
-        }
-
         [When(@"I invite a team member with email address ""(.*)"" and name ""(.*)""")]
         public void WhenIInviteATeamMemberWithEmailAddressAndName(string email, string name)
         {
             SetAccountIdForUser();
 
+            ScenarioContext.Current["InvitedEmailAddress"] = email;
             CreateInvitationForGivenEmailAndName(email, name);
         }
 
         [Then(@"A user invite is ""(.*)""")]
         public void ThenAUserInviteIsWithPendingStatus(string createdStatus)
         {
-            
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
-            var teamMembers = orcehstrator.GetTeamMembers(_accountId, _externalUserId).Result;
+            var teamMembers = orcehstrator.GetTeamMembers(_accountId, accountOwnerId).Result;
+
+            var invitedTeamMember = ScenarioContext.Current["InvitedEmailAddress"].ToString();
 
             if (createdStatus.ToLower() == "created")
             {
-                Assert.AreEqual(2,teamMembers.Data.TeamMembers.Count);
+                Assert.IsTrue(teamMembers.Data.TeamMembers.Any(c=>c.Email.Equals(invitedTeamMember,StringComparison.CurrentCultureIgnoreCase)));
                 //Check to make sure an email has been sent
-                _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Once);
-
+                _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.AtLeastOnce);
             }
             else
             {
-                Assert.AreEqual(1, teamMembers.Data.TeamMembers.Count);
+                Assert.IsFalse(teamMembers.Data.TeamMembers.Any(c => c.Email.Equals(invitedTeamMember, StringComparison.CurrentCultureIgnoreCase)));
                 //Check to make sure an email has not been sent
-                _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
+                //_messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
         }
 
@@ -122,6 +101,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
 
         private void CreateInvitationForGivenEmailAndName(string email, string name)
         {
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
@@ -129,13 +109,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
                 Email = email,
                 Name = name,
                 Role = Role.Transactor
-            }, _externalUserId).Wait();
+            }, accountOwnerId).Wait();
         }
 
         private void SetAccountIdForUser()
         {
+            var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var mediator = _container.GetInstance<IMediator>();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = _externalUserId}).Result;
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = accountOwnerId }).Result;
 
             _accountId = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault().Id;
         }

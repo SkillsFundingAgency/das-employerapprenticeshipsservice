@@ -58,9 +58,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 CompanyDateOfIncorporation = new DateTime(2016, 01, 01),
-                EmployerRef = "123/ABC",
+                EmployerRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 CompanyName = "Test Company",
-                CompanyNumber = "123456TGB",
+                CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
                 CompanyRegisteredAddress = "Address Line 1"
             }).Wait();
 
@@ -70,31 +70,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
         private void CreateUserWithRole(string accountRole)
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var mediator = _container.GetInstance<IMediator>();
-            var userRepository = _container.GetInstance<IUserRepository>();
-            var membershipRepository = _container.GetInstance<IMembershipRepository>();
-
             Role roleOut;
             Enum.TryParse(accountRole, out roleOut);
 
             var signInModel = new SignInUserModel
             {
-                Email = "test@test.com",
+                Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "test",
                 LastName = "tester",
                 UserId = _externalUserId
             };
+            var userCreation = new UserCreationSteps();
+            userCreation.UpsertUser(signInModel);
 
-            UserCreationSteps.UpsertUser(signInModel, mediator);
-
-            UserCreationSteps.CreateUserWithRole(
+            userCreation.CreateUserWithRole(
                 new User
                 {
                     Email = signInModel.Email,
                     FirstName = signInModel.FirstName,
                     LastName = signInModel.LastName,
                     UserRef = _externalUserId
-                }, roleOut, accountId, userRepository, membershipRepository);
+                }, roleOut, accountId);
         }
 
         private void CreateAccountWithOwner()
@@ -105,13 +101,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
             var signInUserModel = new SignInUserModel
             {
                 UserId = accountOwnerUserId,
-                Email = "accountowner@test.com",
+                Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
             };
-            UserCreationSteps.UpsertUser(signInUserModel, _container.GetInstance<IMediator>());
+            var userCreationSteps = new UserCreationSteps();
+            userCreationSteps.UpsertUser(signInUserModel);
 
-            var user = UserCreationSteps.GetExistingUserAccount(_container.GetInstance<HomeOrchestrator>());
+            var user = userCreationSteps.GetExistingUserAccount();
 
             CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
         }
