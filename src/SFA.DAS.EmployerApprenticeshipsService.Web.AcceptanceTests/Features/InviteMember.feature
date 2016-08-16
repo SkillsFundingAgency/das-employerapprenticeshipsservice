@@ -5,7 +5,7 @@
 
 @mytag
 Scenario Outline: Add team member
-	Given I am an account owner
+	Given I am an account "Owner"
 	When I invite a team member with email address "<email>" and name "<name>"
 	Then A user invite is "<result>"
 Examples:
@@ -14,7 +14,7 @@ Examples:
 	| test'ing@test.com | tester	| created	  |
 	| notanemail		| something | not_created |
 	|					| something | not_created |
-	| test@test.com		|           | not_created |
+	| test2@test.com	|           | not_created |
 
 Scenario Outline: View team members
 	Given I am an account "<account_role>"

@@ -16,15 +16,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
     [Binding, Explicit]
     public class AddPayeSchemeSteps
     {
-        private IContainer _container;
-        private Mock<IMessagePublisher> _messagePublisher;
-        private ICleanDatabase _cleanDownDb;
-        private Mock<IOwinWrapper> _owinWrapper;
-        private bool _newLegalEntity;
-        private int _exceptionCount;
+        private static IContainer _container;
+        private static Mock<IMessagePublisher> _messagePublisher;
+        private static ICleanDatabase _cleanDownDb;
+        private static Mock<IOwinWrapper> _owinWrapper;
+        private static bool _newLegalEntity;
+        private static int _exceptionCount;
 
-        [BeforeScenario]
-        public void Arrange()
+        [BeforeFeature()]
+        public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
@@ -35,8 +35,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             _cleanDownDb.Execute().Wait();
         }
 
-        [AfterScenario]
-        public void TearDown()
+        [AfterFeature()]
+        public static void TearDown()
         {
             _exceptionCount = 0;
             _newLegalEntity = false;
@@ -46,7 +46,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             _container.Dispose();
         }
 
-        
+        [AfterScenario()]
+        public void ResetData()
+        {
+            _exceptionCount = 0;
+            _newLegalEntity = false;
+        }
         
         [Then(@"I can view all of my PAYE schemes")]
         public void ThenICanViewAllOfMyPAYESchemes()
@@ -75,7 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             {
                 AccountId = accountId,
                 LegalEntityId = legalEntity.LegalEntityId,
-                PayeScheme = "654/ABC",
+                PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString()
             };
@@ -102,7 +107,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             {
                 AccountId = accountId,
                 LegalEntityId = 0,
-                PayeScheme = "654/ABC",
+                PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 LegalEntityCode = "12345",
