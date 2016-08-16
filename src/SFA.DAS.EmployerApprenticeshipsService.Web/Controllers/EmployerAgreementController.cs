@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Sign(long agreementid, long accountId, string understood)
+        public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    TempData["successMessage"] = response.FlashMessage.Message;
+                    TempData["successMessage"] = $"Agreement for {legalEntityName} has been signed";
 
                     return RedirectToAction("Index", new {accountId = accountId});
                 }

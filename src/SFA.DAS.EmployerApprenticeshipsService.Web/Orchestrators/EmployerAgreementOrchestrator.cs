@@ -92,13 +92,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                return new OrchestratorResponse
-                {
-                    FlashMessage = new FlashMessageViewModel
-                    {
-                        Message = "Agreement has been signed"
-                    }
-                };
+                return new OrchestratorResponse();
             }
             catch (Exception)
             {
