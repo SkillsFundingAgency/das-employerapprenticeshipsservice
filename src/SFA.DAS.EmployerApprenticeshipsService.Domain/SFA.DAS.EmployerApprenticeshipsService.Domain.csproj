@@ -138,6 +138,7 @@
     <Compile Include="DepedencyResolution\LoggingPolicy.cs" />
     <Compile Include="DepedencyResolution\MessagePolicy.cs" />
     <Compile Include="EmployerAgreementStatus.cs" />
+    <Compile Include="EmployerAgreementTemplate.cs" />
     <Compile Include="EmployerAgreementView.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />

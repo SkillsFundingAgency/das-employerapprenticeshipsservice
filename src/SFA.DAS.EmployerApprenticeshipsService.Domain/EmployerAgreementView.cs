@@ -15,5 +15,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public string LegalEntityRegisteredAddress { get; set; }
         public int TemplateId { get; set; }
         public string TemplateText { get; set; }
+        public string TemplateRef { get; set; }
     }
 }

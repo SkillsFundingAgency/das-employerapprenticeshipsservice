@@ -4,6 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
 {
     public class CreateEmployerAgreementTemplateCommand : IAsyncRequest
     {
+        public string TemplateRef { get; set; }
         public string Text { get; set; }
     }
 }

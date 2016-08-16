@@ -9,6 +9,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
         {
             var validationResult = new ValidationResult();
 
+            if (string.IsNullOrWhiteSpace(item.TemplateRef))
+                validationResult.AddError("Ref", "No Ref supplied");
+
             if (string.IsNullOrWhiteSpace(item.Text))
                 validationResult.AddError("Text", "No Text supplied");
 

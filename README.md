@@ -19,6 +19,7 @@ You should run Visual Studio as an Administrator.
 
 ### Setup
 
+* Run DevInstall.ps1 in an Administrator PowerShell window
 * Running the RunBuild.bat will expose any dependency issues
 * Running the Database project (SFA.DAS.EmployerApprenticeshipsService.Database) will provision the local DB instance with relevent seed data.
 * In the Azure Storage Explorer, connect to local storage. In the "(Development)" storage account, create a new local table named "Configuration" and load the following row data:
