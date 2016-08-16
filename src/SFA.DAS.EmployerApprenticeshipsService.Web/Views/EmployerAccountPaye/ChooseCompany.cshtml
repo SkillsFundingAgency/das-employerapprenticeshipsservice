@@ -21,7 +21,7 @@
                 var entity = Model.LegalEntities[index];
                 <div class="form-group">
                     <label class="block-label">
-                        <input type="radio" name="selectedCompanyId" value="@entity.Id"/>
+                        <input type="radio" name="selectedCompanyId" value="@entity.Id" @(index==0 ? "checked=''" : ""  )/>
                         <input type="hidden" name="LegalEntities[@index].Id" value="@entity.Id"/>
                         <input type="hidden" name="LegalEntities[@index].Name" value="@entity.Name"/>
                         <input type="hidden" name="LegalEntities[@index].Code" value="@entity.Code"/>
@@ -32,7 +32,7 @@
             
             <div class="form-group">
                 <label class="block-label">
-                    <input type="radio" name="selectedCompanyId" value="-1"/>
+                    <input type="radio" name="selectedCompanyId" value="-1" />
                     <input type="hidden" name="LegalEntities[@index].Id" value="-1" />
                     <input type="hidden" name="LegalEntities[@index].Name" value="new-company" />
                     <span class="heading-small">Add new legal entity</span>
