@@ -145,10 +145,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         }
         public string BaseAddress { get; set; }
 
-        public string AuthorizeEndpoint() => BaseAddress + "/Login/dialog/appl/oidctest/wflow/authorize";
+        public string AuthorizeEndpoint() => BaseAddress + "/Login/dialog/appl/oidc/wflow/authorize";
         public string LogoutEndpoint() => BaseAddress + "/connect/endsession";
-        public string TokenEndpoint() =>  BaseAddress + "/Login/rest/appl/oidctest/wflow/token";
-        public string UserInfoEndpoint() =>  BaseAddress + "/Login/rest/appl/oidctest/wflow/userinfo";
+        public string TokenEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/token";
+        public string UserInfoEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/userinfo";
         public string IdentityTokenValidationEndpoint() =>  BaseAddress + "/connect/identitytokenvalidation";
         public string TokenRevocationEndpoint() => BaseAddress + "/connect/revocation";
     }

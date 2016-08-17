@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
             {
                 var authenticationManager = _owinContext.Authentication;
                 authenticationManager.SignOut("Cookies");
-                return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/sfa/wflow/logout?returnUrl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
+                return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/oidc/wflow/logout?redirecturl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
             }
         }
 
