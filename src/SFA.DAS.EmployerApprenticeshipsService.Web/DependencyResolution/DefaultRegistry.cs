@@ -17,6 +17,7 @@
 
 using System;
 using System.Configuration;
+using System.Reflection;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Configuration;
@@ -25,6 +26,7 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -33,8 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         
-        #region Constructors and Destructors
-
+        
         public DefaultRegistry() {
 
             Scan(
@@ -56,6 +57,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             }
 
             RegisterMediator();
+
+            
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
@@ -64,6 +67,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             if (string.IsNullOrEmpty(environment))
             {
                 environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            }
+            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
+            {
+                PopulateSystemDetails(environment);
             }
 
             var configurationRepository = GetConfigurationRepository();
@@ -95,7 +102,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
             For<IMediator>().Use<Mediator>();
         }
-        #endregion
+        
+        private void PopulateSystemDetails(string envName)
+        {
+            SystemDetails.EnvironmentName = envName;
+            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
     }
-    
 }

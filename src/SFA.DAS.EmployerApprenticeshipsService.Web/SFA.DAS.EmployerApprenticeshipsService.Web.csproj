@@ -316,6 +316,7 @@
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\FlashMessageViewModel.cs" />
+    <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -447,7 +448,7 @@
     <Content Include="Views\EmployerAccountPaye\Confirm.cshtml" />
     <Content Include="Views\EmployerAccountPaye\AddNewLegalEntity.cshtml" />
     <Content Include="Views\VisualTest\Notification.cshtml" />
-	<Content Include="Views\EmployerAgreement\Index.cshtml" />
+    <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
