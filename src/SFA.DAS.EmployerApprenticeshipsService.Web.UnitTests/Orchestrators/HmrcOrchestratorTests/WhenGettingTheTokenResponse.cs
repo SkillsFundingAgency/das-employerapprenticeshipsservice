@@ -5,6 +5,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
         private Mock<ILogger> _logger;
         private Mock<IMediator> _mediator;
         private Mock<ICookieService> _cookieService;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -23,8 +25,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             _logger = new Mock<ILogger>();
             _mediator = new Mock<IMediator>();
             _cookieService = new Mock<ICookieService>();
+            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            {
+                Hmrc = new HmrcConfiguration {IgnoreDuplicates = false}
+            };
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
 
         [Test]

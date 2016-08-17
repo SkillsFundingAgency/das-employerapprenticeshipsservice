@@ -1,14 +1,15 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Data;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
+        protected readonly EmployerApprenticeshipsServiceConfiguration Configuration;
 
         //Needed for tests
         protected EmployerVerificationOrchestratorBase()
@@ -27,11 +29,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
         {
             Mediator = mediator;
             Logger = logger;
             CookieService = cookieService;
+            Configuration = configuration;
         }
 
 
@@ -86,7 +89,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 response.Empref = "";
             }
-
+            if (Configuration.Hmrc.IgnoreDuplicates && response.Empref == "")
+            {
+                response.Empref = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+            }
             return response;
         }
 

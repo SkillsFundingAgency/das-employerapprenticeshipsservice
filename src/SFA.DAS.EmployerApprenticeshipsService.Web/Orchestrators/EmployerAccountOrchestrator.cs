@@ -4,6 +4,7 @@ using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -15,10 +16,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         //Needed for tests
         protected EmployerAccountOrchestrator()
         {
-            
+
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService) : base(mediator,logger,cookieService)
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
         {
         }
 
@@ -54,6 +55,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             CookieService.Update(context, CookieName, JsonConvert.SerializeObject(data));
         }
-        
+
     }
 }

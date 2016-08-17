@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Data;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
@@ -12,7 +9,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExi
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
@@ -22,11 +18,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
         {
-            _configuration = configuration;
         }
 
         public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
@@ -62,16 +55,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     FlashMessage = response.FlashMessage
                 };
             }
-            string empRef;
-            if (_configuration.Hmrc.IgnoreDuplicates)
-            {
-                empRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
-            }
-            else
-            {
-                var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
-                empRef = hmrcResponse.Empref;
-            }
+
+            var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
+            var empRef = hmrcResponse.Empref;
+            
 
             return new OrchestratorResponse < AddNewPayeScheme > { 
                Data = new AddNewPayeScheme
