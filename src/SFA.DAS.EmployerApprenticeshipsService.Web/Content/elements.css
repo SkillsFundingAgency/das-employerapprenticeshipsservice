@@ -2675,3 +2675,9 @@ a[href^=mailto],.fake-link[href^=mailto],details summary[href^=mailto] {
     font-weight: 700;
     margin-right: 10px;
 }
+.about {
+    background-color: #6E777A;
+    color: #fff;
+    font-size: 1.25em;
+    padding: 0.5em;    
+}
