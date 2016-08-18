@@ -117,7 +117,7 @@
   <ItemGroup>
     <Compile Include="Controllers\ControllerTestBase.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenILoginInAUser.cs" />
+    <Compile Include="Controllers\HomeControllerTests\WhenILoginInAUserUsingFakeLogin.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
