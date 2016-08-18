@@ -52,7 +52,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
             _exceptionCount = 0;
             _newLegalEntity = false;
         }
-        
+
+        [When(@"I remove a scheme")]
+        public void WhenIRemoveAScheme()
+        {
+            ScenarioContext.Current.Pending();
+        }
+
+        [Then(@"Scheme is ""(.*)""")]
+        public void ThenSchemeIs(string schemeStatus)
+        {
+            ScenarioContext.Current.Pending();
+        }
+
+
         [Then(@"I can view all of my PAYE schemes")]
         public void ThenICanViewAllOfMyPAYESchemes()
         {

@@ -93,6 +93,26 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Remove PAYE scheme")]
+        [NUnit.Framework.TestCaseAttribute("Owner", "removed", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Viewer", "not_removed", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Transactor", "not_removed", new string[0])]
+        public virtual void RemovePAYEScheme(string account_Role, string scheme_Status, string[] exampleTags)
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Remove PAYE scheme", exampleTags);
+#line 17
+this.ScenarioSetup(scenarioInfo);
+#line 18
+testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 19
+testRunner.When("I remove a scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 20
+testRunner.Then("Scheme is \"status\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Add new PAYE scheme to new legal entity")]
         [NUnit.Framework.TestCaseAttribute("Owner", "created", new string[0])]
         [NUnit.Framework.TestCaseAttribute("Viewer", "not_created", new string[0])]
@@ -100,13 +120,13 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void AddNewPAYESchemeToNewLegalEntity(string account_Role, string scheme_Status, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Add new PAYE scheme to new legal entity", exampleTags);
-#line 17
+#line 28
 this.ScenarioSetup(scenarioInfo);
-#line 18
+#line 29
 testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 19
+#line 30
  testRunner.When("I Add a new PAYE scheme to my new legal entity", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 20
+#line 31
  testRunner.Then(string.Format("The PAYE scheme Is \"{0}\"", scheme_Status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -120,11 +140,11 @@ testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((strin
         public virtual void ViewMyAvailableSchemes(string account_Role, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View my available schemes", exampleTags);
-#line 27
+#line 38
 this.ScenarioSetup(scenarioInfo);
-#line 28
+#line 39
  testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 29
+#line 40
  testRunner.Then("I can view all of my PAYE schemes", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
