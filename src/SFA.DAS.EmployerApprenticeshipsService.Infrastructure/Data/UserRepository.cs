@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@userRef", new Guid(id), DbType.Guid);
                 
                 var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [dbo].[User] WHERE PireanKey = @userRef",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE PireanKey = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
                 return res;
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", emailAddress, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [dbo].[User] WHERE Email = @email",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE Email = @email",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [dbo].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
+                    sql: "INSERT INTO [account].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where PireanKey = @userRef",
+                    sql: "UPDATE [account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where PireanKey = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [dbo].[User];",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User];",
                     param: parameters,
                     commandType: CommandType.Text);
             });

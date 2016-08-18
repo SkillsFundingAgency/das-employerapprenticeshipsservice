@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[GetTeamMembers]
+﻿CREATE VIEW [account].[GetTeamMembers]
 	AS 
 	
 select 1 AS IsUser,
@@ -24,7 +24,7 @@ SELECT
 	i.RoleId,
 	CASE WHEN i.Status = 1 AND i.ExpiryDate < GETDATE() THEN 3 ELSE i.Status END AS Status,
 	i.ExpiryDate
-FROM [dbo].[Invitation] i
-	JOIN [dbo].[Account] a
+FROM [account].[Invitation] i
+	JOIN [account].[Account] a
 		ON a.Id = i.AccountId
 WHERE i.Status NOT IN (2, 4)

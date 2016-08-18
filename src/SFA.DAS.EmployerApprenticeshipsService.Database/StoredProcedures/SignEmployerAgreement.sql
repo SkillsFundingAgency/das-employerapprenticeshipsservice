@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[SignEmployerAgreement]
+﻿CREATE PROCEDURE [account].[SignEmployerAgreement]
 	@agreementId BIGINT,
 	@signedById BIGINT,
 	@signedByName NVARCHAR(100)
@@ -8,7 +8,7 @@ BEGIN
 
 	DECLARE @legalEntityId BIGINT;
 
-	UPDATE [dbo].[EmployerAgreement] 
+	UPDATE [account].[EmployerAgreement] 
 	SET SignedById = @signedById, 
 		SignedByName = @signedByName, 
 		SignedDate = GETDATE(), 
@@ -17,10 +17,10 @@ BEGIN
 
 	--mark previous agreement as superceded
 	SELECT @legalEntityId = LegalEntityId
-	FROM [dbo].[EmployerAgreement]
+	FROM [account].[EmployerAgreement]
 	WHERE Id = @agreementId;
 
-	UPDATE [dbo].[EmployerAgreement] 
+	UPDATE [account].[EmployerAgreement] 
 	SET StatusId = 4
 	WHERE LegalEntityId = @legalEntityId
 		AND Id <> @agreementId

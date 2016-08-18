@@ -14,169 +14,169 @@ Post-Deployment Script Template
 EXECUTE Cleardown;
 
 -- Role seed data
-SET IDENTITY_INSERT  [dbo].[Role] ON 
-IF (NOT EXISTS(SELECT * FROM [dbo].[Role] WHERE Id = 1
+SET IDENTITY_INSERT  [account].[Role] ON 
+IF (NOT EXISTS(SELECT * FROM [account].[Role] WHERE Id = 1
     AND Name = 'Owner'))
 BEGIN 
-    INSERT INTO [dbo].[Role](Id, Name) 
+    INSERT INTO [account].[Role](Id, Name) 
     VALUES(1, 'Owner') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[Role] 
+    UPDATE [account].[Role] 
     SET Name = 'Owner'
     WHERE Id = 1
 END 
-IF (NOT EXISTS(SELECT * FROM [dbo].[Role] WHERE Id = 2
+IF (NOT EXISTS(SELECT * FROM [account].[Role] WHERE Id = 2
     AND Name = 'Transactor'))
 BEGIN 
-    INSERT INTO [dbo].[Role](Id, Name) 
+    INSERT INTO [account].[Role](Id, Name) 
     VALUES(2, 'Transactor') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[Role] 
+    UPDATE [account].[Role] 
     SET Name = 'Transactor'
     WHERE Id = 2
 END 
-IF (NOT EXISTS(SELECT * FROM [dbo].[Role] WHERE Id = 3
+IF (NOT EXISTS(SELECT * FROM [account].[Role] WHERE Id = 3
     AND Name = 'Viewer'))
 BEGIN 
-    INSERT INTO [dbo].[Role](Id, Name) 
+    INSERT INTO [account].[Role](Id, Name) 
     VALUES(3, 'Viewer') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[Role] 
+    UPDATE [account].[Role] 
     SET Name = 'Viewer'
     WHERE Id = 3
 END 
-SET IDENTITY_INSERT  [dbo].[Role] OFF
+SET IDENTITY_INSERT  [account].[Role] OFF
 GO
 
 -- Account seed data
-SET IDENTITY_INSERT  [dbo].[Account] ON
-IF (NOT EXISTS(SELECT * FROM [dbo].[Account] WHERE Id = 1
+SET IDENTITY_INSERT  [account].[Account] ON
+IF (NOT EXISTS(SELECT * FROM [account].[Account] WHERE Id = 1
     AND Name = 'Floyd Price Ltd'))
 BEGIN 
-    INSERT INTO [dbo].[Account](Id, Name) 
+    INSERT INTO [account].[Account](Id, Name) 
     VALUES(1, 'Floyd Price Ltd') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[Account] 
+    UPDATE [account].[Account] 
     SET Name = 'Floyd Price Ltd'
     WHERE Id = 1
 END 
-SET IDENTITY_INSERT  [dbo].[Account] OFF
+SET IDENTITY_INSERT  [account].[Account] OFF
 GO
 
 -- User seed data 
-SET IDENTITY_INSERT  [dbo].[User] ON
-IF (NOT EXISTS(SELECT * FROM [dbo].[User] WHERE Id = 1
+SET IDENTITY_INSERT  [account].[User] ON
+IF (NOT EXISTS(SELECT * FROM [account].[User] WHERE Id = 1
 	AND PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B'
     AND Email = 'floyd.price@test.local'))
 BEGIN 
-    INSERT INTO [dbo].[User](Id, PireanKey, Email, FirstName, LastName) 
+    INSERT INTO [account].[User](Id, PireanKey, Email, FirstName, LastName) 
     VALUES(1,'758943A5-86AA-4579-86AF-FB3D4A05850B','floyd.price@test.local', 'Floyd', 'Price') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[User] 
+    UPDATE [account].[User] 
     SET PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B', Email = 'floyd.price@test.local', FirstName = 'Floyd', LastName = 'Price'
     WHERE Id = 1
 END 
 
-IF (NOT EXISTS(SELECT * FROM [dbo].[User] WHERE Id = 2
+IF (NOT EXISTS(SELECT * FROM [account].[User] WHERE Id = 2
 	AND PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37'
     AND Email = 'ian.russell@test.local'))
 BEGIN 
-    INSERT INTO [dbo].[User](Id, PireanKey, Email, FirstName, LastName) 
+    INSERT INTO [account].[User](Id, PireanKey, Email, FirstName, LastName) 
     VALUES(2,'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37','ian.russell@test.local', 'Ian', 'Russell') 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[User] 
+    UPDATE [account].[User] 
     SET PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37', Email = 'ian.russell@test.local', FirstName = 'Ian', LastName = 'Russell'
     WHERE Id = 2
 END 
 
-SET IDENTITY_INSERT  [dbo].[User] OFF
+SET IDENTITY_INSERT  [account].[User] OFF
 GO
 
 -- Membership seed data
-IF (NOT EXISTS(SELECT * FROM [dbo].[Membership] WHERE RoleId = 1
+IF (NOT EXISTS(SELECT * FROM [account].[Membership] WHERE RoleId = 1
 	AND [UserId] = 1
     AND AccountId = 1))
 BEGIN 
-    INSERT INTO [dbo].[Membership](RoleId, UserId, AccountId) 
+    INSERT INTO [account].[Membership](RoleId, UserId, AccountId) 
     VALUES(1,1,1) 
 END 
 ELSE 
 BEGIN 
-    UPDATE [dbo].[Membership] 
+    UPDATE [account].[Membership] 
     SET [UserId] = 1, AccountId = 1
     WHERE RoleId = 1
 END 
 
 -- EmployerAgreement Status
-SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] ON 
-IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 1
+SET IDENTITY_INSERT  [account].[EmployerAgreementStatus] ON 
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementStatus] WHERE Id = 1
 	AND Name = 'Pending'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	INSERT INTO [account].[EmployerAgreementStatus](Id, Name) 
 	VALUES(1, 'Pending') 
 END 
 ELSE 
 BEGIN 
-	UPDATE [dbo].[EmployerAgreementStatus] 
+	UPDATE [account].[EmployerAgreementStatus] 
 	SET Name = 'Pending'
 	WHERE Id = 1
 END 
-IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 2
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementStatus] WHERE Id = 2
 	AND Name = 'Signed'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	INSERT INTO [account].[EmployerAgreementStatus](Id, Name) 
 	VALUES(2, 'Signed') 
 END 
 ELSE 
 BEGIN 
-	UPDATE [dbo].[EmployerAgreementStatus] 
+	UPDATE [account].[EmployerAgreementStatus] 
 	SET Name = 'Signed'
 	WHERE Id = 2
 END 
-IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 3
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementStatus] WHERE Id = 3
 	AND Name = 'Expired'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	INSERT INTO [account].[EmployerAgreementStatus](Id, Name) 
 	VALUES(3, 'Expired') 
 END 
 ELSE 
 BEGIN 
-	UPDATE [dbo].[EmployerAgreementStatus] 
+	UPDATE [account].[EmployerAgreementStatus] 
 	SET Name = 'Expired'
 	WHERE Id = 3
 END 
-IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementStatus] WHERE Id = 4
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementStatus] WHERE Id = 4
 	AND Name = 'Superceded'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementStatus](Id, Name) 
+	INSERT INTO [account].[EmployerAgreementStatus](Id, Name) 
 	VALUES(4, 'Superceded') 
 END 
 ELSE 
 BEGIN 
-	UPDATE [dbo].[EmployerAgreementStatus] 
+	UPDATE [account].[EmployerAgreementStatus] 
 	SET Name = 'Superceded'
 	WHERE Id = 4
 END 
-SET IDENTITY_INSERT  [dbo].[EmployerAgreementStatus] OFF
+SET IDENTITY_INSERT  [account].[EmployerAgreementStatus] OFF
 
 -- EmployerAgreement Template
-SET IDENTITY_INSERT  [dbo].[EmployerAgreementTemplate] ON 
-IF (NOT EXISTS(SELECT * FROM [dbo].[EmployerAgreementTemplate] WHERE Id = 1
+SET IDENTITY_INSERT  [account].[EmployerAgreementTemplate] ON 
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementTemplate] WHERE Id = 1
 	AND [Ref] = 'SFA Employer Agreement V1.0BETA'))
 BEGIN 
-	INSERT INTO [dbo].[EmployerAgreementTemplate](Id, [Text], CreatedDate, Ref, ReleasedDate) 
+	INSERT INTO [account].[EmployerAgreementTemplate](Id, [Text], CreatedDate, Ref, ReleasedDate) 
 	VALUES(1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nunc eros, posuere at lectus sollicitudin, efficitur malesuada odio. Curabitur varius mauris sit amet fringilla consequat. Integer porta id augue eu pretium. Sed quis sem vitae orci tincidunt vehicula. Nam sit amet ante metus. Suspendisse et elit varius, euismod odio quis, elementum erat. Nam imperdiet at ipsum vitae molestie. Mauris nisl diam, congue ultrices pretium vitae, congue vitae magna.
 
 Nam ut hendrerit velit. Nam vitae quam rhoncus, tempor eros nec, sagittis quam. Etiam aliquet lectus in varius sodales. Vestibulum volutpat orci eu dui faucibus rutrum ut sed ante. Etiam molestie, quam ac ultricies lacinia, erat nunc tempus enim, vitae elementum libero tortor vitae urna. Integer eu eros mattis, euismod ligula in, venenatis nisi. Praesent ultricies nulla sed enim tristique accumsan. Etiam bibendum nulla vel bibendum facilisis. Suspendisse et tellus in dui vehicula ullamcorper nec nec libero. Curabitur ac ex eget elit aliquet rutrum. Ut lacinia, tellus vitae mattis eleifend, metus arcu pharetra massa, vitae placerat velit sapien sit amet nulla. Fusce id mi egestas, facilisis justo in, scelerisque leo. Vivamus lorem nisl, egestas in pulvinar at, facilisis et leo.
@@ -189,7 +189,7 @@ Mauris purus nisl, fermentum et est sit amet, dapibus pretium massa. Fusce ultri
 END 
 ELSE 
 BEGIN 
-	UPDATE [dbo].[EmployerAgreementTemplate] 
+	UPDATE [account].[EmployerAgreementTemplate] 
 	SET [Text] = 'I am a template',
 		CreatedDate = GETDATE(),
 		Ref = 'T/1',
@@ -197,4 +197,4 @@ BEGIN
 	WHERE Id = 1
 END 
 
-SET IDENTITY_INSERT  [dbo].[EmployerAgreementTemplate] OFF
+SET IDENTITY_INSERT  [account].[EmployerAgreementTemplate] OFF

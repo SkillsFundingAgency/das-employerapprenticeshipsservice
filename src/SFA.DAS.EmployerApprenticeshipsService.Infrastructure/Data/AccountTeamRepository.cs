@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await connection.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [dbo].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

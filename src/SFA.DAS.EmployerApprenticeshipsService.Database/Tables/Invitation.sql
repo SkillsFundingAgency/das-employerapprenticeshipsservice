@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Invitation](
+﻿CREATE TABLE [account].[Invitation](
 	[Id] BIGINT IDENTITY(1,1) NOT NULL,
 	[AccountId] BIGINT NOT NULL,
 	[Name] [nvarchar](100) NOT NULL,
@@ -10,8 +10,8 @@
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY], 
-    CONSTRAINT [FK_Invitation_Role] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Role]([Id]),
-    CONSTRAINT [FK_Invitation_Account] FOREIGN KEY ([AccountId]) REFERENCES [dbo].[Account]([Id])
+    CONSTRAINT [FK_Invitation_Role] FOREIGN KEY ([RoleId]) REFERENCES [account].[Role]([Id]),
+    CONSTRAINT [FK_Invitation_Account] FOREIGN KEY ([AccountId]) REFERENCES [account].[Account]([Id])
 ) ON [PRIMARY]
 
 GO

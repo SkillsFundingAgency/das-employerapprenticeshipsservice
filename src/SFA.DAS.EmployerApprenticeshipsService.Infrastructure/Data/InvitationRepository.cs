@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<InvitationView>(
-                    sql: "SELECT * FROM [dbo].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
+                    sql: "SELECT * FROM [account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<InvitationView>(
-                    sql: "SELECT * FROM [dbo].[GetInvitations] WHERE Id = @id;",
+                    sql: "SELECT * FROM [account].[GetInvitations] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [dbo].[Invitation] ([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) VALUES (@accountId, @name, @email, @expiryDate, @statusId, @roleId)",
+                    sql: "INSERT INTO [account].[Invitation] ([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) VALUES (@accountId, @name, @email, @expiryDate, @statusId, @roleId)",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Invitation>(
-                    sql: "SELECT * FROM [dbo].[Invitation] WHERE Id = @id;",
+                    sql: "SELECT * FROM [account].[Invitation] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<Invitation>(
-                    sql: "SELECT * FROM [dbo].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
+                    sql: "UPDATE [account].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                    sql: "UPDATE [account].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -145,7 +145,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "[dbo].[AcceptInvitation]",
+                    sql: "[account].[AcceptInvitation]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -159,7 +159,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<int>(
-                    sql: "[dbo].[GetNumberOfInvitations_ByUserId]",
+                    sql: "[account].[GetNumberOfInvitations_ByUserId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

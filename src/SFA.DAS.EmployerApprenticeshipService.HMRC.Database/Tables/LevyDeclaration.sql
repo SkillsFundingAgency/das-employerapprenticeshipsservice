@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[LevyDeclaration]
+﻿CREATE TABLE [levy].[LevyDeclaration]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [empRef] NVARCHAR(50) NOT NULL, 

@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[CreateEmployerAgreementTemplate]",
+                    sql: "[account].[CreateEmployerAgreementTemplate]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@agreementId", agreementId, DbType.Int64);
 
                 return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "[dbo].[GetEmployerAgreement]",
+                    sql: "[account].[GetEmployerAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@signedByName", signedByName, DbType.String);
 
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[SignEmployerAgreement]",
+                    sql: "[account].[SignEmployerAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
                 return result;
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[ReleaseEmployerAgreementTemplate]",
+                    sql: "[account].[ReleaseEmployerAgreementTemplate]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@templateId", templateId, DbType.Int32);
 
                 return await c.QueryAsync<EmployerAgreementTemplate>(
-                    sql: "SELECT * FROM [dbo].[EmployerAgreementTemplate] WHERE Id = @templateId;",
+                    sql: "SELECT * FROM [account].[EmployerAgreementTemplate] WHERE Id = @templateId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

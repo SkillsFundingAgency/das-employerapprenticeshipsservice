@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[EmployerAgreementTemplate]
+﻿CREATE TABLE [account].[EmployerAgreementTemplate]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
 	[Ref] NVARCHAR(50) NOT NULL,

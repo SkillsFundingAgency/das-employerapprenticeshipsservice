@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@MessageFormat", message.MessageFormat, DbType.Int16);
                 parameters.Add("@Id", null, DbType.Int64, ParameterDirection.Output, 8);
 
-                await c.ExecuteAsync("[dbo].[CreateNotification]", parameters, commandType: CommandType.StoredProcedure);
+                await c.ExecuteAsync("[account].[CreateNotification]", parameters, commandType: CommandType.StoredProcedure);
 
                 return parameters.Get<long>("@Id");
             });
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@Id", expectedMessageId, DbType.Int64);
 
-                return await c.QueryAsync<NotificationMessage>("[dbo].[GetNotification]", parameters, commandType: CommandType.StoredProcedure);
+                return await c.QueryAsync<NotificationMessage>("[account].[GetNotification]", parameters, commandType: CommandType.StoredProcedure);
 
             });
 
