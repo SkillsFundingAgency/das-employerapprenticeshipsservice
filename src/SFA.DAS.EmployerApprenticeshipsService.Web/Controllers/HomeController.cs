@@ -33,6 +33,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View("ServiceLandingPage");
         }
 
+
+        [Authorize]
+        public ActionResult SignIn()
+        {
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public ActionResult SignInUser(string selectedUserId, SignInUserViewModel model)
         {
