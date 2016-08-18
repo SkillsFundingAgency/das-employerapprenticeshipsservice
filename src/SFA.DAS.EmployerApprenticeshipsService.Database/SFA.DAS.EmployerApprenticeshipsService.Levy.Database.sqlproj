@@ -70,9 +70,6 @@
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="Paye.sql" />
-    <Build Include="LevyDeclaration.sql" />
-    <Build Include="EnglishFraction.sql" />
-    <Build Include="Views\GetLevyDeclarations.sql" />
     <Build Include="Invitation.sql" />
     <Build Include="Views\GetInvitations.sql" />
     <Build Include="Views\GetTeamMembers.sql" />

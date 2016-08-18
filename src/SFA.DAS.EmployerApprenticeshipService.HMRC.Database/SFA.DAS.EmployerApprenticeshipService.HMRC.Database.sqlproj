@@ -64,4 +64,9 @@
   <ItemGroup>
     <None Include="SFA.DAS.EmployerApprenticeshipService.HMRC.Database.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\EnglishFraction.sql" />
+    <Build Include="Tables\LevyDeclaration.sql" />
+    <Build Include="Views\GetLevyDeclarations.sql" />
+  </ItemGroup>
 </Project>
