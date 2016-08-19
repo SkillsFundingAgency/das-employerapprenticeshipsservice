@@ -33,11 +33,11 @@
             <h2 class="heading-medium">Invitations</h2>
             @if (Model.Data.Invitations == 1)
             {
-                <p>You have @Model.Data.Invitations pending invitation to a levy account.</p>
+                <p>You have @Model.Data.Invitations invitation to a levy account.</p>
             }
             else
             {
-                <p>You have @Model.Data.Invitations pending invitations to levy accounts.</p>
+                <p>You have @Model.Data.Invitations invitations to levy accounts.</p>
             }
             
             <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
@@ -51,16 +51,16 @@
         <h2 class="heading-medium">Levy accounts</h2>
         @if (Model.Data.Accounts.AccountList.Count == 1)
         {
-            <p>You have no employer accounts associated with this account. To use your account you will either need to create a new employer account or be invited to an existing one.</p>
+            <p>You don't have access to any levy accounts. You can create a new levy account or ask your account admin to invite you to an existing one.</p>
         }
         else
         {
-            <p>Choose an employer account to action</p>
+            <p>Select an account or add a new one.</p>
             <div class="responsive-table">
                 <div class="responsive-thead">
                     <div class="responsive-tr">
-                        <div class="responsive-th">Name</div>
-                        <div class="responsive-th">Role</div>
+                        <div class="responsive-th">Account name</div>
+                        <div class="responsive-th">What you can do</div>
                         <div class="responsive-th"> </div>
                     </div>
                 </div>
@@ -71,10 +71,10 @@
                         <div class="responsive-tr">
                             <div class="responsive-td">
                                 <div>@account.Name</div>
-                                <div class="responsive-inner-caption">Name</div>
+                                <div class="responsive-inner-caption">Account name</div>
                             </div>
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Role</div>
+                                <div class="responsive-inner-caption">What you can do</div>
                                 <div>@account.RoleName
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
             </div>
         }
         <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create a new employer account</a>
+        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create new account</a>
         <p></p>
     </div>
 </div>
