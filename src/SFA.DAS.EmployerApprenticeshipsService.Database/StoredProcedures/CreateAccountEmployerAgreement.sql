@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[CreateAccountEmployerAgreement]
+﻿CREATE PROCEDURE [account].[CreateAccountEmployerAgreement]
 	@accountId int = 0,
 	@employerAgreementId int
 AS
-	INSERT INTO [dbo].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId)
+	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId)

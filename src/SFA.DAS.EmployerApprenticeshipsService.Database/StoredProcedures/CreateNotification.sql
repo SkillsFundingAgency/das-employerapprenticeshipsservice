@@ -1,6 +1,6 @@
 ﻿
 
-CREATE PROCEDURE [dbo].[CreateNotification]
+CREATE PROCEDURE [account].[CreateNotification]
 	@UserId BIGINT, 
 	@DateTime DATETIME ,
 	@ForceFormat BIT = 0,
@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[CreateNotification]
 	@Id BIGINT OUTPUT
 as
 BEGIN
-	INSERT INTO [dbo].[Notification]
+	INSERT INTO [account].[Notification]
 		(UserId, DateTime, ForecFormat, TemplateId,Data,MessageFormat)
 	VALUES
 		(@UserId,@DateTime, @ForceFormat, @TemplateId, @Data, @MessageFormat)

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Validation
 {

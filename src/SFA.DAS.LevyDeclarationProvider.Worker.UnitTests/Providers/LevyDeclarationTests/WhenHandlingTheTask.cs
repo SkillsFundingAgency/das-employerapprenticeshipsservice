@@ -6,9 +6,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
-using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
 
@@ -51,17 +50,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             //Assert
             _pollingMessageReceiver.Verify(x=>x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(),Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheDeclarationDataIsReceivedForTheQueueMessageId()
-        {
-            //Act   
-            await _levyDeclaration.Handle();
-
-            //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountRequest>(c=>c.AccountId.Equals(ExpecetedEmpref))), Times.Once());
-
-        }
+        
 
         [Test]
         public async Task ThenTheRebuildDeclarationCommandIsCalledIfThereIsData()
@@ -92,7 +81,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             await _levyDeclaration.Handle();
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetLevyDeclarationQuery>()),Times.Never());
+            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
             mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
         }
     }

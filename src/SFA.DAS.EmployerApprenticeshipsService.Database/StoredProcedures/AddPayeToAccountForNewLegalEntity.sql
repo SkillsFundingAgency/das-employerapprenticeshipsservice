@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AddPayeToAccountForNewLegalEntity]
+﻿CREATE PROCEDURE [account].[AddPayeToAccountForNewLegalEntity]
 	@accountId BIGINT,
 	@companyNumber NVARCHAR(50),
 	@companyName NVARCHAR(255),

@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Notification]
+﻿CREATE TABLE [account].[Notification]
 (
 	[Id] BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 	[UserId] BIGINT NOT NULL,

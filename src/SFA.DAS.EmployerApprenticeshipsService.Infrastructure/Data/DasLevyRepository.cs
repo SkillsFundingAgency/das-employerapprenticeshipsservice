@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
-                    sql: "SELECT Amount, SubmissionId AS Id, SubmissionType, SubmissionDate AS [Date] FROM [dbo].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
+                    sql: "SELECT Amount, SubmissionId AS Id, SubmissionType, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@SubmissionType", dasDeclaration.SubmissionType, DbType.String);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [dbo].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType);",
+                    sql: "INSERT INTO [levy].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType);",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFractions>(
-                    sql: "SELECT * FROM [dbo].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
+                    sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [dbo].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
+                    sql: "INSERT INTO [levy].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<LevyDeclarationView>(
-                    sql: "SELECT * from [dbo].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC;",
+                    sql: "SELECT * from [levy].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

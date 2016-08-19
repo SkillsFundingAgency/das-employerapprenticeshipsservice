@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration
 {
-    public class GetLevyDeclarationQueryValidator : IValidator<GetLevyDeclarationQuery>
+    public class GetHMRCLevyDeclarationQueryValidator : IValidator<GetHMRCLevyDeclarationQuery>
     {
-        public ValidationResult Validate(GetLevyDeclarationQuery item)
+        public ValidationResult Validate(GetHMRCLevyDeclarationQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetLevyDeclarationQuery item)
+        public Task<ValidationResult> ValidateAsync(GetHMRCLevyDeclarationQuery item)
         {
             throw new NotImplementedException();
         }

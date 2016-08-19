@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[EnglishFraction]
+﻿CREATE TABLE [levy].[EnglishFraction]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [DateCalculated] DATETIME NULL, 

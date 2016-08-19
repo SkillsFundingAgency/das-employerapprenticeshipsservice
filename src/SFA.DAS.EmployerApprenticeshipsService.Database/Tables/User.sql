@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[User]
+﻿CREATE TABLE [account].[User]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     [PireanKey] UNIQUEIDENTIFIER NOT NULL, 

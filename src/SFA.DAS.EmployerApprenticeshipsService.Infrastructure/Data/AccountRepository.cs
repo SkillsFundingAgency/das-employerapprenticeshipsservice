@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
-                    sql: "[dbo].[CreateAccount]",
+                    sql: "[account].[CreateAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[AddPayeToAccountForExistingLegalEntity]",
+                    sql: "[account].[AddPayeToAccountForExistingLegalEntity]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[dbo].[AddPayeToAccountForNewLegalEntity]",
+                    sql: "[account].[AddPayeToAccountForNewLegalEntity]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<PayeView>(
-                    sql: "SELECT * FROM [dbo].[GetAccountPayeSchemes] WHERE AccountId = @accountId;",
+                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE AccountId = @accountId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "GetEmployerAgreementsLinkedToAccount",
+                    sql: "account.GetEmployerAgreementsLinkedToAccount",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

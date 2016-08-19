@@ -98,6 +98,8 @@
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
+    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
+    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
@@ -173,9 +175,12 @@
     <Compile Include="Queries\GetInvitation\GetInvitationQueryHandler.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationRequest.cs" />
     <Compile Include="Queries\GetInvitation\GetInvitationResponse.cs" />
-    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQuery.cs" />
+    <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQuery.cs" />
+    <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryHandler.cs" />
+    <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryValidator.cs" />
+    <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
-    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryValidator.cs" />
+    <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
     <Compile Include="Queries\GetMember\GetMemberQueryHandler.cs" />
     <Compile Include="Queries\GetMember\GetMemberRequest.cs" />

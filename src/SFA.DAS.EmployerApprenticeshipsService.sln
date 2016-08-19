@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Levy.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EmployerApprenticeshipsService.Levy.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Account.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EmployerApprenticeshipsService.Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
 EndProject
@@ -52,7 +52,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE
 		localhost.pfx = localhost.pfx
 	EndProjectSection
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipService.HMRC.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EmployerApprenticeshipService.HMRC.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipService.Levy.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EmployerApprenticeshipService.Levy.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,7 +132,6 @@ Global
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
