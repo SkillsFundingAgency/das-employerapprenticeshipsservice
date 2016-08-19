@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration
 {
     public class GetLevyDeclarationRequest : IAsyncRequest<GetLevyDeclarationResponse>
     {

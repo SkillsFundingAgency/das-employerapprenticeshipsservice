@@ -6,7 +6,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
@@ -92,7 +92,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             await _levyDeclaration.Handle();
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetLevyDeclarationQuery>()),Times.Never());
+            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
             mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
         }
     }

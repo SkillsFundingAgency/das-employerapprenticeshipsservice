@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLevyAggregation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.LevyAggregationProvider.Worker.Commands.CreateLevyAggregation;
-using SFA.DAS.LevyAggregationProvider.Worker.Queries.GetLevyDeclaration;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers

@@ -10,9 +10,7 @@ AS
 	BEGIN
 		DELETE FROM [account].[User];
 	END
-
-	DELETE FROM [account].[LevyDeclaration];
-	DELETE FROM [account].[EnglishFraction];
+		
 	DELETE FROM [account].[Paye];
 	DELETE FROM [account].[LegalEntity];
 	DELETE FROM [account].[Account];

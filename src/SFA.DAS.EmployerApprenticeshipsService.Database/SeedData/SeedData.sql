@@ -11,7 +11,7 @@ Post-Deployment Script Template
 */
 
 
-EXECUTE Cleardown;
+EXECUTE account.Cleardown;
 
 -- Role seed data
 SET IDENTITY_INSERT  [account].[Role] ON 

@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.Model
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
 {
-    public class SourceDataItem
+    public class LevyDeclarationSourceDataItem
     {
         public int Id { get; set; }
         public string EmpRef { get; set; }

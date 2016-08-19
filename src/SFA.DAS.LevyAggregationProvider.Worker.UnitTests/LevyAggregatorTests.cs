@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.LevyAggregationProvider.Worker.Model;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
@@ -24,10 +24,10 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
         {
             const int accountId = 23;
 
-            var response = _aggregator.BuildAggregate(new SourceData
+            var response = _aggregator.BuildAggregate(new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>()
+                Data = new List<LevyDeclarationSourceDataItem>()
             });
 
             Assert.That(response.AccountId, Is.EqualTo(accountId));
@@ -40,12 +40,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             const int accountId = 23;
             const string empRef = "120/1234567";
 
-            var source = new SourceData
+            var source = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>
+                Data = new List<LevyDeclarationSourceDataItem>
                 {
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 1,
                         EmpRef = empRef,
@@ -80,12 +80,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             const int accountId = 23;
             const string empRef = "120/1234567";
 
-            var source = new SourceData
+            var source = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>
+                Data = new List<LevyDeclarationSourceDataItem>
                 {
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 1,
                         EmpRef = empRef,
@@ -94,7 +94,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 2,
                         EmpRef = empRef,
@@ -129,12 +129,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             const int accountId = 23;
             const string empRef = "120/1234567";
 
-            var source = new SourceData
+            var source = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>
+                Data = new List<LevyDeclarationSourceDataItem>
                 {
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 1,
                         EmpRef = empRef,
@@ -143,7 +143,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 2,
                         EmpRef = empRef,
@@ -168,12 +168,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             const string empRef1 = "120/1234567";
             const string empRef2 = "120/7654321";
 
-            var source = new SourceData
+            var source = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>
+                Data = new List<LevyDeclarationSourceDataItem>
                 {
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 1,
                         EmpRef = empRef1,
@@ -182,7 +182,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 2,
                         EmpRef = empRef2,
@@ -218,12 +218,12 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
             const string empRef1 = "120/1234567";
             const string empRef2 = "120/7654321";
 
-            var source = new SourceData
+            var source = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = new List<SourceDataItem>
+                Data = new List<LevyDeclarationSourceDataItem>
                 {
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 1,
                         EmpRef = empRef2,
@@ -232,7 +232,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 2,
                         EmpRef = empRef2,
@@ -240,7 +240,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         Amount = 25.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 3,
                         EmpRef = empRef1,
@@ -249,7 +249,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 4,
                         EmpRef = empRef1,
@@ -257,7 +257,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         Amount = 10.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 5,
                         EmpRef = empRef1,
@@ -266,7 +266,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 6,
                         EmpRef = empRef1,
@@ -274,7 +274,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         Amount = 10.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 7,
                         EmpRef = empRef2,
@@ -283,7 +283,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
                     },
-                    new SourceDataItem
+                    new LevyDeclarationSourceDataItem
                     {
                         Id = 8,
                         EmpRef = empRef2,

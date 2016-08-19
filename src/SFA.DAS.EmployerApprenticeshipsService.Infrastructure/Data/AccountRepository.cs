@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "GetEmployerAgreementsLinkedToAccount",
+                    sql: "account.GetEmployerAgreementsLinkedToAccount",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

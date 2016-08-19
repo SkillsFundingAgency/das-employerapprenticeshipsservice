@@ -6,7 +6,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
@@ -64,7 +64,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 foreach (var scheme in employerSchemesResult.Schemes.SchemesList)
                 {
 
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetLevyDeclarationQuery { Id = scheme.Ref });
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { Id = scheme.Ref });
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions(), Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
                     if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.Declarations != null)

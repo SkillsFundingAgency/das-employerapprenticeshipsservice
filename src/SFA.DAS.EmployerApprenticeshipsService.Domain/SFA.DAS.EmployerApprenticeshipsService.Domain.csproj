@@ -170,6 +170,8 @@
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
