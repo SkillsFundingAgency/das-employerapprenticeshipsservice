@@ -2,7 +2,15 @@
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
 {
-    public class EmployerApprenticeshipsServiceConfiguration
+
+    public interface IConfiguration
+    {
+        string DatabaseConnectionString { get; set; }
+
+        string ServiceBusConnectionString { get; set; }
+    }
+
+    public class EmployerApprenticeshipsServiceConfiguration : IConfiguration
     {
         public CompaniesHouseConfiguration CompaniesHouse { get; set; }
         public EmployerConfiguration Employer { get; set; }
@@ -13,6 +21,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public string DashboardUrl { get; set; }
 
         public HmrcConfiguration Hmrc { get; set; }
+        public string DatabaseConnectionString { get; set; }
+    }
+
+    public class LevyDeclarationProvider : IConfiguration
+    {
+        public string DatabaseConnectionString { get; set; }
+        public string ServiceBusConnectionString { get; set; }
     }
 
     public class HmrcConfiguration

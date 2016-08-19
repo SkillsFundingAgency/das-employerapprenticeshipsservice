@@ -12,9 +12,15 @@ using StructureMap.Pipeline;
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 {
     
-    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy
+    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : IConfiguration
     {
-        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+        private readonly string _serviceName;
+
+        public ConfigurationPolicy(string serviceName)
+        {
+            _serviceName = serviceName;
+        }
+        
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
             
@@ -30,9 +36,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 
                 var configurationRepository = GetConfigurationRepository();
                 var configurationService = new ConfigurationService(configurationRepository,
-                    new ConfigurationOptions(ServiceName, environment, "1.0"));
+                    new ConfigurationOptions(_serviceName, environment, "1.0"));
 
-                var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+                var result = configurationService.Get<T>();
                 if (result != null)
                 {
                     instance.Dependencies.AddForConstructorParameter(serviceConfigurationParamater, result);

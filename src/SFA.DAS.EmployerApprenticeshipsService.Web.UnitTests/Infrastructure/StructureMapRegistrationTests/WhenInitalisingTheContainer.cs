@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 c =>
                     {
                         c.AddRegistry<TestRegistry>();
-                        c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                        c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                     }
                 );
         }
@@ -42,31 +42,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             Assert.IsNotNull(item);
         }
 
-        public class TestRegistry : Registry
+        
+        internal class TestRegistry : Registry
         {
             public TestRegistry()
             {
                 For<ITestClass>().Use<TestClass>();
+                For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             }
         }
 
-        
-        public interface ITestClass
+
+        internal interface ITestClass
         {
             
         }
 
-        public class TestClass : ITestClass
+        internal class TestClass : ITestClass
         {
-            public readonly EmployerApprenticeshipsServiceConfiguration Configuration;
+            public readonly IConfiguration Configuration;
 
-            public TestClass(EmployerApprenticeshipsServiceConfiguration configuration)
+            public TestClass(IConfiguration configuration)
             {
                 Configuration = configuration;
             }
         }
 
-        public class TestController
+        internal class TestController
         {
             
             public TestController()
