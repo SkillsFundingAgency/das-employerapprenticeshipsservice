@@ -18,7 +18,7 @@
     <div class="column-full">
         <h1 class="heading-xlarge">
             @HttpContext.Current.User.Identity.Name
-            <p class="text-secondary bold-small">User account</p>
+            <p class="heading-secondary">Your profile</p>
         </h1>
         <hr class="wide"/>
     </div>
@@ -33,11 +33,11 @@
             <h2 class="heading-medium">Invitations</h2>
             @if (Model.Data.Invitations == 1)
             {
-                <p>You have @Model.Data.Invitations pending invitation to an employer account.</p>
+                <p>You have @Model.Data.Invitations pending invitation to a levy account.</p>
             }
             else
             {
-                <p>You have @Model.Data.Invitations pending invitations to employer accounts.</p>
+                <p>You have @Model.Data.Invitations pending invitations to levy accounts.</p>
             }
             
             <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
@@ -48,8 +48,8 @@
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Employer Accounts</h2>
-        @if (Model.Data.Accounts.AccountList.Count == 0)
+        <h2 class="heading-medium">Levy accounts</h2>
+        @if (Model.Data.Accounts.AccountList.Count == 1)
         {
             <p>You have no employer accounts associated with this account. To use your account you will either need to create a new employer account or be invited to an existing one.</p>
         }
