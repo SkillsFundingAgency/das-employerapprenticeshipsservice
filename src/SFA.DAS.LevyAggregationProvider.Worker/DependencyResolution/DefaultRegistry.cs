@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using StructureMap;
 using StructureMap.Graph;
@@ -20,7 +22,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
-            For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             
             RegisterMediator();
 
