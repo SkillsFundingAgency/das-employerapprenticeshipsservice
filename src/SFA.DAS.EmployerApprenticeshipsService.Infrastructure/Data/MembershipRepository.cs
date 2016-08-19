@@ -6,12 +6,13 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class MembershipRepository : BaseRepository, IMembershipRepository
     {
-        public MembershipRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration,logger)
+        public MembershipRepository(IConfiguration configuration, ILogger logger) : base(configuration,logger)
         {
         }
 

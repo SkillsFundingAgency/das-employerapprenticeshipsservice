@@ -3,15 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class NotificationRepository : BaseRepository, INotificationRepository
     {
-        public NotificationRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+        public NotificationRepository(IConfiguration configuration, ILogger logger)
             : base(configuration, logger)
         {
         }

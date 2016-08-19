@@ -4,12 +4,13 @@ using Dapper;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup
 {
     public class CleanDatabase : BaseRepository, ICleanDatabase
     {
-        public CleanDatabase(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration, logger)
+        public CleanDatabase(IConfiguration configuration, ILogger logger) : base(configuration, logger)
         {
         }
 

@@ -136,7 +136,6 @@
     <Compile Include="Data\IInvitationRepository.cs" />
     <Compile Include="Data\IMembershipRepository.cs" />
     <Compile Include="Data\INotificationRepository.cs" />
-    <Compile Include="Data\IRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="DepedencyResolution\ConfigurationPolicy.cs" />

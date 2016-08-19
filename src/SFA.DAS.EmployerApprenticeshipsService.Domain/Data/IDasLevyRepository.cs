@@ -5,7 +5,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
-    public interface IDasLevyRepository : IRepository
+    public interface IDasLevyRepository
     {
         Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef);
         Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef);
