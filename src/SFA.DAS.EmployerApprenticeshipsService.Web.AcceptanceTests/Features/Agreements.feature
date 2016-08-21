@@ -11,3 +11,8 @@ Examples:
 | Owner       | signed     |
 | Transactor  | not_signed |
 | Viewer      | not_signed |
+
+@mytag
+Scenario Outline: Check Aknowledgement
+Given I am an account "Owner"
+And I have not checked aknowledgement
