@@ -147,6 +147,7 @@
     <Compile Include="Entities\Account\LegalEntity.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
+    <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
+    <Compile Include="Models\HmrcEmployer\EmpRefLookupItem.cs" />
     <Compile Include="Models\HmrcLevy\Declarations.cs" />
     <Compile Include="Models\HmrcLevy\Employer.cs" />
     <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />

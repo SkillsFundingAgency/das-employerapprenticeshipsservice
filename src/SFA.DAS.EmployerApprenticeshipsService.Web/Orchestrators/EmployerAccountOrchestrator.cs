@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -19,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService) : base(mediator, logger, cookieService, configuration, empRefFileBasedService)
         {
         }
 

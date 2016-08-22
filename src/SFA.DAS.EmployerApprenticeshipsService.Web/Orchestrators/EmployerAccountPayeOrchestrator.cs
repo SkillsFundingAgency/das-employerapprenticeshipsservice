@@ -12,13 +12,14 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService) : base(mediator, logger, cookieService, configuration, empRefFileBasedService)
         {
         }
 
@@ -56,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 };
             }
 
-            var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
+            var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken, string.Empty);
             var empRef = hmrcResponse.Empref;
             
 

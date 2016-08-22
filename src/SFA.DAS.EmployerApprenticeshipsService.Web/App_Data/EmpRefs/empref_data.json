@@ -1,14 +1,20 @@
 ﻿{
   "Data": [
     {
-      "Email": "daniel.ashton@test.local",
-      "Password": "1234567890",
-      "EmpRef": "456/CD45678"
+      "Username": "das.levy.scenario1",
+      "EmpRef": "111/AA00001"
     },
     {
-      "Email": "ian.russell@test.local",
-      "Password": "1234567890",
-      "EmpRef": "123/AB12345"
+      "Username": "das.levy.scenario2",
+      "EmpRef": "222/AA00001"
+    },
+    {
+      "Username": "das.levy.scenario3",
+      "EmpRef": "333/AA00001"
+    },
+    {
+      "Username": "das.levy.scenario9",
+      "EmpRef": "999/AA00001"
     }
   ]
 }

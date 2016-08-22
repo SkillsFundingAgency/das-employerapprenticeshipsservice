@@ -6,6 +6,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -17,6 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
+        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -26,8 +28,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
+            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration, _empRefFileBasedService.Object);
         }
 
         [Test]

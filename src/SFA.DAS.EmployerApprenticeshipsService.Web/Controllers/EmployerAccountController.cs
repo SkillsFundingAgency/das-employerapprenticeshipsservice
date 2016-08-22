@@ -90,7 +90,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View("InvalidSummary", response);
             }
 
-            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken);
+            var email = _owinWrapper.GetClaimValue("email");
+
+            var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
@@ -98,9 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
-
             
-         
             return RedirectToAction("Summary");
         }
         
