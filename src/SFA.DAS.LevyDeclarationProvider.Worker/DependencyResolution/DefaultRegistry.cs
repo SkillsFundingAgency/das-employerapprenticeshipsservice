@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
@@ -20,9 +21,12 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
-            For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IUserRepository>().Use<UserRepository>();
 
+            For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
+
+            For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
+            
             AddMediatrRegistrations();
         }
 
@@ -33,7 +37,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
 
             For<IMediator>().Use<Mediator>();
         }
-
+        
     }
 
 }

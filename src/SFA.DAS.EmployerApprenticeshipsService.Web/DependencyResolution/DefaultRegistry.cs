@@ -25,6 +25,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using StructureMap;
@@ -45,7 +46,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
-           
+
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+
             var config = this.GetConfiguration();
             if (config.Identity.UseFake)
             {

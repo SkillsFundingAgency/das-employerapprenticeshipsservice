@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[MembershipView]
+﻿CREATE VIEW [account].[MembershipView]
 AS
 SELECT m.*, 
 	CONVERT(varchar(64), u.PireanKey) AS UserRef, 
@@ -7,10 +7,10 @@ SELECT m.*,
 	u.LastName, 
 	a.Name AS AccountName, 
 	r.Name AS RoleName
-FROM [dbo].[Membership] m
-	JOIN [dbo].[User] u
+FROM [account].[Membership] m
+	JOIN [account].[User] u
 		ON u.Id = m.UserId
-	JOIN [dbo].[Account] a
+	JOIN [account].[Account] a
 		ON a.Id = m.AccountId
-	JOIN [dbo].[Role] r
+	JOIN [account].[Role] r
 		ON r.Id = m.RoleId

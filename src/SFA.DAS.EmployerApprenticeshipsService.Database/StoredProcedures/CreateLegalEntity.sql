@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[CreateLegalEntity]
+﻿CREATE PROCEDURE [account].[CreateLegalEntity]
 	@employerNumber NVARCHAR(50), 
 	@employerName NVARCHAR(100), 
 	@employerRegisteredAddress NVARCHAR(256),
@@ -6,6 +6,6 @@
 	@legalEntityId BIGINT OUTPUT
 AS
 BEGIN
-	INSERT INTO [dbo].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+	INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
 	SELECT @legalEntityId = SCOPE_IDENTITY();
 END

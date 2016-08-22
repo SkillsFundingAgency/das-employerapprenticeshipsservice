@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetLevyDeclarationTests
 {
     public class WhenValidatingTheRequest
     {
-        private GetLevyDeclarationQueryValidator _getLevyDeclarationQueryValidator;
+        private GetHMRCLevyDeclarationQueryValidator _getHMRCLevyDeclarationQueryValidator;
 
         [SetUp]
         public void Arrange()
         {
-            _getLevyDeclarationQueryValidator = new GetLevyDeclarationQueryValidator();
+            _getHMRCLevyDeclarationQueryValidator = new GetHMRCLevyDeclarationQueryValidator();
         }
 
         [Test]
         public void ThenTheDicitionaryIsPopulatedWhenTheIdIsMissing()
         {
             //Act
-            var actual = _getLevyDeclarationQueryValidator.Validate(new GetLevyDeclarationQuery());
+            var actual = _getHMRCLevyDeclarationQueryValidator.Validate(new GetHMRCLevyDeclarationQuery());
 
             //Assert
             Assert.IsNotNull(actual);
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenTheDictionaryIsNotPopulatedIfAllFieldsAreSupplied()
         {
             //Act
-            var actual = _getLevyDeclarationQueryValidator.Validate(new GetLevyDeclarationQuery {Id = "123456"});
+            var actual = _getHMRCLevyDeclarationQueryValidator.Validate(new GetHMRCLevyDeclarationQuery {Id = "123456"});
 
             //Assert
             Assert.IsNotNull(actual);

@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
-        private readonly IMessagePublisher _messagePublisher; 
+        private readonly IMessagePublisher _messagePublisher;
 
         public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IMessagePublisher messagePublisher)
         {
@@ -32,8 +32,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
-            
-            bool sendLevyDataChanged = false; 
+
+            bool sendLevyDataChanged = false;
             foreach (var employerLevyData in message.EmployerLevyData)
             {
                 foreach (var dasDeclaration in employerLevyData.Declarations.Declarations)
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
                     if (declaration == null)
                     {
-                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef);
+                        await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef, message.AccountId);
                         sendLevyDataChanged = true;
                     }
                 }
@@ -58,9 +58,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
             if (sendLevyDataChanged)
             {
-                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = message.EmployerId});
+                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = message.AccountId });
             }
-            
+
         }
     }
 }

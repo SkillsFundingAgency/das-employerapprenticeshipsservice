@@ -6,10 +6,10 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
-using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
@@ -22,12 +22,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IDasAccountService _dasAccountService;
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger, IDasAccountService dasAccountService)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
             _logger = logger;
+            _dasAccountService = dasAccountService;
         }
 
         public async Task Handle()
@@ -40,31 +42,21 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 var employerAccountId = message.Content.AccountId;
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
+                
 
-                var employerAccountResult = await _mediator.SendAsync(new GetAccountRequest
-                {
-                    AccountId = employerAccountId
-                });
-
-                if (employerAccountResult?.Account == null)
+                var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
+                if (employerSchemesResult?.SchemesList == null)
                 {
                     await message.CompleteAsync();
                     return;
                 }
 
-                var employerSchemesResult = await _mediator.SendAsync(new GetEmployerSchemesQuery { Id = employerAccountResult.Account.Id });
-                if (employerSchemesResult?.Schemes?.SchemesList == null)
-                {
-                    await message.CompleteAsync();
-                    return;
-                }
+                var employerDataList = new List<EmployerLevyData>();
 
-                List<EmployerLevyData> employerDataList = new List<EmployerLevyData>();
-
-                foreach (var scheme in employerSchemesResult.Schemes.SchemesList)
+                foreach (var scheme in employerSchemesResult.SchemesList)
                 {
 
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetLevyDeclarationQuery { Id = scheme.Ref });
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { Id = scheme.Ref });
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions(), Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
                     if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.Declarations != null)
@@ -92,7 +84,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 }
 
 
-                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand() { EmployerId = employerAccountId, EmployerLevyData = employerDataList });
+                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+                {
+                    AccountId = employerAccountId,
+                    EmployerLevyData = employerDataList
+                });
 
                 
 

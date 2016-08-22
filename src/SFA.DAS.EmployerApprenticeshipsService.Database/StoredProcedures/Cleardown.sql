@@ -1,21 +1,19 @@
-﻿CREATE PROCEDURE [dbo].[Cleardown]
+﻿CREATE PROCEDURE [account].[Cleardown]
 	@INCLUDEUSERTABLE TINYINT = 0
 AS
-	DELETE FROM [dbo].[AccountEmployerAgreement];
-	DELETE FROM [dbo].[EmployerAgreement];
-	DELETE FROM [dbo].[Invitation];
-	DELETE FROM [dbo].[Membership];
+	DELETE FROM [account].[AccountEmployerAgreement];
+	DELETE FROM [account].[EmployerAgreement];
+	DELETE FROM [account].[Invitation];
+	DELETE FROM [account].[Membership];
 
 	IF @INCLUDEUSERTABLE = 1
 	BEGIN
-		DELETE FROM [dbo].[User];
+		DELETE FROM [account].[User];
 	END
-
-	DELETE FROM [dbo].[LevyDeclaration];
-	DELETE FROM [dbo].[EnglishFraction];
-	DELETE FROM [dbo].[Paye];
-	DELETE FROM [dbo].[LegalEntity];
-	DELETE FROM [dbo].[Account];
-	DELETE FROM [dbo].[Role];
-	DELETE FROM [dbo].[EmployerAgreementTemplate];
+		
+	DELETE FROM [account].[Paye];
+	DELETE FROM [account].[LegalEntity];
+	DELETE FROM [account].[Account];
+	DELETE FROM [account].[Role];
+	DELETE FROM [account].[EmployerAgreementTemplate];
 RETURN 0

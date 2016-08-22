@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
@@ -12,13 +13,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         private readonly ILogger _logger;
         private readonly string _connectionString;
 
-        protected BaseRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
+        protected BaseRepository(IConfiguration configuration, ILogger logger)
         {
             _logger = logger;
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
 
-            _connectionString = configuration.Employer.DatabaseConnectionString;
+            _connectionString = configuration.DatabaseConnectionString;
         }
 
         protected async Task<T> WithConnection<T>(Func<IDbConnection, Task<T>> getData)

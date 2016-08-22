@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -6,9 +7,10 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
-using SFA.DAS.LevyDeclarationProvider.Worker.Queries.GetAccount;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
 
@@ -16,12 +18,12 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
 {
     public class WhenHandlingTheTask
     {
-        private const int ExpecetedEmpref = 123456;
+        private const int ExpectedAccountId = 123456;
         private LevyDeclaration _levyDeclaration;
         private Mock<IPollingMessageReceiver> _pollingMessageReceiver;
         private Mock<IMediator> _mediator;
-        private Mock<IMessagePublisher> _messagePublisher;
         private Mock<ILogger> _logger;
+        private Mock<IDasAccountService> _dasAccountService;
 
         [SetUp]
         public void Arrange()
@@ -31,15 +33,17 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
             _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
                 ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile, 
-                new EmployerRefreshLevyQueueMessage { AccountId = ExpecetedEmpref }));
-            _messagePublisher = new Mock<IMessagePublisher>();
-
+                new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId }));
+            
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpecetedEmpref})).ReturnsAsync(new GetEmployerAccountResponse());
+            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpectedAccountId})).ReturnsAsync(new GetEmployerAccountResponse());
+
+            _dasAccountService = new Mock<IDasAccountService>();
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes());
 
             _logger = new Mock<ILogger>();
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object);
+            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object,_dasAccountService.Object);
         }
 
         [Test]
@@ -51,17 +55,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             //Assert
             _pollingMessageReceiver.Verify(x=>x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(),Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheDeclarationDataIsReceivedForTheQueueMessageId()
-        {
-            //Act   
-            await _levyDeclaration.Handle();
-
-            //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountRequest>(c=>c.AccountId.Equals(ExpecetedEmpref))), Times.Once());
-
-        }
+        
 
         [Test]
         public async Task ThenTheRebuildDeclarationCommandIsCalledIfThereIsData()
@@ -82,6 +76,16 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
         }
 
         [Test]
+        public async Task ThenTheSchemesAreRetrunedFromTheService()
+        {
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _dasAccountService.Verify(x=>x.GetAccountSchemes(ExpectedAccountId), Times.Once);
+        } 
+
+        [Test]
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
         {
             //Arrange
@@ -92,7 +96,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             await _levyDeclaration.Handle();
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetLevyDeclarationQuery>()),Times.Never());
+            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
             mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
         }
     }

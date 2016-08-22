@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Moq;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using StructureMap;
@@ -24,6 +26,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
 
             For<IOwinWrapper>().Use(() => owinWrapperMock.Object);
             
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+
             AddMediatrRegistrations();
         }
 

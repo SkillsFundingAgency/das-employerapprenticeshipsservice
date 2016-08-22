@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
         public async Task<string> DiscoverEmpref(string authToken)
         {
-            var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy");
+            var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy/");
 
             return json.Emprefs.SingleOrDefault();
         }
