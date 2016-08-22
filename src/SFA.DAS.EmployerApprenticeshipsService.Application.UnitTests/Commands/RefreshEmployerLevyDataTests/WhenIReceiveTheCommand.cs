@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
@@ -18,6 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IDasLevyRepository> _levyRepository;
         private Mock<IMessagePublisher> _messagePublisher;
         private const string ExpectedEmpRef = "123456";
+        private const long ExpectedAccountId = 44321;
 
         [SetUp]
         public void Arrange()
@@ -37,14 +39,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef));
 
             //Assert
-            _validator.Verify(x=>x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>()));
+            _validator.Verify(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>()));
         }
 
         [Test]
         public void ThenAInvalidRequestExceptionIsThrownIfTheMessageIsNotValid()
         {
             //Arrange
-            _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> { { "", ""}}});
+            _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _refreshEmployerLevyDataCommandHandler.Handle(new RefreshEmployerLevyDataCommand()));
@@ -60,7 +62,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
 
             //Assert
-            _levyRepository.Verify(x=>x.GetEmployerDeclaration(It.Is<string>(c=>c.Equals("1") || c.Equals("2")),ExpectedEmpRef),Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count));
+            _levyRepository.Verify(x => x.GetEmployerDeclaration(It.Is<string>(c => c.Equals("1") || c.Equals("2")), ExpectedEmpRef), Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count));
         }
 
         [Test]
@@ -71,10 +73,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _levyRepository.Setup(x => x.GetEmployerDeclaration("2", ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
 
             //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef));
+            await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
 
             //Assert
-            _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), It.IsAny<string>()));
+            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), ExpectedEmpRef, ExpectedAccountId));
+        }
+
+        [Test]
+        public async Task ThenTheMessageIsPublishedIfThereAreChanges()
+        {
+            //Arrange
+            _levyRepository.Setup(x => x.GetEmployerDeclaration("2", ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
+
+            //Assert
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is< EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
         }
     }
 }

@@ -10,11 +10,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class RefreshEmployerLevyDataCommandObjectMother
     {
-        public static RefreshEmployerLevyDataCommand Create(string empRef)
+        public static RefreshEmployerLevyDataCommand Create(string empRef,long accountId = 1)
         {
 
             var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
-            {EmployerId = 1,
+            {
+                AccountId = accountId,
                 EmployerLevyData = new List<EmployerLevyData> {
                     new EmployerLevyData
                 {
