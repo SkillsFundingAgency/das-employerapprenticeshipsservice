@@ -1,7 +1,9 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
 {
     public interface IDasAccountService
     {
-        Schemes GetAccountSchemes(long accountId);
+        Task<Schemes> GetAccountSchemes(long accountId);
     }
 }
