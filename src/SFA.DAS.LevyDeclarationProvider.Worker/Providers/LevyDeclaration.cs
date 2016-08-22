@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.Messaging;
 
@@ -21,12 +22,14 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
         private readonly IPollingMessageReceiver _pollingMessageReceiver;
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IDasAccountService _dasAccountService;
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger, IDasAccountService dasAccountService)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
             _logger = logger;
+            _dasAccountService = dasAccountService;
         }
 
         public async Task Handle()
@@ -40,16 +43,17 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
                 
-                var employerSchemesResult = await _mediator.SendAsync(new GetEmployerSchemesQuery { Id = employerAccountId });
-                if (employerSchemesResult?.Schemes?.SchemesList == null)
+
+                var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
+                if (employerSchemesResult?.SchemesList == null)
                 {
                     await message.CompleteAsync();
                     return;
                 }
 
-                List<EmployerLevyData> employerDataList = new List<EmployerLevyData>();
+                var employerDataList = new List<EmployerLevyData>();
 
-                foreach (var scheme in employerSchemesResult.Schemes.SchemesList)
+                foreach (var scheme in employerSchemesResult.SchemesList)
                 {
 
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { Id = scheme.Ref });
@@ -80,7 +84,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 }
 
 
-                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand() { EmployerId = employerAccountId, EmployerLevyData = employerDataList });
+                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+                {
+                    AccountId = employerAccountId,
+                    EmployerLevyData = employerDataList
+                });
 
                 
 

@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAcco
 
         public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
         {
+            //TODO add validator.
             var userId = message.UserId;
 
             var accounts = await _userAccountsRepository.GetAccountsByUserId(userId);
