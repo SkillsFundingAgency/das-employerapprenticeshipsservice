@@ -37,9 +37,10 @@ namespace SFA.DAS.EAS.Notification.Worker
 
             _container = new Container(c =>
             {
-                c.Policies.Add<ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>>();
+                var serviceName = "SFA.DAS.EmployerApprenticeshipsService";
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(serviceName));
                 c.Policies.Add<LoggingPolicy>();
-                c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new MessagePolicy(serviceName));
                 c.AddRegistry<DefaultRegistry>();
             });
 

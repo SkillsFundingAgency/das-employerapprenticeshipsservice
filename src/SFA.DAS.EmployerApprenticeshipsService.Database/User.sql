@@ -1,8 +1,0 @@
-﻿CREATE TABLE [dbo].[User]
-(
-	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
-    [PireanKey] UNIQUEIDENTIFIER NOT NULL, 
-    [Email] NVARCHAR(50) NOT NULL, 
-    [FirstName] NVARCHAR(MAX) NULL, 
-    [LastName] NVARCHAR(MAX) NULL
-)

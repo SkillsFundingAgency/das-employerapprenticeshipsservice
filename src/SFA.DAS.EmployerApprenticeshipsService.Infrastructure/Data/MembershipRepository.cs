@@ -6,6 +6,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [dbo].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@userId", userId, DbType.Int64);
 
                 return await c.QueryAsync<Membership>(
-                    sql: "SELECT * FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "SELECT * FROM [account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.ExecuteAsync(
-                    sql: "DELETE FROM [dbo].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "DELETE FROM [account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [dbo].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "UPDATE [account].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -89,7 +90,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [dbo].[MembershipView] WHERE AccountId = @accountId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [account].[MembershipView] WHERE AccountId = @accountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -107,7 +108,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [dbo].[Membership] ([AccountId], [UserId], [RoleId]) VALUES(@accountId, @userId, @roleId); ",
+                    sql: "INSERT INTO [account].[Membership] ([AccountId], [UserId], [RoleId]) VALUES(@accountId, @userId, @roleId); ",
                     param: parameters,
                     commandType: CommandType.Text);
             });

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[CreateAccount]
+﻿CREATE PROCEDURE [account].[CreateAccount]
 (
 	@userId BIGINT,
 	@employerNumber NVARCHAR(50), 
@@ -17,26 +17,26 @@ BEGIN
 	DECLARE @legalEntityId BIGINT;
 	DECLARE @employerAgreementId BIGINT;
 
-	INSERT INTO [dbo].[Account](Name) VALUES (@employerName);
+	INSERT INTO [account].[Account](Name) VALUES (@employerName);
 	SELECT @accountId = SCOPE_IDENTITY();
 
-	SELECT @legalEntityId = Id FROM [dbo].[LegalEntity] WHERE Code = @employerNumber;
+	SELECT @legalEntityId = Id FROM [account].[LegalEntity] WHERE Code = @employerNumber;
 	
 	IF (@legalEntityId IS NULL)
 	BEGIN
-		INSERT INTO [dbo].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
 		SELECT @legalEntityId = SCOPE_IDENTITY();
 
 		DECLARE @templateId INT;
 
-		SELECT TOP 1 @templateId = Id FROM [dbo].[EmployerAgreementTemplate] ORDER BY Id ASC;
+		SELECT TOP 1 @templateId = Id FROM [account].[EmployerAgreementTemplate] ORDER BY Id ASC;
 
-		INSERT INTO [dbo].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
+		INSERT INTO [account].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
 		SELECT @employerAgreementId = SCOPE_IDENTITY();
 	END
 
-	INSERT INTO [dbo].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
+	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
-	INSERT INTO [dbo].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
-	INSERT INTO [dbo].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
+	INSERT INTO [account].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
+	INSERT INTO [account].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
 END

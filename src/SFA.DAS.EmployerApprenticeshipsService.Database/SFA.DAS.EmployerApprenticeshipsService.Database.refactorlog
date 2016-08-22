@@ -1,37 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
   <Operation Name="Rename Refactor" Key="47605214-8b95-4d80-9c2a-0585af08d3b6" ChangeDateTime="07/14/2016 21:42:55">
-    <Property Name="ElementName" Value="[dbo].[LevyDeclaration].[PayeId]" />
+    <Property Name="ElementName" Value="[account].[LevyDeclaration].[PayeId]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[LevyDeclaration]" />
+    <Property Name="ParentElementName" Value="[account].[LevyDeclaration]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="empRef" />
   </Operation>
   <Operation Name="Rename Refactor" Key="fe9b231c-0df1-4e4f-806d-c9ab75d85ebf" ChangeDateTime="08/09/2016 07:50:19">
-    <Property Name="ElementName" Value="[dbo].[LegalEntity].[PostCode]" />
+    <Property Name="ElementName" Value="[account].[LegalEntity].[PostCode]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[LegalEntity]" />
+    <Property Name="ParentElementName" Value="[account].[LegalEntity]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="RegisrteredAddress" />
   </Operation>
   <Operation Name="Rename Refactor" Key="8faef627-c0d3-4755-9d90-b39a881be570" ChangeDateTime="08/09/2016 07:50:51">
-    <Property Name="ElementName" Value="[dbo].[LegalEntity].[RegisrteredAddress]" />
+    <Property Name="ElementName" Value="[account].[LegalEntity].[RegisrteredAddress]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[LegalEntity]" />
+    <Property Name="ParentElementName" Value="[account].[LegalEntity]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="RegisteredAddress" />
   </Operation>
   <Operation Name="Rename Refactor" Key="1d8f0c75-85ee-4927-aee5-af6e058cdac8" ChangeDateTime="08/09/2016 09:39:54">
-    <Property Name="ElementName" Value="[dbo].[AccountEmployerAgreement].[Id]" />
+    <Property Name="ElementName" Value="[account].[AccountEmployerAgreement].[Id]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[AccountEmployerAgreement]" />
+    <Property Name="ParentElementName" Value="[account].[AccountEmployerAgreement]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="AccountId" />
   </Operation>
   <Operation Name="Rename Refactor" Key="3c923104-60c4-4803-916b-05f0c314d24a" ChangeDateTime="08/09/2016 09:50:56">
-    <Property Name="ElementName" Value="[dbo].[EmployerAgreement].[Status]" />
+    <Property Name="ElementName" Value="[account].[EmployerAgreement].[Status]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[EmployerAgreement]" />
+    <Property Name="ParentElementName" Value="[account].[EmployerAgreement]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StatusId" />
   </Operation>

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.LevyAggregationProvider.Worker.Model;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 {
     public class LevyAggregator
     {
-        public AggregationData BuildAggregate(SourceData input)
+        public AggregationData BuildAggregate(LevyDeclarationSourceData input)
         {
             if (input == null)
                 return null;
@@ -22,7 +22,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             };
         }
 
-        private List<AggregationLine> DoWork(List<SourceDataItem> source)
+        private IEnumerable<AggregationLine> DoWork(IEnumerable<LevyDeclarationSourceDataItem> source)
         {
             var output = new List<AggregationLine>();
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             return output;
         }
 
-        private AggregationLineItem MapFrom(SourceDataItem item)
+        private AggregationLineItem MapFrom(LevyDeclarationSourceDataItem item)
         {
             return new AggregationLineItem
             {

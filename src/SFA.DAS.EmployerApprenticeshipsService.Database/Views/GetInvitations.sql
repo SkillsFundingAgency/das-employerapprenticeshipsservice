@@ -1,4 +1,4 @@
-﻿CREATE VIEW [dbo].[GetInvitations]
+﻿CREATE VIEW [account].[GetInvitations]
 AS 
 SELECT i.Id,
 	i.AccountId,
@@ -11,10 +11,10 @@ SELECT i.Id,
 	r.Name AS RoleName,
 	u.Id AS InternalUserId,
 	u.PireanKey AS ExternalUserId	 
-FROM [dbo].[Invitation] i
-	JOIN [dbo].[Account] a
+FROM [account].[Invitation] i
+	JOIN [account].[Account] a
 		ON a.Id = i.AccountId
-	JOIN [dbo].[Role] r
+	JOIN [account].[Role] r
 		ON r.Id = i.RoleId
-	LEFT OUTER JOIN [dbo].[User] u
+	LEFT OUTER JOIN [account].[User] u
 		ON u.Email = i.Email

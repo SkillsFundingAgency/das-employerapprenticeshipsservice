@@ -13,7 +13,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Team Members</h1>
+        <h1 class="heading-xlarge">Manage team members</h1>
         @if (Model.Data.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
@@ -21,15 +21,14 @@
         else
         {
             <p class="lede">
-                This is the list of people who can access this account or have been invited
-                to be a team member on this account.
+                Invite members, control what they can do, delete members and cancel or resend invitations.
             </p>
         }
     </div>  
     <div class="column-one-third ">
         <form action="@Url.Action("Invite")" method="get">
             <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
-            <input class="button nextto-h1" id="addNewUser" type="submit" value="Invite team member">
+            <input class="button nextto-h1" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>
 </div>
@@ -42,10 +41,10 @@
                 <div class="responsive-thead">
                     <div class="responsive-tr">
 
-                        <div class="responsive-th" scope="col">Name</div>
-                        <div class="responsive-th" scope="col">Email address</div>
+                        
+                        <div class="responsive-th" scope="col">Email</div>
 
-                        <div class="responsive-th" scope="col">Role</div>
+                        <div class="responsive-th" scope="col">What they can do</div>
                         <div class="responsive-th" scope="col">Status</div>
 
                         <div class="responsive-th" scope="col"></div>
@@ -63,11 +62,11 @@
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Email address</div>
+                                <div class="responsive-inner-caption">Email</div>
                                 <div>@teamMember.Email</div>
                             </div>
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Role</div>
+                                <div class="responsive-inner-caption">What they can do</div>
                                 <div>@teamMember.Role</div>
                             </div>
                             <div class="responsive-td">

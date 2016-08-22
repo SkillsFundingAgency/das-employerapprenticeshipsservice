@@ -18,12 +18,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup
             var parameters = new DynamicParameters();
             parameters.Add("@INCLUDEUSERTABLE", 1, DbType.Int16);
             await WithConnection(async c => await c.ExecuteAsync(
-                "[dbo].[Cleardown]",
+                "[account].[Cleardown]",
                 parameters,
                 commandType: CommandType.StoredProcedure));
 
             await WithConnection(async c => await c.ExecuteAsync(
-                "[dbo].[SeedDataForRoles]",
+                "[account].[SeedDataForRoles]",
                 null,
                 commandType: CommandType.StoredProcedure));
 

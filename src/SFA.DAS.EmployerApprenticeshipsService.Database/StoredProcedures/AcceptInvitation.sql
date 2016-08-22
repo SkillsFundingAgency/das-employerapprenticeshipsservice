@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AcceptInvitation]
+﻿CREATE PROCEDURE [account].[AcceptInvitation]
 (
 	@email NVARCHAR(100),
 	@accountId BIGINT,
@@ -11,15 +11,15 @@ BEGIN
 	DECLARE @userId BIGINT;
 
 	SELECT @userId = Id
-	FROM [dbo].[User]
+	FROM [account].[User]
 	WHERE [Email] = @email;
 
-	UPDATE [dbo].[Invitation]
+	UPDATE [account].[Invitation]
 	SET [Status] = 2
 	WHERE [Email] = @email
 		AND [AccountId] = @accountId;
 
-	INSERT INTO [dbo].[Membership] ([AccountId], [UserId], [RoleId])
+	INSERT INTO [account].[Membership] ([AccountId], [UserId], [RoleId])
 	VALUES (@accountId, @userId, @roleId);
 END
 GO

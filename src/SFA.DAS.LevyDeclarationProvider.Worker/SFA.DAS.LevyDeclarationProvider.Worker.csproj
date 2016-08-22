@@ -130,9 +130,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ILevyDeclaration.cs" />
     <Compile Include="Providers\LevyDeclaration.cs" />
-    <Compile Include="Queries\GetAccount\GetAccountQueryHandler.cs" />
-    <Compile Include="Queries\GetAccount\GetAccountRequest.cs" />
-    <Compile Include="Queries\GetAccount\GetAccountResponse.cs" />
     <Compile Include="WorkerRole.cs" />
   </ItemGroup>
   <ItemGroup>

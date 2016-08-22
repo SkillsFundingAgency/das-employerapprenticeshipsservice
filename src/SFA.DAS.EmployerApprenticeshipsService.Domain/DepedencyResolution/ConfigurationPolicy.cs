@@ -6,18 +6,25 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 {
     
-    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy
+    public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : IConfiguration
     {
-        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+        private readonly string _serviceName;
+
+        public ConfigurationPolicy(string serviceName)
+        {
+            _serviceName = serviceName;
+        }
+        
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            
+
             var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
 
             if (serviceConfigurationParamater != null)
@@ -30,9 +37,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 
                 var configurationRepository = GetConfigurationRepository();
                 var configurationService = new ConfigurationService(configurationRepository,
-                    new ConfigurationOptions(ServiceName, environment, "1.0"));
+                    new ConfigurationOptions(_serviceName, environment, "1.0"));
 
-                var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
+                var result = configurationService.Get<T>();
                 if (result != null)
                 {
                     instance.Dependencies.AddForConstructorParameter(serviceConfigurationParamater, result);

@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _logger = new Mock<ILogger>();
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.Get<EmprefDiscovery>(It.IsAny<string>(), "apprenticeship-levy")).ReturnsAsync(new EmprefDiscovery {Emprefs = new List<string> {ExpectedEmpref} });
+            _httpClientWrapper.Setup(x => x.Get<EmprefDiscovery>(It.IsAny<string>(), "apprenticeship-levy/")).ReturnsAsync(new EmprefDiscovery {Emprefs = new List<string> {ExpectedEmpref} });
 
             _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
         }
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             await _hmrcService.DiscoverEmpref(authToken);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.Get<EmprefDiscovery>(authToken, "apprenticeship-levy"), Times.Once);
+            _httpClientWrapper.Verify(x => x.Get<EmprefDiscovery>(authToken, "apprenticeship-levy/"), Times.Once);
         }
 
         [Test]

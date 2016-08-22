@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[GetNotification]
+﻿CREATE PROCEDURE [account].[GetNotification]
 	@Id BIGINT
 AS
-	SELECT * FROM [dbo].[Notification]
+	SELECT * FROM [account].[Notification]
 	WHERE id = @Id

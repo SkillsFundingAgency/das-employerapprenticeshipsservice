@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[AddPayeToAccountForNewLegalEntity]
+﻿CREATE PROCEDURE [account].[AddPayeToAccountForNewLegalEntity]
 	@accountId BIGINT,
 	@companyNumber NVARCHAR(50),
 	@companyName NVARCHAR(255),
@@ -12,13 +12,13 @@ BEGIN
 	DECLARE @legalEntityId BIGINT
 	DECLARE @employerAgreementId BIGINT
 
-	EXEC [CreateLegalEntity] @companyNumber,@companyName,@CompanyAddress,@CompanyDateOfIncorporation,@legalEntityId OUTPUT
+	EXEC [account].[CreateLegalEntity] @companyNumber,@companyName,@CompanyAddress,@CompanyDateOfIncorporation,@legalEntityId OUTPUT
 
-	EXEC [AddPayeToAccountForExistingLegalEntity] @accountId, @legalEntityId,@employerRef,@accessToken, @refreshToken
+	EXEC [account].[CreatePaye] @accountId, @legalEntityId,@employerRef,@accessToken, @refreshToken
 
-	EXEC [CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
+	EXEC [account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
 
-	EXEC [CreateAccountEmployerAgreement] @accountId, @employerAgreementId
+	EXEC [account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId
 	
 END
 

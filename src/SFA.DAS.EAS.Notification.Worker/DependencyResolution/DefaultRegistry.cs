@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -8,19 +10,16 @@ namespace SFA.DAS.EAS.Notification.Worker.DependencyResolution
     {
         public DefaultRegistry()
         {
-            //var environment = Environment.GetEnvironmentVariable("DASENV");
-            //if (string.IsNullOrEmpty(environment))
-            //{
-            //    environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            //}
-
+            
             Scan(scan =>
             {
                 scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
                    a.GetName().Name.StartsWith("SFA.DAS.EAS"));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
             });
-            
+
+            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+
             AddMediatrRegistrations();
         }
 

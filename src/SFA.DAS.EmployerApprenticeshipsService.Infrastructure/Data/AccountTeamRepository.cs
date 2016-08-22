@@ -7,6 +7,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
@@ -25,9 +26,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
-                const string sql = @"select tm.* from [GetTeamMembers] tm 
-                            join [Membership] m on m.AccountId = tm.AccountId
-                            join [User] u on u.Id = m.UserId
+                const string sql = @"select tm.* from [account].[GetTeamMembers] tm 
+                            join [account].[Membership] m on m.AccountId = tm.AccountId
+                            join [account].[User] u on u.Id = m.UserId
                             where u.PireanKey = @externalUserId and tm.AccountId = @accountId";
                 return await connection.QueryAsync<TeamMember>(
                     sql: sql,
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await connection.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [dbo].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
