@@ -62,6 +62,7 @@
     <Folder Include="Views" />
     <Folder Include="StoredProcedures" />
     <Folder Include="Schemas" />
+    <Folder Include="SeedData" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -71,5 +72,9 @@
     <Build Include="Tables\LevyDeclaration.sql" />
     <Build Include="Views\GetLevyDeclarations.sql" />
     <Build Include="Schemas\Levy.sql" />
+    <Build Include="StoredProcedures\Cleardown.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="SeedData\SeedData.sql" />
   </ItemGroup>
 </Project>
