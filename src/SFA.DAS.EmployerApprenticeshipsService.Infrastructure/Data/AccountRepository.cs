@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[AddPayeToAccountForExistingLegalEntity]",
+                    sql: "[account].[CreatePaye]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
