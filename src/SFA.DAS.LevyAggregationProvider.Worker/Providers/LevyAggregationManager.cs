@@ -32,8 +32,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         public async Task Process()
         {
-            //TODO review
-            
+     
                 var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
                 if (message?.Content == null || message.Content.AccountId == 0)

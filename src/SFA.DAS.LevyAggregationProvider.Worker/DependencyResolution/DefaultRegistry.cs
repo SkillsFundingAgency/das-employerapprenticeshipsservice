@@ -22,8 +22,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.DependencyResolution
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-            
+            For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
+
             RegisterMediator();
 
         }

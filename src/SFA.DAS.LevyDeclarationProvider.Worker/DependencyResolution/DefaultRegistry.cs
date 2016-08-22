@@ -21,9 +21,9 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
-            For<IUserRepository>().Use<FileSystemUserRepository>();
+            For<IUserRepository>().Use<UserRepository>();
 
-            For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
 
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
             
@@ -37,7 +37,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
 
             For<IMediator>().Use<Mediator>();
         }
-
+        
     }
 
 }

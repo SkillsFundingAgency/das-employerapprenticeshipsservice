@@ -40,6 +40,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
 
             _container = new Container(c =>
             {
+                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
