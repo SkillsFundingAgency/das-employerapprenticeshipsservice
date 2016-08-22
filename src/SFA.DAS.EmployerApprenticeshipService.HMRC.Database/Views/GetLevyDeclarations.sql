@@ -1,6 +1,8 @@
 ﻿CREATE VIEW [levy].[GetLevyDeclarations]
 AS
-SELECT ld.Id AS Id,	
+SELECT 
+	ld.Id AS Id,	
+	ld.AccountId as AccountId,
 	ld.empRef AS EmpRef,
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
@@ -10,7 +12,7 @@ SELECT ld.Id AS Id,
 FROM [levy].[LevyDeclaration] ld
 OUTER APPLY
 (
-	SELECT TOP 1 *
+	SELECT TOP 1 Amount
 	FROM [levy].[EnglishFraction] ef
 	WHERE ef.EmpRef = ld.empRef 
 		AND ef.[DateCalculated] <= ld.[SubmissionDate]

@@ -1,4 +1,4 @@
-﻿Create Procedure GetNumberOfInvitations_ByUserId
+﻿Create Procedure [account].[GetNumberOfInvitations_ByUserId]
 	@id uniqueidentifier
 AS
 SELECT count(1)

@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [account].[AddPayeToAccountForExistingLegalEntity]
+﻿CREATE PROCEDURE [account].[CreatePaye]
 	@accountId BIGINT,
 	@legalEntityId BIGINT,
 	@employerRef NVARCHAR(16),
