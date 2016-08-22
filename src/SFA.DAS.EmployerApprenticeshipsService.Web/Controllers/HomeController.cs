@@ -17,15 +17,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _owinWrapper = owinWrapper;
             _homeOrchestrator = homeOrchestrator;
         }
-
-        [Authorize]
+        
         public async Task<ActionResult> Index()
         {
-            var accounts = await _homeOrchestrator.GetUserAccounts();
+            var userId = _owinWrapper.GetClaimValue("sub");
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
-            accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
+                accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
 
-            return View(accounts);
+                return View(accounts);
+            }
+            
+            return View("ServiceLandingPage");
+        }
+
+
+        [Authorize]
+        public ActionResult SignIn()
+        {
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

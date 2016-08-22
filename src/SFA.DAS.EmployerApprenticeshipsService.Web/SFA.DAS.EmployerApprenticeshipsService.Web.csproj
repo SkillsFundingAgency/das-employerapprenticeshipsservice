@@ -455,6 +455,7 @@
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
+    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
