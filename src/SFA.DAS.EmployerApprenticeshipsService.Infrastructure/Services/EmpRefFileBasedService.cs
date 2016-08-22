@@ -16,9 +16,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         
         public async Task<string> GetEmpRef(string email, string id)
         {
-            var empRefItems = await ReadFileById<IEnumerable<EmpRefLookupItem>>(id);
+            var empRefLookup = await ReadFileById<EmpRefLookup>(id);
 
-            return empRefItems.FirstOrDefault(x => email.StartsWith(x.Username))?.EmpRef;
+            return empRefLookup.Data.FirstOrDefault(x => email.StartsWith(x.Username))?.EmpRef;
         }
     }
 }
