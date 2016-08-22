@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        public AccountRepository(IConfiguration configuration, ILogger logger)
+        public AccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
             : base(configuration, logger)
         {
         }

@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        public EmployerSchemesRepository(IConfiguration configuration, ILogger logger)
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
             : base(configuration, logger)
         {
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
@@ -12,7 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class AccountTeamRepository : BaseRepository, IAccountTeamRepository
     {
-        public AccountTeamRepository(IConfiguration configuration, ILogger logger )
+        public AccountTeamRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger )
             :base(configuration, logger)
         {
         }

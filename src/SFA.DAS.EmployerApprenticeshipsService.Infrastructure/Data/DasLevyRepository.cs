@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        public DasLevyRepository(IConfiguration configuration, ILogger logger)
+        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, ILogger logger)
             : base(configuration, logger)
         {
         }
@@ -36,19 +36,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef)
+        public async Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef, long accountId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@Amount", dasDeclaration.Amount, DbType.Decimal);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@EmpRef", empRef, DbType.String);
                 parameters.Add("@SubmissionDate", dasDeclaration.Date, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
                 parameters.Add("@SubmissionType", dasDeclaration.SubmissionType, DbType.String);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType);",
+                    sql: "INSERT INTO [levy].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType, AccountId) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType, @AccountId);",
                     param: parameters,
                     commandType: CommandType.Text);
             });

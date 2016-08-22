@@ -24,8 +24,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
         
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            
-            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType.IsAssignableFrom(typeof(T)));
+
+            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
 
             if (serviceConfigurationParamater != null)
             {

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Dapper;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -13,7 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class EmployerAgreementRepository : BaseRepository, IEmployerAgreementRepository
     {
-        public EmployerAgreementRepository(IConfiguration configuration, ILogger logger) 
+        public EmployerAgreementRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) 
             : base(configuration, logger)
         {
         }
@@ -26,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<LegalEntity>(
-                    sql: "GetLegalEntitiesLinkedToAccount",
+                    sql: "[account].[GetLegalEntitiesLinkedToAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
