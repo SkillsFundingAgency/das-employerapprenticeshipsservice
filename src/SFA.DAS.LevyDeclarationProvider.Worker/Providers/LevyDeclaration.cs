@@ -59,8 +59,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                         var fraction = levyDeclarationQueryResult.Fractions.FractionCalculations[0]; //TODO Make some sence of this!
                         if (fraction != null)
                         {
-                            employerData.Fractions.DateCalculated = DateTime.Parse(fraction.calculatedAt);
-                            employerData.Fractions.Amount = decimal.Parse(fraction.fractions.Find(fr => fr.region == "England").value);
+                            employerData.Fractions.DateCalculated = DateTime.Parse(fraction.CalculatedAt);
+                            employerData.Fractions.Amount = decimal.Parse(fraction.Fractions.Find(fr => fr.Region == "England").Value);
                         }
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
