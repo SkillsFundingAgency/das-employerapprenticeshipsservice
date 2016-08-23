@@ -14,6 +14,17 @@ Examples:
 	| Viewer       | not_created   |
 	| Transactor   | not_created   |
 
+Scenario Outline: Remove PAYE scheme 
+Given I am an account "<account_role>"
+When I remove a scheme
+Then Scheme is "status"
+Examples:
+| account_role | scheme_status |
+	| Owner        | removed       |
+	| Viewer       | not_removed   |
+	| Transactor   | not_removed  |
+
+
 Scenario Outline: Add new PAYE scheme to new legal entity
 Given I am an account "<account_role>"
 	When I Add a new PAYE scheme to my new legal entity
