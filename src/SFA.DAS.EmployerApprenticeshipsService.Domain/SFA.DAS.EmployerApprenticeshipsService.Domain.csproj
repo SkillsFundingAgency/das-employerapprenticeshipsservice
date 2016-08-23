@@ -168,7 +168,7 @@
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcEmployer\EmpRefLookup.cs" />
     <Compile Include="Models\HmrcEmployer\EmpRefLookupItem.cs" />
-    <Compile Include="Models\HmrcLevy\Declarations.cs" />
+    <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
     <Compile Include="Models\HmrcLevy\Employer.cs" />
     <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />

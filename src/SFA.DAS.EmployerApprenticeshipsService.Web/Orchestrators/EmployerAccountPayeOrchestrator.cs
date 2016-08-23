@@ -58,7 +58,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
 
             var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken, string.Empty);
-            var empRef = hmrcResponse.Empref;
             
 
             return new OrchestratorResponse < AddNewPayeScheme > { 
@@ -66,9 +65,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                  
                 AccountId = accountId,
-                PayeScheme = empRef,
-                AccessToken = !string.IsNullOrEmpty(empRef) ? response.Data.AccessToken : "",
-                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.Data.RefreshToken : ""
+                PayeScheme = hmrcResponse.Empref,
+                AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
+                RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
                 }
             };
             

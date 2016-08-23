@@ -1,8 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -58,6 +58,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
             return json.Emprefs.SingleOrDefault();
         }
-        
+
+        public async Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef)
+        {
+            var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
+            return await _httpClientWrapper.Get<LevyDeclarations>(authToken, url);
+        }
+
+        public async Task<EnglishFractionDeclarations> GetEnglishFraction(string authToken, string empRef)
+        {
+            var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
+            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken, url);
+        }
     }
 }

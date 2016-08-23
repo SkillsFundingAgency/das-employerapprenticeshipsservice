@@ -5,7 +5,6 @@ using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -34,16 +33,13 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
         public async Task Handle()
         {
-
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
-
                 var employerAccountId = message.Content.AccountId;
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
                 
-
                 var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
                 if (employerSchemesResult?.SchemesList == null)
                 {
@@ -55,11 +51,10 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
-
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { Id = scheme.Ref });
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions(), Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
-                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.Declarations != null)
+                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
                     {
                         var fraction = levyDeclarationQueryResult.Fractions.FractionCalculations[0]; //TODO Make some sence of this!
                         if (fraction != null)
@@ -67,37 +62,32 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                             employerData.Fractions.DateCalculated = DateTime.Parse(fraction.calculatedAt);
                             employerData.Fractions.Amount = decimal.Parse(fraction.fractions.Find(fr => fr.region == "England").value);
                         }
-                        foreach (var declaration in levyDeclarationQueryResult.Declarations.declarations)
+                        foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
-                            var dasDeclaration = new DasDeclaration();
-                            dasDeclaration.Amount = declaration.amount;
-                            dasDeclaration.Date = DateTime.Parse(declaration.submissionDate);
-                            dasDeclaration.SubmissionType = declaration.submissionType;
-                            dasDeclaration.Id = declaration.submissionId;
+                            var dasDeclaration = new DasDeclaration
+                            {
+                                Date = DateTime.Parse(declaration.SubmissionTime),
+                                Id = declaration.Id
+                            };
+
                             employerData.EmpRef = scheme.Ref;
                             employerData.Declarations.Declarations.Add(dasDeclaration);
                         }
 
                         employerDataList.Add(employerData);
                     }
-                    
                 }
-
 
                 await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
                 {
                     AccountId = employerAccountId,
                     EmployerLevyData = employerDataList
                 });
-
-                
-
             }
             if (message != null)
             {
                 await message.CompleteAsync();
             }
-            
         }
     }
 }

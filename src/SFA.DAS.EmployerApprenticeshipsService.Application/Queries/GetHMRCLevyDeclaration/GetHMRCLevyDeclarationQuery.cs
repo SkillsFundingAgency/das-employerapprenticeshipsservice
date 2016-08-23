@@ -4,6 +4,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
 {
     public class GetHMRCLevyDeclarationQuery : IAsyncRequest<GetHMRCLevyDeclarationResponse>
     {
-        public string Id { get; set; }
+        public string AuthToken { get; set; }
+
+        public string EmpRef { get; set; }
     }
 }
