@@ -7,7 +7,7 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.SubmissionType AS SubmissionType,
-	ld.Amount AS Amount,
+	ld.LevyDueYTD AS Amount,
 	t.Amount AS EnglishFraction
 FROM [levy].[LevyDeclaration] ld
 OUTER APPLY
