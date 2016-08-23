@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
+    <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

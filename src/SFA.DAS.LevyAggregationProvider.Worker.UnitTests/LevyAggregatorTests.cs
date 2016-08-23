@@ -49,7 +49,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 1,
                         EmpRef = empRef,
-                        ActivityDate = new DateTime(2016, 7, 14),
+                        SubmissionDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -67,8 +67,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
 
             Assert.That(response.Data[0].Items.Count, Is.EqualTo(1));
 
-            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.ActivityDate.Month));
-            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.ActivityDate.Year));
+            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.SubmissionDate.Month));
+            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.SubmissionDate.Year));
             Assert.That(aggregateLine.LevyItemType, Is.EqualTo(sourceItem.LevyItemType));
             Assert.That(aggregateLine.Amount, Is.EqualTo(sourceItem.Amount));
             Assert.That(aggregateLine.Balance, Is.EqualTo(sourceItem.Amount));
@@ -89,7 +89,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 1,
                         EmpRef = empRef,
-                        ActivityDate = new DateTime(2016, 7, 14),
+                        SubmissionDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -98,7 +98,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 2,
                         EmpRef = empRef,
-                        ActivityDate = new DateTime(2016, 7, 28),
+                        SubmissionDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
                         EnglishFraction = 0.85m,
                         LevyItemType = LevyItemType.Declaration
@@ -116,8 +116,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
 
             Assert.That(response.Data[0].Items.Count, Is.EqualTo(2));
 
-            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.ActivityDate.Month));
-            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.ActivityDate.Year));
+            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.SubmissionDate.Month));
+            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.SubmissionDate.Year));
             Assert.That(aggregateLine.LevyItemType, Is.EqualTo(sourceItem.LevyItemType));
             Assert.That(aggregateLine.Amount, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
             Assert.That(aggregateLine.Balance, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
@@ -138,7 +138,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 1,
                         EmpRef = empRef,
-                        ActivityDate = new DateTime(2016, 7, 14),
+                        SubmissionDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -147,7 +147,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 2,
                         EmpRef = empRef,
-                        ActivityDate = new DateTime(2016, 7, 28),
+                        SubmissionDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.TopUp
@@ -177,7 +177,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 1,
                         EmpRef = empRef1,
-                        ActivityDate = new DateTime(2016, 7, 14),
+                        SubmissionDate = new DateTime(2016, 7, 14),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -186,7 +186,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 2,
                         EmpRef = empRef2,
-                        ActivityDate = new DateTime(2016, 7, 28),
+                        SubmissionDate = new DateTime(2016, 7, 28),
                         Amount = 250.0m,
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
@@ -204,8 +204,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
 
             Assert.That(response.Data[0].Items.Count, Is.EqualTo(2));
 
-            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.ActivityDate.Month));
-            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.ActivityDate.Year));
+            Assert.That(aggregateLine.Month, Is.EqualTo(sourceItem.SubmissionDate.Month));
+            Assert.That(aggregateLine.Year, Is.EqualTo(sourceItem.SubmissionDate.Year));
             Assert.That(aggregateLine.LevyItemType, Is.EqualTo(sourceItem.LevyItemType));
             Assert.That(aggregateLine.Amount, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
             Assert.That(aggregateLine.Balance, Is.EqualTo(source.Data[0].Amount + source.Data[1].Amount));
@@ -227,7 +227,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 1,
                         EmpRef = empRef2,
-                        ActivityDate = DateTime.Today.AddMonths(-3),
+                        SubmissionDate = DateTime.Today.AddMonths(-3),
                         Amount = 250.0m,
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
@@ -236,7 +236,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 2,
                         EmpRef = empRef2,
-                        ActivityDate = DateTime.Today.AddMonths(-3),
+                        SubmissionDate = DateTime.Today.AddMonths(-3),
                         Amount = 25.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
@@ -244,7 +244,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 3,
                         EmpRef = empRef1,
-                        ActivityDate = DateTime.Today.AddMonths(-2),
+                        SubmissionDate = DateTime.Today.AddMonths(-2),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -253,7 +253,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 4,
                         EmpRef = empRef1,
-                        ActivityDate = DateTime.Today.AddMonths(-2),
+                        SubmissionDate = DateTime.Today.AddMonths(-2),
                         Amount = 10.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
@@ -261,7 +261,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 5,
                         EmpRef = empRef1,
-                        ActivityDate = DateTime.Today.AddMonths(-1),
+                        SubmissionDate = DateTime.Today.AddMonths(-1),
                         Amount = 100.0m,
                         EnglishFraction = 0.81m,
                         LevyItemType = LevyItemType.Declaration
@@ -270,7 +270,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 6,
                         EmpRef = empRef1,
-                        ActivityDate = DateTime.Today.AddMonths(-1),
+                        SubmissionDate = DateTime.Today.AddMonths(-1),
                         Amount = 10.0m,
                         LevyItemType = LevyItemType.TopUp
                     },
@@ -278,7 +278,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 7,
                         EmpRef = empRef2,
-                        ActivityDate = DateTime.Today.AddMonths(-1),
+                        SubmissionDate = DateTime.Today.AddMonths(-1),
                         Amount = 250.0m,
                         EnglishFraction = 0.84m,
                         LevyItemType = LevyItemType.Declaration
@@ -287,7 +287,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                     {
                         Id = 8,
                         EmpRef = empRef2,
-                        ActivityDate = DateTime.Today.AddMonths(-1),
+                        SubmissionDate = DateTime.Today.AddMonths(-1),
                         Amount = 25.0m,
                         LevyItemType = LevyItemType.TopUp
                     }
@@ -304,7 +304,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests
                 var sourceItems =
                     source.Data.Where(
                         x =>
-                            x.ActivityDate.Year == aggregationItem.Year && x.ActivityDate.Month == aggregationItem.Month &&
+                            x.SubmissionDate.Year == aggregationItem.Year && x.SubmissionDate.Month == aggregationItem.Month &&
                             x.LevyItemType == aggregationItem.LevyItemType).ToList();
 
                 Assert.That(aggregationItem.Items.Count, Is.EqualTo(sourceItems.Count));

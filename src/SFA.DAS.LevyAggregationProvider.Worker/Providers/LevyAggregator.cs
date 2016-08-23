@@ -32,14 +32,14 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             {
                 balance += item.Amount;
 
-                var existing = output.FirstOrDefault(x => x.LevyItemType == item.LevyItemType && x.Year == item.ActivityDate.Year && x.Month == item.ActivityDate.Month);
+                var existing = output.FirstOrDefault(x => x.LevyItemType == item.LevyItemType && x.Year == item.SubmissionDate.Year && x.Month == item.SubmissionDate.Month);
 
                 if (existing == null)
                 {
                     existing = new AggregationLine
                     {
-                        Month = item.ActivityDate.Month,
-                        Year = item.ActivityDate.Year,
+                        Month = item.SubmissionDate.Month,
+                        Year = item.SubmissionDate.Year,
                         LevyItemType = item.LevyItemType,
                         Amount = item.Amount,
                         Balance = balance,
@@ -68,7 +68,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             {
                 Id = item.Id,
                 EmpRef = item.EmpRef,
-                ActivityDate = item.ActivityDate,
+                ActivityDate = item.SubmissionDate,
                 Amount = item.Amount,
                 EnglishFraction = item.EnglishFraction,
                 LevyItemType = item.LevyItemType
