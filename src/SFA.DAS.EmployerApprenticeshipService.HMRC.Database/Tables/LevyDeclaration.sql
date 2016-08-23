@@ -6,7 +6,6 @@
     [LevyDueYTD] DECIMAL(18, 4) NULL, 
     [LevyAllowanceForYear] DECIMAL(18, 4) NULL, 
     [SubmissionDate] DATETIME NULL, 
-    [SubmissionType] NCHAR(10) NULL, 
     [SubmissionId] BIGINT NOT NULL DEFAULT 0,
 	[PayrollYear] NVARCHAR(10) NULL,
 	[PayrollMonth] TINYINT NULL
