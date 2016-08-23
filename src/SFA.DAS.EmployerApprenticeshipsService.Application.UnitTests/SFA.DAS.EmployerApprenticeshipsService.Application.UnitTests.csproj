@@ -112,8 +112,8 @@
     <Compile Include="Queries\GetGatewayTokenTests\WhenGettingTokenResponseFromHmrc.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenRequestingEmployerInformation.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenValidatingTheRequest.cs" />
-    <Compile Include="Queries\GetLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
-    <Compile Include="Queries\GetLevyDeclarationTests\WhenValidatingTheRequest.cs" />
+    <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
+    <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />

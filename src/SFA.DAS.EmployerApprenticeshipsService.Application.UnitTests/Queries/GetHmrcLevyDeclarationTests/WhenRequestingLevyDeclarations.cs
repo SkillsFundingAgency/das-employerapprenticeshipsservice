@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetLevyDeclarationTests
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
 {
     public class WhenRequestingLevyDeclarations
     {
