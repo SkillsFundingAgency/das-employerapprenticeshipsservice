@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public string EmpRef { get; set; }
         public DateTime SubmissionDate { get; set; }
         public long SubmissionId { get; set; }
-        public decimal Amount { get; set; }
+        public decimal LevyDueYtd { get; set; }
         public decimal EnglishFraction { get; set; }
         public string PayrollYear { get; set; }
         public int PayrollMonth { get; set; }

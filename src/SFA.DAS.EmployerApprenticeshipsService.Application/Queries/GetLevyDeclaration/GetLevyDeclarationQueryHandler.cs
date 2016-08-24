@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                         Id = item.Id,
                         EmpRef = item.EmpRef,
                         SubmissionDate = item.SubmissionDate,
-                        Amount = item.Amount,
+                        Amount = item.LevyDueYtd,
                         EnglishFraction = item.EnglishFraction,
                         PayrollDate = item.PayrollDate()
                     }).ToList()

@@ -73,6 +73,7 @@
     <Build Include="Views\GetLevyDeclarations.sql" />
     <Build Include="Schemas\Levy.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
+    <Build Include="StoredProcedures\CreateDeclaration.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />

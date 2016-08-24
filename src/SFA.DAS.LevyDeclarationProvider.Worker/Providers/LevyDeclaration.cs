@@ -67,9 +67,13 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                             var dasDeclaration = new DasDeclaration
                             {
                                 Date = DateTime.Parse(declaration.SubmissionTime),
-                                Id = declaration.Id
+                                Id = declaration.Id,
+                                PayrollMonth = declaration.PayrollPeriod?.Month,
+                                PayrollYear = declaration.PayrollPeriod?.Year,
+                                LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
+                                LevyDueYtd = declaration.LevyDueYearToDate,
                             };
-
+                            
                             employerData.EmpRef = scheme.Ref;
                             employerData.Declarations.Declarations.Add(dasDeclaration);
                         }

@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
         public string Year { get; set; }
 
         [JsonProperty("month")]
-        public int Month { get; set; }
+        public short Month { get; set; }
     }
 
     public class Declaration
@@ -46,7 +46,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
         public PayrollPeriod PayrollPeriod { get; set; }
 
         [JsonProperty("levyDueYTD")]
-        public double LevyDueYearToDate { get; set; }
+        public decimal LevyDueYearToDate { get; set; }
+
+        [JsonProperty("levyAllowanceForFullYear")]
+        public decimal LevyAllowanceForFullYear { get; set; }
     }
 
 }

@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
-                    sql: "SELECT Amount, SubmissionId AS Id, SubmissionType, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
+                    sql: "SELECT LevyDueYtd, SubmissionId AS Id, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -41,17 +41,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Amount", dasDeclaration.Amount, DbType.Decimal);
+                parameters.Add("@LevyDueYtd", dasDeclaration.LevyDueYtd, DbType.Decimal);
+                parameters.Add("@LevyAllowanceForYear", dasDeclaration.LevyAllowanceForFullYear, DbType.Decimal);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@EmpRef", empRef, DbType.String);
+                parameters.Add("@PayrollYear", dasDeclaration.PayrollYear, DbType.String);
+                parameters.Add("@PayrollMonth", dasDeclaration.PayrollMonth, DbType.Int16);
                 parameters.Add("@SubmissionDate", dasDeclaration.Date, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
-                parameters.Add("@SubmissionType", dasDeclaration.SubmissionType, DbType.String);
-
+                
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType, AccountId) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType, @AccountId);",
+                    sql: "[levy].[CreateDeclaration]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
         }
 

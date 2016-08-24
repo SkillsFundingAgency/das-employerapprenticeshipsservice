@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
             {
                 Id = 95875,
                 AccountId = accountId,
-                Amount = 1000,
+                LevyDueYtd = 1000,
                 EmpRef = "123/abc123",
                 EnglishFraction = 0.90m,
                 PayrollMonth = 2,

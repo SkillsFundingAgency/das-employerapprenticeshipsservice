@@ -27,13 +27,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                         new DasDeclaration
                         {
                             Id = "1",
-                            Amount = 10,
+                            LevyDueYtd = 10,
                             Date = DateTime.UtcNow
                         },
                         new DasDeclaration
                         {
                             Id = "2",
-                            Amount = 70,
+                            LevyDueYtd = 70,
                             Date = DateTime.UtcNow.AddMonths(1)
                         }
                     }
