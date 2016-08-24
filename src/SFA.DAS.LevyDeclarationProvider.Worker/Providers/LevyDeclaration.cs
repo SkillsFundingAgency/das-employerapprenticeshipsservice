@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.Messaging;
 
@@ -52,16 +53,19 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
-                    var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions(), Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
+                    var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
                     if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
                     {
-                        var fraction = levyDeclarationQueryResult.Fractions.FractionCalculations[0]; //TODO Make some sence of this!
-                        if (fraction != null)
+                        foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
                         {
-                            employerData.Fractions.DateCalculated = DateTime.Parse(fraction.CalculatedAt);
-                            employerData.Fractions.Amount = decimal.Parse(fraction.Fractions.Find(fr => fr.Region == "England").Value);
+                            employerData.Fractions.Fractions.Add(new DasEnglishFraction
+                            {
+                                Amount = decimal.Parse(fractionCalculation.Fractions.Find(fr => fr.Region == "England").Value),
+                                DateCalculated = DateTime.Parse(fractionCalculation.CalculatedAt)
+                            });
                         }
+
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
                             var dasDeclaration = new DasDeclaration
