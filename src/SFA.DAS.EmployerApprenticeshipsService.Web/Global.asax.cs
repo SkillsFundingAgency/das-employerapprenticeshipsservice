@@ -7,12 +7,15 @@ using System.Web.Routing;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
+using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         protected void Application_Start()
         {
             LoggingConfig.ConfigureLogging();
@@ -30,6 +33,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         protected void Application_Error(object sender, EventArgs e)
         {
             var exception = Server.GetLastError();
+
+            _logger.Error(exception);
+
             var tc = new TelemetryClient();
             tc.TrackTrace($"{exception.Message} - {exception.InnerException}");
         }

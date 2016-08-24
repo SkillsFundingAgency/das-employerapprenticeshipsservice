@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution
 
             if (logger != null)
             {
-                instance.Dependencies.AddForConstructorParameter(logger, LogManager.GetLogger(pluginType.Name));
+                instance.Dependencies.AddForConstructorParameter(logger, LogManager.GetLogger(pluginType.FullName));
             }
 
         }
