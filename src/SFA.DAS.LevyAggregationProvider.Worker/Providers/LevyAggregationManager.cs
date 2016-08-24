@@ -32,32 +32,32 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         public async Task Process()
         {
-     
-                var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
-                if (message?.Content == null || message.Content.AccountId == 0)
-                    return;
+            var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
+
+            if (message?.Content == null || message.Content.AccountId == 0)
+                return;
 
 
-                _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
+            _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
 
-                var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
+            var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
+            {
+                AccountId = message.Content.AccountId
+            });
+
+            var aggregator = new LevyAggregator();
+
+            var destinationData = aggregator.BuildAggregate(response.Data);
+
+            if (destinationData != null)
+                await _mediator.SendAsync(new CreateLevyAggregationCommand
                 {
-                    AccountId = message.Content.AccountId
+                    Data = destinationData
                 });
 
-                var aggregator = new LevyAggregator();
+            await message.CompleteAsync();
 
-                var destinationData = aggregator.BuildAggregate(response.Data);
-
-                if (destinationData != null)
-                    await _mediator.SendAsync(new CreateLevyAggregationCommand
-                    {
-                        Data = destinationData
-                    });
-
-                await message.CompleteAsync();
-            
         }
     }
 }
