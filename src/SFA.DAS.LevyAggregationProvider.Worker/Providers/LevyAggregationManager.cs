@@ -35,28 +35,33 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
-            if (message?.Content == null || message.Content.AccountId == 0)
-                return;
-
-
-            _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
-
-            var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
+            if (message?.Content != null && message.Content.AccountId != 0)
             {
-                AccountId = message.Content.AccountId
-            });
+                _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
 
-            var aggregator = new LevyAggregator();
-
-            var destinationData = aggregator.BuildAggregate(response.Data);
-
-            if (destinationData != null)
-                await _mediator.SendAsync(new CreateLevyAggregationCommand
+                var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
                 {
-                    Data = destinationData
+                    AccountId = message.Content.AccountId
                 });
 
-            await message.CompleteAsync();
+                var aggregator = new LevyAggregator();
+
+                var destinationData = aggregator.BuildAggregate(response.Data);
+
+                if (destinationData != null)
+                {
+                    await _mediator.SendAsync(new CreateLevyAggregationCommand
+                    {
+                        Data = destinationData
+                    });
+                }
+            }
+
+            if (message != null)
+            {
+                await message.CompleteAsync();
+            }   
+            
 
         }
     }
