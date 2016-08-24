@@ -69,6 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
         public async Task ThenICanRetrieveCorrectEmpRefOfScenarioUser()
         {
             //Arrange
+            _configuration.Hmrc.IgnoreDuplicates = true;
             var scenarioUserEmail = "test.user@test.com";
             var expectedEmpRef = "123/456789";
 

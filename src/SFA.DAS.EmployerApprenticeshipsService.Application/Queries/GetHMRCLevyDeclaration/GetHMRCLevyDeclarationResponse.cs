@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
     public class GetHMRCLevyDeclarationResponse
     {
         public EnglishFractionDeclarations Fractions { get; set; }
-        public Declarations Declarations { get; set; }
+        public LevyDeclarations LevyDeclarations { get; set; }
         public string Empref { get; set; }
     }
 }

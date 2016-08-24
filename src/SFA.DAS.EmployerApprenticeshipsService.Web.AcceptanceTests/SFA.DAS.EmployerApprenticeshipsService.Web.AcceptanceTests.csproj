@@ -163,6 +163,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddPayeScheme.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\Agreements.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Agreements.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\InviteMember.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -189,6 +194,10 @@
     <None Include="Features\AddPayeScheme.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddPayeScheme.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Agreements.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Agreements.feature.cs</LastGenOutput>
     </None>
     <None Include="Features\InviteMember.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -217,6 +226,9 @@
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Steps\AgreementSteps\" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

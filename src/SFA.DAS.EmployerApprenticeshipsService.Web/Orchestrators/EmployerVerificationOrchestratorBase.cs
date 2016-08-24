@@ -93,11 +93,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 response.Empref = "";
             }
 
-            response.Empref = await _empRefFileBasedService.GetEmpRef(email, "empref_data");
-
             if (Configuration.Hmrc.IgnoreDuplicates && string.IsNullOrEmpty(response.Empref))
             {
-                response.Empref = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+                response.Empref = await _empRefFileBasedService.GetEmpRef(email, "empref_data");
+
+                if (string.IsNullOrEmpty(response.Empref))
+                {
+                    response.Empref =
+                        $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+                }
             }
             return response;
         }

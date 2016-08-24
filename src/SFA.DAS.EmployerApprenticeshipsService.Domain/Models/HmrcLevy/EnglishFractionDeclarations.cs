@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
     {
         [JsonProperty("empref")]
         public string Empref { get; set; }
+
         [JsonProperty("fractionCalculations")]
         public List<FractionCalculation> FractionCalculations { get; set; }
     }
@@ -14,14 +15,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
 
     public class Fraction
     {
-        public string region { get; set; }
-        public string value { get; set; }
+        [JsonProperty("region")]
+        public string Region { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
     }
 
     public class FractionCalculation
     {
-        public string calculatedAt { get; set; }
-        public List<Fraction> fractions { get; set; }
+        [JsonProperty("calculatedAt")]
+        public string CalculatedAt { get; set; }
+
+        [JsonProperty("fractions")]
+        public List<Fraction> Fractions { get; set; }
     }
 
 

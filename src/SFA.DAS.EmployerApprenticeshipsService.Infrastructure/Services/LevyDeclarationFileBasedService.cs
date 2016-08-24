@@ -16,9 +16,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
         }
 
-        public async Task<Declarations> GetLevyDeclarations(string id)
+        public async Task<LevyDeclarations> GetLevyDeclarations(string id)
         {
-            return await ReadFileById<Declarations>(string.Format(DeclarationDataFileName, id.Replace("/","-")));
+            return await ReadFileById<LevyDeclarations>(string.Format(DeclarationDataFileName, id.Replace("/","-")));
         }
 
         public async Task<EnglishFractionDeclarations> GetEnglishFraction(string id)

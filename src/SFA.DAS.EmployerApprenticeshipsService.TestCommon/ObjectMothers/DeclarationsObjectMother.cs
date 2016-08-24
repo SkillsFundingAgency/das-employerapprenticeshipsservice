@@ -6,26 +6,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class DeclarationsObjectMother
     {
-        public static Declarations Create(string empRef)
+        public static LevyDeclarations Create(string empRef)
         {
-
-            var declarations = new Declarations
+            var declarations = new LevyDeclarations
             {
-                declarations =
+                Declarations =
                     new List<Declaration>
                     {
                         new Declaration
                         {
-                            amount = 10,
-                            payrollMonth = new PayrollMonth {month = 10, year = 2016},
-                            submissionDate = "",
-                            submissionType = ""
+                            PayrollPeriod = new PayrollPeriod {Month = 10, Year = "2016"},
+                            SubmissionTime = "",
+                            DateCeased = DateTime.Now
                         }
                     },
-                empref = empRef,
-                schemeCessationDate = DateTime.Now.ToString("yyyy-MM-dd")
+                EmpRef = empRef
             };
-
 
             return declarations;
         }
