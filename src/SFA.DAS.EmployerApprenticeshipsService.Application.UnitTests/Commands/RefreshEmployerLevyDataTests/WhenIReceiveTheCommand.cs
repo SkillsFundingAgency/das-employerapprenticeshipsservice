@@ -66,6 +66,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
+        public async Task ThenEveryFractionIsAddedToTheRepository()
+        {
+            //Act
+            var refreshEmployerLevyDataCommand = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
+
+            //Assert
+            _levyRepository.Verify(x=>x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(),ExpectedEmpRef),Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Fractions.Fractions.Count));
+        }
+
+        [Test]
         public async Task ThenTheLevyRepositoryIsUpdatedIfTheDeclarationDoesNotExist()
         {
             //Arrange

@@ -48,6 +48,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                             Amount = 0.89m,
                             Id = "1",
                             DateCalculated = DateTime.UtcNow
+                        },
+                        new DasEnglishFraction
+                        {
+                            Amount = 0.89m,
+                            Id = "1",
+                            DateCalculated = DateTime.UtcNow
                         }
                     }
                 }
