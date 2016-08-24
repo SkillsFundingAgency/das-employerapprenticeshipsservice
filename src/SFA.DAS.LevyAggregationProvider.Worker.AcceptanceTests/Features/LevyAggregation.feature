@@ -3,8 +3,10 @@
 	I want to be view the aggregation of my PAYE schemes
 
 @mytag
-Scenario: Add two numbers
-	Given I have entered 50 into the calculator
-	And I have entered 70 into the calculator
-	When I press add
-	Then the result should be 120 on the screen
+Scenario Outline: Add two numbers
+	Given I have added "<paye_scenario>" to my account
+	When I build the aggregation
+	Then the result is equal to "<paye_scenario_result>"
+Examples: 
+	| paye_scenario | paye_scenario_result |
+	| scenario_1    | scenario_1_result    |
