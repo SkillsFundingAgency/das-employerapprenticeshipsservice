@@ -12,22 +12,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public decimal LevyDueYtd { get; set; }
         public decimal EnglishFraction { get; set; }
         public string PayrollYear { get; set; }
-        public int PayrollMonth { get; set; }
+        public short? PayrollMonth { get; set; }
 
         public string PayrollDate()
         {
+
+            if (PayrollMonth == null || string.IsNullOrEmpty(PayrollYear))
+            {
+                return null;
+            }
+
             var year = 2000;
             var month = 1;
 
             if (PayrollMonth <= 9)
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[0]);
-                PayrollMonth = PayrollMonth + 3;
+                PayrollMonth = (short) (PayrollMonth + 3);
             }
             else
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[1]);
-                PayrollMonth = PayrollMonth - 9;
+                PayrollMonth = (short) (PayrollMonth - 9);
             }
 
             var dateTime = new DateTime(year, month,1);

@@ -8,7 +8,9 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
-	t.Amount AS EnglishFraction
+	t.Amount AS EnglishFraction,
+	ld.PayrollYear as PayrollYear,
+	ld.PayrollMonth as PayrollMonth
 FROM [levy].[LevyDeclaration] ld
 OUTER APPLY
 (

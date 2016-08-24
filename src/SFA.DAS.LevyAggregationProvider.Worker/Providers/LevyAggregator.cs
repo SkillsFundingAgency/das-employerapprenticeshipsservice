@@ -30,7 +30,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             foreach (var item in source)
             {
-                balance += item.Amount;
+                balance += item.LevyDueYtd;
 
                 var existing = output.FirstOrDefault(x => x.LevyItemType == item.LevyItemType && x.Year == item.SubmissionDate.Year && x.Month == item.SubmissionDate.Month);
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                         Month = item.SubmissionDate.Month,
                         Year = item.SubmissionDate.Year,
                         LevyItemType = item.LevyItemType,
-                        Amount = item.Amount,
+                        Amount = item.LevyDueYtd,
                         Balance = balance,
                         Id = Guid.NewGuid().ToString(),
                         Items = new List<AggregationLineItem>
@@ -53,7 +53,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 }
                 else
                 {
-                    existing.Amount += item.Amount;
+                    existing.Amount += item.LevyDueYtd;
                     existing.Balance = balance;
                     existing.Items.Add(MapFrom(item));
                 }
@@ -69,7 +69,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 Id = item.Id,
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
-                Amount = item.Amount,
+                Amount = item.LevyDueYtd,
                 EnglishFraction = item.EnglishFraction,
                 LevyItemType = item.LevyItemType
             };
