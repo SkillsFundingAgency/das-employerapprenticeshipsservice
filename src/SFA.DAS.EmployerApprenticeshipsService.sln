@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE
 	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipService.Levy.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EmployerApprenticeshipService.Levy.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C145D4A-CBA9-439C-984E-0A5953CBE04D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,8 +148,10 @@ Global
 		{9DD77DF0-827E-4C14-B14B-B991BF26FD8C} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{88E7DB8E-7A95-4EA1-8CDF-7406188D642D} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{05D7C094-E2C9-4CCD-B0D7-85D263254B26} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{8A2A2059-CB81-4336-8D08-BDCB37901B96} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{093678BE-45CD-4EC9-9EB0-3665C74E0E38} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

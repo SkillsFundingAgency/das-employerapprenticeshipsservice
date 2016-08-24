@@ -6,7 +6,7 @@ using SFA.DAS.Messaging;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.MockPolicy
+namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.MockPolicy
 {
     public class MockMessagePolicy : ConfiguredInstancePolicy
     {
@@ -19,16 +19,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.MockPolicy
 
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
-            var messagePublisher = instance?.Constructor?
-                    .GetParameters().FirstOrDefault(x => x.ParameterType == typeof(IMessagePublisher) || x.ParameterType == typeof(IPollingMessageReceiver));
+            var messagePublisher = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(IMessagePublisher) || x.ParameterType == typeof(IPollingMessageReceiver));
 
 
             if (messagePublisher != null)
             {
                 var queueName = instance
-                    .SettableProperties()
-                    .FirstOrDefault(c => c.CustomAttributes
-                        .FirstOrDefault(x => x.AttributeType.Name == nameof(QueueNameAttribute)) != null);
+                    .SettableProperties().FirstOrDefault(c => c.CustomAttributes.FirstOrDefault(x => x.AttributeType.Name == nameof(QueueNameAttribute)) != null);
 
 
                 if (queueName != null)
