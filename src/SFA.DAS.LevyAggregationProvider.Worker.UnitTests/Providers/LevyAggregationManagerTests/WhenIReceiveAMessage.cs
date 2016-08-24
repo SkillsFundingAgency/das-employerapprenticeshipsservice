@@ -57,8 +57,6 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             _mediator.Verify(x=>x.SendAsync(It.IsAny<CreateLevyAggregationCommand>()), Times.Never);
             mockFileMessage.Verify(x => x.CompleteAsync(), Times.Once);
         }
-
-        [Test]
-        public async Task Then
+        
     }
 }
