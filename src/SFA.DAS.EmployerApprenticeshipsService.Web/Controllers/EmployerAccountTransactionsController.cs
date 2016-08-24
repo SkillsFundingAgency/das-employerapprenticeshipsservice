@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(transactionViewResult.Model);
         }
 
-        public async Task<ActionResult> Detail(int accountId, string itemId)
+        public async Task<ActionResult> Detail(int accountId, long itemId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             if (transactionViewResult.Model.LineItem == null)
             {
-                return RedirectToAction("Index", "EmployerAccountTransactions", new {accountId = accountId});
+                return RedirectToAction("Index", "EmployerAccountTransactions", new {accountId});
             }
            
             return View(transactionViewResult.Model);

@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, string lineItemId, string externalUserId)
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, long lineItemId, string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
             {

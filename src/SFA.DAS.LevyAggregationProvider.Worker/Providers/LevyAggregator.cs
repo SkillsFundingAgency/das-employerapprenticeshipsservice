@@ -43,7 +43,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                         LevyItemType = item.LevyItemType,
                         Amount = item.LevyDueYtd,
                         Balance = balance,
-                        Id = Guid.NewGuid().ToString(),
+                        Id = item.Id,
                         Items = new List<AggregationLineItem>
                         {
                             MapFrom(item)
