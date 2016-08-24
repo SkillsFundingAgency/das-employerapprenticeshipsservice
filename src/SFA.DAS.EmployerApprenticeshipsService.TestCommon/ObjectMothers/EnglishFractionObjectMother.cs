@@ -14,13 +14,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                 {
                     new FractionCalculation
                     {
-                        CalculatedAt = "",
+                        CalculatedAt = "2017 06 01",
                         Fractions = new List<Fraction>
                         {
                             new Fraction
                             {
-                                Region = "English",
-                                Value = "0.67"
+                                Region = "England",
+                                Value = "0.67",
+                            }
+                        }
+                    },
+                    new FractionCalculation
+                    {
+                        CalculatedAt = "2017 10 01",
+                        Fractions = new List<Fraction>
+                        {
+                            new Fraction
+                            {
+                                Region = "England",
+                                Value = "0.97",
                             }
                         }
                     }

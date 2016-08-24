@@ -1,0 +1,11 @@
+﻿using System;
+
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
+{
+    public class DasEnglishFraction
+    {
+        public string Id { get; set; }
+        public DateTime DateCalculated { get; set; }
+        public decimal Amount { get; set; }
+    }
+}

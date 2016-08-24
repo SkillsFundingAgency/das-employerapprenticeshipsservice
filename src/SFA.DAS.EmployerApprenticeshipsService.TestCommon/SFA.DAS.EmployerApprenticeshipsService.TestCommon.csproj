@@ -81,6 +81,7 @@
     <Compile Include="MockPolicy\MockMessagePolicy.cs" />
     <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
+    <Compile Include="ObjectMothers\GetHMRCLevyDeclarationResponseObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
     <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />

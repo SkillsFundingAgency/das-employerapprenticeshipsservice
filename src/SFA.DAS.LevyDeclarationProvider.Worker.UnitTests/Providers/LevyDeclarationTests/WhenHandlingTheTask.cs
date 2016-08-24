@@ -1,14 +1,17 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
@@ -97,6 +100,22 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
             mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
+        }
+
+        [Test]
+        public async Task ThenEachFractionReturnedFromTheServiceIsAddedToTheRepository()
+        {
+            //Arrange
+            var expectedAccessToken= "myaccesstoken";
+            var expectedEmpref = "123/fgh456";
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme> {new Scheme {AccessToken = expectedAccessToken,AccountId = ExpectedAccountId,Id=1,Ref=expectedEmpref,RefreshToken = "token"} } });
+            _mediator.Setup(x =>x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _mediator.Verify(x=>x.SendAsync(It.Is<RefreshEmployerLevyDataCommand>(c=>c.AccountId.Equals(ExpectedAccountId) && c.EmployerLevyData[0].Fractions.Fractions.Count==2)));
         }
     }
 }

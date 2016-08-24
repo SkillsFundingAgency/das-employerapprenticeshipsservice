@@ -168,6 +168,7 @@
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcEmployer\EmpRefLookup.cs" />
     <Compile Include="Models\HmrcEmployer\EmpRefLookupItem.cs" />
+    <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
     <Compile Include="Models\HmrcLevy\Employer.cs" />
     <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
@@ -178,6 +179,7 @@
     <Compile Include="Models\HmrcLevy\Name.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
+    <Compile Include="Models\Levy\DasEnglishFraction.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />

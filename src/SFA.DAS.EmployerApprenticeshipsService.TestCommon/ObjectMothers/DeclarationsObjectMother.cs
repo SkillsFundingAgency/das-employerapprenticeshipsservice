@@ -16,8 +16,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                         new Declaration
                         {
                             PayrollPeriod = new PayrollPeriod {Month = 10, Year = "2016"},
-                            SubmissionTime = "",
-                            DateCeased = DateTime.Now
+                            SubmissionTime = DateTime.UtcNow.ToString(),
+                            DateCeased = DateTime.UtcNow
                         }
                     },
                 EmpRef = empRef

@@ -47,13 +47,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
                     }
                 }
 
-                var fraction = await _dasLevyRepository.GetEmployerFraction(employerLevyData.Fractions.DateCalculated, employerLevyData.EmpRef);
-
-                if (fraction == null)
+                foreach (var fraction in employerLevyData.Fractions.Fractions)
                 {
-                    await _dasLevyRepository.CreateEmployerFraction(employerLevyData.Fractions, employerLevyData.EmpRef);
-                    sendLevyDataChanged = true;
+                    var dasFraction = await _dasLevyRepository.GetEmployerFraction(fraction.DateCalculated, employerLevyData.EmpRef);
+
+                    if (dasFraction == null)
+                    {
+                        await _dasLevyRepository.CreateEmployerFraction(fraction, employerLevyData.EmpRef);
+                        sendLevyDataChanged = true;
+                    }
                 }
+                
             }
 
             if (sendLevyDataChanged)

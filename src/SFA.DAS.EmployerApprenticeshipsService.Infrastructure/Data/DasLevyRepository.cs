@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public async Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
+        public async Task<DasEnglishFraction> GetEmployerFraction(DateTime dateCalculated, string empRef)
         {
             var result = await WithConnection(async c =>
             {
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@dateCalculated", dateCalculated, DbType.DateTime);
                 parameters.Add("@empRef", empRef, DbType.String);
 
-                return await c.QueryAsync<DasEnglishFractions>(
+                return await c.QueryAsync<DasEnglishFraction>(
                     sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
                     param: parameters,
                     commandType: CommandType.Text);
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
+        public async Task CreateEmployerFraction(DasEnglishFraction fractions, string empRef)
         {
             await WithConnection(async c =>
             {
