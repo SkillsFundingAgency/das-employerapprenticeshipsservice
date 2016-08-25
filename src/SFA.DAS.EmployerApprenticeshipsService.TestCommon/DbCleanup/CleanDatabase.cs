@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
@@ -9,7 +8,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup
 {
     public class CleanDatabase : BaseRepository, ICleanDatabase
     {
-        public CleanDatabase(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger) : base(configuration, logger)
+        public CleanDatabase(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
 

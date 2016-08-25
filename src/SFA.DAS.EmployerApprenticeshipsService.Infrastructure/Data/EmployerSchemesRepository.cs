@@ -2,18 +2,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger)
-            : base(configuration, logger)
+        public EmployerSchemesRepository(EmployerApprenticeshipsServiceConfiguration configuration)
+            : base(configuration)
         {
         }
 
