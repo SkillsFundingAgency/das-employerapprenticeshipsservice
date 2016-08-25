@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
@@ -42,7 +41,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                         SubmissionDate = item.SubmissionDate,
                         LevyDueYtd = item.LevyDueYtd,
                         EnglishFraction = item.EnglishFraction,
-                        PayrollDate = item.PayrollDate()
+                        PayrollDate = item.PayrollDate(),
+                        PayrollMonth = item.PayrollMonth,
+                        PayrollYear = item.PayrollYear
                     }).ToList()
                 }
             };

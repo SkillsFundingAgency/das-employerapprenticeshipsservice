@@ -11,5 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
         public DateTime SubmissionDate { get; set; }
         public LevyItemType LevyItemType { get; set; }
         public string PayrollDate { get; set; }
+        public string PayrollYear { get; set; }
+        public short? PayrollMonth { get; set; }
     }
 }
