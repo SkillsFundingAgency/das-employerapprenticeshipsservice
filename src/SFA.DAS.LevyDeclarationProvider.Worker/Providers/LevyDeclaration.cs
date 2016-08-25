@@ -57,6 +57,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                     if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
                     {
+
+                        //TODO call to hmrc to see when the last fraction was calculated apprenticeship-levy/fraction-calculation-date
                         foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
                         {
                             employerData.Fractions.Fractions.Add(new DasEnglishFraction
