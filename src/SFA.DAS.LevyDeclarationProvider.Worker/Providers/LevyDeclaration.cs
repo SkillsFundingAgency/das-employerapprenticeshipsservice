@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -24,7 +26,8 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
         private readonly ILogger _logger;
         private readonly IDasAccountService _dasAccountService;
 
-        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, ILogger logger, IDasAccountService dasAccountService)
+        public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, 
+            ILogger logger, IDasAccountService dasAccountService)
         {
             _pollingMessageReceiver = pollingMessageReceiver;
             _mediator = mediator;
@@ -49,10 +52,20 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 }
 
                 var employerDataList = new List<EmployerLevyData>();
-                
+
+                var updateEnglishFractionsRequired = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
+                    if (updateEnglishFractionsRequired.UpdateRequired)
+                    {
+                        await _mediator.SendAsync(new UpdateEnglishFractionsCommand
+                        {
+                            AuthToken = scheme.AccessToken,
+                            EmployerReference = scheme.Ref
+                        });
+                    }
+
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
 
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };

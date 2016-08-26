@@ -2,6 +2,6 @@
 {
     public class GetEnglishFractionUpdateRequiredResponse
     {
-        private bool UpdateRequired { get; set; }
+        public bool UpdateRequired { get; set; }
     }
 }

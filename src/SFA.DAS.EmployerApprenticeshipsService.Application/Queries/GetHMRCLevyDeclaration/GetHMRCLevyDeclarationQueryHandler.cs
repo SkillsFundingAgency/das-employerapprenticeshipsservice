@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
 
             var declarations = await _hmrcService.GetLevyDeclarations(message.AuthToken, message.EmpRef);
             
-            var fractions = await _hmrcService.GetEnglishFraction(message.AuthToken, message.EmpRef);
+            var fractions = await _hmrcService.GetEnglishFractions(message.AuthToken, message.EmpRef);
             
             var getLevyDeclarationResponse = new GetHMRCLevyDeclarationResponse
             {

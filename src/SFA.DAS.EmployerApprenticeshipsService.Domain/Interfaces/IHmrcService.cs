@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
         Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef);
         Task<string> DiscoverEmpref(string authToken);
         Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef);
-        Task<EnglishFractionDeclarations> GetEnglishFraction(string authToken, string empRef);
+        Task<EnglishFractionDeclarations> GetEnglishFractions(string authToken, string empRef);
         Task<DateTime> GetLastEnglishFractionUpdate();
     }
 }

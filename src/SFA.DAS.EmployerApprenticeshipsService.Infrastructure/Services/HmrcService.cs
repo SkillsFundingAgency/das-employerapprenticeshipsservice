@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return await _httpClientWrapper.Get<LevyDeclarations>(authToken, url);
         }
 
-        public async Task<EnglishFractionDeclarations> GetEnglishFraction(string authToken, string empRef)
+        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string authToken, string empRef)
         {
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
             return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken, url);

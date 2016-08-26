@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,34 +17,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
         }
         
-        public async Task<DasEnglishFraction> GetLatest(string empRef)
+        public async Task<DateTime> GetLastUpdateDate()
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@empRef", empRef, DbType.String);
-
-                return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT Id, DateCalculated, Amount FROM [levy].[EnglishFraction] WHERE empRef = @EmpRef ORDER BY DateCalculated DESC;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            var result = await WithConnection(async c => await c.QueryAsync<DateTime>(
+                sql: "SELECT Top(1) DateCalculated FROM [levy].[EnglishFraction] ORDER BY DateCalculated DESC;",
+                commandType: CommandType.Text));
 
             return result.FirstOrDefault();
         }
 
-        public Task Save(DasEnglishFraction fraction)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<DasEnglishFraction> GetEmployerFraction(DateTime dateCalculated, string empRef)
+        public async Task<DasEnglishFraction> GetEmployerFraction(DateTime dateCalculated, string employerReference)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@dateCalculated", dateCalculated, DbType.DateTime);
-                parameters.Add("@empRef", empRef, DbType.String);
+                parameters.Add("@empRef", employerReference, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
                     sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
@@ -54,12 +43,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task CreateEmployerFraction(DasEnglishFraction fractions, string empRef)
+        public async Task<IEnumerable<DasEnglishFraction>> GetAllEmployerFractions(string employerReference)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", employerReference, DbType.String);
+
+                return await c.QueryAsync<DasEnglishFraction>(
+                    sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef ORDER BY DateCalculated desc;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result;
+        }
+
+        public async Task CreateEmployerFraction(DasEnglishFraction fractions, string employerReference)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@EmpRef", empRef, DbType.String);
+                parameters.Add("@EmpRef", employerReference, DbType.String);
                 parameters.Add("@Amount", fractions.Amount, DbType.Decimal);
                 parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
 

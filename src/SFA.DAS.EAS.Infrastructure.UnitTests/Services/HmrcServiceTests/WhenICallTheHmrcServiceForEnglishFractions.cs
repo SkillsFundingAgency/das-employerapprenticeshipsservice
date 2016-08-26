@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                 .ReturnsAsync(englishFractions);
 
             //Act
-            var result = await _hmrcService.GetEnglishFraction(authToken, empRef);
+            var result = await _hmrcService.GetEnglishFractions(authToken, empRef);
 
             //Assert
             _httpClientWrapper.Verify(x => x.Get<EnglishFractionDeclarations>(authToken, expectedApiUrl), Times.Once);
