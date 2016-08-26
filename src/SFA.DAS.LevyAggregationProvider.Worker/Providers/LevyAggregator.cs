@@ -26,10 +26,11 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source)
         {
             var output = new List<AggregationLine>();
-            var previousAmount = new Dictionary<string, decimal>();
+            
 
             foreach (var declarationsForMonth in GetDeclarationsByPayrollYearAndPayrollMonth(source))
             {
+                var previousAmount = new Dictionary<string, decimal>();
                 var aggregationLine = new AggregationLine
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -71,7 +72,11 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             {
                 empref.EmpRef,
                 Data = group.ToList()
-            }).Sum(item => item.Data.First(c => c.IsLastSubmission).CalculatedAmount);
+            }).Sum(item =>
+            {
+                var aggregationLineItem = item.Data.FirstOrDefault(c => c.IsLastSubmission);
+                return aggregationLineItem?.CalculatedAmount ?? 0;
+            });
 
             return totalAmount;
         }
@@ -126,7 +131,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             //find the latest value for each one and add to store
 
-            foreach (var declaration in addedDeclarations)
+            foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year}, new PayrollDateComparer()))
             {
                 foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission))
                 {
@@ -140,7 +145,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                         {
                             continue;
                         }
-                        previousAmount.Add(empref, aggregationLineItem.CalculatedAmount);
+                        previousAmount.Add(empref, aggregationLineItem.Amount);
                         break;
                     }
                 }

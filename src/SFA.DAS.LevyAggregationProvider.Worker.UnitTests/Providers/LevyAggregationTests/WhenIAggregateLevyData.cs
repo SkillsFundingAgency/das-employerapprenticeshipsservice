@@ -156,9 +156,34 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             var someValue = actualData.Data.Where(x => x.LastSubmission == 1).ToList();
             var expectedAmount1 = (someValue[0].LevyDueYtd * someValue[0].EnglishFraction)
                                 + (someValue[2].LevyDueYtd * someValue[2].EnglishFraction);
-            var expectedAmount2 = ((someValue[1].LevyDueYtd * someValue[1].EnglishFraction) - (someValue[0].LevyDueYtd * someValue[0].EnglishFraction))
-                                + ((someValue[3].LevyDueYtd * someValue[3].EnglishFraction) - (someValue[2].LevyDueYtd * someValue[2].EnglishFraction));
+            var expectedAmount2 = ((someValue[1].LevyDueYtd * someValue[1].EnglishFraction) 
+                                    - (someValue[0].LevyDueYtd * someValue[0].EnglishFraction))
+                                + ((someValue[3].LevyDueYtd * someValue[3].EnglishFraction) 
+                                    - (someValue[2].LevyDueYtd * someValue[2].EnglishFraction));
            Assert.AreEqual(expectedAmount1 + expectedAmount2, actual.Data[0].Balance);
+        }
+
+        [Test]
+        public void ThenThePreviousAmountIsUsedToCalculateTheLevyAmountCorrectly()
+        {
+            //Arrange
+            var expectedEmprefs = new[] { "123/ABC123" };
+            var actualData = LevyDeclarationSourceDataObjectMother.Create(expectedEmprefs, numberOfDeclarations: 3,randomEnlgishFraction:true);
+
+            //Act
+            var actual = _levyAggregator.BuildAggregate(actualData);
+
+            //Assert
+            var someValue = actualData.Data.Where(x => x.LastSubmission == 1).ToList();
+            var expectedAmount1 = (someValue[0].LevyDueYtd * someValue[0].EnglishFraction);
+            var expectedAmount2 = ((someValue[1].LevyDueYtd * someValue[1].EnglishFraction) -
+                                   (someValue[0].LevyDueYtd * someValue[0].EnglishFraction));
+            var expectedAmount3 = ((someValue[2].LevyDueYtd * someValue[2].EnglishFraction) -
+                                   (someValue[1].LevyDueYtd * someValue[1].EnglishFraction));
+            Assert.AreEqual(expectedAmount1, actual.Data[2].Amount);
+            Assert.AreEqual(expectedAmount2, actual.Data[1].Amount);
+            Assert.AreEqual(expectedAmount3, actual.Data[0].Amount);
+            Assert.AreEqual(expectedAmount1 + expectedAmount2 + expectedAmount3, actual.Data[0].Balance);
         }
 
         [Test]
