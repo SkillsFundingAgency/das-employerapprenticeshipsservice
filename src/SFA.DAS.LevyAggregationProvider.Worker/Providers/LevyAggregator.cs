@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
@@ -13,7 +14,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             if (input == null)
                 return null;
 
-            var aggregates = DoWork(input.Data);
+            var aggregates = AggregateData(input.Data);
 
             return new AggregationData
             {
@@ -22,57 +23,156 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             };
         }
 
-        private IEnumerable<AggregationLine> DoWork(IEnumerable<LevyDeclarationSourceDataItem> source)
+        private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source)
         {
             var output = new List<AggregationLine>();
+            var previousAmount = new Dictionary<string, decimal>();
 
-            var balance = 0.0m;
-
-            foreach (var item in source)
+            foreach (var declarationsForMonth in GetDeclarationsByPayrollYearAndPayrollMonth(source))
             {
-                balance += item.LevyDueYtd;
-
-                var existing = output.FirstOrDefault(x => x.LevyItemType == item.LevyItemType && x.Year == item.SubmissionDate.Year && x.Month == item.SubmissionDate.Month);
-
-                if (existing == null)
+                var aggregationLine = new AggregationLine
                 {
-                    existing = new AggregationLine
+                    Id = Guid.NewGuid().ToString(),
+                    LevyItemType = LevyItemType.Declaration,
+                    Items = new List<AggregationLineItem>(),
+                    Year = declarationsForMonth.PayrollYear,
+                    Month = declarationsForMonth.PayrollMonth
+                };
+
+                AddPreviousAmountForPayeToCollection(previousAmount, output);
+
+                foreach (var declarationsByEmpref in GetDeclarationsByEmpref(declarationsForMonth))
+                {
+                    foreach (LevyDeclarationSourceDataItem levyDeclarationSourceDataItem in declarationsByEmpref.Data)
                     {
-                        Month = item.SubmissionDate.Month,
-                        Year = item.SubmissionDate.Year,
-                        LevyItemType = item.LevyItemType,
-                        Amount = item.LevyDueYtd,
-                        Balance = balance,
-                        Id = item.Id,
-                        Items = new List<AggregationLineItem>
-                        {
-                            MapFrom(item)
-                        }
-                    };
-                    output.Add(existing);
+                        aggregationLine.Items.Add(MapFrom(levyDeclarationSourceDataItem, previousAmount));
+                    }
                 }
-                else
-                {
-                    existing.Amount += item.LevyDueYtd;
-                    existing.Balance = balance;
-                    existing.Items.Add(MapFrom(item));
-                }
+
+                var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items);
+                aggregationLine.Amount = amount;
+                aggregationLine.Balance = CalculateCurrentBalance(output, amount);
+
+                output.Add(aggregationLine);
+
             }
 
             return output;
         }
 
-        private AggregationLineItem MapFrom(LevyDeclarationSourceDataItem item)
+        private decimal CalculateCurrentBalance(List<AggregationLine> output, decimal amount)
         {
+            return output.Sum(c => c.Amount) + amount;
+        }
+
+        private decimal CalculateAmountWithEnglishFraction(List<AggregationLineItem> items)
+        {
+            var totalAmount = items.GroupBy(c => new { c.EmpRef }, (empref, group) => new
+            {
+                empref.EmpRef,
+                Data = group.ToList()
+            }).Sum(item => item.Data.First(c => c.IsLastSubmission).CalculatedAmount);
+
+            return totalAmount;
+        }
+
+        private dynamic GetDeclarationsByEmpref(dynamic groupedItem)
+        {
+            return ((List<LevyDeclarationSourceDataItem>)groupedItem.Data).ToList().GroupBy(c => new { c.EmpRef }, (empref, group) => new
+            {
+                empref.EmpRef,
+                Data = group.ToList()
+            });
+        }
+
+        private dynamic GetDeclarationsByPayrollYearAndPayrollMonth(IEnumerable<LevyDeclarationSourceDataItem> source)
+        {
+            return source.GroupBy(c => new { c.PayrollDate.Value.Month, c.PayrollDate.Value.Year },
+                (payroll, group) => new
+                {
+                    PayrollYear = payroll.Year,
+                    PayrollMonth = payroll.Month,
+                    Data = group.ToList()
+                }).OrderBy(c => new PayrollDate { PayrollMonth = c.PayrollMonth, PayrollYear = c.PayrollYear }, new PayrollDateComparer());
+        }
+
+        private AggregationLineItem MapFrom(LevyDeclarationSourceDataItem item, Dictionary<string, decimal> previousAmount)
+        {
+            var calculatedAmount = (item.LevyDueYtd * item.EnglishFraction) - (previousAmount.ContainsKey(item.EmpRef) ? previousAmount[item.EmpRef] : 0m);
             return new AggregationLineItem
             {
                 Id = item.Id,
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
-                Amount = item.LevyDueYtd,
+                LevyDueYtd = item.LevyDueYtd,
+                Amount = item.LevyDueYtd * item.EnglishFraction,
                 EnglishFraction = item.EnglishFraction,
-                LevyItemType = item.LevyItemType
+                CalculatedAmount = calculatedAmount,
+                LevyItemType = item.LevyItemType,
+                IsLastSubmission = item.LastSubmission == 1
             };
+        }
+
+        private static void AddPreviousAmountForPayeToCollection(Dictionary<string, decimal> previousAmount, List<AggregationLine> addedDeclarations)
+        {
+            //find all distinct emprefs
+
+            var emprefs = new List<string>();
+            foreach (var declaration in addedDeclarations)
+            {
+                emprefs.AddRange(declaration.Items.Select(c => c.EmpRef).Distinct());
+            }
+
+
+            //find the latest value for each one and add to store
+
+            foreach (var declaration in addedDeclarations)
+            {
+                foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission))
+                {
+                    foreach (var empref in emprefs)
+                    {
+                        if (!empref.Equals(aggregationLineItem.EmpRef))
+                        {
+                            continue;
+                        }
+                        if (previousAmount.ContainsKey(empref))
+                        {
+                            continue;
+                        }
+                        previousAmount.Add(empref, aggregationLineItem.CalculatedAmount);
+                        break;
+                    }
+                }
+            }
+
+            //Check to see if we have a value for all emprefs
+            foreach (var empref in emprefs)
+            {
+                if (!previousAmount.ContainsKey(empref))
+                {
+                    previousAmount.Add(empref, 0m);
+                }
+            }
+
+        }
+
+        private class PayrollDate
+        {
+            public int PayrollMonth { get; set; }
+
+            public int PayrollYear { get; set; }
+        }
+
+        private class PayrollDateComparer : IComparer<PayrollDate>
+        {
+            public int Compare(PayrollDate x, PayrollDate y)
+            {
+                var firstDate = new DateTime(2000 + x.PayrollYear, x.PayrollMonth, 1);
+                var secondDate = new DateTime(2000 + y.PayrollYear, y.PayrollMonth, 1);
+
+                return firstDate.CompareTo(secondDate);
+            }
         }
     }
 }
