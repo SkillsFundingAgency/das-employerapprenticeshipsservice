@@ -67,8 +67,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Add two numbers")]
         [NUnit.Framework.CategoryAttribute("mytag")]
-        [NUnit.Framework.TestCaseAttribute("scenario_1", "scenario_1_result", new string[0])]
-        public virtual void AddTwoNumbers(string paye_Scenario, string paye_Scenario_Result, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("123", "scenario_1_result", "", "", new string[0])]
+        public virtual void AddTwoNumbers(string paye_Schemes, string paye_Scenario_Result, string period, string account_Open_From, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -80,7 +80,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.Features
 #line 6
 this.ScenarioSetup(scenarioInfo);
 #line 7
- testRunner.Given(string.Format("I have added \"{0}\" to my account", paye_Scenario), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have added \"{0}\" to my account", paye_Schemes), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 8
  testRunner.When("I build the aggregation", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
