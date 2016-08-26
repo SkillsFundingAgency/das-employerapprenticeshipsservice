@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(transactionViewResult.Model);
         }
 
-        public async Task<ActionResult> Detail(int accountId, long itemId)
+        public async Task<ActionResult> Detail(int accountId, string itemId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");

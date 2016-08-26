@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var aggregationLine = new AggregationLine
             {
                 Amount = 12m,
-                Id = 1,
+                Id = "12345",
                 Balance = 12m,
                 LevyItemType = LevyItemType.TopUp,
                 Year = 2016,
