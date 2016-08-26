@@ -11,6 +11,7 @@ SELECT
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
 	t.Amount AS EnglishFraction,
+	w.amount as TopUpPercentage,
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,
 	CASE 
@@ -39,10 +40,12 @@ OUTER APPLY
 		AND ef.[DateCalculated] <= ld.[SubmissionDate]
 	ORDER BY [DateCalculated] DESC
 ) t
-
-GO
-
-
+outer apply
+(
+	SELECT top 1 Amount
+	from [levy].[TopUpPercentage] tp
+	WHERE tp.[DateFrom] <= ld.[SubmissionDate]
+) w
 
 GO
 

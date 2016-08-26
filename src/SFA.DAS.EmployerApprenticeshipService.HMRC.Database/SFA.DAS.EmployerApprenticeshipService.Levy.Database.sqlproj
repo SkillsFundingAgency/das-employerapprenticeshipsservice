@@ -74,6 +74,8 @@
     <Build Include="Schemas\Levy.sql" />
     <Build Include="StoredProcedures\Cleardown.sql" />
     <Build Include="StoredProcedures\CreateDeclaration.sql" />
+    <Build Include="Tables\TopUpPercentage.sql" />
+    <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\SeedData.sql" />
