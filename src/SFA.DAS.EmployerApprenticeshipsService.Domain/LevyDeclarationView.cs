@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public decimal EnglishFraction { get; set; }
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
-
+        public int LastSubmission { get; set; }
         public DateTime? PayrollDate()
         {
 
@@ -28,12 +28,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
             if (PayrollMonth <= 9)
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[0]);
-                PayrollMonth = (short) (PayrollMonth + 3);
+                month = (short) (PayrollMonth + 3);
             }
             else
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[1]);
-                PayrollMonth = (short) (PayrollMonth - 9);
+                month = (short) (PayrollMonth - 9);
             }
 
             var dateTime = new DateTime(year, month,1);
