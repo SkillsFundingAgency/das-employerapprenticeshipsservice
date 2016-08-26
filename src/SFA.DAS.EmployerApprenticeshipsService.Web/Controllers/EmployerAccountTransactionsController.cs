@@ -23,10 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         
         public async Task<ActionResult> Index(int accountId)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(accountId, userIdClaim);
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(accountId, _owinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Account == null)
             {
@@ -37,10 +34,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> Detail(int accountId, string itemId)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId, userIdClaim);
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId, _owinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Account == null)
             {

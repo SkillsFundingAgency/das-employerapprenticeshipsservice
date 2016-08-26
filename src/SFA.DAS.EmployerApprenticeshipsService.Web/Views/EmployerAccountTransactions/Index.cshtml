@@ -11,7 +11,7 @@
         <div>
             <div class="home-figures">
                 <h2 class="heading-small">This is your current balance:</h2>
-                <h2 class="bold-xlarge" data-bind="text: displayBalance">@($"{Model.CurrentBalance:n0}")</h2> <!--style="color:#08c"-->
+                <h2 class="bold-xlarge" data-bind="text: displayBalance">@($"{Model.CurrentBalance:c0}")</h2> <!--style="color:#08c"-->
                 <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToString("d MMM yyyy")</span></p>
             </div>
         </div>
@@ -59,19 +59,14 @@
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Credit</div>
                                 <div>
-                                    @{
-                                        var credit = aggregationLine.Amount > (decimal)0.0 ? aggregationLine.Amount : (decimal)0.0;
-                                    }
-                                    @($"{credit:n0}")
+                                    @($"{ aggregationLine.Amount:c0}")
                                 </div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Debit</div>
                                 <div>
-                                    @{
-                                        var debit = aggregationLine.Amount <= (decimal)0.0 ? aggregationLine.Amount : (decimal)0.0;
-                                    }
-                                    @($"{debit:n0}")
+                                    
+                                    @($"{0.0:c0}")
                                 </div>
                             </div>
 
