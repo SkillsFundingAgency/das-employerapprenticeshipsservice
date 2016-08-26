@@ -49,16 +49,16 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                 }
 
                 var employerDataList = new List<EmployerLevyData>();
+                
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
+
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
-                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.Fractions != null || levyDeclarationQueryResult?.LevyDeclarations != null)
                     {
-
-                        //TODO call to hmrc to see when the last fraction was calculated apprenticeship-levy/fraction-calculation-date
                         foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
                         {
                             employerData.Fractions.Fractions.Add(new DasEnglishFraction

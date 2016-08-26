@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 
@@ -12,5 +13,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
         Task<string> DiscoverEmpref(string authToken);
         Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef);
         Task<EnglishFractionDeclarations> GetEnglishFraction(string authToken, string empRef);
+        Task<DateTime> GetLastEnglishFractionUpdate();
     }
 }

@@ -1,12 +1,10 @@
 using System.Threading.Tasks;
 using System.Web;
 using Moq;
-using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
 

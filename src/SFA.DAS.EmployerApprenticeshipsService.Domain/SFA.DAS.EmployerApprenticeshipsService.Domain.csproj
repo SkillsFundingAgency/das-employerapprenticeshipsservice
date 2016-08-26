@@ -129,6 +129,7 @@
     <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAccountTeamRepository.cs" />
     <Compile Include="Data\IAggregationRepository.cs" />
+    <Compile Include="Data\IEnglishFractionRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IEmployerAccountRepository.cs" />
     <Compile Include="Data\IEmployerAgreementRepository.cs" />

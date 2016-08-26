@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration
@@ -9,11 +10,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
     {
         private readonly IValidator<GetHMRCLevyDeclarationQuery> _validator;
         private readonly IHmrcService _hmrcService;
+        private readonly IEnglishFractionRepository _englishFractionRepository;
 
-        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, IHmrcService hmrcService)
+        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, IHmrcService hmrcService, 
+            IEnglishFractionRepository englishFractionRepository)
         {
             _validator = validator;
             _hmrcService = hmrcService;
+            _englishFractionRepository = englishFractionRepository;
         }
 
         public async Task<GetHMRCLevyDeclarationResponse> Handle(GetHMRCLevyDeclarationQuery message)
@@ -26,9 +30,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
             }
 
             var declarations = await _hmrcService.GetLevyDeclarations(message.AuthToken, message.EmpRef);
-
+            
             var fractions = await _hmrcService.GetEnglishFraction(message.AuthToken, message.EmpRef);
-
+            
             var getLevyDeclarationResponse = new GetHMRCLevyDeclarationResponse
             {
                 Fractions = fractions,

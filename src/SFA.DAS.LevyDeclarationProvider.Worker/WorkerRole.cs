@@ -49,7 +49,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
 
 
 
-            bool result = base.OnStart();
+            var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker has been started");
 
@@ -77,7 +77,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
                 Trace.TraceInformation("Working");
                 
                 await levyDeclaration.Handle();
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
             }
         }
     }

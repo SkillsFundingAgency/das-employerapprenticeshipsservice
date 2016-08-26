@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private RefreshEmployerLevyDataCommandHandler _refreshEmployerLevyDataCommandHandler;
         private Mock<IValidator<RefreshEmployerLevyDataCommand>> _validator;
         private Mock<IDasLevyRepository> _levyRepository;
+        private Mock<IEnglishFractionRepository> _englishFractionRepository;
         private Mock<IMessagePublisher> _messagePublisher;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
@@ -25,10 +26,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void Arrange()
         {
             _levyRepository = new Mock<IDasLevyRepository>();
+            _englishFractionRepository = new Mock<IEnglishFractionRepository>();
             _validator = new Mock<IValidator<RefreshEmployerLevyDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
             _messagePublisher = new Mock<IMessagePublisher>();
-            _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _messagePublisher.Object);
+            _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(
+                _validator.Object, _levyRepository.Object, _englishFractionRepository.Object, _messagePublisher.Object);
 
         }
 
@@ -73,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
 
             //Assert
-            _levyRepository.Verify(x=>x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(),ExpectedEmpRef),Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Fractions.Fractions.Count));
+            _englishFractionRepository.Verify(x=>x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(),ExpectedEmpRef),Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Fractions.Fractions.Count));
         }
 
         [Test]

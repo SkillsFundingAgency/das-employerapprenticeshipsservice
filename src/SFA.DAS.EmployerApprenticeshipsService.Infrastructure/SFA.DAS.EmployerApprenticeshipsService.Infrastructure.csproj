@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
+    <Compile Include="Data\EnglishFractionRepository.cs" />
     <Compile Include="Data\DasLevyRepository.cs" />
     <Compile Include="Data\EmployerAgreementRepository.cs" />
     <Compile Include="Data\EmployerSchemesRepository.cs" />
