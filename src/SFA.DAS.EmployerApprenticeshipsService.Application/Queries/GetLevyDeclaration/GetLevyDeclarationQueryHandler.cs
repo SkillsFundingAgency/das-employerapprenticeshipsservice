@@ -43,7 +43,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                         EnglishFraction = item.EnglishFraction,
                         PayrollDate = item.PayrollDate(),
                         PayrollMonth = item.PayrollMonth,
-                        PayrollYear = item.PayrollYear
+                        PayrollYear = item.PayrollYear,
+                        LastSubmission = item.LastSubmission
                     }).ToList()
                 }
             };
