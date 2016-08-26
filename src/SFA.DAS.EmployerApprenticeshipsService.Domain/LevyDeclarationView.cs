@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
 
-        public string PayrollDate()
+        public DateTime? PayrollDate()
         {
 
             if (PayrollMonth == null || string.IsNullOrEmpty(PayrollYear))
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 
             var dateTime = new DateTime(year, month,1);
             
-            return dateTime.ToString("MMM yyyy");
+            return dateTime;
         }
     }
 }
