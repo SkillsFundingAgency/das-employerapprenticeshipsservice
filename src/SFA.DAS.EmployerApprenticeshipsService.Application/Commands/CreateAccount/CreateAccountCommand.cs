@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
     public class CreateAccountCommand : IAsyncRequest
     {

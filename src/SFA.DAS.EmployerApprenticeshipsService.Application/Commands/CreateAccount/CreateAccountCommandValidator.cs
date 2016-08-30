@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
     public class CreateAccountCommandValidator : IValidator<CreateAccountCommand>
     {

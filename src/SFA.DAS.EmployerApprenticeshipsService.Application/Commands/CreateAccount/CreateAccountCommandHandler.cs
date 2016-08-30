@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccountCreatedNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccount
+namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
     public class CreateAccountCommandHandler : AsyncRequestHandler<CreateAccountCommand>
     {
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmpl
         private readonly IMediator _mediator;
         private readonly CreateAccountCommandValidator _validator;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator)
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
