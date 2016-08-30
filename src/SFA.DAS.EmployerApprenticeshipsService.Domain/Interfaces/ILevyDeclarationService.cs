@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
 {
     public interface ILevyDeclarationService
     {
-        Task<Declarations> GetLevyDeclarations(string id);
+        Task<LevyDeclarations> GetLevyDeclarations(string id);
 
         Task<EnglishFractionDeclarations> GetEnglishFraction(string id);
     }

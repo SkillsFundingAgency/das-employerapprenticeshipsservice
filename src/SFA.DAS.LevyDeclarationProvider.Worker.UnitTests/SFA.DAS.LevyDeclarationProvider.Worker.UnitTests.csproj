@@ -84,6 +84,10 @@
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+      <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj">
       <Project>{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}</Project>
       <Name>SFA.DAS.LevyDeclarationProvider.Worker</Name>

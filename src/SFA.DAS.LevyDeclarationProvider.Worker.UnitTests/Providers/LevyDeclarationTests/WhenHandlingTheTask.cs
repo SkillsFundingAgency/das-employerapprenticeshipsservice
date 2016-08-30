@@ -1,15 +1,19 @@
-﻿using System.IO;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
@@ -37,6 +41,12 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpectedAccountId})).ReturnsAsync(new GetEmployerAccountResponse());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
+                .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
+                {
+                    UpdateRequired = false
+                });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>())).ReturnsAsync(Unit.Value);
 
             _dasAccountService = new Mock<IDasAccountService>();
             _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes());
@@ -98,6 +108,55 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclara
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
             mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
+        }
+
+        [Test]
+        public async Task ThenEachFractionReturnedFromTheServiceIsAddedToTheRepository()
+        {
+            //Arrange
+            var expectedAccessToken= "myaccesstoken";
+            var expectedEmpref = "123/fgh456";
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme> {new Scheme {AccessToken = expectedAccessToken,AccountId = ExpectedAccountId,Id=1,Ref=expectedEmpref,RefreshToken = "token"} } });
+            _mediator.Setup(x =>x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _mediator.Verify(x=>x.SendAsync(It.Is<RefreshEmployerLevyDataCommand>(c=>c.AccountId.Equals(ExpectedAccountId) && c.EmployerLevyData[0].Fractions.Fractions.Count==2)));
+        }
+
+        [Test]
+        public async Task ThenWhenHmrcHaveUpdatedTheirEnglishFractionCalculationsIShouldUpdateTheLevyCalculations()
+        {
+            //Assign
+            var expectedAccessToken = "myaccesstoken";
+            var expectedEmpref = "123/fgh456";
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes { SchemesList = new List<Scheme> { new Scheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
+
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
+               .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
+               {
+                   UpdateRequired = true
+               });
+
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheLevyCalculationShouldNotBeUpdateIfTheyAreTheLatest()
+        {
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Never);
         }
     }
 }

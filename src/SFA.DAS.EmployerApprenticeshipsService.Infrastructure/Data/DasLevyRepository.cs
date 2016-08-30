@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -14,8 +13,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, ILogger logger)
-            : base(configuration, logger)
+        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration)
+            : base(configuration)
         {
         }
 
@@ -28,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
-                    sql: "SELECT Amount, SubmissionId AS Id, SubmissionType, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
+                    sql: "SELECT LevyDueYtd, SubmissionId AS Id, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -41,52 +40,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@Amount", dasDeclaration.Amount, DbType.Decimal);
+                parameters.Add("@LevyDueYtd", dasDeclaration.LevyDueYtd, DbType.Decimal);
+                parameters.Add("@LevyAllowanceForYear", dasDeclaration.LevyAllowanceForFullYear, DbType.Decimal);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@EmpRef", empRef, DbType.String);
+                parameters.Add("@PayrollYear", dasDeclaration.PayrollYear, DbType.String);
+                parameters.Add("@PayrollMonth", dasDeclaration.PayrollMonth, DbType.Int16);
                 parameters.Add("@SubmissionDate", dasDeclaration.Date, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
-                parameters.Add("@SubmissionType", dasDeclaration.SubmissionType, DbType.String);
-
+                
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[LevyDeclaration] (Amount, empRef, SubmissionDate, SubmissionId, SubmissionType, AccountId) VALUES (@Amount, @EmpRef, @SubmissionDate, @SubmissionId, @SubmissionType, @AccountId);",
+                    sql: "[levy].[CreateDeclaration]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
         }
 
-        public async Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@dateCalculated", dateCalculated, DbType.DateTime);
-                parameters.Add("@empRef", empRef, DbType.String);
-
-                return await c.QueryAsync<DasEnglishFractions>(
-                    sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
-
-            return result.SingleOrDefault();
-        }
-
-        public async Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef)
-        {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@EmpRef", empRef, DbType.String);
-                parameters.Add("@Amount", fractions.Amount, DbType.Decimal);
-                parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
-
-                return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
-        }
+        
 
         public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
         {
@@ -96,9 +66,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<LevyDeclarationView>(
-                    sql: "SELECT * from [levy].[GetLevyDeclarations] WHERE [AccountId] = @accountId ORDER BY [SubmissionDate] ASC;",
+                    sql: "[levy].[GetLevyDeclarations_ByAccountId]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result.ToList();

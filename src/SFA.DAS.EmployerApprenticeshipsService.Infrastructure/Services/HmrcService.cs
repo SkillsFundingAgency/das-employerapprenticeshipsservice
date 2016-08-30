@@ -1,8 +1,8 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -26,11 +26,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
         public string GenerateAuthRedirectUrl(string redirectUrl)
         {
-
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
-
             return $"{_configuration.Hmrc.BaseUrl}oauth/authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
-            
         }
 
         public async Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode)
@@ -42,7 +39,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             var response = await _httpClientWrapper.SendMessage("", url);
 
             return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
-
         }
         
         public async Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
@@ -58,6 +54,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
             return json.Emprefs.SingleOrDefault();
         }
-        
+
+        public async Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef)
+        {
+            var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
+            return await _httpClientWrapper.Get<LevyDeclarations>(authToken, url);
+        }
+
+        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string authToken, string empRef)
+        {
+            var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
+            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken, url);
+        }
+
+        public async Task<DateTime> GetLastEnglishFractionUpdate()
+        {
+            const string url = "apprenticeship-levy/fraction-calculation-date";
+            return await _httpClientWrapper.Get<DateTime>(_configuration.Hmrc.ServerToken, url);
+        }
     }
 }

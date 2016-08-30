@@ -22,14 +22,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.Contains(new KeyValuePair<string, string>("Id", "The Id field has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("EmpRef", "The EmpRef field has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
         public void ThenTheDictionaryIsNotPopulatedIfAllFieldsAreSupplied()
         {
             //Act
-            var actual = _getHMRCLevyDeclarationQueryValidator.Validate(new GetHMRCLevyDeclarationQuery {Id = "123456"});
+            var actual = _getHMRCLevyDeclarationQueryValidator.Validate(new GetHMRCLevyDeclarationQuery {EmpRef = "123456"});
 
             //Assert
             Assert.IsNotNull(actual);

@@ -2,7 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -17,32 +17,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
     public class AddPayeSchemeSteps
     {
         private static IContainer _container;
-        private static Mock<IMessagePublisher> _messagePublisher;
-        private static ICleanDatabase _cleanDownDb;
-        private static Mock<IOwinWrapper> _owinWrapper;
         private static bool _newLegalEntity;
         private static int _exceptionCount;
 
-        [BeforeFeature()]
+
+
+
+        [BeforeFeature]
         public static void Arrange()
         {
-            _messagePublisher = new Mock<IMessagePublisher>();
-            _owinWrapper = new Mock<IOwinWrapper>();
+            var messagePublisher = new Mock<IMessagePublisher>();
+            var owinWrapper = new Mock<IOwinWrapper>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper);
 
-            _cleanDownDb = _container.GetInstance<ICleanDatabase>();
-            _cleanDownDb.Execute().Wait();
         }
 
-        [AfterFeature()]
+        [AfterFeature]
         public static void TearDown()
         {
-            _exceptionCount = 0;
-            _newLegalEntity = false;
-
-            _cleanDownDb.Execute().Wait();
-
             _container.Dispose();
         }
 

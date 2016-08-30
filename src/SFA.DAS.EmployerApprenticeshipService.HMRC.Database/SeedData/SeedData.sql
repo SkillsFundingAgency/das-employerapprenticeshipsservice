@@ -12,3 +12,9 @@ Post-Deployment Script Template
 
 EXECUTE levy.Cleardown
 GO
+
+
+insert into [levy].[TopUpPercentage]
+(datefrom,amount)
+values
+('2015-01-01 00:00:00.000',0.1)

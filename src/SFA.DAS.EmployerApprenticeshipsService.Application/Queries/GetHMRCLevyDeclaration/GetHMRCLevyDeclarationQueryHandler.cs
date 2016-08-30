@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration
@@ -8,12 +9,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
     public class GetHMRCLevyDeclarationQueryHandler : IAsyncRequestHandler<GetHMRCLevyDeclarationQuery,GetHMRCLevyDeclarationResponse>
     {
         private readonly IValidator<GetHMRCLevyDeclarationQuery> _validator;
-        private readonly ILevyDeclarationService _levyDeclarationService;
+        private readonly IHmrcService _hmrcService;
+        private readonly IEnglishFractionRepository _englishFractionRepository;
 
-        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, ILevyDeclarationService levyDeclarationService)
+        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, IHmrcService hmrcService, 
+            IEnglishFractionRepository englishFractionRepository)
         {
             _validator = validator;
-            _levyDeclarationService = levyDeclarationService;
+            _hmrcService = hmrcService;
+            _englishFractionRepository = englishFractionRepository;
         }
 
         public async Task<GetHMRCLevyDeclarationResponse> Handle(GetHMRCLevyDeclarationQuery message)
@@ -25,15 +29,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevy
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var declarations = await _levyDeclarationService.GetLevyDeclarations(message.Id);
-
-            var fractions = await _levyDeclarationService.GetEnglishFraction(message.Id);
-
+            var declarations = await _hmrcService.GetLevyDeclarations(message.AuthToken, message.EmpRef);
+            
+            var fractions = await _hmrcService.GetEnglishFractions(message.AuthToken, message.EmpRef);
+            
             var getLevyDeclarationResponse = new GetHMRCLevyDeclarationResponse
             {
                 Fractions = fractions,
-                Declarations = declarations,
-                Empref = message.Id
+                LevyDeclarations = declarations,
+                Empref = message.EmpRef
             };
 
             return getLevyDeclarationResponse;

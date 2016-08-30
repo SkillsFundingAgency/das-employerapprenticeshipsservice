@@ -47,7 +47,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
         {
             ServicePointManager.DefaultConnectionLimit = 12;
             
-            bool result = base.OnStart();
+            var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.LevyAggregationProvider.Worker has been started");
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker
                 await manager.Process();
 
                 Trace.TraceInformation("Working");
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
             }
         }
     }

@@ -9,9 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef);
         Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef, long accountId);
-        Task<DasEnglishFractions> GetEmployerFraction(DateTime dateCalculated, string empRef);
-        Task CreateEmployerFraction(DasEnglishFractions fractions, string empRef);
-
+       
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
@@ -27,22 +28,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                         new DasDeclaration
                         {
                             Id = "1",
-                            Amount = 10,
+                            LevyDueYtd = 10,
                             Date = DateTime.UtcNow
                         },
                         new DasDeclaration
                         {
                             Id = "2",
-                            Amount = 70,
+                            LevyDueYtd = 70,
                             Date = DateTime.UtcNow.AddMonths(1)
                         }
                     }
                 },
                 Fractions = new DasEnglishFractions
                 {
-                    Amount = 0.89m,
-                    Id = "1",
-                    DateCalculated = DateTime.UtcNow
+                    Fractions = new List<DasEnglishFraction>
+                    {
+                        new DasEnglishFraction
+                        {
+                            Amount = 0.89m,
+                            Id = "1",
+                            DateCalculated = DateTime.UtcNow
+                        },
+                        new DasEnglishFraction
+                        {
+                            Amount = 0.89m,
+                            Id = "1",
+                            DateCalculated = DateTime.UtcNow
+                        }
+                    }
                 }
                 }
                }

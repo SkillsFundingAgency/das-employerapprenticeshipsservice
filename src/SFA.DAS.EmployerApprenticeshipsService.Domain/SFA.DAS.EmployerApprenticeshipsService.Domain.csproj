@@ -129,6 +129,7 @@
     <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAccountTeamRepository.cs" />
     <Compile Include="Data\IAggregationRepository.cs" />
+    <Compile Include="Data\IEnglishFractionRepository.cs" />
     <Compile Include="Data\IDasLevyRepository.cs" />
     <Compile Include="Data\IEmployerAccountRepository.cs" />
     <Compile Include="Data\IEmployerAgreementRepository.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
+    <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
@@ -165,7 +167,10 @@
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
-    <Compile Include="Models\HmrcLevy\Declarations.cs" />
+    <Compile Include="Models\HmrcEmployer\EmpRefLookup.cs" />
+    <Compile Include="Models\HmrcEmployer\EmpRefLookupItem.cs" />
+    <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
+    <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
     <Compile Include="Models\HmrcLevy\Employer.cs" />
     <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
     <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
@@ -175,6 +180,7 @@
     <Compile Include="Models\HmrcLevy\Name.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
+    <Compile Include="Models\Levy\DasEnglishFraction.cs" />
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />

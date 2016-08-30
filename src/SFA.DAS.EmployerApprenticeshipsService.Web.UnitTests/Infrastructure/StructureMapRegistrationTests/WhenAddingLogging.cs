@@ -36,6 +36,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
             
         }
 
+        [Test]
+        public void ThenTheLoggerHasBeenNamedWithTheFullNameOfThatClass()
+        {
+            //Act
+            var actual = _container.GetInstance<TestClass>();
+            //Assert
+            Assert.AreEqual(typeof(TestClass).FullName, actual.Logger.Name);
+        }
+
         public interface ITestClass
         {
 

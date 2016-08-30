@@ -10,6 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInfor
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -22,6 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
         protected readonly EmployerApprenticeshipsServiceConfiguration Configuration;
+        private readonly IEmpRefFileBasedService _empRefFileBasedService;
 
         //Needed for tests
         protected EmployerVerificationOrchestratorBase()
@@ -29,12 +31,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService)
         {
             Mediator = mediator;
             Logger = logger;
             CookieService = cookieService;
             Configuration = configuration;
+            _empRefFileBasedService = empRefFileBasedService;
         }
 
 
@@ -75,7 +78,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
 
-        public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken)
+        public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken, string email)
         {
             var response = new GetHmrcEmployerInformationResponse();
             try
@@ -89,9 +92,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 response.Empref = "";
             }
-            if (Configuration.Hmrc.IgnoreDuplicates && response.Empref == "")
+
+            if (Configuration.Hmrc.IgnoreDuplicates && string.IsNullOrEmpty(response.Empref))
             {
-                response.Empref = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+                response.Empref = await _empRefFileBasedService.GetEmpRef(email, "empref_data");
+
+                if (string.IsNullOrEmpty(response.Empref))
+                {
+                    response.Empref =
+                        $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
+                }
             }
             return response;
         }

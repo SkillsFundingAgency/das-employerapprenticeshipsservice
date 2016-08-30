@@ -45,8 +45,12 @@
                 <div class="responsive-thead">
                     <div class="responsive-tr">
                         <div class="responsive-th" scope="col">Payroll number</div>
+                        <div class="responsive-th" scope="col">Type</div>
                         <div class="responsive-th numeric" scope="col">English percentage</div>
+                        <div class="responsive-th numeric" scope="col">Date submitted</div>
+                        <div class="responsive-th numeric" scope="col">Levy YTD</div>
                         <div class="responsive-th numeric" scope="col">Amount</div>
+                        <div class="responsive-th numeric" scope="col">Total</div>
 
                     </div>
                 </div>
@@ -60,13 +64,29 @@
                                 <div>@aggregationLineItem.EmpRef</div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
+                            <div class="responsive-td rjTableName">
+                                <div>@aggregationLineItem.LevyItemType</div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">English percentage</div>
-                                <div>100%</div>
+                                <div>@($"{aggregationLineItem.EnglishFraction*100:n0}")%</div>
+                            </div>
+                            <div class="responsive-td numeric">
+                                <div class="responsive-inner-caption">DateSubmitted</div>
+                                <div>@aggregationLineItem.ActivityDate.ToString("d MMM yyyy")</div>
+                            </div>
+                            <div class="responsive-td numeric">
+                                <div class="responsive-inner-caption">LevyYtd</div>
+                                <div>@($"{aggregationLineItem.LevyDueYtd:c0}")</div>
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">Amount</div>
-                                <div>@($"{aggregationLineItem.Amount:n0}")</div>                                    
+                                <div>@($"{aggregationLineItem.Amount:c0}")</div>
+                            </div>
+                            <div class="responsive-td numeric">
+                                <div class="responsive-inner-caption">CalculatedAmount</div>
+                                <div>@($"{aggregationLineItem.CalculatedAmount:c0}")</div>
                             </div>
                         </div>
                     }

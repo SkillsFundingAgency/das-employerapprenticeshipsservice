@@ -15,12 +15,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
 
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
+        private readonly IEnglishFractionRepository _englishFractionRepository;
         private readonly IMessagePublisher _messagePublisher;
 
-        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IMessagePublisher messagePublisher)
+        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, 
+            IDasLevyRepository dasLevyRepository, IEnglishFractionRepository englishFractionRepository, 
+            IMessagePublisher messagePublisher)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
+            _englishFractionRepository = englishFractionRepository;
             _messagePublisher = messagePublisher;
         }
 
@@ -47,12 +51,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
                     }
                 }
 
-                var fraction = await _dasLevyRepository.GetEmployerFraction(employerLevyData.Fractions.DateCalculated, employerLevyData.EmpRef);
-
-                if (fraction == null)
+                foreach (var fraction in employerLevyData.Fractions.Fractions)
                 {
-                    await _dasLevyRepository.CreateEmployerFraction(employerLevyData.Fractions, employerLevyData.EmpRef);
-                    sendLevyDataChanged = true;
+                    var dasFraction = await _englishFractionRepository.GetEmployerFraction(fraction.DateCalculated, employerLevyData.EmpRef);
+
+                    if (dasFraction == null)
+                    {
+                        await _englishFractionRepository.CreateEmployerFraction(fraction, employerLevyData.EmpRef);
+                        sendLevyDataChanged = true;
+                    }
                 }
             }
 

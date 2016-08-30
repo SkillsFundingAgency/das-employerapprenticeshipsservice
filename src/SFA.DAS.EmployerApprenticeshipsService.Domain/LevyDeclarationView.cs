@@ -4,13 +4,42 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
     public class LevyDeclarationView
     {
-        public int Id { get; set; }
-        public int AccountId { get; set; }
+        public long Id { get; set; }
+        public long AccountId { get; set; }
         public string EmpRef { get; set; }
         public DateTime SubmissionDate { get; set; }
-        public string SubmissionId { get; set; }
-        public string SubmissionType { get; set; }
-        public decimal Amount { get; set; }
+        public long SubmissionId { get; set; }
+        public decimal LevyDueYtd { get; set; }
         public decimal EnglishFraction { get; set; }
+        public string PayrollYear { get; set; }
+        public short? PayrollMonth { get; set; }
+        public int LastSubmission { get; set; }
+        public decimal TopUp { get; set; }
+        public DateTime? PayrollDate()
+        {
+
+            if (PayrollMonth == null || string.IsNullOrEmpty(PayrollYear))
+            {
+                return null;
+            }
+
+            var year = 2000;
+            var month = 1;
+
+            if (PayrollMonth <= 9)
+            {
+                year += Convert.ToInt32(PayrollYear.Split('-')[0]);
+                month = (short) (PayrollMonth + 3);
+            }
+            else
+            {
+                year += Convert.ToInt32(PayrollYear.Split('-')[1]);
+                month = (short) (PayrollMonth - 9);
+            }
+
+            var dateTime = new DateTime(year, month,1);
+            
+            return dateTime;
+        }
     }
 }

@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup;
+using SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -24,7 +24,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         private static IContainer _container;
         private long _accountId;
         private static Mock<IMessagePublisher> _messagePublisher;
-        private static ICleanDatabase _cleanDownDb;
         private static Mock<IOwinWrapper> _owinWrapper;
 
 
@@ -35,16 +34,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             _owinWrapper = new Mock<IOwinWrapper>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
-
-            _cleanDownDb = _container.GetInstance<ICleanDatabase>();
-            _cleanDownDb.Execute().Wait();
+            
         }
 
         [AfterFeature]
         public static void TearDown()
         {
-            _cleanDownDb.Execute().Wait();
-
             _container.Dispose();
         }
         

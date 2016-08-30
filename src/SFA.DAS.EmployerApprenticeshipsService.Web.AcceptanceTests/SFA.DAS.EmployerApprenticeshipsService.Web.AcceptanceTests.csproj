@@ -156,8 +156,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbCleanup\CleanDatabase.cs" />
-    <Compile Include="DbCleanup\ICleanDatabase.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Features\AddPayeScheme.feature.cs">
@@ -175,10 +173,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>InviteMember.feature</DependentUpon>
     </Compile>
-    <Compile Include="MockPolicy\MockMessagePolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\AddPayeScheme\AddPayeSchemeSteps.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
+    <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
     <Compile Include="Steps\CommonSteps\UserCreationSteps.cs" />
     <Compile Include="Steps\InviteMember\InviteMemberSteps.cs" />
   </ItemGroup>
@@ -220,6 +218,10 @@
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+      <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
@@ -228,6 +230,7 @@
   <ItemGroup>
     <Folder Include="Steps\AgreementSteps\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

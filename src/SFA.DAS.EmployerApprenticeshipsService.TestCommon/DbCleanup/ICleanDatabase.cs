@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DbCleanup
+namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup
 {
     public interface ICleanDatabase
     {

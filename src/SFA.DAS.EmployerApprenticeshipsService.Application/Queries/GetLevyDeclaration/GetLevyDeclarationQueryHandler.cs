@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 
@@ -12,16 +10,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
     public class GetLevyDeclarationQueryHandler : IAsyncRequestHandler<GetLevyDeclarationRequest, GetLevyDeclarationResponse>
     {
         private readonly IDasLevyRepository _repository;
+        private readonly IValidator<GetLevyDeclarationRequest> _validator;
 
-        public GetLevyDeclarationQueryHandler(IDasLevyRepository repository)
+        public GetLevyDeclarationQueryHandler(IDasLevyRepository repository, IValidator<GetLevyDeclarationRequest> validator )
         {
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
             _repository = repository;
+            _validator = validator;
         }
 
         public async Task<GetLevyDeclarationResponse> Handle(GetLevyDeclarationRequest message)
         {
+            var validationResult = _validator.Validate(message);
+
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+
             var declarations = await _repository.GetAccountLevyDeclarations(message.AccountId);
 
             return new GetLevyDeclarationResponse
@@ -33,37 +38,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                     {
                         Id = item.Id,
                         EmpRef = item.EmpRef,
-                        ActivityDate = item.SubmissionDate,
-                        Amount = item.Amount,
-                        LevyItemType = GetLevyItemType(item.SubmissionType)
+                        SubmissionDate = item.SubmissionDate,
+                        LevyDueYtd = item.LevyDueYtd,
+                        EnglishFraction = item.EnglishFraction,
+                        PayrollDate = item.PayrollDate(),
+                        PayrollMonth = item.PayrollMonth,
+                        PayrollYear = item.PayrollYear,
+                        LastSubmission = item.LastSubmission,
+                        TopUp = item.TopUp
                     }).ToList()
                 }
             };
         }
-
-        private List<LevyDeclarationSourceDataItem> MapFrom(IEnumerable<LevyDeclarationView> source)
-        {
-            return source.Select(item => new LevyDeclarationSourceDataItem
-            {
-                Id = item.Id,
-                EmpRef = item.EmpRef,
-                ActivityDate = item.SubmissionDate,
-                Amount = item.Amount,
-                LevyItemType = GetLevyItemType(item.SubmissionType)
-            }).ToList();
-        }
-
-        private static LevyItemType GetLevyItemType(string input)
-        {
-            switch (input)
-            {
-                case "Levy":
-                    return LevyItemType.Declaration;
-                case "TopUp":
-                    return LevyItemType.TopUp;
-                default:
-                    return LevyItemType.Unknown;
-            }
-        }
+        
     }
 }

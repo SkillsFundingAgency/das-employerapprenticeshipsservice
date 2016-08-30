@@ -12,13 +12,14 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService) : base(mediator, logger, cookieService, configuration, empRefFileBasedService)
         {
         }
 
@@ -56,8 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 };
             }
 
-            var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken);
-            var empRef = hmrcResponse.Empref;
+            var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken, string.Empty);
             
 
             return new OrchestratorResponse < AddNewPayeScheme > { 
@@ -65,9 +65,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                  
                 AccountId = accountId,
-                PayeScheme = empRef,
-                AccessToken = !string.IsNullOrEmpty(empRef) ? response.Data.AccessToken : "",
-                RefreshToken = !string.IsNullOrEmpty(empRef) ? response.Data.RefreshToken : ""
+                PayeScheme = hmrcResponse.Empref,
+                AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
+                RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
                 }
             };
             

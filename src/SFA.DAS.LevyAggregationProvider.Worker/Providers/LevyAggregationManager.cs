@@ -32,13 +32,11 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         public async Task Process()
         {
-     
-                var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
-                if (message?.Content == null || message.Content.AccountId == 0)
-                    return;
+            var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
 
-
+            if (message?.Content != null && message.Content.AccountId != 0)
+            {
                 _logger.Info($"Processing LevyAggregation for Account: {message.Content.AccountId}");
 
                 var response = await _mediator.SendAsync(new GetLevyDeclarationRequest
@@ -51,13 +49,20 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 var destinationData = aggregator.BuildAggregate(response.Data);
 
                 if (destinationData != null)
+                {
                     await _mediator.SendAsync(new CreateLevyAggregationCommand
                     {
                         Data = destinationData
                     });
+                }
+            }
 
+            if (message != null)
+            {
                 await message.CompleteAsync();
+            }   
             
+
         }
     }
 }
