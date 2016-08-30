@@ -1,6 +1,11 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators.TransactionLineItemViewModel
+﻿@using System.Globalization
+@model SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators.TransactionLineItemViewModel
 
-    <div class="grid-row">
+@{
+    var culture = new CultureInfo("en-GB");
+}
+
+<div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">Credit details</h1>
             <div>
@@ -78,15 +83,16 @@
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">LevyYtd</div>
-                                <div>@($"{aggregationLineItem.LevyDueYtd:c0}")</div>
+                                <div>@(aggregationLineItem.LevyDueYtd.ToString("C0", culture))</div>
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">Amount</div>
-                                <div>@($"{aggregationLineItem.Amount:c0}")</div>
+                                <div>@(aggregationLineItem.Amount.ToString("C0", culture))</div>
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">CalculatedAmount</div>
-                                <div>@($"{aggregationLineItem.CalculatedAmount:c0}")</div>
+                                <div>@(aggregationLineItem.CalculatedAmount.ToString("C0", culture))</div>
+                                
                             </div>
                         </div>
                     }
