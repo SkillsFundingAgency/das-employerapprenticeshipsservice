@@ -25,15 +25,15 @@ BEGIN
 	IF (@legalEntityId IS NULL)
 	BEGIN
 		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
-		SELECT @legalEntityId = SCOPE_IDENTITY();
-
-		DECLARE @templateId INT;
-
-		SELECT TOP 1 @templateId = Id FROM [account].[EmployerAgreementTemplate] ORDER BY Id ASC;
-
-		INSERT INTO [account].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
-		SELECT @employerAgreementId = SCOPE_IDENTITY();
+		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
+	
+	DECLARE @templateId INT;
+
+	SELECT TOP 1 @templateId = Id FROM [account].[EmployerAgreementTemplate] ORDER BY Id ASC;
+
+	INSERT INTO [account].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
+	SELECT @employerAgreementId = SCOPE_IDENTITY();
 
 	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
