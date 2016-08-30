@@ -187,6 +187,35 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
         }
 
         [Test]
+        public void ThenIfThereIsATopUpThenItIsAddedToTheAggregationAsASeperateLine()
+        {
+            //Arrange
+            var expectedEmprefs = new[] { "123/ABC123" };
+            var actualData = LevyDeclarationSourceDataObjectMother.Create(expectedEmprefs, numberOfDeclarations:2,addTopUp:true);
+
+            //Act
+            var actual = _levyAggregator.BuildAggregate(actualData);
+
+            //Assert
+            Assert.AreEqual(4,actual.Data.Sum(c=>c.Items.Count));
+        }
+
+        [Test]
+        public void ThenTheTotalIncludesTheTopUpValue()
+        {
+            //Arrange
+            var expectedEmprefs = new[] { "123/ABC123" };
+            var actualData = LevyDeclarationSourceDataObjectMother.Create(expectedEmprefs, numberOfDeclarations: 1, addTopUp: true);
+
+            //Act
+            var actual = _levyAggregator.BuildAggregate(actualData);
+
+            //Assert
+            var expectedTotal = actualData.Data[0].LevyDueYtd + actualData.Data[0].TopUp;
+            Assert.AreEqual(expectedTotal,actual.Data[0].Balance);
+        }
+
+        [Test]
         public void ThenIfTheAccountIsOpenedWhenThereAreMultipleSubmissionsAlreadyMadeTheyAreAllContainedInOneLineItem()
         {
             

@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
         public int LastSubmission { get; set; }
+        public decimal TopUp { get; set; }
         public DateTime? PayrollDate()
         {
 

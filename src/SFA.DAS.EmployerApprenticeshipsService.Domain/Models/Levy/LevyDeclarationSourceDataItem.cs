@@ -14,5 +14,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
         public int LastSubmission { get; set; }
+        public decimal TopUp { get; set; }
     }
 }

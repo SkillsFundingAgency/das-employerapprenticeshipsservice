@@ -47,6 +47,10 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     foreach (LevyDeclarationSourceDataItem levyDeclarationSourceDataItem in declarationsByEmpref.Data)
                     {
                         aggregationLine.Items.Add(MapFrom(levyDeclarationSourceDataItem, previousAmount));
+                        if (levyDeclarationSourceDataItem.TopUp != 0)
+                        {
+                            aggregationLine.Items.Add(MapTopUp(levyDeclarationSourceDataItem));
+                        }
                     }
                 }
 
@@ -74,8 +78,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 Data = group.ToList()
             }).Sum(item =>
             {
-                var aggregationLineItem = item.Data.FirstOrDefault(c => c.IsLastSubmission);
-                return aggregationLineItem?.CalculatedAmount ?? 0;
+                return item.Data.Where(c => c.IsLastSubmission).Sum(c=>c.CalculatedAmount);
             });
 
             return totalAmount;
@@ -115,6 +118,21 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 CalculatedAmount = calculatedAmount,
                 LevyItemType = item.LevyItemType,
                 IsLastSubmission = item.LastSubmission == 1
+            };
+        }
+
+        private AggregationLineItem MapTopUp(LevyDeclarationSourceDataItem item)
+        {
+            return new AggregationLineItem
+            {
+                Id= item.Id,
+                EmpRef = item.EmpRef,
+                ActivityDate = item.SubmissionDate,
+                LevyDueYtd = 0,
+                Amount = item.TopUp,
+                CalculatedAmount = item.TopUp,
+                LevyItemType = item.LevyItemType,
+                IsLastSubmission = true
             };
         }
 
