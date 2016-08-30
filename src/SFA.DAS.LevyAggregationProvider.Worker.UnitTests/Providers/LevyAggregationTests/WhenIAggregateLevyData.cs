@@ -216,6 +216,21 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
         }
 
         [Test]
+        public void ThenTheTotalIncludesTheTopUpValueAndTheEnglishPercentage()
+        {
+            //Arrange
+            var expectedEmprefs = new[] { "123/ABC123" };
+            var actualData = LevyDeclarationSourceDataObjectMother.Create(expectedEmprefs, numberOfDeclarations: 1, addTopUp: true,randomEnlgishFraction:true);
+
+            //Act
+            var actual = _levyAggregator.BuildAggregate(actualData);
+
+            //Assert
+            var expectedTotal = (actualData.Data[0].LevyDueYtd * actualData.Data[0].EnglishFraction) + (actualData.Data[0].TopUp * actualData.Data[0].EnglishFraction);
+            Assert.AreEqual(expectedTotal, actual.Data[0].Balance);
+        }
+
+        [Test]
         public void ThenIfTheAccountIsOpenedWhenThereAreMultipleSubmissionsAlreadyMadeTheyAreAllContainedInOneLineItem()
         {
             

@@ -129,8 +129,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
                 LevyDueYtd = 0,
-                Amount = item.TopUp,
-                CalculatedAmount = item.TopUp,
+                Amount = item.TopUp * item.EnglishFraction,
+                CalculatedAmount = item.TopUp * item.EnglishFraction,
                 LevyItemType = item.LevyItemType,
                 IsLastSubmission = true
             };
