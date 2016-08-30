@@ -45,6 +45,7 @@
                 <div class="responsive-thead">
                     <div class="responsive-tr">
                         <div class="responsive-th" scope="col">Payroll number</div>
+                        <div class="responsive-th" scope="col">Type</div>
                         <div class="responsive-th numeric" scope="col">English percentage</div>
                         <div class="responsive-th numeric" scope="col">Date submitted</div>
                         <div class="responsive-th numeric" scope="col">Levy YTD</div>
@@ -61,6 +62,10 @@
                         <div class="responsive-tr">
                             <div class="responsive-td rjTableName">
                                 <div>@aggregationLineItem.EmpRef</div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td rjTableName">
+                                <div>@aggregationLineItem.LevyItemType</div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td numeric">
