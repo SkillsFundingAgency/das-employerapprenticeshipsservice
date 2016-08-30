@@ -131,7 +131,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 LevyDueYtd = 0,
                 Amount = item.TopUp * item.EnglishFraction,
                 CalculatedAmount = item.TopUp * item.EnglishFraction,
-                LevyItemType = item.LevyItemType,
+                EnglishFraction = item.EnglishFraction,
+                LevyItemType = LevyItemType.TopUp,
                 IsLastSubmission = true
             };
         }
