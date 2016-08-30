@@ -1,4 +1,8 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.TransactionViewModel
+﻿@using System.Globalization
+@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.TransactionViewModel
+@{
+    var culture = new CultureInfo("en-GB");
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -59,21 +63,21 @@
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Credit</div>
                                 <div>
-                                    @($"{ aggregationLine.Amount:c0}")
+                                    @(aggregationLine.Amount.ToString("C0", culture))
                                 </div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Debit</div>
                                 <div>
                                     
-                                    @($"{0.0:c0}")
+                                    @("£0")
                                 </div>
                             </div>
 
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Balance</div>
                                 <div>
-                                    @($"{aggregationLine.Balance:n0}")
+                                    @(aggregationLine.Balance.ToString("C0", culture))
                                 </div>
                             </div>
                             <div class="responsive-td">
