@@ -70,7 +70,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
 
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
-                    if (levyDeclarationQueryResult?.Fractions != null || levyDeclarationQueryResult?.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
                     {
                         foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
                         {
