@@ -24,7 +24,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return base.View(viewName, masterName, orchestratorResponse);
 
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
+            {
+                //Get the account id
+                var accountId = Request.Params["AccountId"];
+                if (accountId != null)
+                {
+                    ViewBag.AccountId = accountId;
+                }
+
                 return base.View(@"AccessDenied", masterName, orchestratorResponse);
+            }
+                
 
             return base.View(@"GenericError", masterName, orchestratorResponse);
 

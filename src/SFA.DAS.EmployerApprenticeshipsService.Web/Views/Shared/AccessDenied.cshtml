@@ -12,13 +12,18 @@
         <p class="">
             If you are experiencing difficulty accessing the aread of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.
         </p>
-        @if (string.IsNullOrWhiteSpace(Model.RedirectUrl))
+        @if (!string.IsNullOrWhiteSpace(Model.RedirectUrl))
         {
-            <a class="button" href="/">Go back to the service home page</a>
+            <a class="button" href="@Model.RedirectUrl">@Model.FlashMessage.RedirectButtonMessage</a>
+
+        }
+        else if (ViewBag.AccountId != null)
+        {
+            <a class="button" href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.AccountId})">Go back to the account home page</a>
         }
         else
         {
-            <a class="button" href="@Model.RedirectUrl">@Model.FlashMessage.RedirectButtonMessage</a>
+            <a class="button" href="/">Go back to the service home page</a>
         }
     </div>
 </div>
