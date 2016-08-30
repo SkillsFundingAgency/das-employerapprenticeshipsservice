@@ -3,7 +3,7 @@
 AS
 	select 
 		x.* ,
-		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.TopUpPercentage as Topup
+		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.TopUpPercentage as TopUp
 	FROM 
 		[levy].[GetLevyDeclarations] x
 	left join 

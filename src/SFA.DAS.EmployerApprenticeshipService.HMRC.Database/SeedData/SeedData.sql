@@ -17,4 +17,4 @@ GO
 insert into [levy].[TopUpPercentage]
 (datefrom,amount)
 values
-('2016-08-01 00:00:00.000',0.1)
+('2015-01-01 00:00:00.000',0.1)
