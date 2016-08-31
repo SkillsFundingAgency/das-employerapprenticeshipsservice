@@ -12,8 +12,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>SFA.DAS.EmployerApprenticeshipService.HMRC.Database</RootNamespace>
-    <AssemblyName>SFA.DAS.EmployerApprenticeshipService.HMRC.Database</AssemblyName>
+    <RootNamespace>SFA.DAS.EmployerApprenticeshipsService.HMRC.Database</RootNamespace>
+    <AssemblyName>SFA.DAS.EmployerApprenticeshipsService.HMRC.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
