@@ -129,6 +129,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
+            _empRefFileBasedService.Setup(x => x.GetEmpRef(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
