@@ -74,15 +74,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             var expectedEmpRef = "123/456789";
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>()))
-                .ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation() });
-            _empRefFileBasedService.Setup(x => x.GetEmpRef(scenarioUserEmail, It.IsAny<string>()))
-                .ReturnsAsync(expectedEmpRef);
-            
+                .ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation(), Empref = expectedEmpRef});
+          
             //Act
             var result = await _employerAccountOrchestrator.GetHmrcEmployerInformation("123", scenarioUserEmail);
             
             //Assert
-            _empRefFileBasedService.Verify(x => x.GetEmpRef(scenarioUserEmail, It.IsAny<string>()), Times.Once);
             Assert.AreEqual(expectedEmpRef, result.Empref);
         }
     }
