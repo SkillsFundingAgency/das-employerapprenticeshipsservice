@@ -1,27 +1,35 @@
 ﻿<div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">
-            Access my apprenticeship levy
+            Access my levy
         </h1>
-        <p class="">Use this service to access your organisation’s levy accounts.</p>
+        <p class="">Use this service to access and spend your levy on apprenticeships in England.</p>
     </div>
 </div>
 
 <div class="grid-row">
-    <div class="column-one-third">
-        <a class="button button-start" href="@Url.Action("SignIn", "Home")">Sign in or register</a>
+    <div class="column-full">
+        <h2 class="heading-large">Create your profile</h2>
+        <p>
+            You need to <a class="link" href="@Url.Action("RegisterUser", "Home")">create a profile</a> to:
+        </p>
+        <ul class="list list-bullet">
+            <li>create levy accounts</li>
+            <li>view financial information</li>
+            <li>create or amend apprenticeships</li>
+            <li>spend money</li>
+        </ul>
     </div>
 
 </div>
 <div class="grid-row">
-    <div class="column-quarter">
+    <div class="column-full">
+        <h2 class="heading-large">Log in to your profile</h2>
 
+        <p>You need your email address and password to <a class="link" href="@Url.Action("SignIn", "Home")"> log in</a>.</p>
 
+        @*<p><a href="#">Forgot your password</a></p>
 
-        <a class="" href="#">Forgot your password</a>
-
-        <a href="#">Unlock your account</a>
-
-        <a class="button" href="@Url.Action("Index", "EmployerAccount")">Create a new account</a>
-    </div>
+        <p><a href="#">Unlock your account</a></p>*@
+</div>
 </div>

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using IdentityServer3.Core.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication

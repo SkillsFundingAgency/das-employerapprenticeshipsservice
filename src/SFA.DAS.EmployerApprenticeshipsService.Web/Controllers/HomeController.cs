@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -11,11 +12,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     {
         private readonly IOwinWrapper _owinWrapper;
         private readonly HomeOrchestrator _homeOrchestrator;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator)
+        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
+            EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _owinWrapper = owinWrapper;
             _homeOrchestrator = homeOrchestrator;
+            _configuration = configuration;
         }
         
         public async Task<ActionResult> Index()
@@ -29,10 +33,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 return View(accounts);
             }
+
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
             
-            return View("ServiceLandingPage");
+            return View("ServiceLandingPage", model);
         }
 
+        [HttpGet]
+        public ActionResult RegisterUser()
+        {
+            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
+            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            //return new RedirectResult("https://ppidentity.apprenticeships.sfa.bis.gov.uk/Login/dialog/appl/selfcare/wflow/register?redirect_uri=https://localhost");
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?redirect_uri={schema}://{authority}");
+        }
 
         [Authorize]
         public ActionResult SignIn()

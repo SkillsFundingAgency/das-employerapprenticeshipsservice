@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using Microsoft.Owin;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
