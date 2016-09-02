@@ -92,10 +92,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 response.Empref = "";
             }
-
-            //Replaces the EmpRef with the correct scenario test empRef if the email is a test account
-            response.Empref = await _empRefFileBasedService.GetEmpRef(email, "empref_data") ?? response.Empref;
-
+            
             if (Configuration.Hmrc.IgnoreDuplicates && string.IsNullOrEmpty(response.Empref))
             {
                 if (string.IsNullOrEmpty(response.Empref))
