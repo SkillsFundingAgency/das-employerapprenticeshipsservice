@@ -3,7 +3,11 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-medium">Create invitation</h1>
+        <h1 class="heading-large">
+            Create invitation
+        </h1>
+
+        <p class="lede">Invite somebody to access this levy account.</p>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -19,46 +23,45 @@
         <form method="POST" action="@Url.Action("Invite")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="Email">Name</label>
-                <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
-                       aria-required="true" value="@Model.Name"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="Email">Email</label>
+                <label class="form-label" for="Email">
+                    Email address
+                    <span class="form-hint">An invitation will be sent to this email address</span>
+                </label>
                 <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
                        aria-required="true" value="@Model.Email"/>
             </div>
             <div class="form-group">
+                <label class="form-label" for="Name">Full name</label>
+                <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
+                       aria-required="true" value="@Model.Name" />
+            </div>
+            <label class="form-label">
+                Team member access
+                <span class="form-hint">Choose the level of access this user can have.</span>
+            </label>
+            <div class="form-group">
                 <label class="block-label" for="radio1">
                     <input id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "") />
                     <span class="heading-small">Viewer</span><br />
-                    A "Viewer" is a team member with limited access to the organisation's account.
-                    They can view contracts and account information, but not make changes to it.
+                    Can @(RoleStrings.ToWhatTheyCanDoLower(Role.Viewer)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio2">
                     <input id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "") />
                     <span class="heading-small">Transactor</span><br />
-                    A "Transactor" is a team member who can:<br />
-                    &ndash;&ensp;create new contracts<br />
-                    &ndash;&ensp;approve in-progress contracts<br />
-                    &ndash;&ensp;pause training payments<br />
-                    &ndash;&ensp;stop training payments
+                    Can @(RoleStrings.ToWhatTheyCanDoLower(Role.Transactor)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio3">
                     <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
                     <span class="heading-small">Owner</span><br />
-                    An "Owner" is a team member with full access to the organisation's account.
-                    They can do everything a Viewer or Transactor can and also<br />
-                    &ndash;&ensp;manage team members<br />
-                    &ndash;&ensp;manage PAYE schemes
+                    Can @(RoleStrings.ToWhatTheyCanDoLower(Role.Owner)).
                 </label>
             </div>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
-            <button type="submit" class="button">Create</button>
+            <button type="submit" class="button">Send invitation</button>
         </form>
     </div>
 </div>

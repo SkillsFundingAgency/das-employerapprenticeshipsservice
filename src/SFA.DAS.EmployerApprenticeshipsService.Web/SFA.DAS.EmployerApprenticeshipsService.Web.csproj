@@ -431,7 +431,6 @@
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\VisualTest\Index.cshtml" Condition=" '$(Configuration)' == 'Debug' " />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
-    <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />

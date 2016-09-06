@@ -111,6 +111,11 @@ table {
   font-weight: 700;
 }
 
+.responsive-detail {
+    font-weight: normal;
+    color: #A7A9AB;
+}
+
 @media (min-width: 641px) {
   .responsive-table .responsive-th,
   .responsive-table .responsive-td {

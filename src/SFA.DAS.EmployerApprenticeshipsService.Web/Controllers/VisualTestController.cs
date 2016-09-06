@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 ExternalUserId = Guid.NewGuid(),
                 InternalUserId = 123,
                 RoleId = 213,
-                RoleName = "Chief Executor"
+                RoleName = "Owner"
             };
             var aggregationLine = new AggregationLine
             {
