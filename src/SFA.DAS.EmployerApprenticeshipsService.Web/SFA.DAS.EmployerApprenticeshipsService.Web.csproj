@@ -285,6 +285,7 @@
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
@@ -302,6 +303,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
+    <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
@@ -325,6 +327,7 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -456,6 +459,7 @@
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\EmployerCommitments\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
