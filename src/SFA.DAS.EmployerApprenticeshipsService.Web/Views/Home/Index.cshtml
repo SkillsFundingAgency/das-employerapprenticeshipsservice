@@ -25,27 +25,24 @@
     
 </div>
 
-@if (Model.Data.Invitations != 0)
-{
     <div class="grid-row">
         <div class="column-two-thirds">
 
             <h2 class="heading-medium">Invitations</h2>
             @if (Model.Data.Invitations == 1)
             {
-                <p>You have @Model.Data.Invitations invitation to a levy account.</p>
+                <p>You have <span class="bold-small">@Model.Data.Invitations</span> invitation to a levy account.</p>
             }
             else
             {
-                <p>You have @Model.Data.Invitations invitations to levy accounts.</p>
-            }
-            
+                <p>You have <span class="bold-small">@(Model.Data.Invitations > 1 ? Model.Data.Invitations.ToString() : "no")</span> invitations to levy accounts.</p>
+            }            
             <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
 
             <hr/>
         </div>
     </div>
-}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h2 class="heading-medium">Levy accounts</h2>
