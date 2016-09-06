@@ -174,14 +174,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var employerAgreement = new EmployerAgreementView()
             {
                 AccountId = 0123456789,
-                ExpiredDate = new DateTime(2018, 7, 1),
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
                 LegalEntityRegisteredAddress = "123 Fake Street",
                 SignedByName = "Bojack Horseman",
                 SignedDate = new DateTime(2016, 8, 12),
-                Status = EmployerAgreementStatus.Signed,
+                Status = EmployerAgreementStatus.Pending,
                 TemplateId = 3,
                 TemplateText = "The good old template"
             };
