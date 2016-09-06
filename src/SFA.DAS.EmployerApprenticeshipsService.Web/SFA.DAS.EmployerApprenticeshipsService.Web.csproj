@@ -301,6 +301,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ICookieService.cs" />
+    <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />

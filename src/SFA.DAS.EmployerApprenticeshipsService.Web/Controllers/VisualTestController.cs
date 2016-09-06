@@ -240,7 +240,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
                         LineItem = aggregationLine
                     }},
-                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<long> {Data = 3 } },
+                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { AccountId = 3, ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
                 {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
