@@ -291,7 +291,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 Accounts = new Accounts()
                                 {
                                     AccountList = new List<Account>() {
-                                        new Account() {Id = 123, Name= "My account" }
+                                        new Account() {Id = 123, Name= "My account", RoleId = 1 }
                                     }
                                 },
                                 Invitations = 3

@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
 
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
@@ -72,7 +73,7 @@
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">What you can do</div>
-                                <div>@account.RoleName
+                                <div>@RoleStrings.ToWhatTheyCanDo(account.RoleName)
                                 </div>
                             </div>
                             <div class="responsive-td">
