@@ -245,6 +245,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
+                {"~/Views/EmployerAccountPaye/ErrorConfrimPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
                 {"~/Views/EmployerAccountPaye/Index.cshtml", new OrchestratorResponse<EmployerAccountPayeListViewModel>()
                 {
                     Data = new EmployerAccountPayeListViewModel()
