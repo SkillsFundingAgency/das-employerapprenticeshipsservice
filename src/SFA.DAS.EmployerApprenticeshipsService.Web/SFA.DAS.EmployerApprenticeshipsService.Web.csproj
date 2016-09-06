@@ -458,6 +458,14 @@
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
+      <Project>{dea2c098-ec17-4485-961d-a7f48720d37d}</Project>
+      <Name>SFA.DAS.Commitments.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Types\SFA.DAS.Commitments.Api.Types.csproj">
+      <Project>{aa3b3870-f97a-443b-8429-663de064a8ad}</Project>
+      <Name>SFA.DAS.Commitments.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>

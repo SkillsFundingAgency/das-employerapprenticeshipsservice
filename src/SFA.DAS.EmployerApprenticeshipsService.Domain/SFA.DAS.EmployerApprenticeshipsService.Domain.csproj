@@ -119,6 +119,7 @@
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
+    <Compile Include="Configuration\CommitmentsApiConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
