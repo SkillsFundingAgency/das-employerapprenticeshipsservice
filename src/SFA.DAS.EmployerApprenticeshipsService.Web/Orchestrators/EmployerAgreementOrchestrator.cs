@@ -6,11 +6,12 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
-    public class EmployerAgreementOrchestrator
+    public class EmployerAgreementOrchestrator : IEmployerAgreementOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
@@ -80,7 +81,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 };
             }
         }
-
+        
         public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId)
         {
             try
@@ -101,6 +102,42 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     Status = HttpStatusCode.Unauthorized
                 };
             }
+        }
+
+        public async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber)
+        {
+            var response = await _mediator.SendAsync(new GetEmployerInformationRequest
+            {
+                Id = companyNumber
+            });
+
+            if (response == null)
+            {
+                _logger.Warn("No response from SelectEmployerViewModel");
+                return new OrchestratorResponse<FindOrganisationViewModel>
+                {
+                    FlashMessage = new FlashMessageViewModel()
+                    {
+                        Message = "No companies match the company house number you have entered.",
+                        SubMessage = "Please try again."
+                    },
+                    Data = new FindOrganisationViewModel()
+                };
+            }
+
+            _logger.Info($"Returning Data for {companyNumber}");
+
+            return new OrchestratorResponse<FindOrganisationViewModel>
+            {
+                Data = new FindOrganisationViewModel
+                {
+                    AccountId = accountId,
+                    CompanyNumber = response.CompanyNumber,
+                    CompanyName = response.CompanyName,
+                    DateOfIncorporation = response.DateOfIncorporation,
+                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                }
+            };
         }
     }
 }

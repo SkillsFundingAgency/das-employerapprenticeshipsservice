@@ -1,0 +1,21 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SelectEmployerViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm Organisation</h1>
+        <div class="grid-row">
+            <h2 class="heading-medium">@Model.CompanyName</h2>
+            <p>Company House number: @Model.CompanyNumber</p>
+        </div>
+
+        <div class="grid-row">
+            <form action="@Url.Action("VerifyOrganisation")" method="POST">
+                <input type="hidden" id="companyHouseNumber" value="@Model.CompanyNumber" />
+                <span>
+                    <input class="button" type="submit" value="Select this company" />
+                    <a class="link" href="@Url.Action("Add")">Choose a different company</a>
+                </span>
+            </form>
+        </div>
+    </div>
+</div>

@@ -10,9 +10,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class EmployerAgreementController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
-        private readonly EmployerAgreementOrchestrator _orchestrator;
+        private readonly IEmployerAgreementOrchestrator _orchestrator;
 
-        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator)
+        public EmployerAgreementController(IOwinWrapper owinWrapper, IEmployerAgreementOrchestrator orchestrator)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(agreement);
         }
-
+        
         [HttpPost]
         public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
         {
@@ -74,6 +74,41 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             TempData["successMessage"] = "You must indicate that you have read and understood the terms";
 
             return RedirectToAction("View", new { agreementId = agreementid, accountId = accountId });
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
+        {
+            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber);
+            
+            return View(response.Data);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ViewEntityAgreement(
+            long accountId, string name, string code, string address, DateTime incorporated)
+        {
+            var response = await _orchestrator.Create(accountId, name, code, address, incorporated);
+
+            return View(response.Data);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateLegalEntity(long accountId, string name, 
+            string code, string address, DateTime incorporated, bool signedAgreement)
+        {
+            var agreementId = await _orchestrator.AddLegalEntityToAccount(accountId, name, code, address, incorporated);
+
+            if (!signedAgreement)
+            {
+                return RedirectToAction("Index", new { accountId });
+            }
+
+            //return await Sign(agreementId, accountId, "understood", name);
+
+            return RedirectToAction("Sign", 
+                new { agreementId = agreementId, accountId = accountId,
+                    understood = "understood", legalEntityName = name });
         }
     }
 }

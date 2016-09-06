@@ -1,7 +1,12 @@
-﻿@model dynamic
-
-<div class="grid-row">
+﻿<div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add agreement</h1>
+        <h1 class="heading-xlarge">Find your organisation</h1>
+        <form action="@Url.Action("FindLegalEntity")" method="POST">
+            <div class="form-group">
+                <label class="form-label">Company House number</label>
+                <input class="form-control form-control-3-4" type="text" name="entityReferenceNumber" id="companyHouseNumber"/>
+            </div>
+            <input class="button" id="findOrganisation" type="submit" value="Continue" />
+        </form>
     </div>
 </div>
