@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateComm
 
         protected override async Task HandleCore(CreateCommitmentCommand message)
         {
-            await _commitmentApi.CreateEmployerCommitment(message.commitment.EmployerAccountId, message.commitment);
+            await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
         }
     }
 }
