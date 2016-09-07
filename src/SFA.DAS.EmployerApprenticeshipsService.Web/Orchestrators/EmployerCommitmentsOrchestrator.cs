@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        internal async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(long accountid)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(long accountid)
         {
             var data = await _mediator.SendAsync(new GetCommitmentsQuery
             {
