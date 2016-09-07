@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
@@ -73,10 +75,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var provider = providers.Providers.SingleOrDefault(x => x.Id == commitment.ProviderId);
             var legalEntity = legalEntities.Entites.LegalEntityList.SingleOrDefault(x => x.Id == commitment.LegalEntityId);
 
-            //await _mediator.SendAsync(new CreateCommitmentCommand
-            //{
-
-            //});
+            await _mediator.SendAsync(new CreateCommitmentCommand
+            {
+                commitment = new Commitment
+                {
+                    Name = commitment.Name,
+                    EmployerAccountId = commitment.AccountId,
+                    LegalEntityId = commitment.LegalEntityId,
+                    LegalEntityName = legalEntity.Name,
+                    ProviderId = commitment.ProviderId,
+                    ProviderName = provider.Name
+                }
+            });
         }
     }
 }
