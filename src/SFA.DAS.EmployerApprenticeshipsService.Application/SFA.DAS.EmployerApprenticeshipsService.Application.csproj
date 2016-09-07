@@ -198,6 +198,9 @@
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseResponse.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseValidator.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />

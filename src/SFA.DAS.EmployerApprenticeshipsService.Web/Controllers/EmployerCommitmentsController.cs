@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
@@ -11,18 +12,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerCommitmentsController : BaseController
     {
-        private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
+        private readonly IOwinWrapper _owinWrapper;
 
-        public EmployerCommitmentsController(IOwinWrapper owinWrapper,
-            EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator)
+        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper)
         {
-            if (owinWrapper == null)
-                throw new ArgumentNullException(nameof(owinWrapper));
             if (employerCommitmentsOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
-            _owinWrapper = owinWrapper;
+            if (owinWrapper == null)
+                throw new ArgumentNullException(nameof(owinWrapper));
             _employerCommitmentsOrchestrator = employerCommitmentsOrchestrator;
+            _owinWrapper = owinWrapper;
         }
 
         [HttpGet]
@@ -31,6 +31,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var model = await _employerCommitmentsOrchestrator.GetAll(accountid);
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Create(long accountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, _owinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(CreateCommitmentViewModel commitment)
+        {
+            await _employerCommitmentsOrchestrator.Create(commitment, _owinWrapper.GetClaimValue(@"sub"));
+
+            return RedirectToAction("Index", new {accountId = commitment.AccountId});
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Details(long accountId, long commitmentId)
+        {
+            return RedirectToAction("Index", new { accountId = accountId });
         }
     }
 }
