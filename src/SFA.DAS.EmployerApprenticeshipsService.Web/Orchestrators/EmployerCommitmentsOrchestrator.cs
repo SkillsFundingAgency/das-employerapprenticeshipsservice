@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Id = accountId,
                 UserId = externalUserId
             });
-            //GetAccountLegalEntitiesRequest
+
             return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
             {
                 Data = new ExtendedCreateCommitmentViewModel
