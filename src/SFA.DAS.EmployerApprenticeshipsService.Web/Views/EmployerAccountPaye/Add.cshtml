@@ -1,22 +1,27 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<long>
-
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.BeginNewPayeScheme>
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add PAYE Scheme</h1>
-        <p>You can add multiple PAYE schemes to your account.</p>
-
-        <h2 class="heading-medium">Before you start</h2>
-
-        <p>
-            You need:
-            <ul class="list-bullet">
-                <li>Government Gateway ID</li>
-                <li>the PAYE schemes you want to link to the apprenticeship account</li>
-            </ul>
-        </p>
-        <a class="button" href="@Url.Action("GetGateway","EmployerAccountPaye",new {accountId = Model.Data})">Continue</a>
-        
+        <p><strong style="font-weight:bold">DRAFT CONTENT</strong> You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
+        <form method="GET" action="@Url.Action("GetGateway","EmployerAccountPaye")">
+            <div class="form-group @(Model.Data.ValidationFailed ? "error" : "")">
+                @if (Model.Data.ValidationFailed)
+                {
+                    <legend>
+                        <span class="error-message">DRAFT CONTENT!! Please confirm to proceed.</span>
+                    </legend>
+                }
+                <label class="block-label" for="confirmPayeVisibility">
+                    <input type="checkbox" id="confirmPayeVisibility" name="confirmPayeVisibility" value="true">
+                    I understand that all account users will be able to see financial information from any PAYE schemes I add.
+                </label>
+            </div>    
+            <input type="hidden" name="confirmPayeVisibility" value="false" />
+            <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
+            
+            <button class="button" type="submit">Continue</button>
+        </form>
     </div>
 </div>
 

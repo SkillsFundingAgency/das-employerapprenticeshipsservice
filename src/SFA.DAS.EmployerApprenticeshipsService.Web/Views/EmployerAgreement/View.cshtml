@@ -30,8 +30,18 @@
                 <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId" />
                 <input type="hidden" id="agreementId" name="agreementId" value="@Model.Data.EmployerAgreement.Id" />
                 <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName" />
-                <input class="checkbox" id="understood" name="understood" type="checkbox" value="understood">
-                <label for="understood">I have read and understood the agreement</label>
+                <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
+                    @if (TempData["notunderstood"] != null)
+                    {
+                        <legend>
+                            <span class="error-message">You must indicate that you have read and understood the terms</span>
+                        </legend>
+                    }
+                    <label class="block-label" for="understood">
+                        <input type="checkbox" id="understood" name="understood" value="understood">
+                        I have read and understood the agreement
+                    </label>
+                </div>   
                 <p></p>
                 <input class="button" id="signAgreement" type="submit" value="Sign agreement">
             </form>
