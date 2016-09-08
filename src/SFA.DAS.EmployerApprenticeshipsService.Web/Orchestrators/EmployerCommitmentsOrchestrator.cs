@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     LegalEntityId = commitment.LegalEntityId,
                     LegalEntityName = legalEntity.Name,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = provider.Name
+                    ProviderName = provider?.Name
                 }
             });
         }

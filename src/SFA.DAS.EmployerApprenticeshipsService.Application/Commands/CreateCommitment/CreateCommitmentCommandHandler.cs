@@ -5,11 +5,11 @@ using SFA.DAS.Commitments.Api.Client;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment
 {
-    public sealed class CreateCommitmentHandler : AsyncRequestHandler<CreateCommitmentCommand>
+    public sealed class CreateCommitmentCommandHandler : AsyncRequestHandler<CreateCommitmentCommand>
     {
         private readonly ICommitmentsApi _commitmentApi;
 
-        public CreateCommitmentHandler(ICommitmentsApi commitmentApi)
+        public CreateCommitmentCommandHandler(ICommitmentsApi commitmentApi)
         {
             if (commitmentApi == null)
                 throw new ArgumentNullException(nameof(commitmentApi));

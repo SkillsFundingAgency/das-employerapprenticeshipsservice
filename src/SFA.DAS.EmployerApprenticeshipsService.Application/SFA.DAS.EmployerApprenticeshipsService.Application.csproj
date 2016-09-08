@@ -89,7 +89,7 @@
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
-    <Compile Include="Commands\CreateCommitment\CreateCommitmentHandler.cs" />
+    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommand.cs" />
