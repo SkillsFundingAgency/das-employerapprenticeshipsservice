@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             await _mediator.SendAsync(new CreateCommitmentCommand
             {
-                commitment = new Commitment
+                Commitment = new Commitment
                 {
                     Name = commitment.Name,
                     EmployerAccountId = commitment.AccountId,
