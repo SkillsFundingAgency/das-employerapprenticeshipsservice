@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 ExternalUserId = Guid.NewGuid(),
                 InternalUserId = 123,
                 RoleId = 213,
-                RoleName = "Chief Executor"
+                RoleName = "Owner"
             };
             var aggregationLine = new AggregationLine
             {
@@ -174,14 +174,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var employerAgreement = new EmployerAgreementView()
             {
                 AccountId = 0123456789,
-                ExpiredDate = new DateTime(2018, 7, 1),
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
                 LegalEntityRegisteredAddress = "123 Fake Street",
                 SignedByName = "Bojack Horseman",
                 SignedDate = new DateTime(2016, 8, 12),
-                Status = EmployerAgreementStatus.Signed,
+                Status = EmployerAgreementStatus.Pending,
                 TemplateId = 3,
                 TemplateText = "The good old template"
             };
@@ -240,11 +239,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
                         LineItem = aggregationLine
                     }},
-                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<long> {Data = 3 } },
+                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { AccountId = 3, ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
                 {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
-                {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", addNewPayeScheme },
+                {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
+                {"~/Views/EmployerAccountPaye/ErrorConfrimPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
                 {"~/Views/EmployerAccountPaye/Index.cshtml", new OrchestratorResponse<EmployerAccountPayeListViewModel>()
                 {
                     Data = new EmployerAccountPayeListViewModel()
@@ -290,7 +290,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                                 Accounts = new Accounts()
                                 {
                                     AccountList = new List<Account>() {
-                                        new Account() {Id = 123, Name= "My account" }
+                                        new Account() {Id = 123, Name= "My account", RoleId = 1 }
                                     }
                                 },
                                 Invitations = 3
