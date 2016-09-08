@@ -119,6 +119,7 @@
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
+    <Compile Include="Configuration\CommitmentsApiConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Data\IInvitationRepository.cs" />
     <Compile Include="Data\IMembershipRepository.cs" />
     <Compile Include="Data\INotificationRepository.cs" />
+    <Compile Include="Data\IProviderRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="DepedencyResolution\ConfigurationPolicy.cs" />
@@ -191,6 +193,8 @@
     <Compile Include="Paye.cs" />
     <Compile Include="PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider.cs" />
+    <Compile Include="Providers.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
     <Compile Include="Schemes.cs" />

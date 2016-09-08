@@ -285,6 +285,7 @@
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
@@ -303,8 +304,10 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
+    <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
+    <Compile Include="Models\CreateCommitmentViewModel.cs" />
     <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementViewModel.cs" />
@@ -326,6 +329,7 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -390,6 +394,7 @@
     <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="App_Data\Providers\provider_data.json" />
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -456,8 +461,18 @@
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\EmployerCommitments\Index.cshtml" />
+    <Content Include="Views\EmployerCommitments\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
+      <Project>{dea2c098-ec17-4485-961d-a7f48720d37d}</Project>
+      <Name>SFA.DAS.Commitments.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Types\SFA.DAS.Commitments.Api.Types.csproj">
+      <Project>{aa3b3870-f97a-443b-8429-663de064a8ad}</Project>
+      <Name>SFA.DAS.Commitments.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
