@@ -20,6 +20,7 @@ using System.Configuration;
 using System.Reflection;
 using MediatR;
 using Microsoft.Azure;
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             RegisterMediator();
 
-            
+            For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<string>().Is(config.CommitmentsApi.BaseUrl);
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
