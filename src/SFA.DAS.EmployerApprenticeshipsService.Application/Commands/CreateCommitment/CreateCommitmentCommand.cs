@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateComm
 {
     public sealed class CreateCommitmentCommand : IAsyncRequest
     {
-        public Commitment commitment { get; set; }
+        public Commitment Commitment { get; set; }
     }
 }
