@@ -139,6 +139,7 @@
     <Compile Include="Data\IMembershipRepository.cs" />
     <Compile Include="Data\INotificationRepository.cs" />
     <Compile Include="Data\IProviderRepository.cs" />
+    <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="DepedencyResolution\ConfigurationPolicy.cs" />
@@ -198,6 +199,7 @@
     <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
     <Compile Include="Schemes.cs" />
+    <Compile Include="Standard.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />

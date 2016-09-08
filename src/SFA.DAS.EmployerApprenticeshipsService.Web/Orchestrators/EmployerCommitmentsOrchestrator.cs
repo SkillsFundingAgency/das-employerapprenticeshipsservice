@@ -5,8 +5,11 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -87,6 +90,61 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     ProviderName = provider?.Name
                 }
             });
+        }
+
+        public async Task<CommitmentViewModel> Get(long accountId, long commitmentId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId
+            });
+
+            return new CommitmentViewModel
+            {
+                Commitment = data.Commitment
+            };
+        }
+
+        public async Task<object> GetApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
+
+            var apprenticeship = MapFrom(data.Apprenticeship);
+
+            apprenticeship.AccountId = accountId;
+
+            return new ExtendedApprenticeshipViewModel
+            {
+                Apprenticeship = apprenticeship,
+                Standards = standards.Standards
+            };
+        }
+        private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
+        {
+            return new ApprenticeshipViewModel
+            {
+                Id = apprenticeship.Id,
+                CommitmentId = apprenticeship.CommitmentId,
+                FirstName = apprenticeship.FirstName,
+                LastName = apprenticeship.LastName,
+                ULN = apprenticeship.ULN,
+                TrainingId = apprenticeship.TrainingId,
+                Cost = apprenticeship.Cost,
+                StartMonth = apprenticeship.StartDate?.Month,
+                StartYear = apprenticeship.StartDate?.Year,
+                EndMonth = apprenticeship.EndDate?.Month,
+                EndYear = apprenticeship.EndDate?.Year,
+                Status = apprenticeship.Status.ToString(),
+                AgreementStatus = apprenticeship.AgreementStatus.ToString()
+            };
         }
     }
 }
