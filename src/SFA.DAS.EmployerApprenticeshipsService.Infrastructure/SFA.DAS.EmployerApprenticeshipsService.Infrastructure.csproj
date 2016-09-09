@@ -95,6 +95,7 @@
     <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemProviderRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
+    <Compile Include="Data\FileSystemStandardsRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\AggregationRepository.cs" />
