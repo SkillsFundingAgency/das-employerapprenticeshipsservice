@@ -1,0 +1,39 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web;
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+
+@model OrchestratorResponse<EmployerAgreementViewModel>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Agreement for @Model.Data.EmployerAgreement.LegalEntityName</h1>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>
+            You can't access levy funds and hire an apprentice through @Model.Data.EmployerAgreement.LegalEntityName
+            until you sign the following agreement.
+        </p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>@Model.Data.EmployerAgreement.TemplateText</p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form action="@Url.Action("CreateLegalEntity")" method="POST">
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId" />
+            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName" />
+            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode"/>
+            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress"/>
+            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate" />
+            <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true"/>
+            <label for="userAuthorised">I've been authorised by my organisation to sign this agreement</label>
+            <button class="button" id="signAgreement" type="submit" name="submit" value="Sign">Sign and add organisation</button>
+            <button class="link" id="createEntity" type="submit" name="submit" value="DoNotSign">Add organisation, but don't sign</button>
+        </form>
+    </div>
+</div>

@@ -3,10 +3,15 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEmployerAgreementTemplate;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -25,7 +30,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
             _logger = logger;
         }
+        
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
+            long accountId, string name, string code, string address, DateTime incorporatedDate)
+        {
+            var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest());
 
+            return new OrchestratorResponse<EmployerAgreementViewModel>
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = new EmployerAgreementView
+                    {
+                        AccountId = accountId,
+                        LegalEntityName = name,
+                        LegalEntityCode = code,
+                        LegalEntityRegisteredAddress = address,
+                        LegalEntityIncorporatedDate = incorporatedDate,
+                        Status = EmployerAgreementStatus.Pending,
+                        TemplateRef = response.Template.Ref,
+                        TemplateText = response.Template.Text
+                    }
+                }
+            };
+        }
+        
         public async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(long accountId, string externalUserId)
         {
             try
@@ -54,7 +83,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(long agreementid, long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
+            long agreementid, long accountId, string externalUserId)
         {
             try
             {
@@ -81,7 +111,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 };
             }
         }
-        
+
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetByLegalEntityCode(
+            long accountId, string legalEntityCode, string externalUserId)
+        {
+            var response = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            {
+                AccountId = accountId,
+                LegalEntityCode = legalEntityCode
+            });
+
+            return new OrchestratorResponse<EmployerAgreementViewModel>
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = response.EmployerAgreement
+                } 
+            };
+        }
+
         public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId)
         {
             try
@@ -137,6 +185,62 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     DateOfIncorporation = response.DateOfIncorporation,
                     RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
                 }
+            };
+        }
+        
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntity request)
+        {
+            if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
+            {
+                var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest());
+
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel
+                    {
+                        EmployerAgreement = new EmployerAgreementView
+                        {
+                            AccountId = request.AccountId,
+                            LegalEntityName = request.Name,
+                            LegalEntityCode = request.Code,
+                            LegalEntityRegisteredAddress = request.Address,
+                            LegalEntityIncorporatedDate = request.IncorporatedDate,
+                            Status = EmployerAgreementStatus.Pending,
+                            TemplateRef = response.Template.Ref,
+                            TemplateText = response.Template.Text
+                        }
+                    },
+                    FlashMessage = new FlashMessageViewModel()
+                    {
+                        Headline = "Agreement cannot be signed",
+                        Message = "You need to confirm that you have authorisation to sign this agreement",
+                        Severity = FlashMessageSeverityLevel.Warning
+                    },
+                    Status = HttpStatusCode.BadRequest
+                };
+            }
+
+            var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
+            {
+                AccountId = request.AccountId,
+                LegalEntity = new LegalEntity
+                {
+                    Name = request.Name,
+                    Code = request.Code,
+                    RegisteredAddress = request.Address,
+                    DateOfIncorporation = request.IncorporatedDate
+                },
+                SignAgreement =  request.UserIsAuthorisedToSign && request.SignedAgreement,
+                ExternalUserId = request.ExternalUserId
+            });
+            
+            return new OrchestratorResponse<EmployerAgreementViewModel>
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = createLegalEntityResponse.AgreementView
+                } ,
+                Status = HttpStatusCode.OK
             };
         }
     }

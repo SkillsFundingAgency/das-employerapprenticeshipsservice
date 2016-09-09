@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.SelectEmployerViewModel
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.FindOrganisationViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -9,8 +9,12 @@
         </div>
 
         <div class="grid-row">
-            <form action="@Url.Action("VerifyOrganisation")" method="POST">
-                <input type="hidden" id="companyHouseNumber" value="@Model.CompanyNumber" />
+            <form action="@Url.Action("ViewEntityAgreement")" method="POST">
+                <input type="hidden" name="accountId" value="@Model.AccountId" />
+                <input type="hidden" name="name" value="@Model.CompanyName"/>
+                <input type="hidden" name="code" value="@Model.CompanyNumber"/>
+                <input type="hidden" name="address" value="@Model.RegisteredAddress"/>
+                <input type="hidden" name="incorporated" value="@Model.DateOfIncorporation"/>
                 <span>
                     <input class="button" type="submit" value="Select this company" />
                     <a class="link" href="@Url.Action("Add")">Choose a different company</a>

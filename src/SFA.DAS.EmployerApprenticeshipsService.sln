@@ -56,6 +56,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,5 +159,6 @@ Global
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{8A2A2059-CB81-4336-8D08-BDCB37901B96} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

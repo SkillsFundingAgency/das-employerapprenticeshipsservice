@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Net;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
@@ -33,12 +37,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        public ActionResult Add()
+        public ActionResult Add(long accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
-            return View();
+            return View(new AddLegalEntityViewModel {AccountId = accountId});
         }
 
         public async Task<ActionResult> View(long agreementid, long accountId)
@@ -85,30 +89,58 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ViewEntityAgreement(
-            long accountId, string name, string code, string address, DateTime incorporated)
+        public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
+            DateTime incorporated)
         {
             var response = await _orchestrator.Create(accountId, name, code, address, incorporated);
 
-            return View(response.Data);
+            return View(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateLegalEntity(long accountId, string name, 
-            string code, string address, DateTime incorporated, bool signedAgreement)
+        public async Task<ActionResult> CreateLegalEntity(
+            long accountId, string name, string code, string address, DateTime incorporated, 
+            bool? userIsAuthorisedToSign, string submit)
         {
-            var agreementId = await _orchestrator.AddLegalEntityToAccount(accountId, name, code, address, incorporated);
-
-            if (!signedAgreement)
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            
+            if (string.IsNullOrWhiteSpace(userIdClaim))
             {
-                return RedirectToAction("Index", new { accountId });
+                return RedirectToAction("Index", "Home");
             }
 
-            //return await Sign(agreementId, accountId, "understood", name);
+            var request = new CreateNewLegalEntity
+            {
+                AccountId = accountId,
+                Name = name,
+                Code = code,
+                Address = address,
+                IncorporatedDate = incorporated,
+                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
+                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
+                ExternalUserId = userIdClaim
+            };
 
-            return RedirectToAction("Sign", 
-                new { agreementId = agreementId, accountId = accountId,
-                    understood = "understood", legalEntityName = name });
+            var response = await _orchestrator.CreateLegalEntity(request);
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK; // We will deal with the error here
+                return View("ViewEntityAgreement", response); //Redirect back to same page to change issue
+            }
+
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"{name} has been added to the levy account");
+
+            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
+            {
+                builder.AppendLine($"Agreement for {name} has been signed)");
+            }
+
+            TempData["successMessage"] = builder.ToString();
+
+            return RedirectToAction("Index", new { accountId });
         }
     }
 }

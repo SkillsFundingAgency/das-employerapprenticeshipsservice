@@ -98,6 +98,9 @@
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
@@ -184,6 +187,12 @@
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementResponse.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateQueryHandler.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequest.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementQueryHandler.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementRequest.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
