@@ -11,6 +11,14 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
+        @if (Model.Data.Commitments.Count == 0)
+        {
+            <p class="panel panel-info">
+                There are no commitments.
+            </p>
+        }
+        else
+        {
         <div class="responsive-table">
             <div class="responsive-thead">
                 <div class="responsive-tr">
@@ -39,8 +47,8 @@
                         <div class="responsive-td">
                             <div>
                                 <form action="@Url.Action("Details")" method="GET">
-                                    <input type="hidden" name="accountId" value="@commitment.EmployerAccountId" />
-                                    <input type="hidden" name="commitmentId" value="@commitment.Id" />
+                                    <input type="hidden" name="accountId" value="@commitment.EmployerAccountId"/>
+                                    <input type="hidden" name="commitmentId" value="@commitment.Id"/>
                                     <button type="submit" name="commitment" class="button">View</button>
                                 </form>
                             </div>
@@ -50,6 +58,7 @@
                 }
             </div>
         </div>
+        }
     </div>
 </div>
 <form action="@Url.Action("Create")" method="GET">
