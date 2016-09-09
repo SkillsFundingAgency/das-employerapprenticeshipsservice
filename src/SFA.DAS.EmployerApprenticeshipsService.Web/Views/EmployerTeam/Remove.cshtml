@@ -1,11 +1,12 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.InvitationViewModel
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.InvitationViewModel
 
 @{
     var name = Model.Name ?? Model.Email;
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Delete Team Member</h2>
+        <h1 class="heading-large">@name</h1>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -18,26 +19,35 @@
                 }
             }
         }
-        <p>Are you sure that you want to delete @name?</p>
+        <table class="th-nopadding">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.Email</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>What they can do</td>
+                    <td>@RoleStrings.ToWhatTheyCanDo(Model.Role)</td>
+                    <td><a href="@Url.Action("ChangeRole", new { accountId = Model.AccountId, email = Model.Email })">Change</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
         <form action="@Url.Action("Remove")" method="POST">
             @Html.AntiForgeryToken()
-            <div class="form-group">
-                <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="remove" value="0" checked>
-                    No, don't delete @name
-                </label>
-            </div>
-            <div class="form-group">
-                <label class="block-label" for="radio2">
-                    <input id="radio2" type="radio" name="remove" value="1">
-                    Yes, delete @name
-                </label>
-            </div>
+            <input type="hidden" id="remove" name="remove" value="1" />
             <input type="hidden" id="UserId" name="UserId" value="@Model.Id"/>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
             <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
-            <button type="submit" class="button">Continue</button>
+            <button type="submit" class="button">Remove team member</button>
         </form>
-        <p></p>
     </div>
 </div>

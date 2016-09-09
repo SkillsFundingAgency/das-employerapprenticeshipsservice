@@ -37,14 +37,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(int accountId)
+        public async Task<ActionResult> View(int accountId, FlashMessageViewModel flashMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
 
-               return View(response);
+            // DANGER: Directly injected messages trump orchestrator responses
+            if (flashMessage != null) response.FlashMessage = flashMessage;
+            return View(response);
         }
 
         [HttpGet]
@@ -84,18 +86,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View(model);
             }
 
-            TempData["successMessage"] = $"Invite sent to {model.Email}";
+            var successMessage = new FlashMessageViewModel()
+            {
+                Severity = FlashMessageSeverityLevel.Success,
+                Headline = "Invitation sent",
+                Message = $"You've sent an invitation to {model.Email}"
+            };
 
-            return RedirectToAction("View", new { accountId = model.AccountId });
+            return RedirectToAction("View", new { accountId = model.AccountId, flashMessage = successMessage });
         }
-
-        [HttpGet]
-        public async Task<ActionResult> Review(long accountId, string email)
-        {
-            var model = await _employerTeamOrchestrator.Review(accountId, email);
-
-            return View(model);
-        }
+        
 
         [HttpGet]
         public async Task<ActionResult> Cancel(long id)
@@ -112,17 +112,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
             if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
 
-            var successMessage = "";
+            FlashMessageViewModel successMessage = null;
             if (cancel == 1)
             {
                 await _employerTeamOrchestrator.Cancel(email, accountId, userIdClaim.Value);
 
-                successMessage = $"Cancelled invitation to {email}";
+                successMessage = new FlashMessageViewModel() {
+                    Headline = "Invitation cancelled",
+                    Message = $"You've cancelled the invitation sent to {email}",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
             }
 
-            TempData["successMessage"] = successMessage;
-
-            return RedirectToAction("View", new { accountId = accountId });
+            return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
         }
 
         [HttpPost]
@@ -156,18 +158,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             try
             {
-                var successMessage = "";
+                FlashMessageViewModel successMessage = null;
 
                 if (remove == 1)
                 {
                     await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
 
-                    successMessage = $"Removed {email} from the Account";
+                    successMessage = new FlashMessageViewModel()
+                    {
+                        Headline = "Team member removed",
+                        Message = $"You've removed the profile for {email}",
+                        Severity = FlashMessageSeverityLevel.Success
+                    };
                 }
 
-                TempData["successMessage"] = successMessage;
-
-                return RedirectToAction("View", new { accountId = accountId });
+                return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {
@@ -201,7 +206,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
 
-                return RedirectToAction("View", new { accountId = accountId });
+                var successMessage = new FlashMessageViewModel()
+                {
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = "Team member updated",
+                    Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
+                };
+                return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {

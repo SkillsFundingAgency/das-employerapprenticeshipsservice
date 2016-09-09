@@ -41,17 +41,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add(long accountId)
+        public async Task<ActionResult> Add(long accountId, bool? validationFailed)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, _owinWrapper.GetClaimValue("email"),Url.Action("Index", "EmployerAccountPaye", new { accountId }));
 
+            if (validationFailed.HasValue && validationFailed.Value)
+            {
+                response.Data.ValidationFailed = true;
+            }
+                
             return View(response);
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetGateway(long accountId)
+        public async Task<ActionResult> GetGateway(long accountId, bool confirmPayeVisibility)
         {
-            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
+            if (confirmPayeVisibility)
+            {
+                return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
+            }
+            else
+            {
+                return Redirect(Url.Action("Add", new { accountId = accountId }));
+            }
         }
 
         [HttpGet]

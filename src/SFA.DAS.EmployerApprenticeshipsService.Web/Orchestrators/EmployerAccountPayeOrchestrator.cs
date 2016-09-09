@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<long>> CheckUserIsOwner(long accountId, string email, string redirectUrl)
+        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(long accountId, string email, string redirectUrl)
         {
             HttpStatusCode status = HttpStatusCode.OK;
 
@@ -92,9 +92,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 }
             }
 
-            return new OrchestratorResponse<long>
+            return new OrchestratorResponse<BeginNewPayeScheme>
             {
-                Data = accountId,
+                Data = new BeginNewPayeScheme { AccountId = accountId } ,
                 Status = status,
                 FlashMessage = new FlashMessageViewModel
                 {

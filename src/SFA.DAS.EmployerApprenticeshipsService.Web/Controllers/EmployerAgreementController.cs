@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
@@ -27,12 +28,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountId)
+        public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var model = await _orchestrator.Get(accountId, userIdClaim);
+
+            //DANGER: Injected flash messages override the orchestrator response
+            if (flashMessage != null) model.FlashMessage = flashMessage;
 
             return View(model);
         }
@@ -45,12 +49,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(new AddLegalEntityViewModel {AccountId = accountId});
         }
 
-        public async Task<ActionResult> View(long agreementid, long accountId)
+        public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var agreement = await _orchestrator.GetById(agreementid, accountId, userIdClaim);
+            
+            //DANGER: Injected flash messages override the orchestrator response
+            if (flashMessage != null) agreement.FlashMessage = flashMessage;
 
             return View(agreement);
         }
@@ -67,17 +74,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    TempData["successMessage"] = $"Agreement for {legalEntityName} has been signed";
+                    var successMessage = new FlashMessageViewModel()
+                    {
+                        Headline = "Agreement signed",
+                        Message = $"You've signed the agreement for {legalEntityName}",
+                        Severity = FlashMessageSeverityLevel.Success
+                    };
 
-                    return RedirectToAction("Index", new {accountId = accountId});
+                    return RedirectToAction("Index", new {accountId = accountId, flashMessage = successMessage });
                 }
 
                 return View("DeadView", response);
             }
 
-            TempData["successMessage"] = "You must indicate that you have read and understood the terms";
-
-            return RedirectToAction("View", new { agreementId = agreementid, accountId = accountId });
+            TempData["notunderstood"] = new object();
+            var errorMessage = new FlashMessageViewModel()
+            {
+                Message = "You must indicate that you have read and understood the terms",
+                Severity = FlashMessageSeverityLevel.Danger
+            };          
+            return RedirectToAction("View", new { agreementId = agreementid, accountId = accountId, flashMessage = errorMessage });
         }
         
         [HttpPost]

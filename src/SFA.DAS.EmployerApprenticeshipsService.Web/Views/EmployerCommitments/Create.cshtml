@@ -1,0 +1,44 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Create commitment</h1>
+        <hr />
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("Create")">
+            <div class="form-group">
+                <label class="form-label" for="Name">Name</label>
+                <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
+                       aria-required="true" />
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="ProviderId">Provider</label>
+                <select name="ProviderId" id="ProviderId" class="form-control" aria-label="Training Provider">
+                    <option value=""></option>
+                    @foreach (var provider in Model.Data.Providers)
+            {
+                        <option value="@provider.Id">@provider.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="LegalEntityId">Legal Entity</label>
+                <select name="LegalEntityId" id="LegalEntityId" class="form-control" aria-label="Legal Entity">
+                    <option value=""></option>
+                    @foreach (var legalEntity in Model.Data.LegalEntities)
+            {
+                        <option value="@legalEntity.Id">@legalEntity.Name</option>
+                    }
+                </select>
+            </div>
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.Commitment.AccountId" />
+            <button type="submit" class="button">Create</button>
+        </form>
+    </div>
+</div>

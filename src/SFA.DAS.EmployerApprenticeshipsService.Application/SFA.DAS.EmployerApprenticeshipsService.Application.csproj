@@ -87,6 +87,9 @@
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
+    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommand.cs" />
+    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
+    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommand.cs" />
     <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommand.cs" />
@@ -152,6 +155,15 @@
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
+    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
+    <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
+    <Compile Include="Queries\GetCommitments\GetCommitmentsHandler.cs" />
+    <Compile Include="Queries\GetCommitments\GetCommitmentsQuery.cs" />
+    <Compile Include="Queries\GetCommitments\GetCommitmentsResponse.cs" />
+    <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
+    <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
+    <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
@@ -204,6 +216,12 @@
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseResponse.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseValidator.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
+    <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />
+    <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
+    <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
+    <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
@@ -221,6 +239,14 @@
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
+      <Project>{DEA2C098-EC17-4485-961D-A7F48720D37D}</Project>
+      <Name>SFA.DAS.Commitments.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Types\SFA.DAS.Commitments.Api.Types.csproj">
+      <Project>{AA3B3870-F97A-443B-8429-663DE064A8AD}</Project>
+      <Name>SFA.DAS.Commitments.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
