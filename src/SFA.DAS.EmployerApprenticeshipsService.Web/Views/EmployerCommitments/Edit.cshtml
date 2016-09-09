@@ -81,7 +81,10 @@
                     </div>
                 </fieldset>
             </div>
-            <input type="hidden" id="status" name="status" value="@Model.Apprenticeship.Status" />
+            <div class="form-group">
+                <label class="form-label" for="status">Status</label>
+                <label class="" id="status" name="status">@Model.Apprenticeship.Status</label>
+            </div>
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.Apprenticeship.AgreementStatus" />
             <input type="hidden" id="accountId" name="accountId" value="@Model.Apprenticeship.AccountId" />
             <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
