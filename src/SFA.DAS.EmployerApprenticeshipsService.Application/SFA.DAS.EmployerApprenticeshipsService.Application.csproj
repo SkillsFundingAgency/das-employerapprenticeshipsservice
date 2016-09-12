@@ -121,6 +121,8 @@
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
+    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
+    <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
