@@ -471,6 +471,7 @@
     <Content Include="Views\EmployerCommitments\Create.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
+    <Content Include="Views\EmployerTeam\Review.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
