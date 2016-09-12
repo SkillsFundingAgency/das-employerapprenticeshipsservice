@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,6 +7,7 @@ using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEmployerAgreementTemplate;
@@ -152,8 +154,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber)
+        public async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber, string userIdClaim)
         {
+            var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                Id = accountId,
+                UserId = userIdClaim
+            });
+
+            if (accountEntities.Entites.LegalEntityList.Any(
+                x => x.Code.Equals(companyNumber, StringComparison.CurrentCultureIgnoreCase)))
+            {
+                return new OrchestratorResponse<FindOrganisationViewModel>
+                {
+                    Data = new FindOrganisationViewModel(),
+                    Status = HttpStatusCode.Conflict
+                };
+            }
+
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
             {
                 Id = companyNumber
@@ -164,12 +182,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 _logger.Warn("No response from SelectEmployerViewModel");
                 return new OrchestratorResponse<FindOrganisationViewModel>
                 {
-                    FlashMessage = new FlashMessageViewModel()
-                    {
-                        Message = "No companies match the company house number you have entered.",
-                        SubMessage = "Please try again."
-                    },
-                    Data = new FindOrganisationViewModel()
+                    Data = new FindOrganisationViewModel(),
+                    Status = HttpStatusCode.NotFound
                 };
             }
 
@@ -209,12 +223,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text
                         }
-                    },
-                    FlashMessage = new FlashMessageViewModel()
-                    {
-                        Headline = "Agreement cannot be signed",
-                        Message = "You need to confirm that you have authorisation to sign this agreement",
-                        Severity = FlashMessageSeverityLevel.Warning
                     },
                     Status = HttpStatusCode.BadRequest
                 };

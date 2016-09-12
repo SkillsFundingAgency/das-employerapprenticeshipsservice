@@ -38,6 +38,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult Add(long accountId)
+        {
+            var response = new OrchestratorResponse<AddLegalEntityViewModel>
+            {
+                Data = new AddLegalEntityViewModel {AccountId = accountId},
+                Status = HttpStatusCode.OK
+            };
+
+            return View(response);
+        }
+
         public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
@@ -88,9 +100,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
         {
-            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber);
-            
-            return View(response.Data);
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
+
+            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, userIdClaim);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return View(response.Data);
+            }
+
+              var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+            {
+                Data = new AddLegalEntityViewModel { AccountId = accountId },
+                Status = HttpStatusCode.OK,
+            };
+
+            if (response.Status == HttpStatusCode.NotFound)
+            {
+                TempData["companyNumberError"] = "No company found. Please try again";
+            }
+
+            if (response.Status == HttpStatusCode.Conflict)
+            {
+                TempData["companyNumberError"] = "Enter a company that isn't already registered";
+            }
+
+            return View("Add", errorResponse);
         }
 
         [HttpPost]
@@ -131,19 +167,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 response.Status = HttpStatusCode.OK; // We will deal with the error here
+
+                TempData["userNotAuthorised"] = "true";
+
                 return View("ViewEntityAgreement", response); //Redirect back to same page to change issue
             }
 
-            var builder = new StringBuilder();
-
-            builder.AppendLine($"{name} has been added to the levy account");
-
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
             {
-                builder.AppendLine($"Agreement for {name} has been signed)");
+                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
+                TempData["successMessage"] = "This account can now spend levy funds";
             }
-
-            TempData["successMessage"] = builder.ToString();
+            else
+            {
+                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
+                TempData["successMessage"] = "To spend the levy funs somebody needs to sign the agreement";
+            }
 
             return RedirectToAction("Index", new { accountId });
         }

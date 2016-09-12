@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -16,7 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId);
 
-        Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber);
+        Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber, string userIdClaim);
 
         Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(long accountId, string name, string code,
             string address, DateTime incorporated);

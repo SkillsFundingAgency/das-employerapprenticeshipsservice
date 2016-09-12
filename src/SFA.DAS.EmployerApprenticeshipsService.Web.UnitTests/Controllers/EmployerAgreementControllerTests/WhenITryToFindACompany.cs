@@ -38,11 +38,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 RegisteredAddress = "1 Test Road, Test City, TE12 3ST"
             };
 
-            _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<long>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<FindOrganisationViewModel>
                 {
                     Data = viewModel
                 });
+
+            var username = "user";
+            _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(username);
 
             //Act
             var result = await _controller.FindLegalEntity(viewModel.AccountId, viewModel.CompanyNumber) as ViewResult;
@@ -50,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             //Assert
             Assert.IsNotNull(result);
 
-            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.AccountId, viewModel.CompanyNumber), Times.Once);
+            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.AccountId, viewModel.CompanyNumber, username), Times.Once);
 
             var model = result.Model as SelectEmployerViewModel;
             Assert.IsNotNull(model);
