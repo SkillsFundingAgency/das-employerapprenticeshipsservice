@@ -37,8 +37,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(int accountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> View(int accountId)
         {
+            FlashMessageViewModel flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
+
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
@@ -93,7 +95,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 Message = $"You've sent an invitation to {model.Email}"
             };
 
-            return RedirectToAction("View", new { accountId = model.AccountId, flashMessage = successMessage });
+            TempData["flashMessage"] = successMessage;
+            return RedirectToAction("View", new { accountId = model.AccountId });
         }
         
 
@@ -240,6 +243,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private void AddExceptionToModelError(Exception ex)
         {
             ModelState.AddModelError("", $"Unexpected exception: {ex.Message}");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Review(int accountId, string email)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+
+            return View(invitation);
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.ApplicationInsights.DataContracts;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public class FlashMessageViewModel
+    public class FlashMessageViewModel 
     {
         public string Headline { get; set; }
 

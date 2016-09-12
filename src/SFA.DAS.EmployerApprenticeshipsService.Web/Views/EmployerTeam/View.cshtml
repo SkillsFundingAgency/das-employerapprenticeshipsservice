@@ -74,12 +74,9 @@
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <a aria-label="Edit details for @teamMember.Name"
-                                        title="Edit details for @teamMember.Name"
-                                        href="@(teamMember.Status == InvitationStatus.Pending
-                                                    ? Url.Action("Cancel", new { id = Model.Data.AccountId })
-                                                    : Url.Action("Remove", new { accountId = Model.Data.AccountId, email = Model.Data.AccountId})
-                                                )">Edit</a>
+                                    <a aria-label="View details for @teamMember.Name"
+                                       - title="View details for @teamMember.Name"
+                                       - href="@Url.Action("Review", new { accountId = Model.Data.AccountId, email = teamMember.Email })">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
