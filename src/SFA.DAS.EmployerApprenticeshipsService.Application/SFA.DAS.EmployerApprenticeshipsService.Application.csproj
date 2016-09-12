@@ -103,6 +103,9 @@
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
+    <Compile Include="Commands\CreateTask\CreateTaskCommand.cs" />
+    <Compile Include="Commands\CreateTask\CreateTaskCommandHandler.cs" />
+    <Compile Include="Commands\CreateTask\CreateTaskCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
@@ -244,6 +247,14 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
+      <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
+      <Name>SFA.DAS.Tasks.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
+      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
+      <Name>SFA.DAS.Tasks.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

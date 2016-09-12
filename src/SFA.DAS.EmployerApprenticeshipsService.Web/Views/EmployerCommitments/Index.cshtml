@@ -63,6 +63,7 @@
                                     <form action="@Url.Action("Submit")" method="POST">
                                         <input type="hidden" name="accountId" value="@commitment.EmployerAccountId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />
+                                        <input type="hidden" name="providerId" value="@commitment.ProviderId" />
                                         <button type="submit" name="commitment" class="button">Submit</button>
                                     </form>
                                 </div>

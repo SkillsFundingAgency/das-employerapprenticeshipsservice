@@ -90,6 +90,8 @@
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
+    <Compile Include="Commands\CreateTaskTests\WhenCreatingATask.cs" />
+    <Compile Include="Commands\CreateTaskTests\WhenValidatingCreateTaskCommand.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIProcessNotificationCommand.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIValidateProcessNotificationCommand.cs" />
@@ -148,6 +150,14 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
+      <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
+      <Name>SFA.DAS.Tasks.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
+      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
+      <Name>SFA.DAS.Tasks.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
