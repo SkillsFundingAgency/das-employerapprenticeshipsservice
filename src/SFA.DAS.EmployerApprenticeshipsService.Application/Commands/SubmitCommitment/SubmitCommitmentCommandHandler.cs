@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment
 {
@@ -16,7 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
         {
-            //await _commitmentApi.PatchCommitment(message.AccountId, message.CommitmentId);
+            await _commitmentApi.PatchEmployerCommitment(message.AccountId, message.CommitmentId, CommitmentStatus.Active);
 
             throw new NotImplementedException();
         }
