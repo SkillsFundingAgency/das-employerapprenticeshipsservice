@@ -11,6 +11,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public string DashboardUrl { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public string DatabaseConnectionString { get; set; }
-        public CommitmentsApiConfiguration CommitmentsApi { get; set; }
     }
 }

@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiConfiguration>("SFA.DAS.Commitments"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy(ServiceName));
                 c.AddRegistry<DefaultRegistry>();

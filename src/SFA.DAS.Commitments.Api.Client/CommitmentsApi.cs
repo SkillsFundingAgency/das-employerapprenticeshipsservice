@@ -13,9 +13,9 @@ namespace SFA.DAS.Commitments.Api.Client
     {
         private readonly string _baseUrl;
 
-        public CommitmentsApi(EmployerApprenticeshipsServiceConfiguration configuration)
+        public CommitmentsApi(CommitmentsApiConfiguration configuration)
         {
-            _baseUrl = configuration.CommitmentsApi.BaseUrl;
+            _baseUrl = configuration.BaseUrl;
         }
 
         public async Task CreateEmployerCommitment(long employerAccountId, Commitment commitment)
