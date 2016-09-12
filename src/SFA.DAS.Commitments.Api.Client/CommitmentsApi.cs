@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.Commitments.Api.Client
 {
@@ -12,11 +13,9 @@ namespace SFA.DAS.Commitments.Api.Client
     {
         private readonly string _baseUrl;
 
-        public CommitmentsApi(string baseUrl)
+        public CommitmentsApi(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            if (baseUrl == null)
-                throw new ArgumentNullException(nameof(baseUrl));
-            _baseUrl = baseUrl;
+            _baseUrl = configuration.CommitmentsApi.BaseUrl;
         }
 
         public async Task CreateEmployerCommitment(long employerAccountId, Commitment commitment)
