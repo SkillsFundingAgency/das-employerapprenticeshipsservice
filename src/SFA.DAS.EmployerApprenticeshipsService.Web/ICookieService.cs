@@ -15,8 +15,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
     {
         public void Create(HttpContextBase context, string name, string content, int expireDays)
         {
-            var userCookie = new HttpCookie(name, content);
-            userCookie.Expires.AddDays(expireDays);
+            var userCookie = new HttpCookie(name, content)
+            {
+                Expires = DateTime.Now.AddDays(expireDays),
+                Secure = true,
+                HttpOnly = true
+            };
             context.Response.Cookies.Add(userCookie);
         }
 
