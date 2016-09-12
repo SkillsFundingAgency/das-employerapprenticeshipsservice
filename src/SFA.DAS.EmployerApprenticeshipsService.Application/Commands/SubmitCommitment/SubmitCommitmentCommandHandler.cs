@@ -17,9 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
         {
-            await _commitmentApi.PatchEmployerCommitment(message.AccountId, message.CommitmentId, CommitmentStatus.Active);
-
-            throw new NotImplementedException();
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, CommitmentStatus.Active);
         }
     }
 }

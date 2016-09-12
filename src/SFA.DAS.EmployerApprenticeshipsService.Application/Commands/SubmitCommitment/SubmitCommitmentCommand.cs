@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
 {
     public sealed class SubmitCommitmentCommand : IAsyncRequest
     {
-        public long AccountId { get; set; }
+        public long EmployerAccountId { get; set; }
         public long CommitmentId { get; set; }
     }
 }

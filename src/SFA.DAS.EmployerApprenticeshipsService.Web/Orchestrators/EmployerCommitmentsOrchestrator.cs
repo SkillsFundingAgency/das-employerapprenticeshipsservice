@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task SubmitCommitment(long accountId, long commitmentId)
         {
-            await _mediator.SendAsync(new SubmitCommitmentCommand { AccountId = accountId, CommitmentId = commitmentId });
+            await _mediator.SendAsync(new SubmitCommitmentCommand { EmployerAccountId = accountId, CommitmentId = commitmentId });
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
