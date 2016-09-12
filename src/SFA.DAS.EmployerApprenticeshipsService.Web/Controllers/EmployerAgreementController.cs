@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
@@ -39,14 +36,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (flashMessage != null) model.FlashMessage = flashMessage;
 
             return View(model);
-        }
-
-        public ActionResult Add(long accountId)
-        {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            return View(new AddLegalEntityViewModel {AccountId = accountId});
         }
 
         public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
