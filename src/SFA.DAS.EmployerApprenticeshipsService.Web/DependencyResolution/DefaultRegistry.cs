@@ -36,15 +36,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-        
+        private const string ServiceNamespace = "SFA.DAS";
         
         public DefaultRegistry() {
 
             Scan(
                 scan =>
                 {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
-
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
@@ -61,8 +60,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             }
 
             RegisterMediator();
-
-            For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<string>().Is(config.CommitmentsApi.BaseUrl);
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()

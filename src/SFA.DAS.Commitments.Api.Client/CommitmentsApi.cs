@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.Commitments.Api.Client
 {
@@ -12,11 +13,9 @@ namespace SFA.DAS.Commitments.Api.Client
     {
         private readonly string _baseUrl;
 
-        public CommitmentsApi(string baseUrl)
+        public CommitmentsApi(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            if (baseUrl == null)
-                throw new ArgumentNullException(nameof(baseUrl));
-            _baseUrl = baseUrl;
+            _baseUrl = configuration.CommitmentsApi.BaseUrl;
         }
 
         public async Task CreateEmployerCommitment(long employerAccountId, Commitment commitment)
@@ -45,6 +44,13 @@ namespace SFA.DAS.Commitments.Api.Client
             var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             return await GetApprenticeship(url);
+        }
+
+        public async Task PatchEmployerCommitment(int employerAccountId, int commitmentId, CommitmentStatus status)
+        {
+            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
+
+            await PatchCommitment(url, status);
         }
 
         public async Task UpdateEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, Apprenticeship apprenticeship)
@@ -96,6 +102,12 @@ namespace SFA.DAS.Commitments.Api.Client
             var content = await PostAsync(url, data);
 
             return JsonConvert.DeserializeObject<Commitment>(content);
+        }
+
+        private async Task PatchCommitment(string url, CommitmentStatus status)
+        {
+            var data = JsonConvert.SerializeObject(status);
+            await PatchAsync(url, data);
         }
 
         private async Task<List<CommitmentListItem>> GetCommitments(string url)
@@ -200,6 +212,36 @@ namespace SFA.DAS.Commitments.Api.Client
                 using (var client = new HttpClient())
                 {
                     var requestMessage = new HttpRequestMessage(HttpMethod.Put, url)
+                    {
+                        Content = new StringContent(data, Encoding.UTF8, "application/json")
+                    };
+
+                    // Add custom headers
+                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
+
+                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
+                    var response = await client.SendAsync(requestMessage);
+                    content = await response.Content.ReadAsStringAsync();
+                    response.EnsureSuccessStatusCode();
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw;
+            }
+
+            return content;
+        }
+
+        private async Task<string> PatchAsync(string url, string data)
+        {
+            var content = "";
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var requestMessage = new HttpRequestMessage(new HttpMethod("PATCH"), url)
                     {
                         Content = new StringContent(data, Encoding.UTF8, "application/json")
                     };
