@@ -494,6 +494,10 @@
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
+      <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
+      <Name>SFA.DAS.Tasks.Api.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

@@ -24,7 +24,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateTask
             var task = new ApiTypes.Task
             {
                 Assignee = assignee,
-                Body = "A new commitment is ready for review."
+                Body = "A new commitment is ready for review.",
+                TaskTemplateId = 1 //TODO: LWA - What should this be?
             };
 
             await _tasksApi.CreateTask(task.Assignee, task);
