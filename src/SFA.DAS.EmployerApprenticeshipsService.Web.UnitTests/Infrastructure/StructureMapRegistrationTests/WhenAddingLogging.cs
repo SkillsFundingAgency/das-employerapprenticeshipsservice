@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+﻿using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
