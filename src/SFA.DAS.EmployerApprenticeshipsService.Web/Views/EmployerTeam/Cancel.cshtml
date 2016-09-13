@@ -1,26 +1,42 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Domain.InvitationView
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@model SFA.DAS.EmployerApprenticeshipsService.Domain.InvitationView
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-medium">Cancel Invitation</h1>
-        <p>Are you sure that you want to cancel the invitation for @Model.Name?</p>
+        <h1 class="heading-large">Cancel invitation</h1>
+        <h2 class="heading-medium">@Model.Name</h2>
+        <table class="th-nopadding">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Email</td>
+                    <td>@Model.Email</td>
+                </tr>
+                <tr>
+                    <td>What they can do</td>
+                    <td>@RoleStrings.ToWhatTheyCanDo(Model.RoleName)<td>
+                </tr>
+            </tbody>
+        </table>
+        <p></p>
         <form action="@Url.Action("Cancel")" method="POST">
             @Html.AntiForgeryToken()
-            <div class="form-group">
-                <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="cancel" value="0" checked>
-                    No, don't cancel the invitation to @Model.Name
-                </label>
-            </div>
-            <div class="form-group">
-                <label class="block-label" for="radio2">
-                    <input id="radio2" type="radio" name="cancel" value="1">
-                    Yes, cancel the invitation to @Model.Name
-                </label>
-            </div>
+            <input type="hidden" id="cancel" name="cancel" value="1" />
             <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
-            <button type="submit" class="button">Continue</button>
+            <button type="submit" class="button">Cancel invitation</button>
+        </form>
+        <p></p>
+        <form action="@Url.Action("Resend")" method="POST">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="Email" name="Email" value="@Model.Email" />
+            <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
+            <button type="submit" class="button">Resend Invitation</button>
         </form>
     </div>
 </div>

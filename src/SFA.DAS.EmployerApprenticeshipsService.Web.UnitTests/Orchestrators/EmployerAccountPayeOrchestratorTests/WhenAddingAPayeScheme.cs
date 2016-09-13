@@ -160,7 +160,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId,"");
 
             //act
-            Assert.IsAssignableFrom<OrchestratorResponse<long>>(actual);
+            Assert.IsAssignableFrom<OrchestratorResponse<BeginNewPayeScheme>>(actual);
             Assert.AreEqual(HttpStatusCode.Unauthorized,actual.Status);
         }
     }

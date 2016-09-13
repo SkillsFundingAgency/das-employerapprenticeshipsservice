@@ -20,6 +20,7 @@ using System.Configuration;
 using System.Reflection;
 using MediatR;
 using Microsoft.Azure;
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
@@ -28,6 +29,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.Tasks.Api.Client;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -35,15 +37,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     
     public class DefaultRegistry : Registry {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-        
+        private const string ServiceNamespace = "SFA.DAS";
         
         public DefaultRegistry() {
 
             Scan(
                 scan =>
                 {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceName));
-
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 
@@ -61,7 +62,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             RegisterMediator();
 
-            
+            // TODO: LWA - Is there another way?
+            For<ITasksApi>().Use<TasksApi>().Ctor<string>().Is("http://localhost:21482/");
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()

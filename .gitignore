@@ -253,3 +253,4 @@ paket-files/
 src/Tools/**/*.*
 **/*.orig
 src/ReleaseTemplate.sql
+*.jfm

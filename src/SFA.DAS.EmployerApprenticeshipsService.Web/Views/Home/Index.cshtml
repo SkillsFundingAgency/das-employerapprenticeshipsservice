@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
 
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
@@ -13,45 +14,21 @@
 }
 
 
-
-<div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">
-            @HttpContext.Current.User.Identity.Name
-            <p class="heading-secondary">Your profile</p>
-        </h1>
-        <hr class="wide"/>
-    </div>
-    
-</div>
-
-@if (Model.Data.Invitations != 0)
-{
-    <div class="grid-row">
-        <div class="column-two-thirds">
-
-            <h2 class="heading-medium">Invitations</h2>
-            @if (Model.Data.Invitations == 1)
-            {
-                <p>You have @Model.Data.Invitations invitation to a levy account.</p>
-            }
-            else
-            {
-                <p>You have @Model.Data.Invitations invitations to levy accounts.</p>
-            }
-            
-            <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
-
-            <hr/>
-        </div>
-    </div>
-}
 <div class="grid-row">
     <div class="column-two-thirds">
         <h2 class="heading-medium">Levy accounts</h2>
+       
         @if (Model.Data.Accounts.AccountList.Count == 0)
         {
-            <p>You don't have access to any levy accounts. You can create a new levy account or ask your account admin to invite you to an existing one.</p>
+
+            <p>With levy accounts you can:</p>
+            <ul class="list list-bullet">
+                <li>view financial information</li>
+                <li>create or amend apprenticeships</li>
+                <li>spend money</li>
+            </ul>
+            <p>At the moment, you don't have access to any levy accounts. You need to be invited to an account or add a new one.</p>
+
         }
         else
         {
@@ -75,7 +52,7 @@
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">What you can do</div>
-                                <div>@account.RoleName
+                                <div>@RoleStrings.ToWhatTheyCanDo(account.RoleName)
                                 </div>
                             </div>
                             <div class="responsive-td">
@@ -87,15 +64,38 @@
                                 <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
-                        
+
                     }
 
                 </div>
             </div>
         }
         <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Create new account</a>
+        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Add new account</a>
         <p></p>
     </div>
 </div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h4 class="heading-medium">Invitiations</h4>
+        @if (Model.Data.Invitations == 0)
+        {
+            <section class="invites-none">
+                <p>You currently have <strong class="bold-small">no</strong> invitations to levy accounts. But you can contact your account admin to request an invitation.</p>
+            </section>
+        }
+        else
+        {
+            <section class="invites-none">
+                <p>
+                    You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations==1?"":"s") to employer accounts.
+                </p>
+                <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
+            </section>
+        }           
+    </div>
+</div>
+
+
 

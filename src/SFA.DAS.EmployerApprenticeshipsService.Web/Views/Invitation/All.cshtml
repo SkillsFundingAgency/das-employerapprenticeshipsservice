@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels.UserInvitationsViewModel
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@model SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels.UserInvitationsViewModel
 
 
 <div class="grid-row">
@@ -43,7 +44,7 @@
                                 </div>
                                 <div class="responsive-td">
                                     <div class="responsive-inner-caption">what you can do</div>
-                                    <div>@invitation.RoleName</div>
+                                    <div>@RoleStrings.ToWhatTheyCanDo(@invitation.RoleName)</div>
                                 </div>
                                 <div class="responsive-td">
                                     <div class="responsive-inner-caption">Expires in</div>

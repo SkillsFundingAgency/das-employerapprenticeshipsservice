@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Web;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
@@ -15,8 +16,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
     {
         public void Create(HttpContextBase context, string name, string content, int expireDays)
         {
-            var userCookie = new HttpCookie(name, content);
-            userCookie.Expires.AddDays(expireDays);
+
+            var plainTextBytes = Encoding.UTF8.GetBytes(content);
+            var encodedContent = Convert.ToBase64String(plainTextBytes);
+
+            var userCookie = new HttpCookie(name, encodedContent)
+            {
+                Expires = DateTime.Now.AddDays(expireDays),
+                Secure = true,
+                HttpOnly = true,
+            };
+
             context.Response.Cookies.Add(userCookie);
         }
 
@@ -24,10 +34,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         {
             var cookie = context.Request.Cookies[name];
 
+            var plainTextBytes = Encoding.UTF8.GetBytes(content);
+            var encodedContent = Convert.ToBase64String(plainTextBytes);
+
             if (cookie != null)
             {
-                cookie.Value = content;
-
+                cookie.Value = encodedContent;
+                
                 context.Response.SetCookie(cookie);
             }
         }
@@ -47,7 +60,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 
         public object Get(HttpContextBase context, string name)
         {
-            return context.Request.Cookies[name].Value;
+            var base64EncodedBytes = System.Convert.FromBase64String(context.Request.Cookies[name].Value);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
     }
 
