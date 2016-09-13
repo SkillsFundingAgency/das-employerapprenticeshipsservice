@@ -20,12 +20,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", employerId, DbType.Int64);
+                parameters.Add("@accountId", employerId, DbType.Int64);
 
                 return await c.QueryAsync<Scheme>(
-                    sql: "SELECT * FROM [account].[Paye] WHERE AccountId = @id;",
+                    sql: "[account].[GetPayeSchemes_ByAccountId]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return new Schemes

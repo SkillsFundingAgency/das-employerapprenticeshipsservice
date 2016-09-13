@@ -33,6 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
+                parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
@@ -50,7 +51,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accessToken", accessToken, DbType.String);
