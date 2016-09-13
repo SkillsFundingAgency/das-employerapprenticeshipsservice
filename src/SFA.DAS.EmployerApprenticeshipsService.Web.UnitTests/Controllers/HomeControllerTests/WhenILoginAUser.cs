@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
     {
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<HomeOrchestrator> _homeOrchestrator;
+        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private HomeController _homeController;
 
         [SetUp]
@@ -23,8 +25,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         {
             _owinWrapper = new Mock<IOwinWrapper>();
             _homeOrchestrator = new Mock<HomeOrchestrator>();
+            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object);
+            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object);
         }
 
         [Test]
