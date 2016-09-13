@@ -47,7 +47,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-            return new RedirectResult("https://ppidentity.apprenticeships.sfa.bis.gov.uk/Login/dialog/appl/selfcare/wflow/register");
+
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register");
         }
 
         [Authorize]
