@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement
@@ -17,6 +18,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
+
+            if (item.SignedDate == default(DateTime))
+                validationResult.AddError("SignedDate", "No SignedDate supplied");
 
             return validationResult;
         }

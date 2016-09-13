@@ -29,7 +29,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             {
                 AccountId = 1,
                 AgreementId = 2,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid().ToString(),
+                SignedDate = DateTime.Now
             };
 
             _owner = new MembershipView
@@ -51,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(3));
+            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
         }
 
         [Test]
@@ -130,7 +131,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             await _handler.Handle(_command);
 
-            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}"), Times.Once);
+            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}", _command.SignedDate), Times.Once);
         }
     }
 }
