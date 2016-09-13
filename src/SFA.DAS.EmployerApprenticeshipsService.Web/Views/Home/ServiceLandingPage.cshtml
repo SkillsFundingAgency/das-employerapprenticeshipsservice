@@ -3,33 +3,32 @@
         <h1 class="heading-xlarge">
             Access my levy
         </h1>
-        <p class="">Use this service to access and spend your levy on apprenticeships in England.</p>
+        <p class="">You can use this service to access and spend your levy on apprenticeships in England.</p>
     </div>
 </div>
 
 <div class="grid-row">
     <div class="column-full">
-        <h2 class="heading-large">Create your profile</h2>
+        <h2 class="heading-medium">Create an account</h2>
         <p>
-            You need to <a class="link" href="@Url.Action("RegisterUser", "Home")">create a profile</a> to:
+            You need to create an account to:
         </p>
         <ul class="list list-bullet">
-            <li>create levy accounts</li>
             <li>view financial information</li>
             <li>create or amend apprenticeships</li>
             <li>spend money</li>
+            <li>accept invitations you've recieved</li>
         </ul>
+        <a class="button button-start" href="@Url.Action("RegisterUser", "Home")">Create account</a> 
     </div>
 
 </div>
 <div class="grid-row">
     <div class="column-full">
-        <h2 class="heading-large">Log in to your profile</h2>
+        <h2 class="heading-medium">Sign in</h2>
 
-        <p>You need your email address and password to <a class="link" href="@Url.Action("SignIn", "Home")"> log in</a>.</p>
+        <p>If you already have an account, you just need your email address and password to sign in.</p>
 
-        @*<p><a href="#">Forgot your password</a></p>
-
-        <p><a href="#">Unlock your account</a></p>*@
+        <a class="button" href="@Url.Action("SignIn", "Home")">Sign in</a>
 </div>
 </div>
