@@ -29,6 +29,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.Tasks.Api.Client;
 using StructureMap;
 using StructureMap.Graph;
 
@@ -60,6 +61,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             }
 
             RegisterMediator();
+
+            // TODO: LWA - Is there another way?
+            For<ITasksApi>().Use<TasksApi>().Ctor<string>().Is("http://localhost:21482/");
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()

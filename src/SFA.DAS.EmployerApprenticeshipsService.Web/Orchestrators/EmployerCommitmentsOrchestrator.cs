@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateTask;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment;
@@ -127,6 +129,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Standards = standards.Standards
             };
         }
+
+        public async Task SubmitCommitment(long accountId, long commitmentId, long providerId)
+        {
+            await _mediator.SendAsync(new SubmitCommitmentCommand { EmployerAccountId = accountId, CommitmentId = commitmentId });
+
+            await _mediator.SendAsync(new CreateTaskCommand { ProviderId = providerId });
+
+        }
+
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel

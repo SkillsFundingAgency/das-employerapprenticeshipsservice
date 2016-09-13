@@ -79,17 +79,18 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h4 class="heading-medium">Invitiations</h4>
-        @if (Model.Data.Invitations == 1)
+        @if (Model.Data.Invitations == 0)
         {
             <section class="invites-none">
-                <p>You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitations to employer accounts.
-                </p>
+                <p>You currently have <strong class="bold-small">no</strong> invitations to levy accounts. But you can contact your account admin to request an invitation.</p>
             </section>
         }
         else
         {
             <section class="invites-none">
-                <p>You currently have <strong class="bold-small">@(Model.Data.Invitations > 1 ? Model.Data.Invitations.ToString() : "no")</strong> invitations to levy accounts. But you can contact your account admin to request an invitation.</p>
+                <p>
+                    You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations==1?"":"s") to employer accounts.
+                </p>
                 <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
             </section>
         }           
