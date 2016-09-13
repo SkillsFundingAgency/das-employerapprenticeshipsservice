@@ -475,6 +475,7 @@
     <Content Include="Views\EmployerCommitments\Create.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
+    <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
   </ItemGroup>
