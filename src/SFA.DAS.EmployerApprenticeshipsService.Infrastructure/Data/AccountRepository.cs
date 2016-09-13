@@ -61,6 +61,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                     sql: "[account].[CreatePaye]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
+
+                var accountHistoryParams = new DynamicParameters();
+                accountHistoryParams.Add("@AccountId", accountId, DbType.Int64);
+                accountHistoryParams.Add("@PayeRef", employerRef, DbType.String);
+                accountHistoryParams.Add("@AddedDate", DateTime.UtcNow, DbType.DateTime);
+
+                await c.ExecuteAsync(
+                    sql: "[account].[CreateAccountHistory]",
+                    param: accountHistoryParams,
+                    commandType: CommandType.StoredProcedure, transaction: trans);
+
+
                 trans.Commit();
                 return result;
             });
@@ -79,6 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@employerRef", payeScheme.EmpRef, DbType.String);
                 parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
                 parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
+                parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(

@@ -6,7 +6,8 @@
 	@CompanyDateOfIncorporation DATETIME,
 	@employerRef  NVARCHAR(16),
 	@accessToken VARCHAR(30),
-	@refreshToken VARCHAR(30)
+	@refreshToken VARCHAR(30),
+	@addedDate DATETIME
 AS
 BEGIN
 	DECLARE @legalEntityId BIGINT
@@ -14,7 +15,9 @@ BEGIN
 
 	EXEC [account].[CreateLegalEntity] @companyNumber,@companyName,@CompanyAddress,@CompanyDateOfIncorporation,@legalEntityId OUTPUT
 
-	EXEC [account].[CreatePaye] @accountId, @legalEntityId,@employerRef,@accessToken, @refreshToken
+	EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+
+	EXEC [account].[CreateAccountHistory] @accountId,@employerRef,@addedDate
 
 	EXEC [account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
 
