@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement
 {
@@ -7,5 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
         public long AgreementId { get; set; }
         public long AccountId { get; set; }
         public string ExternalUserId { get; set; }
+        public DateTime SignedDate { get; set; }
     }
 }

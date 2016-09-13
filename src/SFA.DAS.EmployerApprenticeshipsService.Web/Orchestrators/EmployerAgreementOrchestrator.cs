@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId)
+        public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId, DateTime signedDate)
         {
             try
             {
@@ -89,7 +89,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     AgreementId = agreementid,
                     AccountId = accountId,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    SignedDate = signedDate
                 });
 
                 return new OrchestratorResponse();
