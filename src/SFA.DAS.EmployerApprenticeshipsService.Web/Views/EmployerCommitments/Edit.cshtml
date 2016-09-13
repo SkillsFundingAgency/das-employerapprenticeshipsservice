@@ -4,7 +4,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Update apprenticeship</h1>
+        <h1 class="heading-xlarge">Apprenticeship Details</h1>
         <hr />
     </div>
 </div>
@@ -13,33 +13,23 @@
         <form method="POST" action="@Url.Action("Update")">
             <div class="form-group">
                 <label class="form-label" for="FirstName">First Name</label>
-                <input class="form-control form-control-3-4" id="FirstName" name="FirstName" type="text"
-                       aria-required="true" value="@Model.Apprenticeship.FirstName" />
+                <label name="FirstName">@Model.Apprenticeship.FirstName</label>
             </div>
             <div class="form-group">
                 <label class="form-label" for="LastName">Last Name</label>
-                <input class="form-control form-control-3-4" id="LastName" name="LastName" type="text"
-                       aria-required="true" value="@Model.Apprenticeship.LastName" />
+                <label name="LastName">@Model.Apprenticeship.LastName</label>
             </div>
             <div class="form-group">
                 <label class="form-label" for="ULN">ULN</label>
-                <input class="form-control form-control-3-4" id="ULN" name="ULN" type="text"
-                       aria-required="true" value="@Model.Apprenticeship.ULN" />
+                <label name="ULN">@Model.Apprenticeship.ULN</label>
             </div>
             <div class="form-group">
                 <label class="form-label" for="cost">Cost</label>
-                <input class="form-control form-control-3-4" id="cost" name="cost" type="number"
-                       aria-required="true" value="@Model.Apprenticeship.Cost" />
+                <label name="cost">@Model.Apprenticeship.Cost</label>
             </div>
             <div class="form-group">
                 <label class="form-label" for="TrainingId">Training</label>
-                <select name="TrainingId" id="TrainingId" class="form-control" aria-label="Training standard">
-                    <option value=""></option>
-                    @foreach (var standard in Model.Standards)
-                    {
-                        <option value="@standard.Name" @if (standard.Name == Model.Apprenticeship.TrainingId) { @Html.Raw("selected=''") ; }>@standard.Name</option>
-                    }
-                </select>
+                <label name="TrainingId">@Model.Apprenticeship.TrainingId</label>
             </div>
             <div class="form-group">
                 <fieldset>
@@ -49,14 +39,12 @@
                     <div class="form-date">
                         <div class="form-group form-group-month">
                             <label class="form-label" for="startMonth">Month</label>
-                            <input class="form-control" id="startMonth" name="startMonth" type="number"
-                                   min="1" max="12" placeholder="MM" value="@Model.Apprenticeship.StartMonth">
+                            <label name="startMonth">@Model.Apprenticeship.StartMonth</label>
                         </div>
                         <div class="form-group form-group-year">
 
                             <label class="form-label" for="startYear">Year</label>
-                            <input class="form-control" id="startYear" name="startYear" type="number"
-                                   min="2016" max="2030" placeholder="YYYY" value="@Model.Apprenticeship.StartYear">
+                            <label name="startYear">@Model.Apprenticeship.StartYear</label>
                         </div>
                     </div>
                 </fieldset>
@@ -70,13 +58,11 @@
                     <div class="form-date">
                         <div class="form-group form-group-month">
                             <label class="form-label" for="endMonth">Month</label>
-                            <input class="form-control" id="endMonth" name="endMonth" type="number"
-                                   min="1" max="12" placeholder="MM" value="@Model.Apprenticeship.EndMonth">
+                            <label name="endMonth">@Model.Apprenticeship.EndMonth</label>
                         </div>
                         <div class="form-group form-group-year">
                             <label class="form-label" for="endYear">Year</label>
-                            <input class="form-control" id="endYear" name="endYear" type="number"
-                                   min="2016" max="2030" placeholder="YYYY" value="@Model.Apprenticeship.EndYear">
+                            <label name="endYear">@Model.Apprenticeship.EndYear</label>
                         </div>
                     </div>
                 </fieldset>
@@ -89,7 +75,7 @@
             <input type="hidden" id="accountId" name="accountId" value="@Model.Apprenticeship.AccountId" />
             <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
             <input type="hidden" id="id" name="id" value="@Model.Apprenticeship.Id" />
-            <button type="submit" class="button">Update</button>
+            <button type="submit" class="button">Back</button>
         </form>
     </div>
 </div>

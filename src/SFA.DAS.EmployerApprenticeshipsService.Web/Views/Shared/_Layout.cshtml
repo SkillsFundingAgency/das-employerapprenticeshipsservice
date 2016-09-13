@@ -91,7 +91,10 @@
                 }
                 else
                 {
-                    <a href="@Url.Action("SignIn","Home")">Sign in / Register</a>
+                    if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                    {
+                        <a href="@Url.Action("SignIn", "Home")">Sign in / Register</a>
+                    }
                 }
             </div>
         </div>

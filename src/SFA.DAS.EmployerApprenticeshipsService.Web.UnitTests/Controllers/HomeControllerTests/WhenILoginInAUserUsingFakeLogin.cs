@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -13,13 +14,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
     {
         private Mock<IOwinWrapper> _owinWrapper;
         private HomeController _homeController;
+        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
 
         [SetUp]
         public void Arrange()
         {
             _owinWrapper = new Mock<IOwinWrapper>();
-
-            _homeController = new HomeController(_owinWrapper.Object,null);
+            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>()
+                ;
+            _homeController = new HomeController(_owinWrapper.Object,null, _configuration.Object);
         }
 
         [Test]
