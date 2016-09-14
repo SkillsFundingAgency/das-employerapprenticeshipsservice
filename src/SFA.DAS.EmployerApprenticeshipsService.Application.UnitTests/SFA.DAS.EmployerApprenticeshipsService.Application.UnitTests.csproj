@@ -95,6 +95,7 @@
     <Compile Include="Commands\ProcessNotificationTests\WhenIValidateProcessNotificationCommand.cs" />
     <Compile Include="Commands\ReleaseEmployerAgreementTemplateTests\WhenIReleaseAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
+    <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
