@@ -78,6 +78,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
+        public Task RemovePayeFromAccount(long accountId, string payeRef)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity)
         {
             await WithConnection(async c =>
