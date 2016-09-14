@@ -78,9 +78,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
         }
 
-        public Task RemovePayeFromAccount(long accountId, string payeRef)
+        public async Task RemovePayeFromAccount(long accountId, string payeRef)
         {
-            throw new NotImplementedException();
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@PayeRef", payeRef, DbType.String);
+                parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
+                
+                var result = await c.ExecuteAsync(
+                   sql: "[account].[UpdateAccountHistory]",
+                   param: parameters,
+                   commandType: CommandType.StoredProcedure);
+
+                return result;
+            });
         }
 
         public async Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity)
