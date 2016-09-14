@@ -9,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
+    [Authorize]
     public class EmployerAgreementController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
@@ -27,13 +28,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var model = await _orchestrator.Get(accountId, userIdClaim);
+            var model = await _orchestrator.Get(accountId, _owinWrapper.GetClaimValue(@"sub"));
 
             //DANGER: Injected flash messages override the orchestrator response
-            if (flashMessage != null) model.FlashMessage = flashMessage;
+            if (flashMessage != null)
+            {
+                model.FlashMessage = flashMessage;
+            }
 
             return View(model);
         }
@@ -52,10 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var agreement = await _orchestrator.GetById(agreementid, accountId, userIdClaim);
+            var agreement = await _orchestrator.GetById(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"));
             
             //DANGER: Injected flash messages override the orchestrator response
             if (flashMessage != null) agreement.FlashMessage = flashMessage;
@@ -66,12 +64,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            if (understood == "understood")
+            if (understood == nameof(understood))
             {
-                var response = await _orchestrator.SignAgreement(agreementid, accountId, userIdClaim);
+                var response = await _orchestrator.SignAgreement(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"));
 
                 if (response.Status == HttpStatusCode.OK)
                 {
@@ -82,7 +77,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         Severity = FlashMessageSeverityLevel.Success
                     };
 
-                    return RedirectToAction("Index", new {accountId = accountId, flashMessage = successMessage });
+                    return RedirectToAction("Index", new {accountId, flashMessage = successMessage });
                 }
 
                 return View("DeadView", response);
@@ -94,23 +89,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 Message = "You must indicate that you have read and understood the terms",
                 Severity = FlashMessageSeverityLevel.Danger
             };          
-            return RedirectToAction("View", new { agreementId = agreementid, accountId = accountId, flashMessage = errorMessage });
+            return RedirectToAction("View", new { agreementId = agreementid, accountId, flashMessage = errorMessage });
         }
         
         [HttpPost]
         public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, userIdClaim);
+            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, _owinWrapper.GetClaimValue(@"sub"));
 
             if (response.Status == HttpStatusCode.OK)
             {
                 return View(response.Data);
             }
 
-              var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
             {
                 Data = new AddLegalEntityViewModel { AccountId = accountId },
                 Status = HttpStatusCode.OK,
@@ -143,13 +135,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             long accountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
-            
-            if (string.IsNullOrWhiteSpace(userIdClaim))
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
             var request = new CreateNewLegalEntity
             {
                 AccountId = accountId,
@@ -159,18 +144,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 IncorporatedDate = incorporated,
                 UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-                ExternalUserId = userIdClaim
+                ExternalUserId = _owinWrapper.GetClaimValue(@"sub")
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);
 
             if (response.Status == HttpStatusCode.BadRequest)
             {
-                response.Status = HttpStatusCode.OK; // We will deal with the error here
+                response.Status = HttpStatusCode.OK; 
 
                 TempData["userNotAuthorised"] = "true";
 
-                return View("ViewEntityAgreement", response); //Redirect back to same page to change issue
+                return View("ViewEntityAgreement", response);
             }
 
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
