@@ -84,6 +84,9 @@
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommand.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />

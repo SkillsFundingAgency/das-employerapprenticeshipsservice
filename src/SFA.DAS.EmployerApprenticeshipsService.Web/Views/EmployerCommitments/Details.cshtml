@@ -31,6 +31,7 @@
                     <div class="responsive-th">Training</div>
                     <div class="responsive-th">Status</div>
                     <div class="responsive-th"> </div>
+                    <div class="responsive-th"> </div>
                 </div>
             </div>
             <div class="responsive-tbody">
@@ -56,6 +57,17 @@
                                     <input type="hidden" name="commitmentId" value="@Model.Commitment.Id"/>
                                     <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id"/>
                                     <button type="submit" name="commitment" class="button">View</button>
+                                </form>
+                            </div>
+                            <div class="responsive-inner-caption"></div>
+                        </div>
+                        <div class="responsive-td">
+                            <div>
+                                <form action="@Url.Action("ApproveApprenticeship")" method="POST">
+                                    <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
+                                    <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
+                                    <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                    <button type="submit" name="commitment" class="button">Approve</button>
                                 </form>
                             </div>
                             <div class="responsive-inner-caption"></div>

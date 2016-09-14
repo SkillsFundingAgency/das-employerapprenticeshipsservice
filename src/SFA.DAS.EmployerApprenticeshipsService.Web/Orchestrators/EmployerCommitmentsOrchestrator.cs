@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateTask;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
@@ -94,6 +95,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        public async Task ApproveApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _mediator.SendAsync(new ApproveApprenticeshipCommand { EmployerAccountId = accountId, CommitmentId = commitmentId, ApprenticeshipId = apprenticeshipId });
+
+            // TODO: LWA - Extend create task command.
+            //await _mediator.SendAsync(new CreateTaskCommand { ProviderId = providerId });
+        }
+
         public async Task<CommitmentViewModel> Get(long accountId, long commitmentId)
         {
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
@@ -135,7 +144,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             await _mediator.SendAsync(new SubmitCommitmentCommand { EmployerAccountId = accountId, CommitmentId = commitmentId });
 
             await _mediator.SendAsync(new CreateTaskCommand { ProviderId = providerId });
-
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
