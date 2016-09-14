@@ -61,8 +61,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             }
 
             RegisterMediator();
-
-            For<ITasksApi>().Use<TasksApi>();
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
