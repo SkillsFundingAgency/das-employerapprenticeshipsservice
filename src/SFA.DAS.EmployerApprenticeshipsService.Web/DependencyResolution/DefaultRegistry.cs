@@ -61,9 +61,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             }
 
             RegisterMediator();
-
-            // TODO: LWA - Is there another way?
-            For<ITasksApi>().Use<TasksApi>().Ctor<string>().Is("http://localhost:21482/");
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()

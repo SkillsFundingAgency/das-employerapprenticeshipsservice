@@ -51,6 +51,10 @@
     <Compile Include="TasksApi.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
       <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
       <Name>SFA.DAS.Tasks.Domain</Name>
