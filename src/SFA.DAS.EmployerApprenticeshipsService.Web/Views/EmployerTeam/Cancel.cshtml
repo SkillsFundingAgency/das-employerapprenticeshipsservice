@@ -29,14 +29,14 @@
             <input type="hidden" id="cancel" name="cancel" value="1" />
             <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
-            <button type="submit" class="button">Cancel invitation</button>
+            <button type="submit" class="button" id="cancel_invitation">Cancel invitation</button>
         </form>
         <p></p>
         <form action="@Url.Action("Resend")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="Email" name="Email" value="@Model.Email" />
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
-            <button type="submit" class="button">Resend Invitation</button>
+            <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
         </form>
     </div>
 </div>

@@ -11,7 +11,7 @@
         @if (string.IsNullOrEmpty(Model.EmployerRef))
         {
             <h2 class="heading-small">The PAYE scheme is already associated with an account. Please use a different gateway login</h2>
-            <a class="button" href="@Url.Action("Gateway","EmployerAccount")">Search Again</a>
+            <a class="button" id="search_again" href="@Url.Action("Gateway","EmployerAccount")">Search Again</a>
         }
         else
         {
@@ -37,7 +37,7 @@
                     </label>
                 </fieldset>
                 <p></p>
-                <button type="submit" class="button">Continue</button>
+                <button type="submit" class="button" id="continue">Continue</button>
                 <p></p>
             </form>
         }

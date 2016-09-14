@@ -45,7 +45,7 @@
 
                     @foreach (var account in Model.Data.Accounts.AccountList)
                     {
-                        <div class="responsive-tr">
+                        <div class="responsive-tr" id="list_of_accounts">
                             <div class="responsive-td">
                                 <div>@account.Name</div>
                                 <div class="responsive-inner-caption">Account name</div>
@@ -71,7 +71,7 @@
             </div>
         }
         <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button">Add new account</a>
+        <a href="@Url.Action("Index", "EmployerAccount")" class="button" id="add_new_account">Add new account</a>
         <p></p>
     </div>
 </div>
