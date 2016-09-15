@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             if (understood == nameof(understood))
             {
-                var response = await _orchestrator.SignAgreement(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"));
+                var response = await _orchestrator.SignAgreement(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"), DateTime.Now);
 
                 if (response.Status == HttpStatusCode.OK)
                 {

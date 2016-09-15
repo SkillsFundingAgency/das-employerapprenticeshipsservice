@@ -140,7 +140,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     AgreementId = agreementid,
                     AccountId = accountId,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    SignedDate = signedDate
                 });
 
                 return new OrchestratorResponse();

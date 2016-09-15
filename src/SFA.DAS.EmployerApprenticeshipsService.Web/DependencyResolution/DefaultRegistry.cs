@@ -29,6 +29,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.Tasks.Api.Client;
 using StructureMap;
 using StructureMap.Graph;
 

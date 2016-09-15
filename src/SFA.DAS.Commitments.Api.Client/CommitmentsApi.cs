@@ -13,9 +13,9 @@ namespace SFA.DAS.Commitments.Api.Client
     {
         private readonly string _baseUrl;
 
-        public CommitmentsApi(EmployerApprenticeshipsServiceConfiguration configuration)
+        public CommitmentsApi(CommitmentsApiConfiguration configuration)
         {
-            _baseUrl = configuration.CommitmentsApi.BaseUrl;
+            _baseUrl = configuration.BaseUrl;
         }
 
         public async Task CreateEmployerCommitment(long employerAccountId, Commitment commitment)
@@ -46,7 +46,7 @@ namespace SFA.DAS.Commitments.Api.Client
             return await GetApprenticeship(url);
         }
 
-        public async Task PatchEmployerCommitment(int employerAccountId, int commitmentId, CommitmentStatus status)
+        public async Task PatchEmployerCommitment(long employerAccountId, long commitmentId, CommitmentStatus status)
         {
             var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
 

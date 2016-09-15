@@ -126,6 +126,7 @@
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />
+    <Compile Include="Configuration\TasksApiConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAccountTeamRepository.cs" />

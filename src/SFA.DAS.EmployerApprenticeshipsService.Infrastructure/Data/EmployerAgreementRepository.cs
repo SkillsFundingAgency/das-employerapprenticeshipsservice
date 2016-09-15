@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task SignAgreement(long agreementId, long signedById, string signedByName)
+        public async Task SignAgreement(long agreementId, long signedById, string signedByName, DateTime signedDate)
         {
             await WithConnection(async c =>
             {
@@ -75,6 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@agreementId", agreementId, DbType.Int64);
                 parameters.Add("@signedById", signedById, DbType.Int64);
                 parameters.Add("@signedByName", signedByName, DbType.String);
+                parameters.Add("@signedDate", signedDate, DbType.DateTime);
 
                 var result = await c.ExecuteAsync(
                     sql: "[account].[SignEmployerAgreement]",

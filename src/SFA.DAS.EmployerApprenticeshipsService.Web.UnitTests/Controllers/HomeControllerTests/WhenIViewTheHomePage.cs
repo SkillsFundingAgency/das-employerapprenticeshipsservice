@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -15,6 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         private Mock<IOwinWrapper> _owinWrapper;
         private HomeController _homeController;
         private Mock<HomeOrchestrator> _homeOrchestrator;
+        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private string ExpectedUserId = "123ABC";
 
         [SetUp]
@@ -27,7 +29,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _homeOrchestrator.Setup(x => x.GetUsers()).ReturnsAsync(new SignInUserViewModel());
             _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel()});
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object);
+            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+
+            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object);
         }
 
         [Test]
