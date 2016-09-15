@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         Task<OrchestratorResponse<EmployerAgreementViewModel>> GetByLegalEntityCode(long accountId, string legalEntityCode, 
             string externalUserId);
 
-        Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId);
+        Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId, DateTime signedDate);
 
         Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber, string userIdClaim);
 
