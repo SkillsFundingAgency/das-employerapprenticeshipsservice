@@ -4,6 +4,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitme
 using SFA.DAS.Commitments.Api.Client;
 using Moq;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitmentTests
 {
@@ -12,6 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
     {
         private SubmitCommitmentCommandHandler _handler;
         private Mock<ICommitmentsApi> _mockCommitmentApi;
+        private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommand _validCommand;
 
         [SetUp]
@@ -20,7 +22,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L };
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object);
+
+            _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
+            _mockTasksApi = new Mock<ITasksApi>();
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object);
         }
 
         [Test]

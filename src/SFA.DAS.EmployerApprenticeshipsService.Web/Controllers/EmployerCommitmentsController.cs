@@ -72,9 +72,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Submit(long accountId, long commitmentId, long providerId)
+        public async Task<ActionResult> Submit(long accountId, long commitmentId)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(accountId, commitmentId, providerId);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(accountId, commitmentId);
 
             return RedirectToAction("Index", new { accountid = accountId, commitmentId = commitmentId });
         }
