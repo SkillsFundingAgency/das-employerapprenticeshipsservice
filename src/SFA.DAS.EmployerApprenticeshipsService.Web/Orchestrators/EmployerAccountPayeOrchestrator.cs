@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
@@ -146,6 +149,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 });
             }
             
+        }
+
+        public async Task<OrchestratorResponse<bool>> RemoveSchemeFromAccount(long accountId, string userId, string payeRef)
+        {
+            var response = new OrchestratorResponse<bool>();
+            try
+            {
+                await Mediator.SendAsync(new RemovePayeFromAccountCommand
+                {
+                    AccountId = accountId,
+                    UserId = userId,
+                    PayeRef = payeRef
+                });
+                response.Data = true;
+                
+            }
+            catch (UnauthorizedAccessException)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+            }
+
+            return response;
         }
     }
 }

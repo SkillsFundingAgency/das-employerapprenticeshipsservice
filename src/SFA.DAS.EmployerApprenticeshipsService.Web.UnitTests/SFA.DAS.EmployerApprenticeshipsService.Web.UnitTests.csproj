@@ -127,6 +127,7 @@
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
+    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
     <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenCallingHmrcService.cs" />
     <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenGettingTheTokenResponse.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
