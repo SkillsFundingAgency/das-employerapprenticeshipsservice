@@ -10,6 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
@@ -42,9 +43,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             long accountId = 1234567;
             var userRef = "abv345";
             var payeRef = "123/abc";
+            var model = new RemovePayeScheme {AccountId = accountId,PayeRef = payeRef,UserId = userRef};
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(accountId, userRef, payeRef);
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.AccountId.Equals(accountId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef))), Times.Once);
@@ -58,7 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new UnauthorizedAccessException(""));
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(1, "", "");
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeScheme ());
 
             //Assert
             Assert.AreEqual(actual.Status,HttpStatusCode.Unauthorized);
@@ -73,7 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(1, "", "");
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeScheme());
 
             //Assert
             Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest);

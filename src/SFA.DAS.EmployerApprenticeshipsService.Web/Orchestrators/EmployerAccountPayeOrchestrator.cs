@@ -22,6 +22,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
+        protected EmployerAccountPayeOrchestrator()
+        {
+            
+        }
+
         public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService) : base(mediator, logger, cookieService, configuration, empRefFileBasedService)
         {
         }
@@ -151,16 +156,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<bool>> RemoveSchemeFromAccount(long accountId, string userId, string payeRef)
+        public virtual async Task<OrchestratorResponse<bool>> RemoveSchemeFromAccount(RemovePayeScheme model)
         {
             var response = new OrchestratorResponse<bool>();
             try
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
-                    AccountId = accountId,
-                    UserId = userId,
-                    PayeRef = payeRef
+                    AccountId = model.AccountId,
+                    UserId = model.UserId,
+                    PayeRef = model.PayeRef
                 });
                 response.Data = true;
                 

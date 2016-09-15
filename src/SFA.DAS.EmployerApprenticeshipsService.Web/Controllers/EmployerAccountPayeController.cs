@@ -43,13 +43,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Add(long accountId, bool? validationFailed)
         {
-            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, _owinWrapper.GetClaimValue("email"),Url.Action("Index", "EmployerAccountPaye", new { accountId }));
+            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, _owinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
 
             if (validationFailed.HasValue && validationFailed.Value)
             {
                 response.Data.ValidationFailed = true;
             }
-                
+
             return View(response);
         }
 
@@ -138,12 +138,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
 
             var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
-            
+
             model.LegalEntityCode = result.Data.CompanyNumber;
             model.LegalEntityDateOfIncorporation = result.Data.DateOfIncorporation;
             model.LegalEntityName = result.Data.CompanyName;
             model.LegalEntityRegisteredAddress = result.Data.RegisteredAddress;
-            
+
             return View("Confirm", model);
         }
 
@@ -159,5 +159,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
         }
 
+        [HttpGet]
+        public ActionResult RemovePaye(long accountId, string payeRef)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemovePaye(RemovePayeScheme model)
+        {
+            model.UserId = _owinWrapper.GetClaimValue("sub");
+
+            var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
+
+            if (result.Status != HttpStatusCode.OK)
+            {
+                return View(result);
+            }
+
+            return RedirectToAction("Index", "EmployerAccountPaye", new { model.AccountId });
+        }
     }
 }
