@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                return View(response.Data);
+                return View("FindLegalEntity",response);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>

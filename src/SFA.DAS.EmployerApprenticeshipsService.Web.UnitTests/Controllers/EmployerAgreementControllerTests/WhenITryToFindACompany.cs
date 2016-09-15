@@ -55,9 +55,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
 
             _orchestrator.Verify(x => x.FindLegalEntity(viewModel.AccountId, viewModel.CompanyNumber, username), Times.Once);
 
-            var model = result.Model as SelectEmployerViewModel;
-            Assert.IsNotNull(model);
-            Assert.AreEqual(viewModel, model);
+            var model = result.Model as OrchestratorResponse<FindOrganisationViewModel>;
+            Assert.IsNotNull(model?.Data);
+            Assert.AreEqual(viewModel, model.Data);
         }
     }
 }
