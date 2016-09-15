@@ -44,6 +44,21 @@
 
 </head>
 <body>
+    <!-- Google Tag Manager -->
+    <noscript>
+        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-5QC5KD"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+            '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-5QC5KD');</script>
+    <!-- End Google Tag Manager -->
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <div id="skiplink-container">
@@ -53,7 +68,9 @@
     </div>
     <div id="global-cookie-message">
 
-        <p>GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a></p>
+        <p>
+            GOV.UK uses cookies to make the site simpler. <a href="https://www.gov.uk/help/cookies">Find out more about cookies</a>
+        </p>
 
     </div>
 
@@ -85,9 +102,9 @@
             <div class="column-one-third">&ensp;</div>
             <div class="column-two-thirds rightalign">
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                {
+            {
                     <span>Hi @HttpContext.Current.User.Identity.Name</span>
-                    <span><a href="@Url.Action("SignOut","Home")">Log out</a></span>
+                    <span><a href="@Url.Action("SignOut", "Home")">Log out</a></span>
                 }
                 else
                 {
@@ -115,9 +132,13 @@
                 <div class="footer-meta-inner">
 
                     <div class="open-government-licence">
-                        <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a></p>
+                        <p class="logo">
+                            <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
+                        </p>
 
-                        <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated</p>
+                        <p>
+                            All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+                        </p>
 
                     </div>
                 </div>
