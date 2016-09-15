@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.ApproveApprenticeship(accountId, commitmentId, apprenticeshipId);
 
-            return RedirectToAction("Index", new { accountid = accountId, commitmentId = commitmentId });
+            return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
         }
     }
 }
