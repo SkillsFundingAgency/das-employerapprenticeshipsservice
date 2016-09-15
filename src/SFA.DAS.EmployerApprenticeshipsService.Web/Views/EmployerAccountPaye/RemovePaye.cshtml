@@ -1,1 +1,33 @@
-﻿
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.RemovePayeScheme>
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Remove this scheme?</h1>
+        <h2 class="heading-medium">@Model.Data.PayeRef</h2>
+        <p>The @Model.Data.AccountName levy account will stop receiving funds through this PAYE scheme.</p>
+        <form method="post" action="@Url.Action("RemovePaye")">
+            @Html.AntiForgeryToken()    
+            <input type="hidden" value="@Model.Data.AccountId" name="AccountId"/>
+            <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef"/>
+
+            <div class="form-group @(Model.Data.Valid ? "" : "error")">
+                @if (!Model.Data.Valid)
+                {
+                    <span class="error-message">@Model.Data.RemoveSchemeErrorMessage</span>   
+                }
+                <label class="block-label">
+                    <input type="radio" name="RemoveScheme" value="true"/>
+                    <span class="heading-small">Yes, remove scheme</span>
+                </label>
+                <label class="block-label">
+                    <input type="radio" name="RemoveScheme" value="false" checked="checked"/>
+                    <span class="heading-small">No, don't remove</span>
+                </label>
+            </div>
+           
+            <button type="submit" class="button">Continue</button>
+            <a href="@Url.Action("Index","EmployerAccountPaye",new {Model.Data.AccountId})" class="link">Cancel</a>
+        </form>
+    </div>
+</div>

@@ -9,4 +9,4 @@ FROM
 inner join 
 	[account].[LegalEntity] l on l.Id = p.LegalEntityId
 inner join 
-	[account].[AccountHistory] ah on ah.PayeRef = p.Ref
+	[account].[AccountHistory] ah on ah.PayeRef = p.Ref and ah.RemovedDate is null

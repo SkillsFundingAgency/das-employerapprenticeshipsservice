@@ -185,6 +185,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View(result);
             }
 
+            TempData["successMessage"] = $"You've removed {model.PayeRef}";
+
             return RedirectToAction("Index", "EmployerAccountPaye", new { model.AccountId });
         }
     }

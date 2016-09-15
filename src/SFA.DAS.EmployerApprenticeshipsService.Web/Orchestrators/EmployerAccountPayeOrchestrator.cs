@@ -173,14 +173,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<RemovePayeScheme>> RemoveSchemeFromAccount(RemovePayeScheme model)
         {
-            var response = new OrchestratorResponse<RemovePayeScheme>();
+            var response = new OrchestratorResponse<RemovePayeScheme> {Data = model};
             try
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
                     AccountId = model.AccountId,
                     UserId = model.UserId,
-                    PayeRef = model.PayeRef
+                    PayeRef = model.PayeRef,
+                    RemoveScheme = model.RemoveScheme
                 });
                 response.Data = model;
                 
@@ -192,6 +193,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             catch (InvalidRequestException ex)
             {
                 response.Status = HttpStatusCode.BadRequest;
+                response.Data.ErrorDictionary = ex.ErrorMessages;
             }
 
             return response;
