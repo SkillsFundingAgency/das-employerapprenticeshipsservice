@@ -43,5 +43,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
         }
+
+        [Test]
+        public async Task ThenATaskShouldBeCreated()
+        {
+            await _handler.Handle(_validCommand);
+
+            _mockTasksApi.Verify(x => x.CreateTask(It.IsAny<string>(), It.IsAny<Tasks.Domain.Entities.Task>()));
+        }
     }
 }

@@ -106,9 +106,6 @@
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommand.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
