@@ -11,6 +11,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExi
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
@@ -156,9 +157,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public virtual async Task<OrchestratorResponse<bool>> RemoveSchemeFromAccount(RemovePayeScheme model)
+        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
         {
-            var response = new OrchestratorResponse<bool>();
+            var response = await
+                    Mediator.SendAsync(new GetEmployerAccountQuery
+                    {
+                        AccountId = model.AccountId,
+                        ExternalUserId = model.UserId
+                    });
+
+            model.AccountName = response.Account.Name;
+
+            return new OrchestratorResponse<RemovePayeScheme> {Data = model};
+        }
+
+        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> RemoveSchemeFromAccount(RemovePayeScheme model)
+        {
+            var response = new OrchestratorResponse<RemovePayeScheme>();
             try
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
@@ -167,7 +182,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     UserId = model.UserId,
                     PayeRef = model.PayeRef
                 });
-                response.Data = true;
+                response.Data = model;
                 
             }
             catch (UnauthorizedAccessException)

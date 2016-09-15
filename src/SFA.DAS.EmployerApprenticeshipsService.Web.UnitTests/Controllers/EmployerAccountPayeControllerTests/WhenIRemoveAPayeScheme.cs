@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
@@ -11,7 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.EmployerAccountPayeOrchestrator
+namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests
 {
     public class WhenIRemoveAPayeScheme
     {
@@ -23,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         public void Arrange()
         {
             _employerAccountPayeOrchestrator = new Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator>();
-            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<bool>());
+            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme>());
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("123abc");
 
@@ -44,12 +40,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.AreEqual("Index",actualRedirect.RouteValues["Action"]);
             Assert.AreEqual("EmployerAccountPaye", actualRedirect.RouteValues["Controller"]);
         }
-
+        
         [Test]
         public async Task ThenTheConfirmRemoveSchemeViewIsReturnedIfThereIsAnError()
         {
             //Arrange
-            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<bool> {Status = HttpStatusCode.BadRequest});
+            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme> {Status = HttpStatusCode.BadRequest});
 
             //Act
             var actual = await _controller.RemovePaye(new RemovePayeScheme());

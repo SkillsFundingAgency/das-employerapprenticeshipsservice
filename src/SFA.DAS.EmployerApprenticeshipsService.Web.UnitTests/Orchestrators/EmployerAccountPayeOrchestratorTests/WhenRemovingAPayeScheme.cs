@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.AccountId.Equals(accountId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef))), Times.Once);
-            Assert.IsTrue(actual.Data);
+            
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             Assert.AreEqual(actual.Status,HttpStatusCode.Unauthorized);
-            Assert.IsFalse(actual.Data);
+            
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest);
-            Assert.IsFalse(actual.Data);
+            
         }
         
     }

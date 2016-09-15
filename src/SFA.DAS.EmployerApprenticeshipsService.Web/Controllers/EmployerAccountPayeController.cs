@@ -160,9 +160,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult RemovePaye(long accountId, string payeRef)
+        public async Task<ActionResult> RemovePaye(long accountId, string empRef)
         {
-            return View();
+            var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeScheme
+            {
+                AccountId = accountId,
+                PayeRef = empRef,
+                UserId = _owinWrapper.GetClaimValue("sub")
+            });
+
+            return View(model);
         }
 
         [HttpPost]
