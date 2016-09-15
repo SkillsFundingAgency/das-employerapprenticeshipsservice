@@ -31,8 +31,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 {
                     AccountId = 12345,
                     PayeRef = "123RFD",
-                    UserId = "123edds"
-                });
+                    UserId = "123edds",
+                    RemoveScheme = true
+            });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -50,6 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             Assert.Contains(new KeyValuePair<string,string>("AccountId","AccountId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("PayeRef","PayeRef has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("RemoveScheme", "Please confirm you wish to remove the scheme"), result.ValidationDictionary);
         }
 
         [Test]
@@ -63,7 +65,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             {
                 AccountId = 12345,
                 PayeRef = "123RFD",
-                UserId = "123edds"
+                UserId = "123edds",
+                RemoveScheme = true
             });
 
             //Assert
@@ -81,7 +84,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             {
                 AccountId = 12345,
                 PayeRef = "123RFD",
-                UserId = "123edds"
+                UserId = "123edds",
+                RemoveScheme = true
             });
 
             //Assert

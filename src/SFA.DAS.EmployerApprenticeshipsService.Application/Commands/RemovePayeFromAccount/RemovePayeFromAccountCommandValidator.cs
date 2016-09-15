@@ -35,6 +35,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePaye
             {
                 validationResult.AddError(nameof(item.UserId), "UserId has not been supplied");
             }
+            if (!item.RemoveScheme)
+            {
+                validationResult.AddError(nameof(item.RemoveScheme), "Please confirm you wish to remove the scheme");
+            }
 
             if (validationResult.IsValid())
             {

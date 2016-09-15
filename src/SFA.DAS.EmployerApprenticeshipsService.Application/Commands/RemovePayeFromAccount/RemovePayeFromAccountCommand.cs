@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePaye
         public long AccountId { get; set; }
         public string PayeRef { get; set; }
         public string UserId { get; set; }
+        public bool RemoveScheme { get; set; }
     }
 }
