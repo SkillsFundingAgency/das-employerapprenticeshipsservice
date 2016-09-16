@@ -9,13 +9,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
     public class WhenIAddAnLegalEntityToAnAccount
     {
         private EmployerAgreementController _controller;
-        private Mock<IEmployerAgreementOrchestrator> _orchestrator;
+        private Mock<EmployerAgreementOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
 
         [SetUp]
         public void Arrange()
         {
-            _orchestrator = new Mock<IEmployerAgreementOrchestrator>();
+            _orchestrator = new Mock<EmployerAgreementOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
 
             _controller = new EmployerAgreementController(_owinWrapper.Object, _orchestrator.Object);

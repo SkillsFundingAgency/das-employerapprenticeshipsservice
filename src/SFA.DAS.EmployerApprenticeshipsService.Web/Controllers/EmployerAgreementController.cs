@@ -13,9 +13,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class EmployerAgreementController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
-        private readonly IEmployerAgreementOrchestrator _orchestrator;
+        private readonly EmployerAgreementOrchestrator _orchestrator;
 
-        public EmployerAgreementController(IOwinWrapper owinWrapper, IEmployerAgreementOrchestrator orchestrator)
+        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

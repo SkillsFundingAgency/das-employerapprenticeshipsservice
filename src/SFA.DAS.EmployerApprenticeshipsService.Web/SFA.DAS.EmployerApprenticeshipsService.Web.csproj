@@ -338,7 +338,6 @@
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
-    <Compile Include="Orchestrators\IEmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="Models\UserAccountsViewModel.cs" />

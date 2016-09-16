@@ -18,10 +18,15 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
-    public class EmployerAgreementOrchestrator : IEmployerAgreementOrchestrator
+    public class EmployerAgreementOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+
+        protected EmployerAgreementOrchestrator()
+        {
+            
+        }
 
         public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger)
         {
@@ -33,7 +38,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
         
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
             long accountId, string name, string code, string address, DateTime incorporatedDate)
         {
             var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest());
@@ -155,7 +160,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber, string userIdClaim)
+        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId, string companyNumber, string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
