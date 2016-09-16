@@ -8,7 +8,8 @@
 	@employerDateOfIncorporation DATETIME,
 	@accountId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
-	@refreshToken VARCHAR(50)
+	@refreshToken VARCHAR(50),
+	@AddedDate DATETIME
 )
 AS
 BEGIN
@@ -37,6 +38,16 @@ BEGIN
 
 	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
-	INSERT INTO [account].[Paye](Ref, AccountId, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @accountId, @legalEntityId, @accessToken, @refreshToken);
+	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
+	BEGIN
+		EXEC [account].[UpdatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
+	ELSE
+	BEGIN
+		EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
+
+	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@AddedDate
+
 	INSERT INTO [account].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
 END

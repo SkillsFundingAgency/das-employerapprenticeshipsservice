@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
@@ -19,6 +23,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {
+        protected EmployerAccountPayeOrchestrator()
+        {
+            
+        }
+
         public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService) : base(mediator, logger, cookieService, configuration, empRefFileBasedService)
         {
         }
@@ -146,6 +155,48 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 });
             }
             
+        }
+
+        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
+        {
+            var response = await
+                    Mediator.SendAsync(new GetEmployerAccountQuery
+                    {
+                        AccountId = model.AccountId,
+                        ExternalUserId = model.UserId
+                    });
+
+            model.AccountName = response.Account.Name;
+
+            return new OrchestratorResponse<RemovePayeScheme> {Data = model};
+        }
+
+        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> RemoveSchemeFromAccount(RemovePayeScheme model)
+        {
+            var response = new OrchestratorResponse<RemovePayeScheme> {Data = model};
+            try
+            {
+                await Mediator.SendAsync(new RemovePayeFromAccountCommand
+                {
+                    AccountId = model.AccountId,
+                    UserId = model.UserId,
+                    PayeRef = model.PayeRef,
+                    RemoveScheme = model.RemoveScheme
+                });
+                response.Data = model;
+                
+            }
+            catch (UnauthorizedAccessException)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.Data.ErrorDictionary = ex.ErrorMessages;
+            }
+
+            return response;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 orchestratorResponse.FlashMessage = flashMessage;
             }
-            if (orchestratorResponse.Status == HttpStatusCode.OK)
+            if (orchestratorResponse.Status == HttpStatusCode.OK || orchestratorResponse.Status == HttpStatusCode.BadRequest)
                 return base.View(viewName, masterName, orchestratorResponse);
 
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)

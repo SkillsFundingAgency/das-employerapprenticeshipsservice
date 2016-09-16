@@ -13,6 +13,7 @@ AS
 		
 	DELETE FROM [account].[Paye];
 	DELETE FROM [account].[LegalEntity];
+	DELETE FROM [account].[AccountHistory]
 	DELETE FROM [account].[Account];
 	DELETE FROM [account].[Role];
 	DELETE FROM [account].[EmployerAgreementTemplate];

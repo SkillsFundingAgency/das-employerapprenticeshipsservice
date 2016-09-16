@@ -1,6 +1,6 @@
 ﻿using Moq;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.MockPolicy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.Messaging;
