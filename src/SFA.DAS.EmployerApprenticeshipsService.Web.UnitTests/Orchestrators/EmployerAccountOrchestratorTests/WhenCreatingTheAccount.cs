@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
             _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration, _empRefFileBasedService.Object);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration);
         }
 
         [Test]

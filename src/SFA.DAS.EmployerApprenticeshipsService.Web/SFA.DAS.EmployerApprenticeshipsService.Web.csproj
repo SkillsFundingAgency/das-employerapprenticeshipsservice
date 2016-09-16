@@ -344,9 +344,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\EmpRefs\empref_data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
     <Content Include="assets\images\apple-touch-icon-152x152.png" />
     <Content Include="assets\images\apple-touch-icon-60x60.png" />

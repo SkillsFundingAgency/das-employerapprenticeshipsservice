@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
-        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
         private ConfirmNewPayeScheme _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private const long ExpectedAccountId = 73636363;
@@ -57,18 +56,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
-            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
-
-            _empRefFileBasedService.Setup(x => x.GetEmpRef(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(ExpectedEmpref);
-
+            
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>())).ReturnsAsync(new GetAccountLegalEntitiesResponse{Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}});
             _mediator.Setup(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c=>c.AccessCode.Equals("1")))).ReturnsAsync(new GetGatewayTokenQueryResponse {HmrcTokenResponse = new HmrcTokenResponse {AccessToken = "1"} });
             _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "123/ABC"});
             _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("2")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "456/ABC"});
 
-            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object,_logger.Object, _cookieService.Object, _configuration, _empRefFileBasedService.Object);
+            _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object,_logger.Object, _cookieService.Object, _configuration);
         }
 
         [Test]
@@ -129,8 +124,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
-            _empRefFileBasedService.Setup(x => x.GetEmpRef(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
-
+            
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
 
