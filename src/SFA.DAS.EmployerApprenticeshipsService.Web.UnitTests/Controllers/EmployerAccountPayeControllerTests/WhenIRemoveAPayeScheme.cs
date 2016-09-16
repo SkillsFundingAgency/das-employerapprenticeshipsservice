@@ -39,10 +39,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(actualRedirect);
             Assert.AreEqual("Index",actualRedirect.RouteValues["Action"]);
             Assert.AreEqual("EmployerAccountPaye", actualRedirect.RouteValues["Controller"]);
+            Assert.IsTrue(_controller.TempData.ContainsKey("successMessage"));
         }
         
         [Test]
-        public async Task ThenTheConfirmRemoveSchemeViewIsReturnedIfThereIsAnError()
+        public async Task ThenTheConfirmRemoveSchemeViewIsReturnedIfThereIsAValidationError()
         {
             //Arrange
             _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme> {Status = HttpStatusCode.BadRequest});
@@ -54,7 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(actual);
             var actualView = actual as ViewResult;
             Assert.IsNotNull(actualView);
-            Assert.AreEqual("GenericError",actualView.ViewName);
+            Assert.AreEqual("",actualView.ViewName);
         }
     }
 }

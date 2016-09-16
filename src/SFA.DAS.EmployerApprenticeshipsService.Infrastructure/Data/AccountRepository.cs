@@ -50,6 +50,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             await WithConnection(async c =>
             {
+                var storedProcedureName = await GetPayeStoredProcedureForUpdateOrCreate(employerRef, c);
+
                 var parameters = new DynamicParameters();
                 parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
                 parameters.Add("@employerRef", employerRef, DbType.String);
@@ -57,8 +59,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@refreshToken",refreshToken, DbType.String);
 
                 var trans = c.BeginTransaction();
+                
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[CreatePaye]",
+                    sql: storedProcedureName,
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
 
@@ -120,7 +123,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 return result;
             });
         }
-        
+
 
         public async Task<List<PayeView>> GetPayeSchemes(long accountId)
         {
@@ -154,5 +157,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
+        private static async Task<string> GetPayeStoredProcedureForUpdateOrCreate(string employerRef, IDbConnection c)
+        {
+            var searchParams = new DynamicParameters();
+            searchParams.Add("@employerRef", employerRef, DbType.String);
+
+            var payeResult =
+                await
+                    c.QueryAsync<int>("select 1 from [account].[paye] where Ref = @employerRef", searchParams,
+                        commandType: CommandType.Text);
+            var storedProcedureName = "[account].[CreatePaye]";
+            if (payeResult.SingleOrDefault() == 1)
+            {
+                storedProcedureName = "[account].[UpdatePaye]";
+            }
+            return storedProcedureName;
+        }
     }
 }

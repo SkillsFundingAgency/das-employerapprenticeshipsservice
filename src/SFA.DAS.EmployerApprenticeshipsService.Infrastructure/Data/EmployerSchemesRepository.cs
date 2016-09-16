@@ -39,12 +39,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@ref", empref, DbType.String);
+                parameters.Add("@payeRef", empref, DbType.String);
 
                 return await c.QueryAsync<Scheme>(
-                    sql: "SELECT * FROM [account].[Paye] WHERE Ref = @ref;",
+                    sql: "[account].[GetPayeSchemesInUse]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result.SingleOrDefault();
