@@ -1,8 +1,9 @@
-﻿using System.Linq;
-using Microsoft.Azure;
+﻿using Microsoft.Azure;
 using NLog;
+using System.Linq;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Logging
+
+namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging
 {
     public static class LoggingConfig
     {

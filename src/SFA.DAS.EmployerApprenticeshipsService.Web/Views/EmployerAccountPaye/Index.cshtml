@@ -10,6 +10,7 @@
                     <div class="responsive-th">Scheme ID</div>
                     <div class="responsive-th">Legal Entity</div>
                     <div class="responsive-th"> </div>
+                    <div class="responsive-th"> </div>
                 </div>
             </div>
             <div class="responsive-tbody">
@@ -26,6 +27,14 @@
                             <div>
                                 @scheme.LegalEntityName
                             </div>
+                        </div>
+                        <div class="responsive-td">
+                            <div>
+                                <a aria-label="Remove PAYE scheme @scheme.EmpRef"
+                                   title="Remove PAYE scheme @scheme.EmpRef"
+                                   href="@Url.Action("RemovePaye", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">Remove</a>
+                            </div>
+                            <div class="responsive-inner-caption"></div>
                         </div>
                         <div class="responsive-td">
                             <div>

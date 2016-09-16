@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Notification.Worker.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Notification.Worker
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Notification.Worker
                 var serviceName = "SFA.DAS.EmployerApprenticeshipsService";
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(serviceName));
                 c.Policies.Add<LoggingPolicy>();
-                c.Policies.Add(new MessagePolicy(serviceName));
+                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(serviceName));
                 c.AddRegistry<DefaultRegistry>();
             });
 

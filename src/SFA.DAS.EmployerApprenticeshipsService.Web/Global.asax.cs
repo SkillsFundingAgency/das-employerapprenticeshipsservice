@@ -8,7 +8,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web
 {
