@@ -15,7 +15,14 @@ BEGIN
 
 	EXEC [account].[CreateLegalEntity] @companyNumber,@companyName,@CompanyAddress,@CompanyDateOfIncorporation,@legalEntityId OUTPUT
 
-	EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
+	BEGIN
+		EXEC [account].[UpdatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
+	ELSE
+	BEGIN
+		EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
 
 	EXEC [account].[CreateAccountHistory] @accountId,@employerRef,@addedDate
 

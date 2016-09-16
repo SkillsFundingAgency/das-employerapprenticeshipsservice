@@ -38,7 +38,14 @@ BEGIN
 
 	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
-	INSERT INTO [account].[Paye](Ref, LegalEntityId, AccessToken, RefreshToken) VALUES (@employerRef, @legalEntityId, @accessToken, @refreshToken);
+	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
+	BEGIN
+		EXEC [account].[UpdatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
+	ELSE
+	BEGIN
+		EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+	END
 
 	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@AddedDate
 
