@@ -5,6 +5,7 @@
 	@companyAddress NVARCHAR(255),
 	@companyDateOfIncorporation DATETIME,
 	@signAgreement BIT,
+	@signedDate DATETIME,
 	@signedById BIGINT,
 	@legalEntityId BIGINT OUTPUT,
 	@employerAgreementId BIGINT OUTPUT
@@ -25,6 +26,6 @@ BEGIN
 		SELECT @firstName = FirstName, @lastName = LastName FROM [account].[User] WHERE Id = @signedById
 		SELECT @signedByName =  @firstName + ' ' + @lastName
 		
-		EXEC [account].[SignEmployerAgreement] @employerAgreementId, @signedById, @signedByName
+		EXEC [account].[SignEmployerAgreement] @employerAgreementId, @signedById, @signedByName, @signedDate
 	END	
 END

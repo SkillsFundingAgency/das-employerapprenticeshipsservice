@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    var successMessage = new FlashMessageViewModel()
+                    var successMessage = new FlashMessageViewModel
                     {
                         Headline = "Agreement signed",
                         Message = $"You've signed the agreement for {legalEntityName}",
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             TempData["notunderstood"] = new object();
-            var errorMessage = new FlashMessageViewModel()
+            var errorMessage = new FlashMessageViewModel
             {
                 Message = "You must indicate that you have read and understood the terms",
                 Severity = FlashMessageSeverityLevel.Danger
@@ -125,7 +125,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
             DateTime incorporated)
         {
-            var response = await _orchestrator.Create(accountId, name, code, address, incorporated);
+            var response = await _orchestrator.Create(accountId, _owinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
 
             return View(response);
         }
@@ -144,6 +144,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 IncorporatedDate = incorporated,
                 UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
+                SignedDate = DateTime.Now,
                 ExternalUserId = _owinWrapper.GetClaimValue(@"sub")
             };
 

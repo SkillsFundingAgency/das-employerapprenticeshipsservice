@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLega
                 message.AccountId, 
                 message.LegalEntity, 
                 message.SignAgreement, 
+                message.SignedDate,
                 owner.UserId);
             
             return new CreateLegalEntityCommandResponse

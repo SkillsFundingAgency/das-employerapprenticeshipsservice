@@ -30,10 +30,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         {
             //Assign
             const int accountId = 2;
+            const string userId = "user";
             const string entityName = "Test Corp";
             const string entityRef = "1234ABC";
             const string entityAddress = "Test Street";
             var incorporatedDate = DateTime.Now.AddYears(-10);
+
             var latestTemplate = new EmployerAgreementTemplate
             {
                 Id = 1,
@@ -50,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 });
             
             //Act
-            var response = await _orchestrator.Create(accountId, entityName, entityRef, entityAddress, incorporatedDate);
+            var response = await _orchestrator.Create(accountId, userId, entityName, entityRef, entityAddress, incorporatedDate);
 
             //Assert
             Assert.AreEqual(accountId, response.Data.EmployerAgreement.AccountId);

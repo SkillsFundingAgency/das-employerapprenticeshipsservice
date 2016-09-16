@@ -8,7 +8,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 {
@@ -91,7 +90,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         }
 
         public async Task<EmployerAgreementView> CreateLegalEntity(
-            long accountId, LegalEntity legalEntity, bool signAgreement, long signedById)
+            long accountId, LegalEntity legalEntity, bool signAgreement, DateTime signedDate, long signedById) 
         {
             return await WithConnection(async c =>
             {
@@ -102,6 +101,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
                 parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@signAgreement", signAgreement, DbType.Boolean);
+                parameters.Add("@signedDate", signedDate, DbType.DateTime);
                 parameters.Add("@signedById", signedById, DbType.Int64);
                 parameters.Add("@legalEntityId", signedById, DbType.Int64);
                 parameters.Add("@employerAgreementId", signedById, DbType.Int64);

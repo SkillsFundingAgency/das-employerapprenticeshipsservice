@@ -208,6 +208,7 @@
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementResponse.cs" />
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateQueryHandler.cs" />
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequest.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequestValidator.cs" />
     <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementQueryHandler.cs" />
     <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementRequest.cs" />
     <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementResponse.cs" />

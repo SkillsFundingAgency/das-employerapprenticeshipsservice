@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public DateTime IncorporatedDate { get; set; }
         public bool UserIsAuthorisedToSign { get; set; }
         public bool SignedAgreement { get; set; }
+        public DateTime SignedDate { get; set; }
         public string ExternalUserId { get; set; }
 
     }

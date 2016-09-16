@@ -3,29 +3,31 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEmployerAgreementTemplate;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEmployerAgreementTemplateTests
 {
-    class WhenIRequestTheLatestEmployerAgreementTemplate
+    class WhenIRequestTheLatestEmployerAgreementTemplate : 
+        QueryBaseTest<
+            GetLatestEmployerAgreementTemplateQueryHandler, 
+            GetLatestEmployerAgreementTemplateRequest, 
+            GetLatestEmployerAgreementResponse>
     {
-        private GetLatestEmployerAgreementTemplateQueryHandler _handler;
+        public override GetLatestEmployerAgreementTemplateRequest Query { get; set; }
+        public override GetLatestEmployerAgreementTemplateQueryHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetLatestEmployerAgreementTemplateRequest>> RequestValidator { get; set; }
+     
         private Mock<IEmployerAgreementRepository> _employmentAgreementRepository;
-        
+        private EmployerAgreementTemplate _template;
+
         [SetUp]
         public void Arrange()
         {
-            _employmentAgreementRepository = new Mock<IEmployerAgreementRepository>();
+            base.SetUp();
 
-            _handler = new GetLatestEmployerAgreementTemplateQueryHandler(_employmentAgreementRepository.Object);    
-        }
-
-        [Test]
-        public async Task ThenIShouldGetTheLatestRepository()
-        {
-            //Assign
-            var template = new EmployerAgreementTemplate
+            _template = new EmployerAgreementTemplate
             {
                 Id = 10,
                 Ref = "324234",
@@ -34,14 +36,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
                 ReleasedDate = DateTime.Now.AddDays(-2)
             };
 
-            _employmentAgreementRepository.Setup(x => x.GetLatestAgreementTemplate()).ReturnsAsync(template);
+            _employmentAgreementRepository = new Mock<IEmployerAgreementRepository>();
+            _employmentAgreementRepository.Setup(x => x.GetLatestAgreementTemplate()).ReturnsAsync(_template);
 
+            RequestHandler = new GetLatestEmployerAgreementTemplateQueryHandler(RequestValidator.Object, _employmentAgreementRepository.Object);
+            Query = new GetLatestEmployerAgreementTemplateRequest();
+        }
+
+        [Test]
+        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
+        {
             //Act
-            var response = await _handler.Handle(new GetLatestEmployerAgreementTemplateRequest());
+            await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual(template, response.Template);
+            _employmentAgreementRepository.Verify(x => x.GetLatestAgreementTemplate(), Times.Once);
+        }
 
+        [Test]
+        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
+        {
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.AreEqual(_template, actual.Template);
         }
     }
 }
