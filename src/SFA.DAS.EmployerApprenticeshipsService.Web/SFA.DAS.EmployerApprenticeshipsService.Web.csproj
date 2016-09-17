@@ -400,6 +400,9 @@
     </Content>
     <Content Include="App_Data\Providers\provider_data.json" />
     <Content Include="App_Data\Standards\standards.json" />
+    <Content Include="App_Data\Features\features_data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -472,6 +475,7 @@
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\RemovePaye.cshtml" />
+    <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -15,8 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
-        public EmployerAccountPayeController(IOwinWrapper owinWrapper,
-            EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator)
+        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

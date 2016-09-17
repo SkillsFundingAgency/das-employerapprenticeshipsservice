@@ -1,0 +1,12 @@
+﻿{
+  "Data": [
+    {
+      "Controller": "EmployerAgreement",
+      "Action": "*"
+    },
+    {
+      "Controller": "Home",
+      "Action": "About"
+    }
+  ]
+}

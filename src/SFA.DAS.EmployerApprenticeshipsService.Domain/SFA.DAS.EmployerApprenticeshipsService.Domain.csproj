@@ -124,6 +124,7 @@
     <Compile Include="Interfaces\IEmailService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
+    <Compile Include="Interfaces\IFeatureToggle.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="LevyItemType.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
+    <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
