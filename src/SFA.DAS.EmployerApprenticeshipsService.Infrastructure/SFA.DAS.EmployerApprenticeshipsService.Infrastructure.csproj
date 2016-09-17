@@ -106,6 +106,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -117,6 +118,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\ICacheProvider.cs" />
+    <Compile Include="Caching\InProcessCacheProvider.cs" />
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\EnglishFractionRepository.cs" />

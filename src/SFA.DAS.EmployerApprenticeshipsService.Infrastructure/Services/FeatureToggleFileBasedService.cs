@@ -1,23 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 {
     public class FeatureToggleFileBasedService : FileSystemRepository, IFeatureToggle
     {
-        public FeatureToggleFileBasedService() : base("Features")
+        private readonly ICacheProvider _cacheProvider;
+
+        public FeatureToggleFileBasedService(ICacheProvider cacheProvider) : base("Features")
         {
+            _cacheProvider = cacheProvider;
         }
 
         public FeatureToggleLookup GetFeatures()
         {
-            return ReadFileByIdNotAsync<FeatureToggleLookup>("features_data");
+
+            var features = _cacheProvider.Get<FeatureToggleLookup>(nameof(FeatureToggleLookup));
+            if(features == null)
+            {
+                features = ReadFileByIdSync<FeatureToggleLookup>("features_data");
+                if (features.Data.Any())
+                {
+                    _cacheProvider.Set(nameof(FeatureToggleLookup),features,new TimeSpan(0,30,0));
+                }
+            }
+            return features;
         }
     }
 }

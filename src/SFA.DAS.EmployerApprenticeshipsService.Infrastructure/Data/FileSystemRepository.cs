@@ -49,12 +49,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             }
         }
 
-        protected T ReadFileByIdNotAsync<T>(string id)
+        protected T ReadFileByIdSync<T>(string id)
         {
             var path = Path.Combine(Directory, id + ".json");
-            return ReadFileNotAsync<T>(path);
+            return ReadFileSync<T>(path);
         }
-        protected T ReadFileNotAsync<T>(string path)
+        protected T ReadFileSync<T>(string path)
         {
             if (!File.Exists(path))
             {
