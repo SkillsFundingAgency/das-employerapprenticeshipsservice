@@ -36,6 +36,32 @@ table {
     background-image: url("/assets/images/icon-pointer-2x.png");
 }
 
+.button-link {
+    background: #fff;
+    color: #005ea5;
+    box-shadow: 0 2px 0 #fff;
+    text-decoration: underline;
+}
+
+.button-link:link, 
+.button-link:hover, 
+.button-link:focus, 
+.button-link:visited {
+    color: #005ea5;
+    background: #fff;
+}
+
+.button-link:hover {
+    background: #fff;
+    box-shadow: 0 2px 0 #fff;
+    color: #2e8aca;
+}
+
+.button-link:focus {
+    background-color: #ffbf47;
+    outline: 3px solid #ffbf47;
+}
+
 .govuk-box-highlight h1, 
 .govuk-box-highlight p {
     margin-left:auto;
