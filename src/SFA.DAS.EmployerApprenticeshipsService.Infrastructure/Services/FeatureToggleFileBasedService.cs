@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             if(features == null)
             {
                 features = ReadFileByIdSync<FeatureToggleLookup>("features_data");
-                if (features.Data.Any())
+                if (features.Data != null && features.Data.Any())
                 {
                     _cacheProvider.Set(nameof(FeatureToggleLookup),features,new TimeSpan(0,30,0));
                 }
