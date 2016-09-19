@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Validation
         {
             ValidationDictionary.Add(propertyName, validationError);
         }
+
         public bool IsValid()
         {
             if (ValidationDictionary == null)
