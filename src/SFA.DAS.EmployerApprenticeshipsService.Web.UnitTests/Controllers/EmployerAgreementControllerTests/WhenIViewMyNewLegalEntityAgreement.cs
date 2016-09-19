@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -16,14 +17,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private EmployerAgreementController _controller;
         private Mock<EmployerAgreementOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IFeatureToggle> _featureToggle;
 
         [SetUp]
         public void Arrange()
         {
             _owinWrapper = new Mock<IOwinWrapper>();
             _orchestrator = new Mock<EmployerAgreementOrchestrator>();
+            _featureToggle = new Mock<IFeatureToggle>();
 
-            _controller = new EmployerAgreementController(_owinWrapper.Object, _orchestrator.Object);
+            _controller = new EmployerAgreementController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object);
         }
 
         [Test]

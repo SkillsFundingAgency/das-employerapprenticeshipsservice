@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
@@ -55,6 +58,43 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers
             });
             var principal = new ClaimsPrincipal(identity);
             _httpContext.Setup(c => c.User).Returns(principal);
+        }
+
+        public T Invoke<T>(Expression<Func<T>> exp) where T : ActionResult
+        {
+            var methodCall = (MethodCallExpression)exp.Body;
+            var method = methodCall.Method;
+            var memberExpression = (MemberExpression)methodCall.Object;
+
+            var getCallerExpression = Expression.Lambda<Func<object>>(memberExpression);
+            var getCaller = getCallerExpression.Compile();
+            var ctrlr = (Controller)getCaller();
+
+            var controllerDescriptor = new ReflectedControllerDescriptor(ctrlr.GetType());
+            var actionDescriptor = new ReflectedActionDescriptor(method, method.Name, controllerDescriptor);
+
+            // OnActionExecuting
+
+            ctrlr.ControllerContext = _controllerContext.Object;
+            var actionExecutingContext = new ActionExecutingContext(ctrlr.ControllerContext, actionDescriptor, new Dictionary<string, object>());
+            var onActionExecuting = ctrlr.GetType().GetMethod("OnActionExecuting", BindingFlags.Instance | BindingFlags.NonPublic);
+            onActionExecuting.Invoke(ctrlr, new object[] { actionExecutingContext });
+            var actionResult = actionExecutingContext.Result;
+
+            if (actionResult != null)
+                return (T)actionResult;
+
+            // call controller method
+
+            var result = exp.Compile()();
+
+            // OnActionExecuted
+            var ctx2 = new ActionExecutedContext(ctrlr.ControllerContext,actionDescriptor, false, null)
+            { Result = result };
+            MethodInfo onActionExecuted = ctrlr.GetType().GetMethod("OnActionExecuted", BindingFlags.Instance | BindingFlags.NonPublic);
+            onActionExecuted.Invoke(ctrlr, new object[] { ctx2 });
+
+            return (T)ctx2.Result;
         }
     }
 }
