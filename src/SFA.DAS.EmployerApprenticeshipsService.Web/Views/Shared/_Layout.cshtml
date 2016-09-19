@@ -99,8 +99,8 @@
             </div>
         </div>
         <div class="grid-row">
-            <div class="column-one-third">&ensp;</div>
-            <div class="column-two-thirds rightalign">
+            <div class="column-two-thirds">@RenderSection("breadcrumb", required:false)&nbsp;</div>
+            <div class="column-one-third rightalign">
                 @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
                     <span>Hi @HttpContext.Current.User.Identity.Name</span>

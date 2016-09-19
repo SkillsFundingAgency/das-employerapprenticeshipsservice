@@ -235,3 +235,69 @@ hr.wide {
 table.full-width, .responsive-table.full-width {
     max-width:100%;
 }
+
+.breadcrumbs li {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  float: left;
+  background-image: url("/assets/images/separator.png");
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  list-style: none;
+  margin-left: 0.6em;
+  margin-bottom: 0.4em;
+  padding-left: 0.9em;
+}
+
+@media (min-width: 641px) {
+  .breadcrumbs li {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .breadcrumbs li {
+    background-image: url("/assets/images/separator-2x.png");
+    background-size: 6px 11px;
+  }
+}
+
+.breadcrumbs li:first-child {
+  background-image: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.breadcrumbs a {
+  color: #0b0c0c;
+}
+
+.breadcrumbs {
+    padding: 0;
+}
+.breadcrumbs ol li {
+  
+    position: relative;
+}
+.back-link {
+    padding-left: 15px;
+    text-decoration: none;
+    border-bottom: 1px solid #0b0c0c;
+}
+.back-link:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-right: 6px solid #0b0c0c;
+    border-bottom: 5px solid transparent;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -6px;
+}

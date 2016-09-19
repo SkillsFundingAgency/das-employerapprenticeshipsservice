@@ -4,17 +4,17 @@
         <p class="first-para-spacing">You need your goverment gateway ID for at least one of the PAYE schemes you intend to link to this apprenticeship account.</p>
         <p class="bold-small">Do you have at least one goverment gateway ID ready?</p>
 
-        
-            
-        
-    
+
+
+
+
         <fieldset class="inline">
             <legend class="visuallyhidden">Goverment Gateway ID ready</legend>
             <label class="block-label" for="radio1">
                 <input id="radio1" type="radio" name="radio-group" value="yes">
                 Yes
             </label>
-                <label class="block-label" for="radio2">
+            <label class="block-label" for="radio2">
                 <input id="radio2" type="radio" name="radio-group" value="no">
                 No
             </label>
@@ -23,7 +23,15 @@
             <div class="column-one-third">
                 <p></p>
                 <a class="button" id="continue" href="@Url.Action("SelectEmployer")">Continue</a>
-            </div>            
+            </div>
         </div>
-    </div>        
+    </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+        </ol>
+    </div>
+}
