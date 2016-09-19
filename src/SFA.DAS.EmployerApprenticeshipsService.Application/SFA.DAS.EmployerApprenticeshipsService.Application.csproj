@@ -232,6 +232,9 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
