@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Routing;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
@@ -11,9 +11,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class BaseController : Controller
     {
         private readonly IFeatureToggle _featureToggle;
+        protected IOwinWrapper OwinWrapper;
 
-        public BaseController(IFeatureToggle featureToggle)
+        public BaseController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle)
         {
+            OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
         }
 

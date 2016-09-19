@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseControllerTests
@@ -12,6 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
     public class WhenOnActionExecuting : ControllerTestBase
     {
         private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IOwinWrapper> _owinWrapper;
         private TestController _controller;
 
         [SetUp]
@@ -20,6 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             base.Arrange();
 
             _featureToggle = new Mock<IFeatureToggle>();
+            _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem>()});
 
             var routes = new RouteData();
@@ -27,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
             
-            _controller = new TestController(_featureToggle.Object)
+            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -80,7 +83,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle) : base(featureToggle)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper) : base(owinWrapper, featureToggle)
             {
 
             }

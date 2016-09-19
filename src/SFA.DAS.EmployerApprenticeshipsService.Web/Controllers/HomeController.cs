@@ -11,20 +11,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IOwinWrapper _owinWrapper;
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle) : base(featureToggle)
+        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
         {
-            _owinWrapper = owinWrapper;
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
         }
         
         public async Task<ActionResult> Index()
         {
-            var userId = _owinWrapper.GetClaimValue("sub");
+            var userId = OwinWrapper.GetClaimValue("sub");
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
@@ -80,18 +78,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         
         public ActionResult SignOut()
         {
-            return _owinWrapper.SignOutUser();
+            return OwinWrapper.SignOutUser();
 
         }
 
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";
-            _owinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
+            OwinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
 
-            _owinWrapper.IssueLoginCookie(id, displayName);
+            OwinWrapper.IssueLoginCookie(id, displayName);
 
-            _owinWrapper.RemovePartialLoginCookie();
+            OwinWrapper.RemovePartialLoginCookie();
         }
 
        

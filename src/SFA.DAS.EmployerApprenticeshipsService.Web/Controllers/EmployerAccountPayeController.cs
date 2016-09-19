@@ -13,23 +13,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAccountPayeController : BaseController
     {
-        private readonly IOwinWrapper _owinWrapper;
+      
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
-        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
+        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
             if (employerAccountPayeOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountPayeOrchestrator));
-            _owinWrapper = owinWrapper;
+           
             _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(long accountid)
         {
-            var model = await _employerAccountPayeOrchestrator.Get(accountid, _owinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerAccountPayeOrchestrator.Get(accountid, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Add(long accountId, bool? validationFailed)
         {
-            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, _owinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
+            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, OwinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
 
             if (validationFailed.HasValue && validationFailed.Value)
             {
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
         {
-            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, _owinWrapper.GetClaimValue(@"sub"));
+            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, OwinWrapper.GetClaimValue(@"sub"));
             return View("ChooseCompany", model);
         }
 
@@ -152,7 +152,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> Confirm(ConfirmNewPayeScheme model)
         {
 
-            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, _owinWrapper.GetClaimValue("sub"));
+            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
             TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
 
@@ -166,7 +166,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 AccountId = accountId,
                 PayeRef = empRef,
-                UserId = _owinWrapper.GetClaimValue("sub")
+                UserId = OwinWrapper.GetClaimValue("sub")
             });
 
             return View(model);
@@ -176,7 +176,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemovePaye(RemovePayeScheme model)
         {
-            model.UserId = _owinWrapper.GetClaimValue("sub");
+            model.UserId = OwinWrapper.GetClaimValue("sub");
 
             var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 

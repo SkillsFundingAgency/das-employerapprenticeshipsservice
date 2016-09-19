@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -10,17 +11,17 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     
-    public class InvitationController : Controller
+    public class InvitationController : BaseController
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
         private readonly string _userIdClaim;
 
-        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper)
+        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));
             _invitationOrchestrator = invitationOrchestrator;
-            _userIdClaim = owinWrapper.GetClaimValue("sub");
+            _userIdClaim = OwinWrapper.GetClaimValue("sub");
         }
 
 

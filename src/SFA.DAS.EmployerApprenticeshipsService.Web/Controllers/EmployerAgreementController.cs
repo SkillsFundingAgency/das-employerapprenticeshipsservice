@@ -13,23 +13,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAgreementController : BaseController
     {
-        private readonly IOwinWrapper _owinWrapper;
+        
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
-        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, IFeatureToggle featureToggle) : base(featureToggle)
+        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
-            _owinWrapper = owinWrapper;
+          
             _orchestrator = orchestrator;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
         {
-            var model = await _orchestrator.Get(accountId, _owinWrapper.GetClaimValue(@"sub"));
+            var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             //DANGER: Injected flash messages override the orchestrator response
             if (flashMessage != null)
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
             
             //DANGER: Injected flash messages override the orchestrator response
             if (flashMessage != null) agreement.FlashMessage = flashMessage;
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             if (understood == nameof(understood))
             {
-                var response = await _orchestrator.SignAgreement(agreementid, accountId, _owinWrapper.GetClaimValue(@"sub"), DateTime.Now);
+                var response = await _orchestrator.SignAgreement(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
 
                 if (response.Status == HttpStatusCode.OK)
                 {
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
         {
-            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, _owinWrapper.GetClaimValue(@"sub"));
+            var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -126,7 +126,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
             DateTime incorporated)
         {
-            var response = await _orchestrator.Create(accountId, _owinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
+            var response = await _orchestrator.Create(accountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
 
             return View(response);
         }
@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
                 SignedDate = DateTime.Now,
-                ExternalUserId = _owinWrapper.GetClaimValue(@"sub")
+                ExternalUserId = OwinWrapper.GetClaimValue(@"sub")
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

@@ -12,16 +12,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAccountController : BaseController
     {
-        
-        private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         
-        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, IFeatureToggle featureToggle):base(featureToggle)
+        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
-            
-            _owinWrapper = owinWrapper;
+           
             _employerAccountOrchestrator = employerAccountOrchestrator;
         }
 
@@ -91,7 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View("InvalidSummary", response);
             }
 
-            var email = _owinWrapper.GetClaimValue("email");
+            var email = OwinWrapper.GetClaimValue("email");
 
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             
@@ -153,7 +150,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         private string GetUserId()
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
         
