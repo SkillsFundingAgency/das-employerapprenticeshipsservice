@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
-        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator)
+        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
         {
             _owinWrapper = owinWrapper;
             _employerTeamOrchestrator = employerTeamOrchestrator;

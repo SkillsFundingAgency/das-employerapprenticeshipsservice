@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -14,8 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration)
+        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle) : base(featureToggle)
         {
             _owinWrapper = owinWrapper;
             _homeOrchestrator = homeOrchestrator;
@@ -70,8 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return RedirectToAction("Index");
         }
-
-
+        
         public async Task<ActionResult> FakeUserSignIn()
         {
             var users = await _homeOrchestrator.GetUsers();

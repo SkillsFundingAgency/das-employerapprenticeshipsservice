@@ -49,6 +49,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             }
         }
 
+        public virtual T ReadFileByIdSync<T>(string id)
+        {
+            var path = Path.Combine(Directory, id + ".json");
+            return ReadFileSync<T>(path);
+        }
+        protected T ReadFileSync<T>(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return default(T);
+            }
+
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
+            using (var reader = new StreamReader(stream))
+            {
+                var json = reader.ReadToEnd();
+                reader.Close();
+
+                return JsonConvert.DeserializeObject<T>(json);
+            }
+        }
+
         protected async Task CreateFile<T>(T item, string id)
         {
             if (!System.IO.Directory.Exists(Directory))

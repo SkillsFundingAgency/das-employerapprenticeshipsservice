@@ -19,7 +19,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
         private Mock<IMediator> _mediator;
         private Mock<ICookieService> _cookieService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
 
         [SetUp]
         public void Arrange()
@@ -31,9 +30,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             {
                 Hmrc = new HmrcConfiguration {IgnoreDuplicates = false}
             };
-            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
+            new Mock<IEmpRefFileBasedService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, _empRefFileBasedService.Object);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
 
         [Test]
