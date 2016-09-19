@@ -19,16 +19,18 @@
             <li>the Government Gateway login details for the PAYE scheme you want to use to clain levy funds</li>
         </ul>
         <p><a href="" rel="external">What's Government Gateway?</a></p>
-        <form method="POST" action="employeraccount/index">
+        <form method="POST" action="@Url.Action("Index")">
             <h2 class="heading-medium">Check this statement to continue</h2>
-                <div class="form-group error">
+                <div class="form-group  @(TempData?["notunderstood"] != null ? "error" : string.Empty)">
                     <label class="block-label" for="understood">
-                        <input type="checkbox" id="understood" name="understood" value="understood" aria-describedby="error-message-understand">
-                        I understand that all account users will be able to see financial information from any PAYE schemes I add. 
-                        <span class="error-message" id="error-message-understand">Please check the box to continue</span>
+                        <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
+                        I understand that all account users will be able to see financial information from any PAYE schemes I add.
+                        @if (TempData["notunderstood"] != null)
+                        {
+                            <span class="error-message" id="error-message-understand">Please check the box to continue</span>
+                        }
                     </label>
                 </div>
-                <input type="hidden" name="accepted" value="true"/>
             <button type="submit" class="button button-start" id="start">Start</button>
         </form>
     </div>
