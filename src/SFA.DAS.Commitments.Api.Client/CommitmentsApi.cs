@@ -48,7 +48,7 @@ namespace SFA.DAS.Commitments.Api.Client
 
         public async Task PatchApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, ApprenticeshipStatus status)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PatchApprenticeship(url, status);
         }
