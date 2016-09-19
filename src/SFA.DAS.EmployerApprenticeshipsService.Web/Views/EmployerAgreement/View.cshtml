@@ -51,7 +51,7 @@
             <p>Signed By</p>
             <p>@Model.Data.EmployerAgreement.SignedByName</p>
             <p>Signed Date</p>
-            <p>@Model.Data.EmployerAgreement.SignedDate</p>
+            <p>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</p>
             if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
             {
                 <p>Expired Date</p>
