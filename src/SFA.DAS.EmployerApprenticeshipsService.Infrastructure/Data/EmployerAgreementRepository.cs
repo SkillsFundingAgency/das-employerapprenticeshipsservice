@@ -118,5 +118,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.SingleOrDefault();
         }
+
+        public async Task<EmployerAgreementTemplate> GetLatestAgreementTemplate()
+        {
+            var result = await WithConnection(async c => await c.QueryAsync<EmployerAgreementTemplate>(
+                sql: "SELECT * FROM [account].[EmployerAgreementTemplate] ORDER BY ReleasedDate DESC;",
+                commandType: CommandType.Text));
+
+            return result.FirstOrDefault();
+        }
     }
 }

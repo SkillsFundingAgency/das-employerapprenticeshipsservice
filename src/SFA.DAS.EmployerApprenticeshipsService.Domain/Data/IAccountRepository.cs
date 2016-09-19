@@ -11,6 +11,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<List<PayeView>> GetPayeSchemes(long accountId);
         Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef, string accessToken, string refreshToken);
         Task RemovePayeFromAccount(long accountId, string payeRef);
+
+        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity, bool signAgreement, DateTime signedDate, long signedById);
+
         Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity);
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
     }
