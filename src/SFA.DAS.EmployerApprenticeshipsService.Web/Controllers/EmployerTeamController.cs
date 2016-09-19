@@ -18,7 +18,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
-        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
+        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }

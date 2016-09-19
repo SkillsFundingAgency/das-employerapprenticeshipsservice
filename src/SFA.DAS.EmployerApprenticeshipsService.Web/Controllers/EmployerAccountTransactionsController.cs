@@ -9,10 +9,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAccountTransactionsController : BaseController
     {
-        
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
-        public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator) :base(owinWrapper, featureToggle)
+        public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, 
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }

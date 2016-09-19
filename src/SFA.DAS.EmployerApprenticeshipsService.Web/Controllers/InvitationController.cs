@@ -16,7 +16,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly InvitationOrchestrator _invitationOrchestrator;
         private readonly string _userIdClaim;
 
-        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
+        public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));

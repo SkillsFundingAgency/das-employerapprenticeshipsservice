@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
     {
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IUserWhiteList> _userWhiteList;
         private TestController _controller;
 
         [SetUp]
@@ -23,6 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
 
             _featureToggle = new Mock<IFeatureToggle>();
             _owinWrapper = new Mock<IOwinWrapper>();
+            _userWhiteList = new Mock<IUserWhiteList>();
             _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem>()});
 
             var routes = new RouteData();
@@ -30,7 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
             
-            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object)
+            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _userWhiteList.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -83,7 +85,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper) : base(owinWrapper, featureToggle)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList) 
+                : base(owinWrapper, featureToggle, userWhiteList)
             {
 
             }

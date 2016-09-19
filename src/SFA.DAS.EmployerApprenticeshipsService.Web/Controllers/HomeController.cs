@@ -14,7 +14,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
+        public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator, 
+            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;

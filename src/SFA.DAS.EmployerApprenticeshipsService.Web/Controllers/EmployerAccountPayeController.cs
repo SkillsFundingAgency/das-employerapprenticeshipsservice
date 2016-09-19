@@ -16,7 +16,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
       
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
-        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
+        public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

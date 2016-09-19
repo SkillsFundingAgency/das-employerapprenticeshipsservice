@@ -11,12 +11,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class BaseController : Controller
     {
         private readonly IFeatureToggle _featureToggle;
+        private readonly IUserWhiteList _userWhiteList;
         protected IOwinWrapper OwinWrapper;
 
-        public BaseController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle)
+        public BaseController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
+            _userWhiteList = userWhiteList;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -26,6 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 filterContext.Result = base.View("FeatureNotEnabled", null, null);
             }
+
 
         }
         

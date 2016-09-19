@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private Mock<EmployerAgreementOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
 
         [SetUp]
         public void Arrange()
@@ -20,8 +21,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             _orchestrator = new Mock<EmployerAgreementOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
 
-            _controller = new EmployerAgreementController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object);
+            _controller = new EmployerAgreementController(
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object);
         }
     }
 }

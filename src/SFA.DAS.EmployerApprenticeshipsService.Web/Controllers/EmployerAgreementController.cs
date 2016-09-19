@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -13,10 +12,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAgreementController : BaseController
     {
-        
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
-        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, IFeatureToggle featureToggle) : base(owinWrapper, featureToggle)
+        public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

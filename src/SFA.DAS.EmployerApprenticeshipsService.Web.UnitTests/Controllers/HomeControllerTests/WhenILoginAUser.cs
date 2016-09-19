@@ -21,6 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private HomeController _homeController;
         private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
 
         [SetUp]
         public void Arrange()
@@ -29,8 +30,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
             _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object);
+            _homeController = new HomeController(
+                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object, _userWhiteList.Object);
         }
 
         [Test]

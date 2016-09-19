@@ -129,6 +129,7 @@
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
+    <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Invitation.cs" />
     <Compile Include="InvitationStatus.cs" />
     <Compile Include="InvitationView.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
+    <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
     <Compile Include="Paye.cs" />
     <Compile Include="PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
