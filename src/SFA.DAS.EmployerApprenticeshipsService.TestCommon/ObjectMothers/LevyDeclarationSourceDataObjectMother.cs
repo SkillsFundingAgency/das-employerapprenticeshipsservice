@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class LevyDeclarationSourceDataObjectMother
     {
-        public static LevyDeclarationSourceData Create(List<Emprefs> emprefs, long accountId = 123453, int numberOfDeclarations = 1, int declarationsPerperiodPerPaye = 1, bool randomEnlgishFraction = false, bool addTopUp = false, DateTime? submissionStartDate = null)
+        public static LevyDeclarationSourceData Create(List<Emprefs> emprefs, long accountId = 123453, int numberOfDeclarations = 1, int declarationsPerperiodPerPaye = 1, bool randomEnlgishFraction = false, bool addTopUp = false, DateTime? submissionStartDate = null,bool multipleAccountIds = false)
         {
             if (!submissionStartDate.HasValue)
             {
@@ -16,13 +16,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
             var item = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = BuildItems(numberOfDeclarations, emprefs, declarationsPerperiodPerPaye, randomEnlgishFraction, addTopUp, submissionStartDate.Value)
+                Data = BuildItems(numberOfDeclarations, emprefs, declarationsPerperiodPerPaye, randomEnlgishFraction, addTopUp, submissionStartDate.Value, accountId, multipleAccountIds)
             };
 
             return item;
         }
 
-        private static List<LevyDeclarationSourceDataItem> BuildItems(int numberOfDeclarations, List<Emprefs> emprefs, int declarationsPerperiodPerPaye, bool randomEnglishFraction, bool addTopup, DateTime submissionStartDate)
+        private static List<LevyDeclarationSourceDataItem> BuildItems(int numberOfDeclarations, List<Emprefs> emprefs, int declarationsPerperiodPerPaye, bool randomEnglishFraction, bool addTopup, DateTime submissionStartDate, long accountId, bool multipleAccountIds)
         {
             var randomLevyDueYtd = new Random();
             var list = new List<LevyDeclarationSourceDataItem>();
@@ -50,7 +50,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                             PayrollMonth = (short)submissionDate.Month,//TODO
                             PayrollYear = submissionDate.ToString("yy"),//TODO
                             LastSubmission = j == declarationsPerperiodPerPaye ? 1 : 0,
-                            TopUp = addTopup ? levyDueYtd * 0.1m : 0m
+                            TopUp = addTopup ? levyDueYtd * 0.1m : 0m,
+                            AccountId =  multipleAccountIds ? accountId ++ : accountId
                         });
                     }
                 }

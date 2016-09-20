@@ -14,7 +14,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             if (input == null)
                 return null;
 
-            var aggregates = AggregateData(input.Data);
+            var aggregates = AggregateData(input.Data, input.AccountId);
 
             return new AggregationData
             {
@@ -23,7 +23,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             };
         }
 
-        private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source)
+        private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source, long accountId)
         {
             var output = new List<AggregationLine>();
             
@@ -47,7 +47,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     }
                 }
 
-                var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items);
+                var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items, accountId);
                 aggregationLine.Amount = amount;
                 
                 if (string.IsNullOrEmpty(FindAggregationLine(declarationsForMonth, output)))
@@ -60,10 +60,38 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     aggregationLine.Balance = output.Sum(c => c.Amount);
                 }
                 
+            }
+            
+            return BuildAggregationOutputForAccount(accountId, output);
+        }
 
+        private List<AggregationLine> BuildAggregationOutputForAccount(long accountId, List<AggregationLine> output)
+        {
+            var aggregationOutputForAccount = new List<AggregationLine>();
+            foreach (var item in output)
+            {
+                var newLine = new AggregationLine {Items = new List<AggregationLineItem>()};
+                foreach (var lineItem in item.Items)
+                {
+                    if (lineItem.AccountId == accountId)
+                    {
+                        newLine.Items.Add(lineItem);
+                    }
+                }
+
+                if (newLine.Items.Any())
+                {
+                    newLine.Id = item.Id;
+                    newLine.Amount = item.Amount;
+                    newLine.Balance = item.Balance;
+                    newLine.LevyItemType = item.LevyItemType;
+                    newLine.Month = item.Month;
+                    newLine.Year = item.Year;
+                    aggregationOutputForAccount.Add(newLine);
+                }
             }
 
-            return output;
+            return aggregationOutputForAccount;
         }
 
         private static AggregationLine BuildAggregationLine(dynamic declarationsForMonth, List<AggregationLine> output)
@@ -111,15 +139,15 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             return output.Sum(c => c.Amount) + amount;
         }
 
-        private decimal CalculateAmountWithEnglishFraction(List<AggregationLineItem> items)
+        private decimal CalculateAmountWithEnglishFraction(List<AggregationLineItem> items, long accountId)
         {
-            var totalAmount = items.GroupBy(c => new { c.EmpRef }, (empref, group) => new
+            var totalAmount = items.GroupBy(c => new { c.EmpRef, c.AccountId }, (empref, group) => new
             {
                 empref.EmpRef,
                 Data = group.ToList()
             }).Sum(item =>
             {
-                return item.Data.Where(c => c.IsLastSubmission).Sum(c => c.CalculatedAmount);
+                return item.Data.Where(c => c.IsLastSubmission && c.AccountId == accountId).Sum(c => c.CalculatedAmount);
             });
 
             return totalAmount;
@@ -159,7 +187,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 EnglishFraction = item.EnglishFraction,
                 CalculatedAmount = calculatedAmount,
                 LevyItemType = LevyItemType.Declaration,
-                IsLastSubmission = item.LastSubmission == 1
+                IsLastSubmission = item.LastSubmission == 1,
+                AccountId = item.AccountId
             };
         }
 
@@ -175,7 +204,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 CalculatedAmount = item.TopUp * item.EnglishFraction,
                 EnglishFraction = item.EnglishFraction,
                 LevyItemType = LevyItemType.TopUp,
-                IsLastSubmission = true
+                IsLastSubmission = true,
+                AccountId = item.AccountId
             };
         }
 

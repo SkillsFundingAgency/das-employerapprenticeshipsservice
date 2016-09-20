@@ -316,5 +316,27 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             Assert.AreEqual(expectedAmount1 + expectedAmount2, actual.Data[0].Balance);
         }
 
+        [Test]
+        public void ThenTheTotalIsTakenFromThePreviousAccountWhenTheSchemeIsAddedToANewAccount()
+        {
+            //Arrange
+            var actualData = LevyDeclarationSourceDataObjectMother.Create(_expectedEmpref, numberOfDeclarations: 2, addTopUp: false, randomEnlgishFraction: true,multipleAccountIds:true);
+
+            //Act
+            var actualAccount1 = _levyAggregator.BuildAggregate(actualData);
+            actualData.AccountId = actualData.AccountId + 1;
+            var actualAccount2 = _levyAggregator.BuildAggregate(actualData);
+
+            //Assert
+            Assert.AreEqual(1, actualAccount1.Data.Count);
+            Assert.AreEqual(1, actualAccount2.Data.Count);
+            var someValue = actualData.Data.Where(x => x.LastSubmission == 1).ToList();
+            var expectedAmount1 = (someValue[0].LevyDueYtd * someValue[0].EnglishFraction);
+            var expectedAmount2 = ((someValue[1].LevyDueYtd * someValue[1].EnglishFraction) -
+                                   (someValue[0].LevyDueYtd * someValue[0].EnglishFraction));
+            Assert.AreEqual(expectedAmount1, actualAccount1.Data[0].Amount);
+            Assert.AreEqual(expectedAmount2, actualAccount2.Data[0].Amount);
+        }
+
     }
 }
