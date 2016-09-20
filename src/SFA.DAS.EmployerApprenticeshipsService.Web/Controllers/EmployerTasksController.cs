@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -11,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerTasksOrchestrator _employerTasksOrchestrator;
 
-        public EmployerTasksController(IOwinWrapper owinWrapper, EmployerTasksOrchestrator employerTasksOrchestrator)
+        public EmployerTasksController(IOwinWrapper owinWrapper, EmployerTasksOrchestrator employerTasksOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
