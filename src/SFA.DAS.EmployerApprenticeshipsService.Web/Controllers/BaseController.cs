@@ -25,16 +25,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             if (!CheckFeatureIsEnabled())
             {
-
                 filterContext.Result = base.View("FeatureNotEnabled", null, null);
             }
 
+            if (filterContext.ActionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), false).Any())
+            {
+                var userEmail = OwinWrapper.GetClaimValue("email");
 
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    if (!_userWhiteList.IsEmailOnWhiteList(userEmail))
+                    {
+                        filterContext.Result = base.View("UserNotAllowed", null, null);
+                    }
+                }
+            }
         }
         
         protected override ViewResult View(string viewName, string masterName, object model)
         {
-            
             var orchestratorResponse = model as OrchestratorResponse;
             
             if (orchestratorResponse == null) return base.View(viewName, masterName, model);
@@ -58,10 +67,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 return base.View(@"AccessDenied", masterName, orchestratorResponse);
             }
-                
 
             return base.View(@"GenericError", masterName, orchestratorResponse);
-
         }
 
         private bool CheckFeatureIsEnabled()
@@ -105,7 +112,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             return null;
         }
-
-
     }
 }

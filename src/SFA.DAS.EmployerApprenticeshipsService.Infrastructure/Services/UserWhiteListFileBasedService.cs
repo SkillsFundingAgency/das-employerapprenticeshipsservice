@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.WhileList;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
@@ -15,22 +16,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
         {
             _cacheProvider = cacheProvider;
         }
-
-        public UserWhiteListLookUp GetList()
+        
+        public bool IsEmailOnWhiteList(string email)
         {
-            var whiteList = _cacheProvider.Get<UserWhiteListLookUp>(nameof(UserWhiteListLookUp));
+            if (string.IsNullOrEmpty(email))
+                return false;
 
-            if (whiteList != null)
-                return whiteList;
+            var whiteList = GetList();
 
-            whiteList = ReadFileByIdSync<UserWhiteListLookUp>("user_white_list");
+            return whiteList?.EmailPatterns != null && 
+                   whiteList.EmailPatterns.Any(pattern => Regex.IsMatch(email, pattern));
+        }
 
-            if (whiteList?.Emails != null && whiteList.Emails.Any())
-            {
-                _cacheProvider.Set(nameof(UserWhiteListLookUp), whiteList, new TimeSpan(0, 30, 0));
-            }
+        private UserWhiteListLookUp GetList()
+        {
+            var whiteListLookUp = _cacheProvider.Get<UserWhiteListLookUp>(nameof(UserWhiteListLookUp));
 
-            return whiteList;
+            if (whiteListLookUp != null)
+                return whiteListLookUp;
+
+            whiteListLookUp = ReadFileByIdSync<UserWhiteListLookUp>("user_white_list");
+
+            if (whiteListLookUp?.EmailPatterns == null || !whiteListLookUp.EmailPatterns.Any())
+                return null;
+
+            _cacheProvider.Set(nameof(UserWhiteListLookUp), whiteListLookUp, new TimeSpan(0, 30, 0));
+
+            return whiteListLookUp;
         }
     }
 }

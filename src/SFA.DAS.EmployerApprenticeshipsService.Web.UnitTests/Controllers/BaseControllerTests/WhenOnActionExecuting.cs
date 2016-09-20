@@ -36,7 +36,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             {
                 ControllerContext = _controllerContext.Object
             };
-            
         }
 
         [Test]
@@ -82,6 +81,48 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
                 Assert.AreEqual("FeatureNotEnabled",viewResult.ViewName);
             }
         }
+       
+        public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(true);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.SecureTestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ContentResult>(result);
+        }
+
+        public void ThenShouldDirectToUserNotAllowedPageIfUserIsNotOnWhiteList()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.SecureTestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ViewResult>(result);
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.AreEqual("UserNotAllowed", viewResult.ViewName);
+        }
+        
+        public void ThenShouldNoDirectToUserNotAllowedPageIfPublicWebPage()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.TestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ContentResult>(result);
+        }
 
         internal class TestController : BaseController
         {
@@ -92,6 +133,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             }
 
             public ActionResult TestView()
+            {
+                return new ContentResult();
+            }
+
+            [Authorize]
+            public ActionResult SecureTestView()
             {
                 return new ContentResult();
             }
