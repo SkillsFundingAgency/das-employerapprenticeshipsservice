@@ -17,5 +17,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
         public decimal TopUp { get; set; }
         public DateTime EmprefAddedDate { get; set; }
         public DateTime? EmprefRemovedDate { get; set; }
+        public long AccountId { get; set; }
     }
 }

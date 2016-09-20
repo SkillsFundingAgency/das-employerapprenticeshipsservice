@@ -45,7 +45,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                         PayrollMonth = item.PayrollMonth,
                         PayrollYear = item.PayrollYear,
                         LastSubmission = item.LastSubmission,
-                        TopUp = item.TopUp
+                        TopUp = item.TopUp,
+                        AccountId = item.AccountId,
+                        
                     }).ToList()
                 }
             };
