@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
-using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggregationTests
 {
