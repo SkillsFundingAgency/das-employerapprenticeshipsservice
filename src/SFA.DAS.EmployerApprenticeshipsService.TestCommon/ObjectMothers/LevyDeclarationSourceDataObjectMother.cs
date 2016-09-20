@@ -6,26 +6,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class LevyDeclarationSourceDataObjectMother
     {
-        public static LevyDeclarationSourceData Create(string[] emprefs, long accountId = 123453, int numberOfDeclarations = 1, int declarationsPerperiodPerPaye = 1, bool randomEnlgishFraction = false, bool addTopUp = false)
+        public static LevyDeclarationSourceData Create(List<Emprefs> emprefs, long accountId = 123453, int numberOfDeclarations = 1, int declarationsPerperiodPerPaye = 1, bool randomEnlgishFraction = false, bool addTopUp = false, DateTime? submissionStartDate = null)
         {
+            if (!submissionStartDate.HasValue)
+            {
+                submissionStartDate = new DateTime(2016, 05, 06);
+            }
+
             var item = new LevyDeclarationSourceData
             {
                 AccountId = accountId,
-                Data = BuildItems(numberOfDeclarations, emprefs, declarationsPerperiodPerPaye, randomEnlgishFraction, addTopUp)
+                Data = BuildItems(numberOfDeclarations, emprefs, declarationsPerperiodPerPaye, randomEnlgishFraction, addTopUp, submissionStartDate.Value)
             };
 
             return item;
         }
 
-        private static List<LevyDeclarationSourceDataItem> BuildItems(int numberOfDeclarations, string[] empRefs, int declarationsPerperiodPerPaye, bool randomEnglishFraction, bool addTopup)
+        private static List<LevyDeclarationSourceDataItem> BuildItems(int numberOfDeclarations, List<Emprefs> emprefs, int declarationsPerperiodPerPaye, bool randomEnglishFraction, bool addTopup, DateTime submissionStartDate)
         {
             var randomLevyDueYtd = new Random();
             var list = new List<LevyDeclarationSourceDataItem>();
-            foreach (var empref in empRefs)
+            foreach (var empref in emprefs)
             {
                 for (var i = 1; i <= numberOfDeclarations; i++)
                 {
-                    var submissionDate = new DateTime(2016, 05, 06).AddMonths(i);
+                    var submissionDate = submissionStartDate.AddMonths(i);
 
                     for (var j = 1; j <= declarationsPerperiodPerPaye; j++)
                     {
@@ -38,7 +43,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                             PayrollDate = submissionDate,//TODO
                             SubmissionDate = submissionDate,
                             LevyItemType = 0,
-                            EmpRef = empref,
+                            EmpRef = empref.Empref,
+                            EmprefAddedDate = empref.AddedDate,
+                            EmprefRemovedDate = empref.RemovedDate,
                             LevyDueYtd = levyDueYtd,
                             PayrollMonth = (short)submissionDate.Month,//TODO
                             PayrollYear = submissionDate.ToString("yy"),//TODO
@@ -51,6 +58,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 
 
             return list;
+        }
+
+        public class Emprefs
+        {
+            public string Empref { get; set; }
+            public DateTime AddedDate { get; set; }
+            public DateTime? RemovedDate { get; set; }
         }
     }
 }

@@ -31,14 +31,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             foreach (var declarationsForMonth in GetDeclarationsByPayrollYearAndPayrollMonth(source))
             {
                 var previousAmount = new Dictionary<string, decimal>();
-                var aggregationLine = new AggregationLine
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    LevyItemType = LevyItemType.Declaration,
-                    Items = new List<AggregationLineItem>(),
-                    Year = declarationsForMonth.PayrollYear,
-                    Month = declarationsForMonth.PayrollMonth
-                };
+                var aggregationLine = BuildAggregationLine(declarationsForMonth, output);
 
                 AddPreviousAmountForPayeToCollection(previousAmount, output);
 
@@ -56,13 +49,61 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
                 var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items);
                 aggregationLine.Amount = amount;
-                aggregationLine.Balance = CalculateCurrentBalance(output, amount);
-
-                output.Add(aggregationLine);
+                
+                if (string.IsNullOrEmpty(FindAggregationLine(declarationsForMonth, output)))
+                {
+                    aggregationLine.Balance = CalculateCurrentBalance(output, amount);
+                    output.Add(aggregationLine);
+                }
+                else
+                {
+                    aggregationLine.Balance = output.Sum(c => c.Amount);
+                }
+                
 
             }
 
             return output;
+        }
+
+        private static AggregationLine BuildAggregationLine(dynamic declarationsForMonth, List<AggregationLine> output)
+        {
+            var aggregationId = FindAggregationLine(declarationsForMonth,output);
+            if (!string.IsNullOrEmpty(aggregationId))
+            {
+                return output.Find(c => c.Id.Equals(aggregationId));
+            }
+                
+
+            return new AggregationLine
+            {
+                Id = Guid.NewGuid().ToString(),
+                LevyItemType = LevyItemType.Declaration,
+                Items = new List<AggregationLineItem>(),
+                Year = declarationsForMonth.PayrollYear,
+                Month = declarationsForMonth.PayrollMonth
+            };
+        }
+
+        private static string FindAggregationLine(dynamic declarationsForMonth, List<AggregationLine> output)
+        {
+            foreach (LevyDeclarationSourceDataItem declaration in declarationsForMonth.Data)
+            {
+                if (declaration.EmprefAddedDate >= declaration.SubmissionDate)
+                {
+                    foreach (var item in output)
+                    {
+                        if (item.Items.FirstOrDefault(c => c.EmpRef.Equals(declaration.EmpRef)) != null)
+                        {
+                            {
+                                return item.Id;
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private decimal CalculateCurrentBalance(List<AggregationLine> output, decimal amount)
@@ -78,7 +119,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 Data = group.ToList()
             }).Sum(item =>
             {
-                return item.Data.Where(c => c.IsLastSubmission).Sum(c=>c.CalculatedAmount);
+                return item.Data.Where(c => c.IsLastSubmission).Sum(c => c.CalculatedAmount);
             });
 
             return totalAmount;
@@ -95,6 +136,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         private dynamic GetDeclarationsByPayrollYearAndPayrollMonth(IEnumerable<LevyDeclarationSourceDataItem> source)
         {
+
             return source.GroupBy(c => new { c.PayrollDate.Value.Month, c.PayrollDate.Value.Year },
                 (payroll, group) => new
                 {
@@ -125,7 +167,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         {
             return new AggregationLineItem
             {
-                Id= item.Id,
+                Id = item.Id,
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
                 LevyDueYtd = 0,
@@ -150,7 +192,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             //find the latest value for each one and add to store
 
-            foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year}, new PayrollDateComparer()))
+            foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year }, new PayrollDateComparer()))
             {
                 foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission))
                 {
