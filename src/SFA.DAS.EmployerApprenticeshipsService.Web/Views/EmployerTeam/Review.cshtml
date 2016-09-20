@@ -5,31 +5,24 @@
     <div class="column-two-thirds">
         <h1 class="heading-medium">Manage Team member</h1>
 
-        <table class="th-nopadding">
-            <thead>
-                <tr>
-                    <th scope="col" style="padding-top: 0"></th>
-                    <th scope="col" class="" style="padding-top: 0"></th>
-                    <th scope="col" class="" style="padding-top: 0"></th>
-                </tr>
-            </thead>
+        <table>      
             <tbody>
                 <tr>
-                    <td>Name</td>
+                    <th scope="row">Name</th>
                     <td>@Model.Name</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Email</td>
+                    <th scope="row">Email</th>
                     <td>@Model.Email</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <td>Role</td>
+                    <th scope="row">Role</th>
                     <td>@Model.Role.ToString()</td>
                     @if (Model.IsUser)
                     {
-                        <td>@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.AccountId, Email = Model.Email })</td>
+                        <td class="link-right">@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.AccountId, Email = Model.Email })</td>
                     }
                     else
                     {
@@ -37,7 +30,7 @@
                     }
                 </tr>
                 <tr>
-                    <td>Status</td>
+                    <th scope="row">Status</th>
                     <td>@Model.Status.ToString()</td>
                     <td></td>
                 </tr>
@@ -73,3 +66,14 @@
         }
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("View", "EmployerTeam", new {accountId = @Model.AccountId})">Manage Team Members</a></li>
+            <li>Team Member</li>
+        </ol>
+    </div>
+}

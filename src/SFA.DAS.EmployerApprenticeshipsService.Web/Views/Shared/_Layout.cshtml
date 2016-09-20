@@ -100,7 +100,7 @@
             <ul id="service-info-list" role="navigation">
             @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                <li><span id="service-info-user-name"><a href="/">@HttpContext.Current.User.Identity.Name</a></span></li>
+                <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
                 <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
             }
             else

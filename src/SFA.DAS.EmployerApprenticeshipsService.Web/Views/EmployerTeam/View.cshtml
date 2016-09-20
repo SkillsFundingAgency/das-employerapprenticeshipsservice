@@ -88,3 +88,13 @@
         </div>
     </div>
 }
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer account homepage</a></li>
+            <li>Manage team members</li>
+        </ol>
+    </div>
+}
