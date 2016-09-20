@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
                 Hmrc = new HmrcConfiguration { IgnoreDuplicates = false }
             };
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, _empRefFileBasedService.Object);   
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);   
         }
 
         [Test]

@@ -1,18 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class BaseController : Controller
     {
+        private readonly IFeatureToggle _featureToggle;
+
+        public BaseController(IFeatureToggle featureToggle)
+        {
+            _featureToggle = featureToggle;
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (!CheckFeatureIsEnabled())
+            {
+
+                filterContext.Result = base.View("FeatureNotEnabled", null, null);
+            }
+
+        }
+        
         protected override ViewResult View(string viewName, string masterName, object model)
         {
+            
             var orchestratorResponse = model as OrchestratorResponse;
+            
             if (orchestratorResponse == null) return base.View(viewName, masterName, model);
 
             var flashMessage = GetHomePageSucessMessage();
@@ -38,6 +57,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return base.View(@"GenericError", masterName, orchestratorResponse);
 
+        }
+
+        private bool CheckFeatureIsEnabled()
+        {
+            var features = _featureToggle.GetFeatures();
+            var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
+            var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            
+            var featureToggleItem = features.Data.FirstOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
+            if (featureToggleItem!= null)
+            {
+                if (featureToggleItem.Action == "*" ||  actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         protected FlashMessageViewModel GetHomePageSucessMessage()

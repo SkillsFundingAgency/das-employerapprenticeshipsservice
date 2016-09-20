@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private HomeController _homeController;
+        private Mock<IFeatureToggle> _featureToggle;
 
         [SetUp]
         public void Arrange()
@@ -26,8 +28,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _owinWrapper = new Mock<IOwinWrapper>();
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+            _featureToggle = new Mock<IFeatureToggle>();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object);
+            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object);
         }
 
         [Test]

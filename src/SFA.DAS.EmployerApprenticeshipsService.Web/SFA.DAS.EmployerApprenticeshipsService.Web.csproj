@@ -362,9 +362,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\EmpRefs\empref_data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
     <Content Include="assets\images\apple-touch-icon-152x152.png" />
     <Content Include="assets\images\apple-touch-icon-60x60.png" />
@@ -421,6 +418,9 @@
     </Content>
     <Content Include="App_Data\Providers\provider_data.json" />
     <Content Include="App_Data\Standards\standards.json" />
+    <Content Include="App_Data\Features\features_data.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -493,7 +493,8 @@
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\RemovePaye.cshtml" />
-    <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
+<Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
+<Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
   </ItemGroup>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -14,6 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private EmployerAccountPayeController _controller;
+        private Mock<IFeatureToggle> _featureToggle;
 
         [SetUp]
         public void Arrange()
@@ -22,8 +24,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme>());
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("123abc");
+            _featureToggle = new Mock<IFeatureToggle>();
 
-            _controller = new EmployerAccountPayeController(_owinWrapper.Object,_employerAccountPayeOrchestrator.Object);
+            _controller = new EmployerAccountPayeController(_owinWrapper.Object,_employerAccountPayeOrchestrator.Object, _featureToggle.Object);
         }
 
         [Test]
