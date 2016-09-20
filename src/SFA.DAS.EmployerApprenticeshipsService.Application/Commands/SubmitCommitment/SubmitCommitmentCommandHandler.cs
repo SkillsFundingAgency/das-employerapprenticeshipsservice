@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
+using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment
 {
