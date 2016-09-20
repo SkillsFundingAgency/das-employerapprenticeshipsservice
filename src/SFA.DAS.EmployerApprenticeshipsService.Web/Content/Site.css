@@ -16,8 +16,21 @@ button, a.button {
     margin-bottom: 0.75em;
 }
 
+.phase-banner-beta {
+    padding-bottom: 10px;
+}
+
+.phase-banner-beta p {
+    display: table;
+}
+
+.phase-banner-beta span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .service-info {
-    margin-bottom: 0.75em;
+    margin-bottom: 10px;
 }
 
 .column-full {
@@ -237,7 +250,8 @@ table.full-width, .responsive-table.full-width {
     max-width:100%;
 }
 
-.breadcrumbs li {
+.breadcrumbs li,
+.user-menu li {
   font-family: "nta", Arial, sans-serif;
   font-size: 14px;
   line-height: 1.1428571429;
@@ -254,7 +268,8 @@ table.full-width, .responsive-table.full-width {
 }
 
 @media (min-width: 641px) {
-  .breadcrumbs li {
+  .breadcrumbs li,
+  .user-menu li {
     font-size: 16px;
     line-height: 1.25;
   }
@@ -267,13 +282,15 @@ table.full-width, .responsive-table.full-width {
   }
 }
 
-.breadcrumbs li:first-child {
+.breadcrumbs li:first-child, 
+.user-menu li:first-child {
   background-image: none;
   margin-left: 0;
   padding-left: 0;
 }
 
-.breadcrumbs a {
+.breadcrumbs a
+.user-menu a {
   color: #0b0c0c;
 }
 
@@ -281,13 +298,12 @@ table.full-width, .responsive-table.full-width {
     padding: 0;
 }
 .breadcrumbs ol li {
-  
     position: relative;
 }
 .back-link {
     padding-left: 15px;
-    text-decoration: none;
-    border-bottom: 1px solid #0b0c0c;
+    text-decoration: underline;
+    display: inline-block;
 }
 .back-link:before {
     content: '';
@@ -301,4 +317,23 @@ table.full-width, .responsive-table.full-width {
     left: 0;
     top: 50%;
     margin-top: -6px;
+}
+
+.user-menu.logged-in {
+    border-bottom: 1px solid #bfc1c3;
+    margin-bottom: 10px;
+}
+
+.user-menu li {
+    display: inline-block;
+    padding: 0;
+    background: none;
+    float: none;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 641px) {
+    .user-menu {
+        text-align: right;
+    }
 }
