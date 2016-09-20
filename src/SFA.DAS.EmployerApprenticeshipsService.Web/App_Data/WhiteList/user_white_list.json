@@ -1,5 +1,5 @@
 ﻿{
   "EmailPatterns": [
-    "[a-zA-Z0-9.-]*@test.com$"
+    
   ]
 }
