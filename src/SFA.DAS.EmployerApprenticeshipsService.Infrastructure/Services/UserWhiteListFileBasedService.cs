@@ -24,8 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 
             var whiteList = GetList();
 
-            return whiteList?.EmailPatterns != null && 
-                   whiteList.EmailPatterns.Any(pattern => Regex.IsMatch(email, pattern));
+            return whiteList?.EmailPatterns?.Any(pattern => Regex.IsMatch(email, pattern)) ?? true;
         }
 
         private UserWhiteListLookUp GetList()

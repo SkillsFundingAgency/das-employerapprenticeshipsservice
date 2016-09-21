@@ -1,4 +1,4 @@
-﻿/* GOV.UK OVERRIDES */
+/* GOV.UK OVERRIDES */
 label.form-label {
     margin-bottom: 15px;
     font-weight: 700;
@@ -39,6 +39,7 @@ button, a.button {
 
 table {
     max-width: 640px;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -50,11 +51,22 @@ table {
     background-size: 30px 19px;
 }
 
-.button-link {
+.button-link,
+a.button-link {
     background: #fff;
     color: #005ea5;
     box-shadow: 0 2px 0 #fff;
     text-decoration: underline;
+    padding: 0;
+    margin: 0;
+}
+
+@media (min-width: 641px) {
+    .button-link,
+    a.button-link {
+        margin: 10px 15px 5px;
+        padding: 0;
+    }
 }
 
 .button-link:link, 
@@ -250,6 +262,7 @@ table.full-width, .responsive-table.full-width {
     max-width:100%;
 }
 
+
 .breadcrumbs li,
 .user-menu li {
   font-family: "nta", Arial, sans-serif;
@@ -340,4 +353,24 @@ table.full-width, .responsive-table.full-width {
     .user-menu {
         text-align: right;
     }
+}
+
+/* Typography */
+
+dt:before {
+  content: "";
+  display: block;
+}
+dt, dd {
+  display: inline;
+}
+
+/* Tables */
+
+th, td {
+    vertical-align: top;
+}
+
+table.top-border {
+    border-top: 1px solid #bfc1c3;
 }
