@@ -49,6 +49,42 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
         }
 
         [Test]
+        public void ThenIShouldNotBeOnWhiteListIfMyEmailDoesntMatchAnyExistingPatterns()
+        {
+            //Assign
+            _mockUserWhiteList.Setup(x => x.ReadFileByIdSync<UserWhiteListLookUp>(It.IsAny<string>()))
+                .Returns(_lookup);
+
+            _cacheProvider.Setup(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()))
+                          .Returns((UserWhiteListLookUp)null);
+
+            //Act
+            var result = _userWhiteList.IsEmailOnWhiteList("test@not_on_the_list.com");
+
+            //Assert
+            _mockUserWhiteList.Verify(x => x.ReadFileByIdSync<UserWhiteListLookUp>("user_white_list"), Times.Once);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ThenIfTheWhiteListIsEmptyIShouldPassAllUsers()
+        {
+            //Assign
+            _mockUserWhiteList.Setup(x => x.ReadFileByIdSync<UserWhiteListLookUp>(It.IsAny<string>()))
+                .Returns(new UserWhiteListLookUp {EmailPatterns = new List<string>()});
+
+            _cacheProvider.Setup(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()))
+                          .Returns((UserWhiteListLookUp)null);
+
+            //Act
+            var result = _userWhiteList.IsEmailOnWhiteList("test@test.com");
+
+            //Assert
+            _mockUserWhiteList.Verify(x => x.ReadFileByIdSync<UserWhiteListLookUp>("user_white_list"), Times.Once);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
         public void ThenIShouldReadFromCacheIfUserWhiteListHasBeenCached()
         {
             //Assign
