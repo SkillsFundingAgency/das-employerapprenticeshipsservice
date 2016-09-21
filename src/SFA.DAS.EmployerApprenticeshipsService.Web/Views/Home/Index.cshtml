@@ -16,7 +16,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-medium">Levy accounts</h2>
+        <h1 class="heading-xlarge">Levy accounts</h1>
 
         @if (Model.Data.Accounts.AccountList.Count == 0)
         {
@@ -71,9 +71,10 @@
                 </div>
             </div>
         }
-        <p></p>
-        <a href="@Url.Action("Index", "EmployerAccount")" class="button" id="add_new_account">Add new account</a>
-        <p></p>
+        <p>
+            <a href="@Url.Action("Index", "EmployerAccount")" class="button action-add" id="add_new_account">Add new account</a>
+        </p>
+  
     </div>
 </div>
 
@@ -97,13 +98,3 @@
         }
     </div>
 </div>
-
-
-
-@section breadcrumb{
-    <div class="breadcrumbs">
-        <ol role="navigation" aria-label="breadcrumbs">
-            <li><a href="/">Your User Profile</a></li>
-        </ol>
-    </div>
-}
