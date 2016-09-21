@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseControllerTests
@@ -12,6 +13,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
     public class WhenOnActionExecuting : ControllerTestBase
     {
         private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IUserWhiteList> _userWhiteList;
         private TestController _controller;
 
         [SetUp]
@@ -20,6 +23,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             base.Arrange();
 
             _featureToggle = new Mock<IFeatureToggle>();
+            _owinWrapper = new Mock<IOwinWrapper>();
+            _userWhiteList = new Mock<IUserWhiteList>();
             _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem>()});
 
             var routes = new RouteData();
@@ -27,11 +32,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
             
-            _controller = new TestController(_featureToggle.Object)
+            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _userWhiteList.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
-            
         }
 
         [Test]
@@ -77,15 +81,64 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
                 Assert.AreEqual("FeatureNotEnabled",viewResult.ViewName);
             }
         }
+       
+        public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(true);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.SecureTestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ContentResult>(result);
+        }
+
+        public void ThenShouldDirectToUserNotAllowedPageIfUserIsNotOnWhiteList()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.SecureTestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ViewResult>(result);
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.AreEqual("UserNotAllowed", viewResult.ViewName);
+        }
+        
+        public void ThenShouldNoDirectToUserNotAllowedPageIfPublicWebPage()
+        {
+            //Assign
+            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
+
+            //Act
+            var result = Invoke(() => _controller.TestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ContentResult>(result);
+        }
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle) : base(featureToggle)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList) 
+                : base(owinWrapper, featureToggle, userWhiteList)
             {
 
             }
 
             public ActionResult TestView()
+            {
+                return new ContentResult();
+            }
+
+            [Authorize]
+            public ActionResult SecureTestView()
             {
                 return new ContentResult();
             }

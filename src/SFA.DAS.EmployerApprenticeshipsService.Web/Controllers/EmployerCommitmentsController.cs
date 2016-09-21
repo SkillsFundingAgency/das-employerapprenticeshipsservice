@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
@@ -14,16 +12,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
-        private readonly IOwinWrapper _owinWrapper;
 
-        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper, IFeatureToggle featureToggle) : base(featureToggle)
+        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper,featureToggle, userWhiteList)
         {
             if (employerCommitmentsOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
             _employerCommitmentsOrchestrator = employerCommitmentsOrchestrator;
-            _owinWrapper = owinWrapper;
         }
 
         [HttpGet]
@@ -37,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> Create(long accountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, _owinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -45,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(CreateCommitmentViewModel commitment)
         {
-            await _employerCommitmentsOrchestrator.Create(commitment, _owinWrapper.GetClaimValue(@"sub"));
+            await _employerCommitmentsOrchestrator.Create(commitment, OwinWrapper.GetClaimValue(@"sub"));
 
             return RedirectToAction("Index", new {accountId = commitment.AccountId});
         }

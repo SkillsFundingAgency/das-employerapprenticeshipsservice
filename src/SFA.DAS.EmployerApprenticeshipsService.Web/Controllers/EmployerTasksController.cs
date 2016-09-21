@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerTasksOrchestrator _employerTasksOrchestrator;
 
-        public EmployerTasksController(IOwinWrapper owinWrapper, EmployerTasksOrchestrator employerTasksOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
+        public EmployerTasksController(IOwinWrapper owinWrapper, EmployerTasksOrchestrator employerTasksOrchestrator, IFeatureToggle featureToggle, IUserWhiteList userWhiteList) : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

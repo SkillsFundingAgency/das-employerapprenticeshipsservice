@@ -16,20 +16,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerTeamController : BaseController
     {
-
-        private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
-        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, IFeatureToggle featureToggle) : base(featureToggle)
+        public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
-            _owinWrapper = owinWrapper;
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }
 
         [HttpGet]
         public async Task<ActionResult> Index(int accountId)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
 
             var response = await _employerTeamOrchestrator.GetAccount(accountId, userIdClaim);
 
@@ -42,7 +41,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             FlashMessageViewModel flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
 
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
@@ -55,7 +54,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Invite(long accountId)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
 
             var model = new InviteTeamMemberViewModel
@@ -71,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             if (userIdClaim == null) return RedirectToAction("Index", "Home");
 
             try
