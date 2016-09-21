@@ -150,6 +150,7 @@
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
     <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Services\UserWhiteListFileBasedService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration\" />

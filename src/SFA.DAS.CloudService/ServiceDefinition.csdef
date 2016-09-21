@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Large">
+  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="small">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -25,10 +25,9 @@
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
   </WebRole>
-  <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -39,11 +38,9 @@
     <LocalResources>
     </LocalResources>
     <Imports>
-      <Import moduleName="RemoteAccess" />
-      <Import moduleName="RemoteForwarder" />
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -52,10 +49,9 @@
       <Setting name="LogLevel" />
     </ConfigurationSettings>
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -63,5 +59,7 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
     </ConfigurationSettings>
+    <Imports>
+    </Imports>
   </WorkerRole>
 </ServiceDefinition>

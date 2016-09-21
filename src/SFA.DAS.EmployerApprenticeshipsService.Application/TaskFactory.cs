@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Tasks.Domain.Entities;
+﻿using SFA.DAS.Tasks.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application
 {

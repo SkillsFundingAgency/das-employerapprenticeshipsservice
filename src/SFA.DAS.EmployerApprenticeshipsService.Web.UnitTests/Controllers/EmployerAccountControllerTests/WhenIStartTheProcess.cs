@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
         private string ExpectedRedirectUrl = "http://redirect.local.test";
         
 
@@ -33,10 +34,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
 
-            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator.Object, _featureToggle.Object);
-            _employerAccountController.ControllerContext = _controllerContext.Object;
-            _employerAccountController.Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes);
+            _employerAccountController = new EmployerAccountController(
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object)
+            {
+                ControllerContext = _controllerContext.Object,
+                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
+            };
         }
 
         [Test]

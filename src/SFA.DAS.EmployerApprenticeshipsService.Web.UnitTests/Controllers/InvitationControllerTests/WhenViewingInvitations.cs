@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -12,6 +13,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Invit
         private InvitationOrchestrator _invitationOrchestrator;
         private InvitationController _controller;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
 
         [SetUp]
         public void Arrange()
@@ -19,10 +22,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Invit
             base.Arrange();
 
             _owinWrapper = new Mock<IOwinWrapper>();
+            _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
 
             _invitationOrchestrator = new InvitationOrchestrator(Mediator.Object, Logger.Object);
 
-            _controller = new InvitationController(_invitationOrchestrator, _owinWrapper.Object);
+            _controller = new InvitationController(
+                _invitationOrchestrator, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
         }
 
         [Test]
@@ -43,7 +49,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Invit
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("my_user_id");
-            _controller = new InvitationController(_invitationOrchestrator, _owinWrapper.Object);
+            _controller = new InvitationController(
+                _invitationOrchestrator, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
 
             //Act
             var actual = _controller.Index();
