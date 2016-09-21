@@ -82,6 +82,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             }
         }
        
+        [Test]
         public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
         {
             //Assign
@@ -95,6 +96,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             Assert.IsAssignableFrom<ContentResult>(result);
         }
 
+        [Test]
         public void ThenShouldDirectToUserNotAllowedPageIfUserIsNotOnWhiteList()
         {
             //Assign
@@ -110,7 +112,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
             Assert.IsNotNull(viewResult);
             Assert.AreEqual("UserNotAllowed", viewResult.ViewName);
         }
-        
+
+        [Test]
         public void ThenShouldNoDirectToUserNotAllowedPageIfPublicWebPage()
         {
             //Assign
