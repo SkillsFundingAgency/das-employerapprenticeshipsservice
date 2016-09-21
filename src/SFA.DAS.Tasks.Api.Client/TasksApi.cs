@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using Task = SFA.DAS.Tasks.Domain.Entities.Task;
+using SFA.DAS.Tasks.Api.Client.Configuration;
+using Task = SFA.DAS.Tasks.Api.Types.Task;
 
 namespace SFA.DAS.Tasks.Api.Client
 {
     public class TasksApi : HttpClientBase, ITasksApi
     {
-        private readonly string _baseUrl;
+        private readonly ITasksApiClientConfiguration _configuration;
 
-        public TasksApi(TasksApiConfiguration configuration)
+        public TasksApi(ITasksApiClientConfiguration configuration)
         {
             if (configuration == null)
                 throw new ArgumentNullException(nameof(configuration));
-            _baseUrl = configuration.BaseUrl;
+            _configuration = configuration;
         }
 
         public async System.Threading.Tasks.Task CreateTask(string assignee, Task task)
         {
-            var url = $"{_baseUrl}api/tasks/{assignee}";
+            var url = $"{_configuration.BaseUrl}api/tasks/{assignee}";
 
             var content = JsonConvert.SerializeObject(task);
 
@@ -30,7 +30,7 @@ namespace SFA.DAS.Tasks.Api.Client
 
         public async Task<List<Task>> GetTasks(string assignee)
         {
-            var url = $"{_baseUrl}api/tasks/{assignee}";
+            var url = $"{_configuration.BaseUrl}api/tasks/{assignee}";
 
             var content = await GetAsync(url);
 
@@ -39,7 +39,7 @@ namespace SFA.DAS.Tasks.Api.Client
 
         public async System.Threading.Tasks.Task UpdateTask(long id, Task task)
         {
-            var url = $"{_baseUrl}api/tasks/{id}";
+            var url = $"{_configuration.BaseUrl}api/tasks/{id}";
 
             var content = JsonConvert.SerializeObject(task);
 

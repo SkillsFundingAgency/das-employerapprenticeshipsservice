@@ -1,103 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 
 namespace SFA.DAS.Commitments.Api.Client
 {
-    public class CommitmentsApi : ICommitmentsApi
+    public class CommitmentsApi : HttpClientBase, ICommitmentsApi
     {
-        private readonly string _baseUrl;
+        private readonly ICommitmentsApiClientConfiguration _configuration;
 
-        public CommitmentsApi(CommitmentsApiConfiguration configuration)
+        public CommitmentsApi(ICommitmentsApiClientConfiguration configuration)
         {
-            _baseUrl = configuration.BaseUrl;
+            if (configuration == null)
+                throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration;
         }
 
         public async Task CreateEmployerCommitment(long employerAccountId, Commitment commitment)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments";
 
             await PostCommitment(url, commitment);
         }
 
         public async Task<List<CommitmentListItem>> GetEmployerCommitments(long employerAccountId)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments";
 
             return await GetCommitments(url);
         }
 
         public async Task<Commitment> GetEmployerCommitment(long employerAccountId, long commitmentId)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
 
             return await GetCommitment(url);
         }
 
         public async Task<Apprenticeship> GetEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             return await GetApprenticeship(url);
         }
 
         public async Task PatchApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, ApprenticeshipStatus status)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PatchApprenticeship(url, status);
         }
 
         public async Task PatchEmployerCommitment(long employerAccountId, long commitmentId, CommitmentStatus status)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
 
             await PatchCommitment(url, status);
         }
 
         public async Task UpdateEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, Apprenticeship apprenticeship)
         {
-            var url = $"{_baseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PutApprenticeship(url, apprenticeship);
         }
 
         public async Task<Apprenticeship> GetProviderApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             return await GetApprenticeship(url);
         }
 
         public async Task CreateProviderApprenticeship(long providerId, long commitmentId, Apprenticeship apprenticeship)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships";
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships";
 
             await PostApprenticeship(url, apprenticeship);
         }
 
         public async Task UpdateProviderApprenticeship(long providerId, long commitmentId, long apprenticeshipId, Apprenticeship apprenticeship)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PutApprenticeship(url, apprenticeship);
         }
 
         public async Task<List<CommitmentListItem>> GetProviderCommitments(long providerId)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments";
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments";
 
             return await GetCommitments(url);
         }
        
         public async Task<Commitment> GetProviderCommitment(long providerId, long commitmentId)
         {
-            var url = $"{_baseUrl}api/provider/{providerId}/commitments/{commitmentId}";
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}";
 
             return await GetCommitment(url);
         }
@@ -155,124 +155,6 @@ namespace SFA.DAS.Commitments.Api.Client
             var content = await PostAsync(url, data);
 
             return JsonConvert.DeserializeObject<Apprenticeship>(content);
-        }
-
-        private async Task<string> GetAsync(string url)
-        {
-            var content = "";
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var requestMessage = new HttpRequestMessage(HttpMethod.Get, url);
-
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
-                    var response = await client.SendAsync(requestMessage);
-                    content = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw;
-            }
-
-            return content;
-        }
-
-        private async Task<string> PostAsync(string url, string data)
-        {
-            var content = "";
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-
-                    var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
-                    {
-                        Content = new StringContent(data, Encoding.UTF8, "application/json")
-                    };
-
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
-                    var response = await client.SendAsync(requestMessage);
-                    content = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw;
-            }
-
-            return content;
-        }
-
-        private async Task<string> PutAsync(string url, string data)
-        {
-            var content = "";
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var requestMessage = new HttpRequestMessage(HttpMethod.Put, url)
-                    {
-                        Content = new StringContent(data, Encoding.UTF8, "application/json")
-                    };
-
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
-                    var response = await client.SendAsync(requestMessage);
-                    content = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw;
-            }
-
-            return content;
-        }
-
-        private async Task<string> PatchAsync(string url, string data)
-        {
-            var content = "";
-
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    var requestMessage = new HttpRequestMessage(new HttpMethod("PATCH"), url)
-                    {
-                        Content = new StringContent(data, Encoding.UTF8, "application/json")
-                    };
-
-                    // Add custom headers
-                    //requestMessage.Headers.Add("User-Agent", "User-Agent-Here");
-
-                    //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("WRAP", "bigAccessToken");
-                    var response = await client.SendAsync(requestMessage);
-                    content = await response.Content.ReadAsStringAsync();
-                    response.EnsureSuccessStatusCode();
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw;
-            }
-
-            return content;
         }
     }
 }

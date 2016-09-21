@@ -87,14 +87,12 @@
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
-    <Compile Include="Configuration\CommitmentsApiConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />
-    <Compile Include="Configuration\TasksApiConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAccountTeamRepository.cs" />
@@ -178,7 +176,16 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
+      <Project>{DEA2C098-EC17-4485-961D-A7F48720D37D}</Project>
+      <Name>SFA.DAS.Commitments.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj">
+      <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
+      <Name>SFA.DAS.Tasks.Api.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -12,6 +12,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -35,12 +36,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Accountid = accountid
             });
 
+            var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
+            {
+                AccountId = accountid
+            });
+
             return new OrchestratorResponse<CommitmentListViewModel>
             {
                 Data = new CommitmentListViewModel
                 {
                     AccountId = accountid,
-                    Commitments = data.Commitments
+                    Commitments = data.Commitments,
+                    NumberOfTasks = tasks.Tasks.Count
                 }
             };
         }

@@ -232,6 +232,9 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
@@ -266,9 +269,9 @@
       <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
       <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
-      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
-      <Name>SFA.DAS.Tasks.Domain</Name>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
+      <Project>{e1e60ba1-5838-474e-bda0-810d7a5b126e}</Project>
+      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
