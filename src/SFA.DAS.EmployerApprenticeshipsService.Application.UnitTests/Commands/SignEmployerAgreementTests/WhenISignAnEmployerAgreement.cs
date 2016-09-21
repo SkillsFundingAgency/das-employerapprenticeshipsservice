@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             await _handler.Handle(_command);
 
-            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}", _command.SignedDate), Times.Once);
+            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, _command.SignedDate), Times.Once);
         }
     }
 }

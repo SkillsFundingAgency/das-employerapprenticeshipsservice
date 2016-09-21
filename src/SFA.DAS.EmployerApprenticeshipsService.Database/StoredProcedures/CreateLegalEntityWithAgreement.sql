@@ -22,10 +22,7 @@ BEGIN
 	EXEC [account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
 
 	IF (@signAgreement = 1) 	
-	BEGIN	
-		SELECT @firstName = FirstName, @lastName = LastName FROM [account].[User] WHERE Id = @signedById
-		SELECT @signedByName =  @firstName + ' ' + @lastName
-		
-		EXEC [account].[SignEmployerAgreement] @employerAgreementId, @signedById, @signedByName, @signedDate
+	BEGIN			
+		EXEC [account].[SignEmployerAgreement] @employerAgreementId, @signedById, @signedDate
 	END	
 END
