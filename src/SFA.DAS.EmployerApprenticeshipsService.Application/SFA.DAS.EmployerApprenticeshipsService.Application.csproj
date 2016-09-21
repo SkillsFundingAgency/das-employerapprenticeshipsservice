@@ -84,6 +84,9 @@
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommand.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
@@ -106,9 +109,6 @@
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommand.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
@@ -232,6 +232,9 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
+    <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
@@ -265,9 +269,9 @@
       <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
       <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
-      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
-      <Name>SFA.DAS.Tasks.Domain</Name>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
+      <Project>{e1e60ba1-5838-474e-bda0-810d7a5b126e}</Project>
+      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -85,13 +85,13 @@
     <Compile Include="Commands\AddPayeToAccountForExistingLegalEntityTests\WhenIAddPayeToAccountForExistingLegalEntity.cs" />
     <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIAddPayeToAnAccountWithANewLegalEntity.cs" />
     <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenValidatingTheApproveApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenApprovingApprenticeship.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenICallCreateAccount.cs" />
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
-    <Compile Include="Commands\CreateTaskTests\WhenCreatingATask.cs" />
-    <Compile Include="Commands\CreateTaskTests\WhenValidatingCreateTaskCommand.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIProcessNotificationCommand.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIValidateProcessNotificationCommand.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
+    <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
     <Compile Include="FakeTimeProvider.cs" />
@@ -138,6 +139,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
+      <Project>{DEA2C098-EC17-4485-961D-A7F48720D37D}</Project>
+      <Name>SFA.DAS.Commitments.Api.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Types\SFA.DAS.Commitments.Api.Types.csproj">
       <Project>{AA3B3870-F97A-443B-8429-663DE064A8AD}</Project>
       <Name>SFA.DAS.Commitments.Api.Types</Name>
@@ -158,9 +163,9 @@
       <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
       <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
-      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
-      <Name>SFA.DAS.Tasks.Domain</Name>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
+      <Project>{E1E60BA1-5838-474E-BDA0-810D7A5B126E}</Project>
+      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

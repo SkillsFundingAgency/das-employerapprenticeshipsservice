@@ -1,9 +1,27 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
 @using SFA.DAS.EmployerApprenticeshipsService.Web.Models
-@using SFA.DAS.Commitments.Api.Types
 
 @model OrchestratorResponse<CommitmentListViewModel>
 
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <h2 class="heading-medium">Tasks</h2>
+        @if (Model.Data.NumberOfTasks == 1)
+            {
+            <p>You have <span class="bold-small">1</span> task to complete.</p>
+        }
+        else
+        {
+            <p>You have <span class="bold-small">@(Model.Data.NumberOfTasks > 1 ? Model.Data.NumberOfTasks.ToString() : "no")</span> tasks to complete.</p>
+        }
+        @if (Model.Data.NumberOfTasks > 0)
+        {
+            <a href="@Url.Action("Index", "EmployerTasks", new {accountId = Model.Data.AccountId})" class="link">View tasks</a>
+        }
+        <hr />
+    </div>
+</div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Commitments</h1>
@@ -63,7 +81,6 @@
                                     <form action="@Url.Action("Submit")" method="POST">
                                         <input type="hidden" name="accountId" value="@commitment.EmployerAccountId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />
-                                        <input type="hidden" name="providerId" value="@commitment.ProviderId" />
                                         <button type="submit" name="commitment" class="button">Submit</button>
                                     </form>
                                 </div>

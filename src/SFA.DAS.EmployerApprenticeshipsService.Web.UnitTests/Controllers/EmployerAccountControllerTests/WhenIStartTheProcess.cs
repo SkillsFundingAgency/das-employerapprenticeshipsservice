@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         public void ThenICanProceedToTheGovernmentGatewayConfirmationPage()
         {
             //Act
-            var actual = _employerAccountController.Index(true);
+            var actual = _employerAccountController.Index("understood");
 
             //Assert
             Assert.IsNotNull(actual);
