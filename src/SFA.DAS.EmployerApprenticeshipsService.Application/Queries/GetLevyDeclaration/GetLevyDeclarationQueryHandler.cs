@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                     AccountId = message.AccountId,
                     Data = declarations.Select(item =>
                     {
-                        var firstOrDefault = schemeInformation.SchemesList.FirstOrDefault(c => c.Ref.Equals(item.EmpRef, StringComparison.CurrentCultureIgnoreCase));
+                        var scheme = schemeInformation?.SchemesList?.FirstOrDefault(c => c.Ref.Equals(item.EmpRef, StringComparison.CurrentCultureIgnoreCase));
                         return new LevyDeclarationSourceDataItem
                         {
                             Id = item.Id,
@@ -55,8 +55,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDecl
                             LastSubmission = item.LastSubmission,
                             TopUp = item.TopUp,
                             AccountId = item.AccountId,
-                            EmprefAddedDate = firstOrDefault.AddedDate,
-                            EmprefRemovedDate = firstOrDefault.RemovedDate
+                            EmprefAddedDate = scheme?.AddedDate ?? DateTime.UtcNow,
+                            EmprefRemovedDate = scheme?.RemovedDate
                         };
                     }).ToList()
                 }
