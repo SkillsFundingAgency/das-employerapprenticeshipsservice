@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -62,9 +62,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Commitments.Api.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Tasks.Api.Client", "SFA.DAS.Tasks.Api.Client\SFA.DAS.Tasks.Api.Client.csproj", "{E442B238-0C69-449E-A2C5-FD890CF6A7DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Tasks.Domain", "SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj", "{9BBAB098-4C62-4DFC-AEEA-20A0D9BD1E2C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Tasks.Api.Types", "SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj", "{E1E60BA1-5838-474E-BDA0-810D7A5B126E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,14 +161,14 @@ Global
 		{E442B238-0C69-449E-A2C5-FD890CF6A7DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E442B238-0C69-449E-A2C5-FD890CF6A7DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E442B238-0C69-449E-A2C5-FD890CF6A7DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BBAB098-4C62-4DFC-AEEA-20A0D9BD1E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BBAB098-4C62-4DFC-AEEA-20A0D9BD1E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BBAB098-4C62-4DFC-AEEA-20A0D9BD1E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BBAB098-4C62-4DFC-AEEA-20A0D9BD1E2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1E60BA1-5838-474E-BDA0-810D7A5B126E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1E60BA1-5838-474E-BDA0-810D7A5B126E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1E60BA1-5838-474E-BDA0-810D7A5B126E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1E60BA1-5838-474E-BDA0-810D7A5B126E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

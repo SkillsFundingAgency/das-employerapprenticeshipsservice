@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public long AccountId { get; set; }
         public List<CommitmentListItem> Commitments { get; set; }
+        public int NumberOfTasks { get; set; }
     }
 }
