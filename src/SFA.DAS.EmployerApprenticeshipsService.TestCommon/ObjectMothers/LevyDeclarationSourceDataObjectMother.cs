@@ -28,14 +28,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
             var list = new List<LevyDeclarationSourceDataItem>();
             foreach (var empref in emprefs)
             {
+                bool idUpdated = false;
                 for (var i = 1; i <= numberOfDeclarations; i++)
                 {
                     var submissionDate = submissionStartDate.AddMonths(i);
-
+                    
                     for (var j = 1; j <= declarationsPerperiodPerPaye; j++)
                     {
                         submissionDate = submissionDate.AddDays(j);
                         var levyDueYtd = randomLevyDueYtd.Next(20, 1000);
+
+                        //var newAccountId = 
+                        if (empref.DeclarationsForScheme!= 0 && i > empref.DeclarationsForScheme && !idUpdated)
+                        {
+                            accountId = accountId + 1;
+                            idUpdated = true;
+                        }
+
                         list.Add(new LevyDeclarationSourceDataItem
                         {
                             Id = i,
@@ -51,7 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                             PayrollYear = submissionDate.ToString("yy"),//TODO
                             LastSubmission = j == declarationsPerperiodPerPaye ? 1 : 0,
                             TopUp = addTopup ? levyDueYtd * 0.1m : 0m,
-                            AccountId =  multipleAccountIds ? accountId ++ : accountId
+                            AccountId =  accountId
                         });
                     }
                 }
@@ -66,6 +75,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
             public string Empref { get; set; }
             public DateTime AddedDate { get; set; }
             public DateTime? RemovedDate { get; set; }
+            public int DeclarationsForScheme { get; set; }
         }
     }
 }

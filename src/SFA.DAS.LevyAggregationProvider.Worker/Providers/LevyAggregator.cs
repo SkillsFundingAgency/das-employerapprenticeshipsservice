@@ -224,7 +224,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year }, new PayrollDateComparer()))
             {
-                foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission))
+                foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission).OrderByDescending(c=>c.ActivityDate))
                 {
                     foreach (var empref in emprefs)
                     {
