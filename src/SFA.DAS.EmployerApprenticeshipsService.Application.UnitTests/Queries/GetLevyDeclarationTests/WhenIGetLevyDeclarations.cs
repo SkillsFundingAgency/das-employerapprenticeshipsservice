@@ -37,7 +37,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             _dasAccountService = new Mock<IDasAccountService>();
             _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme>
             {
-                new Scheme ()
+                new Scheme
+                {
+                    Ref = ExpectedEmpref
+                }
             } });
 
             RequestHandler = new GetLevyDeclarationQueryHandler(_repository.Object, RequestValidator.Object, _dasAccountService.Object);
