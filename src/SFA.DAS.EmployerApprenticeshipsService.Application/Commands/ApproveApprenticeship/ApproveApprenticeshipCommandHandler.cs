@@ -29,14 +29,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApp
             // TODO: LWA - Validated Employer is that of the commitment and apprenticeship is in the commitment.
             var commitment = await _commitmentsApi.GetEmployerCommitment(message.EmployerAccountId, message.CommitmentId);
 
-            await _commitmentsApi.PatchApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, Commitments.Api.Types.ApprenticeshipStatus.Approved);
+            await _commitmentsApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, Commitments.Api.Types.ApprenticeshipStatus.Approved);
 
             await CreateTask(commitment);
         }
 
         private async Task CreateTask(Commitment commitment)
         {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "This is the body of the task.");
+            var task = TaskFactory.Create(commitment.ProviderId.Value, "ApproveApprenticeship", "This is the body of the task.");
 
             await _tasksApi.CreateTask(task.Assignee, task);
         }
