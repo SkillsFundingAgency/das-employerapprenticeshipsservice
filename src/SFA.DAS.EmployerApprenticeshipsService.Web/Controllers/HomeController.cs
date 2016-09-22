@@ -28,18 +28,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
-
+                
                 accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
                 accounts.Data.FlashMessage = new FlashMessageViewModel()
                 {
                     Headline = (string)TempData["successMessage"]
                 };
+
+                var c = new Constants(_configuration.Identity.BaseAddress);
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url.Encode( Request.Url.AbsoluteUri)}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url.Encode(Request.Url.AbsoluteUri)}"; 
+                
                 return View(accounts);
             }
 
             var model = new
             {
                 HideHeaderSignInLink = true
+               
             };
 
             return View("ServiceLandingPage", model);

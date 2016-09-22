@@ -14,7 +14,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             if (input == null)
                 return null;
 
-            var aggregates = AggregateData(input.Data);
+            var aggregates = AggregateData(input.Data, input.AccountId);
 
             return new AggregationData
             {
@@ -23,7 +23,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             };
         }
 
-        private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source)
+        private IEnumerable<AggregationLine> AggregateData(IEnumerable<LevyDeclarationSourceDataItem> source, long accountId)
         {
             var output = new List<AggregationLine>();
             
@@ -31,14 +31,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             foreach (var declarationsForMonth in GetDeclarationsByPayrollYearAndPayrollMonth(source))
             {
                 var previousAmount = new Dictionary<string, decimal>();
-                var aggregationLine = new AggregationLine
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    LevyItemType = LevyItemType.Declaration,
-                    Items = new List<AggregationLineItem>(),
-                    Year = declarationsForMonth.PayrollYear,
-                    Month = declarationsForMonth.PayrollMonth
-                };
+                var aggregationLine = BuildAggregationLine(declarationsForMonth, output);
 
                 AddPreviousAmountForPayeToCollection(previousAmount, output);
 
@@ -54,15 +47,91 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                     }
                 }
 
-                var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items);
+                var amount = CalculateAmountWithEnglishFraction(aggregationLine.Items, accountId);
                 aggregationLine.Amount = amount;
-                aggregationLine.Balance = CalculateCurrentBalance(output, amount);
+                
+                if (string.IsNullOrEmpty(FindAggregationLine(declarationsForMonth, output)))
+                {
+                    aggregationLine.Balance = CalculateCurrentBalance(output, amount);
+                    output.Add(aggregationLine);
+                }
+                else
+                {
+                    aggregationLine.Balance = output.Sum(c => c.Amount);
+                }
+                
+            }
+            
+            return BuildAggregationOutputForAccount(accountId, output);
+        }
 
-                output.Add(aggregationLine);
+        private List<AggregationLine> BuildAggregationOutputForAccount(long accountId, List<AggregationLine> output)
+        {
+            var aggregationOutputForAccount = new List<AggregationLine>();
+            foreach (var item in output)
+            {
+                var newLine = new AggregationLine {Items = new List<AggregationLineItem>()};
+                foreach (var lineItem in item.Items)
+                {
+                    if (lineItem.AccountId == accountId)
+                    {
+                        newLine.Items.Add(lineItem);
+                    }
+                }
 
+                if (newLine.Items.Any())
+                {
+                    newLine.Id = item.Id;
+                    newLine.Amount = item.Amount;
+                    newLine.Balance = item.Balance;
+                    newLine.LevyItemType = item.LevyItemType;
+                    newLine.Month = item.Month;
+                    newLine.Year = item.Year;
+                    aggregationOutputForAccount.Add(newLine);
+                }
             }
 
-            return output;
+            return aggregationOutputForAccount;
+        }
+
+        private static AggregationLine BuildAggregationLine(dynamic declarationsForMonth, List<AggregationLine> output)
+        {
+            var aggregationId = FindAggregationLine(declarationsForMonth,output);
+            if (!string.IsNullOrEmpty(aggregationId))
+            {
+                return output.Find(c => c.Id.Equals(aggregationId));
+            }
+                
+
+            return new AggregationLine
+            {
+                Id = Guid.NewGuid().ToString(),
+                LevyItemType = LevyItemType.Declaration,
+                Items = new List<AggregationLineItem>(),
+                Year = declarationsForMonth.PayrollYear,
+                Month = declarationsForMonth.PayrollMonth
+            };
+        }
+
+        private static string FindAggregationLine(dynamic declarationsForMonth, List<AggregationLine> output)
+        {
+            foreach (LevyDeclarationSourceDataItem declaration in declarationsForMonth.Data)
+            {
+                if (declaration.EmprefAddedDate >= declaration.SubmissionDate)
+                {
+                    foreach (var item in output)
+                    {
+                        if (item.Items.FirstOrDefault(c => c.EmpRef.Equals(declaration.EmpRef)) != null)
+                        {
+                            {
+                                return item.Id;
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         private decimal CalculateCurrentBalance(List<AggregationLine> output, decimal amount)
@@ -70,15 +139,15 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
             return output.Sum(c => c.Amount) + amount;
         }
 
-        private decimal CalculateAmountWithEnglishFraction(List<AggregationLineItem> items)
+        private decimal CalculateAmountWithEnglishFraction(List<AggregationLineItem> items, long accountId)
         {
-            var totalAmount = items.GroupBy(c => new { c.EmpRef }, (empref, group) => new
+            var totalAmount = items.GroupBy(c => new { c.EmpRef, c.AccountId }, (empref, group) => new
             {
                 empref.EmpRef,
                 Data = group.ToList()
             }).Sum(item =>
             {
-                return item.Data.Where(c => c.IsLastSubmission).Sum(c=>c.CalculatedAmount);
+                return item.Data.Where(c => c.IsLastSubmission && c.AccountId == accountId).Sum(c => c.CalculatedAmount);
             });
 
             return totalAmount;
@@ -95,6 +164,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         private dynamic GetDeclarationsByPayrollYearAndPayrollMonth(IEnumerable<LevyDeclarationSourceDataItem> source)
         {
+
             return source.GroupBy(c => new { c.PayrollDate.Value.Month, c.PayrollDate.Value.Year },
                 (payroll, group) => new
                 {
@@ -117,7 +187,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 EnglishFraction = item.EnglishFraction,
                 CalculatedAmount = calculatedAmount,
                 LevyItemType = LevyItemType.Declaration,
-                IsLastSubmission = item.LastSubmission == 1
+                IsLastSubmission = item.LastSubmission == 1,
+                AccountId = item.AccountId
             };
         }
 
@@ -125,7 +196,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
         {
             return new AggregationLineItem
             {
-                Id= item.Id,
+                Id = item.Id,
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
                 LevyDueYtd = 0,
@@ -133,7 +204,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 CalculatedAmount = item.TopUp * item.EnglishFraction,
                 EnglishFraction = item.EnglishFraction,
                 LevyItemType = LevyItemType.TopUp,
-                IsLastSubmission = true
+                IsLastSubmission = true,
+                AccountId = item.AccountId
             };
         }
 
@@ -150,9 +222,9 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
             //find the latest value for each one and add to store
 
-            foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year}, new PayrollDateComparer()))
+            foreach (var declaration in addedDeclarations.OrderByDescending(c => new PayrollDate { PayrollMonth = c.Month, PayrollYear = c.Year }, new PayrollDateComparer()))
             {
-                foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission))
+                foreach (var aggregationLineItem in declaration.Items.Where(c => c.IsLastSubmission).OrderByDescending(c=>c.ActivityDate))
                 {
                     foreach (var empref in emprefs)
                     {
