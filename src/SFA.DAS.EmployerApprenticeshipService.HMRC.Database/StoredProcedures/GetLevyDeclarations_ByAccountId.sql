@@ -9,6 +9,6 @@ AS
 	left join 
 		[levy].[GetLevyDeclarations] y on y.lastsubmission = 1 and y.id = x.id
 	where
-	x.AccountId = @accountId
+	x.EmpRef in (Select Empref from levy.LevyDeclaration where AccountId = @accountId)
 	 order by SubmissionDate asc
 
