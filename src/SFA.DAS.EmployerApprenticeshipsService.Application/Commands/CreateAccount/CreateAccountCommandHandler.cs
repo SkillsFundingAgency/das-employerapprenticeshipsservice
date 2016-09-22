@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
@@ -22,8 +23,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
+        private readonly IHashingService _hashingService;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService)
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
@@ -36,6 +38,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
             _messagePublisher = messagePublisher;
             _mediator = mediator;
             _validator = validator;
+            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(CreateAccountCommand message)
@@ -54,6 +57,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
 
+            await _accountRepository.SetAccountHashedId(_hashingService.HashValue(accountId), accountId);
+
             if (emprefs.Length > 1)
             {
                 var schemes = await _accountRepository.GetPayeSchemes(accountId);
@@ -62,6 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
                     await _accountRepository.AddPayeToAccountForExistingLegalEntity(accountId, schemes.First().LegalEntityId, emprefs[i], message.AccessToken, message.RefreshToken);
                 }
             }
+
 
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
             {

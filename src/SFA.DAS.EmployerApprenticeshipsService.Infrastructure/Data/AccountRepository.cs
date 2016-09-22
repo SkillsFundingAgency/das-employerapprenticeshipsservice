@@ -196,6 +196,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
+        public async Task SetAccountHashedId(long accountId, string hashedAccountId)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+
+                var result = await c.ExecuteAsync(
+                   sql: "[account].[UpdateAccount_SetAccountHashId]",
+                   param: parameters,
+                   commandType: CommandType.StoredProcedure);
+
+                return result;
+            });
+        }
+
         private static async Task<string> GetPayeStoredProcedureForUpdateOrCreate(string employerRef, IDbConnection c)
         {
             var searchParams = new DynamicParameters();

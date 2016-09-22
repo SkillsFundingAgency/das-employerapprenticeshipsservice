@@ -124,6 +124,7 @@
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IFeatureToggle.cs" />
+    <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
