@@ -501,6 +501,7 @@
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
+    <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             else
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funs somebody needs to sign the agreement";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
             return RedirectToAction("Index", new { accountId });

@@ -208,6 +208,9 @@
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementResponse.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateQueryHandler.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateRequest.cs" />
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementResponse.cs" />
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateQueryHandler.cs" />
     <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequest.cs" />
