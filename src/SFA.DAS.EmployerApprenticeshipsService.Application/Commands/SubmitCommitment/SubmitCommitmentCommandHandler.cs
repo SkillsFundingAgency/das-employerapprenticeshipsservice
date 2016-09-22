@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
