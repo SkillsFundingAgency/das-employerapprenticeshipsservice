@@ -6,4 +6,4 @@
 )
 GO
 
-CREATE UNIQUE INDEX [IX_Account_HashedAccountId] ON [account].[Account] ([HashedAccountId])
+CREATE INDEX [IX_Account_HashedAccountId] ON [account].[Account] ([HashedAccountId])
