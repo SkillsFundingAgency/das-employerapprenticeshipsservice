@@ -78,7 +78,7 @@
                             @if (commitment.CanBeSubmitted())
                             {
                                 <div>
-                                    <form action="@Url.Action("Submit")" method="POST">
+                                    <form action="@Url.Action("Submit")" method="GET">
                                         <input type="hidden" name="accountId" value="@commitment.EmployerAccountId" />
                                         <input type="hidden" name="commitmentId" value="@commitment.Id" />
                                         <button type="submit" name="commitment" class="button">Submit</button>
