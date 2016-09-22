@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             else
             {
-                return Redirect(Url.Action("Add", new { accountId = accountId }));
+                return Redirect(Url.Action("Add", new { accountId = accountId,validationFailed=true }));
             }
         }
 
