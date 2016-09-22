@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
 
         private async Task CreateTask(Commitment commitment)
         {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "This is the body of the task.");
+            var task = TaskFactory.Create(commitment.ProviderId.Value, "SubmitCommitment", "This is the body of the task.");
 
             await _tasksApi.CreateTask(task.Assignee, task);
         }
