@@ -78,6 +78,7 @@
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="SeedData\SeedData.sql" />
+    <None Include="SeedData\SeedData.sql" />
+    <None Include="SeedData\PostDeploymentRules.sql" />
   </ItemGroup>
 </Project>

@@ -10,10 +10,12 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-EXECUTE levy.Cleardown
-
-
-insert into [levy].[TopUpPercentage]
-(datefrom,amount)
-values
-('2015-01-01 00:00:00.000',0.1)
+IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
+	BEGIN
+	   RAISERROR('Server %s is in development - seeding test data.',10,1,@@servername) WITH NOWAIT
+	   :r .\SeedData.sql
+	END
+ELSE
+	BEGIN
+		RAISERROR('Server %s is managed - leaving data as it.',10,1,@@servername) WITH NOWAIT
+	END
