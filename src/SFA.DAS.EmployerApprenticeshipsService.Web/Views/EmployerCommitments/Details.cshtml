@@ -65,7 +65,7 @@
                             @if (apprenticeship.CanBeApproved())
                             {
                                 <div>
-                                    <form action="@Url.Action("ApproveApprenticeship")" method="POST">
+                                    <form action="@Url.Action("ApproveApprenticeship")" method="GET">
                                         <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
                                         <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
                                         <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />

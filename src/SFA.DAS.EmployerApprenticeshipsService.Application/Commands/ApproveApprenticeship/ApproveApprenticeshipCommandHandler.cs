@@ -19,24 +19,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApp
             _tasksApi = tasksApi;
         }
 
-        protected override async Task HandleCore(ApproveApprenticeshipCommand message)
+        protected override async Task HandleCore(ApproveApprenticeshipCommand command)
         {
-            var validationResult = _validator.Validate(message);
+            var validationResult = _validator.Validate(command);
 
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            // TODO: LWA - Validated Employer is that of the commitment and apprenticeship is in the commitment.
-            var commitment = await _commitmentsApi.GetEmployerCommitment(message.EmployerAccountId, message.CommitmentId);
+            // TODO: LWA - Validate Employer is that of the commitment and apprenticeship is in the commitment.
+            var commitment = await _commitmentsApi.GetEmployerCommitment(command.EmployerAccountId, command.CommitmentId);
 
-            await _commitmentsApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, Commitments.Api.Types.ApprenticeshipStatus.Approved);
+            await _commitmentsApi.PatchEmployerApprenticeship(command.EmployerAccountId, command.CommitmentId, command.ApprenticeshipId, ApprenticeshipStatus.Approved);
 
-            await CreateTask(commitment);
+            await CreateTask(commitment, command.Message);
         }
 
-        private async Task CreateTask(Commitment commitment)
+        private async Task CreateTask(Commitment commitment, string message)
         {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "ApproveApprenticeship", "This is the body of the task.");
+            var task = TaskFactory.Create(commitment.ProviderId.Value, "ApproveApprenticeship", message);
 
             await _tasksApi.CreateTask(task.Assignee, task);
         }
