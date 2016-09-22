@@ -52,7 +52,7 @@ BEGIN
     WHERE Id = 3
 END 
 SET IDENTITY_INSERT  [account].[Role] OFF
-GO
+
 
 -- Account seed data
 SET IDENTITY_INSERT  [account].[Account] ON
@@ -69,7 +69,7 @@ BEGIN
     WHERE Id = 1
 END 
 SET IDENTITY_INSERT  [account].[Account] OFF
-GO
+
 
 -- User seed data 
 SET IDENTITY_INSERT  [account].[User] ON
@@ -102,7 +102,7 @@ BEGIN
 END 
 
 SET IDENTITY_INSERT  [account].[User] OFF
-GO
+
 
 -- Membership seed data
 IF (NOT EXISTS(SELECT * FROM [account].[Membership] WHERE RoleId = 1
