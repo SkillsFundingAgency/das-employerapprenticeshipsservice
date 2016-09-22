@@ -6,7 +6,7 @@
 }
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-large">@name</h2>
+        <h2 class="heading-xlarge">@name</h2>
         <p class="lede">Choose what you allow this team member to do.</p>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
@@ -50,3 +50,14 @@
         </form>
     </div>
 </div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("View", "EmployerTeam", new {accountId = @Model.AccountId})">Manage Team Members</a></li>
+            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.AccountId, email = @Model.Email })">Team Member</a></li>
+            <li>Change Role</li>
+        </ol>
+    </div>
+}

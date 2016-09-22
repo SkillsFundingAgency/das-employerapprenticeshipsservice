@@ -1,4 +1,4 @@
-﻿/* GOV.UK OVERRIDES */
+/* GOV.UK OVERRIDES */
 label.form-label {
     margin-bottom: 15px;
     font-weight: 700;
@@ -16,8 +16,21 @@ button, a.button {
     margin-bottom: 0.75em;
 }
 
+.phase-banner-beta {
+    padding-bottom: 10px;
+}
+
+.phase-banner-beta p {
+    display: table;
+}
+
+.phase-banner-beta span {
+    display: table-cell;
+    vertical-align: middle;
+}
+
 .service-info {
-    margin-bottom: 0.75em;
+    margin-bottom: 10px;
 }
 
 .column-full {
@@ -97,7 +110,7 @@ a.button-link {
     border-spacing: 0;
     width: 100%;  
     max-width: 640px;
-
+    margin-bottom: 20px;
     font-family: "nta", Arial, sans-serif;
     font-size: 14px;
     line-height: 1.1428571429;
@@ -128,8 +141,11 @@ a.button-link {
 .responsive-inner-caption, .responsive-td div {
     display: table-cell;
     border-bottom: 1px solid #bfc1c3;
-    padding: 0.75em 1.25em 0.5625em 0;
-    
+    padding: 0.75em 1.25em 0.5625em 0;   
+}
+
+.responsive-td div.full-width {
+    display: block;
 }
 
 .responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
@@ -249,6 +265,120 @@ table.full-width, .responsive-table.full-width {
     max-width:100%;
 }
 
+
+.breadcrumbs li,
+.user-menu li {
+  font-family: "nta", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-weight: 400;
+  text-transform: none;
+  float: left;
+  background-image: url("/assets/images/separator.png");
+  background-position: 0% 50%;
+  background-repeat: no-repeat;
+  list-style: none;
+  margin-left: 0.6em;
+  margin-bottom: 0.4em;
+  padding-left: 0.9em;
+}
+
+@media (min-width: 641px) {
+  .breadcrumbs li,
+  .user-menu li {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .breadcrumbs li {
+    background-image: url("/assets/images/separator-2x.png");
+    background-size: 6px 11px;
+  }
+}
+
+.breadcrumbs li:first-child, 
+.user-menu li:first-child {
+  background-image: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.breadcrumbs a
+.user-menu a {
+  color: #0b0c0c;
+}
+
+.breadcrumbs {
+    padding: 0;
+}
+.breadcrumbs ol li {
+    position: relative;
+}
+.back-link {
+    padding-left: 15px;
+    text-decoration: underline;
+    display: inline-block;
+}
+.back-link:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-right: 6px solid #0b0c0c;
+    border-bottom: 5px solid transparent;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -6px;
+}
+
+.user-menu.logged-in {
+    border-bottom: 1px solid #bfc1c3;
+    margin-bottom: 10px;
+}
+
+.user-menu li {
+    display: inline-block;
+    padding: 0;
+    background: none;
+    float: none;
+    margin-bottom: 10px;
+}
+
+.link-user-profile {
+    font-weight: 700;
+}
+
+@media (min-width: 641px) {
+    .user-menu {
+        text-align: right;
+    }
+}
+
+/* Layout */
+
+aside.sidebar {
+    font-size: 14px;
+}
+
+aside.sidebar li {
+    margin-bottom: 5px;
+}
+
+@media (min-width: 641px) {
+    .pull-right {
+        float: right
+    }
+    aside.sidebar {
+        margin-top: 60px;
+        border-top: 10px solid #005ea5;
+        font-size: 16px;
+    }
+}
+
 /* Typography */
 
 dt:before {
@@ -260,6 +390,10 @@ dt, dd {
 }
 
 /* Tables */
+
+table {
+    margin-bottom: 20px;
+}
 
 th, td {
     vertical-align: top;
