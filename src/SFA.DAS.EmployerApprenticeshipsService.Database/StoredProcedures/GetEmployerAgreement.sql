@@ -8,7 +8,7 @@ BEGIN
 		aea.AccountId,
 		ea.StatusId AS [Status],
 		ea.LegalEntityId, 
-		u.FirstName + ' ' + u.LastName AS SignedName,
+		ea.SignedByName,
 		ea.SignedDate,
 		ea.ExpiredDate,
 		le.Name AS LegalEntityName,
@@ -22,7 +22,5 @@ BEGIN
 			ON aea.[EmployerAgreementId] = ea.Id
 		JOIN [account].[EmployerAgreementTemplate] eat
 			ON eat.Id = ea.TemplateId
-		LEFT OUTER JOIN [account].[User] u
-			ON u.Id = ea.SignedById
 	WHERE ea.Id = @agreementId
 END

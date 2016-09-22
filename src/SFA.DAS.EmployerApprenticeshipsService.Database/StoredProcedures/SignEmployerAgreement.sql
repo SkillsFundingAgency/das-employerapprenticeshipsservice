@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [account].[SignEmployerAgreement]
 	@agreementId BIGINT,
-	@signedById BIGINT,	
+	@signedById BIGINT,
+	@signedByName NVARCHAR(100),
 	@signedDate DateTime
 AS
 BEGIN
@@ -9,7 +10,8 @@ BEGIN
 	DECLARE @legalEntityId BIGINT;
 
 	UPDATE [account].[EmployerAgreement] 
-	SET SignedById = @signedById, 		
+	SET SignedById = @signedById, 
+		SignedByName = @signedByName, 
 		SignedDate = @signedDate, 
 		StatusId = 2 
 	WHERE Id = @agreementId;

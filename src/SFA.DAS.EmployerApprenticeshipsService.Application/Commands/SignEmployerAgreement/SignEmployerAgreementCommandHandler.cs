@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
             if (agreement.ExpiredDate.HasValue)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", $"Agreement {message.AgreementId} has expired" } });
 
-            await _employerAgreementRepository.SignAgreement(message.AgreementId, owner.UserId, message.SignedDate);
+            await _employerAgreementRepository.SignAgreement(message.AgreementId, owner.UserId, $"{owner.FirstName} {owner.LastName}", message.SignedDate);
         }
     }
 }
