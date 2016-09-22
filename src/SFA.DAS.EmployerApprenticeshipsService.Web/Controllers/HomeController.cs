@@ -35,9 +35,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     Headline = (string)TempData["successMessage"]
                 };
 
-                var c = new Constants(_configuration.Identity.BaseAddress);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url.Encode( Request.Url.AbsoluteUri)}";
-                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url.Encode(Request.Url.AbsoluteUri)}"; 
+                var c = new Constants(_configuration.Identity?.BaseAddress);
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri)}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url?.Encode(Request?.Url?.AbsoluteUri)}"; 
                 
                 return View(accounts);
             }
