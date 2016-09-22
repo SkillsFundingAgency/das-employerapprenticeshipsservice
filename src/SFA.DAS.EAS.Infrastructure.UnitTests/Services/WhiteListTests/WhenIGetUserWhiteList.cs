@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
         }
 
         [Test]
-        public void ThenIfTheWhiteListIsEmptyIShouldDenieAllUsers()
+        public void ThenIfTheWhiteListIsEmptyIShouldDenyAllUsers()
         {
             //Assign
 
