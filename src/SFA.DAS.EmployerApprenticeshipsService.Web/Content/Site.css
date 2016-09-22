@@ -268,3 +268,25 @@ th, td {
 table.top-border {
     border-top: 1px solid #bfc1c3;
 }
+
+
+.notice {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #bfc1c3;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding-top: 30px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+}
+
+@media (min-width: 641px) {
+  .notice {
+    padding-top: 45px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    padding-left: 30px;
+  }
+}
