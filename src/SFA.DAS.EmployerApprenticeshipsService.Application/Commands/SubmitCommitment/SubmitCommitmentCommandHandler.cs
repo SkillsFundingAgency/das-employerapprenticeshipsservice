@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
             var taskTemplate = new CreateCommitmentTemplate
             {
                 CommitmentId = message.CommitmentId,
-                Message = "",
+                Message = message.Message,
                 Source = $"EMPLOYER-{message.EmployerAccountId}"
             };
 
