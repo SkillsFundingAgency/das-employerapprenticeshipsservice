@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult HandleNewRegistraion()
         {
-            ViewData["successMessage"] = @"Registration Complete";
+            ViewData["successMessage"] = @"You've created your profile";
             return RedirectToAction("Index");
         }
 
