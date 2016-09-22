@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [account].[Account]
 (
 	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
-	[HashedAccountId] NVARCHAR(100) NOT NULL,
+	[HashedAccountId] NVARCHAR(100) NULL,
     [Name] NVARCHAR(100) NOT NULL 
 )
 GO
