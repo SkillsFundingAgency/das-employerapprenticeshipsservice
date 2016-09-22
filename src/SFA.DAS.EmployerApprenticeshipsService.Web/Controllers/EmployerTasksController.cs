@@ -23,14 +23,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId)
+        public async Task<ActionResult> Index(long accountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
 
             var response = await _employerTasksOrchestrator.GetTasks(accountId, userIdClaim);
 
             return View(response);
+        }
 
+        [HttpGet]
+        public async Task<ActionResult> View(long accountId, long taskId)
+        {
+            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+
+            var response = await _employerTasksOrchestrator.GetTask(accountId, taskId, userIdClaim);
+
+            return View(response);
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model TaskViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">View task</h1>
+        <hr />
+        <p>Name</p>
+        <p>@Model.Task.Name</p>
+        <p>Created Date</p>
+        <p>@Model.Task.CreatedOn</p>
+        <p>Message</p>
+        <p>@Model.Message</p>
+        
+        <a href="@Url.Action("Details", "EmployerCommitments", new {accountId = Model.AccountId, commitmentId = Model.LinkId})" class="link">View commitment</a>
+    </div>
+</div>
