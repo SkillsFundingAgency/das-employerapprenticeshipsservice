@@ -196,7 +196,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task SetAccountHashedId(long accountId, string hashedAccountId)
+        public async Task SetAccountHashedId(string hashedAccountId, long accountId)
         {
             await WithConnection(async c =>
             {
