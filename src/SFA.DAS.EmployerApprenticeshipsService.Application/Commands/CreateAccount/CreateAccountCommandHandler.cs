@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
 
-            await _accountRepository.SetAccountHashedId(_hashingService.HashValue(accountId), accountId);
+            await _accountRepository.SetHashedId(_hashingService.HashValue(accountId), accountId);
 
             if (emprefs.Length > 1)
             {

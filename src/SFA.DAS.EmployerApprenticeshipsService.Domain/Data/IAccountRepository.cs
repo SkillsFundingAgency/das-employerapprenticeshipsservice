@@ -16,6 +16,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 
         Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity);
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
-        Task SetAccountHashedId(string hashedAccountId, long accountId);
+        Task SetHashedId(string hashedId, long accountId);
     }
 }

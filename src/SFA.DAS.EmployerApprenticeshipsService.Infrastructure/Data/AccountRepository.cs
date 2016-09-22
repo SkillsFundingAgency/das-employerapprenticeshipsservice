@@ -196,13 +196,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task SetAccountHashedId(string hashedAccountId, long accountId)
+        public async Task SetHashedId(string hashedId, long accountId)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", accountId, DbType.Int64);
-                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+                parameters.Add("@HashedId", hashedId, DbType.String);
 
                 var result = await c.ExecuteAsync(
                    sql: "[account].[UpdateAccount_SetAccountHashId]",

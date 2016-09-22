@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.SetAccountHashedId(ExpectedHashString, ExpectedAccountId),Times.Once);
+            _accountRepository.Verify(x=>x.SetHashedId(ExpectedHashString, ExpectedAccountId),Times.Once);
         }
 
         [Test]
