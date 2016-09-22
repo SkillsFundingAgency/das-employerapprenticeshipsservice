@@ -110,7 +110,7 @@ a.button-link {
     border-spacing: 0;
     width: 100%;  
     max-width: 640px;
-
+    margin-bottom: 20px;
     font-family: "nta", Arial, sans-serif;
     font-size: 14px;
     line-height: 1.1428571429;
@@ -141,8 +141,11 @@ a.button-link {
 .responsive-inner-caption, .responsive-td div {
     display: table-cell;
     border-bottom: 1px solid #bfc1c3;
-    padding: 0.75em 1.25em 0.5625em 0;
-    
+    padding: 0.75em 1.25em 0.5625em 0;   
+}
+
+.responsive-td div.full-width {
+    display: block;
 }
 
 .responsive-td:first-child .responsive-inner-caption, .responsive-td:first-child div {
@@ -355,6 +358,27 @@ table.full-width, .responsive-table.full-width {
     }
 }
 
+/* Layout */
+
+aside.sidebar {
+    font-size: 14px;
+}
+
+aside.sidebar li {
+    margin-bottom: 5px;
+}
+
+@media (min-width: 641px) {
+    .pull-right {
+        float: right
+    }
+    aside.sidebar {
+        margin-top: 60px;
+        border-top: 10px solid #005ea5;
+        font-size: 16px;
+    }
+}
+
 /* Typography */
 
 dt:before {
@@ -366,6 +390,10 @@ dt, dd {
 }
 
 /* Tables */
+
+table {
+    margin-bottom: 20px;
+}
 
 th, td {
     vertical-align: top;
