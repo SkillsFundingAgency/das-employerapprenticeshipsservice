@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
+using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment
@@ -32,12 +34,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, CommitmentStatus.Active);
 
-            await CreateTask(commitment);
-        }
+            var taskTemplate = new CreateCommitmentTemplate
+            {
+                CommitmentId = message.CommitmentId,
+                Message = "",
+                Source = $"EMPLOYER-{message.EmployerAccountId}"
+            };
 
-        private async Task CreateTask(Commitment commitment)
-        {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "SubmitCommitment", "This is the body of the task.");
+            var task = new Tasks.Api.Types.Task
+            {
+                Assignee = $"PROVIDER-{commitment.ProviderId}",
+                TaskTemplateId = CreateCommitmentTemplate.TemplateId,
+                Name = "Create Commitment",
+                Body = JsonConvert.SerializeObject(taskTemplate)
+            };
 
             await _tasksApi.CreateTask(task.Assignee, task);
         }
