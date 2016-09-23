@@ -16,7 +16,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
 
+        public PrivacyConfiguration Privacy { get; set; }
+
         
+    }
+
+    public class PrivacyConfiguration
+    {
+        public string GoogleAnalyticsUrl { get; set; }
+
+        public string ApplicationInsightsUrl { get; set; }
+
+        public string AboutCookiesUrl { get; set; }
+
+        public string SurveyProviderUrl { get; set; }
     }
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration

@@ -126,6 +126,7 @@
     <Compile Include="Controllers\HomeControllerTests\WhenILoginInAUserUsingFakeLogin.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
+    <Compile Include="Controllers\HomeControllerTests\WhenIViewThePrivacyPage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
