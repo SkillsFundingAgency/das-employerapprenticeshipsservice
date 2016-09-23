@@ -389,6 +389,10 @@ dt, dd {
   display: inline;
 }
 
+dd {
+    font-weight: bold;
+}
+
 /* Tables */
 
 table {

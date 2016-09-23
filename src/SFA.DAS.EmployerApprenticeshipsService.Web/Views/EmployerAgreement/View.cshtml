@@ -46,15 +46,20 @@
         }
         else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
         {
-            <p>Signed By</p>
-            <p>@Model.Data.EmployerAgreement.SignedByName</p>
-            <p>Signed Date</p>
-            <p>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</p>
+            <dl>
+                <dt>Signed by</dt>
+                <dd>@Model.Data.EmployerAgreement.SignedByName</dd>
+                <dt>Signed date</dt>
+                <dd>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</dd>
+            </dl>
             if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
             {
-                <p>Expired Date</p>
-                <p>@Model.Data.EmployerAgreement.ExpiredDate</p>
+                <dl>
+                    <dt>Expired Date</dt>
+                    <dd>@Model.Data.EmployerAgreement.ExpiredDate</dd>
+               </dl>
             }
+
         }
     </div>
 </div>
