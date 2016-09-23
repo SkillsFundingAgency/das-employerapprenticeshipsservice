@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerTeamMembersViewModel = new EmployerTeamMembersViewModel()
             {
-                AccountId = 1234567890,
+                HashedId = "1234567890",
                 SuccessMessage = "It successfully applied the cream",
                 TeamMembers = new List<TeamMember>
                 {

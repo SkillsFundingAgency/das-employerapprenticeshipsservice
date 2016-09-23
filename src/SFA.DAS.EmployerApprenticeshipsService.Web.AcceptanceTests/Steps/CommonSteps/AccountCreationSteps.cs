@@ -119,7 +119,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
             var mediator = _container.GetInstance<IMediator>();
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserId = accountOwnerId }).Result;
 
-            ScenarioContext.Current["AccountId"] = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault().Id;
+            var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
+            ScenarioContext.Current["AccountId"] = account.Id;
+            ScenarioContext.Current["HashedId"] = account.HashedId;
         }
     }
 }

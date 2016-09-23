@@ -470,7 +470,7 @@
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
     <Content Include="Views\Invitation\Index.cshtml" />
     <Content Include="Views\Invitation\All.cshtml" />
-    <Content Include="Views\EmployerTeam\View.cshtml" />
+    <Content Include="Views\EmployerTeam\ViewTeam.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
