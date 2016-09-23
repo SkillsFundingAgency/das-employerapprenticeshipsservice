@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount
@@ -10,24 +9,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
     public class GetEmployerAccountHandler : IAsyncRequestHandler<GetEmployerAccountQuery, GetEmployerAccountResponse>
     {
         private readonly IEmployerAccountRepository _employerAccountRepository   ;
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IValidator<GetEmployerAccountQuery> _validator;
 
-        public GetEmployerAccountHandler(IEmployerAccountRepository employerAccountRepository, IMembershipRepository membershipRepository)
+        public GetEmployerAccountHandler(IEmployerAccountRepository employerAccountRepository, IValidator<GetEmployerAccountQuery> validator)
         {
             if (employerAccountRepository == null)
                 throw new ArgumentNullException(nameof(employerAccountRepository));
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
             _employerAccountRepository = employerAccountRepository;
-            _membershipRepository = membershipRepository;
+            _validator = validator;
         }
 
         public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountQuery message)
         {
-            var membership = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            var result = await _validator.ValidateAsync(message);
 
-            if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
+            if (!result.IsValid())
+            {
+                throw new InvalidRequestException(result.ValidationDictionary);
+            }
+
+            if (result.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            
 
             var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 
