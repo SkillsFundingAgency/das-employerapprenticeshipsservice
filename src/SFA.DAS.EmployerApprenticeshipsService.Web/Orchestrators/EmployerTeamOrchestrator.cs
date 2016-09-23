@@ -29,14 +29,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse<Account>> GetAccount(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<Account>> GetAccount(string accountId, string externalUserId)
         {
             try
             {
-                var response = await _mediator.SendAsync(new GetEmployerAccountQuery
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
-                    AccountId = accountId,
-                    ExternalUserId = externalUserId
+                    HashedId = accountId,
+                    UserId = externalUserId
                 });
 
                 return new OrchestratorResponse<Account>

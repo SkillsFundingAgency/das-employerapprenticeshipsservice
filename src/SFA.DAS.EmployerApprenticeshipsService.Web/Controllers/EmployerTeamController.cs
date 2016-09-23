@@ -14,6 +14,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
@@ -26,7 +27,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId)
+        [Route]
+        public async Task<ActionResult> Index(string accountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
 
@@ -37,6 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("View")]
         public async Task<ActionResult> View(int accountId)
         {
             FlashMessageViewModel flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
@@ -52,6 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("Invite")]
         public ActionResult Invite(long accountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -68,6 +72,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Invite")]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -101,6 +106,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         
 
         [HttpGet]
+        [Route("Cancel")]
         public async Task<ActionResult> Cancel(long id)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(id);
@@ -110,6 +116,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Cancel")]
         public async Task<ActionResult> Cancel(string email, long accountId, int cancel)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -132,6 +139,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Resend")]
         public async Task<ActionResult> Resend(long accountId, string email)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -145,6 +153,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("Remove")]
         public async Task<ActionResult> Remove(long accountId, string email)
         {
             var model = await _employerTeamOrchestrator.Review(accountId, email);
@@ -154,6 +163,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Remove")]
         public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -191,6 +201,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        [Route("ChangeRole")]
         public async Task<ActionResult> ChangeRole(long accountId, string email)
         {
             var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
@@ -200,6 +211,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("ChangeRole")]
         public async Task<ActionResult> ChangeRole(long accountId, string email, short role)
         {
             var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
@@ -231,6 +243,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
 
+        [HttpGet]
+        [Route("Review")]
+        public async Task<ActionResult> Review(int accountId, string email)
+        {
+            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
+            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
+
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+
+            return View(invitation);
+        }
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {
@@ -243,17 +266,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private void AddExceptionToModelError(Exception ex)
         {
             ModelState.AddModelError("", $"Unexpected exception: {ex.Message}");
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Review(int accountId, string email)
-        {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
-
-            return View(invitation);
         }
     }
 }
