@@ -46,16 +46,16 @@ namespace SFA.DAS.Commitments.Api.Client
             return await GetApprenticeship(url);
         }
 
-        public async Task PatchApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, ApprenticeshipStatus status)
-        {
-            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
-
-            await PatchApprenticeship(url, status);
-        }
-
         public async Task PatchEmployerCommitment(long employerAccountId, long commitmentId, CommitmentStatus status)
         {
             var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}";
+
+            await PatchCommitment(url, status);
+        }
+
+        public async Task PatchProviderCommitment(long providerId, long commitmentId, CommitmentStatus status)
+        {
+            var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}";
 
             await PatchCommitment(url, status);
         }
@@ -65,6 +65,13 @@ namespace SFA.DAS.Commitments.Api.Client
             var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
 
             await PutApprenticeship(url, apprenticeship);
+        }
+
+        public async Task PatchEmployerApprenticeship(long employerAccountId, long commitmentId, long apprenticeshipId, ApprenticeshipStatus status)
+        {
+            var url = $"{_configuration.BaseUrl}api/employer/{employerAccountId}/commitments/{commitmentId}/apprenticeships/{apprenticeshipId}";
+
+            await PatchApprenticeship(url, status);
         }
 
         public async Task<Apprenticeship> GetProviderApprenticeship(long providerId, long commitmentId, long apprenticeshipId)
@@ -94,7 +101,8 @@ namespace SFA.DAS.Commitments.Api.Client
 
             return await GetCommitments(url);
         }
-       
+
+
         public async Task<Commitment> GetProviderCommitment(long providerId, long commitmentId)
         {
             var url = $"{_configuration.BaseUrl}api/provider/{providerId}/commitments/{commitmentId}";
@@ -110,9 +118,9 @@ namespace SFA.DAS.Commitments.Api.Client
             return JsonConvert.DeserializeObject<Commitment>(content);
         }
 
-        private async Task PatchCommitment(string url, CommitmentStatus status)
+        private async Task PatchCommitment(string url, CommitmentStatus change)
         {
-            var data = JsonConvert.SerializeObject(status);
+            var data = JsonConvert.SerializeObject(change);
             await PatchAsync(url, data);
         }
 

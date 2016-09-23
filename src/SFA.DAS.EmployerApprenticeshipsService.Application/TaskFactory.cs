@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Tasks.Api.Types;
+﻿using System;
+using SFA.DAS.Tasks.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application
 {
     public static class TaskFactory
     {
-        public static Task Create(long providerId, string body)
+        public static Task Create(long providerId, string taskName, string body)
         {
             var assignee = $"PROVIDER-{providerId}";
 
@@ -12,7 +13,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application
             {
                 Assignee = assignee,
                 Body = body,
-                TaskTemplateId = 1 //TODO: LWA - What should this be?
+                TaskTemplateId = 1,
+                Name = taskName,
+                CreatedOn = DateTime.UtcNow,
+                TaskStatus = 0
             };
         }
     }

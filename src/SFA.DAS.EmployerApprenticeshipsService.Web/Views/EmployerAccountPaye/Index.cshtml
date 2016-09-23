@@ -3,56 +3,75 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">PAYE Schemes</h1>
-        <div class="responsive-table">
-            <div class="responsive-thead">
-                <div class="responsive-tr">
-                    <div class="responsive-th">Scheme ID</div>
-                    <div class="responsive-th">Legal Entity</div>
-                    <div class="responsive-th"> </div>
-                    <div class="responsive-th"> </div>
+        <div class="hgroup">
+            <h1 class="heading-xlarge">PAYE Schemes</h1>
+
+            <p>Add PAYE schemes to allow levy funds to be added to your account.</p>    
+        </div>
+        
+
+        @if (Model.Data.PayeSchemes.Any())
+        {
+            <div class="responsive-table">
+                <div class="responsive-thead">
+                    <div class="responsive-tr">
+                        <div class="responsive-th">Scheme ID</div>
+                        <div class="responsive-th">Legal Entity</div>
+                        <div class="responsive-th"> </div>
+                        <div class="responsive-th"> </div>
+                    </div>
+                </div>
+                <div class="responsive-tbody">
+                    @foreach (var scheme in Model.Data.PayeSchemes)
+                    {
+                        <div class="responsive-tr">
+                            <div class="responsive-td">
+                                <div>@scheme.EmpRef</div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div class="responsive-inner-caption">Legal Entity</div>
+                                <div>
+                                    @scheme.LegalEntityName
+                                </div>
+                            </div>
+                            <div class="responsive-td">
+                                <div>
+                                    <a aria-label="Remove PAYE scheme @scheme.EmpRef"
+                                       title="Remove PAYE scheme @scheme.EmpRef"
+                                       href="@Url.Action("RemovePaye", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">Remove</a>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                            <div class="responsive-td">
+                                <div>
+                                    <a aria-label="View PAYE scheme @scheme.EmpRef"
+                                       title="View PAYE scheme @scheme.EmpRef"
+                                       href="@Url.Action("Details", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">View</a>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            </div>
+                        </div>
+
+                    }
+
+
                 </div>
             </div>
-            <div class="responsive-tbody">
 
-                @foreach (var scheme in Model.Data.PayeSchemes)
-                {
-                    <div class="responsive-tr">
-                        <div class="responsive-td">
-                            <div>@scheme.EmpRef</div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Legal Entity</div>
-                            <div>
-                                @scheme.LegalEntityName
-                            </div>
-                        </div>
-                        <div class="responsive-td">
-                            <div>
-                                <a aria-label="Remove PAYE scheme @scheme.EmpRef"
-                                   title="Remove PAYE scheme @scheme.EmpRef"
-                                   href="@Url.Action("RemovePaye", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">Remove</a>
-                            </div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            <div>
-                                <a aria-label="View PAYE scheme @scheme.EmpRef"
-                                   title="View PAYE scheme @scheme.EmpRef"
-                                   href="@Url.Action("Details", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">View</a>
-                            </div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                    </div>
-
-                }
-
+        }
+        else
+        {
+            <div class="notice">
+                <p class="">There are no PAYE schemes added.</p>
             </div>
-        </div>
+        }
+
+
     </div>
 
-</div>
+    </div>
+
 <div class="grid-row">
     <br/>
 </div>
@@ -64,3 +83,12 @@
         </form>
     </div>
 </div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li>PAYE Schemes</li>
+        </ol>
+    </div>
+}

@@ -16,7 +16,7 @@
         <p>To add a levy account you need:</p>
         <ul class="list-bullet">
             <li>the Companies House number for your organisation</li>
-            <li>the Government Gateway login details for the PAYE scheme you want to use to clain levy funds</li>
+            <li>the Government Gateway login details for the PAYE scheme you want to use to claim levy funds</li>
         </ul>
         <p><a href="http://www.gateway.gov.uk/Help/Help.aspx?content=help_more_info_gateway.htm&languageid=0" target="_blank" rel="external">What's Government Gateway?</a></p>
         <form method="POST" action="@Url.Action("Index")">
@@ -35,3 +35,11 @@
         </form>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+        </ol>
+    </div>
+}
