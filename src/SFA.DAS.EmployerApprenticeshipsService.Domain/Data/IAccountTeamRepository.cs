@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
     public interface IAccountTeamRepository
     {
-        Task<List<TeamMember>> GetAccountTeamMembersForUserId(long accountId, string externalUserId);
+        Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedId, string externalUserId);
         Task<TeamMember> GetMember(long accountId, string email);
     }
 }
