@@ -34,11 +34,9 @@
   <!-- Items for the project -->
   <ItemGroup>
     <ServiceDefinition Include="ServiceDefinition.csdef" />
-    <None Include="ServiceDefinition.Release.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
-    <None Include="PreDeployment.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Profiles" />
@@ -95,9 +93,4 @@
     <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.9\</CloudExtensionsDir>
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName) == Release (
-powershell "start-process powershell.exe, '$(ProjectDir)PreDeployment.ps1', '$(ProjectDir)', '$(TargetDir)'"
-)</PreBuildEvent>
-  </PropertyGroup>
 </Project>
