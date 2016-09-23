@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         }
 
         [Test]
-        public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserIsNotPartOFTheAccount()
+        public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserIsNotPartOfTheAccount()
         {
             //Act
             var result = await _validator.ValidateAsync(new GetEmployerAccountQuery());
