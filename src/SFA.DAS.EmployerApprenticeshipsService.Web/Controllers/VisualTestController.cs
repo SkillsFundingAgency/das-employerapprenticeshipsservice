@@ -270,7 +270,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
-                        AccountId = 123,
+                        HashedId = "123",
                         Email = "bojack.horseman@horsingaround.com",
                         Name = "Bocjack Horseman",
                         Role = Role.Owner

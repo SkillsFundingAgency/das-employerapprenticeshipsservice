@@ -56,11 +56,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Teams/Invite")]
-        public ActionResult Invite(long accountId)
+        public ActionResult Invite(string accountId)
         {
             var model = new InviteTeamMemberViewModel
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Role = Role.Viewer
             };
 
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             };
 
             TempData["flashMessage"] = successMessage;
-            return RedirectToAction("ViewTeam", new { accountId = model.AccountId });
+            return RedirectToAction("ViewTeam");
         }
         
 
