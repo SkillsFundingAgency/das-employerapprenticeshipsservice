@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
@@ -23,24 +24,36 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
+        private Mock<IValidator<CreateInvitationCommand>> _validator;
+        private const long ExpectedAccountId = 545641561;
+        private const long ExpectedUserId = 521465;
+        private const string ExpectedExternalUserId = "someid";
+        private const string ExpectedHashedId = "aaa415ss1";
+        private const string ExpectedCallerEmail = "test.user@test.local";
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, ExpectedCallerEmail)).ReturnsAsync(null);
             _membershipRepository = new Mock<IMembershipRepository>();
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(new MembershipView {AccountId = ExpectedAccountId, UserId = ExpectedUserId});
 
             _mediator = new Mock<IMediator>();
 
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration.Object);
+            _validator = new Mock<IValidator<CreateInvitationCommand>>();
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
+
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration.Object, _validator.Object);
             _command = new CreateInvitationCommand
             {
-                AccountId = 101,
-                Email = "test.user@test.local",
+                HashedId = ExpectedHashedId,
+                Email = ExpectedCallerEmail,
                 Name = "Test User",
-                RoleId = Role.Owner
+                RoleId = Role.Owner,
+                ExternalUserId = ExpectedExternalUserId
             };
             DateTimeProvider.Current = new FakeTimeProvider(DateTime.UtcNow);
         }
@@ -54,78 +67,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ValidCommandFromAccountOwnerCreatesInvitation()
         {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
-            {
-                RoleId = (int)Role.Owner
-            });
-
+            //Act
             await _handler.Handle(_command);
 
-            _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == _command.AccountId && m.Email == _command.Email && m.Name == _command.Name && m.Status == InvitationStatus.Pending && m.RoleId == _command.RoleId && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
+            //Assert
+            _invitationRepository.Verify(x => x.Create(It.Is<Invitation>(m => m.AccountId == ExpectedAccountId && m.Email == _command.Email && m.Name == _command.Name && m.Status == InvitationStatus.Pending && m.RoleId == _command.RoleId && m.ExpiryDate == DateTimeProvider.Current.UtcNow.Date.AddDays(8))), Times.Once);
         }
-
-        [Test]
-        public void ValidCommandFromNonAccountOwnerDoesNotCreateInvitation()
-        {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
-            {
-                RoleId = 0
-            });
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ValidCommandFromNonAccountUserDoesNotCreateInvitation()
-        {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ValidCommandFromExistingMemberDoesNotCreateInvitation()
-        {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
-            {
-                RoleId = (int)Role.Owner
-            });
-            _membershipRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new TeamMember
-            {
-                IsUser = true
-            });
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-            Assert.That(exception.ErrorMessages.FirstOrDefault().Key, Is.EqualTo("ExistingMember"));
-        }
-
-        [Test]
-        public void InvalidCommandThrowsException()
-        {
-            var command = new CreateInvitationCommand();
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
-        }
-
+        
         [Test]
         public void ValidCommandButExistingDoesNotCreateInvitation()
         {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(new Invitation
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(new Invitation
             {
                 Id = 1,
-                AccountId = _command.AccountId,
+                AccountId = ExpectedAccountId,
                 Email = _command.Email
             });
 
@@ -135,14 +90,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
+        public void ThenAUnauthorizedAccessExecptionIsThrownIfTheValidionResultIsUnauthorized()
+        {
+            //Arrange
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
+
+            //Act
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
+        }
+
+        [Test]
         public async Task ThenTheSendNotificationCommandIsInvoked()
         {
             var userId = 1;
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(null);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner,
-                UserId = userId
+                UserId = userId,
+                AccountId = ExpectedAccountId
             });
 
             //Act

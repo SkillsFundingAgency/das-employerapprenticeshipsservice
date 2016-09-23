@@ -22,7 +22,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
     public class InviteMemberSteps
     {
         private static IContainer _container;
-        private long _accountId;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
         private string _hashedAccountId;
@@ -101,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
-                AccountId = _accountId,
+                HashedId = _hashedAccountId,
                 Email = email,
                 Name = name,
                 Role = Role.Transactor
@@ -115,7 +114,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
-            _accountId = account.Id;
             _hashedAccountId = account.HashedId;
         }
         
