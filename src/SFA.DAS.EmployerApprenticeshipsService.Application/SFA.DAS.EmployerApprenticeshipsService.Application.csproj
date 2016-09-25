@@ -112,6 +112,9 @@
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommand.cs" />
     <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\ProcessNotification\ProcessNotificationCommand.cs" />

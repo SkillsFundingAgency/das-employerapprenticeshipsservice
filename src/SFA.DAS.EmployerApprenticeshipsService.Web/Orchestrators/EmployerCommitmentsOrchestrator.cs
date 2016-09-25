@@ -6,6 +6,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResumeApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -156,6 +157,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 	    public async Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
         {
             await _mediator.SendAsync(new PauseApprenticeshipCommand
+            {
+                EmployerAccountId = accountId,
+                CommitmentId = commitmentId,
+                ApprenticeshipId = apprenticeshipId
+            });
+        }
+
+        public async Task ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _mediator.SendAsync(new ResumeApprenticeshipCommand
             {
                 EmployerAccountId = accountId,
                 CommitmentId = commitmentId,

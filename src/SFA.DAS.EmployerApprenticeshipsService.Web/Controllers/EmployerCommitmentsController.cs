@@ -131,5 +131,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
         }
+
+        [HttpGet]
+        public async Task<ActionResult> ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _employerCommitmentsOrchestrator.ResumeApprenticeship(accountId, commitmentId, apprenticeshipId);
+
+            return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
+        }
     }
 }
