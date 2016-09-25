@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -152,9 +153,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
         
-	internal Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+	    public async Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
         {
-            throw new NotImplementedException();
+            await _mediator.SendAsync(new PauseApprenticeshipCommand
+            {
+                EmployerAccountId = accountId,
+                CommitmentId = commitmentId,
+                ApprenticeshipId = apprenticeshipId
+            });
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
