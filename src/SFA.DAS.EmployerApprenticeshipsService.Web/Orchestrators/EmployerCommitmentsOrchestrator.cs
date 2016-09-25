@@ -151,6 +151,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Message = message
             });
         }
+        
+	internal Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            throw new NotImplementedException();
+        }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
