@@ -342,7 +342,9 @@
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
+    <Compile Include="Models\TaskListItemModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
+    <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
@@ -510,6 +512,7 @@
     <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\Submit.cshtml" />
+    <Content Include="Views\EmployerTasks\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
