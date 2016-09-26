@@ -7,7 +7,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
     {
         public string HashValue(long id)
         {
-            var hashIds = new Hashids("SFA: digital apprenticeship service",10, "46789BCDFGHJKLMNPRSTVWXY");
+            var hashIds = new Hashids("SFA: digital apprenticeship service",6, "46789BCDFGHJKLMNPRSTVWXY");
 
             return hashIds.EncodeLong(id);
         }
