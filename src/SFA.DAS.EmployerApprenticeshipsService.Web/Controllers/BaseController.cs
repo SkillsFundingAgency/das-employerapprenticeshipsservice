@@ -1,18 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class BaseController : Controller
     {
+        private readonly IFeatureToggle _featureToggle;
+        private readonly IUserWhiteList _userWhiteList;
+        protected IOwinWrapper OwinWrapper;
+
+        public BaseController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
+        {
+            OwinWrapper = owinWrapper;
+            _featureToggle = featureToggle;
+            _userWhiteList = userWhiteList;
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (!CheckFeatureIsEnabled())
+            {
+                filterContext.Result = base.View("FeatureNotEnabled", null, null);
+            }
+
+            if (filterContext.ActionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), false).Any())
+            {
+                var userEmail = OwinWrapper.GetClaimValue("email");
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    if (!_userWhiteList.IsEmailOnWhiteList(userEmail))
+                    {
+                        filterContext.Result = base.View("UserNotAllowed", null, null);
+                    }
+                }
+            }
+        }
+        
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var orchestratorResponse = model as OrchestratorResponse;
+            
             if (orchestratorResponse == null) return base.View(viewName, masterName, model);
 
             var flashMessage = GetHomePageSucessMessage();
@@ -20,7 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 orchestratorResponse.FlashMessage = flashMessage;
             }
-            if (orchestratorResponse.Status == HttpStatusCode.OK)
+            if (orchestratorResponse.Status == HttpStatusCode.OK || orchestratorResponse.Status == HttpStatusCode.BadRequest)
                 return base.View(viewName, masterName, orchestratorResponse);
 
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
@@ -34,10 +67,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 return base.View(@"AccessDenied", masterName, orchestratorResponse);
             }
-                
 
             return base.View(@"GenericError", masterName, orchestratorResponse);
+        }
 
+        private bool CheckFeatureIsEnabled()
+        {
+            var features = _featureToggle.GetFeatures();
+            var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
+            var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            
+            var featureToggleItem = features.Data.FirstOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
+            if (featureToggleItem!= null)
+            {
+                if (featureToggleItem.Action == "*" ||  actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         protected FlashMessageViewModel GetHomePageSucessMessage()
@@ -63,7 +112,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
             return null;
         }
-
-
     }
 }

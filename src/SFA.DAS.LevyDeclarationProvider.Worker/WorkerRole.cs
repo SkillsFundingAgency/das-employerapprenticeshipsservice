@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Logging;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging;
 using SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution;
 using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
 using StructureMap;
@@ -43,7 +43,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add<LoggingPolicy>();
-                c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.AddRegistry<DefaultRegistry>();
             });
 

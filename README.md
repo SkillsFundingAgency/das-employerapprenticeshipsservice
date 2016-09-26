@@ -32,3 +32,26 @@ You should run Visual Studio as an Administrator.
 ### Running
 
 Running the cloud service will start the web application in your browser.
+
+
+### Whitelisting
+
+To limit access to the site to subset of users you can add regex patterns to allow users with certain email addresses to access the site only. Unlisted email addresses will be redirected to a 'user not allowed' page but will still be able to create a user account and log in. 
+
+To add such regex patterns simple open up the json file:
+
+**SFA.DAS.EmployerApprenticeshipsService.Web/App_Data/WhiteList/user_white_list.json**
+
+And add any number of regex patterns you wish to use to select users by email for the site's whitelist.
+
+Below is an example of what the file may look like
+
+```
+{
+  "EmailPatterns": [
+    "^[a-zA-Z0-9.-]*@test.com$",
+    "^test2@test.com$",
+    "test@[a-z]*.co.uk"
+  ]
+} 
+```

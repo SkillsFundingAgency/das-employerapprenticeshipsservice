@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
@@ -16,8 +17,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
-        private Mock<ICookieService> _cookieService;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
         private string ExpectedRedirectUrl = "http://redirect.local.test";
         
 
@@ -26,15 +28,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         {
             base.Arrange(ExpectedRedirectUrl);
             
-            _cookieService = new Mock<ICookieService>();
+            new Mock<ICookieService>();
             
             _orchestrator =  new Mock<EmployerAccountOrchestrator>();
             
             _owinWrapper = new Mock<IOwinWrapper>();
+            _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
 
-            _employerAccountController = new EmployerAccountController (_owinWrapper.Object,_orchestrator.Object);
-            _employerAccountController.ControllerContext = _controllerContext.Object;
-            _employerAccountController.Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes);
+            _employerAccountController = new EmployerAccountController(
+                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object)
+            {
+                ControllerContext = _controllerContext.Object,
+                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
+            };
         }
 
         [Test]
@@ -54,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         public void ThenICanProceedToTheGovernmentGatewayConfirmationPage()
         {
             //Act
-            var actual = _employerAccountController.Index(true);
+            var actual = _employerAccountController.Index("understood");
 
             //Assert
             Assert.IsNotNull(actual);

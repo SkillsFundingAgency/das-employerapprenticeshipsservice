@@ -1,17 +1,24 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web;
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@using SFA.DAS.EmployerApprenticeshipsService.Domain.Extensions
+@using SFA.DAS.EmployerApprenticeshipsService.Web;
 @using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Agreements</h1>
+        <h1 class="heading-xlarge">Your organisations</h1>
     </div>
     <div class="column-one-third rightalign">
         <form action="@Url.Action("Add")" method="GET">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
-           <!-- <input class="button" id="addNewPaye" type="submit" value="New agreement">-->
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId"/>
+            <input class="button" id="addNewPaye" type="submit" value="Add new organisation">
         </form>
+    </div>
+    <div class="column-full">
+        <p>Add the organisations that you want to hire apprentices through.</p>
+        <p>You need to sign an agreement for each organisation before you can access levy funds and hire
+           apprentices through that organisation.</p>
     </div>
 </div>
 <div class="grid-row">
@@ -19,9 +26,8 @@
         <div class="responsive-table">
             <div class="responsive-thead">
                 <div class="responsive-tr">
-                    <div class="responsive-th">Agreement ID</div>
-                    <div class="responsive-th">Employer</div>
-                    <div class="responsive-th">Status</div>
+                    <div class="responsive-th">Name</div>
+                    <div class="responsive-th">Agreement status</div>
                     <div class="responsive-th"> </div>
                 </div>
             </div>
@@ -31,10 +37,6 @@
             {
                     <div class="responsive-tr">
                         <div class="responsive-td">
-                            <div class="responsive-inner-caption">Agreement ID</div>
-                            <div>@employerAgreement.TemplateRef</div>
-                        </div>
-                        <div class="responsive-td">
                             <div class="responsive-inner-caption">Employer</div>
                             <div>
                                 @employerAgreement.LegalEntityName
@@ -43,22 +45,31 @@
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Status</div>
                             <div>
-                                @employerAgreement.Status.ToString()
+                                @employerAgreement.Status.GetDescription()
                             </div>
                         </div>
                         <div class="responsive-td">
                             <div>
                                 <a aria-label="View Employer Agreement @employerAgreement.Id"
                                    title="View Employer Agreement @employerAgreement.Id"
-                                   href="@Url.Action("View", new { agreementId = employerAgreement.Id, accountId = Model.Data.AccountId })">View</a>
+                                   href="@Url.Action("View", new {agreementId = employerAgreement.Id, accountId = Model.Data.AccountId})">
+                                    @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
+                                </a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
                     </div>
-
                 }
-
             </div>
         </div>
     </div>
 </div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li>Your Organisations</li>
+        </ol>
+    </div>
+}

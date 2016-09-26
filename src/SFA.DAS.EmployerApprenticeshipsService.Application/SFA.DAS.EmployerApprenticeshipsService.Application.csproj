@@ -84,6 +84,9 @@
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommand.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
@@ -101,14 +104,19 @@
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
+    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommand.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandHandler.cs" />
-    <Compile Include="Commands\CreateTask\CreateTaskCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
+    <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
+    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommand.cs" />
+    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\ProcessNotification\ProcessNotificationCommand.cs" />
     <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandHandler.cs" />
     <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandValidator.cs" />
@@ -118,6 +126,9 @@
     <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommand.cs" />
     <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandHandler.cs" />
     <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandValidator.cs" />
+    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommand.cs" />
+    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandHandler.cs" />
+    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandValidator.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommand.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandHandler.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandValidator.cs" />
@@ -125,6 +136,7 @@
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommand.cs" />
+    <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommand.cs" />
@@ -202,6 +214,16 @@
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationQueryValidator.cs" />
     <Compile Include="Queries\GetHMRCLevyDeclaration\GetHMRCLevyDeclarationResponse.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementResponse.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateQueryHandler.cs" />
+    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateRequest.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementResponse.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateQueryHandler.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequest.cs" />
+    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequestValidator.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementQueryHandler.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementRequest.cs" />
+    <Compile Include="Queries\GetLegalEntityAgreement\GetLegalEntityAgreementResponse.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
@@ -219,6 +241,12 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
+    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
+    <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
+    <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
+    <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />
@@ -232,6 +260,7 @@
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
+    <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
@@ -252,9 +281,9 @@
       <Project>{E442B238-0C69-449E-A2C5-FD890CF6A7DC}</Project>
       <Name>SFA.DAS.Tasks.Api.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.Tasks.Domain\SFA.DAS.Tasks.Domain.csproj">
-      <Project>{9bbab098-4c62-4dfc-aeea-20a0d9bd1e2c}</Project>
-      <Name>SFA.DAS.Tasks.Domain</Name>
+    <ProjectReference Include="..\SFA.DAS.Tasks.Api.Types\SFA.DAS.Tasks.Api.Types.csproj">
+      <Project>{e1e60ba1-5838-474e-bda0-810d7a5b126e}</Project>
+      <Name>SFA.DAS.Tasks.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

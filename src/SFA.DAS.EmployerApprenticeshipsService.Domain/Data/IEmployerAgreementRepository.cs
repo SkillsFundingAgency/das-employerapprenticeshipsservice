@@ -13,5 +13,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task ReleaseEmployerAgreementTemplate(int templateId);
         Task CreateEmployerAgreementTemplate(string templateRef, string text);
         Task<EmployerAgreementTemplate> GetEmployerAgreementTemplate(int templateId);
+        Task<EmployerAgreementTemplate> GetLatestAgreementTemplate();
     }
 }

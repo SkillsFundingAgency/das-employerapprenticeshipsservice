@@ -1,0 +1,35 @@
+﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.FindOrganisationViewModel>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-large bold-large">Confirm organisation</h1>
+        <p>
+            <div class="bold-xlarge">@Model.Data.CompanyName</div>
+            <div class="text-secondary font-medium">Companies House number: @Model.Data.CompanyNumber</div>
+        </p>
+        <p class="heading-medium">Is this the correct organisation?</p>
+        <form action="@Url.Action("ViewEntityAgreement")" method="POST">
+            <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
+            <input type="hidden" name="name" value="@Model.Data.CompanyName"/>
+            <input type="hidden" name="code" value="@Model.Data.CompanyNumber"/>
+            <input type="hidden" name="address" value="@Model.Data.RegisteredAddress"/>
+            <input type="hidden" name="incorporated" value="@Model.Data.DateOfIncorporation"/>
+            <span>
+                <input class="button" type="submit" value="Yes, continue" />
+                <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.AccountId})">No, search again</a>
+            </span>
+        </form>
+        
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement", new {accountId = @Model.Data.AccountId})">Your Organisations</a></li>
+            <li><a href="@Url.Action("Add", "EmployerAgreement", new {accountId = @Model.Data.AccountId})">Find your organisation</a></li>
+            <li>Confirm organisation</li>
+        </ol>
+    </div>
+}

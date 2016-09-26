@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -18,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
-        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
+       
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -28,9 +30,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
-            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration, _empRefFileBasedService.Object);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration);
         }
 
         [Test]
@@ -64,6 +65,53 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
                     )));
+        }
+
+        [Test]
+        public async Task ThenIfUserTriesToSignTheAgreementWhenNotAuthorisedTheyGetBadRequest()
+        {
+            //Arrange
+            var model = new CreateAccountModel
+            {
+                UserIsAuthorisedToSign = false,
+                SignedAgreement = true
+            };
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()))
+                     .ReturnsAsync(new GetLatestAccountAgreementResponse
+                     {
+                         Template = new EmployerAgreementTemplate()
+                     });
+
+            //Act
+           var result = await _employerAccountOrchestrator.CreateAccount(model);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()), Times.Once);
+            Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
+        }
+
+        [Test]
+        public async Task ThenIfUserSignsTheAgreementAndIsAuthorisedToTheyGetOkRequest()
+        {
+            //Arrange
+            var model = new CreateAccountModel
+            {
+                UserIsAuthorisedToSign = true,
+                SignedAgreement = true
+            };
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()))
+                     .ReturnsAsync(new GetLatestAccountAgreementResponse
+                     {
+                         Template = new EmployerAgreementTemplate()
+                     });
+
+            //Act
+            var result = await _employerAccountOrchestrator.CreateAccount(model);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.OK, result.Status);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -18,6 +19,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private string ExpectedUserId = "123ABC";
+        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
 
         [SetUp]
         public void Arrange()
@@ -31,7 +34,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
 
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object);
+            _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
+
+            _homeController = new HomeController(
+                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object,
+                _userWhiteList.Object);
         }
 
         [Test]

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -10,35 +11,43 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IOwinWrapper _owinWrapper;
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration)
+            EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
-            _owinWrapper = owinWrapper;
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
         }
-        
+
         public async Task<ActionResult> Index()
         {
-            var userId = _owinWrapper.GetClaimValue("sub");
+            var userId = OwinWrapper.GetClaimValue("sub");
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
-
+                
                 accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
+                accounts.Data.FlashMessage = new FlashMessageViewModel()
+                {
+                    Headline = (string)TempData["successMessage"]
+                };
 
+                var c = new Constants(_configuration.Identity?.BaseAddress);
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri)}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url?.Encode(Request?.Url?.AbsoluteUri)}"; 
+                
                 return View(accounts);
             }
 
             var model = new
             {
                 HideHeaderSignInLink = true
+               
             };
-            
+
             return View("ServiceLandingPage", model);
         }
 
@@ -48,7 +57,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
 
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register");
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistraion");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult HandleNewRegistraion()
+        {
+            ViewData["successMessage"] = @"You've created your profile";
+            return RedirectToAction("Index");
         }
 
         [Authorize]
@@ -71,30 +88,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index");
         }
 
-
         public async Task<ActionResult> FakeUserSignIn()
         {
             var users = await _homeOrchestrator.GetUsers();
 
             return View(users);
         }
-        
+
         public ActionResult SignOut()
         {
-            return _owinWrapper.SignOutUser();
+            return OwinWrapper.SignOutUser();
 
         }
 
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";
-            _owinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
+            OwinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
 
-            _owinWrapper.IssueLoginCookie(id, displayName);
+            OwinWrapper.IssueLoginCookie(id, displayName);
 
-            _owinWrapper.RemovePartialLoginCookie();
+            OwinWrapper.RemovePartialLoginCookie();
         }
 
-       
+
     }
 }

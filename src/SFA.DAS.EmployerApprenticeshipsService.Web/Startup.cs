@@ -151,5 +151,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
         public string UserInfoEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/userinfo";
         public string IdentityTokenValidationEndpoint() =>  BaseAddress + "/connect/identitytokenvalidation";
         public string TokenRevocationEndpoint() => BaseAddress + "/connect/revocation";
+
+        public string ChangePasswordLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changepwdpg";
+
+        public string ChangeEmailLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changeemailpg";
     }
 }

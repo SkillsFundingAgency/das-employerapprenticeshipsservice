@@ -2,6 +2,8 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -11,16 +13,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     [Authorize]
     public class EmployerAccountController : BaseController
     {
-        
-        private readonly IOwinWrapper _owinWrapper;
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         
-        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator)
+        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
-            
-            _owinWrapper = owinWrapper;
+           
             _employerAccountOrchestrator = employerAccountOrchestrator;
         }
 
@@ -31,9 +32,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(bool accepted)
+        public ActionResult Index(string understood)
         {
-            return RedirectToAction("GovernmentGatewayConfirm");
+            if (!string.IsNullOrEmpty(understood))
+                return RedirectToAction("GovernmentGatewayConfirm");
+
+            TempData["notunderstood"] = true;
+            return View();
         }
 
         [HttpGet]
@@ -90,7 +95,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View("InvalidSummary", response);
             }
 
-            var email = _owinWrapper.GetClaimValue("email");
+            var email = OwinWrapper.GetClaimValue("email");
 
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
             
@@ -122,17 +127,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAccount()
+        public async Task<ActionResult> ViewAccountAgreement()
         {
-
-            if (Request.Params[@"confirm_create"] != @"1")
-            {
-                TempData["ErrorMessage"] = "You can start the create account proccess again";
-                return RedirectToAction("Index");
-            }
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
+            var model = new CreateAccountModel
+            {
+                CompanyNumber = enteredData.CompanyNumber,
+                CompanyName = enteredData.CompanyName,
+                CompanyRegisteredAddress = enteredData.RegisteredAddress,
+                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
+            };
+
+            var response = await _employerAccountOrchestrator.GetAccountAgreementTemplate(model);
+
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateAccount(bool? userIsAuthorisedToSign, string submit)
+        {
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+            var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
                 CompanyNumber = enteredData.CompanyNumber,
@@ -141,21 +158,40 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
                 AccessToken = enteredData.AccessToken,
-                RefreshToken = enteredData.RefreshToken
-            });
+                RefreshToken = enteredData.RefreshToken,
+                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
+                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
+            };
 
-            TempData["successHeader"] = "Account Created";
-            TempData["successCompany"] = enteredData.CompanyName;
+            var response = await _employerAccountOrchestrator.CreateAccount(request);
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
+
+                TempData["userNotAuthorised"] = "true";
+                
+                return RedirectToAction("ViewAccountAgreement");
+            }
+
+            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
+            {
+                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+                TempData["successMessage"] = "This account can now spend levy funds";
+            }
+            else
+            {
+                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+            }
 
             return RedirectToAction("Index", "Home");
         }
 
         private string GetUserId()
         {
-            var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
-        
-        
     }
 }

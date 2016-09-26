@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+﻿using System;
+
+namespace SFA.DAS.EmployerApprenticeshipsService.Domain
 {
     public class Scheme
     {
@@ -9,5 +11,8 @@
         public string AccessToken { get; set; }
 
         public string RefreshToken { get; set; }
+
+        public DateTime AddedDate { get; set; }
+        public DateTime? RemovedDate { get; set; }
     }
 }

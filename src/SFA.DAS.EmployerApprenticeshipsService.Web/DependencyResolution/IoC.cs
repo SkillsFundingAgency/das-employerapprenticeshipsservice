@@ -17,7 +17,7 @@
 
 
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     using StructureMap;
@@ -29,10 +29,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
-                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiConfiguration>("SFA.DAS.Commitments"));
-                c.Policies.Add(new ConfigurationPolicy<TasksApiConfiguration>("SFA.DAS.Tasks"));
                 c.Policies.Add<LoggingPolicy>();
-                c.Policies.Add(new MessagePolicy(ServiceName));
+                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.AddRegistry<DefaultRegistry>();
             });
         }

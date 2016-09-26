@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.DepedencyResolution;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 c =>
                     {
                         c.AddRegistry<TestRegistry>();
-                        c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                        c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                     }
                 );
         }
@@ -63,7 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 c =>
                     {
                         c.AddRegistry<TestRegistry>();
-                        c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService_no_SB"));
+                        c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService_no_SB"));
                     }
                 );
 
@@ -93,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.St
                 c =>
                     {
                         c.AddRegistry<TestRegistryPolling>();
-                        c.Policies.Add(new MessagePolicy("SFA.DAS.EmployerApprenticeshipsService"));
+                        c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                     }
                 );
 

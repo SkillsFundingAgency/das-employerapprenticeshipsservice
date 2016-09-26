@@ -10,7 +10,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInfor
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -23,7 +22,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
         protected readonly EmployerApprenticeshipsServiceConfiguration Configuration;
-        private readonly IEmpRefFileBasedService _empRefFileBasedService;
 
         //Needed for tests
         protected EmployerVerificationOrchestratorBase()
@@ -31,13 +29,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration, IEmpRefFileBasedService empRefFileBasedService)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
         {
             Mediator = mediator;
             Logger = logger;
             CookieService = cookieService;
             Configuration = configuration;
-            _empRefFileBasedService = empRefFileBasedService;
         }
 
 
