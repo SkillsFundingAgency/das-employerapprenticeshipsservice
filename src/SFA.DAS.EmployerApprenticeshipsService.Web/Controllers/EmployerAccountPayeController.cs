@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Add(long accountId, bool? validationFailed)
+        public async Task<ActionResult> Add(string accountId, bool? validationFailed)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, OwinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
 

@@ -102,11 +102,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task<InvitationViewModel> Review(long accountId, string email)
+        public async Task<InvitationViewModel> Review(string accountId, string email)
         {
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Email = email
             });
 
@@ -143,21 +143,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task Remove(long userId, long accountId, string externalUserId)
+        public async Task Remove(long userId, string accountId, string externalUserId)
         {
             await _mediator.SendAsync(new RemoveTeamMemberCommand
             {
                 UserId = userId,
-                AccountId = accountId,
+                HashedId = accountId,
                 ExternalUserId = externalUserId
             });
         }
 
-        public async Task<TeamMember> GetTeamMember(long accountId, string email)
+        public async Task<TeamMember> GetTeamMember(string accountId, string email)
         {
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Email = email
             });
 

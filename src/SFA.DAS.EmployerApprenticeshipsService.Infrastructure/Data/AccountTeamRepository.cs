@@ -37,16 +37,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
-        public async Task<TeamMember> GetMember(long accountId, string email)
+        public async Task<TeamMember> GetMember(string hashedId, string email)
         {
             var result = await WithConnection(async connection =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@hashedId", hashedId, DbType.String);
                 parameters.Add("@email", email, DbType.String);
 
                 return await connection.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE HashedId = @hashedId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

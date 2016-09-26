@@ -81,14 +81,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(long accountId, string email, string redirectUrl)
+        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(string accountId, string email, string redirectUrl)
         {
             HttpStatusCode status = HttpStatusCode.OK;
 
             
             var response = await Mediator.SendAsync(new GetMemberRequest
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Email = email
             });
 
@@ -102,7 +102,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return new OrchestratorResponse<BeginNewPayeScheme>
             {
-                Data = new BeginNewPayeScheme { AccountId = accountId } ,
+                Data = new BeginNewPayeScheme { HashedId = accountId} ,//TODO
                 Status = status,
                 FlashMessage = new FlashMessageViewModel
                 {

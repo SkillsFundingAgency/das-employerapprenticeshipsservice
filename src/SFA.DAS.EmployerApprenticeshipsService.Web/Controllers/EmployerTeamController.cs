@@ -141,8 +141,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Teams/Remove")]
-        public async Task<ActionResult> Remove(long accountId, string email)
+        [Route("Teams/Remove/{email}")]
+        public async Task<ActionResult> Remove(string accountId, string email)
         {
             var model = await _employerTeamOrchestrator.Review(accountId, email);
 
@@ -152,7 +152,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/Remove")]
-        public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
+        public async Task<ActionResult> Remove(long userId, string accountId, string email, int remove)
         {
             
             try
@@ -171,7 +171,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     };
                 }
 
-                return RedirectToAction("ViewTeam", new { accountId = accountId, flashMessage = successMessage });
+                return RedirectToAction("ViewTeam", new { accountId, flashMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {
@@ -187,8 +187,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Teams/ChangeRole")]
-        public async Task<ActionResult> ChangeRole(long accountId, string email)
+        [Route("Teams/ChangeRole/{email}")]
+        public async Task<ActionResult> ChangeRole(string accountId, string email)
         {
             var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
@@ -221,14 +221,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 AddExceptionToModelError(ex);
             }
 
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember("", email);//TODO accountid
             return View(teamMember);
         }
 
 
         [HttpGet]
-        [Route("Teams/Review")]
-        public async Task<ActionResult> Review(int accountId, string email)
+        [Route("Teams/Review/{email}")]
+        public async Task<ActionResult> Review(string accountId, string email)
         {
             var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
