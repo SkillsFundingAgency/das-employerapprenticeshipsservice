@@ -141,7 +141,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Teams/Remove/{email}")]
+        [Route("Teams/{email}/Remove/")]
         public async Task<ActionResult> Remove(string accountId, string email)
         {
             var model = await _employerTeamOrchestrator.Review(accountId, email);
@@ -151,7 +151,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Teams/Remove")]
+        [Route("Teams/{email}/Remove")]
         public async Task<ActionResult> Remove(long userId, string accountId, string email, int remove)
         {
             
@@ -187,7 +187,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Teams/ChangeRole/{email}")]
+        [Route("Teams/{email}/ChangeRole/")]
         public async Task<ActionResult> ChangeRole(string accountId, string email)
         {
             var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
@@ -227,7 +227,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
 
         [HttpGet]
-        [Route("Teams/Review/{email}")]
+        [Route("Teams/{email}/Review/")]
         public async Task<ActionResult> Review(string accountId, string email)
         {
             var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);

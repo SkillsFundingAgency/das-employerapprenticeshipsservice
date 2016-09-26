@@ -29,7 +29,7 @@
                     <td>@Model.Role.ToString()</td>
                     @if (Model.IsUser)
                     {
-                        <td>@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.AccountId, Email = Model.Email })</td>
+                        <td><a href="@Url.Action("ChangeRole","EmployerTeam",new {accountId=Model.HashedId,email=Model.Email})">Change</a></td>
                     }
                     else
                     {
