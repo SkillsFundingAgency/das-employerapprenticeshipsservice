@@ -198,7 +198,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/ChangeRole")]
-        public async Task<ActionResult> ChangeRole(long accountId, string email, short role)
+        public async Task<ActionResult> ChangeRole(string accountId, string email, short role)
         {
             try
             {
