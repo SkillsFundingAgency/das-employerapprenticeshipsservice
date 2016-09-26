@@ -517,6 +517,7 @@
     <Content Include="Views\EmployerCommitments\Submit.cshtml" />
     <Content Include="Views\EmployerTasks\View.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
+    <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

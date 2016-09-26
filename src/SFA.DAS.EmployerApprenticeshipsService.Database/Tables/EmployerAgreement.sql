@@ -6,7 +6,6 @@
     [StatusId] TINYINT NOT NULL DEFAULT 1, 
     [SignedByName] NVARCHAR(100) NULL, 
     [SignedDate] DATETIME NULL, 
-    [SignByDate] DATETIME NULL, 
     [ExpiredDate] DATETIME NULL, 
     [SignedById] BIGINT NULL, 
     CONSTRAINT [FK_EmployerAgreement_LegalEntity] FOREIGN KEY ([LegalEntityId]) REFERENCES [account].[LegalEntity]([Id]), 

@@ -117,6 +117,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenITryToFindACompany.cs" />

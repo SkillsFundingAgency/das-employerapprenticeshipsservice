@@ -27,14 +27,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> Index(long accountId)
         {
             var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            //DANGER: Injected flash messages override the orchestrator response
-            if (flashMessage != null)
+            if (TempData.ContainsKey("agreementSigned"))
             {
-                model.FlashMessage = flashMessage;
+                model.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Agreement signed",
+                    Message = $"You've signed the agreement for {TempData["agreementSigned"]}",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
             }
 
             return View(model);
@@ -52,12 +56,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(response);
         }
 
-        public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
+        [HttpGet]
+        public async Task<ActionResult> View(long agreementid, long accountId)
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
-            
-            //DANGER: Injected flash messages override the orchestrator response
-            if (flashMessage != null) agreement.FlashMessage = flashMessage;
+
+            if (TempData.ContainsKey("notunderstood"))
+            {
+                agreement.FlashMessage = new FlashMessageViewModel
+                {
+                    Message = "You must indicate that you have read and understood the terms",
+                    Severity = FlashMessageSeverityLevel.Danger
+                };
+            }
 
             return View(agreement);
         }
@@ -71,26 +82,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    var successMessage = new FlashMessageViewModel
-                    {
-                        Headline = "Agreement signed",
-                        Message = $"You've signed the agreement for {legalEntityName}",
-                        Severity = FlashMessageSeverityLevel.Success
-                    };
+                    TempData["agreementSigned"] = legalEntityName;
 
-                    return RedirectToAction("Index", new {accountId, flashMessage = successMessage });
+                    return RedirectToAction("Index", new {accountId });
                 }
 
                 return View("DeadView", response);
             }
 
-            TempData["notunderstood"] = new object();
-            var errorMessage = new FlashMessageViewModel
-            {
-                Message = "You must indicate that you have read and understood the terms",
-                Severity = FlashMessageSeverityLevel.Danger
-            };          
-            return RedirectToAction("View", new { agreementId = agreementid, accountId, flashMessage = errorMessage });
+            TempData["notunderstood"] = true;
+           
+            return RedirectToAction("View", new { agreementId = agreementid, accountId });
         }
         
         [HttpPost]
@@ -168,7 +170,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             else
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funs somebody needs to sign the agreement";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
             return RedirectToAction("Index", new { accountId });
