@@ -360,6 +360,67 @@ table.full-width, .responsive-table.full-width {
 
 /* Layout */
 
+.header-global {
+    margin: 0 auto;
+    max-width: 960px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+@media (min-width: 641px) {
+    .header-global {
+        display: table;
+        padding-bottom: 10px;
+    }
+}
+
+.header-global__title,
+.header-global__subtitle {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    padding: 0;
+}
+
+.header-global__subtitle {
+    font-size: 16px;
+}
+
+@media (min-width: 641px) {
+    .header-global__title,
+    .header-global__subtitle {
+        display: table-cell;
+        height: 70px;
+        vertical-align: middle;
+        width: 30%;
+        font-size: 32px;
+    }
+    .header-global__subtitle {
+        font-size: 24px;
+        text-align: right;
+        width: 70%;
+    }
+}
+
+
+.header-global__title a,
+.header-global__subtitle a {
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    color: #ffffff;
+    display: inline-block;
+    padding: 2px 0;
+    text-decoration: none;
+}
+
+.header-global__title a:hover, 
+.header-global__subtitle a:hover {
+    border-color: #ffffff;
+}
+
+.header-global a:focus {
+    color: #0b0c0c;
+}
 aside.sidebar {
     font-size: 14px;
 }
