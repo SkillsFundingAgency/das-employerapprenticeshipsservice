@@ -339,6 +339,8 @@
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\FlashMessageViewModel.cs" />
+    <Compile Include="Models\ApproveApprenticeshipModel.cs" />
+    <Compile Include="Models\ApproveApprenticeshipViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentViewModel.cs" />
     <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />

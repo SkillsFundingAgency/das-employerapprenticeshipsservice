@@ -9,36 +9,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApp
     public sealed class ApproveApprenticeshipCommandHandler : AsyncRequestHandler<ApproveApprenticeshipCommand>
     {
         private ICommitmentsApi _commitmentsApi;
-        private readonly ITasksApi _tasksApi;
         private readonly ApproveApprenticeshipCommandValidator _validator;
 
-        public ApproveApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi)
+        public ApproveApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi)
         {
             _commitmentsApi = commitmentsApi;
             _validator = new ApproveApprenticeshipCommandValidator();
-            _tasksApi = tasksApi;
         }
 
-        protected override async Task HandleCore(ApproveApprenticeshipCommand message)
+        protected override async Task HandleCore(ApproveApprenticeshipCommand command)
         {
-            var validationResult = _validator.Validate(message);
+            var validationResult = _validator.Validate(command);
 
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            // TODO: LWA - Validated Employer is that of the commitment and apprenticeship is in the commitment.
-            var commitment = await _commitmentsApi.GetEmployerCommitment(message.EmployerAccountId, message.CommitmentId);
+            // TODO: LWA - Validate Employer is that of the commitment and apprenticeship is in the commitment.
+            var commitment = await _commitmentsApi.GetEmployerCommitment(command.EmployerAccountId, command.CommitmentId);
 
-            await _commitmentsApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, Commitments.Api.Types.ApprenticeshipStatus.Approved);
-
-            await CreateTask(commitment);
-        }
-
-        private async Task CreateTask(Commitment commitment)
-        {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "ApproveApprenticeship", "This is the body of the task.");
-
-            await _tasksApi.CreateTask(task.Assignee, task);
+            await _commitmentsApi.PatchEmployerApprenticeship(command.EmployerAccountId, command.CommitmentId, command.ApprenticeshipId, ApprenticeshipStatus.Approved);
         }
     }
 }
