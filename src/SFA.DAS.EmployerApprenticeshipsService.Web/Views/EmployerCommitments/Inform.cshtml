@@ -10,10 +10,26 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>Content goes here.</p>
+        <p>Use this service to:</p>
+            <ul>
+                <li>add a new apprentice to your account</li>
+                <li>make sure your training provider gets paid</li>
+            </ul>
+        <p>You will need to know:</p>
+            <ul>
+                <li>the name or UKPRN (UK provider reference number) of your training provider</li>
+                <li>who your apprentice will be employed by, if your business has more than one legal entity</li>
+             </ul>        
         <form action="@Url.Action("Create")" method="GET">
             <input type="hidden" name="accountId" value="@Model.AccountId"/>
-            <button type="submit" name="commitment" class="button">Continue</button>
+            <button type="submit" name="commitment" class="button">Start</button>
         </form>
+        <h2>Before you start</h2>
+        <p>You must make sure you have:</p>
+            <ul>
+                <li>an agreement in place with the Skills Funding Agency</li>
+                <li>an agreement in place with your training provider</li>
+                <li>recruited and know the names of your apprentices</li>
+            </ul>
     </div>
 </div>
