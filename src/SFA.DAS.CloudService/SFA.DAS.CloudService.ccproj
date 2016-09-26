@@ -34,14 +34,14 @@
   <!-- Items for the project -->
   <ItemGroup>
     <ServiceDefinition Include="ServiceDefinition.csdef" />
-    <None Include="ServiceDefinition.Release.csdef" />
+    <None Include="Configuration\ServiceDefinition.Release.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.Release.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Local.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
-    <None Include="PreDeployment.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Profiles" />
+    <Folder Include="Configuration" />
     <Folder Include="SFA.DAS.EAS.Notification.WorkerContent" />
     <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
     <Folder Include="SFA.DAS.LevyAggregationProvider.WorkerContent\" />
@@ -89,6 +89,11 @@
   <ItemGroup>
     <PublishProfile Include="Profiles\das-at-eas-cs (stage).azurePubxml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Configuration\PreDeployment.ps1">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
@@ -96,8 +101,7 @@
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName) == Release (
-powershell "start-process powershell.exe, '$(ProjectDir)PreDeployment.ps1', '$(ProjectDir)', '$(TargetDir)'"
-)</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>
