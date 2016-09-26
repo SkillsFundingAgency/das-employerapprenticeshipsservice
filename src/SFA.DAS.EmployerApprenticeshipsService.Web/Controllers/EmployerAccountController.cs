@@ -126,7 +126,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
         public async Task<ActionResult> ViewAccountAgreement()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
