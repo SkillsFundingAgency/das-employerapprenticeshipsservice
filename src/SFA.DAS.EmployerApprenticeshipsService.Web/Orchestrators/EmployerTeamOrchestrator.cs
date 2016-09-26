@@ -179,11 +179,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task ChangeRole(string accountId, string email, short role, string externalUserId)
+        public async Task ChangeRole(string hashedId, string email, short role, string externalUserId)
         {
             await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 Email = email,
                 RoleId = role,
                 ExternalUserId = externalUserId
