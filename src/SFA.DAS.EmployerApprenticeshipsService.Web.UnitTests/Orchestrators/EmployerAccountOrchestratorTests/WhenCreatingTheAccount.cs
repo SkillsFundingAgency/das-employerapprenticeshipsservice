@@ -32,6 +32,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration);
+            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+                     .ReturnsAsync(new CreateAccountCommandResponse()
+                     {
+                         AccountId = 10
+                     });
         }
 
         [Test]
@@ -47,7 +52,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 CompanyDateOfIncorporation = new DateTime(2016,10,30),
                 CompanyRegisteredAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
+                RefreshToken = Guid.NewGuid().ToString(),
+                SignedAgreement = true,
+                UserIsAuthorisedToSign = true
             };
 
             //Act
@@ -112,6 +119,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackTheNewAccountId()
+        {
+            //Assign
+            const long accountId = 10;
+            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
+                .ReturnsAsync(new CreateAccountCommandResponse()
+                {
+                    AccountId = accountId
+                });
+
+            //Act
+            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
+            {
+                UserIsAuthorisedToSign = true,
+                SignedAgreement = true
+            });
+
+            //Assert
+            Assert.AreEqual(accountId, response.Data?.EmployerAgreement?.AccountId);
         }
     }
 }
