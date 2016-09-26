@@ -33,6 +33,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult Inform(long accountId)
+        {
+            var model = new CommitmentInformViewModel
+            {
+                AccountId = accountId
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> Create(long accountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
