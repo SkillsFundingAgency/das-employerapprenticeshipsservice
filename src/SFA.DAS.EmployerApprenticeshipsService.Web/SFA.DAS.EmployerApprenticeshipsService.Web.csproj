@@ -319,6 +319,7 @@
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
+    <Compile Include="Models\CommitmentInformViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
@@ -515,6 +516,7 @@
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\Submit.cshtml" />
     <Content Include="Views\EmployerTasks\View.cshtml" />
+    <Content Include="Views\EmployerCommitments\Inform.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

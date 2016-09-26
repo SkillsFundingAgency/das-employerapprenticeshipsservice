@@ -1,0 +1,19 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model CommitmentInformViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Create commitment</h1>
+        <hr />
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>Content goes here.</p>
+        <form action="@Url.Action("Create")" method="GET">
+            <input type="hidden" name="accountId" value="@Model.AccountId"/>
+            <button type="submit" name="commitment" class="button">Continue</button>
+        </form>
+    </div>
+</div>
