@@ -9,14 +9,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApp
     public sealed class ApproveApprenticeshipCommandHandler : AsyncRequestHandler<ApproveApprenticeshipCommand>
     {
         private ICommitmentsApi _commitmentsApi;
-        private readonly ITasksApi _tasksApi;
         private readonly ApproveApprenticeshipCommandValidator _validator;
 
-        public ApproveApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi, ITasksApi tasksApi)
+        public ApproveApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi)
         {
             _commitmentsApi = commitmentsApi;
             _validator = new ApproveApprenticeshipCommandValidator();
-            _tasksApi = tasksApi;
         }
 
         protected override async Task HandleCore(ApproveApprenticeshipCommand command)
@@ -30,15 +28,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApp
             var commitment = await _commitmentsApi.GetEmployerCommitment(command.EmployerAccountId, command.CommitmentId);
 
             await _commitmentsApi.PatchEmployerApprenticeship(command.EmployerAccountId, command.CommitmentId, command.ApprenticeshipId, ApprenticeshipStatus.Approved);
-
-            await CreateTask(commitment, command.Message);
-        }
-
-        private async Task CreateTask(Commitment commitment, string message)
-        {
-            var task = TaskFactory.Create(commitment.ProviderId.Value, "ApproveApprenticeship", message);
-
-            await _tasksApi.CreateTask(task.Assignee, task);
         }
     }
 }

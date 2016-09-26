@@ -14,7 +14,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private ApproveApprenticeshipCommandHandler _handler;
         private Mock<ICommitmentsApi> _mockCommitmentApi;
         private ApproveApprenticeshipCommand _validCommand;
-        private Mock<ITasksApi> _mockTasksApi;
 
         [SetUp]
         public void Setup()
@@ -23,8 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
-            _mockTasksApi = new Mock<ITasksApi>();
-            _handler = new ApproveApprenticeshipCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object);
+            _handler = new ApproveApprenticeshipCommandHandler(_mockCommitmentApi.Object);
         }
 
         [Test]
@@ -41,14 +39,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _validCommand.ApprenticeshipId = 0; // Should fail validation
 
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
-        }
-
-        [Test]
-        public async Task ThenATaskShouldBeCreated()
-        {
-            await _handler.Handle(_validCommand);
-
-            _mockTasksApi.Verify(x => x.CreateTask(It.IsAny<string>(), It.IsAny<Tasks.Api.Types.Task>()));
         }
     }
 }

@@ -515,7 +515,6 @@
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\Submit.cshtml" />
     <Content Include="Views\EmployerTasks\View.cshtml" />
-    <Content Include="Views\EmployerCommitments\ApproveApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
