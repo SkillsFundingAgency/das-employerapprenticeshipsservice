@@ -5,6 +5,8 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResumeApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
@@ -101,12 +103,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task ApproveApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
         {
-            await _mediator.SendAsync(new ApproveApprenticeshipCommand { EmployerAccountId = accountId, CommitmentId = commitmentId, ApprenticeshipId = apprenticeshipId });
-
-            // TODO: LWA - Extend create task command.
-            //await _mediator.SendAsync(new CreateTaskCommand { ProviderId = providerId });
+            await _mediator.SendAsync(new ApproveApprenticeshipCommand { EmployerAccountId = model.AccountId, CommitmentId = model.CommitmentId, ApprenticeshipId = model.ApprenticeshipId, Message = model.Message });
         }
 
         public async Task<CommitmentViewModel> Get(long accountId, long commitmentId)
@@ -123,7 +122,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<object> GetApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
         {
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
@@ -145,9 +144,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(long accountId, long commitmentId)
+        public async Task SubmitCommitment(long accountId, long commitmentId, string message)
         {
-            await _mediator.SendAsync(new SubmitCommitmentCommand { EmployerAccountId = accountId, CommitmentId = commitmentId });
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                EmployerAccountId = accountId,
+                CommitmentId = commitmentId,
+                Message = message
+            });
+        }
+        
+	    public async Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _mediator.SendAsync(new PauseApprenticeshipCommand
+            {
+                EmployerAccountId = accountId,
+                CommitmentId = commitmentId,
+                ApprenticeshipId = apprenticeshipId
+            });
+        }
+
+        public async Task ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _mediator.SendAsync(new ResumeApprenticeshipCommand
+            {
+                EmployerAccountId = accountId,
+                CommitmentId = commitmentId,
+                ApprenticeshipId = apprenticeshipId
+            });
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
