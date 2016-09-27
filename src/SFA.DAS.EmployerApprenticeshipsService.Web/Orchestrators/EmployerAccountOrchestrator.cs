@@ -48,7 +48,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                 EmployerRef = model.EmployerRef,
                 AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken
+                RefreshToken = model.RefreshToken,
+                SignAgreement = model.UserIsAuthorisedToSign && model.SignedAgreement
             });
 
             return new OrchestratorResponse<EmployerAgreementViewModel>

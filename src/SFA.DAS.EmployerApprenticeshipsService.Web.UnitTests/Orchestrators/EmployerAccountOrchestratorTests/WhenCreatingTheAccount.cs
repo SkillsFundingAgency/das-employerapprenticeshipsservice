@@ -71,6 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.EmployerRef.Equals(model.EmployerRef)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
+                        && c.SignAgreement.Equals(true)
                     )));
         }
 
@@ -122,6 +123,41 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         }
 
         [Test]
+        public async Task ThenShouldSignAgreementIfUserCanAndHasSignedAgreement()
+        {
+            //Arrange
+            var model = new CreateAccountModel
+            {
+                CompanyName = "test",
+                UserId = Guid.NewGuid().ToString(),
+                EmployerRef = "123ADFC",
+                CompanyNumber = "12345",
+                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
+                CompanyRegisteredAddress = "My Address",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
+                SignedAgreement = true,
+                UserIsAuthorisedToSign = true
+            };
+
+            //Act
+            await _employerAccountOrchestrator.CreateAccount(model);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
+                        c => c.AccessToken.Equals(model.AccessToken)
+                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
+                        && c.CompanyName.Equals(model.CompanyName)
+                        && c.CompanyNumber.Equals(model.CompanyNumber)
+                        && c.CompanyRegisteredAddress.Equals(model.CompanyRegisteredAddress)
+                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
+                        && c.EmployerRef.Equals(model.EmployerRef)
+                        && c.AccessToken.Equals(model.AccessToken)
+                        && c.RefreshToken.Equals(model.RefreshToken)
+                        && c.SignAgreement.Equals(true)
+                    )));
+        }
+          [Test]
         public async Task ThenIShouldGetBackTheNewAccountId()
         {
             //Assign
@@ -141,6 +177,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             Assert.AreEqual(accountId, response.Data?.EmployerAgreement?.AccountId);
-        }
+
+            }
     }
 }
