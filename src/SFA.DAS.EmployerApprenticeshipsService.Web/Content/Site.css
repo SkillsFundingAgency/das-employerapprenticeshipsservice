@@ -371,6 +371,8 @@ table.full-width, .responsive-table.full-width {
     .header-global {
         display: table;
         padding-bottom: 10px;
+        width: 100%;
+        padding: 0;
     }
 }
 
@@ -393,13 +395,14 @@ table.full-width, .responsive-table.full-width {
         display: table-cell;
         height: 70px;
         vertical-align: middle;
-        width: 30%;
+        width: 50%;
+        text-align: left;
         font-size: 32px;
     }
     .header-global__subtitle {
         font-size: 24px;
         text-align: right;
-        width: 70%;
+        width: 50%;
     }
 }
 
