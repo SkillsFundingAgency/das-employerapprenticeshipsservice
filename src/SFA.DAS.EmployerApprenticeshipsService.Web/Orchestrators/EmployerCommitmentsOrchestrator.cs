@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = "",
                 UserId = externalUserId
             });
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = commitment.AccountId,
+                HashedId = "",
                 UserId = externalUserId
             });
 

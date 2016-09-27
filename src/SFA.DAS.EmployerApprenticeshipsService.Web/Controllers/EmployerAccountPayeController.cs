@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
         {
-            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.AccountId, OwinWrapper.GetClaimValue(@"sub"));
+            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.HashedId, OwinWrapper.GetClaimValue(@"sub"));
             return View("ChooseCompany", model);
         }
 

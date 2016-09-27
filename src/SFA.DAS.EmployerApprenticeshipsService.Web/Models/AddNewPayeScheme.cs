@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public List<LegalEntity> LegalEntities { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public string HashedId { get; set; }
     }
 }
