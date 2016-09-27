@@ -22,7 +22,7 @@
         else
         {
             <p class="lede">
-                Invite members, control what they can do, delete members and cancel or resend invitations.
+                Invite members, control what they can do, remove members and cancel or resend invitations.
             </p>
         }
     </div>  
@@ -43,7 +43,7 @@
                     <div class="responsive-tr">
 
 
-                        <div class="responsive-th" scope="col">Team member</div>
+                        <div class="responsive-th" scope="col">User name</div>
                         
                         <div class="responsive-th" scope="col">What they can do</div>
                         <div class="responsive-th" scope="col">Status</div>
@@ -76,9 +76,9 @@
                                 <div>
                                     <a aria-label="View details for @teamMember.Name"
                                        - title="View details for @teamMember.Name"
-                                       - href="@Url.Action("Review", new { accountId = Model.Data.AccountId, email = teamMember.Email })">View</a>
+                                       - href="@Url.Action("Review", new { accountId = Model.Data.AccountId, email = teamMember.Email })">Edit</a>
                                 </div>
-                                <div class="responsive-inner-caption"></div>
+                                
                             </div>
                         </div>
                     }
