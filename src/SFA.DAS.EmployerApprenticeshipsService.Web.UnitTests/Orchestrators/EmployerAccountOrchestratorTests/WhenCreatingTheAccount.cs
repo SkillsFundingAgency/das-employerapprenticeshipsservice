@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.EmployerRef.Equals(model.EmployerRef)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
-                        && c.SignAgreement.Equals(false)
+                        && c.SignAgreement.Equals(true)
                     )));
         }
 
