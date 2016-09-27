@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
@@ -21,7 +22,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
-        private string ExpectedRedirectUrl = "http://redirect.local.test";
+        private const string ExpectedRedirectUrl = "http://redirect.local.test";
+        private EmployerAccountData _accountData;
+        private OrchestratorResponse<EmployerAgreementViewModel> _response;
+        private const long AccountId = 10;
 
         [SetUp]
         public void Arrange()
@@ -40,13 +44,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
             };
-        }
 
-        [Test]
-        public async Task ThenIfISignTheAgreementIShouldGoBackToTheHomePage()
-        {
-            //Assign
-            var accountData = new EmployerAccountData
+            _accountData = new EmployerAccountData
             {
                 CompanyName = "Test Corp",
                 CompanyNumber = "1244454",
@@ -55,43 +54,41 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
-                         .Returns(accountData);
+                       .Returns(_accountData);
+
+            _response = new OrchestratorResponse<EmployerAgreementViewModel>()
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = new EmployerAgreementView
+                    {
+                        AccountId = AccountId
+                    }
+                },
+                Status = HttpStatusCode.OK
+            };
 
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>()))
-                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>()
-                {
-                    Status = HttpStatusCode.OK
-                });
+                .ReturnsAsync(_response);
+        }
 
+        [Test]
+        public async Task ThenIfISignTheAgreementIShouldGoBackToTheEmployerTeamPage()
+        {
             //Act
             var result = await _employerAccountController.CreateAccount(true, "Sign") as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("Index", result.RouteValues["Action"]);
-            Assert.AreEqual("Home", result.RouteValues["Controller"]);
+            Assert.AreEqual("EmployerTeam", result.RouteValues["Controller"]);
         }
 
         [Test]
         public async Task ThenIfISignTheAgreementButDoNotAcknowledgeIHaveAuthorityToIShouldGoBackToAgreementPage()
         {
             //Assign
-            var accountData = new EmployerAccountData
-            {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
-            };
-
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
-                         .Returns(accountData);
-
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>()))
-                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>()
-                {
-                    Status = HttpStatusCode.BadRequest
-                });
+            _response.Status = HttpStatusCode.BadRequest;
 
             //Act
             var result = await _employerAccountController.CreateAccount(false, "Sign") as RedirectToRouteResult;
@@ -100,6 +97,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(result);
             Assert.AreEqual("ViewAccountAgreement", result.RouteValues["Action"]);
             Assert.IsNull(result.RouteValues["Controller"]);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackTheAccountId()
+        {
+            //Act
+            var result = await _employerAccountController.CreateAccount(true, "Sign") as RedirectToRouteResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(AccountId, result.RouteValues["AccountId"]);
         }
     }
 }

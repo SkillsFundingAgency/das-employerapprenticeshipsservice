@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 return response;
             }
 
-            await Mediator.SendAsync(new CreateAccountCommand
+            var result = await Mediator.SendAsync(new CreateAccountCommand
             {
                 ExternalUserId = model.UserId,
                 CompanyNumber = model.CompanyNumber,
@@ -48,11 +48,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                 EmployerRef = model.EmployerRef,
                 AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken
+                RefreshToken = model.RefreshToken,
+                SignAgreement = model.UserIsAuthorisedToSign && model.SignedAgreement
             });
 
             return new OrchestratorResponse<EmployerAgreementViewModel>
             {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = new EmployerAgreementView
+                    {
+                        AccountId = result.AccountId
+                    }
+                },
                 Status = HttpStatusCode.OK
             };
         }
