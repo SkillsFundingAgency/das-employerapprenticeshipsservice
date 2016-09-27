@@ -5,20 +5,26 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View task</h1>
-        <hr />
-        <div class="form-group">
-            <label class="form-label" for="Name">Name</label>
-            <label class="form-label" id="Name">@Model.Task.Name</label>
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="CreatedDate">Created Date</label>
-            <label class="form-label" id="CreatedDate">@Model.Task.CreatedOn</label>
-        </div>
-        <div class="form-group">
-            <label class="form-label" for="Message">Message</label>
-            <label class="form-label" id="Message">@Model.Message</label>
-        </div>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>@Model.Task.Name</td>
+                    <td><a href="@Url.Action("Details", "EmployerCommitments", new {accountId = Model.AccountId, commitmentId = Model.LinkId})" class="link">View commitment</a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Created Date</th>
+                    <td>@Model.Task.CreatedOn.ToGdsFormat()</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Message</th>
+                    <td>@Model.Message</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
        
-        <a href="@Url.Action("Details", "EmployerCommitments", new {accountId = Model.AccountId, commitmentId = Model.LinkId})" class="link">View commitment</a>
+        
     </div>
 </div>

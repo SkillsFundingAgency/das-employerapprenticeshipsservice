@@ -27,9 +27,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 filterContext.Result = base.View("FeatureNotEnabled", null, null);
             }
-
-            if (filterContext.ActionDescriptor.GetCustomAttributes(typeof(AuthorizeAttribute), false).Any())
+            if (filterContext.ActionDescriptor.IsDefined (typeof(AuthorizeAttribute), true) || (filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AuthorizeAttribute), true)) && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true))
             {
+                // Check for authorization
                 var userEmail = OwinWrapper.GetClaimValue("email");
 
                 if (!string.IsNullOrEmpty(userEmail))
@@ -41,11 +41,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 }
             }
         }
-        
+
         protected override ViewResult View(string viewName, string masterName, object model)
         {
             var orchestratorResponse = model as OrchestratorResponse;
-            
+
             if (orchestratorResponse == null) return base.View(viewName, masterName, model);
 
             var flashMessage = GetHomePageSucessMessage();
@@ -76,16 +76,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var features = _featureToggle.GetFeatures();
             var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
             var actionName = ControllerContext.RouteData.Values["Action"].ToString();
-            
+
             var featureToggleItem = features.Data.FirstOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
-            if (featureToggleItem!= null)
+            if (featureToggleItem != null)
             {
-                if (featureToggleItem.Action == "*" ||  actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase))
+                if (featureToggleItem.Action == "*" || actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return false;
                 }
             }
-            
+
             return true;
         }
 

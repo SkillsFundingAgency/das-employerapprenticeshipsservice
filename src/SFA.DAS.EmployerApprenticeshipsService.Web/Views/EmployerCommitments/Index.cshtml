@@ -5,27 +5,32 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-
-        <h2 class="heading-medium">Tasks</h2>
-        @if (Model.Data.NumberOfTasks == 1)
-            {
-            <p>You have <span class="bold-small">1</span> task to complete.</p>
-        }
-        else
-        {
-            <p>You have <span class="bold-small">@(Model.Data.NumberOfTasks > 1 ? Model.Data.NumberOfTasks.ToString() : "no")</span> tasks to complete.</p>
-        }
         @if (Model.Data.NumberOfTasks > 0)
         {
-            <a href="@Url.Action("Index", "EmployerTasks", new {accountId = Model.Data.AccountId})" class="link">View tasks</a>
+            <h2 class="heading-medium">Tasks</h2>
+           <p>Any commitments that need your attention are shown below:</p>
+            if (Model.Data.NumberOfTasks == 1)
+            {
+                <p>You have <span class="bold-small">1</span> task to complete.</p>
+            }
+            else
+            {
+                <p>You have <span class="bold-small">Model.Data.NumberOfTasks.ToString()</span> tasks to complete.</p>
+            }
+
+            if (Model.Data.NumberOfTasks > 0)
+            {
+                <a href="@Url.Action("Index", "EmployerTasks", new { accountId = Model.Data.AccountId })" class="link">View tasks</a>
+            }
+            <hr />
         }
-        <hr />
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Commitments</h1>
         <hr />
+        <p>Any commitments that are new or in discussion with your training provider are listed below:/p>
     </div>
 </div>
 <div class="grid-row">
@@ -42,7 +47,7 @@
             <div class="responsive-thead">
                 <div class="responsive-tr">
                     <div class="responsive-th">Provider</div>
-                    <div class="responsive-th">Legal Entity</div>
+                    <div class="responsive-th">Legal entity</div>
                     <div class="responsive-th">Name</div>
                     <div class="responsive-th"> </div>
                     <div class="responsive-th"> </div>
@@ -96,7 +101,7 @@
 </div>
 <form action="@Url.Action("Inform")" method="GET">
     <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
-    <button type="submit" name="commitment" class="button">Create commitment</button>
+    <button type="submit" name="commitment" class="button">Add new commitment</button>
 </form>
 
 @section breadcrumb {
