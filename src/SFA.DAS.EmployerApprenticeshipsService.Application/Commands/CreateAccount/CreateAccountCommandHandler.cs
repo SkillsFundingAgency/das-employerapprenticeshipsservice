@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var emprefs = message.EmployerRef.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken, message.SignAgreement);
 
             if (emprefs.Length > 1)
             {
