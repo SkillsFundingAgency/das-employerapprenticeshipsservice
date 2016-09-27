@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEm
 {
     public class GetLatestEmployerAgreementTemplateRequest : IAsyncRequest<GetLatestEmployerAgreementResponse>
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
 
         public string UserId { get; set; }
     }

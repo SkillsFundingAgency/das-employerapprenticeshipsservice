@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLega
 {
     public class CreateLegalEntityCommand : IAsyncRequest<CreateLegalEntityCommandResponse>
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
         
         public LegalEntity LegalEntity { get; set; }
 

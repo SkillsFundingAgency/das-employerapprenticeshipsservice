@@ -17,10 +17,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLega
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
         {
-            var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            var owner = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
 
             var agreementView = await _accountRepository.CreateLegalEntity(
-                message.AccountId, 
+                owner.AccountId, 
                 message.LegalEntity, 
                 message.SignAgreement, 
                 message.SignedDate,

@@ -74,10 +74,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             var expectedUserId = Guid.NewGuid().ToString();
 
             //Act
-            await _employerAccountPayeOrchestrator.GetLegalEntities(ExpectedAccountId, expectedUserId);
+            await _employerAccountPayeOrchestrator.GetLegalEntities(ExpectedHashedId, expectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(c=>c.Id.Equals(ExpectedAccountId) && c.UserId.Equals(expectedUserId))));
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(c=>c.HashedId.Equals(ExpectedHashedId) && c.UserId.Equals(expectedUserId))));
         }
 
         [Test]
