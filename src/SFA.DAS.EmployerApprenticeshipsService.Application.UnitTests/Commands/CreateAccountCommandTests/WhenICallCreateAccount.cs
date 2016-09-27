@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _accountRepository = new Mock<IAccountRepository>();
             _accountRepository.Setup(x => x.GetPayeSchemes(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).ReturnsAsync(ExpectedAccountId);
 
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetById(It.IsAny<string>())).ReturnsAsync(new User());

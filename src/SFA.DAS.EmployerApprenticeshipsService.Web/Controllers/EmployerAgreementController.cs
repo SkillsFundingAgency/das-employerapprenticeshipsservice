@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Agreements")]
-        public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> Index(string accountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 

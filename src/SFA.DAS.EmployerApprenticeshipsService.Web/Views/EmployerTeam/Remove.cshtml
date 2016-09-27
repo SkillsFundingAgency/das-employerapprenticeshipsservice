@@ -36,7 +36,7 @@
                 <tr>
                     <td>What they can do</td>
                     <td>@RoleStrings.ToWhatTheyCanDo(Model.Role)</td>
-                    <td><a href="@Url.Action("ChangeRole", new { accountId = Model.AccountId, email = Model.Email })">Change</a></td>
+                    <td><a href="@Url.Action("ChangeRole")">Change</a></td>
                 </tr>
             </tbody>
         </table>
@@ -55,7 +55,7 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("View", "EmployerTeam", new {accountId = @Model.AccountId})">Manage Team Members</a></li>
+            <li><a href="@Url.Action("Viewteam", "EmployerTeam")">Manage Team Members</a></li>
         </ol>
     </div>
 }
