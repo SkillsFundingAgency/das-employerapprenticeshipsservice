@@ -128,7 +128,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ViewAccountAgreement()
         {
@@ -189,7 +189,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.AccountId});
         }
 
         private string GetUserId()

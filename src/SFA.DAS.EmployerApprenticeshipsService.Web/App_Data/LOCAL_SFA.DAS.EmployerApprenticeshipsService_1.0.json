@@ -21,6 +21,12 @@
     "BaseUrl": "",
     "ClientId": "",
     "Scope": "",
-    "ClientSecret" : "" 
-  } 
+    "ClientSecret": ""
+  },
+  "Privacy": {
+    "GoogleAnalyticsUrl": "https://tools.google.com/dlpage/gaoptout",
+    "ApplicationInsightsUrl": "https://azure.microsoft.com/en-us/documentation/articles/app-insights-data-retention-privacy/",
+    "AboutCookiesUrl": "http://www.aboutcookies.org/",
+    "SurveyProviderUrl": "http://www.surveymonkey.com/"
+  }
 }

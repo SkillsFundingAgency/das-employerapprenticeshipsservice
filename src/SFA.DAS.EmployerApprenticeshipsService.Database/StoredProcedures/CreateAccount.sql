@@ -9,7 +9,8 @@
 	@accountId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
-	@AddedDate DATETIME
+	@addedDate DATETIME,
+	@signAgreement BIT
 )
 AS
 BEGIN
@@ -36,6 +37,18 @@ BEGIN
 	INSERT INTO [account].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 1);
 	SELECT @employerAgreementId = SCOPE_IDENTITY();
 
+	IF(@signAgreement = 1)
+	BEGIN
+		DECLARE @firstName NVARCHAR(MAX)	
+		DECLARE @lastName NVARCHAR(MAX)
+		DECLARE @signedByName NVARCHAR(100)	
+
+		SELECT @firstName = FirstName, @lastName = LastName FROM [account].[User] WHERE Id = @userId
+		SELECT @signedByName =  @firstName + ' ' + @lastName
+
+		EXEC [account].[SignEmployerAgreement] @employerAgreementId, @userId, @signedByName, @addedDate
+	END
+
 	INSERT INTO [account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
 	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
@@ -47,7 +60,7 @@ BEGIN
 		EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
 	END
 
-	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@AddedDate
+	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@addedDate
 
 	INSERT INTO [account].[Membership](UserId, AccountId, RoleId) VALUES (@userId, @accountId, 1);
 END
