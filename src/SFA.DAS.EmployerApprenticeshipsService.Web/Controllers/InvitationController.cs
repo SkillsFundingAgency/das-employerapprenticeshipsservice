@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
-
+            //TODO incorrect message when accepting an invite
             TempData["successHeader"] = "Invitation Created";
             TempData["successCompany"] = invitationItem.AccountName;
 
