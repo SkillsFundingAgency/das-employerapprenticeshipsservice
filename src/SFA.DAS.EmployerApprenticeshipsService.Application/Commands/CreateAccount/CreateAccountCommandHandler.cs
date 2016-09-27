@@ -13,7 +13,7 @@ using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
-    public class CreateAccountCommandHandler : AsyncRequestHandler<CreateAccountCommand>
+    public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         [QueueName]
         public string get_employer_levy { get; set; }
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
             _hashingService = hashingService;
         }
 
-        protected override async Task HandleCore(CreateAccountCommand message)
+        public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var emprefs = message.EmployerRef.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken, message.SignAgreement);
 
             await _accountRepository.SetHashedId(_hashingService.HashValue(accountId), accountId);
 
@@ -78,6 +78,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
             {
                 AccountId = accountId
             });
+
+            return new CreateAccountCommandResponse
+            {
+                AccountId = accountId
+            };
         }
     }
 }

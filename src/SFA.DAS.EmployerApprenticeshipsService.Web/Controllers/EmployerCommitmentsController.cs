@@ -33,6 +33,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult Inform(long accountId)
+        {
+            var model = new CommitmentInformViewModel
+            {
+                AccountId = accountId
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<ActionResult> Create(long accountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -70,18 +81,52 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return RedirectToAction("Index", new { accountId = apprenticeship.AccountId, commitmentId = apprenticeship.CommitmentId });
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> Submit(long accountId, long commitmentId)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(accountId, commitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.Get(accountId, commitmentId);
+            
+            var model = new SubmitCommitmentViewModel
+            {
+                SubmitCommitmentModel = new SubmitCommitmentModel
+                {
+                    AccountId = accountId,
+                    CommitmentId = commitmentId
+                },
+                Commitment = commitment.Commitment
+            };
 
-            return RedirectToAction("Index", new { accountid = accountId, commitmentId = commitmentId });
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ApproveApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        public async Task<ActionResult> Submit(SubmitCommitmentModel model)
         {
-            await _employerCommitmentsOrchestrator.ApproveApprenticeship(accountId, commitmentId, apprenticeshipId);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model.AccountId, model.CommitmentId, model.Message);
+
+            return RedirectToAction("Index", new { accountid = model.AccountId, commitmentId = model.CommitmentId });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ApproveApprenticeship(ApproveApprenticeshipModel model)
+        {
+            await _employerCommitmentsOrchestrator.ApproveApprenticeship(model);
+
+            return RedirectToAction("Details", new { accountid = model.AccountId, commitmentId = model.CommitmentId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _employerCommitmentsOrchestrator.PauseApprenticeship(accountId, commitmentId, apprenticeshipId);
+
+            return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        {
+            await _employerCommitmentsOrchestrator.ResumeApprenticeship(accountId, commitmentId, apprenticeshipId);
 
             return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
         }

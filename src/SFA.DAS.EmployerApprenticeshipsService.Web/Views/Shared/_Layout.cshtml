@@ -75,54 +75,55 @@
     </div>
 
     <header role="banner" id="global-header" class="">
-        <div class="header-wrapper">
+        <div class="header-wrapper">          
             <div class="header-global">
-                <div class="header-logo">
-                    <a href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo" class="content">
-                        <img src="/assets/images/gov.uk_logotype_crown_invert_trans.png" width="35" height="31" alt=""> GOV.UK
-                    </a>
-                </div>
-
+                
+                    <div class="header-global__title">
+                        <a title="Skills Funding Agency" href="/">
+                            Skills Funding Agency
+                        </a>
+                    </div>
+                    <div class="header-global__subtitle">
+                        <a title="Go to Access My Levy homepage" href="/">
+                            Access My Levy
+                        </a>
+                    </div>
+           
             </div>
-
         </div>
     </header>
 
 
     <div id="global-header-bar"></div>
     <main role="main">
-        <div class="service-info ">
+        <div class="service-info">
             <div class="phase-banner-beta">
-                <p>
-                    <strong class="phase-tag">BETA</strong><span>This is a trial service. Help us improve it - send your <a id="feedback-link" href="#" data-sso="false" data-journey-click="other-global:Click:Feedback">feedback</a>.</span>
-                </p>
+                <p><strong class="phase-tag">BETA</strong><span>This is a trial service. Help us improve it - send your <a id="feedback-link" href="#">feedback</a>.</span></p>
             </div>
         </div>
-        <div class="grid-row">
-            <div class="column-one-third">&ensp;</div>
-            <div class="column-two-thirds rightalign">
-                @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        <div class="user-menu @(HttpContext.Current.User.Identity.IsAuthenticated ? "logged-in" : string.Empty)">
+            <ul id="service-info-list" role="navigation">
+            @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                    <span>Hi @HttpContext.Current.User.Identity.Name</span>
-                    <span><a href="@Url.Action("SignOut", "Home")">Log out</a></span>
-                }
-                else
+                <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
+            }
+            else
+            {
+                if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
                 {
-                    if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
-                    {
-                        <a href="@Url.Action("SignIn", "Home")">Sign in / Register</a>
-                    }
+                    <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
                 }
-            </div>
+            }
+            </ul>
         </div>
 
+        @RenderSection("breadcrumb", required: false)
 
+        @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
 
-
-        <div id="content">
-            @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
-            @RenderBody()
-        </div>
+        @RenderBody()
+     
     </main>
 
     <footer class="group js-footer" id="footer" role="contentinfo">
@@ -144,9 +145,7 @@
 
                     </div>
                 </div>
-                <div class="copyright">
-                    <a href="http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">© Crown copyright</a>
-                </div>
+                
             </div>
         </div>
     </footer>

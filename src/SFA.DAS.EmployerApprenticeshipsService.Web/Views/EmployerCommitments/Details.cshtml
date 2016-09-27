@@ -5,21 +5,34 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View commitment</h1>
-        <hr />
-        <p>Name</p>
-        <p>@Model.Commitment.Name</p>
-        <p>Legal Entity</p>
-        <p>@Model.Commitment.LegalEntityName</p>
-        <p>Provider</p>
-        <p>@Model.Commitment.ProviderName</p>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>@Model.Commitment.Name</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Legal entity</th>
+                    <td>@Model.Commitment.LegalEntityName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Provider</th>
+                    <td>@Model.Commitment.ProviderName</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="grid-row">
     <div class="column-full">
+        <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Commitment.Apprenticeships.Count == 0)
         {
             <p class="panel panel-info">
-                No apprenticeships exist for this commitment.
+                No apprentices exist for this commitment.
             </p>
         }
         else
@@ -70,6 +83,30 @@
                                         <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
                                         <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
                                         <button type="submit" name="commitment" class="button">Approve</button>
+                                    </form>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            }
+                            @if (apprenticeship.CanBePaused())
+                            {
+                                <div>
+                                    <form action="@Url.Action("PauseApprenticeship")" method="GET">
+                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
+                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
+                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                        <button type="submit" name="commitment" class="button">Pause</button>
+                                    </form>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            }
+                            @if (apprenticeship.CanBeResumed())
+                            {
+                                <div>
+                                    <form action="@Url.Action("ResumeApprenticeship")" method="GET">
+                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
+                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
+                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                        <button type="submit" name="commitment" class="button">Resume</button>
                                     </form>
                                 </div>
                                 <div class="responsive-inner-caption"></div>

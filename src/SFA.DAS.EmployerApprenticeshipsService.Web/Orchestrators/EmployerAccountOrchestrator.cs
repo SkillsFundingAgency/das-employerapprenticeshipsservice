@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -19,13 +22,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, 
+            EmployerApprenticeshipsServiceConfiguration configuration) 
+            : base(mediator, logger, cookieService, configuration)
         {
+            
         }
 
-        public async Task CreateAccount(CreateAccountModel model)
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model)
         {
-            await Mediator.SendAsync(new CreateAccountCommand
+            if (!model.UserIsAuthorisedToSign && model.SignedAgreement)
+            {
+                var response = await GetAccountAgreementTemplate(model);
+                response.Status = HttpStatusCode.BadRequest;
+
+                return response;
+            }
+
+            var result = await Mediator.SendAsync(new CreateAccountCommand
             {
                 ExternalUserId = model.UserId,
                 CompanyNumber = model.CompanyNumber,
@@ -34,11 +48,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                 EmployerRef = model.EmployerRef,
                 AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken
+                RefreshToken = model.RefreshToken,
+                SignAgreement = model.UserIsAuthorisedToSign && model.SignedAgreement
             });
+
+            return new OrchestratorResponse<EmployerAgreementViewModel>
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = new EmployerAgreementView
+                    {
+                        AccountId = result.AccountId
+                    }
+                },
+                Status = HttpStatusCode.OK
+            };
         }
 
-        public EmployerAccountData GetCookieData(HttpContextBase context)
+        public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
             var cookie = (string)CookieService.Get(context, CookieName);
 
@@ -56,5 +83,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             CookieService.Update(context, CookieName, JsonConvert.SerializeObject(data));
         }
 
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountModel model)
+        {
+            var response = new OrchestratorResponse<EmployerAgreementViewModel>();
+            
+            var templateResponse = await Mediator.SendAsync(new GetLatestAccountAgreementTemplateRequest());
+
+            response.Data = new EmployerAgreementViewModel
+            {
+                EmployerAgreement = new EmployerAgreementView
+                {
+                    LegalEntityName = model.CompanyName,
+                    LegalEntityCode = model.CompanyNumber,
+                    LegalEntityRegisteredAddress = model.CompanyRegisteredAddress,
+                    LegalEntityIncorporatedDate = model.CompanyDateOfIncorporation,
+                    Status = EmployerAgreementStatus.Pending,
+                    TemplateRef = templateResponse.Template.Ref,
+                    TemplateText = templateResponse.Template.Text
+                }
+            };
+
+            return response;
+        }
     }
 }

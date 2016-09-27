@@ -11,7 +11,6 @@ Post-Deployment Script Template
 */
 
 EXECUTE levy.Cleardown
-GO
 
 
 insert into [levy].[TopUpPercentage]

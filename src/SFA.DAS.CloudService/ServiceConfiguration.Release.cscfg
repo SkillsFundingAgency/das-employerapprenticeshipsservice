@@ -53,14 +53,16 @@
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
-      <InstanceAddress roleName="__rolename__">
+      <InstanceAddress roleName="SFA.DAS.EmployerApprenticeshipsService.Web">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
-      <ReservedIPs>
-        <ReservedIP name="__rip__" />
-      </ReservedIPs>
     </AddressAssignments>
+    <LoadBalancers>
+      <LoadBalancer name="__ilbname__">
+        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.120.158"/>
+      </LoadBalancer>
+    </LoadBalancers>
   </NetworkConfiguration>
 </ServiceConfiguration>

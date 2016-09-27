@@ -6,24 +6,24 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+
+@if (TempData["notunderstood"] != null)
+{
+        <div tabindex="-1" role="group" class="error-summary">
+            <h1 id="error-summary" class="heading-medium error-summary-heading">
+                There's a problem
+            </h1>
+            <ul class="error-summary-list">
+                <li><a href="#error-message-understand" data-focuses="error-message-understand">You must indicate that you have read and understood the terms</a></li>
+            </ul>
+        </div>
+}
+
         <h1 class="heading-xlarge">Employer agreement</h1>
-    </div>
-</div>
-
-<div class="grid-row">
-    <div class="column-two-thirds">
-
-        <h1 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h1>
-        <h2>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h2>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
+        <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
+        <h3>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h3>
         <p>@Model.Data.EmployerAgreement.TemplateText</p>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
+    
         @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
         {
             <form action="@Url.Action("Sign")" method="POST">
@@ -32,30 +32,43 @@
                 <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
                     @if (TempData["notunderstood"] != null)
                     {
-                        <legend>
-                            <span class="error-message">You must indicate that you have read and understood the terms</span>
-                        </legend>
+                        <span class="error-message" id="error-message-understand">You must indicate that you have read and understood the terms</span>
+                  
                     }
                     <label class="block-label" for="understood">
-                        <input type="checkbox" id="understood" name="understood" value="understood">
+                        <input type="checkbox" id="understood" name="understood" value="understood"  @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
                         I have read and understood the agreement
                     </label>
                 </div>   
-                <p></p>
                 <input class="button" id="signAgreement" type="submit" value="Sign agreement">
             </form>
         }
         else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
         {
-            <p>Signed By</p>
-            <p>@Model.Data.EmployerAgreement.SignedByName</p>
-            <p>Signed Date</p>
-            <p>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</p>
+            <dl>
+                <dt>Signed by</dt>
+                <dd>@Model.Data.EmployerAgreement.SignedByName</dd>
+                <dt>Signed date</dt>
+                <dd>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</dd>
+            </dl>
             if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
             {
-                <p>Expired Date</p>
-                <p>@Model.Data.EmployerAgreement.ExpiredDate</p>
+                <dl>
+                    <dt>Expired Date</dt>
+                    <dd>@Model.Data.EmployerAgreement.ExpiredDate</dd>
+               </dl>
             }
+
         }
     </div>
 </div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.EmployerAgreement.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement", new { accountId = @Model.Data.EmployerAgreement.AccountId })">Your Organisations</a></li>
+            <li>Employer agreement</li>
+        </ol>
+    </div>
+}

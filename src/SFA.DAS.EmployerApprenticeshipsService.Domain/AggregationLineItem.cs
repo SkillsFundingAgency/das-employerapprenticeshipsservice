@@ -13,5 +13,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public decimal CalculatedAmount { get; set; }
         public bool IsLastSubmission { get; set; }
         public decimal LevyDueYtd { get; set; }
+        public long AccountId { get; set; }
     }
 }

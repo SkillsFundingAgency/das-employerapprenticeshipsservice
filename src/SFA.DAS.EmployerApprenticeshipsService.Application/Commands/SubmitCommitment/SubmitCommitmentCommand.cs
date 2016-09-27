@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitComm
     {
         public long EmployerAccountId { get; set; }
         public long CommitmentId { get; set; }
+        public string Message { get; set; }
     }
 }

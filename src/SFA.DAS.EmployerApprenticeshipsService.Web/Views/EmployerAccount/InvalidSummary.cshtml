@@ -4,10 +4,18 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Confirm PAYE Scheme</h1>
 
-       
+
         <p>The response from HMRC Government Gateway was not expected.</p>
-       
+
 
         <a class="" id="start_again" href="@Url.Action("Index", "EmployerAccount")">Start Again</a>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+        </ol>
+    </div>
+}

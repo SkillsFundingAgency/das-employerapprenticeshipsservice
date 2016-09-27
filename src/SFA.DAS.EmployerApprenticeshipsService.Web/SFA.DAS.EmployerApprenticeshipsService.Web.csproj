@@ -307,6 +307,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
+    <Compile Include="Models\CommitmentInformViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
@@ -339,8 +341,14 @@
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\FlashMessageViewModel.cs" />
+    <Compile Include="Models\ApproveApprenticeshipModel.cs" />
+    <Compile Include="Models\ApproveApprenticeshipViewModel.cs" />
+    <Compile Include="Models\SubmitCommitmentViewModel.cs" />
+    <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
+    <Compile Include="Models\TaskListItemModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
+    <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
@@ -394,6 +402,12 @@
     <Content Include="assets\stylesheets\images\open-government-licence.png" />
     <Content Include="assets\stylesheets\images\open-government-licence_2x.png" />
     <Content Include="Content\elements.css" />
+    <Content Include="assets\images\separator-2x.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\images\separator.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -501,6 +515,10 @@
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
+    <Content Include="Views\EmployerCommitments\Submit.cshtml" />
+    <Content Include="Views\EmployerTasks\View.cshtml" />
+    <Content Include="Views\EmployerCommitments\Inform.cshtml" />
+    <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

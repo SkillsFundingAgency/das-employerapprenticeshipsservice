@@ -1,0 +1,39 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model SubmitCommitmentViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Submit commitment</h1>
+        <hr />
+            <div class="form-group">
+                <p>You are about to send your commitment to your training provider. Once you send it they will be able to see it in their online account.</p>
+                <p>You can add a note for your training provider to read.</p>
+            </div>
+        <form method="POST" action="@Url.Action("Submit")">
+            <div class="form-group">
+                <label class="form-label" for="Name">Name</label>
+                <label class="form-label" id="Name">@Model.Commitment.Name</label>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="ProviderId">Training provider name</label>
+                <label class="form-label" id="ProviderId">@Model.Commitment.ProviderName</label>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="Message">Note</label>
+                <p>For example, please add the 25 engineers we agreed on contract #30815</p>
+                <textarea class="form-control form-control-3-4" id="Message" name="Message"
+                          cols="40" rows="10"
+                          aria-required="true">
+                    @Model.SubmitCommitmentModel.Message
+                    </textarea>
+                </div>
+                <input type="hidden" id="accountId" name="accountId" value="@Model.SubmitCommitmentModel.AccountId" />
+                <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />
+                <button type="submit" class="button">Send to provider</button>
+            </form>
+        </div>
+    </div>
+
+
+

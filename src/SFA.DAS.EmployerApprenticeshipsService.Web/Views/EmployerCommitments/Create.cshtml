@@ -14,11 +14,15 @@
         <form method="POST" action="@Url.Action("Create")">
             <div class="form-group">
                 <label class="form-label" for="Name">Name</label>
-                <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
+                    <p>Give this commitment a name, for example a code or reference - your training provider will see this.</p>
+                    <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
                        aria-required="true" />
             </div>
             <div class="form-group">
                 <label class="form-label" for="ProviderId">Provider</label>
+                    <div class="form-group">
+                        <p>Search by UKPRN (UK Provider Registration Number) - your provider will give you this information.</p>
+                    </div>
                 <select name="ProviderId" id="ProviderId" class="form-control" aria-label="Training Provider">
                     <option value=""></option>
                     @foreach (var provider in Model.Data.Providers)
@@ -28,7 +32,10 @@
                 </select>
             </div>
             <div class="form-group">
-                <label class="form-label" for="LegalEntityId">Legal Entity</label>
+                <label class="form-label" for="LegalEntityId">Legal entity</label>
+                    <div class="form-group">
+                        <p>Choose the organisation employing the apprentices.</p>
+                    </div>
                 <select name="LegalEntityId" id="LegalEntityId" class="form-control" aria-label="Legal Entity">
                     <option value=""></option>
                     @foreach (var legalEntity in Model.Data.LegalEntities)

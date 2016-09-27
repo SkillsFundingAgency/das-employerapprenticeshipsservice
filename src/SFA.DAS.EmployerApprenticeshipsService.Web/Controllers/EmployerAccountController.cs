@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -125,18 +126,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateAccount()
+        [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
+        public async Task<ActionResult> ViewAccountAgreement()
         {
-
-            if (Request.Params[@"confirm_create"] != @"1")
-            {
-                TempData["ErrorMessage"] = "You can start the create account proccess again";
-                return RedirectToAction("Index");
-            }
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
+            var model = new CreateAccountModel
+            {
+                CompanyNumber = enteredData.CompanyNumber,
+                CompanyName = enteredData.CompanyName,
+                CompanyRegisteredAddress = enteredData.RegisteredAddress,
+                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
+            };
+
+            var response = await _employerAccountOrchestrator.GetAccountAgreementTemplate(model);
+
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateAccount(bool? userIsAuthorisedToSign, string submit)
+        {
+            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+            var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
                 CompanyNumber = enteredData.CompanyNumber,
@@ -145,13 +158,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
                 AccessToken = enteredData.AccessToken,
-                RefreshToken = enteredData.RefreshToken
-            });
+                RefreshToken = enteredData.RefreshToken,
+                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
+                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
+            };
 
-            TempData["successHeader"] = "Account Created";
-            TempData["successCompany"] = enteredData.CompanyName;
+            var response = await _employerAccountOrchestrator.CreateAccount(request);
 
-            return RedirectToAction("Index", "Home");
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
+
+                TempData["userNotAuthorised"] = "true";
+                
+                return RedirectToAction("ViewAccountAgreement");
+            }
+
+            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
+            {
+                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+                TempData["successMessage"] = "This account can now spend levy funds";
+            }
+            else
+            {
+                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+            }
+
+            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.AccountId});
         }
 
         private string GetUserId()
@@ -159,7 +193,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
             return userIdClaim ?? "";
         }
-        
-        
     }
 }
