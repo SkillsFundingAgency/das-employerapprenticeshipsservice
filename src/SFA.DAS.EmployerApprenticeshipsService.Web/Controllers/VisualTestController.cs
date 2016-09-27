@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerAgreement = new EmployerAgreementView()
             {
-                AccountId = 0123456789,
+                 
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
