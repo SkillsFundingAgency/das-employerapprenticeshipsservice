@@ -74,6 +74,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
@@ -96,6 +97,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
         {
             var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
@@ -125,6 +127,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
             DateTime incorporated)
         {
@@ -134,6 +137,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateLegalEntity(
             long accountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
