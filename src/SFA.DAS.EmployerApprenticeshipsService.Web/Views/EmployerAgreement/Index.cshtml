@@ -11,7 +11,6 @@
     </div>
     <div class="column-one-third rightalign">
         <form action="@Url.Action("Add")" method="GET">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId"/>
             <input class="button" id="addNewPaye" type="submit" value="Add new organisation">
         </form>
     </div>
@@ -52,7 +51,7 @@
                             <div>
                                 <a aria-label="View Employer Agreement @employerAgreement.Id"
                                    title="View Employer Agreement @employerAgreement.Id"
-                                   href="@Url.Action("View", new {agreementId = employerAgreement.Id, accountId = Model.Data.AccountId})">
+                                   href="@Url.Action("View", new {agreementId = employerAgreement.Id, accountId = Model.Data.HashedId})">
                                     @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
                                 </a>
                             </div>

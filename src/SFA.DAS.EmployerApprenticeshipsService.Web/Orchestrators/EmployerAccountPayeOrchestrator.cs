@@ -112,11 +112,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<List<LegalEntity>> GetLegalEntities(long accountId, string userId)
+        public async Task<List<LegalEntity>> GetLegalEntities(string accountId, string userId)
         {
             var response = await Mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = accountId,
                 UserId = userId
             });
 

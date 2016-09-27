@@ -3,7 +3,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find your organisation</h1>
-        <form action="@Url.Action("FindLegalEntity")" method="POST">
+        <form action="@Url.Action("FindLegalEntity","EmployerAgreement")" method="POST">
             <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                 <label class="form-label">Company House number</label>
                 
@@ -14,7 +14,6 @@
                     </legend>
                 }
                
-                <input type="hidden" name="accountId" value="@Model.Data.AccountId"/>
                 <input class="form-control form-control-3-4" type="text" name="entityReferenceNumber" id="companyHouseNumber"/>
             </div>
             <input class="button" id="findOrganisation" type="submit" value="Continue" />
