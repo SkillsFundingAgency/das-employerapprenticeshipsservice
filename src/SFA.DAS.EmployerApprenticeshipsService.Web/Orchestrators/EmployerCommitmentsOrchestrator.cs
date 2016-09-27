@@ -15,6 +15,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -189,7 +190,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status.ToString(),
+                Status = apprenticeship.Status.GetDescription(),
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
         }
