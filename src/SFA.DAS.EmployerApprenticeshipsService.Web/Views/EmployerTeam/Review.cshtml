@@ -57,7 +57,8 @@
                 </form>
                 <p></p>
                 <form action="@Url.Action("Cancel")" method="GET">
-                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+                    <input type="hidden" id="Id" name="Id" value="@Model.Id"/>
+                    <input type="hidden" id="Email" name="Email" value="@Model.Email" />
                     <button type="submit" class="button" id="cancel_invitation">Cancel Invitation</button>
                 </form>
         }

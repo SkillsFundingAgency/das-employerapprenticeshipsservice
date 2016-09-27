@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         
 
         [HttpGet]
-        [Route("Teams/Cancel")]
+        [Route("Teams/{email}/Cancel")]
         public async Task<ActionResult> Cancel(long id)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(id);
@@ -110,9 +110,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Teams/Cancel")]
+        [Route("Teams/{email}/Cancel")]
         public async Task<ActionResult> Cancel(string email, string accountId, int cancel)
         {
+            //TODO Flash message no longer works
             FlashMessageViewModel successMessage = null;
             if (cancel == 1)
             {
