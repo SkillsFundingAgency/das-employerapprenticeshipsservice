@@ -133,12 +133,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task Resend(string email, long accountId, string externalUserId)
+        public async Task Resend(string email, string hashedId, string externalUserId)
         {
             await _mediator.SendAsync(new ResendInvitationCommand
             {
                 Email = email,
-                AccountId = accountId,
+                HashedId = hashedId,
                 ExternalUserId = externalUserId
             });
         }

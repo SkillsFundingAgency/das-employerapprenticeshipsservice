@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/Resend")]
-        public async Task<ActionResult> Resend(long accountId, string email)
+        public async Task<ActionResult> Resend(string accountId, string email)
         {
             await _employerTeamOrchestrator.Resend(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
