@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/Cancel")]
-        public async Task<ActionResult> Cancel(string email, long accountId, int cancel)
+        public async Task<ActionResult> Cancel(string email, string accountId, int cancel)
         {
             FlashMessageViewModel successMessage = null;
             if (cancel == 1)
@@ -197,7 +197,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Teams/ChangeRole")]
+        [Route("Teams/{email}/ChangeRole")]
         public async Task<ActionResult> ChangeRole(string accountId, string email, short role)
         {
             try
@@ -221,7 +221,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 AddExceptionToModelError(ex);
             }
 
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember("", email);//TODO accountid
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
             return View(teamMember);
         }
 
