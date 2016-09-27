@@ -27,7 +27,6 @@
         @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
         {
             <form action="@Url.Action("Sign")" method="POST">
-                <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId" />
                 <input type="hidden" id="agreementId" name="agreementId" value="@Model.Data.EmployerAgreement.Id" />
                 <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName" />
                 <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">

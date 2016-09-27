@@ -9,14 +9,13 @@
         </p>
         <p class="heading-medium">Is this the correct organisation?</p>
         <form action="@Url.Action("ViewEntityAgreement")" method="POST">
-            <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
             <input type="hidden" name="name" value="@Model.Data.CompanyName"/>
             <input type="hidden" name="code" value="@Model.Data.CompanyNumber"/>
             <input type="hidden" name="address" value="@Model.Data.RegisteredAddress"/>
             <input type="hidden" name="incorporated" value="@Model.Data.DateOfIncorporation"/>
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.AccountId})">No, search again</a>
+                <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.HashedId})">No, search again</a>
             </span>
         </form>
         

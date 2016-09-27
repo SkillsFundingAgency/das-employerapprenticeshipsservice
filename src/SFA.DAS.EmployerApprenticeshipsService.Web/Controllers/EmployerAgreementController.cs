@@ -43,7 +43,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Add(long accountId)
+        [Route("Agreements/Add")]
+        public ActionResult Add(string accountId)
         {
             var response = new OrchestratorResponse<AddLegalEntityViewModel>
             {
@@ -54,7 +55,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(response);
         }
 
-        public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
+        [Route("Agreements/{agreementid}/View")]
+        public async Task<ActionResult> View(long agreementid, string accountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
             
@@ -65,7 +67,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
+        [Route("Agreements/{agreementid}/Sign")]
+        public async Task<ActionResult> Sign(long agreementid, string accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
@@ -96,7 +99,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
-        public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
+        [Route("Agreements/Add")]
+        public async Task<ActionResult> FindLegalEntity(string accountId, string entityReferenceNumber)
         {
             var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -125,7 +129,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
+        [Route("Agreements/ViewAgreement")]
+        public async Task<ActionResult> ViewEntityAgreement(string accountId, string name, string code, string address, 
             DateTime incorporated)
         {
             var response = await _orchestrator.Create(accountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
@@ -134,13 +139,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
-            long accountId, string name, string code, string address, DateTime incorporated, 
+            string accountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Name = name,
                 Code = code,
                 Address = address,
