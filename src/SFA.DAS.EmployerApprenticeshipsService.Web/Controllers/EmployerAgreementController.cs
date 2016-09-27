@@ -10,6 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerAgreementController : BaseController
     {
         private readonly EmployerAgreementOrchestrator _orchestrator;
@@ -27,7 +28,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
+        [Route("Agreements")]
+        public async Task<ActionResult> Index(string accountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
