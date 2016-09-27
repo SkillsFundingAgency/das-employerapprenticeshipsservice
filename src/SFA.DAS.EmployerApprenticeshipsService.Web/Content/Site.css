@@ -46,6 +46,12 @@ table {
     max-width: 640px;
 }
 
+@media (min-width: 641px) {
+    .form-group > form {
+        display: inline-block;
+    }
+}
+
 .button-start {
     background-image: url("/assets/images/icon-pointer-2x.png");
     background-size: 30px 19px;
