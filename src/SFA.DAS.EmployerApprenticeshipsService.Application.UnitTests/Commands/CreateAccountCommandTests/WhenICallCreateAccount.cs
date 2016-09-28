@@ -93,6 +93,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         }
 
         [Test]
+        public async Task ThenTheHashedIdIsReturnedInTheResponse()
+        {
+            //Arrange
+
+            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+
+            //Act
+            var actual = await _handler.Handle(createAccountCommand);
+
+            //Assert
+            Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
+            Assert.AreEqual(ExpectedHashString, actual.HashedId);
+        }
+
+        [Test]
         public async Task WillCallRepositoryToCreateNewAccount()
         {
             const int accountId = 23;

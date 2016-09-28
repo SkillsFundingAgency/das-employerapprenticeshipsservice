@@ -27,12 +27,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
         public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService)
         {
-            if (accountRepository == null)
-                throw new ArgumentNullException(nameof(accountRepository));
-            if (userRepository == null)
-                throw new ArgumentNullException(nameof(userRepository));
-            if (messagePublisher == null)
-                throw new ArgumentNullException(nameof(messagePublisher));
             _accountRepository = accountRepository;
             _userRepository = userRepository;
             _messagePublisher = messagePublisher;
@@ -57,7 +51,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken, message.SignAgreement);
 
-            await _accountRepository.SetHashedId(_hashingService.HashValue(accountId), accountId);
+            var hashedAccountId = _hashingService.HashValue(accountId);
+            await _accountRepository.SetHashedId(hashedAccountId, accountId);
 
             if (emprefs.Length > 1)
             {
@@ -81,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             return new CreateAccountCommandResponse
             {
-                AccountId = accountId
+                HashedId = hashedAccountId
             };
         }
     }
