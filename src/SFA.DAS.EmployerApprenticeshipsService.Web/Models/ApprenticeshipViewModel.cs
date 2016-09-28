@@ -19,9 +19,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string ULN { get; set; }
         public string TrainingId { get; set; } //standard or framework
         public decimal? Cost { get; set; }
-        public int? StartMonth { get; set; }
+        public string StartMonth { get; set; }
         public int? StartYear { get; set; }
-        public int? EndMonth { get; set; }
+        public string EndMonth { get; set; }
         public int? EndYear { get; set; }
         public string Status { get; set; }
         public string AgreementStatus { get; set; }

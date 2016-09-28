@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,6 +16,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -185,11 +187,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 ULN = apprenticeship.ULN,
                 TrainingId = apprenticeship.TrainingId,
                 Cost = apprenticeship.Cost,
-                StartMonth = apprenticeship.StartDate?.Month,
+                StartMonth = apprenticeship.StartDate.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(apprenticeship.StartDate.Value.Month) : string.Empty,
                 StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate?.Month,
+                EndMonth = apprenticeship.EndDate.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(apprenticeship.EndDate.Value.Month) : string.Empty,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status.ToString(),
+                Status = apprenticeship.Status.GetDescription(),
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
         }
