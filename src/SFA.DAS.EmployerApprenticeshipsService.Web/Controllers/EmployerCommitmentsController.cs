@@ -44,9 +44,40 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create(long accountId)
+        public async Task<ActionResult> SelectLegalEntity(long accountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult SelectLegalEntity(CreateCommitmentModel commitment)
+        {
+            return RedirectToAction("SelectProvider", commitment);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> SelectProvider(long accountId, long legalEntityId, string legalEntityName)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            model.Data.Commitment.LegalEntityId = legalEntityId;
+            model.Data.Commitment.LegalEntityName = legalEntityName;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult SelectProvider(CreateCommitmentModel commitment)
+        {
+            return RedirectToAction("Create", commitment);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Create(CreateCommitmentModel commitment)
+        {
+            var model = await _employerCommitmentsOrchestrator.CreateSummary(commitment, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -56,7 +87,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.Create(commitment, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("Index", new {accountId = commitment.AccountId});
+            return RedirectToAction("Index", new { accountId = commitment.AccountId });
         }
 
         [HttpGet]

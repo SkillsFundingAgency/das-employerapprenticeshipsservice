@@ -80,6 +80,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
+        {
+            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
+            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                Id = commitment.AccountId,
+                UserId = externalUserId
+            });
+
+            var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Id == commitment.LegalEntityId);
+
+            return new OrchestratorResponse<CreateCommitmentViewModel>
+            {
+                Data = new CreateCommitmentViewModel
+                {
+                    AccountId = commitment.AccountId,
+                    LegalEntityId = commitment.LegalEntityId,
+                    LegalEntityName = legalEntity.Name,
+                    ProviderId = commitment.ProviderId,
+                    ProviderName = provider.Name
+                }
+            };
+        }
+
         public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
             var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());

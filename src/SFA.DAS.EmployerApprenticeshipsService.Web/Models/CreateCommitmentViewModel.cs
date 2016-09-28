@@ -11,7 +11,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public List<LegalEntity> LegalEntities { get; set; }
     }
 
-    public class CreateCommitmentViewModel
+    public class CreateCommitmentViewModel : CreateCommitmentModelBase
+    {
+        
+    }
+
+    public class CreateCommitmentModel : CreateCommitmentModelBase
+    {
+
+    }
+
+    public abstract class CreateCommitmentModelBase
     {
         public string Name { get; set; }
         public long AccountId { get; set; }
