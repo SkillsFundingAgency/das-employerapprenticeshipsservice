@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
 
-            return RedirectToAction("Index", "EmployerAccountPaye");
+            return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
         }
 
         [HttpGet]
