@@ -5,7 +5,7 @@
       <Site name="Web">
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
-          <Binding name="Endpoint1" endpointName="HttpIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
         </Bindings>
       </Site>
     </Sites>
