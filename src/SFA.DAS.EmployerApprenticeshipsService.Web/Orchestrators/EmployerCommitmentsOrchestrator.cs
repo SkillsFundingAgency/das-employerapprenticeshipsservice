@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResumeApprenticeship;
@@ -146,6 +147,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            await _mediator.SendAsync(new CreateApprenticeshipCommand
+            {
+                AccountId = apprenticeship.AccountId,
+                Apprenticeship = MapFrom(apprenticeship)
+            });
+        }
+
+        public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(long accountId, long commitmentId)
+        {
+            var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
+
+            var apprenticeship = new ApprenticeshipViewModel
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId,
+            };
+
+            return new ExtendedApprenticeshipViewModel
+            {
+                Apprenticeship = apprenticeship,
+                Standards = standards.Standards
+            };
+        }
+
         public async Task SubmitCommitment(long accountId, long commitmentId, string message)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
@@ -187,13 +214,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 ULN = apprenticeship.ULN,
                 TrainingId = apprenticeship.TrainingId,
                 Cost = apprenticeship.Cost,
-                StartMonth = apprenticeship.StartDate.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(apprenticeship.StartDate.Value.Month) : string.Empty,
+                StartMonth = apprenticeship.StartDate.Value.Month,
                 StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(apprenticeship.EndDate.Value.Month) : string.Empty,
+                EndMonth = apprenticeship.EndDate.Value.Month,
                 EndYear = apprenticeship.EndDate?.Year,
                 Status = apprenticeship.Status.GetDescription(),
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
+        }
+
+        private Apprenticeship MapFrom(ApprenticeshipViewModel viewModel)
+        {
+            return new Apprenticeship
+            {
+                Id = viewModel.Id,
+                CommitmentId = viewModel.CommitmentId,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                ULN = viewModel.ULN,
+                TrainingId = viewModel.TrainingId,
+                Cost = viewModel.Cost,
+                StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+            };
+        }
+
+        private DateTime? GetDateTime(int? month, int? year)
+        {
+            if (month.HasValue && year.HasValue)
+                return new DateTime(year.Value, month.Value, 1);
+
+            return null;
         }
     }
 }

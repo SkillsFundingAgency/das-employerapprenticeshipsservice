@@ -118,5 +118,10 @@
             </div>
         </div>
         }
+        <form action="@Url.Action("CreateApprenticeship")" method="GET">
+            <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
+            <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
+            <button type="submit" name="commitment" class="button">Add apprentice</button>
+        </form>
     </div>
 </div>
