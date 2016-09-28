@@ -159,10 +159,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
         {
             var response = await
-                    Mediator.SendAsync(new GetEmployerAccountQuery
+                    Mediator.SendAsync(new GetEmployerAccountHashedQuery()
                     {
-                        AccountId = model.AccountId,
-                        ExternalUserId = model.UserId
+                        HashedId = model.HashedId,
+                        UserId = model.UserId
                     });
 
             model.AccountName = response.Account.Name;
@@ -177,7 +177,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     UserId = model.UserId,
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme

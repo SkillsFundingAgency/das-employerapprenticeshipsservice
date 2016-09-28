@@ -174,12 +174,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> RemovePaye(long accountId, string empRef)
+        [Route("Schemes/{empRef}/Remove")]
+        public async Task<ActionResult> Remove(string accountId, string empRef)
         {
             var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeScheme
             {
-                AccountId = accountId,
-                PayeRef = empRef,
+                HashedId = accountId,
+                PayeRef = empRef.FormatPayeFromUrl(),
                 UserId = OwinWrapper.GetClaimValue("sub")
             });
 
@@ -188,6 +189,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Schemes/RemovePaye")]
         public async Task<ActionResult> RemovePaye(RemovePayeScheme model)
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");
@@ -196,12 +198,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             if (result.Status != HttpStatusCode.OK)
             {
-                return View(result);
+                return View("Remove",result);
             }
 
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
 
-            return RedirectToAction("Index", "EmployerAccountPaye");
+            return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
         }
     }
 }
