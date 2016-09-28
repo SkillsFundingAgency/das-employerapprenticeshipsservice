@@ -40,7 +40,7 @@
                 <label class="block-label" for="radio3">
                     <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
                     
-                    Can @(RoleStrings.ToWhatTheyCanDoLower(Role.Owner)).
+                    Can do @(RoleStrings.ToWhatTheyCanDoLower(Role.Owner)).
                 </label>
             </div>
             <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
