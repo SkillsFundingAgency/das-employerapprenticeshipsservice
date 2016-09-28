@@ -9,8 +9,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId == 0)
-                validationResult.AddError(nameof(item.AccountId), "No AccountId supplied");
+            if (string.IsNullOrEmpty(item.HashedId))
+                validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
 
             if (item.LegalEntityId == 0)
                 validationResult.AddError(nameof(item.LegalEntityId), "No LegalEntityId supplied");
