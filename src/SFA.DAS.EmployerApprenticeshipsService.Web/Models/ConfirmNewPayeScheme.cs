@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
             AccessToken = model.AccessToken;
             RefreshToken = model.RefreshToken;
             PayeScheme = model.PayeScheme;
+            HashedId = model.HashedId;
         }
 
         public long LegalEntityId { get; set; }

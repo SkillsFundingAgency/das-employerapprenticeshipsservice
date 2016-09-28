@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
     public interface IHashingService
     {
         string HashValue(long id);
+        long DecodeValue(string id);
     }
 }

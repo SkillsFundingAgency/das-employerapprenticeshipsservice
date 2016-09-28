@@ -21,8 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _membershiprepository = new Mock<IMembershipRepository>();
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
 
             _validator = new AddPayeToNewLegalEntityCommandValidator(_membershiprepository.Object);
         }
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x=>x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x=>x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User not connected to account"), actual.ValidationDictionary);
         }
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User is not an owner"), actual.ValidationDictionary);
         }
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.AccountId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
             Assert.IsTrue(actual.IsValid());
         }
     }

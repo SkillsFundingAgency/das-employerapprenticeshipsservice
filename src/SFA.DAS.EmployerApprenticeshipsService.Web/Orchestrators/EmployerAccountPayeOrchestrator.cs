@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new AddPayeToNewLegalEntityCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     AccessToken = model.AccessToken,
                     RefreshToken = model.RefreshToken,
                     LegalEntityCode = model.LegalEntityCode,
@@ -145,7 +145,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     ExternalUserId = userId,
                     EmpRef = model.PayeScheme,
                     LegalEntityId = model.LegalEntityId,

@@ -6,6 +6,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity
@@ -18,12 +19,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
         private readonly IValidator<AddPayeToNewLegalEntityCommand> _validator;
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
+        private readonly IHashingService _hashingService;
 
-        public AddPayeToNewLegalEnttiyCommandHandler(IValidator<AddPayeToNewLegalEntityCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher)
+        public AddPayeToNewLegalEnttiyCommandHandler(IValidator<AddPayeToNewLegalEntityCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
+            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(AddPayeToNewLegalEntityCommand message)
@@ -35,12 +38,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
+            var accountId = _hashingService.DecodeValue(message.HashedId);
+
             await _accountRepository.AddPayeToAccountForNewLegalEntity(
                     new Paye
                     {
                         AccessToken = message.AccessToken,
                         RefreshToken = message.RefreshToken,
-                        AccountId = message.AccountId,
+                        AccountId = accountId,
                         EmpRef = message.Empref
                     }, 
                     new LegalEntity
@@ -55,7 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
             await _messagePublisher.PublishAsync(
                 new EmployerRefreshLevyQueueMessage
                 {
-                    AccountId = message.AccountId
+                    AccountId = accountId
                 });
         }
     }

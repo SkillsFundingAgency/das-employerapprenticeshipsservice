@@ -62,7 +62,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetGateway(long accountId, bool confirmPayeVisibility)
+        [Route("Schemes/Gateway")]
+        public async Task<ActionResult> GetGateway(string accountId, bool confirmPayeVisibility)
         {
             if (confirmPayeVisibility)
             {
@@ -91,13 +92,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/ConfirmPayeScheme")]
-        public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
+        public async Task<ActionResult> ConfirmPayeScheme(string accountId, AddNewPayeScheme model)
         {
             model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.HashedId, OwinWrapper.GetClaimValue(@"sub"));
             return View("ChooseCompany", model);
         }
 
         [HttpGet]
+        [Route("Schemes/ChooseCompany")]
         public ActionResult ChooseCompany()
         {
             return RedirectToAction("GetGateway");
@@ -105,7 +107,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ChooseCompany(int selectedCompanyId, AddNewPayeScheme model)
+        [Route("Schemes/ChooseCompany")]
+        public ActionResult ChooseCompany(string accountId, int selectedCompanyId, AddNewPayeScheme model)
         {
             if (selectedCompanyId == -1)
             {
@@ -139,11 +142,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> ChooseExistingLegalEntity(AddNewPayeScheme model)
         {
-            return await ConfirmPayeScheme(model);
+            return await ConfirmPayeScheme(model.HashedId);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Schemes/SelectCompany")]
         public async Task<ActionResult> SelectCompany(ConfirmNewPayeScheme model)
         {
 
@@ -159,14 +163,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Schemes/Confirm")]
         public async Task<ActionResult> Confirm(ConfirmNewPayeScheme model)
         {
-
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
             TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.AccountId });
+            return RedirectToAction("Index", "EmployerAccountPaye");
         }
 
         [HttpGet]
@@ -197,7 +201,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new { model.AccountId });
+            return RedirectToAction("Index", "EmployerAccountPaye");
         }
     }
 }

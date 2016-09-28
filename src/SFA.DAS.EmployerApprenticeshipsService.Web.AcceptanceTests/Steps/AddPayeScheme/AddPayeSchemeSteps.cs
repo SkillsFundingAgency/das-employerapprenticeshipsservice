@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         {
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
             var hashedId = ScenarioContext.Current["HashedId"].ToString();
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            
             _newLegalEntity = false;
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 LegalEntityId = legalEntity.LegalEntityId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         [When(@"I Add a new PAYE scheme to my new legal entity")]
         public void WhenIAddANewPAYESchemeToMyNewLegalEntity()
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             _newLegalEntity = true;
@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 LegalEntityId = 0,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
@@ -137,7 +137,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         [Then(@"The PAYE scheme Is ""(.*)""")]
         public void ThenThePAYESchemeIs(string schemeStatus)
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+         
             var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
