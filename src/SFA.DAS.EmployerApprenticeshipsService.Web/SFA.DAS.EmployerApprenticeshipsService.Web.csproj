@@ -332,6 +332,7 @@
     <Compile Include="Models\EmployerAgreementListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
+    <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FindOrganisationViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -520,6 +521,7 @@
     <Content Include="Views\EmployerTasks\View.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
+    <Content Include="Views\EmployerCommitments\CreateApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">
