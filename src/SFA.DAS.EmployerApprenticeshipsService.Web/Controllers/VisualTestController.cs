@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerAccountPayeListViewModel = new EmployerAccountPayeListViewModel()
             {
-                AccountId = 1234567890,
+                
                 PayeSchemes = new List<PayeView>()
                 {
                     payeView,
@@ -249,7 +249,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 {
                     Data = new EmployerAccountPayeListViewModel()
                     {
-                        AccountId = 1234567890,
+                        
                         PayeSchemes = new List<PayeView>()
                         {
                             payeView,

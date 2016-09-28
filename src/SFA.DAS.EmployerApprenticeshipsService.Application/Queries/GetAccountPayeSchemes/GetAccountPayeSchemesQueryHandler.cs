@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountP
 
         public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesRequest message)
         {
-            var payeSchemes = await _accountRepository.GetPayeSchemes(message.AccountId);
+            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedId);
 
             return new GetAccountPayeSchemesResponse
             {

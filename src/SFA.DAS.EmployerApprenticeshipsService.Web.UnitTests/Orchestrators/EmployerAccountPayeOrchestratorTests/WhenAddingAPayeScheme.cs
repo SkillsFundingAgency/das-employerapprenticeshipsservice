@@ -16,7 +16,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -44,6 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 AccountId = ExpectedAccountId,
+                HashedId = "1",
                 PayeScheme = ExpectedEmpref,
                 LegalEntityId = 1,
                 LegalEntityCode = "mycode",
@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
 
             //Act
-            await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
+            await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1"))), Times.Once);
@@ -127,7 +127,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
             
             //Act
-            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
+            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
             //Assert
             Assert.IsEmpty(actual.Data.PayeScheme);

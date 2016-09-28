@@ -11,6 +11,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerAccountPayeController : BaseController
     {
       
@@ -29,7 +30,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountid)
+        [Route("Schemes")]
+        public async Task<ActionResult> Index(string accountid)
         {
             var model = await _employerAccountPayeOrchestrator.Get(accountid, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -37,12 +39,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(long accountId, string empRef)
+        [Route("Schemes/{empRef}/Detail")]
+        public ActionResult Details(string accountId, string empRef)
         {
             return View();
         }
 
         [HttpGet]
+        [Route("Schemes/Add")]
         public async Task<ActionResult> Add(string accountId, bool? validationFailed)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, OwinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
@@ -69,7 +73,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ConfirmPayeScheme(long accountId)
+        [Route("Schemes/ConfirmPayeScheme")]
+        public async Task<ActionResult> ConfirmPayeScheme(string accountId)
         {
 
             var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
@@ -83,6 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Schemes/ConfirmPayeScheme")]
         public async Task<ActionResult> ConfirmPayeScheme(AddNewPayeScheme model)
         {
             model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.HashedId, OwinWrapper.GetClaimValue(@"sub"));
