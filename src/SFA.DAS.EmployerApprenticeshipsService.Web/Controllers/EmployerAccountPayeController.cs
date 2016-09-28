@@ -42,6 +42,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Schemes/{empRef}/Detail")]
         public ActionResult Details(string accountId, string empRef)
         {
+            empRef = empRef.FormatPayeFromUrl();
+
             return View();
         }
 

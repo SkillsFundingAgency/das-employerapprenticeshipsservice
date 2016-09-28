@@ -39,7 +39,7 @@
                                 <div>
                                     <a aria-label="Remove PAYE scheme @scheme.EmpRef"
                                        title="Remove PAYE scheme @scheme.EmpRef"
-                                       href="@Url.Action("RemovePaye", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">Remove</a>
+                                       href="@Url.Action("RemovePaye", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
@@ -47,7 +47,7 @@
                                 <div>
                                     <a aria-label="View PAYE scheme @scheme.EmpRef"
                                        title="View PAYE scheme @scheme.EmpRef"
-                                       href="@Url.Action("Details", new {accountId = scheme.AccountId, empRef = scheme.EmpRef})">View</a>
+                                       href="@Url.Action("Details", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
