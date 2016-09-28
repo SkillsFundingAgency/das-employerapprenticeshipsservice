@@ -57,14 +57,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetNew(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(long accountId, string externalUserId)
         {
-            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
-            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                Id = accountId,
-                UserId = externalUserId
-            });
+            var legalEntities = await GetActiveLegalEntities(accountId, externalUserId);
 
             return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
             {
@@ -74,20 +69,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     {
                         AccountId = accountId
                     },
-                    Providers = providers.Providers,
                     LegalEntities = legalEntities.Entites.LegalEntityList
+                }
+            };
+        }
+
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(long accountId, string externalUserId)
+        {
+            var providers = await GetProviders();
+
+            return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+            {
+                Data = new ExtendedCreateCommitmentViewModel
+                {
+                    Commitment = new CreateCommitmentViewModel
+                    {
+                        AccountId = accountId
+                    },
+                    Providers = providers.Providers
                 }
             };
         }
 
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
         {
-            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
-            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                Id = commitment.AccountId,
-                UserId = externalUserId
-            });
+            var providers = await GetProviders();
+            var legalEntities = await GetActiveLegalEntities(commitment.AccountId, externalUserId);
 
             var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
             var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Id == commitment.LegalEntityId);
@@ -107,16 +114,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
-            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
-            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                Id = commitment.AccountId,
-                UserId = externalUserId
-            });
-
-            var provider = providers.Providers.SingleOrDefault(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.SingleOrDefault(x => x.Id == commitment.LegalEntityId);
-
             await _mediator.SendAsync(new CreateCommitmentCommand
             {
                 Commitment = new Commitment
@@ -124,9 +121,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     Name = commitment.Name,
                     EmployerAccountId = commitment.AccountId,
                     LegalEntityId = commitment.LegalEntityId,
-                    LegalEntityName = legalEntity.Name,
+                    LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = provider?.Name
+                    ProviderName = commitment.ProviderName
                 }
             });
         }
@@ -225,6 +222,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 EmployerAccountId = accountId,
                 CommitmentId = commitmentId,
                 ApprenticeshipId = apprenticeshipId
+            });
+        }
+
+        private async Task<GetProvidersQueryResponse> GetProviders()
+        {
+            return await _mediator.SendAsync(new GetProvidersQueryRequest());
+        }
+
+        private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(long accountId, string externalUserId)
+        {
+            return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                Id = accountId,
+                UserId = externalUserId
             });
         }
 

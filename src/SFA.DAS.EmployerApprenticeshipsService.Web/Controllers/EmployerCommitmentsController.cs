@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> SelectLegalEntity(long accountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetLegalEntities(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> SelectProvider(long accountId, long legalEntityId, string legalEntityName)
         {
-            var model = await _employerCommitmentsOrchestrator.GetNew(accountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetProviders(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             model.Data.Commitment.LegalEntityId = legalEntityId;
             model.Data.Commitment.LegalEntityName = legalEntityName;
