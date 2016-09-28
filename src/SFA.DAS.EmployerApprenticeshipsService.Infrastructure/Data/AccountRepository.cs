@@ -182,6 +182,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.ToList();
         }
 
+
+        public async Task<List<PayeView>> GetPayeSchemesByHashedId(string hashedId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@hashedId", hashedId, DbType.String);
+
+                return await c.QueryAsync<PayeView>(
+                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE HashedId = @hashedId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.ToList();
+        }
+
         public async Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId)
         {
             var result = await WithConnection(async c =>
