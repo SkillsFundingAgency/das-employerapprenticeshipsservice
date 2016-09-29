@@ -21,6 +21,7 @@
 
     <p class="heading-medium">Sign the agreement now?</p>
     <form action="@Url.Action("CreateAccount")" method="POST">
+        @Html.AntiForgeryToken()
         <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
 
             @if (TempData["userNotAuthorised"] != null)
@@ -31,7 +32,7 @@
             }
 
             <label for="userAuthorised" class="block-label">
-                <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" />
+                <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true"/>
                 I've been authorised by my organisation to sign this agreement
             </label>
         </div>

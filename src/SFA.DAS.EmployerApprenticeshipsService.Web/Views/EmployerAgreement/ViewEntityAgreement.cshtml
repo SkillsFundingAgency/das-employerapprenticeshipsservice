@@ -34,21 +34,22 @@
 
         <p class="heading-medium">Sign the agreement now?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId" />
-            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName" />
-            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode" />
-            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress" />
-            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId"/>
+            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
+            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode"/>
+            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress"/>
+            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate"/>
             <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
 
                 @if (TempData["userNotAuthorised"] != null)
-            {
+                {
                     <span class="error-message" id="error-message-agreement">You need to agree to the terms to sign the agreement.</span>
-           
+
                 }
 
                 <label for="userAuthorised" class="block-label">
-                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty) />
+                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty)/>
                     I've been authorised by my organisation to sign this agreement
                 </label>
             </div>
