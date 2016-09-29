@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Assign
             var request = new CreateNewLegalEntity
             {
-                AccountId = 1,
+                HashedId = "1",
                 Name = "Test Corp",
                 Code = "SD665734",
                 Address = "1, Test Street",
@@ -51,7 +51,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                          AgreementView = new EmployerAgreementView
                          {
                              Id = agreementEntityId,
-                             AccountId = request.AccountId,
                              LegalEntityId = legalEntityId,
                              LegalEntityName = request.Name,
                              LegalEntityCode = request.Code,
@@ -65,7 +64,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(command =>
-            command.AccountId.Equals(request.AccountId) &&
             command.LegalEntity.Name.Equals(request.Name) &&
             command.LegalEntity.Code.Equals(request.Code) &&
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&

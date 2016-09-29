@@ -36,9 +36,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
                 UserRef = "kaka-kakah"
             };
             _teamMembers = new List<TeamMember> { _teamMember };
-            _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId(1, _teamMember.UserRef)).ReturnsAsync(new List<TeamMember>( _teamMembers));
+            _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId("1", _teamMember.UserRef)).ReturnsAsync(new List<TeamMember>( _teamMembers));
             RequestHandler = new GetAccountTeamMembersHandler(RequestValidator.Object,_accountTeamMembersRepository.Object);
-            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", Id = 1};
+            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", HashedId = "1"};
         }
         
         [Test]
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             await RequestHandler.Handle(Query);
 
             //Assert
-            _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId(1, "kaka-kakah"), Times.Once);
+            _accountTeamMembersRepository.Verify(x => x.GetAccountTeamMembersForUserId("1", "kaka-kakah"), Times.Once);
         }
 
         [Test]

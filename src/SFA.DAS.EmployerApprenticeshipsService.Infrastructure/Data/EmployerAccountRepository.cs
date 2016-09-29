@@ -30,6 +30,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
             return result.SingleOrDefault();
         }
+
+        public async Task<Account> GetAccountByHashedId(string hashedId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@HashedId", hashedId, DbType.String);
+
+                return await c.QueryAsync<Account>(
+                    sql: "select a.* from [account].[Account] a where a.HashedId = @HashedId;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+            return result.SingleOrDefault();
+        }
     }
 }
 

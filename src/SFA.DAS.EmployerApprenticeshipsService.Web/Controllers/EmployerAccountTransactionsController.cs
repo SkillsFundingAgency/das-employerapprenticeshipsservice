@@ -7,6 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
@@ -18,7 +19,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
         
-        public async Task<ActionResult> Index(int accountId)
+        [Route("Balance")]
+        public async Task<ActionResult> Index(string accountId)
         {
             var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -26,10 +28,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 return RedirectToAction("Index", "AccessDenied");
             }
+
+            transactionViewResult.Model.Data.HashedId = accountId;
             return View(transactionViewResult.Model);
         }
 
-        public async Task<ActionResult> Detail(int accountId, string itemId)
+        [Route("Balance/{itemId}/Detail")]
+        public async Task<ActionResult> Detail(string accountId, string itemId)
         {
             var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId, OwinWrapper.GetClaimValue(@"sub"));
 

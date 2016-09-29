@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { AccountId = 12345, RoleId = (short)Role.Owner });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { AccountId = 12345, RoleId = (short)Role.Owner });
 
             _validator = new RemovePayeFromAccountCommandValidator(_membershipRepository.Object);
         }
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
                 {
-                    AccountId = 12345,
+                    HashedId = "12345",
                     PayeRef = "123RFD",
                     UserId = "123edds",
                     RemoveScheme = true
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.IsNotEmpty(result.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("AccountId","AccountId has not been supplied"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedId", "HashedId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("PayeRef","PayeRef has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("RemoveScheme", "Please confirm you wish to remove the scheme"), result.ValidationDictionary);
@@ -58,12 +58,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerAndUnauthroizedIsSetOnTheResult()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {AccountId = 12345, RoleId = (short)Role.Transactor});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {AccountId = 12345, RoleId = (short)Role.Transactor});
 
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
             {
-                AccountId = 12345,
+                HashedId = "12345",
                 PayeRef = "123RFD",
                 UserId = "123edds",
                 RemoveScheme = true
@@ -77,12 +77,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public async Task ThenTheUserIsCheckedToSeeIfTheyArePartOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
             {
-                AccountId = 12345,
+                HashedId = "12345",
                 PayeRef = "123RFD",
                 UserId = "123edds",
                 RemoveScheme = true

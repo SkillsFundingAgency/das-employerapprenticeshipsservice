@@ -28,7 +28,6 @@
     </div>  
     <div class="column-one-third ">
         <form action="@Url.Action("Invite")" method="get">
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
             <input class="button nextto-h1" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>
@@ -74,9 +73,9 @@
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <a aria-label="View details for @teamMember.Name"
-                                       - title="View details for @teamMember.Name"
-                                       - href="@Url.Action("Review", new { accountId = Model.Data.AccountId, email = teamMember.Email })">Edit</a>
+                                    <a aria-label="View details for @teamMember.Name" 
+                                       title="View details for @teamMember.Name" 
+                                       href="@Url.Action("Review", new { accountId = Model.Data.HashedId, email = teamMember.Email })">View</a>
                                 </div>
                                 
                             </div>
@@ -93,7 +92,7 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Employer Account Homepage</a></li>
             <li>Manage Team Members</li>
         </ol>
     </div>

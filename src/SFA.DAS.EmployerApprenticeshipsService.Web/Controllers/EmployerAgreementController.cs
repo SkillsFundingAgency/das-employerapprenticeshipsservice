@@ -10,6 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerAgreementController : BaseController
     {
         private readonly EmployerAgreementOrchestrator _orchestrator;
@@ -27,7 +28,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountId)
+        [Route("Agreements")]
+        public async Task<ActionResult> Index(string accountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -45,7 +47,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Add(long accountId)
+        [Route("Agreements/Add")]
+        public ActionResult Add(string accountId)
         {
             var response = new OrchestratorResponse<AddLegalEntityViewModel>
             {
@@ -56,8 +59,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(response);
         }
 
-        [HttpGet]
-        public async Task<ActionResult> View(long agreementid, long accountId)
+		[HttpGet]
+		[Route("Agreements/{agreementid}/View")]
+        public async Task<ActionResult> View(long agreementid, string accountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -74,8 +78,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
+        [Route("Agreements/{agreementid}/Sign")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Sign(long agreementid, string accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
@@ -97,8 +102,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/Add")]
+        public async Task<ActionResult> FindLegalEntity(string accountId, string entityReferenceNumber)
         {
             var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -127,8 +133,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/ViewAgreement")]
+        public async Task<ActionResult> ViewEntityAgreement(string accountId, string name, string code, string address, 
             DateTime incorporated)
         {
             var response = await _orchestrator.Create(accountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
@@ -137,14 +144,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
-            long accountId, string name, string code, string address, DateTime incorporated, 
+            string accountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Name = name,
                 Code = code,
                 Address = address,

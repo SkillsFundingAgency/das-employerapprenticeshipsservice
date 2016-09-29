@@ -21,12 +21,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(int accountId, string lineItemId, string externalUserId)
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, string lineItemId, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery()
             {
-                AccountId = accountId,
-                ExternalUserId = externalUserId
+                HashedId = hashedId,
+                UserId = externalUserId
             });
             if (employerAccountResult.Account == null)
             {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
             {
-                AccountId = accountId
+                AccountId = employerAccountResult.Account.Id
             });
             var latestLineItem = data.Data.Data.FirstOrDefault();
             decimal currentBalance;
@@ -65,19 +65,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<TransactionViewResult> GetAccountTransactions(int accountId, string externalUserId)
+        public async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountQuery
+            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
-                AccountId = accountId,
-                ExternalUserId = externalUserId
+                HashedId = hashedId,
+                UserId = externalUserId
             });
             if (employerAccountResult.Account == null)
             {
                 return new TransactionViewResult();
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = accountId});
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id});
             var latestLineItem = data.Data.Data.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;

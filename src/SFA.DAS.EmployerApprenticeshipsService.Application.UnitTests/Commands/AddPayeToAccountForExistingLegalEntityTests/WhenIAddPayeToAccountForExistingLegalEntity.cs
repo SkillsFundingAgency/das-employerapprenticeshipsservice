@@ -21,6 +21,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private AddPayeToAccountForExistingLegalEntityCommandHandler _handler;
         private AddPayeToAccountForExistingLegalEntityCommand _command;
         private Mock<IMessagePublisher> _messagePublisher;
+        private const long ExpectedAccountId = 454878;
 
         [SetUp]
         public void Setup()
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _command = new AddPayeToAccountForExistingLegalEntityCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 LegalEntityId = 2,
                 EmpRef = "123/ABC",
                 ExternalUserId = Guid.NewGuid().ToString(),
@@ -41,16 +42,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _accountRepository = new Mock<IAccountRepository>(); 
             _membershipRepository = new Mock<IMembershipRepository>();
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(_command.AccountId))
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId))
                 .ReturnsAsync(new List<LegalEntity> { new LegalEntity { Id = 2 } });
 
             _handler = new AddPayeToAccountForExistingLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _employerAgreementRepository.Object, _messagePublisher.Object);
 
             
 
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (short)Role.Owner
+                RoleId = (short)Role.Owner,
+                AccountId = ExpectedAccountId
             });
         }
 
@@ -63,7 +65,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             Assert.That(requestException.ErrorMessages.Count, Is.EqualTo(6));
 
-            Assert.True(requestException.ErrorMessages.ContainsKey("AccountId"));
+            Assert.True(requestException.ErrorMessages.ContainsKey("HashedId"));
             Assert.True(requestException.ErrorMessages.ContainsKey("LegalEntityId"));
             Assert.True(requestException.ErrorMessages.ContainsKey("EmpRef"));
             Assert.True(requestException.ErrorMessages.ContainsKey("ExternalUserId"));
@@ -74,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenIThrowAnExceptionWhenNotAMember()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(null);
 
             var requestException = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
@@ -85,7 +87,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenIThrowAnExceptionWhenMemberNotAnOwner()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (short)Role.Viewer
             });
@@ -99,7 +101,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenIThrowAnExceptionWhenLegalEntityNotLinkedToAccount()
         {
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(_command.AccountId))
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId))
                 .ReturnsAsync(new List<LegalEntity>());
 
             var requestException = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
@@ -115,7 +117,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(_command);
             
             //Assert
-            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(_command.AccountId, _command.LegalEntityId, _command.EmpRef, _command.AccessToken, _command.RefreshToken), Times.Once);
+            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(ExpectedAccountId, _command.LegalEntityId, _command.EmpRef, _command.AccessToken, _command.RefreshToken), Times.Once);
         }
 
         [Test]
@@ -125,7 +127,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(_command);
 
             //Assert
-            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId.Equals(_command.AccountId))));
+            _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId.Equals(ExpectedAccountId))));
         }
     }
 }

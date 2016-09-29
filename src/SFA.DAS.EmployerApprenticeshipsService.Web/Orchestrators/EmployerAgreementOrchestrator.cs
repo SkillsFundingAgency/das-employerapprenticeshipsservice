@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
-            long accountId, string externalUserId, string name, string code, string address, DateTime incorporatedDate)
+            string hashedId, string externalUserId, string name, string code, string address, DateTime incorporatedDate)
         {
             var response = new OrchestratorResponse<EmployerAgreementViewModel>();
 
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 var request = new GetLatestEmployerAgreementTemplateRequest
                 {
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     UserId = externalUserId
                 };
 
@@ -57,7 +57,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        AccountId = accountId,
                         LegalEntityName = name,
                         LegalEntityCode = code,
                         LegalEntityRegisteredAddress = address,
@@ -80,14 +79,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(long accountId,
+        public async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
             string externalUserId)
         {
             try
             {
                 var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     ExternalUserId = externalUserId
                 });
 
@@ -95,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Data = new EmployerAgreementListViewModel
                     {
-                        AccountId = accountId,
+                        HashedId = hashedId,
                         EmployerAgreements = response.EmployerAgreements
                     }
                 };
@@ -110,14 +109,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
-            long agreementid, long accountId, string externalUserId)
+            long agreementid, string hashedId, string externalUserId)
         {
             try
             {
                 var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
                 {
                     AgreementId = agreementid,
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     ExternalUserId = externalUserId
                 });
 
@@ -156,7 +155,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse> SignAgreement(long agreementid, long accountId, string externalUserId,
+        public async Task<OrchestratorResponse> SignAgreement(long agreementid, string hashedId, string externalUserId,
             DateTime signedDate)
         {
             try
@@ -164,7 +163,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
                     AgreementId = agreementid,
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     ExternalUserId = externalUserId,
                     SignedDate = signedDate
                 });
@@ -180,12 +179,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(long accountId,
+        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(string hashedId,
             string companyNumber, string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = hashedId,
                 UserId = userIdClaim
             });
 
@@ -220,7 +219,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 Data = new FindOrganisationViewModel
                 {
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     CompanyNumber = response.CompanyNumber,
                     CompanyName = response.CompanyName,
                     DateOfIncorporation = response.DateOfIncorporation,
@@ -236,7 +235,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest
                 {
-                    AccountId = request.AccountId,
+                    HashedId = request.HashedId,
                     UserId = request.ExternalUserId
                 });
 
@@ -246,7 +245,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            AccountId = request.AccountId,
                             LegalEntityName = request.Name,
                             LegalEntityCode = request.Code,
                             LegalEntityRegisteredAddress = request.Address,
@@ -262,7 +260,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
-                AccountId = request.AccountId,
+                HashedId = request.HashedId,
                 LegalEntity = new LegalEntity
                 {
                     Name = request.Name,

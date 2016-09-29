@@ -186,9 +186,13 @@
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementResponse.cs" />

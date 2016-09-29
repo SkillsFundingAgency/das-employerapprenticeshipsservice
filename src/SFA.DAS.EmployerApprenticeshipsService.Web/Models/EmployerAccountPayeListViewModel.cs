@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class EmployerAccountPayeListViewModel
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
                     
         public List<PayeView> PayeSchemes { get; set; }   
     }

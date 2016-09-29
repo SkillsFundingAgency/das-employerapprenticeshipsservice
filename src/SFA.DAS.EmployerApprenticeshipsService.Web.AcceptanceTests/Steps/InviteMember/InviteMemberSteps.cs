@@ -22,9 +22,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
     public class InviteMemberSteps
     {
         private static IContainer _container;
-        private long _accountId;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
+        private string _hashedAccountId;
 
 
         [BeforeFeature]
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         {
             var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
-            var teamMembers = orcehstrator.GetTeamMembers(_accountId, accountOwnerId).Result;
+            var teamMembers = orcehstrator.GetTeamMembers(_hashedAccountId, accountOwnerId).Result;
 
             var invitedTeamMember = ScenarioContext.Current["InvitedEmailAddress"].ToString();
 
@@ -79,9 +79,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         public void ThenIViewTeamMembers(string canView)
         {
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = (string)ScenarioContext.Current["HashedId"];
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
-            var teamMembers = orcehstrator.GetTeamMembers(accountId, userId).Result;
+            var teamMembers = orcehstrator.GetTeamMembers(hashedId, userId).Result;
             
             if (canView.ToLower().Equals("can"))
             {
@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
-                AccountId = _accountId,
+                HashedId = _hashedAccountId,
                 Email = email,
                 Name = name,
                 Role = Role.Transactor
@@ -113,7 +113,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             var mediator = _container.GetInstance<IMediator>();
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = accountOwnerId }).Result;
 
-            _accountId = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault().Id;
+            var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
+            _hashedAccountId = account.HashedId;
         }
         
     }

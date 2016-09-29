@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -30,32 +30,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
-            _validator = new CreateInvitationCommandValidator();
+            _validator = validator;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
         {
-            var validationResult = _validator.Validate(message);
+            var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            //Verify the caller an owner of the account
-            var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            if(validationResult.IsUnauthorized)
+                throw new UnauthorizedAccessException();
 
-            if (caller == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
-            if ((Role)caller.RoleId != Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
+            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
 
-            //Verify the email is not used by an existing team member for the account
-            var existingTeamMember = await _membershipRepository.Get(message.AccountId, message.Email);
-
-            if (existingTeamMember != null && existingTeamMember.IsUser)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "ExistingMember", "Invitee is already a Member of this team" } });
-
-            //Verify the email is not used by an existing invitation for the account
-            var existingInvitation = await _invitationRepository.Get(message.AccountId, message.Email);
+            ////Verify the email is not used by an existing invitation for the account
+            var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);
 
             if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted && existingInvitation.Status != InvitationStatus.Accepted)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
@@ -64,7 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             {
                 await _invitationRepository.Create(new Invitation
                 {
-                    AccountId = message.AccountId,
+                    AccountId = caller.AccountId,
                     Email = message.Email,
                     Name = message.Name,
                     RoleId = message.RoleId,

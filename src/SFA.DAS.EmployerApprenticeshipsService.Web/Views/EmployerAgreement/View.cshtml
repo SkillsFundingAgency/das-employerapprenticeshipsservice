@@ -28,7 +28,6 @@
         {
             <form action="@Url.Action("Sign")" method="POST">
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId"/>
                 <input type="hidden" id="agreementId" name="agreementId" value="@Model.Data.EmployerAgreement.Id"/>
                 <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
                 <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
@@ -68,8 +67,8 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.EmployerAgreement.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement", new { accountId = @Model.Data.EmployerAgreement.AccountId })">Your Organisations</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your Organisations</a></li>
             <li>Employer agreement</li>
         </ol>
     </div>

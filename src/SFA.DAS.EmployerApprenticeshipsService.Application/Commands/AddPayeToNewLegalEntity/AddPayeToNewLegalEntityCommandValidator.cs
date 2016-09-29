@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
 
             if (validationResult.IsValid())
             {
-                var member = await _membershipRepository.GetCaller(item.AccountId, item.ExternalUserId);
+                var member = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
 
                 if (member == null)
                 {
@@ -52,9 +52,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToN
             {
                 validationResult.AddError(nameof(item.AccessToken), "AccessToken has not been supplied");
             }
-            if (item.AccountId == 0)
+            if (string.IsNullOrEmpty(item.HashedId))
             {
-                validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
+                validationResult.AddError(nameof(item.HashedId), "HashedId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.Empref))
             {

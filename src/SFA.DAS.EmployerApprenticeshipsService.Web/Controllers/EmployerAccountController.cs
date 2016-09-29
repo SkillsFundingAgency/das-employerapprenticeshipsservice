@@ -189,7 +189,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
-            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.AccountId});
+            return RedirectToAction("Index", "EmployerTeam", new {accountId =  response.Data.EmployerAgreement.HashedId});
         }
 
         private string GetUserId()

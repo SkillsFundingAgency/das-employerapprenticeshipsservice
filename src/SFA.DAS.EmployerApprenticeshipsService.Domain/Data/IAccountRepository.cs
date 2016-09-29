@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, bool signAgreement);
         Task<List<PayeView>> GetPayeSchemes(long accountId);
+        Task<List<PayeView>> GetPayeSchemesByHashedId(string hashedId);
         Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef, string accessToken, string refreshToken);
         Task RemovePayeFromAccount(long accountId, string payeRef);
 
@@ -16,5 +17,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 
         Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity);
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
+        Task SetHashedId(string hashedId, long accountId);
     }
 }

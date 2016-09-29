@@ -29,8 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers
             Mediator = new Mock<IMediator>();
 
             _routes = new RouteCollection();
-            RouteConfig.RegisterRoutes(_routes);
-
+            
             _httpRequest = new Mock<HttpRequestBase>();
             _httpRequest.Setup(r => r.UserHostAddress).Returns("123.123.123.123");
             _httpRequest.Setup(r => r.Url).Returns(new Uri("http://test.local",UriKind.Absolute));

@@ -36,7 +36,7 @@
                 <tr>
                     <td>What they can do</td>
                     <td>@RoleStrings.ToWhatTheyCanDo(Model.Role)</td>
-                    <td><a href="@Url.Action("ChangeRole", new { accountId = Model.AccountId, email = Model.Email })">Change</a></td>
+                    <td><a href="@Url.Action("ChangeRole")">Change</a></td>
                 </tr>
             </tbody>
         </table>
@@ -45,7 +45,6 @@
             @Html.AntiForgeryToken()
             <input type="hidden" id="remove" name="remove" value="1" />
             <input type="hidden" id="UserId" name="UserId" value="@Model.Id"/>
-            <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId"/>
             <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
             <button type="submit" class="button" id="remove_team_member">Remove team member</button>
         </form>
@@ -56,7 +55,7 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("View", "EmployerTeam", new {accountId = @Model.AccountId})">Manage Team Members</a></li>
+            <li><a href="@Url.Action("Viewteam", "EmployerTeam")">Manage Team Members</a></li>
         </ol>
     </div>
 }

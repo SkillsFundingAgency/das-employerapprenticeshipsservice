@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("Id","Account Id has not been supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("HashedId","Hashed Id has not been supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("UserId","User Id has not been supplied"),result.ValidationDictionary );
         }
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenFalseIsReturnedIfTheUserIdIsNotAGuid()
         {
             //Act
-            var result = _validator.Validate(new GetAccountLegalEntitiesRequest {Id=12345,UserId = "12345"});
+            var result = _validator.Validate(new GetAccountLegalEntitiesRequest {HashedId="12345",UserId = "12345"});
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public void ThenTrueIsReturnedIfTheFieldsArePopulated()
         {
             //Act
-            var result = _validator.Validate(new GetAccountLegalEntitiesRequest { Id = 12345, UserId = Guid.NewGuid().ToString() });
+            var result = _validator.Validate(new GetAccountLegalEntitiesRequest { HashedId = "12345", UserId = Guid.NewGuid().ToString() });
 
             //Assert
             Assert.IsTrue(result.IsValid());

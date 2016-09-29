@@ -27,14 +27,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
             }
-            if (item.Id == 0)
+            if (string.IsNullOrEmpty(item.HashedId))
             {
-                validationResult.AddError(nameof(item.Id), "AccountId has not been supplied");
+                validationResult.AddError(nameof(item.HashedId), "HashedId has not been supplied");
             }
 
             if (validationResult.IsValid())
             {
-                var member = await _membershipRepository.GetCaller(item.Id, item.ExternalUserId);
+                var member = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
                 if (member == null)
                 {
                     validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");

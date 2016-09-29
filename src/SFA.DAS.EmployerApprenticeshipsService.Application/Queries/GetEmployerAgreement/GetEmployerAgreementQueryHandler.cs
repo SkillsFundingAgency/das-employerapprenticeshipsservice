@@ -7,6 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement
 {
+    //TODO add validator and unit tests
     public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
     {
         private readonly IMembershipRepository _membershipRepository;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 
         public async Task<GetEmployerAgreementResponse> Handle(GetEmployerAgreementRequest message)
         {
-            var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 
             if (agreement == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement could not be found" } });
-            if (agreement.AccountId != message.AccountId)
+            if (agreement.AccountId != caller.AccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement is not linked to this account" } });
 
             return new GetEmployerAgreementResponse

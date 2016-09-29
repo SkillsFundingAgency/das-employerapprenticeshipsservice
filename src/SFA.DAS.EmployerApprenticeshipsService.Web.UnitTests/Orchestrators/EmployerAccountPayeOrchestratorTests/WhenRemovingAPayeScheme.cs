@@ -22,7 +22,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
 
         [SetUp]
         public void Arrange()
@@ -31,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
-            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
+            new Mock<IEmpRefFileBasedService>();
             
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object,_configuration);
         }
@@ -40,16 +39,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheCommandIsCalledForRemovingThePayeScheme()
         {
             //Arrange
-            long accountId = 1234567;
+            var hashedId = "ABV465";
             var userRef = "abv345";
             var payeRef = "123/abc";
-            var model = new RemovePayeScheme {AccountId = accountId,PayeRef = payeRef,UserId = userRef};
+            var model = new RemovePayeScheme {HashedId = hashedId,PayeRef = payeRef,UserId = userRef};
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.AccountId.Equals(accountId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef))), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<RemovePayeFromAccountCommand>(c=>c.HashedId.Equals(hashedId) && c.PayeRef.Equals(payeRef) && c.UserId.Equals(userRef))), Times.Once);
             
         }
 
