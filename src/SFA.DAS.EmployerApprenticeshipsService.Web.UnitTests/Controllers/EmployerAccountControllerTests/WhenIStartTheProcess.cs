@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(actual);
             var actualRedirectResult = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirectResult);
-            Assert.AreEqual("GovernmentGatewayConfirm",actualRedirectResult.RouteValues["Action"]);
+            Assert.AreEqual("SelectEmployer",actualRedirectResult.RouteValues["Action"]);
         }
 
         [Test]

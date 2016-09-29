@@ -36,15 +36,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public ActionResult Index(string understood)
         {
             if (!string.IsNullOrEmpty(understood))
-                return RedirectToAction("GovernmentGatewayConfirm");
+                return RedirectToAction("SelectEmployer");
 
             TempData["notunderstood"] = true;
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult GovernmentGatewayConfirm()
-        {
             return View();
         }
 
