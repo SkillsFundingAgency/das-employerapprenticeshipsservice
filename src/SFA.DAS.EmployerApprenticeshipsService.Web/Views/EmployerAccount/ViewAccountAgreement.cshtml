@@ -32,6 +32,7 @@
         <p>@Model.Data.EmployerAgreement.TemplateText</p>
         <p class="heading-medium">Sign the agreement now?</p>
         <form action="@Url.Action("CreateAccount")" method="POST">
+            @Html.AntiForgeryToken()
             <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
 
                 @if (TempData["userNotAuthorised"] != null)
