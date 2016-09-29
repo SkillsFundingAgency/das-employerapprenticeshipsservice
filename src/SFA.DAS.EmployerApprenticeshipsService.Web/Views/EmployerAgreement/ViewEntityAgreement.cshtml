@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web;
+@using SFA.DAS.EmployerApprenticeshipsService.Web;
 @using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 @model OrchestratorResponse<EmployerAgreementViewModel>
@@ -10,10 +10,11 @@
         {
             <div tabindex="-1" role="group" class="error-summary">
                 <h1 id="error-summary" class="heading-medium error-summary-heading">
-                    There's a problem
+                    Errors to fix
                 </h1>
+                <p>Check the following details:</p>
                 <ul class="error-summary-list">
-                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">You need to agree to the terms to sign the agreement</a></li>
+                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">Authorisation to sign agreement</a></li>
                 </ul>
             </div>
         }
@@ -24,7 +25,7 @@
             until you sign the following agreement.
         </p>
 
-        <p class="heading-medium">@Model.Data.EmployerAgreement.LegalEntityName</p>
+        <h2 class="heading-medium">@Model.Data.EmployerAgreement.LegalEntityName</h2>
         <p>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</p>
 
         <hr />
@@ -34,20 +35,20 @@
 
         <p class="heading-medium">Sign the agreement now?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
-            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName" />
-            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode" />
-            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress" />
-            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
+            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode"/>
+            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress"/>
+            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate"/>
             <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
 
                 @if (TempData["userNotAuthorised"] != null)
-            {
-                    <span class="error-message" id="error-message-agreement">You need to agree to the terms to sign the agreement.</span>
-           
+                {
+                    <span class="error-message" id="error-message-agreement">You must be authorised to sign the agreement</span>
                 }
 
                 <label for="userAuthorised" class="block-label">
-                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty) />
+                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty)/>
                     I've been authorised by my organisation to sign this agreement
                 </label>
             </div>

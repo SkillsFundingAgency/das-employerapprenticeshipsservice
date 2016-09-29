@@ -5,7 +5,7 @@
       <Site name="Web">
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
-          <Binding name="Endpoint1" endpointName="HttpIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
         </Bindings>
       </Site>
     </Sites>
@@ -51,7 +51,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="large">
+  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />

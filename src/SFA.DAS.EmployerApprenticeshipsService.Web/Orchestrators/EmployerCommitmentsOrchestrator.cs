@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResumeApprenticeship;
@@ -15,6 +17,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -54,9 +57,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetNew(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(long accountId, string externalUserId)
         {
-            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
                 HashedId = "",
@@ -71,24 +73,51 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     {
                         AccountId = accountId
                     },
-                    Providers = providers.Providers,
                     LegalEntities = legalEntities.Entites.LegalEntityList
+                }
+            };
+        }
+
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(long accountId, string externalUserId)
+        {
+            var providers = await GetProviders();
+
+            return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+            {
+                Data = new ExtendedCreateCommitmentViewModel
+                {
+                    Commitment = new CreateCommitmentViewModel
+                    {
+                Id = commitment.AccountId,
+                    },
+                    Providers = providers.Providers
+                }
+            };
+        }
+
+        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
+        {
+            var providers = await GetProviders();
+            var legalEntities = await GetActiveLegalEntities(commitment.AccountId, externalUserId);
+
+            var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Id == commitment.LegalEntityId);
+
+            return new OrchestratorResponse<CreateCommitmentViewModel>
+            {
+                Data = new CreateCommitmentViewModel
+                {
+                    AccountId = commitment.AccountId,
+                    LegalEntityId = commitment.LegalEntityId,
+                    LegalEntityName = legalEntity.Name,
+                    ProviderId = commitment.ProviderId,
+                    ProviderName = provider.Name
                 }
             };
         }
 
         public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
-            var providers = await _mediator.SendAsync(new GetProvidersQueryRequest());
-            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                HashedId = "",
-                UserId = externalUserId
-            });
-
-            var provider = providers.Providers.SingleOrDefault(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.SingleOrDefault(x => x.Id == commitment.LegalEntityId);
-
             await _mediator.SendAsync(new CreateCommitmentCommand
             {
                 Commitment = new Commitment
@@ -96,9 +125,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     Name = commitment.Name,
                     EmployerAccountId = commitment.AccountId,
                     LegalEntityId = commitment.LegalEntityId,
-                    LegalEntityName = legalEntity.Name,
+                    LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = provider?.Name
+                    ProviderName = commitment.ProviderName
                 }
             });
         }
@@ -144,6 +173,32 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            await _mediator.SendAsync(new CreateApprenticeshipCommand
+            {
+                AccountId = apprenticeship.AccountId,
+                Apprenticeship = MapFrom(apprenticeship)
+            });
+        }
+
+        public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(long accountId, long commitmentId)
+        {
+            var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
+
+            var apprenticeship = new ApprenticeshipViewModel
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId,
+            };
+
+            return new ExtendedApprenticeshipViewModel
+            {
+                Apprenticeship = apprenticeship,
+                Standards = standards.Standards
+            };
+        }
+
         public async Task SubmitCommitment(long accountId, long commitmentId, string message)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
@@ -174,6 +229,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
+        private async Task<GetProvidersQueryResponse> GetProviders()
+        {
+            return await _mediator.SendAsync(new GetProvidersQueryRequest());
+        }
+
+        private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(long accountId, string externalUserId)
+        {
+            return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                Id = accountId,
+                UserId = externalUserId
+            });
+        }
+
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel
@@ -185,13 +254,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 ULN = apprenticeship.ULN,
                 TrainingId = apprenticeship.TrainingId,
                 Cost = apprenticeship.Cost,
-                StartMonth = apprenticeship.StartDate?.Month,
+                StartMonth = apprenticeship.StartDate.Value.Month,
                 StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate?.Month,
+                EndMonth = apprenticeship.EndDate.Value.Month,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status.ToString(),
+                Status = apprenticeship.Status.GetDescription(),
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
+        }
+
+        private Apprenticeship MapFrom(ApprenticeshipViewModel viewModel)
+        {
+            return new Apprenticeship
+            {
+                Id = viewModel.Id,
+                CommitmentId = viewModel.CommitmentId,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                ULN = viewModel.ULN,
+                TrainingId = viewModel.TrainingId,
+                Cost = viewModel.Cost,
+                StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+            };
+        }
+
+        private DateTime? GetDateTime(int? month, int? year)
+        {
+            if (month.HasValue && year.HasValue)
+                return new DateTime(year.Value, month.Value, 1);
+
+            return null;
         }
     }
 }

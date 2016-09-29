@@ -79,7 +79,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         
         [HttpPost]
         [Route("Agreements/{agreementid}/Sign")]
-        public async Task<ActionResult> Sign(long agreementid, string accountId, string understood, string legalEntityName)
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
@@ -101,6 +102,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
         
         [HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("Agreements/Add")]
         public async Task<ActionResult> FindLegalEntity(string accountId, string entityReferenceNumber)
         {
@@ -131,6 +133,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("Agreements/ViewAgreement")]
         public async Task<ActionResult> ViewEntityAgreement(string accountId, string name, string code, string address, 
             DateTime incorporated)
@@ -141,6 +144,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+		[ValidateAntiForgeryToken]
         [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
             string accountId, string name, string code, string address, DateTime incorporated, 

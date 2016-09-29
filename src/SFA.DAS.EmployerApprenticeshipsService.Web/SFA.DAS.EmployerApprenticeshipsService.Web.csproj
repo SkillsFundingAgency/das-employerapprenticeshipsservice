@@ -312,6 +312,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -332,6 +333,7 @@
     <Compile Include="Models\EmployerAgreementListViewModel.cs" />
     <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
+    <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
     <Compile Include="Models\FindOrganisationViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
@@ -506,7 +508,7 @@
     <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\Create.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
@@ -520,6 +522,9 @@
     <Content Include="Views\EmployerTasks\View.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
+    <Content Include="Views\EmployerCommitments\CreateApprenticeship.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
+    <Content Include="Views\EmployerCommitments\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

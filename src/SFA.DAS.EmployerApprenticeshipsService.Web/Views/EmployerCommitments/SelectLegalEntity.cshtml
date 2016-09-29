@@ -1,0 +1,32 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Create commitment - select legal entity</h1>
+        <hr />
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("SelectLegalEntity")">
+            <div class="form-group">
+                <label class="form-label" for="LegalEntityId">Legal entity</label>
+                    <div class="form-group">
+                        <p>Choose the organisation employing the apprentices.</p>
+                    </div>
+                <select name="LegalEntityId" id="LegalEntityId" class="form-control" aria-label="Legal Entity">
+                    <option value=""></option>
+                    @foreach (var legalEntity in Model.Data.LegalEntities)
+            {
+                        <option value="@legalEntity.Id">@legalEntity.Name</option>
+                    }
+                </select>
+            </div>
+            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.Commitment.AccountId" />
+            <button type="submit" class="button">Next</button>
+        </form>
+    </div>
+</div>

@@ -1,15 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using System.Globalization;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public class ExtendedApprenticeshipViewModel
-    {
-        public ApprenticeshipViewModel Apprenticeship { get; set; }
-        public List<Standard> Standards { get; set; }
-    }
-
-    public class ApprenticeshipViewModel
+    public sealed class ApprenticeshipViewModel
     {
         public long Id { get; set; }
         public long CommitmentId { get; set; }
@@ -20,10 +13,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string TrainingId { get; set; } //standard or framework
         public decimal? Cost { get; set; }
         public int? StartMonth { get; set; }
+
+        public string StartMonthName
+        {
+            get
+            {
+                return StartMonth.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(StartMonth.Value) : string.Empty;
+            }
+        }
+
         public int? StartYear { get; set; }
         public int? EndMonth { get; set; }
+
+        public string EndMonthName
+        {
+            get
+            {
+                return EndMonth.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(EndMonth.Value) : string.Empty;
+            }
+        }
+
         public int? EndYear { get; set; }
         public string Status { get; set; }
         public string AgreementStatus { get; set; }
+
     }
 }
