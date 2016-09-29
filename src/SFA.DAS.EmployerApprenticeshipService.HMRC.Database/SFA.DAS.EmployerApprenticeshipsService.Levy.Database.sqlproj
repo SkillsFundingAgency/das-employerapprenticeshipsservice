@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
-    <None Include="SeedData\PostDeploymentRules.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
   </ItemGroup>
 </Project>
