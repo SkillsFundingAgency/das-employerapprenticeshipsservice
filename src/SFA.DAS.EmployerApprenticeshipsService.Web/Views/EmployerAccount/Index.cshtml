@@ -12,6 +12,18 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
+        @if (TempData["notunderstood"] != null)
+        {
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-message-understand" data-focuses="error-message-understand">Check statement to continue</a></li>
+                </ul>
+            </div>
+        }
         <h1 class="heading-xlarge">What you need</h1>
         <p>To add a levy account you need:</p>
         <ul class="list-bullet">
@@ -24,7 +36,7 @@
                 <div class="form-group  @(TempData?["notunderstood"] != null ? "error" : string.Empty)">
                     @if (TempData["notunderstood"] != null)
                     {
-                        <span class="error-message" id="error-message-understand">Please check the box to continue</span>
+                        <span class="error-message" id="error-message-understand">Check this statement to continue</span>
                     }
                     <label class="block-label" for="understood">
                         <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
