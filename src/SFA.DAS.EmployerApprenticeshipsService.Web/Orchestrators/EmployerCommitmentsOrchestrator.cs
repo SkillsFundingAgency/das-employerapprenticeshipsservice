@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Commitment = new CreateCommitmentViewModel
                     {
-                Id = commitment.AccountId,
+                        AccountId = accountId,
                     },
                     Providers = providers.Providers
                 }
@@ -238,7 +238,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = accountId.ToString(),//TODO
                 UserId = externalUserId
             });
         }
