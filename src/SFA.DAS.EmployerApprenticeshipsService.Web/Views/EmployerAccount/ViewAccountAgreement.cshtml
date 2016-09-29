@@ -1,44 +1,53 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web;
+@using SFA.DAS.EmployerApprenticeshipsService.Web;
 @using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 @model OrchestratorResponse<EmployerAgreementViewModel>
 
 <div class="grid-row">
-    <h1 class="heading-xlarge">Sign agreement</h1>
-    <p>
-        You can't access levy funds and hire an apprentice through @Model.Data.EmployerAgreement.LegalEntityName
-        until you sign the following agreement.
-    </p>
-
-    <p class="heading-medium">@Model.Data.EmployerAgreement.LegalEntityName</p>
-    <p>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</p>
-
-    <hr />
-
     <div class="column-two-thirds">
+        @if (TempData["userNotAuthorised"] != null)
+        {
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">Authorisation to sign agreement</a></li>
+                </ul>
+            </div>
+        }
+
+        <h1 class="heading-xlarge">Sign agreement</h1>
+        <p>
+            You can't access levy funds and hire an apprentice through @Model.Data.EmployerAgreement.LegalEntityName
+            until you sign the following agreement.
+        </p>
+
+        <h2 class="heading-medium">@Model.Data.EmployerAgreement.LegalEntityName</h2>
+        <p>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</p>
+
+        <hr />
+
         <p>@Model.Data.EmployerAgreement.TemplateText</p>
+        <p class="heading-medium">Sign the agreement now?</p>
+        <form action="@Url.Action("CreateAccount")" method="POST">
+            <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
+
+                @if (TempData["userNotAuthorised"] != null)
+                {
+                    <span class="error-message" id="error-message-agreement">You must be authorised to sign the agreement</span>
+                }
+
+                <label for="userAuthorised" class="block-label">
+                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty) />
+                    I've been authorised by my organisation to sign this agreement
+                </label>
+            </div>
+            <div class="form-group">
+                <button class="button" id="signAgreement" type="submit" name="submit" value="Sign">Sign, and add account</button>
+                <button class="button button-link" id="createEntity" type="submit" name="submit" value="DoNotSign">Add account, but don't sign</button>
+            </div>
+        </form>
     </div>
-
-    <p class="heading-medium">Sign the agreement now?</p>
-    <form action="@Url.Action("CreateAccount")" method="POST">
-        @Html.AntiForgeryToken()
-        <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
-
-            @if (TempData["userNotAuthorised"] != null)
-            {
-                <legend>
-                    <span class="error-message">You need to agree to the terms to sign the agreement.</span>
-                </legend>
-            }
-
-            <label for="userAuthorised" class="block-label">
-                <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true"/>
-                I've been authorised by my organisation to sign this agreement
-            </label>
-        </div>
-        <div class="form-group">
-            <button class="button" id="signAgreement" type="submit" name="submit" value="Sign">Sign, and add account</button>
-            <button class="button button-link" id="createEntity" type="submit" name="submit" value="DoNotSign">Add account, but don't sign</button>
-        </div>
-    </form>
 </div>
