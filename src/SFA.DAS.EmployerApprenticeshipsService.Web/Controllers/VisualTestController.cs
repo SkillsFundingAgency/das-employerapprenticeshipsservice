@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var confirmNewPayeScheme = new ConfirmNewPayeScheme()
             {
                 AccessToken = "MyAccessToken",
-                AccountId = 012345679,
+                
                 LegalEntities = new List<LegalEntity>
                         {
                             legalEntity,
@@ -165,7 +165,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var addNewPayeScheme = new AddNewPayeScheme()
             {
                 AccessToken = "MyAccessToken",
-                AccountId = 0123456789,
+                
                 LegalEntities = new List<LegalEntity> { legalEntity, legalEntity, legalEntity },
                 PayeScheme = "mypaye-123",
                 RefreshToken = "refresh-123"

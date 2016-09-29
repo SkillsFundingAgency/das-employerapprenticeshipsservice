@@ -10,7 +10,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
         public ConfirmNewPayeScheme(AddNewPayeScheme model)
         {
-            AccountId = model.AccountId;
             AccessToken = model.AccessToken;
             RefreshToken = model.RefreshToken;
             PayeScheme = model.PayeScheme;

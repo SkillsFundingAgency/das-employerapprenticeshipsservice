@@ -26,6 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
         private const long AccountId = 10;
+        private const string HashedId = "ABC123";
 
         [SetUp]
         public void Arrange()
@@ -62,7 +63,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        AccountId = AccountId
+                        HashedId = HashedId
                     }
                 },
                 Status = HttpStatusCode.OK
@@ -107,7 +108,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(AccountId, result.RouteValues["AccountId"]);
+            Assert.AreEqual(HashedId, result.RouteValues["accountId"]);
         }
     }
 }

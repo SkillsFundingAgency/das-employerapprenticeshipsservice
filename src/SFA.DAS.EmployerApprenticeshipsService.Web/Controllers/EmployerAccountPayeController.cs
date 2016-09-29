@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Schemes/ChooseCompany")]
-        public ActionResult ChooseCompany()
+        public ActionResult ChooseCompany(string accountId)
         {
             return RedirectToAction("GetGateway");
         }
@@ -134,21 +134,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddNewLegalEntity(ConfirmNewPayeScheme model)
+        [Route("Schemes/AddNewLegalEntity")]
+        public ActionResult AddNewLegalEntity(string accountId, ConfirmNewPayeScheme model)
         {
             return View(model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> ChooseExistingLegalEntity(AddNewPayeScheme model)
+        [Route("Schemes/ChooseExistingLegalEntity")]
+        public async Task<ActionResult> ChooseExistingLegalEntity(string accountId, AddNewPayeScheme model)
         {
-            return await ConfirmPayeScheme(model.HashedId);
+            return await ConfirmPayeScheme(model.HashedId,model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/SelectCompany")]
-        public async Task<ActionResult> SelectCompany(ConfirmNewPayeScheme model)
+        public async Task<ActionResult> SelectCompany(string accountId, ConfirmNewPayeScheme model)
         {
 
             var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
@@ -164,7 +166,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/Confirm")]
-        public async Task<ActionResult> Confirm(ConfirmNewPayeScheme model)
+        public async Task<ActionResult> Confirm(string accountId, ConfirmNewPayeScheme model)
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
@@ -190,7 +192,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/RemovePaye")]
-        public async Task<ActionResult> RemovePaye(RemovePayeScheme model)
+        public async Task<ActionResult> RemovePaye(string accountId, RemovePayeScheme model)
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");
 

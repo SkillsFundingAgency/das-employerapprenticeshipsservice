@@ -42,7 +42,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                AccountId = ExpectedAccountId,
                 HashedId = ExpectedHashedId,
                 PayeScheme = ExpectedEmpref,
                 LegalEntityId = 1,
