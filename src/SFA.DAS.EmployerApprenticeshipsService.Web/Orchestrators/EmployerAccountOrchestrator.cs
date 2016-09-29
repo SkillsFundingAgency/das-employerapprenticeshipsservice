@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        AccountId = result.AccountId
+                        HashedId = result.HashedId
                     }
                 },
                 Status = HttpStatusCode.OK

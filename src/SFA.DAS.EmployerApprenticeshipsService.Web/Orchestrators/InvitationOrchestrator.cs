@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     ExternalUserId = externalUserId,
                     Name = model.Name,
                     Email = model.Email,

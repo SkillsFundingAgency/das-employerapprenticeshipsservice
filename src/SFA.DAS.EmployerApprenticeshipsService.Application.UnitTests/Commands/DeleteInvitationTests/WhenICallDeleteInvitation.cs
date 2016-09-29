@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _command = new DeleteInvitationCommand
             {
                 Email = _invitation.Email,
-                AccountId = _invitation.AccountId,
+                HashedId = "1",
                 ExternalUserId = "EXT_USER"
             };
         }
@@ -41,9 +41,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             _invitation.Status = InvitationStatus.Pending;
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Owner
+                RoleId = (int)Role.Owner,
+                AccountId = _invitation.AccountId
             });
 
             await _handler.Handle(_command);
@@ -54,7 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThrowExceptionWhenInvitationNotFound()
         {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(_invitation);
+            _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _command.Email)).ReturnsAsync(_invitation);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
@@ -64,8 +65,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThrowExceptionWhenCallerIsNotAccountOwner()
         {
-            _invitationRepository.Setup(x => x.Get(_command.AccountId, _command.Email)).ReturnsAsync(_invitation);
-            _membershipRepository.Setup(x => x.GetCaller(_command.AccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _command.Email)).ReturnsAsync(_invitation);
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Viewer
             });

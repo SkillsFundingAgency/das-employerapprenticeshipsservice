@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class BeginNewPayeScheme
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
         public bool ValidationFailed { get; set; }
     }
 }

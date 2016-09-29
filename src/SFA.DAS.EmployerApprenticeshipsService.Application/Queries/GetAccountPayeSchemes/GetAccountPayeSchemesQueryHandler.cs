@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountP
     {
         private readonly IAccountRepository _accountRepository;
 
-        //TODO needs validator. And tests.
+        //TODO needs validator. And tests. make sure you cant access someone elses schemes!
 
         public GetAccountPayeSchemesQueryHandler(IAccountRepository accountRepository)
         {
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountP
 
         public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesRequest message)
         {
-            var payeSchemes = await _accountRepository.GetPayeSchemes(message.AccountId);
+            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedId);
 
             return new GetAccountPayeSchemesResponse
             {

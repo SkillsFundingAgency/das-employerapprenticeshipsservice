@@ -9,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
 {
+    //TODO - lots of CTRL C CTRL V here. Refactor!
     [TestFixture]
     public class WhenICallChangeTeamMemberRole
     {
@@ -27,13 +28,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(command.HashedId, command.ExternalUserId)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -54,12 +55,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var callerMembership = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 2,
                 UserId = 1,
                 RoleId = (int)Role.Viewer
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -80,13 +81,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var callerMembership = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 2,
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
-            _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -99,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -107,7 +108,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             var callerMembership = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 2,
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
@@ -119,8 +120,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Role = (Role)callerMembership.RoleId
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
-            _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(userMembership);
+            _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(userMembership);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -133,15 +134,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                AccountId = 1,
+                HashedId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
-                ExternalUserId = Guid.NewGuid().ToString()
+                ExternalUserId = Guid.NewGuid().ToString(),
+                
             };
 
             var callerMembership = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 2,
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
@@ -152,13 +154,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 Id = callerMembership.UserId + 1,
                 Role = (Role)command.RoleId
             };
-
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
-            _membershipRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(userMembership);
+            
+            _membershipRepository.Setup(x => x.GetCaller(command.HashedId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(userMembership);
 
             await _handler.Handle(command);
 
-            _membershipRepository.Verify(x => x.ChangeRole(userMembership.Id, command.AccountId, command.RoleId), Times.Once);
+            _membershipRepository.Verify(x => x.ChangeRole(userMembership.Id, callerMembership.AccountId, command.RoleId), Times.Once);
         }
 
         [Test]

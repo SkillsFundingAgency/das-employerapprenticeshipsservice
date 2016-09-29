@@ -31,11 +31,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
         }
 
-        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedId, string externalUserId)
         {
             var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 ExternalUserId = externalUserId
             });
             
@@ -43,13 +43,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 Data = new EmployerAccountPayeListViewModel
                 {
-                    AccountId = accountId,
+                    HashedId = hashedId,
                     PayeSchemes = response.PayeSchemes
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(long accountId, string code, string redirectUrl, NameValueCollection nameValueCollection)
+        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(string hashedId, string code, string redirectUrl, NameValueCollection nameValueCollection)
         { 
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Data = new AddNewPayeScheme
                     {
-                        AccountId = accountId
+                        HashedId = hashedId
                     },
                     Status = response.Status,
                     FlashMessage = response.FlashMessage
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                Data = new AddNewPayeScheme
             {
                  
-                AccountId = accountId,
+                HashedId = hashedId,
                 PayeScheme = hmrcResponse.Empref,
                 AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
                 RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
@@ -81,14 +81,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(long accountId, string email, string redirectUrl)
+        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(string hashedId, string email, string redirectUrl)
         {
             HttpStatusCode status = HttpStatusCode.OK;
 
             
             var response = await Mediator.SendAsync(new GetMemberRequest
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 Email = email
             });
 
@@ -102,7 +102,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return new OrchestratorResponse<BeginNewPayeScheme>
             {
-                Data = new BeginNewPayeScheme { AccountId = accountId } ,
+                Data = new BeginNewPayeScheme { HashedId = hashedId} ,//TODO
                 Status = status,
                 FlashMessage = new FlashMessageViewModel
                 {
@@ -112,11 +112,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<List<LegalEntity>> GetLegalEntities(long accountId, string userId)
+        public async Task<List<LegalEntity>> GetLegalEntities(string hashedId, string userId)
         {
             var response = await Mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = hashedId,
                 UserId = userId
             });
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new AddPayeToNewLegalEntityCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     AccessToken = model.AccessToken,
                     RefreshToken = model.RefreshToken,
                     LegalEntityCode = model.LegalEntityCode,
@@ -145,7 +145,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     ExternalUserId = userId,
                     EmpRef = model.PayeScheme,
                     LegalEntityId = model.LegalEntityId,
@@ -159,10 +159,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
         {
             var response = await
-                    Mediator.SendAsync(new GetEmployerAccountQuery
+                    Mediator.SendAsync(new GetEmployerAccountHashedQuery()
                     {
-                        AccountId = model.AccountId,
-                        ExternalUserId = model.UserId
+                        HashedId = model.HashedId,
+                        UserId = model.UserId
                     });
 
             model.AccountName = response.Account.Name;
@@ -177,7 +177,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     UserId = model.UserId,
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme

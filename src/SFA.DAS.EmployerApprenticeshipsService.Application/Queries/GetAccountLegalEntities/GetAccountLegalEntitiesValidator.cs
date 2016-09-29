@@ -10,9 +10,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountL
         {
             var validationResult = new ValidationResult();
 
-            if (item.Id == 0)
+            if (string.IsNullOrEmpty(item.HashedId))
             {
-                validationResult.AddError(nameof(item.Id), "Account Id has not been supplied");
+                validationResult.AddError(nameof(item.HashedId), "Hashed Id has not been supplied");
             }
             if (string.IsNullOrWhiteSpace(item.UserId))
             {

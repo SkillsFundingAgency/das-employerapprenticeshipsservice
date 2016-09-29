@@ -16,7 +16,6 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -32,6 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private ConfirmNewPayeScheme _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private const long ExpectedAccountId = 73636363;
+        private const string ExpectedHashedId = "jgdfg786";
         private const string ExpectedEmpref = "123/DFDS";
         private const string ExpectedUserId = "someid";
 
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                AccountId = ExpectedAccountId,
+                HashedId = ExpectedHashedId,
                 PayeScheme = ExpectedEmpref,
                 LegalEntityId = 1,
                 LegalEntityCode = "mycode",
@@ -73,10 +73,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             var expectedUserId = Guid.NewGuid().ToString();
 
             //Act
-            await _employerAccountPayeOrchestrator.GetLegalEntities(ExpectedAccountId, expectedUserId);
+            await _employerAccountPayeOrchestrator.GetLegalEntities(ExpectedHashedId, expectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(c=>c.Id.Equals(ExpectedAccountId) && c.UserId.Equals(expectedUserId))));
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(c=>c.HashedId.Equals(ExpectedHashedId) && c.UserId.Equals(expectedUserId))));
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountForExistingLegalEntityCommand>(c=>c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityId.Equals(1))),Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountForExistingLegalEntityCommand>(c=>c.HashedId.Equals(ExpectedHashedId) && c.EmpRef.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityId.Equals(1))),Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToNewLegalEntityCommand>()), Times.Never);
         }
 
@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToNewLegalEntityCommand>(c => c.AccountId.Equals(ExpectedAccountId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityCode.Equals(_model.LegalEntityCode))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToNewLegalEntityCommand>(c => c.HashedId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityCode.Equals(_model.LegalEntityCode))), Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToAccountForExistingLegalEntityCommand>()), Times.Never);
         }
 
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
 
             //Act
-            await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
+            await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1"))), Times.Once);
@@ -126,7 +126,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
             
             //Act
-            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(1, "1", "", null);
+            var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
             //Assert
             Assert.IsEmpty(actual.Data.PayeScheme);
@@ -138,7 +138,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheLoggedInUserIsCheckedToMakeSureThatTheyAreAnOwner()
         {
             //Act
-            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId, "");
+            await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId, "");
 
             //assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Once);
@@ -151,7 +151,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>())).ReturnsAsync(new GetMemberResponse {TeamMember = new TeamMember {Role=Role.Viewer} });
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedAccountId, ExpectedUserId,"");
+            var actual = await _employerAccountPayeOrchestrator.CheckUserIsOwner(ExpectedHashedId, ExpectedUserId,"");
 
             //act
             Assert.IsAssignableFrom<OrchestratorResponse<BeginNewPayeScheme>>(actual);

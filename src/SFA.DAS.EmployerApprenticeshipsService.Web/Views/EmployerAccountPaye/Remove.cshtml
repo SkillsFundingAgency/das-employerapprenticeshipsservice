@@ -6,10 +6,10 @@
         <h1 class="heading-xlarge">Remove this scheme?</h1>
         <h2 class="heading-medium">@Model.Data.PayeRef</h2>
         <p>The @Model.Data.AccountName levy account will stop receiving funds through this PAYE scheme.</p>
-        <form method="post" action="@Url.Action("RemovePaye")">
+        <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
             @Html.AntiForgeryToken()    
-            <input type="hidden" value="@Model.Data.AccountId" name="AccountId"/>
             <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef"/>
+            <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
 
             <div class="form-group @(Model.Data.Valid ? "" : "error")">
                 @if (!Model.Data.Valid)
@@ -27,7 +27,7 @@
             </div>
            
             <button type="submit" class="button">Continue</button>
-            <a href="@Url.Action("Index","EmployerAccountPaye",new {Model.Data.AccountId})" class="link">Cancel</a>
+            <a href="@Url.Action("Index","EmployerAccountPaye")" class="link">Cancel</a>
         </form>
     </div>
 </div>
@@ -35,8 +35,8 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new {accountId = @Model.Data.AccountId})">PAYE Schemes</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
             <li>Remove PAYE Scheme</li>
         </ol>
     </div>

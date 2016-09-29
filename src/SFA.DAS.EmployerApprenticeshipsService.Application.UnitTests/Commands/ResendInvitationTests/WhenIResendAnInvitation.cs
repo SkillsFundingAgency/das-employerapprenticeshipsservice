@@ -12,6 +12,7 @@ using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ResendInvitationTests
 {
+    //TODO Refactor, lots of CTRL C CTRL V
     [TestFixture]
     public class WhenIResendAnInvitation
     {
@@ -57,18 +58,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                AccountId = 2,
+                HashedId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
             var owner = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 1,
                 UserId = 2,
                 RoleId = (int)Role.Viewer
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
+            _membershipRepository.Setup(x => x.GetCaller(owner.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -83,19 +84,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                AccountId = 2,
+                HashedId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
             var owner = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 1,
                 UserId = 2,
                 RoleId = (int)Role.Owner
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, command.ExternalUserId)).ReturnsAsync(owner);
+            _invitationRepository.Setup(x => x.Get(owner.AccountId, command.Email)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -110,13 +111,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                AccountId = 2,
+                HashedId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
             var owner = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 1,
                 UserId = 2,
                 RoleId = (int)Role.Owner
             };
@@ -124,12 +125,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var invitation = new Invitation
             {
                 Id = 12,
-                AccountId = command.AccountId,
+                AccountId = 1,
                 Status = InvitationStatus.Accepted
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(invitation);
+            _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, command.ExternalUserId)).ReturnsAsync(owner);
+            _invitationRepository.Setup(x => x.Get(owner.AccountId, command.Email)).ReturnsAsync(invitation);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -147,27 +148,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                AccountId = 2,
+                HashedId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
             var owner = new MembershipView
             {
-                AccountId = command.AccountId,
+                AccountId = 1,
                 UserId = 2,
-                RoleId = (int)Role.Owner
+                RoleId = (int)Role.Owner,
+                HashedId = "2"
             };
 
             var invitation = new Invitation
             {
                 Id = invitationId,
-                AccountId = command.AccountId,
+                AccountId = 1,
                 Status = InvitationStatus.Deleted,
                 ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.AccountId, command.ExternalUserId)).ReturnsAsync(owner);
-            _invitationRepository.Setup(x => x.Get(command.AccountId, command.Email)).ReturnsAsync(invitation);
+            _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, command.ExternalUserId)).ReturnsAsync(owner);
+            _invitationRepository.Setup(x => x.Get(owner.AccountId, command.Email)).ReturnsAsync(invitation);
 
             await _handler.Handle(command);
 

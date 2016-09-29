@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountT
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var accounts = await _repository.GetAccountTeamMembersForUserId(message.Id, message.ExternalUserId);
+            var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedId, message.ExternalUserId);
             return new GetAccountTeamMembersResponse {TeamMembers = accounts};
             
         }

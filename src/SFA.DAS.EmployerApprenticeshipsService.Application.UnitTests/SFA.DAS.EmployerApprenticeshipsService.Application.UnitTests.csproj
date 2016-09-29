@@ -92,6 +92,7 @@
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
+    <Compile Include="Commands\CreateInvitationTests\WhenIValidateCreateInvitation.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIProcessNotificationCommand.cs" />
     <Compile Include="Commands\ProcessNotificationTests\WhenIValidateProcessNotificationCommand.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
+    <Compile Include="Commands\RemoveTeamMember\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
@@ -111,6 +113,10 @@
     <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
+    <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
+    <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
+    <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
     <Compile Include="Queries\GetEnglishFractionsUpdateRequired\WhenGettingIfEnglishFractionsUpdateIsRequired.cs" />
     <Compile Include="Queries\GetLatestAccountAgreementTemplateTests\WhenIRequestTheLatestAgreementTemplate.cs" />

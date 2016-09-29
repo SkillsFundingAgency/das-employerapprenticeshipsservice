@@ -11,7 +11,7 @@
 
                 <p>Do you want to associate @Model.Data.PayeScheme with your account?</p>
 
-                <input type="hidden" value="@Model.Data.AccountId" name="AccountId"/>
+                <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
                 <input type="hidden" value="@Model.Data.PayeScheme" name="PayeScheme"/>
                 <input type="hidden" value="@Model.Data.RefreshToken" name="RefreshToken"/>
                 <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
@@ -26,6 +26,6 @@
 
 
 
-        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {accountId = Model.Data.AccountId, confirmPayeVisibility = true})">Search Again</a>
+        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Search Again</a>
     </div>
 </div>

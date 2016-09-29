@@ -9,9 +9,8 @@
         <form method="post" action="@Url.Action("ChooseCompany")">
             
             @Html.AntiForgeryToken()
-
+            <input type="hidden" name="HashedId" value="@Model.HashedId" />
             <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
-            <input type="hidden" value="@Model.AccountId" name="AccountId"/>
             <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
             <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
 

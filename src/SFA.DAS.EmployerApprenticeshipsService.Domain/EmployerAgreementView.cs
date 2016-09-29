@@ -6,6 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
     {
         public long Id { get; set; }
         public long AccountId { get; set; }
+        public string HashedId { get; set; }
         public EmployerAgreementStatus Status { get; set; }
         public string SignedByName { get; set; }
         public DateTime? SignedDate { get; set; }

@@ -36,7 +36,6 @@
         <p class="heading-medium">Sign the agreement now?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
             @Html.AntiForgeryToken()
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.EmployerAgreement.AccountId"/>
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode"/>
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress"/>

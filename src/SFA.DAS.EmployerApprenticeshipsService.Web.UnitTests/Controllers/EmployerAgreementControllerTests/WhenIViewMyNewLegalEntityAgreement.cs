@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             const string entityCode = "1234";
             const string entityAddress = "Test street";
             var entityIncorporated = DateTime.Now;
-            const int accountId = 1;
+            const string accountId = "1";
             const string userId = "user";
 
             var expectedResponse = new OrchestratorResponse<EmployerAgreementViewModel>
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 Status = HttpStatusCode.OK
             };
            
-            _orchestrator.Setup(x => x.Create(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+            _orchestrator.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
                 It.IsAny<string>(), It.IsAny<DateTime>())).ReturnsAsync(expectedResponse);
 
             _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(userId);

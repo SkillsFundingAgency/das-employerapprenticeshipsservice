@@ -59,7 +59,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(long accountId, string externalUserId)
         {
-            var legalEntities = await GetActiveLegalEntities(accountId, externalUserId);
+            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            {
+                HashedId = "",
+                UserId = externalUserId
+            });
 
             return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
             {
@@ -84,7 +88,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Commitment = new CreateCommitmentViewModel
                     {
-                        AccountId = accountId
+                        AccountId = accountId,
                     },
                     Providers = providers.Providers
                 }
@@ -234,7 +238,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                Id = accountId,
+                HashedId = accountId.ToString(),//TODO
                 UserId = externalUserId
             });
         }

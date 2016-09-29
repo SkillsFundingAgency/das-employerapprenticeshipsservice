@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountE
 {
     public class GetAccountEmployerAgreementsRequest : IAsyncRequest<GetAccountEmployerAgreementsResponse>
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
         public string ExternalUserId { get; set; }
     }
 }

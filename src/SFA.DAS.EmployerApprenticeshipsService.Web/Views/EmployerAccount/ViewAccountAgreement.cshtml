@@ -41,7 +41,7 @@
                 }
 
                 <label for="userAuthorised" class="block-label">
-                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty) />
+                    <input class="checkbox" id="userAuthorised" name="userIsAuthorisedToSign" type="checkbox" value="true" @(TempData?["userNotAuthorised"] != null ? "aria-describedby=\"error-message-agreement\"" : string.Empty)/>
                     I've been authorised by my organisation to sign this agreement
                 </label>
             </div>

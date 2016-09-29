@@ -9,8 +9,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeam
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId == 0)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+            if (string.IsNullOrEmpty(item.HashedId))
+                validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Email", "No Email supplied");

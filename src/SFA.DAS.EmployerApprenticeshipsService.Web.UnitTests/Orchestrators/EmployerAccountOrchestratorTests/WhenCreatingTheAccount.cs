@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
-       
+
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -31,11 +31,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             _cookieService = new Mock<ICookieService>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object,_cookieService.Object, _configuration);
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
-                         AccountId = 10
+                         HashedId = "ABS10"
                      });
         }
 
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 UserId = Guid.NewGuid().ToString(),
                 EmployerRef = "123ADFC",
                 CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016,10,30),
+                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
                 CompanyRegisteredAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
@@ -61,8 +61,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             await _employerAccountOrchestrator.CreateAccount(model);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<CreateAccountCommand>(
-                        c=>c.AccessToken.Equals(model.AccessToken) 
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
+                        c => c.AccessToken.Equals(model.AccessToken)
                         && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
                         && c.CompanyName.Equals(model.CompanyName)
                         && c.CompanyNumber.Equals(model.CompanyNumber)
@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                      });
 
             //Act
-           var result = await _employerAccountOrchestrator.CreateAccount(model);
+            var result = await _employerAccountOrchestrator.CreateAccount(model);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()), Times.Once);
@@ -157,15 +157,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.SignAgreement.Equals(true)
                     )));
         }
-          [Test]
+        [Test]
         public async Task ThenIShouldGetBackTheNewAccountId()
         {
             //Assign
-            const long accountId = 10;
+            const string hashedId = "1AFGG0";
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                 .ReturnsAsync(new CreateAccountCommandResponse()
                 {
-                    AccountId = accountId
+                    HashedId = hashedId
                 });
 
             //Act
@@ -176,8 +176,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             });
 
             //Assert
-            Assert.AreEqual(accountId, response.Data?.EmployerAgreement?.AccountId);
+            Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedId);
 
-            }
+        }
     }
 }
