@@ -1,4 +1,4 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
+@using SFA.DAS.EmployerApprenticeshipsService.Domain
 @model SFA.DAS.EmployerApprenticeshipsService.Domain.TeamMember
 
 @{
@@ -39,7 +39,6 @@
             <div class="form-group">
                 <label class="block-label" for="radio3">
                     <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
-                    
                     @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
                 </label>
             </div>
@@ -55,7 +54,7 @@
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.HashedId})">Employer Account Homepage</a></li>
             <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.HashedId })">Manage Team Members</a></li>
-            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.AccountId, email = @Model.Email })">@name</a></li>
+            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.HashedId, email = @Model.Email })">@name</a></li>
             <li>Change Role</li>
         </ol>
     </div>
