@@ -6,19 +6,17 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.WhileList;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
 {
-    public class UserWhiteListService : FileSystemRepository, IUserWhiteList
+    public class UserWhiteListService : IUserWhiteList
     {
         private readonly ICacheProvider _cacheProvider;
         private const string ConfigurationName = "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
-        public UserWhiteListService(ICacheProvider cacheProvider) : base("WhiteList")
+        public UserWhiteListService(ICacheProvider cacheProvider)
         {
             _cacheProvider = cacheProvider;
         }
