@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
         }
 
-        public void CreateCookieData(HttpContextBase context, object data)
+        public virtual void CreateCookieData(HttpContextBase context, object data)
         {
             var json = JsonConvert.SerializeObject(data);
             CookieService.Create(context, CookieName, json, 365);

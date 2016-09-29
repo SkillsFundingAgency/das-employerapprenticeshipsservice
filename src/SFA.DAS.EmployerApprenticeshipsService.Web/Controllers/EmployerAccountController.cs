@@ -57,11 +57,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
                 return View(response);
 
-            return RedirectToAction("VerifyEmployer", response.Data);
+            return RedirectToAction("Gateway", response.Data);
         }
 
         [HttpGet]
-        public ActionResult VerifyEmployer(SelectEmployerViewModel model)
+        public async Task<ActionResult> Gateway(SelectEmployerViewModel model)
         {
             var data = new EmployerAccountData
             {
@@ -71,14 +71,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 RegisteredAddress = model.RegisteredAddress
             };
 
-            _employerAccountOrchestrator.CreateCookieData(HttpContext,data);
-            
-            return View(model);
-        }
+            _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
 
-        [HttpGet]
-        public async Task<ActionResult> Gateway()
-        {
             return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse","EmployerAccount",null,Request.Url.Scheme)));
         }
 
