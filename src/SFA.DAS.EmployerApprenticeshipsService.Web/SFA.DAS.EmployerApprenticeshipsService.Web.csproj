@@ -507,7 +507,7 @@
     <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\Create.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\Edit.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
@@ -522,6 +522,8 @@
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeship.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
+    <Content Include="Views\EmployerCommitments\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Commitments.Api.Client\SFA.DAS.Commitments.Api.Client.csproj">

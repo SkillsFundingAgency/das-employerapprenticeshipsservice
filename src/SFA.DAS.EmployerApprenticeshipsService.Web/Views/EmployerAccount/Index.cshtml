@@ -1,4 +1,4 @@
-﻿@if (TempData.Keys.Contains("ErrorMessage"))
+@if (TempData.Keys.Contains("ErrorMessage"))
 {
     <div class="grid-row">
         <div class="column-full">
@@ -32,6 +32,7 @@
         </ul>
         <p><a href="http://www.gateway.gov.uk/Help/Help.aspx?content=help_more_info_gateway.htm&languageid=0" target="_blank" rel="external">What's Government Gateway?</a></p>
         <form method="POST" action="@Url.Action("Index")">
+            @Html.AntiForgeryToken()
             <h2 class="heading-medium">Check this statement to continue</h2>
                 <div class="form-group  @(TempData?["notunderstood"] != null ? "error" : string.Empty)">
                     @if (TempData["notunderstood"] != null)
