@@ -32,6 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(string understood)
         {
             if (!string.IsNullOrEmpty(understood))
@@ -54,6 +55,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> SelectEmployer(SelectEmployerModel model)
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
@@ -127,6 +129,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ViewAccountAgreement()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
@@ -145,6 +148,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAccount(bool? userIsAuthorisedToSign, string submit)
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);

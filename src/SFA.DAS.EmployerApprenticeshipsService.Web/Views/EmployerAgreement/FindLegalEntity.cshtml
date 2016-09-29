@@ -9,7 +9,8 @@
         </p>
         <p class="heading-medium">Is this the correct organisation?</p>
         <form action="@Url.Action("ViewEntityAgreement")" method="POST">
-            <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="accountId" value="@Model.Data.AccountId"/>
             <input type="hidden" name="name" value="@Model.Data.CompanyName"/>
             <input type="hidden" name="code" value="@Model.Data.CompanyNumber"/>
             <input type="hidden" name="address" value="@Model.Data.RegisteredAddress"/>

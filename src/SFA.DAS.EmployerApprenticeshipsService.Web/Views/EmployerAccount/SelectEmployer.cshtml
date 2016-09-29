@@ -8,6 +8,7 @@
         </p>
             <form method="POST" action="@Url.Action("SelectEmployer")">
                 <div class="form-group">
+                    @Html.AntiForgeryToken()
                     <label class="form-label" for="EmployerRef">Companies House number</label>
                     <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text"
                            aria-required="true"/>

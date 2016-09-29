@@ -58,6 +58,24 @@
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.LevyDeclarationProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.LevyAggregationProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.EAS.Notification.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>     
+      <!-- <ReservedIPs>
+        <ReservedIP name="__rip__" />
+      </ReservedIPs>-->
     </AddressAssignments>
     <LoadBalancers>
       <LoadBalancer name="__ilbname__">
