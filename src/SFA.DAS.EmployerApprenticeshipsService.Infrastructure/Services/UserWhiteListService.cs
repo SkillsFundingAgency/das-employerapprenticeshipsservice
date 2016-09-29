@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return whiteList?.EmailPatterns?.Any(pattern => Regex.IsMatch(email, pattern)) ?? false;
         }
 
-        private UserWhiteListLookUp GetList()
+        public virtual UserWhiteListLookUp GetList()
         {
             var whiteListLookUp = _cacheProvider.Get<UserWhiteListLookUp>(nameof(UserWhiteListLookUp));
 

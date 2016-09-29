@@ -23,10 +23,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
                 .Returns(new FeatureToggleLookup());
 
             _mockFeatureToggleFileBasedService = new Mock<FeatureToggleService>(_cacheProvider.Object);
-            _mockFeatureToggleFileBasedService.Setup(x => x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>())).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem> {new FeatureToggleItem()} });
-            _mockFeatureToggleFileBasedService.Setup(
-                x => x.ReadFileByIdSync<FeatureToggleLookup>(nameof(FeatureToggleLookup)))
-                .Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).CallBase();
             _featureToggleService = _mockFeatureToggleFileBasedService.Object;
         }
 
@@ -38,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
             _featureToggleService.GetFeatures();
 
             //Assert
-            _mockFeatureToggleFileBasedService.Verify(x=>x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>()), Times.Once());
+            _mockFeatureToggleFileBasedService.Verify(x=>x.GetDataFromStorage(), Times.Once());
             _cacheProvider.Verify(x=>x.Get<FeatureToggleLookup>(nameof(FeatureToggleLookup)), Times.Exactly(2));
         }
 
@@ -46,7 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
         public void ThenTheValueIsNotAddedToTheCacheIfNullOrEmpty()
         {
             //Arrange
-            _mockFeatureToggleFileBasedService.Setup(x => x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>())).Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup());
 
             //Act
             _featureToggleService.GetFeatures();

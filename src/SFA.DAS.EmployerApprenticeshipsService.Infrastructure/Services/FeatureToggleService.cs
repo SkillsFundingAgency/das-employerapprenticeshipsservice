@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             _cacheProvider = cacheProvider;
         }
 
-        public FeatureToggleLookup GetFeatures()
+        public virtual FeatureToggleLookup GetFeatures()
         {
 
             var features = _cacheProvider.Get<FeatureToggleLookup>(nameof(FeatureToggleLookup));

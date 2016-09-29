@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
             return configurationRepository;
         }
 
-        protected T GetDataFromStorage()
+        public virtual T GetDataFromStorage()
         {
             var environment = Environment.GetEnvironmentVariable("DASENV");
             if (string.IsNullOrEmpty(environment))
