@@ -147,9 +147,10 @@
     <Compile Include="Entities\LevyAggregationEntity.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
-    <Compile Include="Services\FeatureToggleFileBasedService.cs" />
+    <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\HashingService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
