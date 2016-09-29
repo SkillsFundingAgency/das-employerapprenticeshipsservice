@@ -42,19 +42,19 @@
             <div class="form-group">
                 <label class="block-label" for="radio1">
                     <input id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "") />
-                    Can @(RoleStrings.ToWhatTheyCanDo(Role.Viewer)).
+                    @(RoleStrings.ToWhatTheyCanDo(Role.Viewer)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio2">
                     <input id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "") />
-                    Can @(RoleStrings.ToWhatTheyCanDo(Role.Transactor)).
+                    @(RoleStrings.ToWhatTheyCanDo(Role.Transactor)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio3">
                     <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
-                    Can do @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
+                    @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
                 </label>
             </div>
             <input type="hidden" id="HashedId" name="HashedId" value="@Model.HashedId"/>
