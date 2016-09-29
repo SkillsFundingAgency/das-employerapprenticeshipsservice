@@ -10,13 +10,12 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
-	BEGIN
-	   RAISERROR('Server %s is in development - seeding test data.',10,1,@@servername) WITH NOWAIT
-	   :r .\SeedData.sql
-	END
-ELSE
-	BEGIN
-		RAISERROR('Server %s is managed - seeding referential data only.',10,1,@@servername) WITH NOWAIT
-		:r .\SeedProdData.sql
-	END
+
+IF (NOT EXISTS(SELECT * FROM [levy].[TopUpPercentage] WHERE Id = 1
+	AND DateFrom = '2015-01-01 00:00:00.000'))
+BEGIN 
+	INSERT INTO [levy].[TopUpPercentage]
+	(DateFrom,Amount)
+	VALUES
+	('2015-01-01 00:00:00.000',0.1)
+END 
