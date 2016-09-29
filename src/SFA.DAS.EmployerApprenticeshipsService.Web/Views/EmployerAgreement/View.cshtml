@@ -28,7 +28,7 @@
         {
             <form action="@Url.Action("Sign")" method="POST">
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="agreementId" name="agreementId" value="@Model.Data.EmployerAgreement.Id"/>
+                <input type="hidden" id="HashedAgreementId" name="HashedAgreementId" value="@Model.Data.EmployerAgreement.HashedAgreementId"/>
                 <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
                 <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
                     @if (TempData["notunderstood"] != null)
