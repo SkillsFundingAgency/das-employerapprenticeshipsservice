@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("Agreements/{agreementid}/Sign")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
+		public async Task<ActionResult> Sign(long agreementid, string accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
