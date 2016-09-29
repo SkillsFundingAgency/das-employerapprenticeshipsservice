@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SignEmployerAgreementTests
@@ -17,18 +18,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private SignEmployerAgreementCommandHandler _handler;
         private SignEmployerAgreementCommand _command;
         private MembershipView _owner;
+        private Mock<IHashingService> _hashingService;
+
+        private const long AgreementId = 123433;
 
         [SetUp]
         public void Setup()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
-            _handler = new SignEmployerAgreementCommandHandler(_membershipRepository.Object, _agreementRepository.Object);
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(AgreementId);
+            _handler = new SignEmployerAgreementCommandHandler(_membershipRepository.Object, _agreementRepository.Object, _hashingService.Object);
 
             _command = new SignEmployerAgreementCommand
             {
                 HashedId = "1",
-                AgreementId = 2,
+                HashedAgreementId = "2",
                 ExternalUserId = Guid.NewGuid().ToString(),
                 SignedDate = DateTime.Now
             };
@@ -83,7 +89,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenAgreementNotFoundThrowsExcption()
         {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
                 .ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
@@ -94,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenAgreementIsAlreadySignedThrowsExcption()
         {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
                     Status = EmployerAgreementStatus.Signed
@@ -108,7 +114,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public void ThenAgreementHasExpiredThrowsExcption()
         {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
                     Status = EmployerAgreementStatus.Pending,
@@ -123,7 +129,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         [Test]
         public async Task ThenAgreementIsSigned()
         {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(_command.AgreementId))
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
                     Status = EmployerAgreementStatus.Pending
@@ -131,7 +137,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             await _handler.Handle(_command);
 
-            _agreementRepository.Verify(x => x.SignAgreement(_command.AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}", _command.SignedDate), Times.Once);
+            _agreementRepository.Verify(x => x.SignAgreement(AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}", _command.SignedDate), Times.Once);
         }
     }
 }

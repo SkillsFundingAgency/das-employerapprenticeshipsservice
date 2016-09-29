@@ -49,9 +49,9 @@
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <a aria-label="View Employer Agreement @employerAgreement.Id"
-                                   title="View Employer Agreement @employerAgreement.Id"
-                                   href="@Url.Action("View", new {agreementId = employerAgreement.Id, accountId = Model.Data.HashedId})">
+                                <a aria-label="View Employer Agreement @employerAgreement.HashedAgreementId"
+                                   title="View Employer Agreement @employerAgreement.HashedAgreementId"
+                                   href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
                                     @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
                                 </a>
                             </div>

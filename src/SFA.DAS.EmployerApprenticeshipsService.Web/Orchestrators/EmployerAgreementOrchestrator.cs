@@ -109,13 +109,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
-            long agreementid, string hashedId, string externalUserId)
+            string agreementid, string hashedId, string externalUserId)
         {
             try
             {
                 var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
                 {
-                    AgreementId = agreementid,
+                    HashedAgreementId = agreementid,
                     HashedId = hashedId,
                     ExternalUserId = externalUserId
                 });
@@ -155,14 +155,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse> SignAgreement(long agreementid, string hashedId, string externalUserId,
+        public async Task<OrchestratorResponse> SignAgreement(string agreementid, string hashedId, string externalUserId,
             DateTime signedDate)
         {
             try
             {
                 await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
-                    AgreementId = agreementid,
+                    HashedAgreementId = agreementid,
                     HashedId = hashedId,
                     ExternalUserId = externalUserId,
                     SignedDate = signedDate

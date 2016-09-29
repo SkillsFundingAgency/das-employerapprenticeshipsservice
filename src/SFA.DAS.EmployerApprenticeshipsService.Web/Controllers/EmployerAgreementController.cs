@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
 		[HttpGet]
 		[Route("Agreements/{agreementid}/View")]
-        public async Task<ActionResult> View(long agreementid, string accountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> View(string agreementid, string accountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [Route("Agreements/{agreementid}/Sign")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(long agreementid, string accountId, string understood, string legalEntityName)
+		public async Task<ActionResult> Sign(string agreementid, string accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
