@@ -1,8 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -28,12 +30,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
-                
-                accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
-                accounts.Data.FlashMessage = new FlashMessageViewModel()
+
+                if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
-                    Headline = (string)TempData["successMessage"]
-                };
+                    
+                    accounts.Data.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+
+                }
+                else
+                {
+                    accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
+                    accounts.Data.FlashMessage = new FlashMessageViewModel()
+                    {
+                        Headline = (string)TempData["successMessage"]
+                    };
+                }
+                
 
                 var c = new Constants(_configuration.Identity?.BaseAddress);
                 ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri)}";
@@ -50,7 +62,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View("ServiceLandingPage", model);
         }
-
+        
         [HttpGet]
         public ActionResult RegisterUser()
         {

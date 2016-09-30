@@ -53,6 +53,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var errorResponse = nameValueCollection?["error"];
             if (errorResponse != null)
             {
+                if (nameValueCollection["error_Code"] == "USER_DENIED_AUTHORIZATION" )
+                {
+                    return new OrchestratorResponse<HmrcTokenResponse>
+                    {
+                        Status = HttpStatusCode.NotAcceptable,
+                        FlashMessage = new FlashMessageViewModel
+                        {
+                            Severity = FlashMessageSeverityLevel.Danger,
+                            Message = "You need to grant authority to HMRC to add an account",
+                            
+                        }
+                    };
+                }
                 return new OrchestratorResponse<HmrcTokenResponse>
                 {
                     Status = HttpStatusCode.NotAcceptable,
