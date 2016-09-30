@@ -35,6 +35,9 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
+    </Endpoints>
     <LocalResources>
     </LocalResources>
     <Imports>
@@ -48,6 +51,9 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50122" />
+    </Endpoints>
     <Imports>
     </Imports>
   </WorkerRole>
@@ -59,6 +65,9 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50123" />
+    </Endpoints>
     <Imports>
     </Imports>
   </WorkerRole>
