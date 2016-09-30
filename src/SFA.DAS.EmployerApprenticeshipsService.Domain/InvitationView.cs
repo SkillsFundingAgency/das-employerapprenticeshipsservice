@@ -34,5 +34,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public InvitationStatus Status { get; set; }
         public int InternalUserId { get; set; }
         public Guid ExternalUserId { get; set; }
+        public string HashedId { get; set; }
     }
 }

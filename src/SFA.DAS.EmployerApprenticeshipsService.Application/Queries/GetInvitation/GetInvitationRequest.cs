@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitati
 {
     public class GetInvitationRequest : IAsyncRequest<GetInvitationResponse>
     {
-        public long Id { get; set; }
+        public string Id { get; set; }
     }
 }
