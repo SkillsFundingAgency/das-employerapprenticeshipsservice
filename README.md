@@ -55,3 +55,12 @@ Below is an example of what the file may look like
   ]
 } 
 ```
+
+### Feature Toggle
+
+You can limit areas of the site by adding them to a list, in the controller action format, or having a * to denote all actions within that controller. Below is an example of the config required:
+
+```
+{   "Data": [     {       "Controller": "EmployerTeam",       "Action": "Invite"     }   ] }
+```
+This is added to the configuration table of your local azure storage, with the PartiionKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
