@@ -473,9 +473,7 @@
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Detail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
-    <Content Include="Views\EmployerAccount\VerifyEmployer.cshtml" />
     <Content Include="Views\EmployerAccount\Index.cshtml" />
-    <Content Include="Views\EmployerAccount\GovernmentGatewayConfirm.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
