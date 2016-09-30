@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         {
             _invitationRepository = new Mock<IInvitationRepository>();
             _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new List<InvitationView> {new InvitationView {Id = 3456776} });
+            _invitationRepository.Setup(x => x.Get("user1")).ReturnsAsync(new List<InvitationView> { });
 
             _hashingService = new Mock<IHashingService>();
             _handler = new GetUserInvitationsQueryHandler(_invitationRepository.Object, _hashingService.Object);
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         }
 
         [Test]
-        public void ThenIGetNoInvitations()
+        public void ThenIGetAnEmptyListInTheResponseWhenThereAreNoInvitations()
         {
             var request = new GetUserInvitationsRequest
             {
