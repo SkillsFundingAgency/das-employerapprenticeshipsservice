@@ -2,23 +2,29 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations
 {
     public class GetUserInvitationsQueryHandler : IAsyncRequestHandler<GetUserInvitationsRequest, GetUserInvitationsResponse>
     {
         private readonly IInvitationRepository _invitationRepository;
+        private readonly IHashingService _hashingService;
 
-        public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository)
+        public GetUserInvitationsQueryHandler(IInvitationRepository invitationRepository, IHashingService hashingService)
         {
-            if (invitationRepository == null)
-                throw new ArgumentNullException(nameof(invitationRepository));
             _invitationRepository = invitationRepository;
+            _hashingService = hashingService;
         }
 
         public async Task<GetUserInvitationsResponse> Handle(GetUserInvitationsRequest message)
         {
             var invitations = await _invitationRepository.Get(message.UserId);
+
+            foreach (var invitation in invitations)
+            {
+                invitation.HashedId = _hashingService.HashValue(invitation.Id);
+            }
 
             return new GetUserInvitationsResponse
             {

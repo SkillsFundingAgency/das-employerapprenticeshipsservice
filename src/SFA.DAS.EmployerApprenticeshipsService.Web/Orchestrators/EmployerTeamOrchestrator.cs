@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return MapFrom(response.TeamMember);
         }
 
-        public async Task<InvitationView> GetInvitation(long id)
+        public async Task<InvitationView> GetInvitation(string id)
         {
             var response = await _mediator.SendAsync(new GetInvitationRequest
             {

@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
         {
             var validationResult = new ValidationResult();
 
-            if (item.AgreementId == 0)
+            if (string.IsNullOrEmpty(item.HashedAgreementId))
                 validationResult.AddError("AgreementId", "No AgreementId supplied");
 
             if (string.IsNullOrEmpty(item.HashedId))

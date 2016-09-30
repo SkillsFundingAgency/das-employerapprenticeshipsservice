@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<InvitationView> GetInvitation(long id)
+        public async Task<InvitationView> GetInvitation(string id)
         {
             var response = await _mediator.SendAsync(new GetInvitationRequest
             {

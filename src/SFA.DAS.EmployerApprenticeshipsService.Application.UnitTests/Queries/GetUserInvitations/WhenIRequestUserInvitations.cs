@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUserInvitations
 {
@@ -14,12 +16,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
     {
         private Mock<IInvitationRepository> _invitationRepository;
         private GetUserInvitationsQueryHandler _handler;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Setup()
         {
             _invitationRepository = new Mock<IInvitationRepository>();
-            _handler = new GetUserInvitationsQueryHandler(_invitationRepository.Object);
+            _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new List<InvitationView> {new InvitationView {Id = 3456776} });
+
+            _hashingService = new Mock<IHashingService>();
+            _handler = new GetUserInvitationsQueryHandler(_invitationRepository.Object, _hashingService.Object);
+        }
+
+        [Test]
+        public async Task ThenTheInvitationIdIsHashedByTheHashingService()
+        {
+            //Act
+            await _handler.Handle(new GetUserInvitationsRequest());
+
+            //Assert
+            _hashingService.Verify(x=>x.HashValue(It.IsAny<long>()));
         }
 
         [Test]
@@ -29,9 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             {
                 UserId = "user1"
             };
-
-            _invitationRepository.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(new List<InvitationView>());
-
+            
             var response = _handler.Handle(request);
 
             Assert.That(response.Result.Invitations, Is.EqualTo(new List<InvitationView>()));

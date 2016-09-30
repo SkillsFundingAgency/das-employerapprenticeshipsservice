@@ -19,5 +19,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         public int TemplateId { get; set; }
         public string TemplateText { get; set; }
         public string TemplateRef { get; set; }
+        public string HashedAgreementId { get; set; }
     }
 }
