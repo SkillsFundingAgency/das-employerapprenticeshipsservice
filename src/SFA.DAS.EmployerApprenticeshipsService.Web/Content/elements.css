@@ -264,7 +264,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   padding-bottom: 30px;
 }
 
-@media (min-width: 769px) {
+@media screen and (min-width: 769px) {
   #content {
     padding-bottom: 90px;
   }
@@ -278,7 +278,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   box-sizing: border-box;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .column-quarter,
   .column-one-quarter {
     float: left;
@@ -294,7 +294,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   box-sizing: border-box;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .column-half,
   .column-one-half {
     float: left;
@@ -310,7 +310,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   box-sizing: border-box;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .column-third,
   .column-one-third {
     float: left;
@@ -325,7 +325,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   box-sizing: border-box;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .column-two-thirds {
     float: left;
     width: 66.6666666667%;
@@ -341,7 +341,7 @@ main {
   -webkit-font-smoothing: antialiased;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   main {
     font-size: 19px;
     line-height: 1.3157894737;
@@ -356,7 +356,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .font-xxlarge {
     font-size: 80px;
     line-height: 1;
@@ -371,7 +371,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .font-xlarge {
     font-size: 48px;
     line-height: 1.0416666667;
@@ -386,7 +386,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .font-large {
     font-size: 36px;
     line-height: 1.1111111111;
@@ -401,7 +401,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .font-medium {
     font-size: 24px;
     line-height: 1.25;
@@ -416,7 +416,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and  (min-width: 641px) {
   .font-small {
     font-size: 19px;
     line-height: 1.3157894737;
@@ -431,7 +431,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .font-xsmall {
     font-size: 16px;
     line-height: 1.25;
@@ -446,7 +446,7 @@ main {
   text-transform: none;
 }
 
-@media (min-width: 641px) {
+@media screen and (min-width: 641px) {
   .bold-xxlarge {
     font-size: 80px;
     line-height: 1;

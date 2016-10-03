@@ -14,7 +14,7 @@
             <div class="@viewModel.FlashMessage.SeverityCssClass">
                 @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
                 {
-                    <h1 class="bold-large">@viewModel.FlashMessage.Headline</h1>
+                    <h1 class="@(viewModel.FlashMessage.Severity == FlashMessageSeverityLevel.Error ? "bold-medium" : "bold-large")">@viewModel.FlashMessage.Headline</h1>
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
                 {
@@ -23,6 +23,15 @@
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
                 {
                     <p>@viewModel.FlashMessage.SubMessage</p>
+                }
+                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.RedirectButtonMessage))
+                {
+                    <ul class="error-summary-list">
+                        <li>
+                            <a class="danger" data-focuses="@viewModel.FlashMessage.RedirectButtonClass" href="#@viewModel.FlashMessage.RedirectButtonClass">@viewModel.FlashMessage.RedirectButtonMessage</a>
+                        </li>
+                    </ul>
+
                 }
             </div>
 

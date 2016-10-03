@@ -23,6 +23,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
                 {
                     case FlashMessageSeverityLevel.Success:
                         return "govuk-box-highlight";
+                    case FlashMessageSeverityLevel.Error:
+                        return "error-summary";
                     case FlashMessageSeverityLevel.Danger:
                         return "panel panel-danger";
                     case FlashMessageSeverityLevel.Info:
@@ -35,6 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         }
 
         public string RedirectButtonMessage { get; set; }
+        public string RedirectButtonClass { get; set; }
     }
 
     public enum FlashMessageSeverityLevel
@@ -42,6 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         Success,
         Info,
         Danger,
-        Warning
+        Warning,
+        Error
     }
 }
