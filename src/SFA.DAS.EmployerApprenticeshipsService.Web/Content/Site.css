@@ -108,6 +108,17 @@ a.button-link {
     outline: 3px solid #ffbf47;
 }
 
+.button-add {
+    margin-bottom: 10px;
+}
+
+@media screen and (min-width: 641px) {
+    .button-add {
+        margin: 60px 0 10px;
+        float: right;
+    }
+}
+
 .govuk-box-highlight h1, 
 .govuk-box-highlight p {
     margin-left:auto;
