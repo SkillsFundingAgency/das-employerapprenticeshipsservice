@@ -1999,7 +1999,7 @@ input[type=number] {
 
 .govuk-box-highlight {
   margin: 1em 0 1em 0;
-  padding: 2em 0 1em 0;
+  padding: 2em .5em 1em;
   color: #fff;
   background: #28a197;
   text-align: center;
