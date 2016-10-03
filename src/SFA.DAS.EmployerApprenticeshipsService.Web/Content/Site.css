@@ -16,6 +16,11 @@ button, a.button {
     margin-bottom: 0.75em;
 }
 
+#global-header-bar {
+    background-color: #6f777b;
+    height: 10px;
+}
+
 .phase-banner-beta {
     padding-bottom: 10px;
 }
