@@ -502,7 +502,6 @@
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ErrorConfrimPayeScheme.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
