@@ -113,6 +113,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
         }
 
         [Test]
+        public void ThenWhenThereAreNoFeatureTogglesDefinedTheNormalViewIsReturned()
+        {
+            //Arrange
+            _featureToggle.Setup(x => x.GetFeatures()).Returns((FeatureToggleLookup)null);
+
+            //Act
+            var result = Invoke(() => _controller.TestView());
+
+            //Assert
+            Assert.IsAssignableFrom<ContentResult>(result);
+        }
+
+        [Test]
         public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
         {
             //Assign

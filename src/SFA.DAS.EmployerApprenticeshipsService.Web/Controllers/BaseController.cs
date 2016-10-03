@@ -75,6 +75,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private bool CheckFeatureIsEnabled()
         {
             var features = _featureToggle.GetFeatures();
+            if (features?.Data == null)
+            {
+                return true;
+            }
+
             var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
             var actionName = ControllerContext.RouteData.Values["Action"].ToString();
 
