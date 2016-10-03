@@ -50,7 +50,7 @@
                 <dt>Signed by</dt>
                 <dd>@Model.Data.EmployerAgreement.SignedByName</dd>
                 <dt>Signed date</dt>
-                <dd>@Model.Data.EmployerAgreement.SignedDate.Value.ToLocalTime()</dd>
+                <dd>@(Model.Data.EmployerAgreement.SignedDate?.ToGMTStandardTime().ToGdsFormat() ?? "N/A")</dd>
             </dl>
             if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
             {
