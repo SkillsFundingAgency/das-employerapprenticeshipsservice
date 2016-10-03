@@ -54,6 +54,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
             {
+                response.FlashMessage.RedirectButtonMessage = "Add new scheme";
+                response.FlashMessage.RedirectButtonClass = "addNewPaye";
+                response.FlashMessage.Headline = "PAYE scheme not added";
+                response.FlashMessage.Message = "You need to grant authority to HMRC to add a PAYE scheme.";
+
                 return new OrchestratorResponse<AddNewPayeScheme>
                 {
                     Data = new AddNewPayeScheme
@@ -61,7 +66,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                         HashedId = hashedId
                     },
                     Status = response.Status,
-                    FlashMessage = response.FlashMessage
+                    
+                    FlashMessage = response.FlashMessage,
+                    
                 };
             }
 

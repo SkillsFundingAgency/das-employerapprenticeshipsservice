@@ -31,9 +31,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Schemes")]
-        public async Task<ActionResult> Index(string accountid)
+        public async Task<ActionResult> Index(string accountId)
         {
-            var model = await _employerAccountPayeOrchestrator.Get(accountid, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -84,7 +84,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
             {
                 gatewayResponseModel.Status = HttpStatusCode.OK;
-                return View("ErrorConfrimPayeScheme", gatewayResponseModel);
+
+                var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
+                model.FlashMessage = gatewayResponseModel.FlashMessage;
+
+                return View("Index", model);
             }
             return View(gatewayResponseModel);
         }

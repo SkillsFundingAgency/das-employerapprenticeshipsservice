@@ -12,9 +12,9 @@
         </div>
     </div>
 }
-
 <div class="grid-row">
     <div class="column-one-third pull-right">
+        
         <aside class="sidebar">
             <h3 class="heading-small">Manage your account</h3>
             <ul role="navigation">
@@ -24,6 +24,7 @@
         </aside>
     </div>
     <div class="column-two-thirds">
+       
         <section>
             <h1 class="heading-xlarge">Levy accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
@@ -55,7 +56,7 @@
                         {
                             <div class="responsive-tr" id="list_of_accounts">
                                 <div class="responsive-td">
-                                    <div class="full-width">@account.Name</div>                                
+                                    <div class="full-width">@account.Name</div>
                                 </div>
                                 <div class="responsive-td">
                                     <div class="responsive-inner-caption">What you can do</div>
@@ -67,7 +68,7 @@
                                     <div>
                                         <a aria-label="View transactions for @account.Name"
                                            title="View transactions for @account.Name"
-                                       href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">Open</a>
+                                           href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">Open</a>
                                     </div>
                                     <div class="responsive-inner-caption"></div>
                                 </div>
@@ -86,14 +87,16 @@
             <h2 class="heading-medium">Invitiations</h2>
             @if (Model.Data.Invitations == 0)
             {
-                <p>You currently have <strong class="bold-small">no</strong> invitations to levy accounts. But you can contact your account admin to request an invitation.</p>
+                <p>You currently have <strong class="bold-small">no</strong> invitations to levy accounts. But you can contact your account admin to request an invitation.
+                </p>
             }
             else
             {
                 <p>
                     You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
                 </p>
-                    <p><a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a></p>
+                <p><a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
+                </p>
 
             }
         </section>

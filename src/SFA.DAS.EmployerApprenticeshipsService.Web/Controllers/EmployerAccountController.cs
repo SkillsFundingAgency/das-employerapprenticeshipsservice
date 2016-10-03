@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -82,7 +83,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (response.Status != HttpStatusCode.OK)
             {
                 response.Status = HttpStatusCode.OK;
-                return View("InvalidSummary", response);
+                
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(response.FlashMessage);
+
+                return RedirectToAction("Index","Home");
             }
 
             var email = OwinWrapper.GetClaimValue("email");
