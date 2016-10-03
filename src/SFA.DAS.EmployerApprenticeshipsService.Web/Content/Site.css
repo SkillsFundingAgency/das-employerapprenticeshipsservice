@@ -8,6 +8,11 @@ label.form-label {
 main {
     padding-bottom: 3em;
 }
+
+main { max-width: 960px; margin: 0 15px; }
+@media screen and (min-width: 641px) { main { margin: 0 30px; } }
+@media screen and (min-width: 1020px) { main { margin: 0 auto; } }
+
 a.button {
     text-align: center;
 }
@@ -55,6 +60,10 @@ table {
 .button-start {
     background-image: url("/assets/images/icon-pointer-2x.png");
     background-size: 30px 19px;
+}
+
+html.lte-ie8 .button-start {
+    background-image: url("/assets/images/icon-pointer.png");
 }
 
 .button-link,
