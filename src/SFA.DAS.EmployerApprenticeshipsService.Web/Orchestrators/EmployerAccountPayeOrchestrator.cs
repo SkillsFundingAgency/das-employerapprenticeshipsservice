@@ -56,7 +56,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 response.FlashMessage.RedirectButtonMessage = "Add new scheme";
                 response.FlashMessage.RedirectButtonClass = "addNewPaye";
-                response.FlashMessage.Headline = "Scheme not added";
+                response.FlashMessage.Headline = "PAYE scheme not added";
+                response.FlashMessage.Message = "You need to grant authority to HMRC to add a PAYE scheme.";
 
                 return new OrchestratorResponse<AddNewPayeScheme>
                 {
