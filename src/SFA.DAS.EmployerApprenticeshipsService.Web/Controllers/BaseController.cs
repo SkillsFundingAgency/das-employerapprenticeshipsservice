@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -74,19 +75,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private bool CheckFeatureIsEnabled()
         {
             var features = _featureToggle.GetFeatures();
+            if (features?.Data == null)
+            {
+                return true;
+            }
+
             var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
             var actionName = ControllerContext.RouteData.Values["Action"].ToString();
 
-            var featureToggleItem = features.Data.FirstOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
-            if (featureToggleItem != null)
-            {
-                if (featureToggleItem.Action == "*" || actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return false;
-                }
-            }
+            var featureToggleItems = features.Data.Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
 
-            return true;
+            return featureToggleItems.All(featureToggleItem => featureToggleItem.Action != "*" && !actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase));
         }
 
         protected FlashMessageViewModel GetHomePageSucessMessage()

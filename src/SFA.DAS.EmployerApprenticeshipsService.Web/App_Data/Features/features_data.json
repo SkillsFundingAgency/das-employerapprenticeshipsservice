@@ -1,8 +1,28 @@
 ﻿{
   "Data": [
     {
-      "Controller": "EmployerTeams",
+      "Controller": "EmployerAgreement",
+      "Action": "Add"
+    },
+    {
+      "Controller": "EmployerCommitments",
+      "Action": "*"
+    },
+    {
+      "Controller": "EmployerTeam",
       "Action": "Invite"
+    },
+    {
+      "Controller": "EmployerAccountPaye",
+      "Action": "Add"
+    },
+    {
+      "Controller": "EmployerAccountPaye",
+      "Action": "Remove"
+    },
+    {
+      "Controller": "EmployerAccountPaye",
+      "Action": "Details"
     }
   ]
 }
