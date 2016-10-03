@@ -33,9 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
-                    
-                    accounts.Data.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
-
+                    accounts.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
                 }
                 else
                 {

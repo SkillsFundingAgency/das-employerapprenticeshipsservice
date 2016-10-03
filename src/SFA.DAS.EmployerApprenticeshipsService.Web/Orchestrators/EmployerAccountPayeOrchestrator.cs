@@ -54,6 +54,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
             {
+                response.FlashMessage.RedirectButtonMessage = "Add new scheme";
+                response.FlashMessage.RedirectButtonClass = "addNewPaye";
+                response.FlashMessage.Headline = "Scheme not added";
+
                 return new OrchestratorResponse<AddNewPayeScheme>
                 {
                     Data = new AddNewPayeScheme
@@ -61,7 +65,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                         HashedId = hashedId
                     },
                     Status = response.Status,
-                    FlashMessage = response.FlashMessage
+                    
+                    FlashMessage = response.FlashMessage,
+                    
                 };
             }
 

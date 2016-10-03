@@ -60,9 +60,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                         Status = HttpStatusCode.NotAcceptable,
                         FlashMessage = new FlashMessageViewModel
                         {
-                            Severity = FlashMessageSeverityLevel.Danger,
-                            Message = "You need to grant authority to HMRC to add an account",
-                            
+                            Severity = FlashMessageSeverityLevel.Error,
+                            Headline = "Account not added",
+                            Message = "You need to grant authority to HMRC to complete the process",
+                            RedirectButtonMessage = "Add new account",
+                            RedirectButtonClass = "add_new_account"
                         }
                     };
                 }
