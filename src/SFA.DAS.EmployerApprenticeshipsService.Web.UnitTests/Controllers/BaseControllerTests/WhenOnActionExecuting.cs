@@ -81,7 +81,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseC
                 Assert.AreEqual("FeatureNotEnabled",viewResult.ViewName);
             }
         }
-       
+
+        [Test]
+        public void ThenMultipleActionsAreHandledInAController()
+        {
+            //Arrange
+            _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup
+            {
+                Data = new List<FeatureToggleItem>
+            {
+                new FeatureToggleItem
+                {
+                    Controller = "Test",
+                    Action = "TestView1"
+                },
+                new FeatureToggleItem
+                {
+                    Controller = "Test",
+                    Action = "TestView"
+                }
+            }
+            });
+
+            //Act
+            var result = Invoke(() => _controller.TestView());
+
+            Assert.IsAssignableFrom<ViewResult>(result);
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.AreEqual("FeatureNotEnabled", viewResult.ViewName);
+        }
+
         [Test]
         public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
         {
