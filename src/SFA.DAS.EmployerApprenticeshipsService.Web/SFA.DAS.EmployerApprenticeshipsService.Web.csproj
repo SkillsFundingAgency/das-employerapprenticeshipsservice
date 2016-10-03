@@ -385,6 +385,7 @@
     <Content Include="assets\images\opengraph-image.png" />
     <Content Include="assets\javascripts\govuk-template.js" />
     <Content Include="assets\javascripts\ie.js" />
+    <Content Include="assets\javascripts\respond.min.js" />
     <Content Include="assets\stylesheets\external-links\external-link-24x24.png" />
     <Content Include="assets\stylesheets\external-links\external-link-black-12x12.png" />
     <Content Include="assets\stylesheets\external-links\external-link-black-24x24.png" />
