@@ -12,22 +12,6 @@
         </div>
     </div>
 }
-@if (TempData["FlashMessage"] != null)
-{
-    <div class="grid-row">
-
-        <div tabindex="-1" role="group" class="error-summary">
-            <h1 id="error-summary" class="heading-medium error-summary-heading">
-                Account not added
-            </h1>
-            <p>@Model.Data.FlashMessage.Message</p>
-            <ul class="error-summary-list">
-                <li><a href="#add_new_account" data-focuses="add_new_account">Add new account</a></li>
-            </ul>
-        </div>
-
-    </div>
-}
 <div class="grid-row">
     <div class="column-one-third pull-right">
         
