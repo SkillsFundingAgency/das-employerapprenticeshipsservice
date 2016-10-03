@@ -235,10 +235,6 @@ a.button-link {
 	
 }
 
-/* LAYOUT CONVENIENCES*/
-h1, h2, p {
-    max-width: 630px;
-}
 .rightalign {
     text-align:right;
 }
