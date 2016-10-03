@@ -68,12 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
             {
                 AccountId = accountId
             });
-
-            await _mediator.SendAsync(new CreateEmployerAccountCreatedNotificationCommand
-            {
-                AccountId = accountId
-            });
-
+            
             return new CreateAccountCommandResponse
             {
                 HashedId = hashedAccountId
