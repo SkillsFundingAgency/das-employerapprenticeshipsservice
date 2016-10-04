@@ -4,7 +4,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Create commitment</h1>
+        <h1 class="heading-xlarge">Add an apprentice</h1>
         <hr />
     </div>
 </div>
@@ -12,24 +12,31 @@
     <div class="column-two-thirds">
         <p>Use this service to:</p>
             <ul class="list-bullet">
-                <li>add a new apprentice to your account</li>
+                <li>add one or more apprentices (a cohort) to your account</li>
+                <li>create a link between your levy account and training provider</li>
                 <li>make sure your training provider gets paid</li>
             </ul>
-        <p>You will need to know:</p>
+        <p>You'll need to know:</p>
             <ul class="list-bullet">
-                <li>the name or UKPRN (UK provider reference number) of your training provider</li>
-                <li>who your apprentice will be employed by, if your business has more than one legal entity</li>
+                <li>who your apprentices will be employed by, if your organisation has more than one legal entity</li>
+                <li>the UK Provider Reference Number (UKPRN) of your training provider</li>
              </ul>        
+        <a href="#" class="toggle toggle-closed">What is a UKPRN?</a>
+        <div class="help-content" data-toggle-text="What is a UKPRN?" aria-hidden="false" aria-expanded="true">
+            <h2 class="visuallyhidden">What is a UKPRN?</h2>
+            <p>A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.</p>
+        </div>
+        <p>Once you start, you can choose to add details of each apprentice or allow your training provider to add details for you.</p>
         <form action="@Url.Action("SelectLegalEntity")" method="GET">
             <input type="hidden" name="accountId" value="@Model.AccountId"/>
             <button type="submit" name="commitment" class="button">Start</button>
         </form>
         <h2 class="heading-medium">Before you start</h2>
-        <p>You must make sure you have:</p>
+        <p>You will need:</p>
             <ul class="list-bullet" >
-                <li>an agreement in place with the Skills Funding Agency</li>
-                <li>an agreement in place with your training provider</li>
-                <li>recruited and know the names of your apprentices</li>
+                <li>an employer agreement with the Skills Funding Agency</li>
+                <li>a training contract with your training provider</li>
+                <li>the names of your apprentices</li>
             </ul>
     </div>
 </div>
