@@ -5,7 +5,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Create commitment - select legal entity</h1>
+        <h1 class="heading-xlarge">Choose employer</h1>
         <hr />
     </div>
 </div>
@@ -13,9 +13,9 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("SelectLegalEntity")">
             <div class="form-group">
-                <label class="form-label" for="LegalEntityId">Legal entity</label>
+                <label class="form-label" for="LegalEntityId">Organisation</label>
                     <div class="form-group">
-                        <p>Choose the organisation employing the apprentices.</p>
+                        <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
                     </div>
                 <select name="LegalEntityId" id="LegalEntityId" class="form-control" aria-label="Legal Entity">
                     <option value=""></option>
