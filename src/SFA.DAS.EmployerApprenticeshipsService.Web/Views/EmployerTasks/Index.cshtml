@@ -43,11 +43,7 @@
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <form action="@Url.Action("View")" method="GET">
-                                        <input type="hidden" name="accountId" value="@Model.AccountHashId" />
-                                        <input type="hidden" name="taskId" value="@task.Id" />
-                                        <button type="submit" name="task" class="button">View</button>
-                                    </form>
+                                    <a href="@Url.Action("View", new { taskId = task.Id })" class="button">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
