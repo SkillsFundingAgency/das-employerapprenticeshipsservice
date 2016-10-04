@@ -20,7 +20,7 @@
 
             if (Model.Data.NumberOfTasks > 0)
             {
-                <a href="@Url.Action("Index", "EmployerTasks", new { accountId = Model.Data.AccountId })" class="link">View tasks</a>
+                <a href="@Url.Action("Index", "EmployerTasks", new { hashedAccountId = Model.Data.AccountHashId })" class="link">View tasks</a>
             }
             <hr />
         }
@@ -71,11 +71,7 @@
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <form action="@Url.Action("Details")" method="GET">
-                                    <input type="hidden" name="accountId" value="@commitment.EmployerAccountId"/>
-                                    <input type="hidden" name="commitmentId" value="@commitment.Id"/>
-                                    <button type="submit" name="commitment" class="button">View</button>
-                                </form>
+                                <a href="@Url.Action("Details", new { commitmentId = commitment.Id })" class="button">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
@@ -83,11 +79,7 @@
                             @if (commitment.CanBeSubmitted())
                             {
                                 <div>
-                                    <form action="@Url.Action("Submit")" method="GET">
-                                        <input type="hidden" name="accountId" value="@commitment.EmployerAccountId" />
-                                        <input type="hidden" name="commitmentId" value="@commitment.Id" />
-                                        <button type="submit" name="commitment" class="button">Submit</button>
-                                    </form>
+                                    <a href="@Url.Action("SubmitCommitmentEntry", new { commitmentId = commitment.Id })" class="button">Submit</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             }
@@ -99,16 +91,13 @@
         }
     </div>
 </div>
-<form action="@Url.Action("Inform")" method="GET">
-    <input type="hidden" name="accountId" value="@Model.Data.AccountId" />
-    <button type="submit" name="commitment" class="button">Add new commitment</button>
-</form>
+<a href="@Url.Action("Inform")" class="button">Add new commitment</a>
 
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
             <li>Commitments</li>
         </ol>
     </div>

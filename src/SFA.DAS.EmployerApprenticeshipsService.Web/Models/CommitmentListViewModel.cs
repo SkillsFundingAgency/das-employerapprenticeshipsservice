@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class CommitmentListViewModel
     {
-        public long AccountId { get; set; }
+        public string AccountHashId { get; set; }
         public List<CommitmentListItem> Commitments { get; set; }
         public int NumberOfTasks { get; set; }
     }

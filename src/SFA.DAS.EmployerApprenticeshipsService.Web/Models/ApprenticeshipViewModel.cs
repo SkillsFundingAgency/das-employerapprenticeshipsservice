@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public long Id { get; set; }
         public long CommitmentId { get; set; }
-        public long AccountId { get; set; }
+        public string HashedAccountId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ULN { get; set; }

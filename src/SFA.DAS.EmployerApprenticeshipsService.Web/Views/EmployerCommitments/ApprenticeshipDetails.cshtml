@@ -56,10 +56,6 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.Apprenticeship.AgreementStatus" />
-        <input type="hidden" id="accountId" name="accountId" value="@Model.Apprenticeship.AccountId" />
-        <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
-        <input type="hidden" id="id" name="id" value="@Model.Apprenticeship.Id" />
-        <a href="@Url.Action("Details", new { accountId = Model.Apprenticeship.AccountId, commitmentId = Model.Apprenticeship.CommitmentId })" class="button">Back</a>
+        <a href="@Url.Action("Details")" class="button">Back</a>
     </div>
 </div>

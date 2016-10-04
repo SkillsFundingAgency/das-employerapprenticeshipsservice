@@ -20,25 +20,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TaskListViewModel> GetTasks(long accountId, string userId)
+        public async Task<TaskListViewModel> GetTasks(string accountHashId, string userId)
         {
             var response = await _mediator.SendAsync(new GetTasksQueryRequest
             {
-                AccountId = accountId
+                AccountHashId = accountHashId
             });
 
             return new TaskListViewModel
             {
-                AccountId = accountId,
+                AccountHashId = accountHashId,
                 Tasks = response.Tasks
             };
         }
 
-        public async Task<TaskViewModel> GetTask(long accountId, long taskId, string userId)
+        public async Task<TaskViewModel> GetTask(string accountHashId, long taskId, string userId)
         {
             var response = await _mediator.SendAsync(new GetTaskQueryRequest
             {
-                AccountId = accountId,
+                AccountHashId = accountHashId,
                 TaskId = taskId
             });
 
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return new TaskViewModel
             {
-                AccountId = accountId,
+                AccountHashId = accountHashId,
                 Task = response.Task,
                 LinkId = taskTemplate.CommitmentId,
                 Message = taskTemplate.Message

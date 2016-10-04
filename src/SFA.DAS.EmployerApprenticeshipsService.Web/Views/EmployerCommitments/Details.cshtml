@@ -66,12 +66,7 @@
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <form action="@Url.Action("Edit")" method="GET">
-                                    <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId"/>
-                                    <input type="hidden" name="commitmentId" value="@Model.Commitment.Id"/>
-                                    <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id"/>
-                                    <button type="submit" name="commitment" class="button">View</button>
-                                </form>
+                                <a href="@Url.Action("ApprenticeshipDetails", new { apprenticeshipId = apprenticeship.Id })" class="button">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
@@ -79,10 +74,7 @@
                             @if (apprenticeship.CanBeApproved())
                             {
                                 <div>
-                                    <form action="@Url.Action("ApproveApprenticeship")" method="POST">
-                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
-                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
-                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                    <form action="@Url.Action("ApproveApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
                                         <button type="submit" name="commitment" class="button">Approve</button>
                                     </form>
                                 </div>
@@ -91,10 +83,7 @@
                             @if (apprenticeship.CanBePaused())
                             {
                                 <div>
-                                    <form action="@Url.Action("PauseApprenticeship")" method="GET">
-                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
-                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
-                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                    <form action="@Url.Action("PauseApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
                                         <button type="submit" name="commitment" class="button">Pause</button>
                                     </form>
                                 </div>
@@ -103,10 +92,7 @@
                             @if (apprenticeship.CanBeResumed())
                             {
                                 <div>
-                                    <form action="@Url.Action("ResumeApprenticeship")" method="GET">
-                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
-                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
-                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                    <form action="@Url.Action("ResumeApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
                                         <button type="submit" name="commitment" class="button">Resume</button>
                                     </form>
                                 </div>
@@ -118,10 +104,6 @@
             </div>
         </div>
         }
-        <form action="@Url.Action("CreateApprenticeship")" method="GET">
-            <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
-            <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
-            <button type="submit" name="commitment" class="button">Add apprentice</button>
-        </form>
+        <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add new commitment</a>
     </div>
 </div>

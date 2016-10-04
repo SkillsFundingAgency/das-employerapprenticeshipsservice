@@ -9,7 +9,7 @@
             <p>You're about to send a request to your training provider, asking them to add one or more apprentices to your cohort. Once you send it, they'll be able to see your request in their online account.</p>
             <p>Before you send your request, you can add a note for your training provider to read.</p>
         </div>
-        <form method="POST" action="@Url.Action("Submit")">
+        <form method="POST" action="@Url.Action("SubmitCommitment")">
             <table>
                 <tbody>
                     <tr>
@@ -31,7 +31,7 @@
                           cols="40" rows="10"
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
                 </div>
-                <input type="hidden" id="accountId" name="accountId" value="@Model.SubmitCommitmentModel.AccountId" />
+                <input type="hidden" id="accountId" name="accountId" value="@Model.SubmitCommitmentModel.HashedAccountId" />
                 <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.SubmitCommitmentModel.CommitmentId" />
                 <button type="submit" class="button">Send request to provider</button>
             </form>

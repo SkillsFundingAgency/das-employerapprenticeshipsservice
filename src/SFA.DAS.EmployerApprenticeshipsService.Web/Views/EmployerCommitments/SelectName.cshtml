@@ -25,14 +25,13 @@
                 </tr>
             </tbody>
         </table>
-        <form method="POST" action="@Url.Action("Create")">
+        <form method="POST" action="@Url.Action("CreateCommitment")">
             <div class="form-group">
                 <label class="form-label" for="Name">Name</label>
                     <p>Give this commitment a name, for example a code or reference - your training provider will see this.</p>
                     <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
                        aria-required="true" />
             </div>
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.AccountId" />
             <input type="hidden" id="legalEntityId" name="legalEntityId" value="@Model.Data.LegalEntityId" />
             <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.LegalEntityName" />
             <input type="hidden" id="providerId" name="providerId" value="@Model.Data.ProviderId" />

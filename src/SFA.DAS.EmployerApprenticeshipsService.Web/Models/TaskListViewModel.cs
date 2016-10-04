@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public class TaskListViewModel
     {
-        public long AccountId { get; set; }
+        public string AccountHashId { get; set; }
         public List<Task> Tasks { get; set; }
     }
 }
