@@ -9,6 +9,8 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" />
@@ -22,6 +24,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -34,6 +38,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
