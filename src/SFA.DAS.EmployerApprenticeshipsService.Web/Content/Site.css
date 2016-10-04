@@ -511,3 +511,7 @@ table.top-border {
     padding-bottom: 0;
     overflow: hidden;
 }
+
+.panel-filled {
+    background: #DEE0E2;
+}
