@@ -22,7 +22,7 @@
         <h1 class="heading-xlarge">Employer agreement</h1>
         <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
         <h3>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h3>
-        <p>@Model.Data.EmployerAgreement.TemplateText</p>
+        <p>@Html.Raw(Model.Data.EmployerAgreement.TemplateText)</p>
     
         @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
         {
