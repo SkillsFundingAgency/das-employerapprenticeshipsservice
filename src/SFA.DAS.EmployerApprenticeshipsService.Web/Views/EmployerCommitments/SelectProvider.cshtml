@@ -5,17 +5,18 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Create commitment - select provider</h1>
+        <h1 class="heading-xlarge">Find your training provider</h1>
         <hr />
+        <p>Search for the training provider that will be training your apprentices.</p>
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("SelectProvider")">
             <div class="form-group">
-                <label class="form-label" for="ProviderId">Provider</label>
+                <label class="form-label" for="ProviderId">Search for training provider</label>
                     <div class="form-group">
-                        <p>Search by UKPRN (UK Provider Registration Number) - your provider will give you this information.</p>
+                        <p>Search by UK Provider Reference Number (UKPRN).</p>
                     </div>
                 <select name="ProviderId" id="ProviderId" class="form-control" aria-label="Training Provider">
                     <option value=""></option>
@@ -25,10 +26,15 @@
                     }
                 </select>
             </div>
+            <a href="#" class="toggle toggle-closed">What is a UKPRN?</a>
+            <div class="help-content" data-toggle-text="What is a UKPRN?" aria-hidden="false" aria-expanded="true">
+                <h2 class="visuallyhidden">What is a UKPRN?</h2>
+                <p>A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.</p>
+            </div>
             <input type="hidden" id="accountId" name="accountId" value="@Model.Data.Commitment.AccountId" />
             <input type="hidden" id="legalEntityId" name="legalEntityId" value="@Model.Data.Commitment.LegalEntityId" />
             <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.Commitment.LegalEntityName" />
-            <button type="submit" class="button">Next</button>
+            <button type="submit" class="button">Search</button>
         </form>
     </div>
 </div>
