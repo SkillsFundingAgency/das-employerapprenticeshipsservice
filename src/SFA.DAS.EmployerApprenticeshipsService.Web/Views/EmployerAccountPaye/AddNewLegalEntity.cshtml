@@ -10,8 +10,16 @@
         </p>
         <form method="POST" action="@Url.Action("SelectCompany")">
             @Html.AntiForgeryToken()
-            <div class="form-group">
+            <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                 <label class="form-label" for="EmployerRef">Companies House number</label>
+
+                @if (TempData["companyNumberError"] != null)
+                {
+                    <legend>
+                        <span class="error-message">@TempData["companyNumberError"]</span>
+                    </legend>
+                }
+                
                 <input class="form-control form-control-3-4" id="EmployerRef" name="LegalEntityCode" type="text"
                        aria-required="true"/>
             </div>

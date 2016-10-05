@@ -122,6 +122,7 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
+    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenISelectACompany.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenITryToFindACompany.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewMyNewLegalEntityAgreement.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIAddAnLegalEntityToAnAccount.cs" />
