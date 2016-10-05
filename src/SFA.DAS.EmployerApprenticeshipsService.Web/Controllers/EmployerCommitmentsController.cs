@@ -64,11 +64,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Commitments/Create/Provider")]
-        public async Task<ActionResult> SelectProvider(string hashedAccountId, long legalEntityId, string legalEntityName)
+        public async Task<ActionResult> SelectProvider(string hashedAccountId, string legalEntityCode, string legalEntityName)
         {
             var model = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            model.Data.Commitment.LegalEntityId = legalEntityId;
+            model.Data.Commitment.LegalEntityCode = legalEntityCode;
             model.Data.Commitment.LegalEntityName = legalEntityName;
 
             return View(model);
