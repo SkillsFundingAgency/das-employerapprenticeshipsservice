@@ -5,7 +5,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Create commitment</h1>
+        <h1 class="heading-xlarge">Create cohort</h1>
         <hr />
     </div>
 </div>
@@ -14,12 +14,12 @@
         <table>
             <tbody>
                 <tr>
-                    <th scope="row">Legal entity</th>
+                    <th scope="row">Employer</th>
                     <td>@Model.Data.LegalEntityName</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <th scope="row">Provider</th>
+                    <th scope="row">Training provider</th>
                     <td>@Model.Data.ProviderName</td>
                     <td></td>
                 </tr>
@@ -27,8 +27,8 @@
         </table>
         <form method="POST" action="@Url.Action("CreateCommitment")">
             <div class="form-group">
-                <label class="form-label" for="Name">Name</label>
-                    <p>Give this commitment a name, for example a code or reference - your training provider will see this.</p>
+                <label class="form-label" for="Name">Cohort name</label>
+                    <p>Give your cohort a name to help you to identify it, for example 'September cohort' or 'Coventry apprentices' - your training provider will see this.</p>
                     <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
                        aria-required="true" />
             </div>
