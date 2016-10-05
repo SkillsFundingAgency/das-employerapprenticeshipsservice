@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Commitments.Api.Types;
+﻿using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public sealed class CommitmentViewModel
+    public sealed class CommitmentListItemViewModel
     {
         public string HashedId { get; set; }
         public string Name { get; set; }
@@ -11,6 +10,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string ProviderName { get; set; }
         public CommitmentStatus Status { get; set; }
 
-        public IList<ApprenticeshipViewModel> Apprenticeships { get; set; }
+        public bool CanBeSubmitted()
+        {
+            return Status == CommitmentStatus.Draft;
+        }
     }
 }

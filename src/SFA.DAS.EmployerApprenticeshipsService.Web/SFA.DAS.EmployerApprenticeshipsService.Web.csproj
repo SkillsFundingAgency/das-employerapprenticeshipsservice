@@ -324,6 +324,7 @@
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\CommitmentInformViewModel.cs" />
+    <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
@@ -351,6 +352,7 @@
     <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TaskListItemModel.cs" />
+    <Compile Include="Models\TaskListItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
@@ -511,7 +513,7 @@
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
-    <Content Include="Views\EmployerCommitments\Edit.cshtml" />
+    <Content Include="Views\EmployerCommitments\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
@@ -519,13 +521,13 @@
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
-    <Content Include="Views\EmployerCommitments\Submit.cshtml" />
-    <Content Include="Views\EmployerTasks\View.cshtml" />
+    <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
+    <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
-    <Content Include="Views\EmployerCommitments\CreateApprenticeship.cshtml" />
+    <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
-    <Content Include="Views\EmployerCommitments\Create.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

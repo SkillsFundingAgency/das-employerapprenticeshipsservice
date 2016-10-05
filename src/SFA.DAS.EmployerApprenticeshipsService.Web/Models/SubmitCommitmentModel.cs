@@ -2,8 +2,8 @@
 {
     public sealed class SubmitCommitmentModel
     {
-        public long AccountId { get; set; }
-        public long CommitmentId { get; set; }
+        public string HashedAccountId { get; set; }
+        public string HashedCommitmentId { get; set; }
         public string Message { get; set; }
     }
 }

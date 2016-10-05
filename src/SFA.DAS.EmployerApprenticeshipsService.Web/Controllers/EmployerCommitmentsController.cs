@@ -9,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{hashedaccountId}")]
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
@@ -25,42 +26,47 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountid)
+        [Route("Commitments")]
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetAll(accountid);
+            var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId);
 
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Inform(long accountId)
+        [Route("Commitments/Inform")]
+        public ActionResult Inform(string hashedAccountId)
         {
             var model = new CommitmentInformViewModel
             {
-                AccountId = accountId
+                HashedAccountId = hashedAccountId
             };
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> SelectLegalEntity(long accountId)
+        [Route("Commitments/Create/LegalEntity")]
+        public async Task<ActionResult> SelectLegalEntity(string hashedAccountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetLegalEntities(accountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult SelectLegalEntity(CreateCommitmentModel commitment)
+        [Route("Commitments/Create/LegalEntity")]
+        public ActionResult SetLegalEntity(CreateCommitmentModel commitment)
         {
             return RedirectToAction("SelectProvider", commitment);
         }
 
         [HttpGet]
-        public async Task<ActionResult> SelectProvider(long accountId, long legalEntityId, string legalEntityName)
+        [Route("Commitments/Create/Provider")]
+        public async Task<ActionResult> SelectProvider(string hashedAccountId, long legalEntityId, string legalEntityName)
         {
-            var model = await _employerCommitmentsOrchestrator.GetProviders(accountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             model.Data.Commitment.LegalEntityId = legalEntityId;
             model.Data.Commitment.LegalEntityName = legalEntityName;
@@ -69,13 +75,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult SelectProvider(CreateCommitmentModel commitment)
+        [Route("Commitments/Create/Provider")]
+        public ActionResult SetProvider(CreateCommitmentModel commitment)
         {
-            return RedirectToAction("Create", commitment);
+            return RedirectToAction("SelectName", commitment);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create(CreateCommitmentModel commitment)
+        [Route("Commitments/Create/Name")]
+        public async Task<ActionResult> SelectName(CreateCommitmentModel commitment)
         {
             var model = await _employerCommitmentsOrchestrator.CreateSummary(commitment, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -83,99 +91,110 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateCommitmentViewModel commitment)
+        [Route("Commitments/Create")]
+        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel commitment)
         {
             await _employerCommitmentsOrchestrator.Create(commitment, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("Index", new { accountId = commitment.AccountId });
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public async Task<ActionResult> Details(long accountId, long commitmentId)
+        [Route("Commitments/{hashedCommitmentId}/Details")]
+        public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = await _employerCommitmentsOrchestrator.Get(accountId, commitmentId);
+            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
 
             return View(model);
         }
 
         [HttpGet]
-        public async Task<ActionResult> Edit(long accountId, long commitmentId, long apprenticeshipId)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
+        public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(accountId, commitmentId, apprenticeshipId);
+            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Update(ApprenticeshipViewModel apprenticeship)
+        [Route("UpdateApprenticeship")]
+        public ActionResult UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
-            return RedirectToAction("Index", new { accountId = apprenticeship.AccountId, commitmentId = apprenticeship.CommitmentId });
+            return RedirectToAction("Index", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
         }
 
         [HttpGet]
-        public async Task<ActionResult> Submit(long accountId, long commitmentId)
+        [Route("Commitments/{hashedCommitmentId}/Submit")]
+        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId)
         {
-            var commitment = await _employerCommitmentsOrchestrator.Get(accountId, commitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
             
             var model = new SubmitCommitmentViewModel
             {
                 SubmitCommitmentModel = new SubmitCommitmentModel
                 {
-                    AccountId = accountId,
-                    CommitmentId = commitmentId
+                    HashedAccountId = hashedAccountId,
+                    HashedCommitmentId = hashedCommitmentId
                 },
-                Commitment = commitment.Commitment
+                Commitment = commitment
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Submit(SubmitCommitmentModel model)
+        [Route("Commitments/{hashedCommitmentId}/Submit")]
+        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model.AccountId, model.CommitmentId, model.Message);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message);
 
-            return RedirectToAction("Index", new { accountid = model.AccountId, commitmentId = model.CommitmentId });
+            return RedirectToAction("Index", new { accountid = model.HashedAccountId });
         }
 
         [HttpPost]
-        public async Task<ActionResult> ApproveApprenticeship(ApproveApprenticeshipModel model)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Approve")]
+        public async Task<ActionResult> ApproveApprenticeship([System.Web.Http.FromUri]ApproveApprenticeshipModel model)
         {
             await _employerCommitmentsOrchestrator.ApproveApprenticeship(model);
 
-            return RedirectToAction("Details", new { accountid = model.AccountId, commitmentId = model.CommitmentId });
+            return RedirectToAction("Details", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = model.HashedCommitmentId });
+        }
+
+        [HttpPost]
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Pause")]
+        public async Task<ActionResult> PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            await _employerCommitmentsOrchestrator.PauseApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
+
+            return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
+        }
+
+        [HttpPost]
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Resume")]
+        public async Task<ActionResult> ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            await _employerCommitmentsOrchestrator.ResumeApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
+
+            return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
         }
 
         [HttpGet]
-        public async Task<ActionResult> PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/Create")]
+        public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
         {
-            await _employerCommitmentsOrchestrator.PauseApprenticeship(accountId, commitmentId, apprenticeshipId);
-
-            return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
-        {
-            await _employerCommitmentsOrchestrator.ResumeApprenticeship(accountId, commitmentId, apprenticeshipId);
-
-            return RedirectToAction("Details", new { accountid = accountId, commitmentId = commitmentId });
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> CreateApprenticeship(long accountId, long commitmentId)
-        {
-            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(accountId, commitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
 
             return View(model);
         }
 
         [HttpPost]
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
 
-            return RedirectToAction("Details", new { accountId = apprenticeship.AccountId, commitmentId = apprenticeship.CommitmentId });
+            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
         }
     }
 }

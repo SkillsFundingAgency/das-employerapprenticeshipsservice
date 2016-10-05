@@ -34,9 +34,6 @@
                 <li>the names of your apprentices</li>
             </ul>
         <p>Once you start, you can choose to add details of each apprentice or allow your training provider to add details for you.</p>
-        <form action="@Url.Action("SelectLegalEntity")" method="GET">
-            <input type="hidden" name="accountId" value="@Model.AccountId"/>
-            <button type="submit" name="commitment" class="button">Start</button>
-        </form>
+        <a href="@Url.Action("SelectLegalEntity")" class="button">Start</a>
     </div>
 </div>

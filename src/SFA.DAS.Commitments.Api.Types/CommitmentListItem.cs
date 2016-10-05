@@ -11,10 +11,5 @@
         public long? ProviderId { get; set; }
         public string ProviderName { get; set; }
         public CommitmentStatus Status { get; set; }
-
-        public bool CanBeSubmitted()
-        {
-            return Status == CommitmentStatus.Draft;
-        }
     }
 }
