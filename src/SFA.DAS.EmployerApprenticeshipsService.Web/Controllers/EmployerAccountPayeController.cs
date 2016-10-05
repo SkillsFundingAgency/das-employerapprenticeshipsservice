@@ -156,8 +156,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Schemes/SelectCompany")]
         public async Task<ActionResult> SelectCompany(string accountId, ConfirmNewPayeScheme model)
         {
-
             var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
+
+            if (result.Status == HttpStatusCode.BadRequest)
+            {
+                TempData["companyNumberError"] = "No company found. Please try again";
+
+                return View("AddNewLegalEntity", model);
+            }
 
             model.LegalEntityCode = result.Data.CompanyNumber;
             model.LegalEntityDateOfIncorporation = result.Data.DateOfIncorporation;
