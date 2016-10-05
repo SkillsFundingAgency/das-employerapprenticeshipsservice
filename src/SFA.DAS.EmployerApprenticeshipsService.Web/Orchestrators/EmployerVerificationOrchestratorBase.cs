@@ -116,7 +116,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -128,11 +128,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Logger.Warn("No response from SelectEmployerViewModel");
                 return new OrchestratorResponse<SelectEmployerViewModel>
                 {
-                    FlashMessage = new FlashMessageViewModel()
-                    {
-                        Message = "No companies match the identifier you entered.",
-                        SubMessage = "Please try again."
-                    },
+                    Status = HttpStatusCode.BadRequest,
                     Data = new SelectEmployerViewModel()
                 };
             }

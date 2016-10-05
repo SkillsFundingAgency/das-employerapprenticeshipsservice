@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -55,10 +54,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
-            if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
-                return View(response);
+            if (response.Status == HttpStatusCode.OK)
+                return RedirectToAction("Gateway", response.Data);
+           
+            TempData["companyNumberError"] = "No company found. Please try again";
+            response.Status = HttpStatusCode.OK;
 
-            return RedirectToAction("Gateway", response.Data);
+            return View(response);
         }
 
         [HttpGet]
