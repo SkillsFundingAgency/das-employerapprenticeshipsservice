@@ -109,10 +109,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{apprenticeshipId}/Details")]
-        public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, long apprenticeshipId)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
+        public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, apprenticeshipId);
+            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return View(model);
         }
@@ -153,7 +153,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{apprenticeshipId}/Approve")]
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Approve")]
         public async Task<ActionResult> ApproveApprenticeship([System.Web.Http.FromUri]ApproveApprenticeshipModel model)
         {
             await _employerCommitmentsOrchestrator.ApproveApprenticeship(model);
@@ -162,19 +162,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{apprenticeshipId}/Pause")]
-        public async Task<ActionResult> PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, long apprenticeshipId)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Pause")]
+        public async Task<ActionResult> PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            await _employerCommitmentsOrchestrator.PauseApprenticeship(hashedAccountId, hashedCommitmentId, apprenticeshipId);
+            await _employerCommitmentsOrchestrator.PauseApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
         }
 
         [HttpPost]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{apprenticeshipId}/Resume")]
-        public async Task<ActionResult> ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, long apprenticeshipId)
+        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Resume")]
+        public async Task<ActionResult> ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
-            await _employerCommitmentsOrchestrator.ResumeApprenticeship(hashedAccountId, hashedCommitmentId, apprenticeshipId);
+            await _employerCommitmentsOrchestrator.ResumeApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
         }

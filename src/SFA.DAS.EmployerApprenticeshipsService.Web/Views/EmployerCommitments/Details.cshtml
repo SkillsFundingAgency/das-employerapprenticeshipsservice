@@ -66,7 +66,7 @@
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <a href="@Url.Action("ApprenticeshipDetails", new { apprenticeshipId = apprenticeship.Id })" class="button">View</a>
+                                <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })" class="button">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
@@ -74,7 +74,7 @@
                             @if (apprenticeship.CanBeApproved())
                             {
                                 <div>
-                                    <form action="@Url.Action("ApproveApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
+                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
                                         <button type="submit" name="commitment" class="button">Approve</button>
                                     </form>
                                 </div>
@@ -83,7 +83,7 @@
                             @if (apprenticeship.CanBePaused())
                             {
                                 <div>
-                                    <form action="@Url.Action("PauseApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
+                                    <form action="@Url.Action("PauseApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
                                         <button type="submit" name="commitment" class="button">Pause</button>
                                     </form>
                                 </div>
@@ -92,7 +92,7 @@
                             @if (apprenticeship.CanBeResumed())
                             {
                                 <div>
-                                    <form action="@Url.Action("ResumeApprenticeship", new { apprenticeshipId = apprenticeship.Id })" method="POST">
+                                    <form action="@Url.Action("ResumeApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
                                         <button type="submit" name="commitment" class="button">Resume</button>
                                     </form>
                                 </div>

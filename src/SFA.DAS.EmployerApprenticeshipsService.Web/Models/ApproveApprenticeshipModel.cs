@@ -4,6 +4,6 @@
     {
         public string HashedAccountId { get; set; }
         public string HashedCommitmentId { get; set; }
-        public long ApprenticeshipId { get; set; }
+        public string HashedApprenticeshipId { get; set; }
     }
 }
