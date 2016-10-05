@@ -55,8 +55,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
-            if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
+                TempData["companyNumberError"] = true;
                 return View(response);
+            }
 
             return RedirectToAction("Gateway", response.Data);
         }
