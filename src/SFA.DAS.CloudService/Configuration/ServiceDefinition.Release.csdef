@@ -16,6 +16,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>
@@ -34,6 +36,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50121" />
@@ -50,6 +54,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50122" />
