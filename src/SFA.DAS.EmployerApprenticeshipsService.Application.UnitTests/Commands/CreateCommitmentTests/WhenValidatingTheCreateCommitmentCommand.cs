@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             {
                 Commitment = new Commitment
                 {
-                    LegalEntityId = 1,
+                    LegalEntityCode = "001",
                     LegalEntityName = "Test Legal Entity Name",
                     EmployerAccountId = 2,
                     EmployerAccountName = "Test Account Name"
@@ -52,11 +52,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             Assert.IsFalse(result.IsValid());
         }
 
-        [TestCase(0)]
-        [TestCase(-4)]
-        public void WhenLegalEntityIdIsNotPositiveNumberIsInvalid(long legalEntityId)
+        [TestCase("")]
+        [TestCase("   ")]
+        public void WhenLegalEntityIdIsNotPositiveNumberIsInvalid(string legalEntityId)
         {
-            _validCommand.Commitment.LegalEntityId = legalEntityId;
+            _validCommand.Commitment.LegalEntityCode = legalEntityId;
             var result = _validator.Validate(_validCommand);
 
             Assert.IsFalse(result.IsValid());

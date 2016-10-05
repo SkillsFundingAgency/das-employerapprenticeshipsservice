@@ -107,16 +107,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var legalEntities = await GetActiveLegalEntities(commitment.HashedAccountId, externalUserId);
 
             var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Id == commitment.LegalEntityId);
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(commitment.LegalEntityCode, StringComparison.InvariantCultureIgnoreCase));
 
             return new OrchestratorResponse<CreateCommitmentViewModel>
             {
                 Data = new CreateCommitmentViewModel
                 {
                     HashedAccountId = commitment.HashedAccountId,
-                    LegalEntityId = commitment.LegalEntityId, // TODO: LWA Decode
+                    LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = legalEntity.Name,
-                    ProviderId = commitment.ProviderId, // TODO: LWA Decode
+                    ProviderId = commitment.ProviderId,
                     ProviderName = provider.Name
                 }
             };
@@ -130,9 +130,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Name = commitment.Name,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
-                    LegalEntityId = commitment.LegalEntityId, // TODO: LWA Decode
+                    LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
-                    ProviderId = commitment.ProviderId, // TODO: LWA Decode
+                    ProviderId = commitment.ProviderId,
                     ProviderName = commitment.ProviderName
                 }
             });
