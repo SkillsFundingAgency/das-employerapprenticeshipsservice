@@ -71,7 +71,7 @@
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <a href="@Url.Action("Details", new { commitmentId = commitment.Id })" class="button">View</a>
+                                <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" class="button">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
@@ -79,7 +79,7 @@
                             @if (commitment.CanBeSubmitted())
                             {
                                 <div>
-                                    <a href="@Url.Action("SubmitCommitmentEntry", new { commitmentId = commitment.Id })" class="button">Submit</a>
+                                    <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })" class="button">Submit</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             }

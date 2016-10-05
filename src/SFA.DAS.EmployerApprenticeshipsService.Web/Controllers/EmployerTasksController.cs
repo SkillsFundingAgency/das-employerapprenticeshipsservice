@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedaccountId}")]
+    [RoutePrefix("accounts/{hashedAccountId}")]
     public class EmployerTasksController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
@@ -26,22 +26,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Tasks/List")]
-        public async Task<ActionResult> Index(string hashedaccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
 
-            var response = await _employerTasksOrchestrator.GetTasks(hashedaccountId, userIdClaim);
+            var response = await _employerTasksOrchestrator.GetTasks(hashedAccountId, userIdClaim);
 
             return View(response);
         }
 
         [HttpGet]
         [Route("Tasks/{taskId}")]
-        public async Task<ActionResult> View(string hashedaccountId, long taskId)
+        public async Task<ActionResult> View(string hashedAccountId, long taskId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
 
-            var response = await _employerTasksOrchestrator.GetTask(hashedaccountId, taskId, userIdClaim);
+            var response = await _employerTasksOrchestrator.GetTask(hashedAccountId, taskId, userIdClaim);
 
             return View(response);
         }

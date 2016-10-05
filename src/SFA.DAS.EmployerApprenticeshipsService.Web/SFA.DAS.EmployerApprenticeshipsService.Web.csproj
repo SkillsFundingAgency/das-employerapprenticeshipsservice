@@ -324,6 +324,7 @@
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />
     <Compile Include="Models\CommitmentInformViewModel.cs" />
+    <Compile Include="Models\CommitmentListItemViewModel.cs" />
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />

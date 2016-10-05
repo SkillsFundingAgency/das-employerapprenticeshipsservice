@@ -24,8 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTask
 
         public async Task<GetTaskQueryResponse> Handle(GetTaskQueryRequest message)
         {
-            var accountId = _hashingService.DecodeValue(message.AccountHashId);
-            var assignee = $"EMPLOYER-{accountId}";
+            var assignee = $"EMPLOYER-{message.AccountId}";
 
             var task = await _tasksApi.GetTask(message.TaskId, assignee);
 

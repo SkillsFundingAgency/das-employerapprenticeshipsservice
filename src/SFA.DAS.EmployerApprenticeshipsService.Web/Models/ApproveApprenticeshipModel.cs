@@ -3,7 +3,7 @@
     public sealed class ApproveApprenticeshipModel
     {
         public string HashedAccountId { get; set; }
-        public long CommitmentId { get; set; }
+        public string HashedCommitmentId { get; set; }
         public long ApprenticeshipId { get; set; }
     }
 }
