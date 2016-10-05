@@ -56,6 +56,14 @@
     <Certificates>
     </Certificates>
   </Role>
+  <Role name="SFA.DAS.EAS.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="" />
+      <Setting name="ConfigurationStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
