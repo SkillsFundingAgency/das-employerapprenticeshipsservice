@@ -9,12 +9,12 @@
             <tbody>
                 <tr>
                     <th scope="row">Name</th>
-                    <td>@Model.Task.Name</td>
+                    <td>@Model.Name</td>
                     <td><a href="@Url.Action("Details", "EmployerCommitments", new { hashedCommitmentId = Model.LinkId })" class="link">View commitment</a></td>
                 </tr>
                 <tr>
                     <th scope="row">Created Date</th>
-                    <td>@Model.Task.CreatedOn.ToGdsFormat()</td>
+                    <td>@Model.CreatedOn.ToGdsFormat()</td>
                     <td></td>
                 </tr>
                 <tr>

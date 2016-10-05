@@ -39,11 +39,11 @@
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Status</div>
-                                <div>@task.TaskStatus.ToString()</div>
+                                <div>@task.Status.ToString()</div>
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <a href="@Url.Action("View", new { taskId = task.Id })" class="button">View</a>
+                                    <a href="@Url.Action("ViewTask", new { hashedTaskId = task.HashedTaskId })" class="button">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>

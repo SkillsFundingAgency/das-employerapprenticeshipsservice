@@ -36,12 +36,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Tasks/{taskId}")]
-        public async Task<ActionResult> View(string hashedAccountId, long taskId)
+        [Route("Tasks/{hashedTaskId}")]
+        public async Task<ActionResult> ViewTask(string hashedAccountId, string hashedTaskId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
 
-            var response = await _employerTasksOrchestrator.GetTask(hashedAccountId, taskId, userIdClaim);
+            var response = await _employerTasksOrchestrator.GetTask(hashedAccountId, hashedTaskId, userIdClaim);
 
             return View(response);
         }

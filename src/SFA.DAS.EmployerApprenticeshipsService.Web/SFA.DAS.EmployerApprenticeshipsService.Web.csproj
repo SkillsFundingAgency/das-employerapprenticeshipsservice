@@ -352,6 +352,7 @@
     <Compile Include="Models\SubmitCommitmentModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Models\TaskListItemModel.cs" />
+    <Compile Include="Models\TaskListItemViewModel.cs" />
     <Compile Include="Models\TaskListViewModel.cs" />
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
@@ -521,7 +522,7 @@
     <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
-    <Content Include="Views\EmployerTasks\View.cshtml" />
+    <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />

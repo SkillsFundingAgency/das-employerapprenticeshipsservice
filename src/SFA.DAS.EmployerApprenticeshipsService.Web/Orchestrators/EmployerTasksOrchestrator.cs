@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -36,26 +38,37 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return new TaskListViewModel
             {
                 AccountHashId = accountHashId,
-                Tasks = response.Tasks
+                Tasks = response.Tasks?.Select(x => MapFrom(x)).ToList() ?? new List<TaskListItemViewModel>(0)
             };
         }
 
-        public async Task<TaskViewModel> GetTask(string hashedAccountId, long taskId, string userId)
+        public async Task<TaskViewModel> GetTask(string hashedAccountId, string hashedTaskId, string userId)
         {
             var response = await _mediator.SendAsync(new GetTaskQueryRequest
             {
                 AccountId = _hashingService.DecodeValue(hashedAccountId),
-                TaskId = taskId
+                TaskId = _hashingService.DecodeValue(hashedTaskId)
             });
 
             var taskTemplate = JsonConvert.DeserializeObject<SubmitCommitmentTemplate>(response.Task.Body);
 
             return new TaskViewModel
             {
-                HashedAccountId = hashedAccountId,
-                Task = response.Task,
+                Name = response.Task.Name,
+                CreatedOn = response.Task.CreatedOn,
                 LinkId = _hashingService.HashValue(taskTemplate.CommitmentId),
                 Message = taskTemplate.Message
+            };
+        }
+
+        private TaskListItemViewModel MapFrom(Tasks.Api.Types.Task task)
+        {
+            return new TaskListItemViewModel
+            {
+                HashedTaskId = _hashingService.HashValue(task.Id),
+                Name = task.Name,
+                Status = task.TaskStatus,
+                CreatedOn = task.CreatedOn
             };
         }
     }
