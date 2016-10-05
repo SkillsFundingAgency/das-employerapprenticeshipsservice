@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
-using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ApproveApprenticeshipCommandTests
 {
