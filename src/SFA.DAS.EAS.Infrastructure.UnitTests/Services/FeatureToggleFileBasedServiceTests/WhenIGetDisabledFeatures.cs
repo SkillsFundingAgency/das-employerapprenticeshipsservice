@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
         public void ThenTheValueIsNotAddedToTheCacheIfNullOrEmpty()
         {
             //Arrange
-            _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
 
             //Act
             _featureToggleService.GetFeatures();
