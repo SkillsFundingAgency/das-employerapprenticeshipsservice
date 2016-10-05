@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
                 companies = GetDataFromStorage();
                 if (companies?.Data != null && companies.Data.Any())
                 {
-                    _cacheProvider.Set(nameof(List<EmployerInformation>), companies, new TimeSpan(0, 30, 0));
+                    _cacheProvider.Set(nameof(ManagedCompanyLookup), companies, new TimeSpan(0, 30, 0));
                 }
             }
 
