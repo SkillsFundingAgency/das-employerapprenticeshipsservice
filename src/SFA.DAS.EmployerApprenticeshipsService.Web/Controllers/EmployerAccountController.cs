@@ -122,8 +122,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<ActionResult> ViewAccountAgreement()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
