@@ -33,7 +33,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Purpose</th>
-                    <th>Expires</th>
+                    <th>Expires after</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,7 +44,7 @@
                         and information that we have recieved from HMRC about your PAYE scheme 
                         through the account creation process.
                     </td>
-                    <td>Session</td>
+                    <td>End of session</td>
                 </tr>
             </tbody>
         </table>
@@ -58,12 +58,9 @@
         </p>
 
         <h2 class="heading-large">
-            How cookies are used by SFA
+            Google Analytics
         </h2>
 
-        <h3 class="heading-medium">
-            Measuring website usage (Google Analytics)
-        </h3>
 
         <p>
             We use Google Analytics software to collect information about how you use SFA sites. We do this to help make sure our sites are meeting the needs of its users and to help us make improvements.
@@ -81,7 +78,8 @@
         <p>We don’t collect or store your personal information (for example your name or address) so this information can’t be used to identify who you are. </p>
 
         <div role="note" aria-label="Information" class="panel panel-border-narrow">
-            <p>We don’t allow Google to use or share our analytics data.</p>
+            <p>We don’t allow Google to use or share our analytics data. You can <a rel="external" target="_blank" href="@Model.GoogleUrl">opt out of Google Analytics cookies.</a>
+        </p>
         </div>
 
         <p>Google Analytics sets the following cookies:</p>
@@ -95,7 +93,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Purpose</th>
-                    <th>Expires</th>
+                    <th>Expires after</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,21 +110,19 @@
             </tbody>
         </table>
 
-        <p>
-            You can <a rel="external" target="_blank" href="@Model.GoogleUrl">opt out of Google Analytics cookies.</a>
-        </p>
+        
 
 
         <h3 class="heading-medium">
             Application Insight
         </h3>
-        <p>We use Microsoft Azure Application Insights to monitor and improve the performance</p>
+        <p>We use Microsoft Azure Application Insights to monitor and improve the performance.</p>
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Purpose</th>
-                    <th>Expires</th>
+                    <th>Expires after</th>
                 </tr>
             </thead>
             <tbody>
@@ -151,32 +147,88 @@
         <p>
             Read more about <a rel="external" target="_blank" href="@Model.ApplicationInsightsUrl">Application Insights data retention</a>
         </p>
+        
+             <h3 class="heading-medium">
+            HotJar - user behaviour data
+        </h3>
+         <p>We use HotJar to anonymously monitor user behaviour and give us insight into how to fix user experience problems. </p>
+           <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Purpose</th>
+                    <th>Expires after</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>_hjClosedSurveyInvites</td>
+                    <td>
+                        This cookie is set once a visitor interacts with a Survey invitation modal popup. It is used to ensure that the same invite does not re-appear if it has already been shown.
+                    </td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>_hjDonePolls</td>
+                    <td>
+                        This cookie is set once a visitor completes a poll using the Feedback Poll widget. It is used to ensure that the same poll does not re-appear if it has already been filled in.
+                    </td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>_hjMinimizedPolls</td>
+                    <td>
+This cookie is set once a visitor minimizes a Feedback Poll widget. It is used to ensure that the widget stays minimizes when the visitor navigates through your site.                    </td>
+                    <td>1 year</td>
+                </tr>
+                 <tr>
+                    <td>_hjDoneTestersWidgets</td>
+                    <td>
+                        This cookie is set once a visitor submits their information in the Recruit User Testers widget. It is used to ensure that the same form does not re-appear if it has already been filled in. 
+                    </td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>_hjMinimizedTestersWidgets</td>
+                    <td>
+This cookie is set once a visitor minimizes a Recruit User Testers widget. It is used to ensure that the widget stays minimizes when the visitor navigates through your site.                    </td>
+                    <td>1 year</td>
+                </tr>
+                <tr>
+                    <td>_hjIncludedInSample</td>
+                    <td>
+This session cookie is set to let Hotjar know whether that visitor is included in the sample which is used to generate funnels.                    </td>
+                    <td>1 year</td>
+                </tr>
+
+            </tbody>
+        </table>
 
         <h3 class="heading-medium">
-            Our introductory message
+            Cookies pop-up message
         </h3>
 
-        <p>You may see a pop-up welcome message when you first visit an SFA site. We’ll store a cookie so that your computer knows you’ve seen it and knows not to show it again.</p>
+        <p>You may see a pop-up welcome message when you first visit an SFA site. When you click this message we store a cookie so that your computer knows you’ve seen it and knows not to show it again.</p>
 
         <table>
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Purpose</th>
-                    <th>Expires</th>
+                    <th>Expires after</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>seen_cookie_message</td>
-                    <td>Saves a message to let us know that you’ve seen our cookie message</td>
+                    <td>Saves a message to let us know that you’ve seen our cookie message.</td>
                     <td>30 days</td>
                 </tr>
             </tbody>
         </table>
 
         <h3 class="heading-medium">
-            Government services
+            Other government services
         </h3>
 
         <p>
@@ -184,7 +236,7 @@
         </p>
 
         <h3 class="heading-medium">
-            Our performance survey
+            Our survey
         </h3>
 
         <p>
