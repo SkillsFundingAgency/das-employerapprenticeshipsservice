@@ -53,8 +53,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
                 {
-                    AuthenticationType = "Cookies"
-
+                    AuthenticationType = "Cookies",
+                    ExpireTimeSpan = new TimeSpan(0,10,0),
+                    SlidingExpiration = true
                 });
 
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
