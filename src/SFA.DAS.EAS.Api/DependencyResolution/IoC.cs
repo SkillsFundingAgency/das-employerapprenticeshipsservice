@@ -16,12 +16,22 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
+using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using StructureMap;
 	
     public static class IoC {
+        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         public static IContainer Initialize() {
-            return new Container(c => c.AddRegistry<DefaultRegistry>());
+            return new Container(c =>
+            {
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add<LoggingPolicy>();
+                c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.AddRegistry<DefaultRegistry>();
+            });
         }
     }
 }
