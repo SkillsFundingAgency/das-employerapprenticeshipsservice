@@ -127,6 +127,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
+            if (enteredData == null)
+                return RedirectToAction("Index", "EmployerAccount");
+
             var model = new CreateAccountModel
             {
                 CompanyNumber = enteredData.CompanyNumber,
@@ -146,6 +149,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
+            if (enteredData == null)
+                return RedirectToAction("Index", "EmployerAccount");
+
             var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
@@ -160,9 +166,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
             };
 
-            var response = await _employerAccountOrchestrator.CreateAccount(request);
+            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
 
-            if (response.Status == HttpStatusCode.BadRequest)
+            if (response.Status == HttpStatusCode.Unauthorized)
             {
                 response.Status = HttpStatusCode.OK;
 
@@ -171,17 +177,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return RedirectToAction("ViewAccountAgreement");
             }
 
-            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
+            if (response.Status == HttpStatusCode.BadRequest)
             {
-                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-                TempData["successMessage"] = "This account can now spend levy funds";
-            }
-            else
-            {
-                TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+                response.Status = HttpStatusCode.OK;
+                response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
+                return RedirectToAction("ViewAccountAgreement");
             }
 
+            TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+            TempData["successMessage"] = request.UserIsAuthorisedToSign && request.SignedAgreement 
+                                            ? "This account can now spend levy funds" 
+                                            : "To spend the levy funds somebody needs to sign the agreement";
+            
             return RedirectToAction("Index", "EmployerTeam", new {accountId =  response.Data.EmployerAgreement.HashedId});
         }
 
