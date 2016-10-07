@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _messagePublisher = new Mock<IMessagePublisher>();
             _mediator = new Mock<IMediator>();
             _validator = new Mock<IValidator<CreateAccountCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<CreateAccountCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string>()});
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedHashString);
@@ -54,15 +54,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public async Task ThenIfThereAreMoreThanOneEmprefPassedThenTheyAreAddedToTheAccount()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand {EmployerRef = "123/abc,456/123", AccessToken = "123rd",RefreshToken = "45YT"};
-            
+            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+
             //Act
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime>(),"123/abc", "123rd", "45YT", false), Times.Once);
-            _accountRepository.Verify(x=>x.GetPayeSchemes(ExpectedAccountId), Times.Once);
-            _accountRepository.Verify(x=>x.AddPayeToAccountForExistingLegalEntity(ExpectedAccountId, ExpectedLegalEntityId, "456/123","123rd","45YT"), Times.Once);
+            _accountRepository.Verify(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), "123/abc", "123rd", "45YT", false), Times.Once);
+            _accountRepository.Verify(x => x.GetPayeSchemes(ExpectedAccountId), Times.Once);
+            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(ExpectedAccountId, ExpectedLegalEntityId, "456/123", "123rd", "45YT"), Times.Once);
         }
 
         [Test]
@@ -75,28 +75,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _hashingService.Verify(x=>x.HashValue(ExpectedAccountId), Times.Once);
+            _hashingService.Verify(x => x.HashValue(ExpectedAccountId), Times.Once);
         }
 
         [Test]
         public async Task ThenTheAccountIsUpdatedWithTheHashedId()
         {
             //Arrange
-            
             var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
 
             //Act
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.SetHashedId(ExpectedHashString, ExpectedAccountId),Times.Once);
+            _accountRepository.Verify(x => x.SetHashedId(ExpectedHashString, ExpectedAccountId), Times.Once);
         }
 
         [Test]
         public async Task ThenTheHashedIdIsReturnedInTheResponse()
         {
             //Arrange
-
             var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
 
             //Act
@@ -105,6 +103,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             //Assert
             Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
             Assert.AreEqual(ExpectedHashString, actual.HashedId);
+        }
+
+        [Test]
+        public void ThenTheValidatorIsCalledAndAInvalidRequestExceptionIsThrownWhenInvalid()
+        {
+            //Assert
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
+
+            //Act
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new CreateAccountCommand()));
+
+            //Assert
+            _validator.Verify(x => x.ValidateAsync(It.IsAny<CreateAccountCommand>()), Times.Once);
         }
 
         [Test]
@@ -138,6 +149,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken, cmd.SignAgreement));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
         }
-        
+
     }
 }
