@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using Moq;
 using NLog;
@@ -43,22 +44,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheMediatorCommandIsCalledWithCorrectParameters()
         {
             //Arrange
-            var model = new CreateAccountModel
-            {
-                CompanyName = "test",
-                UserId = Guid.NewGuid().ToString(),
-                EmployerRef = "123ADFC",
-                CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
-                CompanyRegisteredAddress = "My Address",
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString(),
-                SignedAgreement = true,
-                UserIsAuthorisedToSign = true
-            };
+            var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateAccount(model);
+            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
@@ -76,7 +65,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         }
 
         [Test]
-        public async Task ThenIfUserTriesToSignTheAgreementWhenNotAuthorisedTheyGetBadRequest()
+        public async Task ThenTheCookieIsDeletedWhenTheAccountHasBeenSuccessfullyCreated()
+        {
+            //Arrange
+            var model = ArrangeModel();
+
+            //Act
+            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
+
+            //Assert
+            _cookieService.Verify(x=>x.Delete(It.IsAny<HttpContextBase>(), "sfa-das-employerapprenticeshipsservice-employeraccount"), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfUserTriesToSignTheAgreementWhenNotAuthorisedTheyGetUnauthorized()
         {
             //Arrange
             var model = new CreateAccountModel
@@ -92,11 +94,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                      });
 
             //Act
-            var result = await _employerAccountOrchestrator.CreateAccount(model);
+            var result = await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()), Times.Once);
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);
         }
 
         [Test]
@@ -116,7 +118,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                      });
 
             //Act
-            var result = await _employerAccountOrchestrator.CreateAccount(model);
+            var result = await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
@@ -126,22 +128,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenShouldSignAgreementIfUserCanAndHasSignedAgreement()
         {
             //Arrange
-            var model = new CreateAccountModel
-            {
-                CompanyName = "test",
-                UserId = Guid.NewGuid().ToString(),
-                EmployerRef = "123ADFC",
-                CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
-                CompanyRegisteredAddress = "My Address",
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString(),
-                SignedAgreement = true,
-                UserIsAuthorisedToSign = true
-            };
+            var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateAccount(model);
+            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
@@ -157,6 +147,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.SignAgreement.Equals(true)
                     )));
         }
+
         [Test]
         public async Task ThenIShouldGetBackTheNewAccountId()
         {
@@ -173,11 +164,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             {
                 UserIsAuthorisedToSign = true,
                 SignedAgreement = true
-            });
+            }, It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedId);
 
+        }
+        
+        private static CreateAccountModel ArrangeModel()
+        {
+            return new CreateAccountModel
+            {
+                CompanyName = "test",
+                UserId = Guid.NewGuid().ToString(),
+                EmployerRef = "123ADFC",
+                CompanyNumber = "12345",
+                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
+                CompanyRegisteredAddress = "My Address",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString(),
+                SignedAgreement = true,
+                UserIsAuthorisedToSign = true
+            };
         }
     }
 }

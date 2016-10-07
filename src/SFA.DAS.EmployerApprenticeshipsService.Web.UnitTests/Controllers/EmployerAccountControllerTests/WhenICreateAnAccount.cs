@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(),It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 

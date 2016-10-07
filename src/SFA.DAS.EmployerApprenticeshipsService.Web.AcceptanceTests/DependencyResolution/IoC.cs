@@ -10,14 +10,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
 {
     public static class IoC
     {
-        public static Container CreateContainer(Mock<IMessagePublisher> messagePublisher, Mock<IOwinWrapper> owinWrapper)
+        public static Container CreateContainer(Mock<IMessagePublisher> messagePublisher, Mock<IOwinWrapper> owinWrapper, Mock<ICookieService> cookieService)
         {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MockMessagePolicy(messagePublisher));
-                c.AddRegistry(new DefaultRegistry(owinWrapper));
+                c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService));
             });
         }
     }
