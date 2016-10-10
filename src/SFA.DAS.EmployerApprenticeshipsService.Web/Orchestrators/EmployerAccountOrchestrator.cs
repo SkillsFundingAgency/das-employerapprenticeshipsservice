@@ -105,5 +105,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             return response;
         }
+
+        public virtual void DeleteCookieData(HttpContextBase context)
+        {
+            CookieService.Delete(context,CookieName);
+        }
     }
 }

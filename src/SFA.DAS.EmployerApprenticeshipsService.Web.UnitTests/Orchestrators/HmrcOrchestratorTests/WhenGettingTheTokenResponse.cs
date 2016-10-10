@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             _cookieService = new Mock<ICookieService>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
-                Hmrc = new HmrcConfiguration {IgnoreDuplicates = false}
+                Hmrc = new HmrcConfiguration ()
             };
             new Mock<IEmpRefFileBasedService>();
 
