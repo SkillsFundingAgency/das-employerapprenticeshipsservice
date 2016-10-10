@@ -5,11 +5,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
 {
     public static class AddPayeToNewLegalEntityCommandObjectMother
     {
-        public static AddPayeToNewLegalEntityCommand Create(string externalUserId = "")
+        public static AddPayeToNewLegalEntityCommand Create(string externalUserId = "", string hashedId = "JDJFAF123")
         {
             var command = new AddPayeToNewLegalEntityCommand
             {
-                AccountId = 123456,
+                HashedId = hashedId,
                 ExternalUserId = string.IsNullOrEmpty(externalUserId) ? Guid.NewGuid().ToString() : externalUserId,
                 Empref = "123/ABC",
                 RefreshToken = "123GGFFDD",

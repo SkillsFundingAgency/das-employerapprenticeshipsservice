@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="small">
+  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Small">
     <Sites>
       <Site name="Web">
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
-          <Binding name="Endpoint1" endpointName="HttpIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
         </Bindings>
       </Site>
     </Sites>
@@ -16,6 +16,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
@@ -34,6 +36,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
@@ -47,6 +51,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
     <Imports>
     </Imports>

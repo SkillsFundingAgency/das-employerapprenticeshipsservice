@@ -10,6 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerAgreementController : BaseController
     {
         private readonly EmployerAgreementOrchestrator _orchestrator;
@@ -27,21 +28,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(long accountId, FlashMessageViewModel flashMessage)
+        [Route("Agreements")]
+        public async Task<ActionResult> Index(string accountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            //DANGER: Injected flash messages override the orchestrator response
-            if (flashMessage != null)
+            if (TempData.ContainsKey("agreementSigned"))
             {
-                model.FlashMessage = flashMessage;
+                model.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Agreement signed",
+                    Message = $"You've signed the agreement for {TempData["agreementSigned"]}",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
             }
 
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Add(long accountId)
+        [Route("Agreements/Add")]
+        public ActionResult Add(string accountId)
         {
             var response = new OrchestratorResponse<AddLegalEntityViewModel>
             {
@@ -52,18 +59,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(response);
         }
 
-        public async Task<ActionResult> View(long agreementid, long accountId, FlashMessageViewModel flashMessage)
+		[HttpGet]
+		[Route("Agreements/{agreementid}/View")]
+        public async Task<ActionResult> View(string agreementid, string accountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
-            
-            //DANGER: Injected flash messages override the orchestrator response
-            if (flashMessage != null) agreement.FlashMessage = flashMessage;
+
+            if (TempData.ContainsKey("notunderstood"))
+            {
+                agreement.FlashMessage = new FlashMessageViewModel
+                {
+                    Message = "You must indicate that you have read and understood the terms",
+                    Severity = FlashMessageSeverityLevel.Danger
+                };
+            }
 
             return View(agreement);
         }
         
         [HttpPost]
-        public async Task<ActionResult> Sign(long agreementid, long accountId, string understood, string legalEntityName)
+        [Route("Agreements/{agreementid}/Sign")]
+		[ValidateAntiForgeryToken]
+		public async Task<ActionResult> Sign(string agreementid, string accountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
@@ -71,30 +88,23 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 if (response.Status == HttpStatusCode.OK)
                 {
-                    var successMessage = new FlashMessageViewModel
-                    {
-                        Headline = "Agreement signed",
-                        Message = $"You've signed the agreement for {legalEntityName}",
-                        Severity = FlashMessageSeverityLevel.Success
-                    };
+                    TempData["agreementSigned"] = legalEntityName;
 
-                    return RedirectToAction("Index", new {accountId, flashMessage = successMessage });
+                    return RedirectToAction("Index", new {accountId });
                 }
 
                 return View("DeadView", response);
             }
 
-            TempData["notunderstood"] = new object();
-            var errorMessage = new FlashMessageViewModel
-            {
-                Message = "You must indicate that you have read and understood the terms",
-                Severity = FlashMessageSeverityLevel.Danger
-            };          
-            return RedirectToAction("View", new { agreementId = agreementid, accountId, flashMessage = errorMessage });
+            TempData["notunderstood"] = true;
+           
+            return RedirectToAction("View", new { agreementId = agreementid, accountId });
         }
         
         [HttpPost]
-        public async Task<ActionResult> FindLegalEntity(long accountId, string entityReferenceNumber)
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/Add")]
+        public async Task<ActionResult> FindLegalEntity(string accountId, string entityReferenceNumber)
         {
             var response = await _orchestrator.FindLegalEntity(accountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -123,7 +133,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ViewEntityAgreement(long accountId, string name, string code, string address, 
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/ViewAgreement")]
+        public async Task<ActionResult> ViewEntityAgreement(string accountId, string name, string code, string address, 
             DateTime incorporated)
         {
             var response = await _orchestrator.Create(accountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
@@ -132,13 +144,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
+		[ValidateAntiForgeryToken]
+        [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
-            long accountId, string name, string code, string address, DateTime incorporated, 
+            string accountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Name = name,
                 Code = code,
                 Address = address,
@@ -168,7 +182,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             else
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funs somebody needs to sign the agreement";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
             return RedirectToAction("Index", new { accountId });

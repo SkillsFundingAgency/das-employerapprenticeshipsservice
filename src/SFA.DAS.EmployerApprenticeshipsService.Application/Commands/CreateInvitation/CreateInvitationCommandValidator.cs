@@ -2,40 +2,75 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation
 {
     public class CreateInvitationCommandValidator : IValidator<CreateInvitationCommand>
     {
+        private readonly IMembershipRepository _membershipRepository;
+
+        public CreateInvitationCommandValidator(IMembershipRepository membershipRepository)
+        {
+            _membershipRepository = membershipRepository;
+            
+        }
+
         public ValidationResult Validate(CreateInvitationCommand item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ValidationResult> ValidateAsync(CreateInvitationCommand item)
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountId == 0)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+            if (string.IsNullOrEmpty(item.HashedId))
+                validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.Email))
-                validationResult.AddError("Email", "No Email supplied");
+                validationResult.AddError(nameof(item.Email), "No Email supplied");
             else
             {
                 if (!IsValidEmailFormat(item.Email))
                 {
-                    validationResult.AddError("Email", "Email is not valid format");
+                    validationResult.AddError(nameof(item.Email), "Email is not valid format");
                 }
             }
 
             if (string.IsNullOrWhiteSpace(item.Name))
-                validationResult.AddError("Name", "No Name supplied");
+                validationResult.AddError(nameof(item.Name), "No Name supplied");
 
             if (item.RoleId == 0)
-                validationResult.AddError("RoleId", "No RoleId supplied");
+                validationResult.AddError(nameof(item.RoleId), "No RoleId supplied");
+
+
+            if (validationResult.IsValid())
+            {
+                var caller = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
+
+                if (caller == null)
+                {
+                    validationResult.AddError("Membership", "User is not a member of this Account");
+                    validationResult.IsUnauthorized = true;
+                }
+                else if ((Role) caller.RoleId != Role.Owner)
+                {
+                    validationResult.AddError("Membership", "User is not an Owner");
+                    validationResult.IsUnauthorized = true;
+                }
+
+                if (validationResult.IsValid() && caller != null)
+                {
+                    var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.Email);
+
+                    if (existingTeamMember != null && existingTeamMember.IsUser)
+                        validationResult.AddError("ExistingMember", "Invitee is already a Member of this team");
+                }
+           }
 
             return validationResult;
-        }
-
-        public Task<ValidationResult> ValidateAsync(CreateInvitationCommand item)
-        {
-            throw new NotImplementedException();
         }
 
         private bool IsValidEmailFormat(string email)

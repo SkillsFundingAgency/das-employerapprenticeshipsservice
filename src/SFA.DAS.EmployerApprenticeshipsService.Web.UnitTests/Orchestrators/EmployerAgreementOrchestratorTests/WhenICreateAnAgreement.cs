@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenIShouldGetAnAgreementWithTheLatestTemplate()
         {
             //Assign
-            const int accountId = 2;
+            const string hashedId = "2";
             const string userId = "user";
             const string entityName = "Test Corp";
             const string entityRef = "1234ABC";
@@ -52,10 +52,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 });
             
             //Act
-            var response = await _orchestrator.Create(accountId, userId, entityName, entityRef, entityAddress, incorporatedDate);
+            var response = await _orchestrator.Create(hashedId, userId, entityName, entityRef, entityAddress, incorporatedDate);
 
             //Assert
-            Assert.AreEqual(accountId, response.Data.EmployerAgreement.AccountId);
             Assert.AreEqual(entityName, response.Data.EmployerAgreement.LegalEntityName);
             Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityRegisteredAddress);
             Assert.AreEqual(latestTemplate.Text, response.Data.EmployerAgreement.TemplateText);

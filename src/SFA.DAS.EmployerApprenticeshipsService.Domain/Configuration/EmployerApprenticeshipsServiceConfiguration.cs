@@ -15,10 +15,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public string DatabaseConnectionString { get; set; }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
-
+        public string Hashstring { get; set; }
         public PrivacyConfiguration Privacy { get; set; }
 
-        
     }
 
     public class PrivacyConfiguration
@@ -35,12 +34,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 
     public class TasksApiClientConfiguration : ITasksApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 }

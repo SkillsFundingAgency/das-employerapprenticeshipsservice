@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Specialized;
+using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Moq;
@@ -8,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
@@ -50,6 +52,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is< GetGatewayTokenQuery>(c=>c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
             Assert.IsAssignableFrom<HmrcTokenResponse>(token.Data);
+        }
+
+        [Test]
+        public async Task ThenTheFlashMessageIsPopulatedWhenAuthorityIsNotGranted()
+        {
+            //Act
+            var actual = await _employerAccountOrchestrator.GetGatewayTokenResponse(string.Empty, string.Empty, new NameValueCollection { new NameValueCollection { {"error", "USER_DENIED_AUTHORIZATION" }, { "error_Code", "USER_DENIED_AUTHORIZATION" } } });
+
+            //Assert
+            Assert.IsAssignableFrom<OrchestratorResponse<HmrcTokenResponse>>(actual);
+            Assert.AreEqual("Account not added", actual.FlashMessage.Headline);
+            Assert.AreEqual("error-summary", actual.FlashMessage.SeverityCssClass);
+            Assert.AreEqual(FlashMessageSeverityLevel.Error, actual.FlashMessage.Severity);
+            Assert.AreEqual("Add new account", actual.FlashMessage.RedirectButtonMessage);
+            Assert.AreEqual("add_new_account", actual.FlashMessage.RedirectButtonClass);
         }
     }
 }

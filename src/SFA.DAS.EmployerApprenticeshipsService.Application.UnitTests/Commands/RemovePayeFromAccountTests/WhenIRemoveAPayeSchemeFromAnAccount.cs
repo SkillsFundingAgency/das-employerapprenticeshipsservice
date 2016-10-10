@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.RemovePayeFromAccountTests
 {
@@ -14,6 +15,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private RemovePayeFromAccountCommandHandler _handler;
         private Mock<IValidator<RemovePayeFromAccountCommand>> _validator;
         private Mock<IAccountRepository> _accountRepository;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Arrange()
@@ -23,7 +25,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _validator = new Mock<IValidator<RemovePayeFromAccountCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult());
 
-            _handler = new RemovePayeFromAccountCommandHandler(_validator.Object, _accountRepository.Object);
+            _hashingService = new Mock<IHashingService>();
+            
+
+            _handler = new RemovePayeFromAccountCommandHandler(_validator.Object, _accountRepository.Object, _hashingService.Object);
         }
 
         [Test]
@@ -67,11 +72,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         {
             //Arrange
             var accountId = 8487533;
+            var hashedId = "12FFF";
             var payeRef = "fkn/123";
             var userId = "abc";
+            _hashingService.Setup(x => x.DecodeValue(hashedId)).Returns(accountId);
 
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand {AccountId = accountId, PayeRef = payeRef, UserId = userId});
+            await _handler.Handle(new RemovePayeFromAccountCommand { HashedId = hashedId, PayeRef = payeRef, UserId = userId});
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);

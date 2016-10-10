@@ -5,9 +5,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
 {
     public class SignEmployerAgreementCommand : IAsyncRequest
     {
-        public long AgreementId { get; set; }
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
         public string ExternalUserId { get; set; }
         public DateTime SignedDate { get; set; }
+        public string HashedAgreementId { get; set; }
     }
 }

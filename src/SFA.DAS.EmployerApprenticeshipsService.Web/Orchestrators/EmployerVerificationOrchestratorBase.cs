@@ -53,6 +53,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             var errorResponse = nameValueCollection?["error"];
             if (errorResponse != null)
             {
+                if (nameValueCollection["error_Code"] == "USER_DENIED_AUTHORIZATION" )
+                {
+                    return new OrchestratorResponse<HmrcTokenResponse>
+                    {
+                        Status = HttpStatusCode.NotAcceptable,
+                        FlashMessage = new FlashMessageViewModel
+                        {
+                            Severity = FlashMessageSeverityLevel.Error,
+                            Headline = "Account not added",
+                            Message = "You need to grant authority to HMRC to add an account.",
+                            RedirectButtonMessage = "Add new account",
+                            RedirectButtonClass = "add_new_account"
+                        }
+                    };
+                }
                 return new OrchestratorResponse<HmrcTokenResponse>
                 {
                     Status = HttpStatusCode.NotAcceptable,
@@ -101,7 +116,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -113,11 +128,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Logger.Warn("No response from SelectEmployerViewModel");
                 return new OrchestratorResponse<SelectEmployerViewModel>
                 {
-                    FlashMessage = new FlashMessageViewModel()
-                    {
-                        Message = "No companies match the identifier you entered.",
-                        SubMessage = "Please try again."
-                    },
+                    Status = HttpStatusCode.BadRequest,
                     Data = new SelectEmployerViewModel()
                 };
             }

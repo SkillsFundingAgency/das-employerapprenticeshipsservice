@@ -55,3 +55,21 @@ Below is an example of what the file may look like
   ]
 } 
 ```
+
+### Feature Toggle
+
+You can limit areas of the site by adding them to a list, in the controller action format, or having a * to denote all actions within that controller. Below is an example of the config required:
+
+```
+{   "Data": [     {       "Controller": "EmployerTeam",       "Action": "Invite"     }   ] }
+```
+This is added to the configuration table of your local azure storage, with the PartiionKey being **LOCAL** and the RowKey being **SFA.DAS.EmployerApprenticeshipsService.Features_1.0**
+
+### Managed Companies House List
+
+You are able to define your own set of companies that aren't available through the companies house API. the Key _UseManagedList_ needs to be set to true then the following entires in the Configuration table in the Azure Storage
+
+```
+{   "Data": [     {   "company_name": "Non companies house company",   "company_number": "AML-456789",   "date_of_creation": "2001-10-01T00:00:00",   "registered_office_address": {         "address_line_1": "Test Address",         "address_line_2": "Test",         "postal_code": "T31 EST"       } }   ] }
+```
+The PartitionKey is **LOCAL** and the RowKey is **SFA.DAS.EmployerApprenticeshipsService.CompanyLookup_1.0**

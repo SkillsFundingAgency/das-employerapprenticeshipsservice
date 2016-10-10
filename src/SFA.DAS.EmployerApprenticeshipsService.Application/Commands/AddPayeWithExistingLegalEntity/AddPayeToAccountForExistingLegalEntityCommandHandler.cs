@@ -43,26 +43,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWit
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
             if ((Role)caller.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
-            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(message.AccountId);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(caller.AccountId);
 
             var isLinked = legalEntities.Exists(x => x.Id == message.LegalEntityId);
 
             if (!isLinked)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "LegalEntity", "LegalEntity is not linked to this Account" } });
 
-            await _accountRepository.AddPayeToAccountForExistingLegalEntity(message.AccountId, message.LegalEntityId, message.EmpRef, message.AccessToken, message.RefreshToken);
+            await _accountRepository.AddPayeToAccountForExistingLegalEntity(caller.AccountId, message.LegalEntityId, message.EmpRef, message.AccessToken, message.RefreshToken);
 
             await _messagePublisher.PublishAsync(
                 new EmployerRefreshLevyQueueMessage
                 {
-                    AccountId = message.AccountId
+                    AccountId = caller.AccountId
                 });
         }
     }

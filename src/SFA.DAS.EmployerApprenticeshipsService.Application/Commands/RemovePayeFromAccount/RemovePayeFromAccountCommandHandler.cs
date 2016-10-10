@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount
 {
@@ -10,11 +11,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePaye
     {
         private readonly IValidator<RemovePayeFromAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
+        private readonly IHashingService _hashingService;
 
-        public RemovePayeFromAccountCommandHandler(IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository)
+        public RemovePayeFromAccountCommandHandler(IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
+            _hashingService = hashingService;
         }
 
         protected override async Task HandleCore(RemovePayeFromAccountCommand message)
@@ -30,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePaye
                 throw new UnauthorizedAccessException();
             }
 
-            await _accountRepository.RemovePayeFromAccount(message.AccountId, message.PayeRef);
+            await _accountRepository.RemovePayeFromAccount(_hashingService.DecodeValue(message.HashedId), message.PayeRef);
 
         }
     }

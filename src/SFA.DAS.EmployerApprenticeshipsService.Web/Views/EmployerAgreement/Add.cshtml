@@ -3,10 +3,11 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find your organisation</h1>
-        <form action="@Url.Action("FindLegalEntity")" method="POST">
+        <form action="@Url.Action("FindLegalEntity","EmployerAgreement")" method="POST">
+            @Html.AntiForgeryToken()
             <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                 <label class="form-label">Company House number</label>
-                
+
                 @if (TempData["companyNumberError"] != null)
                 {
                     <legend>
@@ -14,10 +15,9 @@
                     </legend>
                 }
                
-                <input type="hidden" name="accountId" value="@Model.Data.AccountId"/>
                 <input class="form-control form-control-3-4" type="text" name="entityReferenceNumber" id="companyHouseNumber"/>
             </div>
-            <input class="button" id="findOrganisation" type="submit" value="Continue" />
+            <input class="button" id="findOrganisation" type="submit" value="Continue"/>
         </form>
     </div>
 </div>
@@ -25,8 +25,8 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement", new {accountId = @Model.Data.AccountId})">Your Organisations</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your Organisations</a></li>
             <li>Find your organisation</li>
         </ol>
     </div>

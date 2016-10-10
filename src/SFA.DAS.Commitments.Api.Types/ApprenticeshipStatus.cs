@@ -1,9 +1,12 @@
-﻿namespace SFA.DAS.Commitments.Api.Types
+﻿using System.ComponentModel;
+
+namespace SFA.DAS.Commitments.Api.Types
 {
     public enum ApprenticeshipStatus : short
     {
-        Created = 0,
-        ReadyForApproval = 1,
-        Approved = 2
+        [Description("Ready for approval")]
+        ReadyForApproval = 0,
+        Approved = 1,
+        Paused = 2
     }
 }

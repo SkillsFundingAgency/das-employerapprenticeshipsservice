@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult> View(long invitationId)
+        public async Task<ActionResult> View(string invitationId)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
             {
@@ -73,8 +73,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
-
-            TempData["successHeader"] = "Invitation Created";
+            //TODO incorrect message when accepting an invite
+            TempData["successHeader"] = "Invitation Accepted";
             TempData["successCompany"] = invitationItem.AccountName;
 
             return RedirectToAction("Index", "Home");

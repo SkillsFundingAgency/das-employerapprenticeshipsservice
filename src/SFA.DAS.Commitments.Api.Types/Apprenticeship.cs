@@ -17,10 +17,5 @@ namespace SFA.DAS.Commitments.Api.Types
         public AgreementStatus AgreementStatus { get; set; }
 
         public string ApprenticeshipName => $"{FirstName} {LastName}";
-
-        public bool CanBeApproved()
-        {
-            return Status == ApprenticeshipStatus.ReadyForApproval;
-        }
     }
 }

@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public long AccountId { get; set; }
         public List<EmployerAgreementView> EmployerAgreements { get; set; }
+        public string HashedId { get; set; }
     }
 }

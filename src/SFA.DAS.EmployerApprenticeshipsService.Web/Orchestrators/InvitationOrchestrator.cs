@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<InvitationView> GetInvitation(long id)
+        public async Task<InvitationView> GetInvitation(string id)
         {
             var response = await _mediator.SendAsync(new GetInvitationRequest
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             {
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
-                    AccountId = model.AccountId,
+                    HashedId = model.HashedId,
                     ExternalUserId = externalUserId,
                     Name = model.Name,
                     Email = model.Email,

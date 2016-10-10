@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
+  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Standard_D2_v2">
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="InstrumentationKey" />
+      <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString"/>
+      <Setting name="EventHubName" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>
+      <InputEndpoint name="HttpIn" protocol="http" port="80" loadBalancer="das-prd-eas-ilb"/>
+    </Endpoints>
+    <Certificates>
+      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
+    <Imports>
+    </Imports>
+  </WebRole>
+  <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="Standard_D1_v2">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName"  />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
+    </Endpoints>
+    <LocalResources>
+    </LocalResources>
+    <Imports>
+    </Imports>
+  </WorkerRole>
+  <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="Standard_D1_v2">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
+      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubName" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50122" />
+    </Endpoints>
+    <Imports>
+    </Imports>
+  </WorkerRole>
+  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="Standard_D1_v2">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="LogLevel" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50123" />
+    </Endpoints>
+    <Imports>
+    </Imports>
+  </WorkerRole>
+</ServiceDefinition>

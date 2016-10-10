@@ -10,13 +10,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeam
             var validationResult = new ValidationResult();
 
             if (item.UserId == 0)
-                validationResult.AddError("UserId", "No UserId supplied");
+                validationResult.AddError(nameof(item.UserId), "No UserId supplied");
 
-            if (item.AccountId == 0)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+            if (string.IsNullOrEmpty(item.HashedId))
+                validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
-                validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "No ExternalUserId supplied");
 
             return validationResult;
         }

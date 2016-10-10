@@ -10,11 +10,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmploy
         {
             var validationResult = new ValidationResult();
 
-            if (item.AgreementId == 0)
+            if (string.IsNullOrEmpty(item.HashedAgreementId))
                 validationResult.AddError("AgreementId", "No AgreementId supplied");
 
-            if (item.AccountId == 0)
-                validationResult.AddError("AccountId", "No AccountId supplied");
+            if (string.IsNullOrEmpty(item.HashedId))
+                validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");

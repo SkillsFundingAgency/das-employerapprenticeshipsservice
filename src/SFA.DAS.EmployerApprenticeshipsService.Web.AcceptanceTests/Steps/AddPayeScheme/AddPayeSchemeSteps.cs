@@ -2,7 +2,6 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup;
 using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -63,10 +62,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         public void ThenICanViewAllOfMyPAYESchemes()
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.Get(accountId, userId).Result;
+            var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
 
             Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
         }
@@ -75,16 +75,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         public void WhenIAddANewPAYESchemeToMyExistingLegalEntity()
         {
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            
             _newLegalEntity = false;
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var legalEntity = employerPayeOrchestrator.Get(accountId, userId).Result.Data.PayeSchemes.FirstOrDefault();
+            var legalEntity = employerPayeOrchestrator.Get(hashedId, userId).Result.Data.PayeSchemes.FirstOrDefault();
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 LegalEntityId = legalEntity.LegalEntityId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
@@ -103,7 +104,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         [When(@"I Add a new PAYE scheme to my new legal entity")]
         public void WhenIAddANewPAYESchemeToMyNewLegalEntity()
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             _newLegalEntity = true;
@@ -111,7 +112,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
-                AccountId = accountId,
+                HashedId = hashedId,
                 LegalEntityId = 0,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
@@ -136,12 +137,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         [Then(@"The PAYE scheme Is ""(.*)""")]
         public void ThenThePAYESchemeIs(string schemeStatus)
         {
-            var accountId = (long)ScenarioContext.Current["AccountId"];
+         
+            var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             //Get the PAYE schemes
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.Get(accountId, userId).Result;
+            var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
             var entities = legalEntities.Data.PayeSchemes.Select(c => c.LegalEntityId).Distinct().Count();
             if (schemeStatus.Equals("created", StringComparison.CurrentCultureIgnoreCase))
             {

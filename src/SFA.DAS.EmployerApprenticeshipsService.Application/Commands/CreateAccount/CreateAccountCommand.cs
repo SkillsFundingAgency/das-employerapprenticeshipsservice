@@ -3,7 +3,7 @@ using MediatR;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
-    public class CreateAccountCommand : IAsyncRequest
+    public class CreateAccountCommand : IAsyncRequest<CreateAccountCommandResponse>
     {
         public string ExternalUserId { get; set; }
         public string CompanyNumber { get; set; }
@@ -13,5 +13,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
         public string EmployerRef { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public bool SignAgreement { get; set; }
     }
 }

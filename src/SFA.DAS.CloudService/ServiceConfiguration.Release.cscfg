@@ -9,6 +9,8 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />
@@ -22,6 +24,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -34,6 +38,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -53,7 +59,22 @@
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
-      <InstanceAddress roleName="__rolename__">
+      <InstanceAddress roleName="SFA.DAS.EmployerApprenticeshipsService.Web">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.LevyDeclarationProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.LevyAggregationProvider.Worker">
+        <Subnets>
+          <Subnet name="__subnet__" />
+        </Subnets>
+      </InstanceAddress>
+      <InstanceAddress roleName="SFA.DAS.EAS.Notification.Worker">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
@@ -62,5 +83,10 @@
         <ReservedIP name="__rip__" />
       </ReservedIPs>
     </AddressAssignments>
+    <LoadBalancers>
+      <LoadBalancer name="__ilbname__">
+        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.120.158" />
+      </LoadBalancer>
+    </LoadBalancers>
   </NetworkConfiguration>
 </ServiceConfiguration>

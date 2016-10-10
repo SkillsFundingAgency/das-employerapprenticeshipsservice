@@ -1,0 +1,30 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model TaskViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">View task</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>@Model.Name</td>
+                    <td><a href="@Url.Action("Details", "EmployerCommitments", new { hashedCommitmentId = Model.LinkId })" class="link">View commitment</a></td>
+                </tr>
+                <tr>
+                    <th scope="row">Created Date</th>
+                    <td>@Model.CreatedOn.ToGdsFormat()</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Message</th>
+                    <td>@Model.Message</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+       
+        
+    </div>
+</div>

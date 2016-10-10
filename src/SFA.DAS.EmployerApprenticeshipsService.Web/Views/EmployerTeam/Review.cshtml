@@ -3,65 +3,53 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Manage Team member</h1>
-        <table>      
+        <h1 class="heading-xlarge">@Model.Name</h1>
+        <table>     
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>What they can do</th>
+                    <th></th>
+                </tr>
+            </thead> 
             <tbody>
                 <tr>
-                    <th scope="row">Name</th>
-                    <td>@Model.Name</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Email</th>
                     <td>@Model.Email</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Role</th>
-                    <td>@Model.Role.ToString()</td>
+                    <td>@RoleStrings.ToWhatTheyCanDo(@Model.Role)</td>
                     @if (Model.IsUser)
                     {
-                        <td class="link-right">@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.AccountId, Email = Model.Email })</td>
+                        <td>@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.HashedId, Email = Model.Email })</td>
                     }
                     else
                     {
                         <td></td>
                     }
-                </tr>
-                <tr>
-                    <th scope="row">Status</th>
-                    <td>@Model.Status.ToString()</td>
-                    <td></td>
-                </tr>
+                </tr>              
             </tbody>
         </table>
-        <p></p>
+      
         @if (@Model.Status == InvitationStatus.Pending || @Model.Status == InvitationStatus.Expired)
         {
-            <p>
-                This user has not accepted the invitation to be a team member.
-                Their invitation will expire at Midnight on @Model.ExpiryDate.ToString("dddd d MMMM yyyy")
-            </p>
+            <div class="form-group">
                 <form action="@Url.Action("Resend")" method="POST">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="Email" name="Email" value="@Model.Email" />
-                    <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
                     <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
                 </form>
-                <p></p>
-                <form action="@Url.Action("Cancel")" method="GET">
-                    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
-                    <button type="submit" class="button" id="cancel_invitation">Cancel Invitation</button>
-                </form>
+
+                <div>
+                    <a href="@Url.Action("Cancel", "EmployerTeam",new {accountId = Model.HashedId,email = Model.Email, invitationId = Model.HashedInvitationId })">Cancel Invitation</a>    
+                </div>
+                
+            </div>
         }
         @if (@Model.IsUser)
         {
             <form action="@Url.Action("Remove")" method="GET">
                 <input type="hidden" id="Email" name="Email" value="@Model.Email" />
-                <input type="hidden" id="AccountId" name="AccountId" value="@Model.AccountId" />
-                <button type="submit" class="button" id="delete_user">Delete user</button>
+                <button type="submit" class="button" id="delete_user">Remove team member</button>
             </form>
-            <p></p>
+         
         }
     </div>
 </div>
@@ -70,9 +58,9 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("View", "EmployerTeam", new {accountId = @Model.AccountId})">Manage Team Members</a></li>
-            <li>Team Member</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.HashedId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.HashedId})">Manage Team Members</a></li>
+            <li>@Model.Name</li>
         </ol>
     </div>
 }

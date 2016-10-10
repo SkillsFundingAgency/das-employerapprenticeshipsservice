@@ -84,7 +84,7 @@
                                 <div>
                                     <a aria-label="View details for the transaction on @date"
                                        title="View details for the transaction on @date" 
-                                       href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.AccountId, itemId = aggregationLine.Id})">View</a>
+                                       href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.HashedId, itemId = aggregationLine.Id})">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
@@ -101,7 +101,7 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Employer Account Homepage</a></li>
             <li>View Your Transactions</li>
         </ol>
     </div>

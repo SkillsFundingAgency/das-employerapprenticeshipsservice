@@ -11,8 +11,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
     public class WhenIGetDisabledFeatures
     {
         private Mock<ICacheProvider> _cacheProvider;
-        private FeatureToggleFileBasedService _featureToggleFileBasedService;
-        private Mock<FeatureToggleFileBasedService> _mockFeatureToggleFileBasedService;
+        private FeatureToggleService _featureToggleService;
+        private Mock<FeatureToggleService> _mockFeatureToggleFileBasedService;
 
         [SetUp]
         public void Arrange()
@@ -22,23 +22,21 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
                 .Returns(null)
                 .Returns(new FeatureToggleLookup());
 
-            _mockFeatureToggleFileBasedService = new Mock<FeatureToggleFileBasedService>(_cacheProvider.Object);
-            _mockFeatureToggleFileBasedService.Setup(x => x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>())).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem> {new FeatureToggleItem()} });
-            _mockFeatureToggleFileBasedService.Setup(
-                x => x.ReadFileByIdSync<FeatureToggleLookup>(nameof(FeatureToggleLookup)))
-                .Returns(new FeatureToggleLookup());
-            _featureToggleFileBasedService = _mockFeatureToggleFileBasedService.Object;
+            _mockFeatureToggleFileBasedService = new Mock<FeatureToggleService>(_cacheProvider.Object);
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).CallBase();
+            _featureToggleService = _mockFeatureToggleFileBasedService.Object;
         }
 
         [Test]
         public void ThenTheFeaturesAreReadFromTheCacheOnSubsequentTimes()
         {
             //Act
-            _featureToggleFileBasedService.GetFeatures();
-            _featureToggleFileBasedService.GetFeatures();
+            _featureToggleService.GetFeatures();
+            _featureToggleService.GetFeatures();
 
             //Assert
-            _mockFeatureToggleFileBasedService.Verify(x=>x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>()), Times.Once());
+            _mockFeatureToggleFileBasedService.Verify(x=>x.GetDataFromStorage(), Times.Once());
             _cacheProvider.Verify(x=>x.Get<FeatureToggleLookup>(nameof(FeatureToggleLookup)), Times.Exactly(2));
         }
 
@@ -46,10 +44,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
         public void ThenTheValueIsNotAddedToTheCacheIfNullOrEmpty()
         {
             //Arrange
-            _mockFeatureToggleFileBasedService.Setup(x => x.ReadFileByIdSync<FeatureToggleLookup>(It.IsAny<string>())).Returns(new FeatureToggleLookup());
+            _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
 
             //Act
-            _featureToggleFileBasedService.GetFeatures();
+            _featureToggleService.GetFeatures();
 
             //Assert
             _cacheProvider.Verify(x => x.Set(nameof(FeatureToggleLookup),It.IsAny<FeatureToggleLookup>(), It.IsAny<TimeSpan>()), Times.Never);

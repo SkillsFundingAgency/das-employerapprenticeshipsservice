@@ -1,25 +1,39 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions
 
 @model CommitmentViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View commitment</h1>
-        <hr />
-        <p>Name</p>
-        <p>@Model.Commitment.Name</p>
-        <p>Legal Entity</p>
-        <p>@Model.Commitment.LegalEntityName</p>
-        <p>Provider</p>
-        <p>@Model.Commitment.ProviderName</p>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td>@Model.Name</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Legal entity</th>
+                    <td>@Model.LegalEntityName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Provider</th>
+                    <td>@Model.ProviderName</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Commitment.Apprenticeships.Count == 0)
+        <h2 class="heading-medium">Apprentices</h2>
+        @if (Model.Apprenticeships.Count == 0)
         {
             <p class="panel panel-info">
-                No apprenticeships exist for this commitment.
+                No apprentices exist for this commitment.
             </p>
         }
         else
@@ -35,7 +49,7 @@
                 </div>
             </div>
             <div class="responsive-tbody">
-                @foreach (var apprenticeship in Model.Commitment.Apprenticeships)
+                @foreach (var apprenticeship in Model.Apprenticeships)
                 {
                     <div class="responsive-tr">
                         <div class="responsive-td">
@@ -48,16 +62,11 @@
                         </div>
                         <div class="responsive-td">
                             <div class="responsive-inner-caption">Status</div>
-                            <div>@apprenticeship.Status</div>
+                            <div>@apprenticeship.Status.GetDescription()</div>
                         </div>
                         <div class="responsive-td">
                             <div>
-                                <form action="@Url.Action("Edit")" method="GET">
-                                    <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId"/>
-                                    <input type="hidden" name="commitmentId" value="@Model.Commitment.Id"/>
-                                    <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id"/>
-                                    <button type="submit" name="commitment" class="button">View</button>
-                                </form>
+                                <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })" class="button">View</a>
                             </div>
                             <div class="responsive-inner-caption"></div>
                         </div>
@@ -65,11 +74,29 @@
                             @if (apprenticeship.CanBeApproved())
                             {
                                 <div>
-                                    <form action="@Url.Action("ApproveApprenticeship")" method="POST">
-                                        <input type="hidden" name="accountId" value="@Model.Commitment.EmployerAccountId" />
-                                        <input type="hidden" name="commitmentId" value="@Model.Commitment.Id" />
-                                        <input type="hidden" name="apprenticeshipId" value="@apprenticeship.Id" />
+                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
+                                        @Html.AntiForgeryToken()
                                         <button type="submit" name="commitment" class="button">Approve</button>
+                                    </form>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            }
+                            @if (apprenticeship.CanBePaused())
+                            {
+                                <div>
+                                    <form action="@Url.Action("PauseApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" name="commitment" class="button">Pause</button>
+                                    </form>
+                                </div>
+                                <div class="responsive-inner-caption"></div>
+                            }
+                            @if (apprenticeship.CanBeResumed())
+                            {
+                                <div>
+                                    <form action="@Url.Action("ResumeApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" name="commitment" class="button">Resume</button>
                                     </form>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
@@ -80,5 +107,6 @@
             </div>
         </div>
         }
+        <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add new commitment</a>
     </div>
 </div>

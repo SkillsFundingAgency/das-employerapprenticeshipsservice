@@ -35,14 +35,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountL
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var membership = await _membershipRepository.GetCaller(message.Id, message.UserId);
+            var membership = await _membershipRepository.GetCaller(message.HashedId, message.UserId);
 
             if (membership == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
             if (membership.RoleId != (short)Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
 
-            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(message.Id);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId);
 
             return new GetAccountLegalEntitiesResponse
             {

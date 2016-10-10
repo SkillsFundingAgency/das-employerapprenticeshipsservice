@@ -38,11 +38,11 @@
                     </td>
                 </tr>
             </table>
-            <form method="POST" action="@Url.Action("CreateAccount")">
+            <form method="GET" action="@Url.Action("ViewAccountAgreement")">
                 <input id="radio1" type="hidden" name="confirm_create" checked="checked" value="1">
                 <div class="form-group">
                     <button type="submit" class="button" id="continue">These details are correct</button>
-                    <a class="button button-link" href="@Url.Action("Index","Home")">Change details</a>
+                    <a class="button button-link" href="@Url.Action("Index", "Home")">Change details</a>
                 </div>
             </form>
         }

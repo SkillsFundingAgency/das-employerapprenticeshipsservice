@@ -3,6 +3,7 @@
 
 @{
     var culture = new CultureInfo("en-GB");
+    var accountId = Model.LineItem.Items[0].AccountId;
 }
 
 <div class="grid-row">
@@ -64,6 +65,9 @@
 
                     @foreach (var aggregationLineItem in Model.LineItem.Items)
                     {
+                        
+                      
+
                         <div class="responsive-tr">
                             <div class="responsive-td rjTableName">
                                 <div>@aggregationLineItem.EmpRef</div>
@@ -100,4 +104,13 @@
             </div>
         </div>
     </div>
-
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountTransactions")">View Your Transactions</a></li>
+            <li>Credit details</li>
+        </ol>
+    </div>
+}

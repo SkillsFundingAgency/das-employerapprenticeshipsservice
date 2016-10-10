@@ -8,12 +8,22 @@ label.form-label {
 main {
     padding-bottom: 3em;
 }
+
+main { max-width: 960px; margin: 0 15px; }
+@media screen and (min-width: 641px) { main { margin: 0 30px; } }
+@media screen and (min-width: 1020px) { main { margin: 0 auto; } }
+
 a.button {
     text-align: center;
 }
 
 button, a.button {
     margin-bottom: 0.75em;
+}
+
+#global-header-bar {
+    background-color: #6f777b;
+    height: 10px;
 }
 
 .phase-banner-beta {
@@ -46,9 +56,19 @@ table {
     max-width: 640px;
 }
 
+@media (min-width: 641px) {
+    .form-group > form {
+        display: inline-block;
+    }
+}
+
 .button-start {
     background-image: url("/assets/images/icon-pointer-2x.png");
     background-size: 30px 19px;
+}
+
+html.lte-ie8 .button-start {
+    background-image: url("/assets/images/icon-pointer.png");
 }
 
 .button-link,
@@ -86,6 +106,17 @@ a.button-link {
 .button-link:focus {
     background-color: #ffbf47;
     outline: 3px solid #ffbf47;
+}
+
+.button-add {
+    margin-bottom: 10px;
+}
+
+@media screen and (min-width: 641px) {
+    .button-add {
+        margin: 60px 0 10px;
+        float: right;
+    }
 }
 
 .govuk-box-highlight h1, 
@@ -229,10 +260,6 @@ a.button-link {
 	
 }
 
-/* LAYOUT CONVENIENCES*/
-h1, h2, p {
-    max-width: 630px;
-}
 .rightalign {
     text-align:right;
 }
@@ -360,6 +387,74 @@ table.full-width, .responsive-table.full-width {
 
 /* Layout */
 
+@media (min-width: 641px) {
+    #global-header .header-wrapper {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+}
+
+.header-global {
+    margin: 0 auto;
+    max-width: 960px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+@media (min-width: 641px) {
+    .header-global {
+        display: table;
+        padding: 15px 0 10px;
+        width: 100%;
+    }
+}
+
+.header-global__title,
+.header-global__subtitle {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+    padding: 0;
+}
+
+.header-global__subtitle {
+    font-size: 16px;
+}
+
+@media (min-width: 641px) {
+    .header-global__title,
+    .header-global__subtitle {
+        display: table-cell;
+        vertical-align: middle;
+        width: 50%;
+        font-size: 32px;
+    }
+    .header-global__subtitle {
+        font-size: 24px;
+        text-align: right;
+        width: 50%;
+    }
+}
+
+
+.header-global__title a,
+.header-global__subtitle a {
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    color: #ffffff;
+    display: inline-block;
+    padding: 2px 0;
+    text-decoration: none;
+}
+
+.header-global__title a:hover, 
+.header-global__subtitle a:hover {
+    border-color: #ffffff;
+}
+
+.header-global a:focus {
+    color: #0b0c0c;
+}
 aside.sidebar {
     font-size: 14px;
 }
@@ -389,6 +484,10 @@ dt, dd {
   display: inline;
 }
 
+dd {
+    font-weight: bold;
+}
+
 /* Tables */
 
 table {
@@ -403,24 +502,16 @@ table.top-border {
     border-top: 1px solid #bfc1c3;
 }
 
-
 .notice {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid #bfc1c3;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding-top: 30px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-  padding-left: 15px;
+    border-left: 10px solid #BFC1C3;
+    background: #DEE0E2;
+    clear: both;
+    margin-bottom: 0.75em;
+    padding: 0.75em;
+    padding-bottom: 0;
+    overflow: hidden;
 }
 
-@media (min-width: 641px) {
-  .notice {
-    padding-top: 45px;
-    padding-right: 30px;
-    padding-bottom: 30px;
-    padding-left: 30px;
-  }
+.panel-filled {
+    background: #DEE0E2;
 }

@@ -1,0 +1,60 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@using System.Globalization
+
+
+@model ExtendedApprenticeshipViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Edit apprentice details</h1>
+        <table>
+            <tbody>
+                <tr>
+                    <th scope="row">First name</th>
+                    <td>@Model.Apprenticeship.FirstName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Last name</th>
+                    <td>@Model.Apprenticeship.LastName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Unique learner number</th>
+                    <td>@Model.Apprenticeship.ULN</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Cost</th>
+                    <td>@Model.Apprenticeship.Cost</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Apprenticeship training course</th>
+                    <td>@Model.Apprenticeship.TrainingId</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Planned training start date</th>
+                    <td>@Model.Apprenticeship.StartMonthName @Model.Apprenticeship.StartYear</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Expected training finish date</th>
+                    <td>@Model.Apprenticeship.EndMonthName @Model.Apprenticeship.EndYear</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>@Model.Apprenticeship.Status</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <a href="@Url.Action("Details")" class="button">Back</a>
+    </div>
+</div>

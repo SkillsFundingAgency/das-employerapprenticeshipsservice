@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         public async Task ThenTheOrchestratorIsCalledIfYouConfirmToRemoveTheScheme()
         {
             //Act
-            var actual = await _controller.RemovePaye(new RemovePayeScheme());
+            var actual = await _controller.RemovePaye("",new RemovePayeScheme());
 
             //Assert
             _employerAccountPayeOrchestrator.Verify(x=>x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>()), Times.Once);
@@ -55,13 +55,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme> {Status = HttpStatusCode.BadRequest});
 
             //Act
-            var actual = await _controller.RemovePaye(new RemovePayeScheme());
+            var actual = await _controller.RemovePaye("",new RemovePayeScheme());
 
             //Assert
             Assert.IsNotNull(actual);
             var actualView = actual as ViewResult;
             Assert.IsNotNull(actualView);
-            Assert.AreEqual("",actualView.ViewName);
+            Assert.AreEqual("Remove",actualView.ViewName);
         }
     }
 }

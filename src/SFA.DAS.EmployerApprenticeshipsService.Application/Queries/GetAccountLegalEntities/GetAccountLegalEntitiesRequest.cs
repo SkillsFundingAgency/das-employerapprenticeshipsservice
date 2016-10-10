@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountL
 {
     public class GetAccountLegalEntitiesRequest : IAsyncRequest<GetAccountLegalEntitiesResponse>
     {
-        public long Id { get; set; }
+        public string HashedId { get; set; }
         public string UserId { get; set; }
     }
 }

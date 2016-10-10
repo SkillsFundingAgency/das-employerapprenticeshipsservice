@@ -16,7 +16,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain
         {
             switch(role)
             {
-                case "Owner": return "Create and stop payments, sign legal agreements, manage PAYE schemes and team accounts";
+                case "Owner": return "Everything - they're the owner";
+                case "Transactor": return "Create and stop payments and view financial information";
+                case "Viewer": return "View financial information";
+                default: throw new ArgumentException("Unexpected role: " + role);
+            }
+        }
+        public static string ToWhatYouCanDo(string role)
+        {
+            switch (role)
+            {
+                case "Owner": return "Everything - you're the owner";
                 case "Transactor": return "Create and stop payments and view financial information";
                 case "Viewer": return "View financial information";
                 default: throw new ArgumentException("Unexpected role: " + role);

@@ -17,5 +17,6 @@ IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%')
 	END
 ELSE
 	BEGIN
-		RAISERROR('Server %s is managed - leaving data as it.',10,1,@@servername) WITH NOWAIT
+		RAISERROR('Server %s is managed - seeding referential data only.',10,1,@@servername) WITH NOWAIT
+		:r .\SeedProdData.sql
 	END

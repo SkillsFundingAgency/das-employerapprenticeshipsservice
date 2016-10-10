@@ -9,6 +9,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 
@@ -20,6 +21,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IValidator<AddPayeToNewLegalEntityCommand>> _validator;
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IHashingService> _hashingService;
+        private const long ExpectedAccountId = 54564;
 
         [SetUp]
         public void Arrange()
@@ -31,7 +34,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _validator = new Mock<IValidator<AddPayeToNewLegalEntityCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<AddPayeToNewLegalEntityCommand>())).ReturnsAsync(new ValidationResult());
 
-            _addPayeToNewLegalEnttiyCommandHandler = new AddPayeToNewLegalEnttiyCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object);
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(ExpectedAccountId);
+
+            _addPayeToNewLegalEnttiyCommandHandler = new AddPayeToNewLegalEnttiyCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object, _hashingService.Object);
         }
 
         [Test]
@@ -74,7 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _addPayeToNewLegalEnttiyCommandHandler.Handle(command);
 
             //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(command.AccountId))));
+            _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
         }
 
 
@@ -94,7 +100,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 c=>c.AccessToken.Equals(command.AccessToken)  &&
                    c.RefreshToken.Equals(command.RefreshToken) &&
                    c.EmpRef.Equals(command.Empref) &&
-                   c.AccountId.Equals(command.AccountId)
+                   c.AccountId.Equals(ExpectedAccountId)
                 );
         }
     }

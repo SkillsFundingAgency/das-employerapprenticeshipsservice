@@ -18,7 +18,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
         public override GetAccountLegalEntitiesQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountLegalEntitiesRequest>> RequestValidator { get; set; }
 
-        private const long ExpectedAccountId = 123;
+        private const string ExpectedHashedId = "123";
+        private const long ExpectedAccountId = 456;
         private readonly string _expectedUserId = Guid.NewGuid().ToString();
         private List<LegalEntity> _legalEntities;
         private Mock<IMembershipRepository> _membershipRepository;
@@ -36,13 +37,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             RequestHandler = new GetAccountLegalEntitiesQueryHandler(_membershipRepository.Object, _employerAgreementRepository.Object, RequestValidator.Object);
             Query = new GetAccountLegalEntitiesRequest
             {
-                Id = ExpectedAccountId,
+                HashedId = ExpectedHashedId,
                 UserId = _expectedUserId
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedAccountId, _expectedUserId)).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, _expectedUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (short)Role.Owner
+                RoleId = (short)Role.Owner,
+                AccountId = ExpectedAccountId
             });
             _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId)).ReturnsAsync(_legalEntities);
 
@@ -83,6 +85,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
                 {
                     Id = 1,
                     Name = "LegalEntity1"
+                    
                 },
                 new LegalEntity
                 {

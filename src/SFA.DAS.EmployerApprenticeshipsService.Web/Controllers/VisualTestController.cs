@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerAccountPayeListViewModel = new EmployerAccountPayeListViewModel()
             {
-                AccountId = 1234567890,
+                
                 PayeSchemes = new List<PayeView>()
                 {
                     payeView,
@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerTeamMembersViewModel = new EmployerTeamMembersViewModel()
             {
-                AccountId = 1234567890,
+                HashedId = "1234567890",
                 SuccessMessage = "It successfully applied the cream",
                 TeamMembers = new List<TeamMember>
                 {
@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var confirmNewPayeScheme = new ConfirmNewPayeScheme()
             {
                 AccessToken = "MyAccessToken",
-                AccountId = 012345679,
+                
                 LegalEntities = new List<LegalEntity>
                         {
                             legalEntity,
@@ -165,7 +165,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var addNewPayeScheme = new AddNewPayeScheme()
             {
                 AccessToken = "MyAccessToken",
-                AccountId = 0123456789,
+                
                 LegalEntities = new List<LegalEntity> { legalEntity, legalEntity, legalEntity },
                 PayeScheme = "mypaye-123",
                 RefreshToken = "refresh-123"
@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var employerAgreement = new EmployerAgreementView()
             {
-                AccountId = 0123456789,
+                 
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
@@ -239,7 +239,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
                         LineItem = aggregationLine
                     }},
-                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { AccountId = 3, ValidationFailed = true } } },
+                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { HashedId = "3", ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
                 {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
@@ -249,7 +249,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 {
                     Data = new EmployerAccountPayeListViewModel()
                     {
-                        AccountId = 1234567890,
+                        
                         PayeSchemes = new List<PayeView>()
                         {
                             payeView,
@@ -270,7 +270,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
-                        AccountId = 123,
+                        HashedId = "123",
                         Email = "bojack.horseman@horsingaround.com",
                         Name = "Bocjack Horseman",
                         Role = Role.Owner

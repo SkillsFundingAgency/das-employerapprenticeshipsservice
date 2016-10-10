@@ -8,11 +8,12 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount
 {
-    public class CreateAccountCommandHandler : AsyncRequestHandler<CreateAccountCommand>
+    public class CreateAccountCommandHandler : IAsyncRequestHandler<CreateAccountCommand, CreateAccountCommandResponse>
     {
         [QueueName]
         public string get_employer_levy { get; set; }
@@ -22,23 +23,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
         private readonly IMessagePublisher _messagePublisher;
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
+        private readonly IHashingService _hashingService;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService)
         {
-            if (accountRepository == null)
-                throw new ArgumentNullException(nameof(accountRepository));
-            if (userRepository == null)
-                throw new ArgumentNullException(nameof(userRepository));
-            if (messagePublisher == null)
-                throw new ArgumentNullException(nameof(messagePublisher));
             _accountRepository = accountRepository;
             _userRepository = userRepository;
             _messagePublisher = messagePublisher;
             _mediator = mediator;
             _validator = validator;
+            _hashingService = hashingService;
         }
 
-        protected override async Task HandleCore(CreateAccountCommand message)
+        public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -52,7 +49,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
 
             var emprefs = message.EmployerRef.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken, message.SignAgreement);
+
+            var hashedAccountId = _hashingService.HashValue(accountId);
+            await _accountRepository.SetHashedId(hashedAccountId, accountId);
 
             if (emprefs.Length > 1)
             {
@@ -63,15 +63,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
                 }
             }
 
+
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
             {
                 AccountId = accountId
             });
-
-            await _mediator.SendAsync(new CreateEmployerAccountCreatedNotificationCommand
+            
+            return new CreateAccountCommandResponse
             {
-                AccountId = accountId
-            });
+                HashedId = hashedAccountId
+            };
         }
     }
 }

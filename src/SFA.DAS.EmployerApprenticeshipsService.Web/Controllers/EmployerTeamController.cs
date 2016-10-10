@@ -14,6 +14,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
+    [RoutePrefix("accounts/{accountId}")]
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
@@ -26,7 +27,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Index(int accountId)
+        [Route]
+        public async Task<ActionResult> Index(string accountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
 
@@ -37,29 +39,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> View(int accountId)
+        [Route("Teams")]
+        public async Task<ActionResult> ViewTeam(string accountId)
         {
-            FlashMessageViewModel flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
-
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
-            var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, userIdClaim);
+            var flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
+            
+            var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             // DANGER: Directly injected messages trump orchestrator responses
-            if (flashMessage != null) response.FlashMessage = flashMessage;
+            if (flashMessage != null)
+            {
+                response.FlashMessage = flashMessage;
+            }
             return View(response);
         }
 
         [HttpGet]
-        public ActionResult Invite(long accountId)
+        [Route("Teams/Invite")]
+        public ActionResult Invite(string accountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            if (string.IsNullOrWhiteSpace(userIdClaim)) return RedirectToAction("Index", "Home");
-
             var model = new InviteTeamMemberViewModel
             {
-                AccountId = accountId,
+                HashedId = accountId,
                 Role = Role.Viewer
             };
 
@@ -68,14 +69,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Teams/Invite")]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            if (userIdClaim == null) return RedirectToAction("Index", "Home");
-
             try
             {
-                await _employerTeamOrchestrator.InviteTeamMember(model, userIdClaim);
+                await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
             {
@@ -96,29 +95,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             };
 
             TempData["flashMessage"] = successMessage;
-            return RedirectToAction("View", new { accountId = model.AccountId });
+            return RedirectToAction("ViewTeam");
         }
         
 
         [HttpGet]
-        public async Task<ActionResult> Cancel(long id)
+        [Route("Teams/{invitationId}/Cancel")]
+        public async Task<ActionResult> Cancel(string email, string invitationId, string accountId)
         {
-            var invitation = await _employerTeamOrchestrator.GetInvitation(id);
+            var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
 
             return View(invitation);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Cancel(string email, long accountId, int cancel)
+        [Route("Teams/{invitationId}/Cancel")]
+        public async Task<ActionResult> Cancel(string invitationId, string email, string accountId, int cancel)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
+            //TODO Flash message no longer works
             FlashMessageViewModel successMessage = null;
             if (cancel == 1)
             {
-                await _employerTeamOrchestrator.Cancel(email, accountId, userIdClaim.Value);
+                await _employerTeamOrchestrator.Cancel(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
                 successMessage = new FlashMessageViewModel() {
                     Headline = "Invitation cancelled",
@@ -127,25 +126,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 };
             }
 
-            return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
+            return RedirectToAction("ViewTeam", new { accountId = accountId, flashMessage = successMessage });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Resend(long accountId, string email)
+        [Route("Teams/Resend")]
+        public async Task<ActionResult> Resend(string accountId, string email)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
-            await _employerTeamOrchestrator.Resend(email, accountId, userIdClaim.Value);
+            await _employerTeamOrchestrator.Resend(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             TempData["successMessage"] = $"Invitation resent to {email}";
 
-            return RedirectToAction("View", new { accountId = accountId });
+            return RedirectToAction("ViewTeam", new { accountId });
         }
 
         [HttpGet]
-        public async Task<ActionResult> Remove(long accountId, string email)
+        [Route("Teams/{email}/Remove/")]
+        public async Task<ActionResult> Remove(string accountId, string email)
         {
             var model = await _employerTeamOrchestrator.Review(accountId, email);
 
@@ -154,18 +152,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Remove(long userId, long accountId, string email, int remove)
+        [Route("Teams/{email}/Remove")]
+        public async Task<ActionResult> Remove(long userId, string accountId, string email, int remove)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
+            
             try
             {
                 FlashMessageViewModel successMessage = null;
 
                 if (remove == 1)
                 {
-                    await _employerTeamOrchestrator.Remove(userId, accountId, userIdClaim.Value);
+                    await _employerTeamOrchestrator.Remove(userId, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
                     successMessage = new FlashMessageViewModel()
                     {
@@ -175,7 +172,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     };
                 }
 
-                return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
+                return RedirectToAction("ViewTeam", new { accountId, flashMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {
@@ -191,7 +188,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ChangeRole(long accountId, string email)
+        [Route("Teams/{email}/ChangeRole/")]
+        public async Task<ActionResult> ChangeRole(string accountId, string email)
         {
             var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
@@ -200,14 +198,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangeRole(long accountId, string email, short role)
+        [Route("Teams/{email}/ChangeRole")]
+        public async Task<ActionResult> ChangeRole(string accountId, string email, short role)
         {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
             try
             {
-                await _employerTeamOrchestrator.ChangeRole(accountId, email, role, userIdClaim.Value);
+                await _employerTeamOrchestrator.ChangeRole(accountId, email, role, OwinWrapper.GetClaimValue(@"sub"));
 
                 var successMessage = new FlashMessageViewModel()
                 {
@@ -215,7 +211,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     Headline = "Team member updated",
                     Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
                 };
-                return RedirectToAction("View", new { accountId = accountId, flashMessage = successMessage });
+                return RedirectToAction("ViewTeam", new { accountId = accountId, flashMessage = successMessage });
             }
             catch (InvalidRequestException ex)
             {
@@ -231,6 +227,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
 
+        [HttpGet]
+        [Route("Teams/{email}/Review/")]
+        public async Task<ActionResult> Review(string accountId, string email)
+        {
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+
+            return View(invitation);
+        }
 
         private void AddErrorsToModelState(Dictionary<string, string> errors)
         {
@@ -243,17 +247,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         private void AddExceptionToModelError(Exception ex)
         {
             ModelState.AddModelError("", $"Unexpected exception: {ex.Message}");
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Review(int accountId, string email)
-        {
-            var userIdClaim = ((ClaimsIdentity)System.Web.HttpContext.Current.User.Identity).Claims.FirstOrDefault(claim => claim.Type == @"sub");
-            if (userIdClaim?.Value == null) return RedirectToAction("Index", "Home");
-
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
-
-            return View(invitation);
         }
     }
 }

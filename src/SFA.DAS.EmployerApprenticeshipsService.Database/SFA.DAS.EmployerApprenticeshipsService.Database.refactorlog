@@ -35,4 +35,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StatusId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="7b68838a-815f-4a9d-8baf-e1c0078ee65c" ChangeDateTime="09/22/2016 13:14:36">
+    <Property Name="ElementName" Value="[account].[Account].[HashedAccountId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[account].[Account]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="HashedId" />
+  </Operation>
 </Operations>

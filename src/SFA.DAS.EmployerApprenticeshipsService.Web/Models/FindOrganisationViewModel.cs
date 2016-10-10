@@ -2,6 +2,6 @@
 {
     public class FindOrganisationViewModel : SelectEmployerViewModel
     {
-        public long AccountId { get; set; }
+        public string HashedId { get; set; }
     }
 }
