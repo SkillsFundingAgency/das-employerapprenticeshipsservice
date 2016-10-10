@@ -20,14 +20,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
         private readonly IValidator<SendNotificationCommand> _validator;
         private readonly ILogger _logger;
         private readonly IMessagePublisher _messagePublisher;
-        private readonly INotificationRepository _notificationRepository;
+        
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand> validator, ILogger logger, IMessagePublisher messagePublisher, INotificationRepository notificationRepository)
+        public SendNotificationCommandHandler(IValidator<SendNotificationCommand> validator, ILogger logger, IMessagePublisher messagePublisher)
         {
             _validator = validator;
             _logger = logger;
             _messagePublisher = messagePublisher;
-            _notificationRepository = notificationRepository;
+        
         }
 
         protected override async Task HandleCore(SendNotificationCommand message)
@@ -40,21 +40,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var messageId = await _notificationRepository.Create(new NotificationMessage
-            {
-                Data = JsonConvert.SerializeObject(message.Data),
-                MessageFormat = message.MessageFormat,
-                UserId = message.UserId,
-                DateTime = message.DateTime,
-                ForceFormat = message.ForceFormat,
-                TemplatedId = message.TemplatedId
-            });
+            //var messageId = await _notificationRepository.Create(new NotificationMessage
+            //{
+            //    Data = JsonConvert.SerializeObject(message.Data),
+            //    MessageFormat = message.MessageFormat,
+            //    UserId = message.UserId,
+            //    DateTime = message.DateTime,
+            //    ForceFormat = message.ForceFormat,
+            //    TemplatedId = message.TemplatedId
+            //});
 
-            _logger.Info($"Notification repository Message: {messageId} created in repository");
+            //_logger.Info($"Notification repository Message: {messageId} created in repository");
 
-            await _messagePublisher.PublishAsync(new SendNotificationQueueMessage {Id = messageId});
+            //await _messagePublisher.PublishAsync(new SendNotificationQueueMessage {Id = messageId});
 
-            _logger.Info($"SendNotificationQueueMessage Message: {messageId} added to queue");
+            //_logger.Info($"SendNotificationQueueMessage Message: {messageId} added to queue");
         }
     }
 }

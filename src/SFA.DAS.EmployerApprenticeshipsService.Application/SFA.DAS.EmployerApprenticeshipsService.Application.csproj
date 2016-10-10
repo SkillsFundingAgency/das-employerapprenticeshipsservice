@@ -137,9 +137,6 @@
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommand.cs" />
     <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandValidator.cs" />
-    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommand.cs" />
-    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandHandler.cs" />
-    <Compile Include="Commands\ProcessNotification\ProcessNotificationCommandValidator.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />

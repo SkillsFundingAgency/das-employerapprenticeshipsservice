@@ -120,7 +120,6 @@
     <Compile Include="Data\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\IInvitationRepository.cs" />
     <Compile Include="Data\IMembershipRepository.cs" />
-    <Compile Include="Data\INotificationRepository.cs" />
     <Compile Include="Data\IProviderRepository.cs" />
     <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
