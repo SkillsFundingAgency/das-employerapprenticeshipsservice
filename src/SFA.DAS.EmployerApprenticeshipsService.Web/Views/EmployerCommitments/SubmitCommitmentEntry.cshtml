@@ -10,6 +10,7 @@
             <p>Before you send your request, you can add a note for your training provider to read.</p>
         </div>
         <form method="POST" action="@Url.Action("SubmitCommitment")">
+            @Html.AntiForgeryToken()
             <table>
                 <tbody>
                     <tr>
