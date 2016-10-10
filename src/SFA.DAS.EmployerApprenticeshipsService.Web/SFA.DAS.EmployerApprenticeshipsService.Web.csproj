@@ -545,7 +545,6 @@
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
-    <Content Include="Views\EmployerCommitments\Submit.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
