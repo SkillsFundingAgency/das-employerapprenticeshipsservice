@@ -37,6 +37,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         }
 
         [Test]
+        public void ThenWhenIChangedMyPasswordTheViewDataIsPopulatedWithPasswordChangedInformation()
+        {
+            //Act
+            _homeController.HandlePasswordChanged();
+
+            //Assert
+            Assert.AreEqual("/user-changed-password", _homeController.ViewData["virtualPageUrl"]);
+            Assert.AreEqual("User Action - Changed Password", _homeController.ViewData["virtualPageTitle"]);
+        }
+
+        [Test]
+        public void ThenThePasswordChangedActionCreatsARedirectToRouteResultToTheIndex()
+        {
+            //Act
+            var actual = _homeController.HandlePasswordChanged();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
+            var actualRedirect = actual as RedirectToRouteResult;
+            Assert.IsNotNull(actualRedirect);
+            Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
+        }
+
+        [Test]
         public void ThenWhenICreateAnAccountTheViewDataIsPopulatedWithTheAccountCreatedInformation()
         {
             //Act

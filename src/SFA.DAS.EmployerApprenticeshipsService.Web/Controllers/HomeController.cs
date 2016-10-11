@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 
 
                 var c = new Constants(_configuration.Identity?.BaseAddress);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri)}";
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri + "/passwordChanged")}";
                 ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url?.Encode(Request?.Url?.AbsoluteUri)}"; 
                 
                 return View(accounts);
@@ -77,6 +77,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             ViewData["successMessage"] = @"You've created your profile";
             ViewData["virtualPageUrl"] = @"/user-created-account";
             ViewData["virtualPageTitle"] = @"User Action - Created Account";
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult HandlePasswordChanged()
+        {
+            //ViewData["successMessage"] = @"You've changed your password";
+            ViewData["virtualPageUrl"] = @"/user-changed-password";
+            ViewData["virtualPageTitle"] = @"User Action - Changed Password";
 
             return RedirectToAction("Index");
         }
