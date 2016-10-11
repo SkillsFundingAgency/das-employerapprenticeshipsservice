@@ -101,14 +101,14 @@
     </div>  
 </div>
 
-@if (ViewData.ContainsKey("virtualPageUrl") && ViewData.ContainsKey("virtualPageTitle"))
+@if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))
 {
-    <script>
+    <script type="text/javascript">
 
         dataLayer.push({
             'event': 'VirtualPageview',
-            'virtualPageURL': '@ViewData["virtualPageUrl"]',
-            'virtualPageTitle': '@ViewData["virtualPageTitle"]'
+            'virtualPageURL': '@TempData["virtualPageUrl"]',
+            'virtualPageTitle': '@TempData["virtualPageTitle"]'
         });
 
     </script>

@@ -43,8 +43,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _homeController.HandlePasswordChanged();
 
             //Assert
-            Assert.AreEqual("/user-changed-password", _homeController.ViewData["virtualPageUrl"]);
-            Assert.AreEqual("User Action - Changed Password", _homeController.ViewData["virtualPageTitle"]);
+            Assert.AreEqual("/user-changed-password", _homeController.TempData["virtualPageUrl"]);
+            Assert.AreEqual("User Action - Changed Password", _homeController.TempData["virtualPageTitle"]);
         }
 
         [Test]
@@ -68,8 +68,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
             _homeController.HandleNewRegistraion();
 
             //Assert
-            Assert.AreEqual("/user-created-account", _homeController.ViewData["virtualPageUrl"]);
-            Assert.AreEqual("User Action - Created Account", _homeController.ViewData["virtualPageTitle"]);
+            Assert.AreEqual("/user-created-account", _homeController.TempData["virtualPageUrl"]);
+            Assert.AreEqual("User Action - Created Account", _homeController.TempData["virtualPageTitle"]);
         }
 
         [Test]
