@@ -30,7 +30,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         private Mock<ICookieService> _cookieService;
         private ConfirmNewPayeScheme _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private const long ExpectedAccountId = 73636363;
         private const string ExpectedHashedId = "jgdfg786";
         private const string ExpectedEmpref = "123/DFDS";
         private const string ExpectedUserId = "someid";
@@ -51,8 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 LegalEntityRegisteredAddress = "Test Address"
             };
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
-            _configuration.Hmrc = new HmrcConfiguration {IgnoreDuplicates = true};
+            _configuration = new EmployerApprenticeshipsServiceConfiguration {Hmrc = new HmrcConfiguration()};
 
             _logger = new Mock<ILogger>();
             _cookieService = new Mock<ICookieService>();
@@ -105,11 +103,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         }
 
         [Test]
-        public async Task ThenTheCallToHmrcIsPerformedIfWeAreCheckingDuplicates()
+        public async Task ThenTheCallToHmrcIsPerformed()
         {
-            //Arrange
-            _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
-
             //Act
             await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);
 
@@ -123,7 +118,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new ConstraintException());
-            _configuration.Hmrc = new HmrcConfiguration { IgnoreDuplicates = false };
             
             //Act
             var actual = await _employerAccountPayeOrchestrator.GetPayeConfirmModel("1", "1", "", null);

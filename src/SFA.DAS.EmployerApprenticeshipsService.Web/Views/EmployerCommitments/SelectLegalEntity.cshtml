@@ -11,21 +11,21 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("SelectLegalEntity")">
+        <form method="POST" action="@Url.Action("SetLegalEntity")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="LegalEntityId">Organisation</label>
                     <div class="form-group">
                         <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
                     </div>
-                <select name="LegalEntityId" id="LegalEntityId" class="form-control" aria-label="Legal Entity">
-                    <option value=""></option>
-                    @foreach (var legalEntity in Model.Data.LegalEntities)
-            {
-                        <option value="@legalEntity.Id">@legalEntity.Name</option>
-                    }
-                </select>
+                    <select name="LegalEntityCode" id="LegalEntityCode" class="form-control" aria-label="Legal Entity">
+                        <option value=""></option>
+                        @foreach (var legalEntity in Model.Data.LegalEntities)
+                        {
+                            <option value="@legalEntity.Code">@legalEntity.Name</option>
+                        }
+                    </select>
             </div>
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Data.Commitment.AccountId" />
             <button type="submit" class="button">Next</button>
         </form>
     </div>

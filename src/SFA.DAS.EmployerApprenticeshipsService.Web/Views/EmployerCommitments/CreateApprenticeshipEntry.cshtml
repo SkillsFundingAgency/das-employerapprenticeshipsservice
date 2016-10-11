@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label class="form-label" for="ULN">Unique learner number</label>
-                <p>This field is usually completed by training provders.</p>
+                <p>This field is usually completed by training providers.</p>
                 <input class="form-control form-control-3-4" id="ULN" name="ULN" type="text"
                        aria-required="true" value="@Model.Apprenticeship.ULN" />
             </div>
@@ -85,8 +85,6 @@
             </div>
             <input type="hidden" id="status" name="status" value="@Model.Apprenticeship.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.Apprenticeship.AgreementStatus" />
-            <input type="hidden" id="accountId" name="accountId" value="@Model.Apprenticeship.AccountId" />
-            <input type="hidden" id="commitmentId" name="commitmentId" value="@Model.Apprenticeship.CommitmentId" />
             <button type="submit" class="button">Add apprentice</button>
         </form>
     </div>

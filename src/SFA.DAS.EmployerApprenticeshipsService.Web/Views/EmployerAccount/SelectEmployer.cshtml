@@ -4,9 +4,17 @@
         <h1 class="heading-xlarge">Search for your organisation</h1>
         <p>Use the companies house number for an organisation that your apprentices will be employed through</p>
             <form method="POST" action="@Url.Action("SelectEmployer")">
-                <div class="form-group">
+                <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                     @Html.AntiForgeryToken()
+
                     <label class="form-label" for="EmployerRef">Companies House number</label>
+
+                    @if (TempData["companyNumberError"] != null)
+                    {
+                        <legend>
+                            <span class="error-message">@TempData["companyNumberError"]</span>
+                        </legend>
+                    }
                     <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text"
                            aria-required="true"/>
                 </div>

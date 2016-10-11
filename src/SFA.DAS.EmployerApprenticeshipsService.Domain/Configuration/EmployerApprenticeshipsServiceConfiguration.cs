@@ -17,16 +17,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public TasksApiClientConfiguration TasksApi { get; set; }
         public string Hashstring { get; set; }
     }
+    
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 
     public class TasksApiClientConfiguration : ITasksApiClientConfiguration
     {
         public string BaseUrl { get; set; }
-        public string ClientSecret { get; set; }
+        public string ClientToken { get; set; }
     }
 }

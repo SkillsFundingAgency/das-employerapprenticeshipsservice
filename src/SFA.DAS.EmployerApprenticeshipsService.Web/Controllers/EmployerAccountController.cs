@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -15,20 +14,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
     public class EmployerAccountController : BaseController
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
-        
-        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+
+        public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
             : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
-           
+
             _employerAccountOrchestrator = employerAccountOrchestrator;
         }
 
         // GET: EmployerAccount
         public ActionResult Index()
         {
+            _employerAccountOrchestrator.DeleteCookieData(HttpContext);
+
             return View();
         }
 
@@ -55,26 +56,47 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
-            if (string.IsNullOrWhiteSpace(response.Data.CompanyNumber))
-                return View(response);
+            if (response.Status == HttpStatusCode.OK)
+                return RedirectToAction("Gateway", response.Data);
 
-            return RedirectToAction("Gateway", response.Data);
+            TempData["companyNumberError"] = "No company found. Please try again";
+            response.Status = HttpStatusCode.OK;
+
+            return View(response);
         }
 
         [HttpGet]
         public async Task<ActionResult> Gateway(SelectEmployerViewModel model)
         {
-            var data = new EmployerAccountData
+            
+            EmployerAccountData data;
+            if (model?.CompanyName != null)
             {
-                CompanyNumber = model.CompanyNumber,
-                CompanyName = model.CompanyName,
-                DateOfIncorporation = model.DateOfIncorporation,
-                RegisteredAddress = model.RegisteredAddress
-            };
+                data = new EmployerAccountData
+                {
+                    CompanyNumber = model.CompanyNumber,
+                    CompanyName = model.CompanyName,
+                    DateOfIncorporation = model.DateOfIncorporation,
+                    RegisteredAddress = model.RegisteredAddress
+                };
+            }
+            else
+            {
+                var existingData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+
+                data = new EmployerAccountData
+                {
+                    CompanyNumber = existingData.CompanyNumber,
+                    CompanyName = existingData.CompanyName,
+                    DateOfIncorporation = existingData.DateOfIncorporation,
+                    RegisteredAddress = existingData.RegisteredAddress
+                };
+            }
+            
 
             _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
 
-            return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse","EmployerAccount",null,Request.Url.Scheme)));
+            return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme)));
         }
 
         public async Task<ActionResult> GateWayResponse()
@@ -83,26 +105,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (response.Status != HttpStatusCode.OK)
             {
                 response.Status = HttpStatusCode.OK;
-                
+
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(response.FlashMessage);
 
-                return RedirectToAction("Index","Home");
+                return RedirectToAction("Index", "Home");
             }
 
             var email = OwinWrapper.GetClaimValue("email");
 
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-            
+
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             enteredData.EmployerRef = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
-            
+
             return RedirectToAction("Summary");
         }
-        
+
 
         [HttpGet]
         public ActionResult Summary()
@@ -120,8 +142,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             return View(model);
         }
 
-        [AcceptVerbs(HttpVerbs.Get |HttpVerbs.Post)]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<ActionResult> ViewAccountAgreement()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
@@ -166,7 +187,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 response.Status = HttpStatusCode.OK;
 
                 TempData["userNotAuthorised"] = "true";
-                
+
                 return RedirectToAction("ViewAccountAgreement");
             }
 
@@ -181,7 +202,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
             }
 
-            return RedirectToAction("Index", "EmployerTeam", new {accountId =  response.Data.EmployerAgreement.HashedId});
+            return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }
 
         private string GetUserId()

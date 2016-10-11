@@ -111,6 +111,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         }
 
+        [HttpGet]
+        public ActionResult Privacy()
+        {
+            //var model = new PrivacyViewModel
+            //{
+            //    AboutUrl = _configuration.Privacy.AboutCookiesUrl,
+            //    SurveyProviderUrl = _configuration.Privacy.SurveyProviderUrl,
+            //    GoogleUrl = _configuration.Privacy.GoogleAnalyticsUrl,
+            //    ApplicationInsightsUrl = _configuration.Privacy.ApplicationInsightsUrl,
+            //};
+
+            return View();
+        }
+
         private void LoginUser(string id, string firstName, string lastName)
         {
             var displayName = $"{firstName} {lastName}";

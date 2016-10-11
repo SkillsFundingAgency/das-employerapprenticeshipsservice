@@ -39,15 +39,11 @@
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Status</div>
-                                <div>@task.TaskStatus.ToString()</div>
+                                <div>@task.Status.ToString()</div>
                             </div>
                             <div class="responsive-td">
                                 <div>
-                                    <form action="@Url.Action("View")" method="GET">
-                                        <input type="hidden" name="accountId" value="@Model.AccountId" />
-                                        <input type="hidden" name="taskId" value="@task.Id" />
-                                        <button type="submit" name="task" class="button">View</button>
-                                    </form>
+                                    <a href="@Url.Action("ViewTask", new { hashedTaskId = task.HashedTaskId })" class="button">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>

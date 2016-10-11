@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitme
 {
     public sealed class GetCommitmentsQuery : IAsyncRequest<GetCommitmentsResponse>
     {
-        public long Accountid { get; set; }
+        public string AccountHashId { get; set; }
     }
 }

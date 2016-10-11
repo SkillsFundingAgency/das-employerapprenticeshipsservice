@@ -2,6 +2,6 @@
 {
     public class CommitmentInformViewModel
     {
-        public long AccountId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

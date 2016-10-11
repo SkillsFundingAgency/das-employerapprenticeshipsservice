@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
@@ -18,8 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
         private Mock<ILogger> _logger;
         private Mock<IMediator> _mediator;
         private Mock<ICookieService> _cookieService;
-        private Mock<IEmpRefFileBasedService> _empRefFileBasedService;
-       
+
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -28,10 +26,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
             _logger = new Mock<ILogger>();
             _mediator = new Mock<IMediator>();
             _cookieService = new Mock<ICookieService>();
-            _empRefFileBasedService = new Mock<IEmpRefFileBasedService>();
+            
             _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
-                Hmrc = new HmrcConfiguration { IgnoreDuplicates = false }
+                Hmrc = new HmrcConfiguration()
             };
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);   
@@ -69,7 +67,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Hmr
         public async Task ThenICanRetrieveCorrectEmpRefOfScenarioUser()
         {
             //Arrange
-            _configuration.Hmrc.IgnoreDuplicates = true;
             var scenarioUserEmail = "test.user@test.com";
             var expectedEmpRef = "123/456789";
 

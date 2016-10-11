@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -25,43 +27,47 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
     public sealed class EmployerCommitmentsOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly IHashingService _hashingService;
 
-        public EmployerCommitmentsOrchestrator(IMediator mediator)
+        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
 
             _mediator = mediator;
+            _hashingService = hashingService;
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(long accountid)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashId)
         {
             var data = await _mediator.SendAsync(new GetCommitmentsQuery
             {
-                Accountid = accountid
+                AccountHashId = hashId
             });
 
             var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
             {
-                AccountId = accountid
+                AccountHashId = hashId
             });
 
             return new OrchestratorResponse<CommitmentListViewModel>
             {
                 Data = new CommitmentListViewModel
                 {
-                    AccountId = accountid,
-                    Commitments = data.Commitments,
+                    AccountHashId = hashId,
+                    Commitments = data.Commitments.Select(x => MapFrom(x)).ToList(),
                     NumberOfTasks = tasks.Tasks.Count
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(string hashedAccountId, string externalUserId)
         {
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                HashedId = "",
+                HashedId = hashedAccountId,
                 UserId = externalUserId
             });
 
@@ -71,14 +77,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Commitment = new CreateCommitmentViewModel
                     {
-                        AccountId = accountId
+                        HashedAccountId = hashedAccountId
                     },
                     LegalEntities = legalEntities.Entites.LegalEntityList
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(long accountId, string externalUserId)
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(string hashedAccountId, string externalUserId)
         {
             var providers = await GetProviders();
 
@@ -88,7 +94,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Commitment = new CreateCommitmentViewModel
                     {
-                        AccountId = accountId,
+                        HashedAccountId = hashedAccountId,
                     },
                     Providers = providers.Providers
                 }
@@ -98,17 +104,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
         {
             var providers = await GetProviders();
-            var legalEntities = await GetActiveLegalEntities(commitment.AccountId, externalUserId);
+            var legalEntities = await GetActiveLegalEntities(commitment.HashedAccountId, externalUserId);
 
             var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Id == commitment.LegalEntityId);
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(commitment.LegalEntityCode, StringComparison.InvariantCultureIgnoreCase));
 
             return new OrchestratorResponse<CreateCommitmentViewModel>
             {
                 Data = new CreateCommitmentViewModel
                 {
-                    AccountId = commitment.AccountId,
-                    LegalEntityId = commitment.LegalEntityId,
+                    HashedAccountId = commitment.HashedAccountId,
+                    LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = legalEntity.Name,
                     ProviderId = commitment.ProviderId,
                     ProviderName = provider.Name
@@ -123,8 +129,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Commitment = new Commitment
                 {
                     Name = commitment.Name,
-                    EmployerAccountId = commitment.AccountId,
-                    LegalEntityId = commitment.LegalEntityId,
+                    EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
+                    LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
                     ProviderName = commitment.ProviderName
@@ -134,37 +140,39 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
         {
-            await _mediator.SendAsync(new ApproveApprenticeshipCommand { EmployerAccountId = model.AccountId, CommitmentId = model.CommitmentId, ApprenticeshipId = model.ApprenticeshipId, Message = model.Message });
+            await _mediator.SendAsync(new ApproveApprenticeshipCommand
+            {
+                EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(model.HashedCommitmentId),
+                ApprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId)
+            });
         }
 
-        public async Task<CommitmentViewModel> Get(long accountId, long commitmentId)
+        public async Task<CommitmentViewModel> Get(string hashedAccountId, string hashedCommitmentId)
         {
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
-                AccountId = accountId,
-                CommitmentId = commitmentId
+                AccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
             });
 
-            return new CommitmentViewModel
-            {
-                Commitment = data.Commitment
-            };
+            return MapFrom(data.Commitment);
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
-                AccountId = accountId,
-                CommitmentId = commitmentId,
-                ApprenticeshipId = apprenticeshipId
+                AccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
             });
 
             var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
 
             var apprenticeship = MapFrom(data.Apprenticeship);
 
-            apprenticeship.AccountId = accountId;
+            apprenticeship.HashedAccountId = hashedAccountId;
 
             return new ExtendedApprenticeshipViewModel
             {
@@ -177,19 +185,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             await _mediator.SendAsync(new CreateApprenticeshipCommand
             {
-                AccountId = apprenticeship.AccountId,
+                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
                 Apprenticeship = MapFrom(apprenticeship)
             });
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(long accountId, long commitmentId)
+        public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId)
         {
             var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
 
             var apprenticeship = new ApprenticeshipViewModel
             {
-                AccountId = accountId,
-                CommitmentId = commitmentId,
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId,
             };
 
             return new ExtendedApprenticeshipViewModel
@@ -199,33 +207,33 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(long accountId, long commitmentId, string message)
+        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
-                EmployerAccountId = accountId,
-                CommitmentId = commitmentId,
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
                 Message = message
             });
         }
         
-	    public async Task PauseApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+	    public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _mediator.SendAsync(new PauseApprenticeshipCommand
             {
-                EmployerAccountId = accountId,
-                CommitmentId = commitmentId,
-                ApprenticeshipId = apprenticeshipId
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
             });
         }
 
-        public async Task ResumeApprenticeship(long accountId, long commitmentId, long apprenticeshipId)
+        public async Task ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _mediator.SendAsync(new ResumeApprenticeshipCommand
             {
-                EmployerAccountId = accountId,
-                CommitmentId = commitmentId,
-                ApprenticeshipId = apprenticeshipId
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
             });
         }
 
@@ -234,31 +242,56 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return await _mediator.SendAsync(new GetProvidersQueryRequest());
         }
 
-        private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(long accountId, string externalUserId)
+        private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(string hashedAccountId, string externalUserId)
         {
             return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                HashedId = accountId.ToString(),//TODO
+                HashedId = hashedAccountId,
                 UserId = externalUserId
             });
+        }
+
+        private CommitmentViewModel MapFrom(Commitment commitment)
+        {
+            return new CommitmentViewModel
+            {
+                HashedId = _hashingService.HashValue(commitment.Id),
+                Name = commitment.Name,
+                LegalEntityName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Status = commitment.Status,
+                Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
+            };
+        }
+
+        private CommitmentListItemViewModel MapFrom(CommitmentListItem commitment)
+        {
+            return new CommitmentListItemViewModel
+            {
+                HashedId = _hashingService.HashValue(commitment.Id),
+                Name = commitment.Name,
+                LegalEntityName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Status = commitment.Status
+            };
         }
 
         private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel
             {
-                Id = apprenticeship.Id,
-                CommitmentId = apprenticeship.CommitmentId,
+                HashedId = _hashingService.HashValue(apprenticeship.Id),
+                HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 ULN = apprenticeship.ULN,
                 TrainingId = apprenticeship.TrainingId,
                 Cost = apprenticeship.Cost,
-                StartMonth = apprenticeship.StartDate.Value.Month,
+                StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate.Value.Month,
+                EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status.GetDescription(),
+                Status = apprenticeship.Status,
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
         }
@@ -267,8 +300,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         {
             return new Apprenticeship
             {
-                Id = viewModel.Id,
-                CommitmentId = viewModel.CommitmentId,
+                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,

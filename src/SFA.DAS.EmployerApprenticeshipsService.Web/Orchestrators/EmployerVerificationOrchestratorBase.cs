@@ -105,18 +105,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 response.Empref = "";
             }
             
-            if (Configuration.Hmrc.IgnoreDuplicates && string.IsNullOrEmpty(response.Empref))
-            {
-                if (string.IsNullOrEmpty(response.Empref))
-                {
-                    response.Empref =
-                        $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
-                }
-            }
             return response;
         }
 
-        public async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -128,11 +120,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Logger.Warn("No response from SelectEmployerViewModel");
                 return new OrchestratorResponse<SelectEmployerViewModel>
                 {
-                    FlashMessage = new FlashMessageViewModel()
-                    {
-                        Message = "No companies match the identifier you entered.",
-                        SubMessage = "Please try again."
-                    },
+                    Status = HttpStatusCode.BadRequest,
                     Data = new SelectEmployerViewModel()
                 };
             }
