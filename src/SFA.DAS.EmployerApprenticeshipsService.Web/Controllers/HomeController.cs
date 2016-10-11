@@ -4,13 +4,13 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
+    
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             _configuration = configuration;
         }
 
+        
         public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue("sub");
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 
 
                 var c = new Constants(_configuration.Identity?.BaseAddress);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/passwordChanged")}";
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
                 ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url?.Encode(Request?.Url?.AbsoluteUri)}"; 
                 
                 return View(accounts);
@@ -67,12 +68,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
 
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistraion");
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistration");
         }
 
         [Authorize]
         [HttpGet]
-        public ActionResult HandleNewRegistraion()
+        public ActionResult HandleNewRegistration()
         {
             TempData["successMessage"] = @"You've created your profile";
             TempData["virtualPageUrl"] = @"/user-created-account";
@@ -118,7 +119,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             return View(users);
         }
-
+        
         public ActionResult SignOut()
         {
             return OwinWrapper.SignOutUser();
@@ -128,13 +129,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult Privacy()
         {
-            //var model = new PrivacyViewModel
-            //{
-            //    AboutUrl = _configuration.Privacy.AboutCookiesUrl,
-            //    SurveyProviderUrl = _configuration.Privacy.SurveyProviderUrl,
-            //    GoogleUrl = _configuration.Privacy.GoogleAnalyticsUrl,
-            //    ApplicationInsightsUrl = _configuration.Privacy.ApplicationInsightsUrl,
-            //};
 
             return View();
         }

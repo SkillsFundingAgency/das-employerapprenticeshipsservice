@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public void ThenWhenICreateAnAccountTheViewDataIsPopulatedWithTheAccountCreatedInformation()
         {
             //Act
-            _homeController.HandleNewRegistraion();
+            _homeController.HandleNewRegistration();
 
             //Assert
             Assert.AreEqual("/user-created-account", _homeController.TempData["virtualPageUrl"]);
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.HomeC
         public void ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
         {
             //Act
-            var actual = _homeController.HandleNewRegistraion();
+            var actual = _homeController.HandleNewRegistration();
 
             //Assert
             Assert.IsNotNull(actual);
