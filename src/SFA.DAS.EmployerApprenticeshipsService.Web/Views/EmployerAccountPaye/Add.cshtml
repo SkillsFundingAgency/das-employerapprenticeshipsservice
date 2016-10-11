@@ -3,7 +3,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add PAYE Scheme</h1>
-        <p><strong style="font-weight:bold">DRAFT CONTENT</strong> You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
+        <p>You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
         <form method="GET" action="@Url.Action("GetGateway","EmployerAccountPaye")">
             <div class="form-group @(Model.Data.ValidationFailed ? "error" : "")">
                 @if (Model.Data.ValidationFailed)
