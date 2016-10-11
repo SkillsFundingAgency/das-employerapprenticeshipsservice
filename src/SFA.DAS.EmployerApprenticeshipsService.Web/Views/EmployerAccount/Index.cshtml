@@ -33,7 +33,7 @@
         <p><a href="http://www.gateway.gov.uk/Help/Help.aspx?content=help_more_info_gateway.htm&languageid=0" target="_blank" rel="external">What's Government Gateway?</a></p>
         <form method="POST" action="@Url.Action("Index")">
             @Html.AntiForgeryToken()
-            <h2 class="heading-medium">Check this statement to continue</h2>
+           
                 <div class="form-group  @(TempData?["notunderstood"] != null ? "error" : string.Empty)">
                     @if (TempData["notunderstood"] != null)
                     {
@@ -41,7 +41,12 @@
                     }
                     <label class="block-label" for="understood">
                         <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
-                        I understand that all account users will be able to see financial information from any PAYE schemes I add.  
+                        
+                        I have authority to add PAYE schemes to this account.
+                        <br /><br />
+                        I understand that all account users will be able to see financial information from any PAYE schemes I add.
+                        <br /><br />
+                        All PAYE schemes I add are owned and operated by an organisation that’ll use this account, or owned and operated by a <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/308734/connected-companies.pdf" target="_blank" title="Connected companies and Employment Allowance: detailed technical guidance for employers and their agents">connected organisation</a>. 
                     </label>
                 </div>
             <button type="submit" class="button button-start" id="start">Start</button>
