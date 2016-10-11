@@ -344,6 +344,7 @@
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
+    <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\CreateCommitmentViewModel.cs" />
     <Compile Include="Models\CreateNewLegalEntity.cs" />
@@ -544,6 +545,7 @@
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
+    <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
