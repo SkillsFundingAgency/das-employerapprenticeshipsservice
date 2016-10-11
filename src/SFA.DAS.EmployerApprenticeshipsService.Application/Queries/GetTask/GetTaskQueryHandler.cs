@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTask
         {
             var assignee = $"EMPLOYER-{message.AccountId}";
 
-            var task = await _tasksApi.GetTask(message.TaskId, assignee);
+            var task = await _tasksApi.GetTask(assignee, message.TaskId);
 
             return new GetTaskQueryResponse
             {

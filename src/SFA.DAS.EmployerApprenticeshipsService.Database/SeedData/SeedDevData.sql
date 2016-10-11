@@ -177,20 +177,323 @@ IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementTemplate] WHERE Id = 1
 	AND [Ref] = 'SFA Employer Agreement V1.0BETA'))
 BEGIN 
 	INSERT INTO [account].[EmployerAgreementTemplate](Id, [Text], CreatedDate, Ref, ReleasedDate) 
-	VALUES(1, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce nunc eros, posuere at lectus sollicitudin, efficitur malesuada odio. Curabitur varius mauris sit amet fringilla consequat. Integer porta id augue eu pretium. Sed quis sem vitae orci tincidunt vehicula. Nam sit amet ante metus. Suspendisse et elit varius, euismod odio quis, elementum erat. Nam imperdiet at ipsum vitae molestie. Mauris nisl diam, congue ultrices pretium vitae, congue vitae magna.</p><br />
-<p>Nam ut hendrerit velit. Nam vitae quam rhoncus, tempor eros nec, sagittis quam. Etiam aliquet lectus in varius sodales. Vestibulum volutpat orci eu dui faucibus rutrum ut sed ante. Etiam molestie, quam ac ultricies lacinia, erat nunc tempus enim, vitae elementum libero tortor vitae urna. Integer eu eros mattis, euismod ligula in, venenatis nisi. Praesent ultricies nulla sed enim tristique accumsan. Etiam bibendum nulla vel bibendum facilisis. Suspendisse et tellus in dui vehicula ullamcorper nec nec libero. Curabitur ac ex eget elit aliquet rutrum. Ut lacinia, tellus vitae mattis eleifend, metus arcu pharetra massa, vitae placerat velit sapien sit amet nulla. Fusce id mi egestas, facilisis justo in, scelerisque leo. Vivamus lorem nisl, egestas in pulvinar at, facilisis et leo.</p><br />
-<p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla consequat ac justo eu accumsan. Duis viverra pharetra elit ut mollis. Ut ultricies viverra mollis. Praesent vel nunc nec magna scelerisque lobortis. Pellentesque tempor venenatis nisl ut scelerisque. Mauris pharetra sapien quis metus dictum suscipit. Morbi mattis velit ante, id ullamcorper sapien tempus vel. In consequat aliquam elit, in congue purus tempor non. Fusce sit amet ligula erat.</p>
-<p>Nunc ut lectus vitae mi varius viverra porta at tortor. Fusce cursus nunc ac neque maximus, a sollicitudin lectus cursus. Phasellus in purus augue. Suspendisse egestas commodo dolor, tempor rutrum tortor gravida in. Ut feugiat in ligula nec malesuada. Pellentesque posuere imperdiet mi. Cras sed odio ante. Aliquam rutrum consectetur urna, eget dictum massa maximus vitae. Donec in pretium metus, sed porta tortor.</p><br />
-<p>Mauris purus nisl, fermentum et est sit amet, dapibus pretium massa. Fusce ultrices massa vitae diam varius, eu pharetra felis gravida. Quisque interdum ac est vitae ultricies. Nunc efficitur nibh et urna varius, nec ullamcorper quam faucibus. Nunc vel lectus rhoncus, faucibus lectus ac, rhoncus nisi. Donec tempor id erat in condimentum. Sed volutpat elementum neque sed sagittis. Aliquam erat volutpat. Maecenas sit amet sapien ut mi ornare imperdiet nec ac diam. Nullam eleifend dictum tellus, luctus convallis ligula. Pellentesque in tortor a libero posuere pellentesque. Donec consectetur lacus at dignissim egestas. Fusce gravida rutrum ex a cursus. </p>', GETDATE(), 'SFA Employer Agreement V1.0BETA', GETDATE()) 
+	VALUES(1, '<p>
+1 Introduction
+</p>
+
+<p>
+1.1 This Agreement is made between the Secretary of State for Education
+through the Skills Funding Agency, an executive agency of the Department for
+Education (the SFA) and [Name of employer], (the Employer).
+</p>
+
+<p>
+1.2 The Agreement applies to any organisation that employs Apprentices and
+sets out the terms and conditions on which the SFA will make payments to
+Providers who have a Contract with the Employer to deliver Apprenticeships.
+</p>
+
+<p>
+2 Definitions
+</p>
+
+<p>
+“Agreement” means this agreement between the Employer and the SFA
+</p>
+
+<p>
+“Apprentice” means those who receive apprenticeship training and (where 
+required) end-point assessment through an apprenticeship framework or
+standard funded by the Skills Funding Agency.
+</p>
+
+<p>
+“Apprenticeship” means a job with an accompanying skills development
+programme. This includes the training and (where required) end-point-
+assessment for an employee as part of a job with an accompanying skills
+development programme.
+</p>
+
+<p>
+“Apprenticeship Framework” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Apprenticeship Levy” means a levy on UK employers to fund new
+apprenticeships. In England, control of apprenticeship funding will be put in
+the hands of employers through the Digital Apprenticeship Service
+</p>
+
+<p>
+“Apprenticeship Standard” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Commitment Statement” means the details of Apprenticeship Standards or
+Apprenticeship Frameworks which the Provider will deliver and the price
+agreed for that delivery that is recorded on DAS
+</p>
+
+<p>
+“Contract” means the Contract between the Employer and the Provider for the
+delivery of Apprenticeships.
+</p>
+
+<p>
+“Digital apprenticeship service” means the digital interface to services
+designed to support the uptake of apprenticeships. The service is aimed
+primarily at employers, with information coming from a range of different
+sources including learning providers and apprenticeship assessment
+organisations.
+</p>
+
+<p>
+“Funding” means
+</p>
+
+<p>
+“Funding Rules” means the document which sets out the detailed
+requirements for Apprenticeships which the Employer and Provider must
+comply with in order for the Provider to be funded by the SFA.
+</p>
+
+<p>
+“Provider” means an organisation body who has a Contract with the Employer
+to deliver Apprenticeships.
+</p>
+
+<p>
+“Provider Agreement” means the agreement between the Provider and the
+SFA setting out the condition on which the Provider will receive Funding from
+the SFA.
+</p>
+
+<p>
+“Register” means the Register of Apprenticeship Training Providers on which
+all Providers must appear and the Register of Apprenticeship Assessment
+Organisations on which all Assessment Organisations must appear.
+</p>
+
+<p>
+3 Term of the Agreement
+</p>
+
+<p>
+3.1 The Agreement will commence on XXXXX and shall end on XXXXX 
+</p>
+
+
+<p>
+1 Introduction
+</p>
+
+<p>
+1.1 This Agreement is made between the Secretary of State for Education
+through the Skills Funding Agency, an executive agency of the Department for
+Education (the SFA) and [Name of employer], (the Employer).
+</p>
+
+<p>
+1.2 The Agreement applies to any organisation that employs Apprentices and
+sets out the terms and conditions on which the SFA will make payments to
+Providers who have a Contract with the Employer to deliver Apprenticeships.
+</p>
+
+<p>
+2 Definitions
+</p>
+
+<p>
+“Agreement” means this agreement between the Employer and the SFA
+</p>
+
+<p>
+“Apprentice” means those who receive apprenticeship training and (where 
+required) end-point assessment through an apprenticeship framework or
+standard funded by the Skills Funding Agency.
+</p>
+
+<p>
+“Apprenticeship” means a job with an accompanying skills development
+programme. This includes the training and (where required) end-point-
+assessment for an employee as part of a job with an accompanying skills
+development programme.
+</p>
+
+<p>
+“Apprenticeship Framework” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Apprenticeship Levy” means a levy on UK employers to fund new
+apprenticeships. In England, control of apprenticeship funding will be put in
+the hands of employers through the Digital Apprenticeship Service
+</p>
+
+<p>
+“Apprenticeship Standard” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Commitment Statement” means the details of Apprenticeship Standards or
+Apprenticeship Frameworks which the Provider will deliver and the price
+agreed for that delivery that is recorded on DAS
+</p>
+
+<p>
+“Contract” means the Contract between the Employer and the Provider for the
+delivery of Apprenticeships.
+</p>
+
+<p>
+“Digital apprenticeship service” means the digital interface to services
+designed to support the uptake of apprenticeships. The service is aimed
+primarily at employers, with information coming from a range of different
+sources including learning providers and apprenticeship assessment
+organisations.
+</p>
+
+<p>
+“Funding” means
+</p>
+
+<p>
+“Funding Rules” means the document which sets out the detailed
+requirements for Apprenticeships which the Employer and Provider must
+comply with in order for the Provider to be funded by the SFA.
+</p>
+
+<p>
+“Provider” means an organisation body who has a Contract with the Employer
+to deliver Apprenticeships.
+</p>
+
+<p>
+“Provider Agreement” means the agreement between the Provider and the
+SFA setting out the condition on which the Provider will receive Funding from
+the SFA.
+</p>
+
+<p>
+“Register” means the Register of Apprenticeship Training Providers on which
+all Providers must appear and the Register of Apprenticeship Assessment
+Organisations on which all Assessment Organisations must appear.
+</p>
+
+<p>
+3 Term of the Agreement
+</p>
+
+<p>
+3.1 The Agreement will commence on XXXXX and shall end on XXXXX 
+</p>
+
+
+<p>
+1 Introduction
+</p>
+
+<p>
+1.1 This Agreement is made between the Secretary of State for Education
+through the Skills Funding Agency, an executive agency of the Department for
+Education (the SFA) and [Name of employer], (the Employer).
+</p>
+
+<p>
+1.2 The Agreement applies to any organisation that employs Apprentices and
+sets out the terms and conditions on which the SFA will make payments to
+Providers who have a Contract with the Employer to deliver Apprenticeships.
+</p>
+
+<p>
+2 Definitions
+</p>
+
+<p>
+“Agreement” means this agreement between the Employer and the SFA
+</p>
+
+<p>
+“Apprentice” means those who receive apprenticeship training and (where 
+required) end-point assessment through an apprenticeship framework or
+standard funded by the Skills Funding Agency.
+</p>
+
+<p>
+“Apprenticeship” means a job with an accompanying skills development
+programme. This includes the training and (where required) end-point-
+assessment for an employee as part of a job with an accompanying skills
+development programme.
+</p>
+
+<p>
+“Apprenticeship Framework” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Apprenticeship Levy” means a levy on UK employers to fund new
+apprenticeships. In England, control of apprenticeship funding will be put in
+the hands of employers through the Digital Apprenticeship Service
+</p>
+
+<p>
+“Apprenticeship Standard” means [AGREE DEFINITION}
+</p>
+
+<p>
+“Commitment Statement” means the details of Apprenticeship Standards or
+Apprenticeship Frameworks which the Provider will deliver and the price
+agreed for that delivery that is recorded on DAS
+</p>
+
+<p>
+“Contract” means the Contract between the Employer and the Provider for the
+delivery of Apprenticeships.
+</p>
+
+<p>
+“Digital apprenticeship service” means the digital interface to services
+designed to support the uptake of apprenticeships. The service is aimed
+primarily at employers, with information coming from a range of different
+sources including learning providers and apprenticeship assessment
+organisations.
+</p>
+
+<p>
+“Funding” means
+</p>
+
+<p>
+“Funding Rules” means the document which sets out the detailed
+requirements for Apprenticeships which the Employer and Provider must
+comply with in order for the Provider to be funded by the SFA.
+</p>
+
+<p>
+“Provider” means an organisation body who has a Contract with the Employer
+to deliver Apprenticeships.
+</p>
+
+<p>
+“Provider Agreement” means the agreement between the Provider and the
+SFA setting out the condition on which the Provider will receive Funding from
+the SFA.
+</p>
+
+<p>
+“Register” means the Register of Apprenticeship Training Providers on which
+all Providers must appear and the Register of Apprenticeship Assessment
+Organisations on which all Assessment Organisations must appear.
+</p>
+
+<p>
+3 Term of the Agreement
+</p>
+
+<p>
+3.1 The Agreement will commence on XXXXX and shall end on XXXXX 
+</p>', GETDATE(), 'SFA Employer Agreement V1.0BETA', GETDATE()) 
 END 
-ELSE 
-BEGIN 
-	UPDATE [account].[EmployerAgreementTemplate] 
-	SET [Text] = 'I am a template',
-		CreatedDate = GETDATE(),
-		Ref = 'T/1',
-		ReleasedDate = GETDATE()
-	WHERE Id = 1
-END 
+
 
 SET IDENTITY_INSERT  [account].[EmployerAgreementTemplate] OFF

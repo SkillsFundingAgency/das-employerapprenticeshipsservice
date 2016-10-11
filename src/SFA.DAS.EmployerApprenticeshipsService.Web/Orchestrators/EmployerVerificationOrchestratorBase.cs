@@ -105,14 +105,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 response.Empref = "";
             }
             
-            if (Configuration.Hmrc.IgnoreDuplicates && string.IsNullOrEmpty(response.Empref))
-            {
-                if (string.IsNullOrEmpty(response.Empref))
-                {
-                    response.Empref =
-                        $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}";
-                }
-            }
             return response;
         }
 

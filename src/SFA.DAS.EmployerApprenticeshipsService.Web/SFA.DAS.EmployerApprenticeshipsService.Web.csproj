@@ -195,12 +195,12 @@
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.1.0.0.8638\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.4.0.12323, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.4.0.12323\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.4.0.12323, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.4.0.12323\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
@@ -344,6 +344,7 @@
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
+    <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\CreateCommitmentViewModel.cs" />
     <Compile Include="Models\CreateNewLegalEntity.cs" />
@@ -544,6 +545,7 @@
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
+    <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>

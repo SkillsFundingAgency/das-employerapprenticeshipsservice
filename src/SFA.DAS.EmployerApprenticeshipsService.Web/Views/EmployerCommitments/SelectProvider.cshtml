@@ -13,6 +13,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("SetProvider")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="ProviderId">Search for training provider</label>
                     <div class="form-group">
