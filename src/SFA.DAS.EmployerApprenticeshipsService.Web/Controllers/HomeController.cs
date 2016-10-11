@@ -75,6 +75,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         public ActionResult HandleNewRegistraion()
         {
             ViewData["successMessage"] = @"You've created your profile";
+            ViewData["virtualPageUrl"] = @"/user-created-account";
+            ViewData["virtualPageTitle"] = @"User Action - Created Account";
+
             return RedirectToAction("Index");
         }
 
