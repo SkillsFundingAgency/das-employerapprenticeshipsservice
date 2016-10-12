@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
 @model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
 
+@{ViewBag.Title = "Levy accounts"; }
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
