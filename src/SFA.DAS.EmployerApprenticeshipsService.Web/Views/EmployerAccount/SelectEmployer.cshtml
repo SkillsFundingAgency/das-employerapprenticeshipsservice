@@ -1,8 +1,8 @@
-﻿
+﻿@{ViewBag.Title = "Search for your organisation"; }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Search for your organisation</h1>
-        <p>Use the companies house number for an organisation that your apprentices will be employed through</p>
+        <p>Use the companies house number for an organisation that your apprentices will be employed through.</p>
             <form method="POST" action="@Url.Action("SelectEmployer")">
                 <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                     @Html.AntiForgeryToken()

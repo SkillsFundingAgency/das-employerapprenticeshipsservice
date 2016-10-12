@@ -177,12 +177,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds";
+                TempData["successMessage"] = "This account can now spend levy funds.";
             }
             else
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
             }
 
             return RedirectToAction("Index", new { accountId });

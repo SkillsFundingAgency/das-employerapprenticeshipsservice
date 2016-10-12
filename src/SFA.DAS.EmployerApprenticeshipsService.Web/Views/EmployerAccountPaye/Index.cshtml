@@ -1,11 +1,15 @@
 ﻿
 @model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.EmployerAccountPayeListViewModel>
-
+@{ViewBag.Title = "PAYE Schemes";}
 <div class="grid-row">
+    <div class="column-one-third pull-right">
+        <form action="@Url.Action("Add")" method="GET">
+            <input class="button button-add" id="addNewPaye" type="submit" value="Add new scheme">
+        </form>
+    </div>
     <div class="column-two-thirds">
         <div class="hgroup">
             <h1 class="heading-xlarge">PAYE Schemes</h1>
-
             <p>Add PAYE schemes to allow levy funds to be added to your account.</p>    
         </div>
         
@@ -69,19 +73,10 @@
 
 
     </div>
-
+  
     </div>
 
-<div class="grid-row">
-    <br/>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <form action="@Url.Action("Add")" method="GET">
-            <input class="button" id="addNewPaye" type="submit" value="Add new scheme">
-        </form>
-    </div>
-</div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
