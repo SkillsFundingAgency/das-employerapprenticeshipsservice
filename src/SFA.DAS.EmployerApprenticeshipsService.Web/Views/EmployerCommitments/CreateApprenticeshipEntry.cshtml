@@ -6,6 +6,18 @@
         <p>
             Add the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
         </p>
+        @if (!ViewContext.ViewData.ModelState.IsValid)
+        {
+            foreach (var state in ViewContext.ViewData.ModelState.Values)
+            {
+                foreach (var error in state.Errors)
+                {
+                    <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
+                        <p class="error-message">@error.ErrorMessage</p>
+                    </div>
+                }
+            }
+        }
         <hr />
     </div>
 </div>
@@ -82,7 +94,7 @@
                 <label class="form-label" for="cost">Cost of apprenticeship</label>
                 <b>£</b>
                 <input class="form-control form-control-3-4" id="cost" name="cost" type="number"
-                       aria-required="true" value="@Model.Apprenticeship.Cost" />
+                       step="0.01" min="0.01" value="@Model.Apprenticeship.Cost" />
                 <hr />
             </div>
 

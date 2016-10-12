@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -200,7 +201,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Commitments/{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
-            await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
+            try
+            {
+                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
+                model.Apprenticeship = apprenticeship;
+
+                foreach (var error in ex.ErrorMessages)
+                {
+                    ModelState.AddModelError(error.Key, error.Value);
+                }
+
+                return View("CreateApprenticeshipEntry", model);
+            }
 
             return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
         }
