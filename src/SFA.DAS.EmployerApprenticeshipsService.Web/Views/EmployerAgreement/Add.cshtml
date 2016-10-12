@@ -6,16 +6,14 @@
         <form action="@Url.Action("FindLegalEntity","EmployerAgreement")" method="POST">
             @Html.AntiForgeryToken()
             <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
-                <label class="form-label">Company House number</label>
+                <label class="form-label" for="companyHouseNumber">Company House number</label>
 
                 @if (TempData["companyNumberError"] != null)
                 {
-                    <legend>
-                        <span class="error-message">@TempData["companyNumberError"]</span>
-                    </legend>
+                   <span class="error-message" id="error-company-number">@TempData["companyNumberError"]</span>
                 }
-               
-                <input class="form-control form-control-3-4" type="text" name="entityReferenceNumber" id="companyHouseNumber"/>
+
+                <input class="form-control" type="text" name="entityReferenceNumber" id="companyHouseNumber" @(TempData?["companyNumberError"] != null ? "aria-describedby=\"error-company-number\"" : string.Empty) />
             </div>
             <input class="button" id="findOrganisation" type="submit" value="Continue"/>
         </form>
