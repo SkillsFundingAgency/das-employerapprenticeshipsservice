@@ -28,6 +28,7 @@
             </tbody>
         </table>
         <form method="POST" action="@Url.Action("CreateCommitment")">
+            @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="form-label" for="Name">Cohort name</label>
                     <p>Your training provider will see this.</p>

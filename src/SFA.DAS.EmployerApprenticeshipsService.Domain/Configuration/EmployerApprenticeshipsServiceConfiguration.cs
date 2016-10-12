@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public TasksApiClientConfiguration TasksApi { get; set; }
         public string Hashstring { get; set; }
     }
+    
 
     public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
