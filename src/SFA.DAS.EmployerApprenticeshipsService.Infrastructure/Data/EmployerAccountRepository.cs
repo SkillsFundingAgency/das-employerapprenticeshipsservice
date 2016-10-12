@@ -45,6 +45,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
             return result.SingleOrDefault();
         }
+
+        public async Task<Accounts> GetAccounts()
+        {
+            var result = await WithConnection(async c => await c.QueryAsync<Account>(
+                sql: "select a.* from [account].[Account] a;",
+                commandType: CommandType.Text));
+            return new Accounts() {AccountList = result.ToList()};
+        }
     }
 }
 
