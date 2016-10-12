@@ -56,7 +56,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.EAS.Api">
+  <Role name="SFA.DAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />

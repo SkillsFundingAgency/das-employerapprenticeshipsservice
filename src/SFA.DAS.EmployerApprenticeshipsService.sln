@@ -58,7 +58,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Api", "SFA.DAS.EAS.Api\SFA.DAS.EAS.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

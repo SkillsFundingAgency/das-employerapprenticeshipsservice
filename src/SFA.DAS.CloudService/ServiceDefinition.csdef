@@ -68,7 +68,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WebRole name="SFA.DAS.EAS.Api" vmsize="Small">
+  <WebRole name="SFA.DAS.Account.Api" vmsize="Small">
     <Sites>
       <Site name="Web">
         <Bindings>
