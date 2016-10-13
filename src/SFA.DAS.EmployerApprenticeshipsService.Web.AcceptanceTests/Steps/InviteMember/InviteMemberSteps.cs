@@ -64,14 +64,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             if (createdStatus.ToLower() == "created")
             {
                 Assert.IsTrue(teamMembers.Data.TeamMembers.Any(c=>c.Email.Equals(invitedTeamMember,StringComparison.CurrentCultureIgnoreCase)));
-                //Check to make sure an email has been sent
-                _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.AtLeastOnce);
             }
             else
             {
                 Assert.IsFalse(teamMembers.Data.TeamMembers.Any(c => c.Email.Equals(invitedTeamMember, StringComparison.CurrentCultureIgnoreCase)));
-                //Check to make sure an email has not been sent
-                //_messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
         }
 
