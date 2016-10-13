@@ -1,9 +1,20 @@
 ﻿using System.Globalization;
+using FluentValidation;
+using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public sealed class ApprenticeshipViewModel
+    public sealed class TestValidator : AbstractValidator<ApprenticeshipViewModel>
+    {
+        public TestValidator()
+        {
+            RuleFor(x => x.FirstName).NotEmpty();
+        }
+    }
+
+    //[Validator(typeof(TestValidator))]
+    public class ApprenticeshipViewModel
     {
         public string HashedId { get; set; }
         public string HashedCommitmentId { get; set; }
