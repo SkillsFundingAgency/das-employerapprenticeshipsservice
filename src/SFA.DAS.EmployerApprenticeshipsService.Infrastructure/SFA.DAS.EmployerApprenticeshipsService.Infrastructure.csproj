@@ -138,7 +138,6 @@
     <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\AggregationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
-    <Compile Include="Data\NotificationRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationPolicy.cs" />
