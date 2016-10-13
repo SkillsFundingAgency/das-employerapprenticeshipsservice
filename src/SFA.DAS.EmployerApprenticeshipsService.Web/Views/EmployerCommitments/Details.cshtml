@@ -81,26 +81,6 @@
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             }
-                            @if (apprenticeship.CanBePaused())
-                            {
-                                <div>
-                                    <form action="@Url.Action("PauseApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" name="commitment" class="button">Pause</button>
-                                    </form>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            }
-                            @if (apprenticeship.CanBeResumed())
-                            {
-                                <div>
-                                    <form action="@Url.Action("ResumeApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" name="commitment" class="button">Resume</button>
-                                    </form>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            }
                         </div>
                     </div>
                 }
