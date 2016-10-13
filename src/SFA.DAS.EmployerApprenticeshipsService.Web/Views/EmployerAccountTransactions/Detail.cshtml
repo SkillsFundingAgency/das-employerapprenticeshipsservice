@@ -37,7 +37,7 @@
                     </tr>
                     <tr>
                         <td class="rjTableName">Date</td>
-                        <td class="">@{ var date = new DateTime(Model.LineItem.Year, Model.LineItem.Month, 1); }@date.ToString("d MMM yyyy")</td>
+                        <td class="">@{ var date = new DateTime(Model.LineItem.Year, Model.LineItem.Month, 1); }@date.ToGdsFormat()</td>
 
                     </tr>
                     <tr>
@@ -83,7 +83,7 @@
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">DateSubmitted</div>
-                                <div>@aggregationLineItem.ActivityDate.ToString("d MMM yyyy")</div>
+                                <div>@aggregationLineItem.ActivityDate.ToGdsFormat()</div>
                             </div>
                             <div class="responsive-td numeric">
                                 <div class="responsive-inner-caption">LevyYtd</div>
