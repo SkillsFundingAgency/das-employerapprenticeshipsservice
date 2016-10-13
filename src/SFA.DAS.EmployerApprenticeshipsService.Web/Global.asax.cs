@@ -4,6 +4,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FluentValidation.Mvc;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
@@ -28,6 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
+            //FluentValidationModelValidatorProvider.Configure();
         }
 
         protected void Application_Error(object sender, EventArgs e)

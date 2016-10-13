@@ -194,7 +194,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
 
-            return View(model);
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View(model.Apprenticeship);
         }
 
         [HttpPost]
@@ -215,7 +217,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     ModelState.AddModelError(error.Key, error.Value);
                 }
 
-                return View("CreateApprenticeshipEntry", model);
+                ViewBag.ApprenticeshipProducts = model.Standards;
+
+                return View("CreateApprenticeshipEntry", model.Apprenticeship);
             }
 
             return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
