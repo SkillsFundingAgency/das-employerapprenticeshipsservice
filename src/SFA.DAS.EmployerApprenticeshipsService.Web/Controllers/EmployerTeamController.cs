@@ -42,15 +42,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams")]
         public async Task<ActionResult> ViewTeam(string accountId)
         {
-            var flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
-            
             var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            // DANGER: Directly injected messages trump orchestrator responses
-            if (flashMessage != null)
-            {
-                response.FlashMessage = flashMessage;
-            }
             return View(response);
         }
 
@@ -74,7 +67,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             try
             {
-                await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
+                var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View("ViewTeam", response);
             }
             catch (InvalidRequestException ex)
             {
@@ -86,16 +81,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 AddExceptionToModelError(ex);
                 return View(model);
             }
-
-            var successMessage = new FlashMessageViewModel()
-            {
-                Severity = FlashMessageSeverityLevel.Success,
-                Headline = "Invitation sent",
-                Message = $"You've sent an invitation to {model.Email}"
-            };
-
-            TempData["flashMessage"] = successMessage;
-            return RedirectToAction("ViewTeam");
         }
         
 

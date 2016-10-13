@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                HashedId = "2",
+                AccountId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                HashedId = "2",
+                AccountId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                HashedId = "2",
+                AccountId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -148,7 +148,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             var command = new ResendInvitationCommand
             {
                 Email = "test.user@test.local",
-                HashedId = "2",
+                AccountId = "2",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
