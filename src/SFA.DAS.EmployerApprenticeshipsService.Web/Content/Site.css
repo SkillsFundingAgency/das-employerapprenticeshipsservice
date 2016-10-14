@@ -68,6 +68,7 @@ table {
         display: inline-block;
         clear: none;
         margin-right: 5px;
+        margin-bottom: 5px;
     }
     .form-group > form {
         display: inline-block;
