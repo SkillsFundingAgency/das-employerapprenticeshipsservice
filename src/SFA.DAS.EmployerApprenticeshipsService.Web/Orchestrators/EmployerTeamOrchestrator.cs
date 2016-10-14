@@ -193,7 +193,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task<TeamMember> GetTeamMember(string accountId, string email)
+        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)
         {
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
@@ -201,7 +201,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Email = email
             });
 
-            return response.TeamMember;
+            return new OrchestratorResponse<TeamMember>()
+            {
+                Data = response.TeamMember
+            };
         }
 
         private InvitationViewModel MapFrom(TeamMember teamMember)
@@ -219,15 +222,49 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task ChangeRole(string hashedId, string email, short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email,
+            short role, string externalUserId)
         {
-            await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+            try
             {
-                HashedId = hashedId,
-                Email = email,
-                RoleId = role,
-                ExternalUserId = externalUserId
-            });
+                await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+                {
+                    HashedId = hashedId,
+                    Email = email,
+                    RoleId = role,
+                    ExternalUserId = externalUserId
+                });
+
+                var response = await GetTeamMembers(hashedId, externalUserId);
+
+                if (response.Status == HttpStatusCode.OK)
+                {
+                    response.FlashMessage = new FlashMessageViewModel()
+                    {
+                        Severity = FlashMessageSeverityLevel.Success,
+                        Headline = "Team member updated",
+                        Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
+                    };
+                }
+
+                return response;
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
         }
     }
 }
