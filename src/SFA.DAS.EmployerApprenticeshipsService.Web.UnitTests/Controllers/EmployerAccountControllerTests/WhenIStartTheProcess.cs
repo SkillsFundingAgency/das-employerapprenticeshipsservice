@@ -45,20 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
             };
         }
-
-        [Test]
-        public void ThenIAmPresentedWithTheEligibilityPage()
-        {
-            //Act
-            var actual = _employerAccountController.Index();
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
-            Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual(string.Empty, actualViewResult.ViewName);
-        }
-
+        
         [Test]
         public async Task ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
         {
@@ -114,20 +101,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
                 )));
         }
-
-        [Test]
-        public void ThenICanProceedToTheGovernmentGatewayConfirmationPage()
-        {
-            //Act
-            var actual = _employerAccountController.Index("understood");
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualRedirectResult = actual as RedirectToRouteResult;
-            Assert.IsNotNull(actualRedirectResult);
-            Assert.AreEqual("SelectEmployer", actualRedirectResult.RouteValues["Action"]);
-        }
-
+        
         [Test]
         public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
@@ -161,7 +135,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         public void ThenTheCookieIsDeletedWhenIStartTheAddAccountProcess()
         {
             //Act
-            _employerAccountController.Index();
+            _employerAccountController.SelectEmployer();
 
             //Assert
             _orchestrator.Verify(x => x.DeleteCookieData(It.IsAny<HttpContextBase>()), Times.Once);
