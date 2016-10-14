@@ -14,10 +14,10 @@ var sfa = sfa || {};
                     radios.each(function () {
                         if ($(this).prop('checked')) {
                             var target = $(this).parent().data("target");
-                            $("#" + target).removeClass("js-hidden").removeAttr("aria-hidden");
+                            $("#" + target).removeClass("js-hidden").attr("aria-hidden");
                         } else {
                             var target = $(this).parent().data("target");
-                            $("#" + target).addClass("js-hidden").addAttr("aria-hidden", "true");
+                            $("#" + target).addClass("js-hidden").attr("aria-hidden", "true");
                         }
                     });
                    
