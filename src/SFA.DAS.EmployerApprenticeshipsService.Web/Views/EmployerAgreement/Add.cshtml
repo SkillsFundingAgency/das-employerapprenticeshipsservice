@@ -1,21 +1,35 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.AddLegalEntityViewModel>
-
+@{ViewBag.Title = "Enter your Companies House number";}
+@if (TempData["companyNumberError"] != null)
+{
+    <div class="grid-row">
+        <div class="column-full error-summary-wrapper">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-company-number" data-focuses="error-company-number">Enter a valid Companies House number</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Find your organisation</h1>
+        <h1 class="heading-xlarge">Enter your Companies House number</h1>
         <form action="@Url.Action("FindLegalEntity","EmployerAgreement")" method="POST">
             @Html.AntiForgeryToken()
             <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
-                <label class="form-label">Company House number</label>
+                <label class="form-label" for="companyHouseNumber">Company House number</label>
 
                 @if (TempData["companyNumberError"] != null)
                 {
-                    <legend>
-                        <span class="error-message">@TempData["companyNumberError"]</span>
-                    </legend>
+                   <span class="error-message" id="error-company-number">Enter a valid Companies House number</span>
                 }
-               
-                <input class="form-control form-control-3-4" type="text" name="entityReferenceNumber" id="companyHouseNumber"/>
+
+                <input class="form-control" type="text" name="entityReferenceNumber" id="companyHouseNumber" @(TempData?["companyNumberError"] != null ? "aria-describedby=\"error-company-number\"" : string.Empty) />
             </div>
             <input class="button" id="findOrganisation" type="submit" value="Continue"/>
         </form>

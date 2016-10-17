@@ -1,9 +1,9 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.BeginNewPayeScheme>
-
+@{ViewBag.Title = "Add PAYE Scheme";}
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add PAYE Scheme</h1>
-        <p><strong style="font-weight:bold">DRAFT CONTENT</strong> You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
+        <p>You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
         <form method="GET" action="@Url.Action("GetGateway","EmployerAccountPaye")">
             <div class="form-group @(Model.Data.ValidationFailed ? "error" : "")">
                 @if (Model.Data.ValidationFailed)
@@ -14,7 +14,11 @@
                 }
                 <label class="block-label" for="confirmPayeVisibility">
                     <input type="checkbox" id="confirmPayeVisibility" name="confirmPayeVisibility" value="true">
+                    I have authority to add PAYE schemes to this account.
+                    <br><br>
                     I understand that all account users will be able to see financial information from any PAYE schemes I add.
+                    <br><br>
+                    All PAYE schemes I add are owned and operated by an organisation that’ll use this account, or owned and operated by a <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/308734/connected-companies.pdf" target="_blank" title="Connected companies and Employment Allowance: detailed technical guidance for employers and their agents">connected organisation</a>.
                 </label>
             </div>    
             <input type="hidden" name="confirmPayeVisibility" value="false" />

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -44,7 +40,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheMediatorCommandIsCalledWithCorrectParameters()
         {
             //Arrange
-            var model = ArrangeModel();
+            var model = new CreateAccountModel
+            {
+                CompanyName = "test",
+                UserId = Guid.NewGuid().ToString(),
+                EmployerRef = "123ADFC",
+                CompanyNumber = "12345",
+                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
+                CompanyRegisteredAddress = "My Address",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
 
             //Act
             await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
@@ -60,91 +65,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                         && c.EmployerRef.Equals(model.EmployerRef)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
-                        && c.SignAgreement.Equals(true)
-                    )));
-        }
-
-        [Test]
-        public async Task ThenTheCookieIsDeletedWhenTheAccountHasBeenSuccessfullyCreated()
-        {
-            //Arrange
-            var model = ArrangeModel();
-
-            //Act
-            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
-
-            //Assert
-            _cookieService.Verify(x=>x.Delete(It.IsAny<HttpContextBase>(), "sfa-das-employerapprenticeshipsservice-employeraccount"), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenIfUserTriesToSignTheAgreementWhenNotAuthorisedTheyGetUnauthorized()
-        {
-            //Arrange
-            var model = new CreateAccountModel
-            {
-                UserIsAuthorisedToSign = false,
-                SignedAgreement = true
-            };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()))
-                     .ReturnsAsync(new GetLatestAccountAgreementResponse
-                     {
-                         Template = new EmployerAgreementTemplate()
-                     });
-
-            //Act
-            var result = await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()), Times.Once);
-            Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);
-        }
-
-        [Test]
-        public async Task ThenIfUserSignsTheAgreementAndIsAuthorisedToTheyGetOkRequest()
-        {
-            //Arrange
-            var model = new CreateAccountModel
-            {
-                UserIsAuthorisedToSign = true,
-                SignedAgreement = true
-            };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestAccountAgreementTemplateRequest>()))
-                     .ReturnsAsync(new GetLatestAccountAgreementResponse
-                     {
-                         Template = new EmployerAgreementTemplate()
-                     });
-
-            //Act
-            var result = await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.OK, result.Status);
-        }
-
-        [Test]
-        public async Task ThenShouldSignAgreementIfUserCanAndHasSignedAgreement()
-        {
-            //Arrange
-            var model = ArrangeModel();
-
-            //Act
-            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
-                        c => c.AccessToken.Equals(model.AccessToken)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.CompanyName.Equals(model.CompanyName)
-                        && c.CompanyNumber.Equals(model.CompanyNumber)
-                        && c.CompanyRegisteredAddress.Equals(model.CompanyRegisteredAddress)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.EmployerRef.Equals(model.EmployerRef)
-                        && c.AccessToken.Equals(model.AccessToken)
-                        && c.RefreshToken.Equals(model.RefreshToken)
-                        && c.SignAgreement.Equals(true)
                     )));
         }
 
@@ -160,11 +80,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel
-            {
-                UserIsAuthorisedToSign = true,
-                SignedAgreement = true
-            }, It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedId);

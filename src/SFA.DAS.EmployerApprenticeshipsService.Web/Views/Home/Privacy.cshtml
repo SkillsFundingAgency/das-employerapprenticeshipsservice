@@ -1,12 +1,11 @@
 ﻿@*@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.PrivacyViewModel*@
-
+@{ViewBag.Title = "Privacy and cookies"; }
 <div class="grid-row">
-
     <div class="column-two-thirds">
         <header class="page-header">
             <div>
                 <h1 class="heading-xlarge">
-                    Cookies
+                    Privacy and cookies
                 </h1>
             </div>
         </header>
@@ -248,3 +247,11 @@ This session cookie is set to let Hotjar know whether that visitor is included i
         </div>
     </div>
 </div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li>Privacy and cookies</li>
+        </ol>
+    </div>
+}

@@ -33,13 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model, HttpContextBase context)
         {
-            if (!model.UserIsAuthorisedToSign && model.SignedAgreement)
-            {
-                var response = await GetAccountAgreementTemplate(model);
-                response.Status = HttpStatusCode.Unauthorized;
-
-                return response;
-            }
+                response.Status = HttpStatusCode.BadRequest;
             try
             {
                 var result = await Mediator.SendAsync(new CreateAccountCommand
@@ -51,8 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                     EmployerRef = model.EmployerRef,
                     AccessToken = model.AccessToken,
-                    RefreshToken = model.RefreshToken,
-                    SignAgreement = model.UserIsAuthorisedToSign && model.SignedAgreement
+                RefreshToken = model.RefreshToken
                 });
 
                 CookieService.Delete(context, CookieName);

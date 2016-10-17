@@ -1,5 +1,5 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.RemovePayeScheme>
-
+@{ViewBag.Title = "Remove PAYE scheme";} 
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -25,10 +25,11 @@
                     <span class="heading-small">No, don't remove</span>
                 </label>
             </div>
-           
-            <button type="submit" class="button">Continue</button>
-            <a href="@Url.Action("Index","EmployerAccountPaye")" class="link">Cancel</a>
-        </form>
+            <div class="form-group">
+                <button type="submit" class="button">Continue</button>
+                <a href="@Url.Action("Index","EmployerAccountPaye")" class="button button-link">Cancel</a>
+            </div>
+         </form>
     </div>
 </div>
 @section breadcrumb {
