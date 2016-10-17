@@ -11,5 +11,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef, long accountId);
        
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
+        Task<DasDeclaration> GetLastSubmissionForScheme(string empRef);
     }
 }
