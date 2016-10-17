@@ -533,6 +533,9 @@ table.top-border {
     background: #DEE0E2;
 }
 
+.validation-summary-valid {
+    display: none;
+}
 b, strong {
     font-weight: 600;
 }

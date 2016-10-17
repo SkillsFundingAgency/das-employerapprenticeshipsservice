@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -286,7 +285,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 LastName = apprenticeship.LastName,
                 ULN = apprenticeship.ULN,
                 TrainingId = apprenticeship.TrainingId,
-                Cost = apprenticeship.Cost,
+                Cost = apprenticeship.Cost.ToString(),
                 StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
@@ -305,7 +304,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,
                 TrainingId = viewModel.TrainingId,
-                Cost = viewModel.Cost,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
             };

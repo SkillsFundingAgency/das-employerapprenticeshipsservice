@@ -9,11 +9,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public TestValidator()
         {
-            RuleFor(x => x.FirstName).NotEmpty();
+            RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("'ULN' is not in the correct format.");
+            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$");
         }
     }
 
-    //[Validator(typeof(TestValidator))]
+    [Validator(typeof(TestValidator))]
     public class ApprenticeshipViewModel
     {
         public string HashedId { get; set; }
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string ApprenticeshipName => $"{FirstName} {LastName}";
         public string ULN { get; set; }
         public string TrainingId { get; set; } //standard or framework
-        public decimal? Cost { get; set; }
+        public string Cost { get; set; }
         public int? StartMonth { get; set; }
 
         public string StartMonthName

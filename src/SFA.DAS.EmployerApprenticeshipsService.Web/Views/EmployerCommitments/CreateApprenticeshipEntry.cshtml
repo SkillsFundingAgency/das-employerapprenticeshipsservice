@@ -6,18 +6,7 @@
         <p>
             Add the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
         </p>
-        @if (!ViewContext.ViewData.ModelState.IsValid)
-        {
-            foreach (var state in ViewContext.ViewData.ModelState.Values)
-            {
-                foreach (var error in state.Errors)
-                {
-                    <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
-                        <p class="error-message">@error.ErrorMessage</p>
-                    </div>
-                }
-            }
-        }
+        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
         <hr />
     </div>
 </div>
@@ -35,7 +24,6 @@
                        aria-required="true" value="@Model.LastName" />
                 <hr />
             </div>
-
             <div class="form-group">
                 <label class="form-label" for="TrainingId">Find apprenticeship</label>
                 <select name="TrainingId" id="TrainingId" class="form-control" aria-label="Training standard">
@@ -92,16 +80,20 @@
             
             <div class="form-group">
                 <label class="form-label" for="cost">Cost of apprenticeship</label>
-                <b>£</b>
-                <input class="form-control form-control-3-4" id="cost" name="cost" type="number"
-                       step="0.01" min="0.01" value="@Model.Cost" />
+                @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), type="number", step="1", min="1" })
+                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4" })
+                
+                @*<input class="form-control form-control-3-4" id="cost" name="cost" type="number"
+                       step="1" min="1" value="@Model.Cost" />*@
                 <hr />
             </div>
 
-            <div class="form-group">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
                 <label class="form-label" for="ULN">Unique learner number</label>
-                <input class="form-control form-control-3-4" id="ULN" name="ULN" type="text"
-                       aria-required="true" value="@Model.ULN" />
+                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
+                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4" })
+                @*<input class="form-control form-control-3-4" id="ULN" name="ULN" type="text"
+                       aria-required="true" value="@Model.ULN" />*@
             </div>
           
             <input type="hidden" id="status" name="status" value="@Model.Status" />
