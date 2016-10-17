@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model, HttpContextBase context)
         {
-                response.Status = HttpStatusCode.BadRequest;
             try
             {
                 var result = await Mediator.SendAsync(new CreateAccountCommand
@@ -45,7 +44,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                     EmployerRef = model.EmployerRef,
                     AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken
+                    RefreshToken = model.RefreshToken
                 });
 
                 CookieService.Delete(context, CookieName);
