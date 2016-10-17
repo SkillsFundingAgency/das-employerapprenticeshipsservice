@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -42,15 +43,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams")]
         public async Task<ActionResult> ViewTeam(string accountId)
         {
-            var flashMessage = TempData["flashMessage"] as FlashMessageViewModel;
-            
             var response = await _employerTeamOrchestrator.GetTeamMembers(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            // DANGER: Directly injected messages trump orchestrator responses
-            if (flashMessage != null)
-            {
-                response.FlashMessage = flashMessage;
-            }
             return View(response);
         }
 
@@ -74,7 +68,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             try
             {
-                await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
+                var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View("ViewTeam", response);
             }
             catch (InvalidRequestException ex)
             {
@@ -86,16 +82,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 AddExceptionToModelError(ex);
                 return View(model);
             }
-
-            var successMessage = new FlashMessageViewModel()
-            {
-                Severity = FlashMessageSeverityLevel.Success,
-                Headline = "Invitation sent",
-                Message = $"You've sent an invitation to {model.Email}"
-            };
-
-            TempData["flashMessage"] = successMessage;
-            return RedirectToAction("ViewTeam");
         }
         
 
@@ -201,29 +187,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/{email}/ChangeRole")]
         public async Task<ActionResult> ChangeRole(string accountId, string email, short role)
         {
-            try
-            {
-                await _employerTeamOrchestrator.ChangeRole(accountId, email, role, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.ChangeRole(accountId, email, role, OwinWrapper.GetClaimValue(@"sub"));
 
-                var successMessage = new FlashMessageViewModel()
-                {
-                    Severity = FlashMessageSeverityLevel.Success,
-                    Headline = "Team member updated",
-                    Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
-                };
-                return RedirectToAction("ViewTeam", new { accountId = accountId, flashMessage = successMessage });
-            }
-            catch (InvalidRequestException ex)
+            if (response.Status == HttpStatusCode.OK)
             {
-                AddErrorsToModelState(ex.ErrorMessages);
+                return View("ViewTeam", response);
             }
-            catch (Exception ex)
-            {
-                AddExceptionToModelError(ex);
-            }
+            
+            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
-            return View(teamMember);
+            //We have to override flash message as the change role view has different model to view team view
+            teamMemberResponse.FlashMessage = response.FlashMessage;
+            teamMemberResponse.Exception = response.Exception;
+
+            return View(teamMemberResponse);
         }
 
 

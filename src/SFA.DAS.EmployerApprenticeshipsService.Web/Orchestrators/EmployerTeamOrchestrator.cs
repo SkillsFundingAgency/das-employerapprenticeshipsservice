@@ -55,12 +55,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId,
+            string userId)
         {
             try
             {
                 var response =
-                    await _mediator.SendAsync(new GetAccountTeamMembersQuery { HashedId = hashedId, ExternalUserId = userId });
+                    await
+                        _mediator.SendAsync(new GetAccountTeamMembersQuery
+                        {
+                            HashedId = hashedId,
+                            ExternalUserId = userId
+                        });
 
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
@@ -90,16 +96,50 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             }
         }
 
-        public async Task InviteTeamMember(InviteTeamMemberViewModel model, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> InviteTeamMember(
+            InviteTeamMemberViewModel model, string externalUserId)
         {
-            await _mediator.SendAsync(new CreateInvitationCommand
+            try
             {
-                ExternalUserId = externalUserId,
-                HashedId = model.HashedId,
-                Name = model.Name,
-                Email = model.Email,
-                RoleId = model.Role
-            });
+                await _mediator.SendAsync(new CreateInvitationCommand
+                {
+                    ExternalUserId = externalUserId,
+                    HashedId = model.HashedId,
+                    Name = model.Name,
+                    Email = model.Email,
+                    RoleId = model.Role
+                });
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = ex
+                };
+            }
+
+            var response = await GetTeamMembers(model.HashedId, externalUserId);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = "Invitation sent",
+                    Message = $"You've sent an invitation to {model.Email}"
+                };
+            }
+
+            return response;
         }
 
         public async Task<InvitationViewModel> Review(string accountId, string email)
@@ -138,7 +178,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             await _mediator.SendAsync(new ResendInvitationCommand
             {
                 Email = email,
-                HashedId = hashedId,
+                AccountId = hashedId,
                 ExternalUserId = externalUserId
             });
         }
@@ -153,7 +193,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task<TeamMember> GetTeamMember(string accountId, string email)
+        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)
         {
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
@@ -161,7 +201,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 Email = email
             });
 
-            return response.TeamMember;
+            return new OrchestratorResponse<TeamMember>()
+            {
+                Data = response.TeamMember
+            };
         }
 
         private InvitationViewModel MapFrom(TeamMember teamMember)
@@ -179,15 +222,49 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task ChangeRole(string hashedId, string email, short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email,
+            short role, string externalUserId)
         {
-            await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+            try
             {
-                HashedId = hashedId,
-                Email = email,
-                RoleId = role,
-                ExternalUserId = externalUserId
-            });
+                await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
+                {
+                    HashedId = hashedId,
+                    Email = email,
+                    RoleId = role,
+                    ExternalUserId = externalUserId
+                });
+
+                var response = await GetTeamMembers(hashedId, externalUserId);
+
+                if (response.Status == HttpStatusCode.OK)
+                {
+                    response.FlashMessage = new FlashMessageViewModel()
+                    {
+                        Severity = FlashMessageSeverityLevel.Success,
+                        Headline = "Team member updated",
+                        Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
+                    };
+                }
+
+                return response;
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
         }
     }
 }
