@@ -131,6 +131,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
+            if (enteredData == null)
+                return RedirectToAction("SelectEmployer", "EmployerAccount");
+
             var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
@@ -143,11 +146,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 RefreshToken = enteredData.RefreshToken
             };
 
-            var response = await _employerAccountOrchestrator.CreateAccount(request);
-           
-            TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-            TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
+            
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
+                response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
+                return RedirectToAction("Summary");
+            }
 
+            TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
+           
+            
             return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }
 

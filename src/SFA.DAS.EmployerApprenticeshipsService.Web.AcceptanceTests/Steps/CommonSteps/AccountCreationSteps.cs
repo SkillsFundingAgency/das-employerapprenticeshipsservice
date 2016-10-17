@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using Moq;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
@@ -24,13 +25,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<ICookieService> _cookieService;
+
         public AccountCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
-
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
+            _cookieService = new Mock<ICookieService>();
+            
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
         }
+
         private string _externalUserId;
 
         [Given(@"I am an account ""(.*)""")]
@@ -62,7 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
                 CompanyName = "Test Company",
                 CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
                 CompanyRegisteredAddress = "Address Line 1"
-            }).Wait();
+            },new Mock<HttpContextBase>().Object).Wait();
 
 
         }

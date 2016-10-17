@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using Moq;
 using NLog;
@@ -40,20 +41,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenTheMediatorCommandIsCalledWithCorrectParameters()
         {
             //Arrange
-            var model = new CreateAccountModel
-            {
-                CompanyName = "test",
-                UserId = Guid.NewGuid().ToString(),
-                EmployerRef = "123ADFC",
-                CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
-                CompanyRegisteredAddress = "My Address",
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
-            };
+            var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateAccount(model);
+            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
@@ -81,11 +72,27 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel());
+            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedId);
 
         }
+        
+        private static CreateAccountModel ArrangeModel()
+        {
+            return new CreateAccountModel
+            {
+                CompanyName = "test",
+                UserId = Guid.NewGuid().ToString(),
+                EmployerRef = "123ADFC",
+                CompanyNumber = "12345",
+                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
+                CompanyRegisteredAddress = "My Address",
+                AccessToken = Guid.NewGuid().ToString(),
+                RefreshToken = Guid.NewGuid().ToString()
+            };
+        }
     }
 }
+
