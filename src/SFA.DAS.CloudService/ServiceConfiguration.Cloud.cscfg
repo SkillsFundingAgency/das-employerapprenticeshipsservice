@@ -44,18 +44,6 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.EAS.Notification.Worker">
-    <Instances count="1" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
-      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
-      <Setting name="EnvironmentName" value="__EnvironmentName__" />
-      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="LogLevel" value="__loglevel__" />
-    </ConfigurationSettings>
-    <Certificates>
-    </Certificates>
-  </Role>
   <Role name="SFA.DAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>

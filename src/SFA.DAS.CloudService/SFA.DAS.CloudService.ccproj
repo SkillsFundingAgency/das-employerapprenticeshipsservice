@@ -63,13 +63,6 @@
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.Account.Api</RoleName>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Notification.Worker\SFA.DAS.EAS.Notification.Worker.csproj">
-      <Name>SFA.DAS.EAS.Notification.Worker</Name>
-      <Project>{275b7c02-04ea-4064-867d-c15025a55d7d}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.Notification.Worker</RoleName>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
       <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>

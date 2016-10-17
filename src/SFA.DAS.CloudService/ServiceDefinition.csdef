@@ -57,17 +57,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.Notification.Worker" vmsize="ExtraSmall">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="LogLevel" />
-    </ConfigurationSettings>
-    <Imports>
-    </Imports>
-  </WorkerRole>
+ 
   <WebRole name="SFA.DAS.Account.Api" vmsize="Small">
     <Sites>
       <Site name="Web">

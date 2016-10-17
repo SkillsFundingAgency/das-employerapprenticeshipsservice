@@ -5,10 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -45,20 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
             };
         }
-
-        [Test]
-        public void ThenIAmPresentedWithTheEligibilityPage()
-        {
-            //Act
-            var actual = _employerAccountController.Index();
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
-            Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual(string.Empty, actualViewResult.ViewName);
-        }
-
+        
         [Test]
         public async Task ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
         {
@@ -114,20 +98,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
                 )));
         }
-
-        [Test]
-        public void ThenICanProceedToTheGovernmentGatewayConfirmationPage()
-        {
-            //Act
-            var actual = _employerAccountController.Index("understood");
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualRedirectResult = actual as RedirectToRouteResult;
-            Assert.IsNotNull(actualRedirectResult);
-            Assert.AreEqual("SelectEmployer", actualRedirectResult.RouteValues["Action"]);
-        }
-
+        
         [Test]
         public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
@@ -144,24 +115,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
             Assert.IsNotNull(actualResult);
             Assert.AreEqual(ExpectedRedirectUrl, actualResult.Url);
         }
-
-        [Test]
-        [Ignore("Cant test this without some serious refactoring of the Controller")]
-        public async Task ThenTheAccessCodeIsTakenFromTheUrlExchangedForThe()
-        {
-            //Arrange
-
-            //_mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayTokenQuery>())).ReturnsAsync(new GetGatewayTokenQueryResponse() { HmrcTokenResponse = new HmrcTokenResponse()});
-
-            //Act
-            var actual = await _employerAccountController.GateWayResponse();
-        }
+            
 
         [Test]
         public void ThenTheCookieIsDeletedWhenIStartTheAddAccountProcess()
         {
             //Act
-            _employerAccountController.Index();
+            _employerAccountController.SelectEmployer();
 
             //Assert
             _orchestrator.Verify(x => x.DeleteCookieData(It.IsAny<HttpContextBase>()), Times.Once);

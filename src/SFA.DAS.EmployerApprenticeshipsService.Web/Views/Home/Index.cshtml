@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
 @model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.UserAccountsViewModel>
 
+@{ViewBag.Title = "Levy accounts"; }
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
@@ -80,7 +81,7 @@
                 </div>
             }
             <p>
-                <a href="@Url.Action("Index", "EmployerAccount")" class="button action-add" id="add_new_account">Add new account</a>
+                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button action-add" id="add_new_account">Add new account</a>
             </p>
         </section>
         
