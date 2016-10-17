@@ -154,6 +154,7 @@
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
+    <Compile Include="Queries\GetUserTest\WhenIGetAUser.cs" />
     <Compile Include="Queries\QueryBaseTest.cs" />
   </ItemGroup>
   <ItemGroup>

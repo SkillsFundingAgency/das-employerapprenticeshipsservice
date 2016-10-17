@@ -12,6 +12,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamM
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -183,14 +184,59 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             });
         }
 
-        public async Task Remove(long userId, string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, string externalUserId)
         {
-            await _mediator.SendAsync(new RemoveTeamMemberCommand
+            var response = await GetTeamMembers(accountId, externalUserId);
+
+            try
             {
-                UserId = userId,
-                HashedId = accountId,
-                ExternalUserId = externalUserId
-            });
+                var userResponse = await _mediator.SendAsync(new GetUserRequest {UserId = userId});
+
+                if (userResponse?.User == null)
+                {
+                    response.Status = HttpStatusCode.NotFound;
+                    response.FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Could not find user",
+                        Message = "The user being removed from the team could not be found",
+                        Severity = FlashMessageSeverityLevel.Error
+                    };
+                }
+                else
+                {
+                    await _mediator.SendAsync(new RemoveTeamMemberCommand
+                    {
+                        UserId = userId,
+                        HashedId = accountId,
+                        ExternalUserId = externalUserId
+                    });
+
+                    //Update the team members list after the user has been removed
+                    response = await GetTeamMembers(accountId, externalUserId);
+
+                    response.Status = HttpStatusCode.OK;
+
+                    response.FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Team member removed",
+                        Message = $"You've removed { userResponse.User.Email}",
+                        Severity = FlashMessageSeverityLevel.Success
+                    };
+                }
+            }
+            catch (InvalidRequestException e)
+            {
+
+                response.Status = HttpStatusCode.BadRequest;
+                response.Exception = e;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = e;
+            }
+           
+            return response;
         }
 
         public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)

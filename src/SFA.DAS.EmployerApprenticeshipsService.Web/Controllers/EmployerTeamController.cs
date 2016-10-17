@@ -141,24 +141,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/{email}/Remove")]
         public async Task<ActionResult> Remove(long userId, string accountId, string email, int remove)
         {
-            
             try
             {
-                FlashMessageViewModel successMessage = null;
+                if (remove != 1)
+                    return RedirectToAction("ViewTeam", new {accountId});
 
-                if (remove == 1)
-                {
-                    await _employerTeamOrchestrator.Remove(userId, accountId, OwinWrapper.GetClaimValue(@"sub"));
+                var response = await _employerTeamOrchestrator.Remove(userId, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-                    successMessage = new FlashMessageViewModel()
-                    {
-                        Headline = "Team member removed",
-                        Message = $"You've removed the profile for {email}",
-                        Severity = FlashMessageSeverityLevel.Success
-                    };
-                }
-
-                return RedirectToAction("ViewTeam", new { accountId, flashMessage = successMessage });
+                return View("ViewTeam", response);
             }
             catch (InvalidRequestException ex)
             {

@@ -281,6 +281,9 @@
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />
+    <Compile Include="Queries\GetUser\GetUserRequestHandler.cs" />
+    <Compile Include="Queries\GetUser\GetUserRequest.cs" />
+    <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
