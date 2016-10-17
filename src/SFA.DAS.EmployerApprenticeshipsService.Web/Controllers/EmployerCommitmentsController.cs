@@ -205,6 +205,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
+                    model.Apprenticeship = apprenticeship;
+                    ViewBag.ApprenticeshipProducts = model.Standards;
+
+                    return View("CreateApprenticeshipEntry", model.Apprenticeship);
+                }
+
                 await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
             }
             catch (InvalidRequestException ex)

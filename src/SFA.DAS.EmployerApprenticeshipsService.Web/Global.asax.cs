@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.Name;
-            //FluentValidationModelValidatorProvider.Configure();
+            FluentValidationModelValidatorProvider.Configure();
         }
 
         protected void Application_Error(object sender, EventArgs e)
