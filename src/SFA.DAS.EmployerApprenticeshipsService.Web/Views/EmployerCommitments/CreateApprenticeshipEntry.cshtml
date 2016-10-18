@@ -1,18 +1,22 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.Models.ApprenticeshipViewModel
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom");    
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add an apprentice</h1>
         <p>
             Add the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
         </p>
-        @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-        <hr />
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("CreateApprenticeship")">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            <hr />
             @Html.EditorFor(m => m.FirstName, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4" }, labelText = "Apprentice first name" })
             @Html.EditorFor(m => m.LastName, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4" }, labelText = "Apprentice last name" })
             <hr />
@@ -70,9 +74,9 @@
                 <hr />
             </div>
 
-            @Html.EditorFor(m => m.Cost, "FormCurrencyString", new { htmlAttributes = new { @class = "form-control form-control-3-4" }, labelText = "Cost" })
+            @Html.EditorFor(m => m.Cost, "FormCurrencyString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" }, labelText = "Cost" })
             <hr />
-            @Html.EditorFor(m => m.ULN, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4"}, labelText = "Unique learner number" })
+            @Html.EditorFor(m => m.ULN, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", step = "1" }, labelText = "Unique learner number" })
           
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
