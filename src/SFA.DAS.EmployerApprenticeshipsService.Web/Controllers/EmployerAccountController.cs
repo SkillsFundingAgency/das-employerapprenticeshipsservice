@@ -156,8 +156,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             }
 
             TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-           
-            
+            TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+
             return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }
 
