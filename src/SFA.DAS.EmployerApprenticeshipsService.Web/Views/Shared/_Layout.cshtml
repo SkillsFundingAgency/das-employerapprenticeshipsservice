@@ -162,6 +162,8 @@
     <script src="/assets/javascripts/govuk-template.js"></script>
     <script src="/assets/javascripts/app.js"></script>
 
+    @RenderSection("pageSpecificJS", required: false)
+
     @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
     {
         <div class="about">
