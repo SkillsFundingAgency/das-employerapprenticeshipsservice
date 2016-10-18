@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.UI;
 using MediatR;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions;
@@ -24,7 +25,9 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string fromDate, int pageSize, int pageNumber)
         {
-            var accountsResult = await _mediator.SendAsync(new GetEmployerAccountsQuery());
+            fromDate = fromDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
+
+            var accountsResult = await _mediator.SendAsync(new GetEmployerAccountsQuery() {FromDate = fromDate, PageSize = pageSize, PageNumber = pageNumber});
             var transactionResult = await _mediator.SendAsync(new GetBatchEmployerAccountTransactionsQuery()
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
@@ -40,7 +43,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 data.Add(new AccountWithBalanceViewModel() { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = currentBalance });
             });
 
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = 0, TotalPages = 0} };
+            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1} };
         }
 
     }

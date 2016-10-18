@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
     public class GetEmployerAccountsResponse
     {
         public List<Account> Accounts { get; set; }
+        public int AccountsCount { get; set; }
     }
 }
