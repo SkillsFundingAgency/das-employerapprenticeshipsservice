@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
 
             _userRepository = new Mock<IUserRepository>();
-            _userRepository.Setup(x => x.GetById(It.IsAny<string>())).ReturnsAsync(new User());
+            _userRepository.Setup(x => x.GetByUserRef(It.IsAny<string>())).ReturnsAsync(new User());
 
             _messagePublisher = new Mock<IMessagePublisher>();
             _mediator = new Mock<IMediator>();
@@ -127,7 +127,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                 RefreshToken = Guid.NewGuid().ToString()
             };
 
-            _userRepository.Setup(x => x.GetById(cmd.ExternalUserId)).ReturnsAsync(user);
+            _userRepository.Setup(x => x.GetByUserRef(cmd.ExternalUserId)).ReturnsAsync(user);
             _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken)).ReturnsAsync(accountId);
 
             await _handler.Handle(cmd);

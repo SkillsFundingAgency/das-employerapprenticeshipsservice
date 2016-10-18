@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assign
             var request = new GetUserRequest{ UserId = 2};
             var user = new User();
-            _repository.Setup(x => x.GetById(It.IsAny<string>())).ReturnsAsync(user);
+            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(user);
 
             //Act
             var result = await _handler.Handle(request);
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(user, result.User);
-            _repository.Verify(x => x.GetById(request.UserId.ToString()), Times.Once);
+            _repository.Verify(x => x.GetUserById(request.UserId), Times.Once);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assign
             var request = new GetUserRequest { UserId = 2 };
             var user = new User();
-            _repository.Setup(x => x.GetById(It.IsAny<string>())).ReturnsAsync(null);
+            _repository.Setup(x => x.GetUserById(It.IsAny<long>())).ReturnsAsync(null);
 
             //Act
             var result = await _handler.Handle(request);
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.G
             //Assert
             Assert.IsNotNull(result);
             Assert.IsNull(result.User);
-            _repository.Verify(x => x.GetById(request.UserId.ToString()), Times.Once);
+            _repository.Verify(x => x.GetUserById(request.UserId), Times.Once);
         }
     }
 }

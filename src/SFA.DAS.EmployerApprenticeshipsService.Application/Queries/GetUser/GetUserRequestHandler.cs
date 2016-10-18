@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser
 
         public async  Task<GetUserResponse> Handle(GetUserRequest message)
         {
-            var user = await _repository.GetById(message.UserId.ToString());
+            var user = await _repository.GetUserById(message.UserId);
 
             return new GetUserResponse {User = user};
         }

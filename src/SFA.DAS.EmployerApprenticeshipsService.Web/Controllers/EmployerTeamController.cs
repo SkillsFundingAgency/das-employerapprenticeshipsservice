@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerApprenticeshipsService.Application;
@@ -52,13 +49,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/Invite")]
         public ActionResult Invite(string accountId)
         {
-            var model = new InviteTeamMemberViewModel
+            var response = new OrchestratorResponse<InviteTeamMemberViewModel>
             {
-                HashedId = accountId,
-                Role = Role.Viewer
+                Data = new InviteTeamMemberViewModel
+                {
+                    HashedId = accountId,
+                    Role = Role.Viewer
+                }
             };
 
-            return View(model);
+            return View(response);
         }
 
         [HttpPost]
@@ -66,22 +66,34 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/Invite")]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
+            Exception exception;
+            HttpStatusCode httpStatusCode;
+
             try
             {
                 var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
 
                 return View("ViewTeam", response);
             }
-            catch (InvalidRequestException ex)
+            catch (InvalidRequestException e)
             {
-                AddErrorsToModelState(ex.ErrorMessages);
-                return View(model);
+                httpStatusCode = HttpStatusCode.BadRequest;
+                exception = e;
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException e)
             {
-                AddExceptionToModelError(ex);
-                return View(model);
+                httpStatusCode = HttpStatusCode.Unauthorized;
+                exception = e;
             }
+
+            var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
+            {
+                Data = model,
+                Status = httpStatusCode,
+                Exception = exception
+            };
+
+            return View(errorResponse);
         }
         
 
@@ -99,20 +111,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/{invitationId}/Cancel")]
         public async Task<ActionResult> Cancel(string invitationId, string email, string accountId, int cancel)
         {
-            //TODO Flash message no longer works
-            FlashMessageViewModel successMessage = null;
-            if (cancel == 1)
-            {
-                await _employerTeamOrchestrator.Cancel(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
+            if (cancel != 1)
+                return RedirectToAction("ViewTeam", new {accountId});
 
-                successMessage = new FlashMessageViewModel() {
-                    Headline = "Invitation cancelled",
-                    Message = $"You've cancelled the invitation sent to {email}",
-                    Severity = FlashMessageSeverityLevel.Success
-                };
-            }
+            var response =  await _employerTeamOrchestrator.Cancel(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("ViewTeam", new { accountId = accountId, flashMessage = successMessage });
+            return View("ViewTeam", response);
         }
 
         [HttpPost]
@@ -120,20 +124,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/Resend")]
         public async Task<ActionResult> Resend(string accountId, string email)
         {
-            await _employerTeamOrchestrator.Resend(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            TempData["successMessage"] = $"Invitation resent to {email}";
-
-            return RedirectToAction("ViewTeam", new { accountId });
+            var response = await _employerTeamOrchestrator.Resend(email, accountId, OwinWrapper.GetClaimValue(@"sub"));
+            
+            return View("ViewTeam", response);
         }
 
         [HttpGet]
         [Route("Teams/{email}/Remove/")]
         public async Task<ActionResult> Remove(string accountId, string email)
         {
-            var model = await _employerTeamOrchestrator.Review(accountId, email);
+            var response = await _employerTeamOrchestrator.Review(accountId, email);
 
-            return View(model);
+            return View(response);
         }
 
         [HttpPost]
@@ -141,6 +143,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/{email}/Remove")]
         public async Task<ActionResult> Remove(long userId, string accountId, string email, int remove)
         {
+            Exception exception;
+            HttpStatusCode httpStatusCode;
+            
             try
             {
                 if (remove != 1)
@@ -150,17 +155,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
                 return View("ViewTeam", response);
             }
-            catch (InvalidRequestException ex)
+            catch (InvalidRequestException e)
             {
-                AddErrorsToModelState(ex.ErrorMessages);
+                httpStatusCode = HttpStatusCode.BadRequest;
+                exception = e;
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException e)
             {
-                AddExceptionToModelError(ex);
+                httpStatusCode = HttpStatusCode.Unauthorized;
+                exception = e;
             }
 
-            var model = await _employerTeamOrchestrator.Review(accountId, email);
-            return View(model);
+            var errorResponse = await _employerTeamOrchestrator.Review(accountId, email);
+            errorResponse.Status = httpStatusCode;
+            errorResponse.Exception = exception;
+
+            return View(errorResponse);
         }
 
         [HttpGet]
@@ -201,19 +211,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
 
             return View(invitation);
-        }
-
-        private void AddErrorsToModelState(Dictionary<string, string> errors)
-        {
-            foreach (var error in errors)
-            {
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
-        private void AddExceptionToModelError(Exception ex)
-        {
-            ModelState.AddModelError("", $"Unexpected exception: {ex.Message}");
         }
     }
 }

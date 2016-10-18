@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
@@ -23,6 +24,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         {
             _mediator = new Mock<IMediator>();
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
+            
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
+                     .ReturnsAsync(new GetAccountTeamMembersResponse
+                {
+                    TeamMembers = new List<TeamMember>()
+                });
         }
 
         [Test]
@@ -32,7 +39,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             var email = "test@test.com";
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserRequest>())).ReturnsAsync(new GetUserResponse
             {
-                User = new User()
+                User = new User
                 {
                     Email = email
                 }
@@ -45,7 +52,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             Assert.AreEqual("Team member removed", result.FlashMessage.Headline);
-            Assert.AreEqual($"You've removed {email}", result.FlashMessage.Message);
+            Assert.AreEqual($"You've removed <strong>{email}</strong>", result.FlashMessage.Message);
         }
 
         [Test]

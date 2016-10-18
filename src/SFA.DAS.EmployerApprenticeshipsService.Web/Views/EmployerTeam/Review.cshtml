@@ -1,7 +1,12 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
-@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<TeamMember>
+@using SFA.DAS.EmployerApprenticeshipsService.Web
 
-@{ViewBag.Title = Model.Data.Name;}
+@model OrchestratorResponse<TeamMember>
+
+@{
+    ViewBag.Title = Model.Data.Name;
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@Model.Data.Name</h1>
