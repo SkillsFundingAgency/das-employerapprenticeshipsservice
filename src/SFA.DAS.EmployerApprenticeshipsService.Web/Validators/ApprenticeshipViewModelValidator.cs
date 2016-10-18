@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Validation
+namespace SFA.DAS.EmployerApprenticeshipsService.Web.Validators
 {
     public class ApprenticeshipViewModelValidator : AbstractValidator<ApprenticeshipViewModel>
     {

@@ -79,7 +79,7 @@
 
             // Customized to add links to match server side validation.
             $.each(validator.errorList, function () {
-                if (this.element.id.length != 0) {
+                if (this.element.id.length !== 0) {
                     $("<li />").html($("<a />").attr("id", "summaryError" + this.element.id).attr("href", "#error-message-" + this.element.id).attr("data-focuses", "error-message-" + this.element.id).html(this.message)).appendTo(list);
                 } else {
                     $("<li />").html(this.message).appendTo(list);

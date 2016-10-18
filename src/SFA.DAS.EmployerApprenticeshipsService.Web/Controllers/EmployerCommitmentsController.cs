@@ -207,31 +207,31 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
-                    model.Apprenticeship = apprenticeship;
-                    ViewBag.ApprenticeshipProducts = model.Standards;
-
-                    return View("CreateApprenticeshipEntry", model.Apprenticeship);
+                    return await RedisplayCreateApprenticeshipView(apprenticeship);
                 }
 
                 await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
             }
             catch (InvalidRequestException ex)
             {
-                var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
-                model.Apprenticeship = apprenticeship;
-
                 foreach (var error in ex.ErrorMessages)
                 {
                     ModelState.AddModelError(error.Key, error.Value);
                 }
 
-                ViewBag.ApprenticeshipProducts = model.Standards;
-
-                return View("CreateApprenticeshipEntry", model.Apprenticeship);
+                return await RedisplayCreateApprenticeshipView(apprenticeship);
             }
 
             return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        }
+
+        private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
+            model.Apprenticeship = apprenticeship;
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View("CreateApprenticeshipEntry", model.Apprenticeship);
         }
     }
 }
