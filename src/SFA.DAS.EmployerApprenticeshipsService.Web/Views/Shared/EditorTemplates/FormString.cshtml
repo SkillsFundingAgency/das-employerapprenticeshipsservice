@@ -1,0 +1,8 @@
+﻿@model String
+
+<div class="form-group @Html.AddClassIfPropertyInError(x => x, "error")">
+    @Html.LabelFor(m => m, ViewData["labelText"].ToString(), new { @class = "form-label" })
+    @Html.ValidationMessageFor(m => m, null, new { id = "error-message-" + Html.IdFor(m => m) })
+    @Html.TextBoxFor(m => m, ViewData["htmlAttributes"])
+    <hr />
+</div>
