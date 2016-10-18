@@ -1,20 +1,11 @@
 ﻿using System.Globalization;
-using FluentValidation;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Validation;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public sealed class TestValidator : AbstractValidator<ApprenticeshipViewModel>
-    {
-        public TestValidator()
-        {
-            RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("'ULN' is not in the correct format.");
-            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$");
-        }
-    }
-
-    [Validator(typeof(TestValidator))]
+    [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel
     {
         public string HashedId { get; set; }
