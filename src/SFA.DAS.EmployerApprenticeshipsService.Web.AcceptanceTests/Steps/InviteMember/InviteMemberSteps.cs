@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
         private string _hashedAccountId;
+        private static Mock<ICookieService> _cookieService;
 
 
         [BeforeFeature]
@@ -32,8 +33,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
+            _cookieService = new Mock<ICookieService>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
             
         }
 

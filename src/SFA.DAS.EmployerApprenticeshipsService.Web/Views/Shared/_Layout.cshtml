@@ -87,8 +87,8 @@
                         </a>
                     </div>
                     <div class="header-global__subtitle">
-                        <a title="Go to Access My Levy homepage" href="/">
-                            Access my levy
+                        <a title="Go to Manage your apprenticeships homepage" href="/">
+                            Manage your apprenticeships
                         </a>
                     </div>
            
@@ -139,7 +139,7 @@
                     <ul class="platform-help-links">
                         <li><a href="mailto:digitalapprenticeshipservicepilot@sfa.bis.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
                         <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
-			<li><a href="@Url.Action("Privacy", "Home")">Privacy and Cookies</a></li>
+			<li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>
                     </ul>
                     <div class="open-government-licence">
@@ -158,7 +158,10 @@
         </div>
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
-    <script src="/assets/javascripts/govuk-template.js"></script>
+
+    @Scripts.Render("~/bundles/footer")
+   
+    @RenderSection("pageSpecificJS", required: false)
 
     @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
     {

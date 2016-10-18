@@ -12,7 +12,5 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string EmployerRef { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
-        public bool UserIsAuthorisedToSign { get; set; }
-        public bool SignedAgreement { get; set; }
     }
 }

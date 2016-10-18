@@ -2,10 +2,11 @@
 @{ViewBag.Title = "Confirm PAYE Scheme";}    
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Confirm PAYE Scheme</h1>
+        
 
         @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
         {
+            <h1 class="heading-xlarge">Confirm PAYE scheme</h1>
             <form method="post">
                 @Html.AntiForgeryToken()
 
@@ -16,16 +17,29 @@
                 <input type="hidden" value="@Model.Data.RefreshToken" name="RefreshToken"/>
                 <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
 
-                <button type="submit" class="button"id="accept">Accept</button>
+                <div class="form-group">
+                    <button type="submit" class="button" id="accept">Accept</button>
+                    <a class="button button-link" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Search Again</a>
+                </div>
             </form>
         }
         else
         {
-            <p>The scheme is already in use, please use a new Gateway login</p>
+            <h1 class="heading-xlarge">PAYE scheme already in use</h1>
+            <p>The PAYE scheme for the Government Gateway details you entered is already added to an account. </p>
+            <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Use different details</a></p>
         }
 
 
 
-        <a class="" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Search Again</a>
+       
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })" class="back-link">Back to PAYE schemes</a></li>
+        </ol>
+    </div>
+}

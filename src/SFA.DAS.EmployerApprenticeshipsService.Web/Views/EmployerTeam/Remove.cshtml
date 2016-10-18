@@ -4,50 +4,33 @@
 @{
     var name = Model.Name ?? Model.Email;
 }
+@{ViewBag.Title = "Remove team member";}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-large">@name</h1>
+        <h1 class="heading-xlarge">Remove team member</h1>
         @if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
             {
                 foreach (var error in state.Errors)
                 {
-                    <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
+                    <div class="error" id="invalidMessage">
                         <p class="error-message">@error.ErrorMessage</p>
                     </div>
                 }
             }
         }
-        <table class="th-nopadding">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Email</td>
-                    <td>@Model.Email</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>What they can do</td>
-                    <td>@RoleStrings.ToWhatTheyCanDo(Model.Role)</td>
-                    <td><a href="@Url.Action("ChangeRole")">Change</a></td>
-                </tr>
-            </tbody>
-        </table>
-        <p></p>
-        <form action="@Url.Action("Remove")" method="POST">
-            @Html.AntiForgeryToken()
-            <input type="hidden" id="remove" name="remove" value="1" />
-            <input type="hidden" id="UserId" name="UserId" value="@Model.Id"/>
-            <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
-            <button type="submit" class="button" id="remove_team_member">Remove team member</button>
-        </form>
+        <p class="lede">Are you sure you want to remove @name?</p>
+        <div class="form-group">
+            <form action="@Url.Action("Remove")" method="POST">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="remove" name="remove" value="1" />
+                <input type="hidden" id="UserId" name="UserId" value="@Model.Id" />
+                <input type="hidden" id="Email" name="Email" value="@Model.Email" />
+                <button type="submit" class="button" id="remove_team_member">Yes, remove now</button>
+            </form>
+            <a href="@Url.Action("Viewteam", "EmployerTeam")" class="button button-link">No, cancel</a>
+        </div>
     </div>
 </div>
 @section breadcrumb {
@@ -56,6 +39,7 @@
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.AccountId})">Employer Account Homepage</a></li>
             <li><a href="@Url.Action("Viewteam", "EmployerTeam")">Manage Team Members</a></li>
+            <li>Remove team member</li>
         </ol>
     </div>
 }

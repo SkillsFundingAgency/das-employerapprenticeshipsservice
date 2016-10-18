@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
     public class DefaultRegistry : Registry
     {
 
-        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock)
+        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieService> cookieServiceMock)
         {
             Scan(scan =>
             {
@@ -25,6 +25,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
             For<IUserRepository>().Use<UserRepository>();
 
             For<IOwinWrapper>().Use(() => owinWrapperMock.Object);
+
+            For<ICookieService>().Use(() => cookieServiceMock.Object);
             
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
