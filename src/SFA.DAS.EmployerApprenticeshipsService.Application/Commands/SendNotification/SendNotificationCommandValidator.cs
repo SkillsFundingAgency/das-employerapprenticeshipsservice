@@ -10,21 +10,35 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
         {
             var validationResult = new ValidationResult();
 
-            if (item.UserId == 0)
+            if (item.Email == null)
             {
-                validationResult.AddError(nameof(item.UserId),"User Id has not been supplied");
+                validationResult.AddError(nameof(item.Email), "Email has not been defined");
+                return validationResult;
             }
 
-            if (item.Data == null)
+            if (string.IsNullOrEmpty(item.Email.RecipientsAddress))
             {
-                validationResult.AddError(nameof(item.Data), "EmailContent has not been supplied");
+                validationResult.AddError(nameof(item.Email.RecipientsAddress), "RecipientsAddress has not been supplied");
             }
-            else
+
+            if (string.IsNullOrEmpty(item.Email.ReplyToAddress))
             {
-                if (string.IsNullOrEmpty(item.Data.RecipientsAddress))
-                {
-                    validationResult.AddError(nameof(item.Data.RecipientsAddress), "Recipients Address has not been supplied");
-                }
+                validationResult.AddError(nameof(item.Email.ReplyToAddress), "ReplyToAddress has not been supplied");
+            }
+
+            if (string.IsNullOrEmpty(item.Email.Subject))
+            {
+                validationResult.AddError(nameof(item.Email.Subject), "Subject has not been supplied");
+            }
+
+            if (string.IsNullOrEmpty(item.Email.SystemId))
+            {
+                validationResult.AddError(nameof(item.Email.SystemId), "SystemId has not been supplied");
+            }
+
+            if (string.IsNullOrEmpty(item.Email.TemplateId))
+            {
+                validationResult.AddError(nameof(item.Email.TemplateId), "TemplateId has not been supplied");
             }
 
             return validationResult;

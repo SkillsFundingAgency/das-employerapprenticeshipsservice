@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
+using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SendNotificationTests
 {
@@ -28,34 +29,28 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             //Assert
             Assert.IsFalse(actual.IsValid());
         }
+        
 
         [Test]
         public void ThenTheErrorDictionaryIsPopulatedWhenNotValid()
         {
             //Act
-            var actual = _validator.Validate(new SendNotificationCommand());
+            var actual = _validator.Validate(new SendNotificationCommand {Email = new Email()});
 
             //Assert
-            Assert.Contains(new KeyValuePair<string,string> ("UserId", "User Id has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string> ("Data", "EmailContent has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string> ("RecipientsAddress", "RecipientsAddress has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string> ("ReplyToAddress", "ReplyToAddress has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string> ("Subject", "Subject has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string> ("SystemId", "SystemId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string> ("TemplateId", "TemplateId has not been supplied"), actual.ValidationDictionary);
         }
-
-        [Test]
-        public void ThenTheErrorDictionaryIsPopulatedWhenNotValidAndHasEmailContentObject()
-        {
-            //Act
-            var actual = _validator.Validate(new SendNotificationCommand {Data = new EmailContent()});
-
-            //Assert
-            Assert.Contains(new KeyValuePair<string, string>("UserId", "User Id has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("RecipientsAddress", "Recipients Address has not been supplied"), actual.ValidationDictionary);
-        }
+        
 
         [Test]
         public void ThenIsValidWhenAllFieldsHaveBeenSupplied()
         {
             //Assert
-            var actual = _validator.Validate(new SendNotificationCommand { Data = new EmailContent {RecipientsAddress = "test"}, UserId = 1});
+            var actual = _validator.Validate(new SendNotificationCommand { Email = new Email { RecipientsAddress = "test",ReplyToAddress = "test",Subject = "test",TemplateId = "test",SystemId = "test"}});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
