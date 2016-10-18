@@ -115,11 +115,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(_command);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<SendNotificationCommand>(c=>c.ForceFormat 
-                                                                                && c.UserId.Equals(userId) 
-                                                                                && c.Data.RecipientsAddress.Equals(_command.Email)
-                                                                                && c.Data.ReplyToAddress.Equals("noreply@sfa.gov.uk")
-                                                                                && c.MessageFormat.Equals(MessageFormat.Email))));
+            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
+                                                                                  && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                                  && c.Email.SystemId.Equals("")
+                                                                                  && c.Email.TemplateId.Equals("")
+                                                                                  && c.Email.Subject.Equals("Account Invitation"))));
         }
     }
 }

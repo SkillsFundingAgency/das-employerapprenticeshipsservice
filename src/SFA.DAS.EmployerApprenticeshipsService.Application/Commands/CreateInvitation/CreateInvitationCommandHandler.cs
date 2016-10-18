@@ -8,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation
@@ -74,18 +75,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
             }
 
             await _mediator.SendAsync(new SendNotificationCommand
-            {
-                UserId = caller.UserId,
-                Data = new EmailContent
+            {   
+                Email = new Email
                 {
                     RecipientsAddress = message.Email,
+                    Subject = "Account Invitation",
+                    TemplateId = "",
+                    SystemId = "",
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Data = new Dictionary<string, string> { { "InviteeName",message.Name}, {"ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
-                },
-                DateTime = DateTime.UtcNow,
-                MessageFormat = MessageFormat.Email,
-                ForceFormat = true,
-                TemplatedId = ""
+                    Tokens = new Dictionary<string, string> { { "InviteeName", message.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
+                }
             });
         }
     }
