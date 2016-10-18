@@ -203,6 +203,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccountWithBalanceViewModel.cs" />
+    <Compile Include="Models\PagedApiResponseViewModel.cs" />
     <Compile Include="Models\SystemDetails.cs" />
     <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
     <Compile Include="Orchestrators\OrchestratorResponse.cs" />
