@@ -18,11 +18,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/respond.js"));
+            bundles.Add(new ScriptBundle("~/bundles/footer").Include(
+                      "~/assets/javascripts/jquery-1.11.0.min.js",
+                      "~/assets/javascripts/govuk-template.js",
+                      "~/assets/javascripts/app.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+               bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/elements.css",
                       "~/Content/site.css"));
         }

@@ -158,9 +158,10 @@
         </div>
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
-    <script src="/assets/javascripts/jquery-1.11.0.min.js"></script>
-    <script src="/assets/javascripts/govuk-template.js"></script>
-    <script src="/assets/javascripts/app.js"></script>
+
+    @Scripts.Render("~/bundles/footer")
+   
+    @RenderSection("pageSpecificJS", required: false)
 
     @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
     {

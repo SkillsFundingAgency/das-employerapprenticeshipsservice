@@ -1,39 +1,40 @@
 var sfa = sfa || {};
-
-    var ShowHideContent = function () {
-        var selectors = {
-            radio: '.block-label[data-target] input[type=radio]'
-        }
-        this.populateEvents = function () {
-            var getElem = this.getElements(selectors.radio);
-            if (getElem.length > 0) {
-
-                var radios = getElem.closest('form').find('input[type=radio][name=' + getElem.attr('name') + ']');   
-                radios.on('change', function () {
-                    
-                    radios.each(function () {
-                        if ($(this).prop('checked')) {
-                            var target = $(this).parent().data("target");
-                            $("#" + target).removeClass("js-hidden").attr("aria-hidden");
-                        } else {
-                            var target = $(this).parent().data("target");
-                            $("#" + target).addClass("js-hidden").attr("aria-hidden", "true");
-                        }
-                    });
-                   
-                });
+    
+sfa.homePage = {
+    init: function () {
+        this.startButton();
+        this.toggleRadios();
+    },
+    startButton: function () {
+        var that = this;
+        $('#create_account').on('click touchstart', function (e) {
+            var isYesClicked = $('#everything-yes').prop('checked'),
+                errorShown = $('body').data('shownError') || false;
+            if (!isYesClicked && !errorShown) {
+                e.preventDefault();
+                that.showError();
             }
-        }
-        this.getElements = function (selector) {
-            var findElems = $(selector);
-            return findElems;
-        }
-    }
+        });
+    }, 
+    showError: function() {
+        $('#have-not-got-everything').removeClass("js-hidden").attr("aria-hidden");
+        $('body').data('shownError', true);
+    },
+    toggleRadios: function () {
+        var radios = $('input[type=radio][name=everything-you-need]');
+        radios.on('change', function () {
 
-    ShowHideContent.prototype.init = function () {
-        this.populateEvents();
-    }
+            radios.each(function () {
+                if ($(this).prop('checked')) {
+                    var target = $(this).parent().data("target");
+                    $("#" + target).removeClass("js-hidden").attr("aria-hidden");
+                } else {
+                    var target = $(this).parent().data("target");
+                    $("#" + target).addClass("js-hidden").attr("aria-hidden", "true");
+                }
+            });
 
-    var shc = new ShowHideContent();
-    shc.init();
+        });
+    }
+}
 
