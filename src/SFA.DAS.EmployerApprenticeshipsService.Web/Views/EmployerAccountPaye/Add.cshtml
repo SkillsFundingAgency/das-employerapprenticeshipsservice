@@ -1,28 +1,43 @@
 ﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.BeginNewPayeScheme>
 @{ViewBag.Title = "Add PAYE Scheme";}
+
+@if (Model.Data.ValidationFailed)
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Unchecked box
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">Check the agreement</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add PAYE Scheme</h1>
-        <p>You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds</p>
+        <h1 class="heading-xlarge">Add a PAYE Scheme</h1>
+        <p>You need the Government Gateway ID login details for the PAYE scheme you want to use to access levy funds.</p>
         <form method="GET" action="@Url.Action("GetGateway","EmployerAccountPaye")">
             <div class="form-group @(Model.Data.ValidationFailed ? "error" : "")">
                 @if (Model.Data.ValidationFailed)
                 {
-                    <legend>
-                        <span class="error-message">DRAFT CONTENT!! Please confirm to proceed.</span>
-                    </legend>
+                    <span class="error-message" id="error-message-agreement">Check the agreement</span>
                 }
                 <label class="block-label" for="confirmPayeVisibility">
-                    <input type="checkbox" id="confirmPayeVisibility" name="confirmPayeVisibility" value="true">
+                    <input type="checkbox" id="confirmPayeVisibility" name="confirmPayeVisibility" value="true" @(Model.Data.ValidationFailed ? "aria-describedby=\"error-message-agreement\"" : string.Empty)>
                     I have authority to add PAYE schemes to this account.
                     <br><br>
                     I understand that all account users will be able to see financial information from any PAYE schemes I add.
                     <br><br>
                     All PAYE schemes I add are owned and operated by an organisation that’ll use this account, or owned and operated by a <a href="https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/308734/connected-companies.pdf" target="_blank" title="Connected companies and Employment Allowance: detailed technical guidance for employers and their agents">connected organisation</a>.
                 </label>
-            </div>    
+            </div>
             <input type="hidden" name="confirmPayeVisibility" value="false" />
-            
+
             <button class="button" type="submit" id="continue">Continue</button>
         </form>
     </div>

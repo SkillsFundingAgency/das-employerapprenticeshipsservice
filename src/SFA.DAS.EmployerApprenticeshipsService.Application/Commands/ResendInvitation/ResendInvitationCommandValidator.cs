@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Email", "No Email supplied");
 
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.AccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))

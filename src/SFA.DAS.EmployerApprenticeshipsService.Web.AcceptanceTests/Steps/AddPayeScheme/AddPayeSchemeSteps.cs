@@ -27,8 +27,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPa
         {
             var messagePublisher = new Mock<IMessagePublisher>();
             var owinWrapper = new Mock<IOwinWrapper>();
+            var cookieService = new Mock<ICookieService>();
 
-            _container = IoC.CreateContainer(messagePublisher, owinWrapper);
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService);
 
         }
 

@@ -1,9 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Newtonsoft.Json;
 using NLog;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
@@ -22,44 +24,64 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, 
-            EmployerApprenticeshipsServiceConfiguration configuration) 
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService,
+            EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
-            
+
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model)
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model, HttpContextBase context)
         {
-            var result = await Mediator.SendAsync(new CreateAccountCommand
+            try
             {
-                ExternalUserId = model.UserId,
-                CompanyNumber = model.CompanyNumber,
-                CompanyName = model.CompanyName,
-                CompanyRegisteredAddress = model.CompanyRegisteredAddress,
-                CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
-                EmployerRef = model.EmployerRef,
-                AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken
-            });
-
-            return new OrchestratorResponse<EmployerAgreementViewModel>
-            {
-                Data = new EmployerAgreementViewModel
+                var result = await Mediator.SendAsync(new CreateAccountCommand
                 {
-                    EmployerAgreement = new EmployerAgreementView
+                    ExternalUserId = model.UserId,
+                    CompanyNumber = model.CompanyNumber,
+                    CompanyName = model.CompanyName,
+                    CompanyRegisteredAddress = model.CompanyRegisteredAddress,
+                    CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
+                    EmployerRef = model.EmployerRef,
+                    AccessToken = model.AccessToken,
+                    RefreshToken = model.RefreshToken
+                });
+
+                CookieService.Delete(context, CookieName);
+
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel
                     {
-                        HashedId = result.HashedId
-                    }
-                },
-                Status = HttpStatusCode.OK
-            };
+                        EmployerAgreement = new EmployerAgreementView
+                        {
+                            HashedId = result.HashedId
+                        }
+                    },
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                Logger.Info(ex,"Create Account Validation Error");
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel(),
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = ex,
+                    FlashMessage = new FlashMessageViewModel()
+                };
+            }
+           
         }
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
             var cookie = (string)CookieService.Get(context, CookieName);
 
+            if(string.IsNullOrEmpty(cookie))
+                return null;
+            
             return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
         }
 
@@ -77,7 +99,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountModel model)
         {
             var response = new OrchestratorResponse<EmployerAgreementViewModel>();
-            
+
             var templateResponse = await Mediator.SendAsync(new GetLatestAccountAgreementTemplateRequest());
 
             response.Data = new EmployerAgreementViewModel
