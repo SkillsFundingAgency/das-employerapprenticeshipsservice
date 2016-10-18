@@ -8,6 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<Account> GetAccountById(long id);
         Task<Account> GetAccountByHashedId(string hashedId);
-        Task<Accounts> GetAccounts(string FromDate, int PageNumber, int PageSize);
+        Task<Accounts> GetAccounts(string fromDate, int pageNumber, int pageSize);
     }
 }
