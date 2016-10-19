@@ -7,6 +7,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation
@@ -58,22 +59,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
 
             existing.Status = InvitationStatus.Pending;
             existing.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
-
+            
             await _invitationRepository.Resend(existing);
 
             await _mediator.SendAsync(new SendNotificationCommand
             {
-                UserId = owner.UserId,
-                Data = new EmailContent
+                Email = new Email
                 {
                     RecipientsAddress = existing.Email,
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Data = new Dictionary<string, string> { { "InviteeName", existing.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
-                },
-                DateTime = DateTime.UtcNow,
-                MessageFormat = MessageFormat.Email,
-                ForceFormat = true,
-                TemplatedId = ""
+                    Subject = "Account Invitation",
+                    SystemId = "",
+                    TemplateId = "",
+                    Tokens = new Dictionary<string, string> { { "InviteeName", existing.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
+                }
             });
         }
     }

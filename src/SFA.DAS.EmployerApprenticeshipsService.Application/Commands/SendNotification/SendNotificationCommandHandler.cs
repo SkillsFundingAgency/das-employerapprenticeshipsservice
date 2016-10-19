@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
@@ -29,8 +30,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotifi
                 _logger.Info("SendNotificationCommandHandler Invalid Request");
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
-            
-            await _notificationsApi.SendEmail(message.Email);
+            try
+            {
+                await _notificationsApi.SendEmail(message.Email);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
             
         }
     }
