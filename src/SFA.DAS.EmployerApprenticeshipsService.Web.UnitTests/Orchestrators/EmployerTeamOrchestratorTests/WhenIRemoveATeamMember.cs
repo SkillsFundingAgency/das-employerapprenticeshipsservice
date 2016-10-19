@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         {
             //Assign
             var email = "test@test.com";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserRequest>())).ReturnsAsync(new GetUserResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse
             {
                 User = new User
                 {
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenIShouldGetANotFoundErrorMessageIfNoUserCanBeFound()
         {
             //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserRequest>())).ReturnsAsync(new GetUserResponse());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse());
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
 
             //Act
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenIShouldGetAInvalidRequestErrorMessageIfExceptionIsThrow()
         {
             //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserRequest>())).ReturnsAsync(new GetUserResponse {User = new User()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse {User = new User()});
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
         public async Task ThenIShouldGetAUnauthorisedErrorMessageIfExceptionIsThrow()
         {
             //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserRequest>())).ReturnsAsync(new GetUserResponse { User = new User() });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse { User = new User() });
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws<UnauthorizedAccessException>();
 
             //Act

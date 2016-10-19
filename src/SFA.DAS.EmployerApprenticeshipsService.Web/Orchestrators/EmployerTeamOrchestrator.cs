@@ -259,7 +259,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
 
             try
             {
-                var userResponse = await _mediator.SendAsync(new GetUserRequest {UserId = userId});
+                var userResponse = await _mediator.SendAsync(new GetUserQuery {UserId = userId});
 
                 if (userResponse?.User == null)
                 {
