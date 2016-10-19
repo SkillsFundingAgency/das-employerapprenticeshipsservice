@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
 using SFA.DAS.Notifications.Api.Types;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SendNotificationTests
@@ -39,9 +34,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             //Assert
             Assert.Contains(new KeyValuePair<string,string> ("RecipientsAddress", "RecipientsAddress has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string> ("ReplyToAddress", "ReplyToAddress has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string> ("Subject", "Subject has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string> ("SystemId", "SystemId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string> ("TemplateId", "TemplateId has not been supplied"), actual.ValidationDictionary);
         }
         

@@ -45,13 +45,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 throw new UnauthorizedAccessException();
 
             var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
-
+            
             ////Verify the email is not used by an existing invitation for the account
             var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);
 
             if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted && existingInvitation.Status != InvitationStatus.Accepted)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
 
+            var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
             if (existingInvitation == null)
             {
                 await _invitationRepository.Create(new Invitation
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                     Name = message.Name,
                     RoleId = message.RoleId,
                     Status = InvitationStatus.Pending,
-                    ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8)
+                    ExpiryDate = expiryDate
                 });
             }
             else
@@ -69,7 +70,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 existingInvitation.Name = message.Name;
                 existingInvitation.RoleId = message.RoleId;
                 existingInvitation.Status = InvitationStatus.Pending;
-                existingInvitation.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
+                existingInvitation.ExpiryDate = expiryDate;
 
                 await _invitationRepository.Resend(existingInvitation);
             }
@@ -79,11 +80,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvi
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    Subject = "Account Invitation",
-                    TemplateId = "",
-                    SystemId = "",
+                    TemplateId = "3edf7c6e-0f1d-4d4f-a092-f2f73cce1bf0",
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Tokens = new Dictionary<string, string> { { "InviteeName", message.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
+                    Subject = "x",
+                    SystemId = "x",
+                    Tokens = new Dictionary<string, string> {
+                        { "account_name", caller.AccountName },
+                        { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
+                        { "expiry_date", expiryDate.ToString("dd MMM yyy")}
+                    }
                 }
             });
         }

@@ -58,7 +58,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Accepted invitations cannot be resent" } });
 
             existing.Status = InvitationStatus.Pending;
-            existing.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
+            var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
+            existing.ExpiryDate = expiryDate;
             
             await _invitationRepository.Resend(existing);
 
@@ -66,12 +67,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
             {
                 Email = new Email
                 {
-                    RecipientsAddress = existing.Email,
+                    RecipientsAddress = message.Email,
+                    TemplateId = "3edf7c6e-0f1d-4d4f-a092-f2f73cce1bf0",
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Subject = "Account Invitation",
-                    SystemId = "",
-                    TemplateId = "",
-                    Tokens = new Dictionary<string, string> { { "InviteeName", existing.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
+                    Subject = "x",
+                    SystemId = "x",
+                    Tokens = new Dictionary<string, string> {
+                        { "account_name", owner.AccountName },
+                        { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
+                        { "expiry_date", expiryDate.ToString("dd MMM yyy")}
+                    }
                 }
             });
         }
