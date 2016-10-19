@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.Emp
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             Assert.IsNotNull(result.FlashMessage);
             Assert.AreEqual("Invitation sent", result.FlashMessage.Headline);
-            Assert.AreEqual($"You've sent an invitation to {request.Email}", result.FlashMessage.Message);
+            Assert.AreEqual($"You've sent an invitation to <strong>{request.Email}</strong>", result.FlashMessage.Message);
         }
 
         [Test]

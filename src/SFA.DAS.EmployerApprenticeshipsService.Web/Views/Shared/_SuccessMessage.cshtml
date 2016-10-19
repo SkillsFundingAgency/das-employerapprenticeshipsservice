@@ -1,11 +1,12 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
 @using SFA.DAS.EmployerApprenticeshipsService.Web.Models
-@model dynamic
+
+@model dynamic 
+
 @{
     var viewModel = Model as OrchestratorResponse;
-
-
 }
+
 @if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage))
 {
     <div class="grid-row">
@@ -18,7 +19,7 @@
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
                 {
-                    <p>@viewModel.FlashMessage.Message</p>
+                    <p>@Html.Raw(viewModel.FlashMessage.Message)</p>
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
                 {

@@ -1,6 +1,12 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
-@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Web.Models.EmployerTeamMembersViewModel>
-@{ViewBag.Title = "Manage team members";}
+@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model OrchestratorResponse<EmployerTeamMembersViewModel>
+
+@{
+    ViewBag.Title = "Manage team members";
+}
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.SuccessMessage))
 {
