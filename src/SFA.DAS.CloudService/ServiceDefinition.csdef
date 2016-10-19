@@ -57,4 +57,22 @@
     <Imports>
     </Imports>
   </WorkerRole>
+ 
+  <WebRole name="SFA.DAS.Account.Api" vmsize="Small">
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
+    </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
+    </Endpoints>
+  </WebRole>
 </ServiceDefinition>
