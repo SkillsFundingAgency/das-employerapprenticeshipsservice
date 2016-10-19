@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
@@ -68,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = "3edf7c6e-0f1d-4d4f-a092-f2f73cce1bf0",
+                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateName.Equals("Invitation")).Key,
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
