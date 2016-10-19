@@ -15,7 +15,24 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
-        public async Task<User> GetById(string id)
+
+        public async Task<User> GetUserById(long id)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@id", id, DbType.Int64);
+
+                var res = await c.QueryAsync<User>(
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE Id = @id",
+                    param: parameters,
+                    commandType: CommandType.Text);
+                return res;
+            });
+            return result.SingleOrDefault();
+        }
+
+        public async Task<User> GetByUserRef(string id)
         {
             var result = await WithConnection(async c =>
             {

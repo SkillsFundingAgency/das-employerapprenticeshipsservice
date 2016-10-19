@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
@@ -7,5 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task Update(long accountId, int pageNumber, string json);
 
         Task<AggregationData> GetByAccountId(long accountId);
+        Task<List<AggregationData>> GetByAccountIds(List<long> accountIds);
     }
 }

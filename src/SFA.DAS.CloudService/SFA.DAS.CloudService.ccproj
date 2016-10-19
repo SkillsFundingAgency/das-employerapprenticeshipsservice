@@ -42,18 +42,27 @@
   <ItemGroup>
     <Folder Include="Profiles" />
     <Folder Include="Configuration" />
+    <Folder Include="SFA.DAS.Account.ApiContent" />
     <Folder Include="SFA.DAS.EAS.Notification.WorkerContent" />
     <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
     <Folder Include="SFA.DAS.LevyAggregationProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\" />
   </ItemGroup>
   <ItemGroup>
+    <DiagnosticsConfiguration Include="SFA.DAS.Account.ApiContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.Notification.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EmployerApprenticeshipsService.WebContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.LevyAggregationProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj">
+      <Name>SFA.DAS.Account.Api</Name>
+      <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>SFA.DAS.Account.Api</RoleName>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
       <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>

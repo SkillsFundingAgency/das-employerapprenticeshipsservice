@@ -44,4 +44,12 @@
     <Certificates>
     </Certificates>
   </Role>
+  <Role name="SFA.DAS.Account.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+    </ConfigurationSettings>
+  </Role>
 </ServiceConfiguration>

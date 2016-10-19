@@ -14,8 +14,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             : base("Users")
         {
         }
-        
-        public async Task<User> GetById(string id)
+
+        public async Task<User> GetUserById(long id)
+        {
+            var users = await ReadFileById<Users>(UserDataFileName);
+
+            return users.UserList.SingleOrDefault(x => x.Id.Equals(id));
+        }
+
+        public async Task<User> GetByUserRef(string id)
         {
             var users = await ReadFileById<Users>(UserDataFileName);
 

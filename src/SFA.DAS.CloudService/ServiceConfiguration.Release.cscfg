@@ -44,6 +44,14 @@
     <Certificates>
     </Certificates>
   </Role>
+  <Role name="SFA.DAS.Account.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="" />
+      <Setting name="ConfigurationStorageConnectionString" value="" />
+    </ConfigurationSettings>
+  </Role>
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
@@ -58,11 +66,6 @@
         </Subnets>
       </InstanceAddress>
       <InstanceAddress roleName="SFA.DAS.LevyAggregationProvider.Worker">
-        <Subnets>
-          <Subnet name="__subnet__" />
-        </Subnets>
-      </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.EAS.Notification.Worker">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
