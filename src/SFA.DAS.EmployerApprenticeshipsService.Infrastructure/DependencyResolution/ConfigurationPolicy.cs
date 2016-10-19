@@ -8,6 +8,7 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
+using StructureMap.TypeRules;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution
 {
@@ -24,7 +25,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolu
         protected override void apply(Type pluginType, IConfiguredInstance instance)
         {
 
-            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T));
+            var serviceConfigurationParamater = instance?.Constructor?.GetParameters().FirstOrDefault(x => x.ParameterType == typeof(T) 
+                                                                                                        || ((System.Reflection.TypeInfo)typeof(T)).GetInterface(x.ParameterType.Name) != null);
 
             if (serviceConfigurationParamater != null)
             {
