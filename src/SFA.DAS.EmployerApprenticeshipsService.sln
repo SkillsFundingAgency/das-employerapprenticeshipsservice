@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -53,6 +53,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

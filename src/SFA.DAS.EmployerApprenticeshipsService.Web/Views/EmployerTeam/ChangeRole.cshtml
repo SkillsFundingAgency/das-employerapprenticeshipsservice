@@ -1,10 +1,13 @@
 @using SFA.DAS.EmployerApprenticeshipsService.Domain
-@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<TeamMember>
+@using SFA.DAS.EmployerApprenticeshipsService.Web
+
+@model OrchestratorResponse<TeamMember>
 
 @{
     var name = Model.Data.Name ?? Model.Data.Email;
+    ViewBag.Title = name;
 }
-@{ViewBag.Title = name;}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@name</h1>
@@ -49,6 +52,7 @@
         </form>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">

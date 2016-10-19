@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
 {
-    public interface IUserRepository 
+    public interface IUserRepository
     {
-        Task<User> GetById(string id);
+        Task<User> GetUserById(long id);
+        Task<User> GetByUserRef(string id);
         Task<User> GetByEmailAddress(string emailAddress);
         Task Create(User registerUser);
         Task Update(User user);

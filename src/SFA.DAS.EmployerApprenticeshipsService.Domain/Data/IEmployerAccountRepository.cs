@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
@@ -7,5 +8,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
     {
         Task<Account> GetAccountById(long id);
         Task<Account> GetAccountByHashedId(string hashedId);
+        Task<Accounts> GetAccounts(string fromDate, int pageNumber, int pageSize);
     }
 }

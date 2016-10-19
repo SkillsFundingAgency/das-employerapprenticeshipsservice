@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAcco
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var user = await _userRepository.GetById(message.ExternalUserId);
+            var user = await _userRepository.GetByUserRef(message.ExternalUserId);
 
             if (user == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });

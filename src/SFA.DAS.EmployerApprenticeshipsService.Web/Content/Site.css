@@ -532,3 +532,8 @@ table.top-border {
 .panel-filled {
     background: #DEE0E2;
 }
+
+b, strong {
+    font-weight: 600;
+}
+
