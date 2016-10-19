@@ -39,8 +39,7 @@
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
-      <Setting name="EventHubName" value="__EventHubName__" />
-    
+      <Setting name="EventHubName" value="__EventHubName__" />    
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -54,6 +53,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
     </ConfigurationSettings>
   </Role>
   <NetworkConfiguration>
