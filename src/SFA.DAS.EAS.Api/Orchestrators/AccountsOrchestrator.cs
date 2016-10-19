@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using MediatR;
+using NLog;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccounts;
@@ -14,12 +15,14 @@ namespace SFA.DAS.EAS.Api.Orchestrators
     public class AccountsOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly ILogger _logger;
 
-        public AccountsOrchestrator(IMediator mediator)
+        public AccountsOrchestrator(IMediator mediator, ILogger logger )
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _logger = logger;
         }
 
 

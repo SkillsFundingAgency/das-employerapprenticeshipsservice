@@ -40,6 +40,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
+    
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -47,9 +48,12 @@
   <Role name="SFA.DAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="EnvironmentName" value="" />
-      <Setting name="ConfigurationStorageConnectionString" value="" />
+    <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+      <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
   </Role>
   <NetworkConfiguration>
