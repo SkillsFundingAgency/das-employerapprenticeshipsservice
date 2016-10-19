@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private CreateInvitationCommand _command;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
-        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IValidator<CreateInvitationCommand>> _validator;
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
@@ -41,12 +42,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _mediator = new Mock<IMediator>();
 
-            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> { new EmailTemplateConfigurationItem { Key = "Invitation", TemplateName = "Invitation" } } };
 
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration.Object, _validator.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object);
             _command = new CreateInvitationCommand
             {
                 HashedId = ExpectedHashedId,
@@ -117,9 +118,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
-                                                                                  && c.Email.SystemId.Equals("")
-                                                                                  && c.Email.TemplateId.Equals("")
-                                                                                  && c.Email.Subject.Equals("Account Invitation"))));
+                                                                                  && c.Email.SystemId.Equals("x")
+                                                                                  && c.Email.TemplateId.Equals("Invitation")
+                                                                                  && c.Email.Subject.Equals("x"))));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         private Mock<IInvitationRepository> _invitationRepository;
         private ResendInvitationCommandHandler _handler;
         private Mock<IMediator> _mediator;
-        private Mock<EmployerApprenticeshipsServiceConfiguration> _config;
+        private EmployerApprenticeshipsServiceConfiguration _config;
         private ResendInvitationCommand _command;
         private const int ExpectedAccountId = 14546;
         private const string ExpectedHashedId = "145AVF46";
@@ -48,8 +49,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, _command.ExternalUserId)).ReturnsAsync(owner);
             _invitationRepository = new Mock<IInvitationRepository>();
             _mediator = new Mock<IMediator>();
-            _config = new Mock<EmployerApprenticeshipsServiceConfiguration>();
-            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config.Object);
+            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem> {new EmailTemplateConfigurationItem {Key="Invitation",TemplateName = "Invitation"} } };
+            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config);
         }
 
         [TearDown]
@@ -158,11 +159,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _handler.Handle(_command);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<SendNotificationCommand>(c=> c.Email.RecipientsAddress.Equals("test@email")
+            _mediator.Verify(x=>x.SendAsync(It.Is<SendNotificationCommand>(c=> c.Email.RecipientsAddress.Equals(_command.Email)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
-                                                                                  && c.Email.SystemId.Equals("")
-                                                                                  && c.Email.TemplateId.Equals("")
-                                                                                  && c.Email.Subject.Equals("Account Invitation"))));
+                                                                                  && c.Email.SystemId.Equals("x")
+                                                                                  && c.Email.Subject.Equals("x")
+                                                                                  && c.Email.TemplateId.Equals("Invitation"))));
         }
         
     }
