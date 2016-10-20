@@ -54,6 +54,9 @@
       <Setting name="LogLevel" value="Debug" />
       <Setting name="EventHubConnectionString" value="" />
       <Setting name="EventHubName" value="" />
+      <Setting name="ApiTokenSecret" value="These are not the secrets you are looking for" />
+      <Setting name="ApiIssuer" value="http://localhost:51693" />
+      <Setting name="ApiAudiences" value="http://example" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>
