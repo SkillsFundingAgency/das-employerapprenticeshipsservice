@@ -533,10 +533,11 @@ table.top-border {
     background: #DEE0E2;
 }
 
+main .column-one-third .spacer{
+    margin-top:60px;
+    float:right;
+}
 .validation-summary-valid {
     display: none;
-}
-b, strong {
-    font-weight: 600;
 }
 

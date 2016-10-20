@@ -8,7 +8,7 @@
         @if (Model.Data.NumberOfTasks > 0)
         {
             <h2 class="heading-medium">Tasks</h2>
-           <p>Any commitments that need your attention are shown below:</p>
+            <p>Any commitments that need your attention are shown below:</p>
             if (Model.Data.NumberOfTasks == 1)
             {
                 <p>You have <span class="bold-small">1</span> task to complete.</p>
@@ -26,15 +26,15 @@
         }
     </div>
 </div>
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Commitments</h1>
-        <hr />
-        <p>Any commitments that are new or in discussion with your training provider are listed below:</p>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-full">
+        <div class="hgroup">
+            <h1 class="heading-xlarge">Commitments</h1>
+
+            <p>Any commitments that are new or in discussion with your training provider are listed below:</p>
+        </div>
+
         @if (Model.Data.Commitments.Count == 0)
         {
             <p class="panel panel-info">
@@ -43,55 +43,60 @@
         }
         else
         {
-        <div class="responsive-table">
-            <div class="responsive-thead">
-                <div class="responsive-tr">
-                    <div class="responsive-th">Provider</div>
-                    <div class="responsive-th">Legal entity</div>
-                    <div class="responsive-th">Name</div>
-                    <div class="responsive-th"> </div>
-                    <div class="responsive-th"> </div>
-                </div>
-            </div>
-            <div class="responsive-tbody">
-                @foreach (var commitment in Model.Data.Commitments)
+            <!--table replacement to gds standards -->
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Provider</th>
+                        <th scope="col">Legal entity</th>
+                        <th scope="col" colspan="3">Name</th>
+                     
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var commitment in Model.Data.Commitments)
                 {
-                    <div class="responsive-tr">
-                        <div class="responsive-td">
-                            <div>@commitment.ProviderName</div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            <div>@commitment.LegalEntityName</div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Role</div>
-                            <div>@commitment.Name</div>
-                        </div>
-                        <div class="responsive-td">
-                            <div>
-                                <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" class="button">View</a>
-                            </div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                        <div class="responsive-td">
-                            @if (commitment.CanBeSubmitted())
-                            {
-                                <div>
-                                    <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })" class="button">Submit</a>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
+                        <tr>
+                            <td>
+                                @commitment.ProviderName
+                            
+                            </td>
+                            <td>
+                                @commitment.LegalEntityName
+                             
+                            </td>
+                            <td>
+                              
+                                @commitment.Name
+                            </td>
+                            <td>
+                              
+                                    <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
+                              
+                               
+                            </td>
+                            <td>
+                                @if (commitment.CanBeSubmitted())
+                                {
+                                    
+                                        <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })">Submit</a>
+                                    
+                                   
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
-    </div>
+    </div> <!-- /column-two-thirds-->
+    <div class="column-one-third pull-right">
+        <a href="@Url.Action("Inform")" class="button spacer">Add new commitment</a>
+    </div><!-- /column-one-third -->
+
 </div>
-<a href="@Url.Action("Inform")" class="button">Add new commitment</a>
+</div>
+
 
 @section breadcrumb {
     <div class="breadcrumbs">
