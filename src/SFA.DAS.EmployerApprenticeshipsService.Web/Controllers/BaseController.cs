@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using SFA.DAS.EmployerApprenticeshipsService.Application;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
@@ -54,6 +55,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             {
                 orchestratorResponse.FlashMessage = flashMessage;
             }
+
+            var invalidRequestException = orchestratorResponse.Exception as InvalidRequestException;
+
+            if (invalidRequestException != null)
+            {
+                foreach (var errorMessageItem in invalidRequestException.ErrorMessages)
+                {
+                    ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
+                }
+            }
+
             if (orchestratorResponse.Status == HttpStatusCode.OK || orchestratorResponse.Status == HttpStatusCode.BadRequest)
                 return base.View(viewName, masterName, orchestratorResponse);
 
