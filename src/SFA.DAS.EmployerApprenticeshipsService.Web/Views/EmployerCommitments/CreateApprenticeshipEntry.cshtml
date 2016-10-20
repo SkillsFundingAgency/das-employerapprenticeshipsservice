@@ -76,7 +76,7 @@
 
             @Html.EditorFor(m => m.Cost, "FormCurrencyString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" }, labelText = "Cost" })
             <hr />
-            @Html.EditorFor(m => m.ULN, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", step = "1" }, labelText = "Unique learner number" })
+            @Html.EditorFor(m => m.ULN, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" }, labelText = "Unique learner number" })
           
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
