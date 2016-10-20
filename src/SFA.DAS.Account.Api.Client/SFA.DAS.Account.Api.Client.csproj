@@ -48,6 +48,7 @@
     <Compile Include="AccountApiConfiguration.cs" />
     <Compile Include="Dtos\AccountWithBalanceViewModel.cs" />
     <Compile Include="Dtos\PagedApiResponseViewModel.cs" />
+    <Compile Include="IAccountApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecureHttpClient.cs" />
   </ItemGroup>

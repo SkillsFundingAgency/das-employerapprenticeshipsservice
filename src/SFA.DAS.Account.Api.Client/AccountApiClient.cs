@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.Account.Api.Client
 {
-    public class AccountApiClient
+    public class AccountApiClient : IAccountApiClient
     {
         private readonly AccountApiConfiguration _configuration;
         private readonly SecureHttpClient _httpClient;
