@@ -18,6 +18,7 @@
 
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
     using StructureMap;
@@ -28,7 +29,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
         public static IContainer Initialize() {
             return new Container(c =>
             {
-                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new ConfigurationPolicy<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.AddRegistry<DefaultRegistry>();

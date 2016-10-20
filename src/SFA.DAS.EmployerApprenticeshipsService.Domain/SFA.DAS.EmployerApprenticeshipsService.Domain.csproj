@@ -74,6 +74,9 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -104,10 +107,12 @@
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
+    <Compile Include="Configuration\EmailTemplateConfigurationItem.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
+    <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Configuration\SmtpConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />

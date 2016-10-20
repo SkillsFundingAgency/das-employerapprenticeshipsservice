@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
         {
             Scan(scan =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService"));
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 
             });
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyR
             For<ICookieService>().Use(() => cookieServiceMock.Object);
             
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-
+            
             AddMediatrRegistrations();
         }
 
