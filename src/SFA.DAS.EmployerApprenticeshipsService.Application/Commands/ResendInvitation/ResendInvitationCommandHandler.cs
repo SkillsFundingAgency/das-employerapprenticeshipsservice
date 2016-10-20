@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
@@ -7,6 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation
@@ -57,23 +59,26 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Accepted invitations cannot be resent" } });
 
             existing.Status = InvitationStatus.Pending;
-            existing.ExpiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
-
+            var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
+            existing.ExpiryDate = expiryDate;
+            
             await _invitationRepository.Resend(existing);
 
             await _mediator.SendAsync(new SendNotificationCommand
             {
-                UserId = owner.UserId,
-                Data = new EmailContent
+                Email = new Email
                 {
-                    RecipientsAddress = existing.Email,
+                    RecipientsAddress = message.Email,
+                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateName.Equals("Invitation")).Key,
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Data = new Dictionary<string, string> { { "InviteeName", existing.Name }, { "ReturnUrl", _employerApprenticeshipsServiceConfiguration.DashboardUrl } }
-                },
-                DateTime = DateTime.UtcNow,
-                MessageFormat = MessageFormat.Email,
-                ForceFormat = true,
-                TemplatedId = ""
+                    Subject = "x",
+                    SystemId = "x",
+                    Tokens = new Dictionary<string, string> {
+                        { "account_name", owner.AccountName },
+                        { "base_url", _employerApprenticeshipsServiceConfiguration.DashboardUrl },
+                        { "expiry_date", expiryDate.ToString("dd MMM yyy")}
+                    }
+                }
             });
         }
     }

@@ -191,6 +191,10 @@
       <HintPath>..\packages\SFA.DAS.NLog.Targets.AzureEventHub.1.0.0.12237\lib\net45\SFA.DAS.NLog.Targets.AzureEventHub.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=1.0.0.8638, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.1.0.0.8638\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>

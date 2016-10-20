@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
         {
             var userRepository = _container.GetInstance<IUserRepository>();
             var membershipRepository = _container.GetInstance<IMembershipRepository>();
-            var userRecord = userRepository.GetById(user.UserRef).Result;
+            var userRecord = userRepository.GetByUserRef(user.UserRef).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short) role).Wait();
 

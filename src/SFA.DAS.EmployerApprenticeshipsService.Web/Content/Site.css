@@ -537,3 +537,8 @@ main .column-one-third .spacer{
     margin-top:60px;
     float:right;
 }
+
+b, strong {
+    font-weight: 600;
+}
+

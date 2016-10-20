@@ -44,4 +44,19 @@
     <Certificates>
     </Certificates>
   </Role>
+  <Role name="SFA.DAS.Account.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+      <Setting name="LogLevel" value="__loglevel__" />
+      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
+      <Setting name="EventHubName" value="__EventHubName__" />
+      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__"/>
+      <Setting name="ApiIssuer" value="__ApiIssuer__"/>
+      <Setting name="ApiAudiences" value="__ApiAudiences__"/>
+    </ConfigurationSettings>
+  </Role>
 </ServiceConfiguration>

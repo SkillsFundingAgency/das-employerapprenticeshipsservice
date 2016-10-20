@@ -36,7 +36,7 @@ Running the cloud service will start the web application in your browser.
 
 ### Whitelisting
 
-To limit access to the site to subset of users you can add regex patterns to allow users with certain email addresses to access the site only. Unlisted email addresses will be redirected to a 'user not allowed' page but will still be able to create a user account and log in. 
+To limit access to the site to subset of users you can add regex patterns to allow users with certain email addresses to access the site only. Unlisted email addresses will be redirected to a 'user not allowed' page but will still be able to create a user account and log in.
 
 To add such regex patterns simple open up the json file:
 
@@ -53,7 +53,7 @@ Below is an example of what the file may look like
     "^test2@test.com$",
     "test@[a-z]*.co.uk"
   ]
-} 
+}
 ```
 
 ### Feature Toggle
@@ -73,3 +73,9 @@ You are able to define your own set of companies that aren't available through t
 {   "Data": [     {   "company_name": "Non companies house company",   "company_number": "AML-456789",   "date_of_creation": "2001-10-01T00:00:00",   "registered_office_address": {         "address_line_1": "Test Address",         "address_line_2": "Test",         "postal_code": "T31 EST"       } }   ] }
 ```
 The PartitionKey is **LOCAL** and the RowKey is **SFA.DAS.EmployerApprenticeshipsService.CompanyLookup_1.0**
+
+## Account API
+The Employer Apprenticeships Service provides a REST Api and client for accessing Employer accounts.
+
+* The API can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api)
+* The client can be found in [src/SFA.DAS.Account.Api.Client](src/SFA.DAS.Account.Api.Client)

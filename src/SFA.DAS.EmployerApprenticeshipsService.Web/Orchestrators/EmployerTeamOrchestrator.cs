@@ -12,6 +12,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamM
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
@@ -135,62 +136,179 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 {
                     Severity = FlashMessageSeverityLevel.Success,
                     Headline = "Invitation sent",
-                    Message = $"You've sent an invitation to {model.Email}"
+                    Message = $"You've sent an invitation to <strong>{model.Email}</strong>"
                 };
             }
 
             return response;
         }
 
-        public async Task<InvitationViewModel> Review(string accountId, string email)
+        public async Task<OrchestratorResponse<InvitationViewModel>> Review(string accountId, string email)
         {
-            var response = await _mediator.SendAsync(new GetMemberRequest
+            var response = new OrchestratorResponse<InvitationViewModel>();
+
+            var queryResponse = await _mediator.SendAsync(new GetMemberRequest
             {
                 HashedId = accountId,
                 Email = email
             });
 
-            return MapFrom(response.TeamMember);
+            response.Data = MapFrom(queryResponse.TeamMember);
+
+            return response;
         }
 
-        public async Task<InvitationView> GetInvitation(string id)
+        public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
-            var response = await _mediator.SendAsync(new GetInvitationRequest
+            var invitationResponse = await _mediator.SendAsync(new GetInvitationRequest
             {
                 Id = id
             });
 
-            return response.Invitation;
+            var response = new OrchestratorResponse<InvitationView>
+            {
+                Data = invitationResponse.Invitation
+            };
+
+            return response;
         }
 
-        public async Task Cancel(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedId, string externalUserId)
         {
-            await _mediator.SendAsync(new DeleteInvitationCommand
+            var response = await GetTeamMembers(hashedId, externalUserId);
+
+            if (response.Status != HttpStatusCode.OK)
+                return response;
+
+            try
             {
-                Email = email,
-                HashedId = hashedId,
-                ExternalUserId = externalUserId
-            });
+                await _mediator.SendAsync(new DeleteInvitationCommand
+                {
+                    Email = email,
+                    HashedId = hashedId,
+                    ExternalUserId = externalUserId
+                });
+
+                response.Status = HttpStatusCode.OK;
+                response.FlashMessage = new FlashMessageViewModel()
+                {
+                    Headline = "Invitation cancelled",
+                    Message = $"You've cancelled the invitation sent to <b>{email}</strong>",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+
+            }
+            catch (InvalidRequestException e)
+            {
+                response.Status = HttpStatusCode.OK;
+                response.Exception = e;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                response.Status = HttpStatusCode.OK;
+                response.Exception = e;
+            }
+
+            return response;
         }
 
-        public async Task Resend(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(string email, string hashedId, string externalUserId)
         {
-            await _mediator.SendAsync(new ResendInvitationCommand
+            var response = await GetTeamMembers(hashedId, externalUserId);
+
+            if (response.Status != HttpStatusCode.OK)
+                return response;
+            
+            try
             {
-                Email = email,
-                AccountId = hashedId,
-                ExternalUserId = externalUserId
-            });
+                await _mediator.SendAsync(new ResendInvitationCommand
+                {
+                    Email = email,
+                    AccountId = hashedId,
+                    ExternalUserId = externalUserId
+                });
+
+                response.Status = HttpStatusCode.OK;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Success,
+                    Headline = $"Invitation resent",
+                    Message = $"You've resent an invitation to <strong>{email}</strong>"
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.Exception = e;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = e;
+            }
+
+            return response;
         }
 
-        public async Task Remove(long userId, string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, string externalUserId)
         {
-            await _mediator.SendAsync(new RemoveTeamMemberCommand
+            var response = await GetTeamMembers(accountId, externalUserId);
+
+            if (response.Status != HttpStatusCode.OK)
+                return response;
+
+            try
             {
-                UserId = userId,
-                HashedId = accountId,
-                ExternalUserId = externalUserId
-            });
+                var userResponse = await _mediator.SendAsync(new GetUserQuery {UserId = userId});
+
+                if (userResponse?.User == null)
+                {
+                    response.Status = HttpStatusCode.NotFound;
+                    response.FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Could not find user",
+                        Message = "The user being removed from the team could not be found",
+                        Severity = FlashMessageSeverityLevel.Error
+                    };
+                }
+                else
+                {
+                    await _mediator.SendAsync(new RemoveTeamMemberCommand
+                    {
+                        UserId = userId,
+                        HashedId = accountId,
+                        ExternalUserId = externalUserId
+                    });
+
+                    //Update the team members list after the user has been removed
+                    response = await GetTeamMembers(accountId, externalUserId);
+
+                    if (response.Status != HttpStatusCode.OK)
+                        return response;
+
+                    response.Status = HttpStatusCode.OK;
+
+                    response.FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Team member removed",
+                        Message = $"You've removed <strong>{ userResponse.User.Email}</strong>",
+                        Severity = FlashMessageSeverityLevel.Success
+                    };
+                }
+            }
+            catch (InvalidRequestException e)
+            {
+
+                response.Status = HttpStatusCode.BadRequest;
+                response.Exception = e;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = e;
+            }
+           
+            return response;
         }
 
         public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)

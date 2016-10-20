@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
@@ -26,6 +28,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
         public void Arrange()
         {
             _levyRepository = new Mock<IDasLevyRepository>();
+            _levyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpRef)).ReturnsAsync(new DasDeclaration { LevyDueYtd = 1000m, LevyAllowanceForFullYear = 1200m });
+
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
             _validator = new Mock<IValidator<RefreshEmployerLevyDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
@@ -65,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
 
             //Assert
-            _levyRepository.Verify(x => x.GetEmployerDeclaration(It.Is<string>(c => c.Equals("1") || c.Equals("2")), ExpectedEmpRef), Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count));
+            _levyRepository.Verify(x => x.GetEmployerDeclaration(It.Is<string>(c => c.Equals("1") || c.Equals("2") || c.Equals("4")), ExpectedEmpRef), Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count(c=>!c.NoPaymentForPeriod)));
         }
 
         [Test]
@@ -104,6 +108,30 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             //Assert
             _messagePublisher.Verify(x=>x.PublishAsync(It.Is< EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
+        }
+
+        [Test]
+        public async Task ThenIfTheDeclarationHasNoSubmissionForPeriodThenTheLAstSubmissionIsReadFromTheRepository()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _levyRepository.Verify(x=>x.GetLastSubmissionForScheme(ExpectedEmpRef),Times.Exactly(data.EmployerLevyData[0].Declarations.Declarations.Count(c=>c.NoPaymentForPeriod)));
+        }
+
+        [Test]
+        public async Task ThenIfTheDeclarationHasNoSubmissionThenTheLevyDueYtdIsTakenFromThePreviousSubmission()
+        {
+            //Act
+            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c=>c.NoPaymentForPeriod && c.LevyDueYtd.Equals(1000) && c.LevyAllowanceForFullYear.Equals(1200m)),ExpectedEmpRef,ExpectedAccountId),Times.Once);
         }
     }
 }
