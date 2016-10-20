@@ -133,6 +133,7 @@
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
