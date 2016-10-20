@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
@@ -40,12 +41,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmp
             bool sendLevyDataChanged = false;
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations)
+                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations.OrderBy(c=>c.Date))
                 {
                     var declaration = await _dasLevyRepository.GetEmployerDeclaration(dasDeclaration.Id, employerLevyData.EmpRef);
 
                     if (declaration == null)
                     {
+                        if (dasDeclaration.NoPaymentForPeriod)
+                        {
+                            var previousSubmission = await _dasLevyRepository.GetLastSubmissionForScheme(employerLevyData.EmpRef);
+                            dasDeclaration.LevyDueYtd = previousSubmission.LevyDueYtd;
+                            dasDeclaration.LevyAllowanceForFullYear = previousSubmission.LevyAllowanceForFullYear;
+                        }
+
                         await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef, message.AccountId);
                         sendLevyDataChanged = true;
                     }

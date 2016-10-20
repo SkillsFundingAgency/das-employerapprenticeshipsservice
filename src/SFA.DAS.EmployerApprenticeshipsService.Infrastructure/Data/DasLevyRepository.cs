@@ -73,6 +73,22 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             return result.ToList();
         }
+
+        public async Task<DasDeclaration> GetLastSubmissionForScheme(string empRef)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", empRef, DbType.String);
+
+                return await c.QueryAsync<DasDeclaration>(
+                    sql: "[levy].[GetLastLevyDeclarations_ByEmpRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
     }
 }
 
