@@ -1,7 +1,10 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
 @model SelectLegalEntityViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -15,17 +18,12 @@
             <hr />
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="LegalEntityId">Organisation</label>
-                    <div class="form-group">
-                        <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
-                    </div>
-                    <select name="LegalEntityCode" id="LegalEntityCode" class="form-control" aria-label="Legal Entity">
-                        <option value=""></option>
-                        @foreach (var legalEntity in ViewBag.LegalEntities)
-                        {
-                            <option value="@legalEntity.Code">@legalEntity.Name</option>
-                        }
-                    </select>
+                @Html.LabelFor(m => m.LegalEntityCode, "Organisation", new { @class = "form-label" })
+                <div class="form-group">
+                    <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
+                </div>
+                @Html.ValidationMessageFor(m => m.LegalEntityCode)
+                @Html.DropDownListFor(m => m.LegalEntityCode, new SelectList(ViewBag.LegalEntities, "Code", "Name"), "Select", new { @class = "form-control", aria_label = "Legal Entity" })
             </div>
             <button type="submit" class="button">Next</button>
         </form>

@@ -61,8 +61,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create/LegalEntity")]
-        public ActionResult SetLegalEntity(SelectLegalEntityViewModel selectedLegalEntity)
+        public async Task<ActionResult> SetLegalEntity(string hashedAccountId, SelectLegalEntityViewModel selectedLegalEntity)
         {
+            if (!ModelState.IsValid)
+            {
+                var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                ViewBag.LegalEntities = legalEntities.Data;
+
+                return View("SelectLegalEntity", selectedLegalEntity);
+            }
+
             return RedirectToAction("SelectProvider", selectedLegalEntity);
         }
 
@@ -80,8 +88,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create/Provider")]
-        public ActionResult SetProvider(SelectProviderViewModel viewModel)
+        public async Task<ActionResult> SetProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                var providers = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                ViewBag.Providers = providers.Data;
+
+                return View("SelectProvider", viewModel);
+            }
+
             return RedirectToAction("SelectName", viewModel);
         }
 
@@ -91,7 +107,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(model);
+            return View(model.Data);
         }
 
         [HttpPost]
@@ -99,6 +115,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Commitments/Create")]
         public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("SelectName", viewModel);
+            }
+
             await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
             return RedirectToAction("Index");
