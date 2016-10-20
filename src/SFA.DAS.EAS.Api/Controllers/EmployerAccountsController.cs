@@ -20,10 +20,11 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("", Name = "AccountsIndex")]
-        [HttpGet]
-        public async Task<IHttpActionResult> Index(string fromDate = null, int pageSize = 1000, int pageNumber = 1)
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]   
+        public async Task<IHttpActionResult> Index(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
-            var result = await _orchestrator.GetAllAccountsWithBalances(fromDate, pageSize, pageNumber);
+            var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
             
             if (result.Status == HttpStatusCode.OK)
             {
