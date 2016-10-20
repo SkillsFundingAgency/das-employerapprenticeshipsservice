@@ -532,3 +532,8 @@ table.top-border {
 .panel-filled {
     background: #DEE0E2;
 }
+
+main .column-one-third .spacer{
+    margin-top:60px;
+    float:right;
+}
