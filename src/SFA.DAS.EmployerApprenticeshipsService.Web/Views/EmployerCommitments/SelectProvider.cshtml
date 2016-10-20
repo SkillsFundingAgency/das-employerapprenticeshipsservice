@@ -1,7 +1,6 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
-@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+@model SelectProviderViewModel
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -21,8 +20,8 @@
                     </div>
                 <select name="ProviderId" id="ProviderId" class="form-control" aria-label="Training Provider">
                     <option value=""></option>
-                    @foreach (var provider in Model.Data.Providers)
-            {
+                    @foreach (var provider in ViewBag.Providers)
+                    {
                         <option value="@provider.Id">@provider.Name</option>
                     }
                 </select>
@@ -32,8 +31,7 @@
                 <h2 class="visuallyhidden">What is a UKPRN?</h2>
                 <p>A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.</p>
             </div>
-            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.Data.Commitment.LegalEntityCode" />
-            <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.Commitment.LegalEntityName" />
+            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
             <button type="submit" class="button">Search</button>
         </form>
     </div>

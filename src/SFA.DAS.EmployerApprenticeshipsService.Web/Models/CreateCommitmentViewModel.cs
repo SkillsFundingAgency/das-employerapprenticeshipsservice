@@ -1,27 +1,18 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public class ExtendedCreateCommitmentViewModel
+    public sealed class SelectLegalEntityViewModel
     {
-        public CreateCommitmentViewModel Commitment { get; set; }
-        public List<Provider> Providers { get; set; }
-        public List<LegalEntity> LegalEntities { get; set; }
+        public string LegalEntityCode { get; set; }
     }
 
-    public class CreateCommitmentViewModel : CreateCommitmentModelBase
+    public sealed class SelectProviderViewModel
     {
-        
+        public string LegalEntityCode { get; set; }
+
+        public string ProviderId { get; set; }
     }
 
-    public class CreateCommitmentModel : CreateCommitmentModelBase
-    {
-
-    }
-
-    public abstract class CreateCommitmentModelBase
+    public sealed class CreateCommitmentViewModel
     {
         public string Name { get; set; }
         public string HashedAccountId { get; set; }
