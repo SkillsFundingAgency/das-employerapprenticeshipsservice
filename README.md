@@ -77,5 +77,5 @@ The PartitionKey is **LOCAL** and the RowKey is **SFA.DAS.EmployerApprenticeship
 ## Account API
 The Employer Apprenticeships Service provides a REST Api and client for accessing Employer accounts.
 
-The API can be found in
-The client can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api) [src/SFA.DAS.Account.Api.Client](src\SFA.DAS.Account.Api.Client)
+* The API can be found in [src/SFA.DAS.EAS.Api](src/SFA.DAS.EAS.Api)
+* The client can be found in [src/SFA.DAS.Account.Api.Client](src/SFA.DAS.Account.Api.Client)
