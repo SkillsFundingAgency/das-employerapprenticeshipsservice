@@ -18,13 +18,13 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <hr />
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
-                @Html.LabelFor(m => m, "Apprentice first name", new { @class = "form-label" })
+                @Html.LabelFor(m => m.FirstName, "Apprentice first name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
                 <hr />
             </div>
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
-                @Html.LabelFor(m => m, "Apprentice last name", new { @class = "form-label" })
+                @Html.LabelFor(m => m.LastName, "Apprentice last name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
                 <hr />
@@ -86,14 +86,14 @@
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                 @Html.LabelFor(m => m.Cost, "Cost", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost) })
-                @Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" })
+                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" })
                 <hr />
             </div>
             <hr />
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
                 @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
-                <b>£</b>@Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" })
+                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" })
                 <hr />
             </div>
           

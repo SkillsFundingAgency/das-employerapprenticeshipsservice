@@ -59,6 +59,7 @@
 
         container.removeClass("field-validation-valid").addClass("field-validation-error");
         error.data("unobtrusiveContainer", container);
+        $(inputElement.closest('div.form-group')).addClass('error');
 
         if (replace) {
             container.empty();
@@ -66,6 +67,7 @@
         }
         else {
             error.hide();
+            $(inputElement.closest('div.form-group')).removeClass('error');
         }
     }
 
@@ -84,6 +86,7 @@
                 } else {
                     $("<li />").html(this.message).appendTo(list);
                 }
+                $(this.element.closest('div.form-group')).addClass('error');
             });
         }
     }
@@ -96,6 +99,7 @@
         if (container) {
             container.addClass("field-validation-valid").removeClass("field-validation-error");
             error.removeData("unobtrusiveContainer");
+            $(container.closest('div.form-group')).removeClass('error');
 
             if (replace) {
                 container.empty();
