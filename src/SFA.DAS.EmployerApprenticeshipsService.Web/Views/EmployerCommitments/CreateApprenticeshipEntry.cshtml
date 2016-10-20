@@ -17,8 +17,18 @@
         <form method="POST" action="@Url.Action("CreateApprenticeship")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <hr />
-            @Html.EditorFor(m => m.FirstName, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4" }, labelText = "Apprentice first name" })
-            @Html.EditorFor(m => m.LastName, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4" }, labelText = "Apprentice last name" })
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
+                @Html.LabelFor(m => m, "Apprentice first name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+                <hr />
+            </div>
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
+                @Html.LabelFor(m => m, "Apprentice last name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+                <hr />
+            </div>
             <hr />
             <div class="form-group">
                 <label class="form-label" for="TrainingId">Find apprenticeship</label>
@@ -73,10 +83,19 @@
                 </fieldset>
                 <hr />
             </div>
-
-            @Html.EditorFor(m => m.Cost, "FormCurrencyString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" }, labelText = "Cost" })
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
+                @Html.LabelFor(m => m.Cost, "Cost", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost) })
+                @Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" })
+                <hr />
+            </div>
             <hr />
-            @Html.EditorFor(m => m.ULN, "FormString", new { htmlAttributes = new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" }, labelText = "Unique learner number" })
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
+                @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
+                <b>£</b>@Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" })
+                <hr />
+            </div>
           
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
