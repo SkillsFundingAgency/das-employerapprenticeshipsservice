@@ -538,6 +538,11 @@ main .column-one-third .spacer{
     float:right;
 }
 
+
+.validation-summary-valid {
+    display: none;
+}
+
 b, strong {
     font-weight: 600;
 }

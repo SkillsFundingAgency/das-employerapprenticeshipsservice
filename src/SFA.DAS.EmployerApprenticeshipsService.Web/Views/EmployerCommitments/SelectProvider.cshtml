@@ -1,40 +1,38 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
-@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+@model SelectProviderViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find your training provider</h1>
-        <hr />
         <p>Search for the training provider that will be training your apprentices.</p>
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("SetProvider")">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            <hr />
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="ProviderId">Search for training provider</label>
-                    <div class="form-group">
-                        <p>Search by UK Provider Reference Number (UKPRN).</p>
-                    </div>
-                <select name="ProviderId" id="ProviderId" class="form-control" aria-label="Training Provider">
-                    <option value=""></option>
-                    @foreach (var provider in Model.Data.Providers)
-            {
-                        <option value="@provider.Id">@provider.Name</option>
-                    }
-                </select>
+                @Html.LabelFor(m => m.ProviderId, "Search for training provider", new { @class = "form-label" })
+                <div class="form-group">
+                    <p>Search by UK Provider Reference Number (UKPRN).</p>
+                </div>
+                @Html.ValidationMessageFor(m => m.ProviderId)
+                @Html.DropDownListFor(m => m.ProviderId, new SelectList(ViewBag.Providers, "Id", "Name"), "Select", new { @class = "form-control", aria_label = "Training Provider" })
             </div>
             <a href="#" class="toggle toggle-closed">What is a UKPRN?</a>
             <div class="help-content" data-toggle-text="What is a UKPRN?" aria-hidden="false" aria-expanded="true">
                 <h2 class="visuallyhidden">What is a UKPRN?</h2>
                 <p>A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.</p>
             </div>
-            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.Data.Commitment.LegalEntityCode" />
-            <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.Commitment.LegalEntityName" />
             <button type="submit" class="button">Search</button>
+            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
         </form>
     </div>
 </div>
