@@ -1,29 +1,28 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards
 {
     public class GetStandardsQueryHandler : IAsyncRequestHandler<GetStandardsQueryRequest, GetStandardsQueryResponse>
     {
-        private readonly IStandardsRepository _standardsRepository;
+        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
 
-        public GetStandardsQueryHandler(IStandardsRepository standardsRepository)
+        public GetStandardsQueryHandler(IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper)
         {
-            if (standardsRepository == null)
-                throw new ArgumentNullException(nameof(standardsRepository));
-            _standardsRepository = standardsRepository;
+            if (apprenticeshipInfoServiceWrapper == null)
+                throw new ArgumentNullException(nameof(apprenticeshipInfoServiceWrapper));
+            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
         }
 
         public async Task<GetStandardsQueryResponse> Handle(GetStandardsQueryRequest message)
         {
-            var standards = await _standardsRepository.GetAllAsync();
+            var data = await _apprenticeshipInfoServiceWrapper.GetStandardsAsync();
 
             return new GetStandardsQueryResponse
             {
-                Standards = standards.ToList()
+                Standards = data.Standards
             };
         }
     }

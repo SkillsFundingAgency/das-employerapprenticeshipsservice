@@ -124,6 +124,7 @@
     <Compile Include="Data\IStandardsRepository.cs" />
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Duration.cs" />
     <Compile Include="EmployerAgreementStatus.cs" />
     <Compile Include="EmployerAgreementTemplate.cs" />
     <Compile Include="EmployerAgreementView.cs" />
@@ -133,6 +134,8 @@
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
+    <Compile Include="Framework.cs" />
+    <Compile Include="FrameworksView.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
@@ -183,10 +186,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Providers.cs" />
+    <Compile Include="ProvidersView.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="Scheme.cs" />
     <Compile Include="Schemes.cs" />
     <Compile Include="Standard.cs" />
+    <Compile Include="StandardsView.cs" />
     <Compile Include="TeamMember.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Users.cs" />

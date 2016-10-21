@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             var standards = await ReadFileById<Standard[]>(fileName);
 
-            return standards.SingleOrDefault(x => x.Code == code);
+            return standards.SingleOrDefault(x => x.Id == code);
         }
     }
 }
