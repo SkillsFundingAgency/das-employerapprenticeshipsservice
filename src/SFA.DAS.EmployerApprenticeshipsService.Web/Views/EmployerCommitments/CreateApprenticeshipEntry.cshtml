@@ -86,14 +86,14 @@
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                 @Html.LabelFor(m => m.Cost, "Cost", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost) })
-                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", min = "1", step = "1" })
+                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number" })
                 <hr />
             </div>
             <hr />
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
                 @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
-                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", min = "1000000000", max = "9999999999", step = "1" })
+                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number" })
                 <hr />
             </div>
           
