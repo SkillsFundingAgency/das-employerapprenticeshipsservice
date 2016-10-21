@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
 
             _mediator = new Mock<IMediator>();
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> { new EmailTemplateConfigurationItem { Key = "Invitation", TemplateName = "Invitation" } } };
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> { new EmailTemplateConfigurationItem {Key = "123456", TemplateType = EmailTemplateType.Invitation, TemplateName = "Invitation" } } };
 
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("Invitation")
+                                                                                  && c.Email.TemplateId.Equals("123456")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
     }

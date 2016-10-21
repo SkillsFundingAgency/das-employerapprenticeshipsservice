@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvi
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateName.Equals("Invitation")).Key,
+                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateType.Equals(EmailTemplateType.Invitation)).Key,
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
