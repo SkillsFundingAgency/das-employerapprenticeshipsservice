@@ -67,7 +67,6 @@
         }
         else {
             error.hide();
-            $(inputElement.closest('div.form-group')).removeClass('error');
         }
     }
 
@@ -96,10 +95,11 @@
             replaceAttrValue = container.attr("data-valmsg-replace"),
             replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
 
+        $(container.closest('div.form-group')).removeClass('error');
+
         if (container) {
             container.addClass("field-validation-valid").removeClass("field-validation-error");
             error.removeData("unobtrusiveContainer");
-            $(container.closest('div.form-group')).removeClass('error');
 
             if (replace) {
                 container.empty();
