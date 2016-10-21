@@ -136,6 +136,7 @@
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
