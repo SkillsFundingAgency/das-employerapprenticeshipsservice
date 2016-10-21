@@ -15,7 +15,7 @@
         </h1>
 
         <p class="lede">Invite somebody to access this levy account.</p>
-        @if (!ViewContext.ViewData.ModelState.IsValid)
+        @*@if (!ViewContext.ViewData.ModelState.IsValid)
         {
             foreach (var state in ViewContext.ViewData.ModelState.Values)
             {
@@ -26,10 +26,23 @@
                     </div>
                 }
             }
-        }
+        }*@
         <form method="POST" action="@Url.Action("Invite")">
             @Html.AntiForgeryToken()
-            <div class="form-group">
+
+            @{
+                var nameError = ViewContext.ViewData.ModelState["Name"]?.Errors?.Any() ?? false;
+                var emailError = ViewContext.ViewData.ModelState["Email"]?.Errors?.Any() ?? false;
+            }
+
+            <div class="form-group @(emailError ? "error" : "")">
+                @if (emailError)
+                {
+                    foreach (var error in ViewContext.ViewData.ModelState["Email"].Errors)
+                    {
+                        <p class="error-message">@error.ErrorMessage</p>
+                    }
+                }
                 <label class="form-label" for="Email">
                     Email address
                     <span class="form-hint">An invitation will be sent to this email address</span>
@@ -37,10 +50,18 @@
                 <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
                        aria-required="true" value="@Model.Data.Email"/>
             </div>
-            <div class="form-group">
+            
+            <div class="form-group @(nameError ? "error" : "")">
+                @if (nameError)
+                {
+                    foreach (var error in ViewContext.ViewData.ModelState["Name"].Errors)
+                    {
+                        <p class="error-message">@error.ErrorMessage</p>
+                    }
+                }
                 <label class="form-label" for="Name">Full name</label>
                 <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
-                       aria-required="true" value="@Model.Data.Name" />
+                       aria-required="true" value="@Model.Data.Name"/>
             </div>
             <label class="form-label">
                 Team member access
