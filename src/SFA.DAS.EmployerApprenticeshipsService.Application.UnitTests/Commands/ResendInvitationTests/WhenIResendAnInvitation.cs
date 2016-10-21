@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
             _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, _command.ExternalUserId)).ReturnsAsync(owner);
             _invitationRepository = new Mock<IInvitationRepository>();
             _mediator = new Mock<IMediator>();
-            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem> {new EmailTemplateConfigurationItem {Key="Invitation",TemplateName = "Invitation"} } };
+            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem> {new EmailTemplateConfigurationItem {Key = "123456", TemplateType= EmailTemplateType.Invitation,TemplateName = "Invitation"} } };
             _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config);
         }
 
@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.Subject.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("Invitation"))));
+                                                                                  && c.Email.TemplateId.Equals("123456"))));
         }
         
     }

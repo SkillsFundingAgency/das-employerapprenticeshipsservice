@@ -5,8 +5,6 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
-using IdentityModel;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
