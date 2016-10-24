@@ -83,18 +83,21 @@
                 </fieldset>
                 <hr />
             </div>
+
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
-                @Html.LabelFor(m => m.Cost, "Cost", new { @class = "form-label" })
-                @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost) })
-                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number" })
-                <hr />
+                <label for="@Html.IdFor(m => m.Cost)">
+                    <span class="form-label-bold">Cost</span>
+                    @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+                </label>
+                <b>£</b>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
-            <hr />
+
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
-                @Html.LabelFor(m => m.ULN, "Unique learner number", new { @class = "form-label" })
-                @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN) })
-                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number" })
-                <hr />
+                <label for="@Html.IdFor(m => m.ULN)">
+                    <span class="form-label-bold">Unique learner number</span>
+                    @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
+                </label>
+                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.ULN) })
             </div>
           
             <input type="hidden" id="status" name="status" value="@Model.Status" />
