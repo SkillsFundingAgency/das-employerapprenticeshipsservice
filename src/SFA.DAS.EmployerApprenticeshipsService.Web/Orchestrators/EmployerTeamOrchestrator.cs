@@ -189,6 +189,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
+                response = await GetTeamMembers(hashedId, externalUserId);
+
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel()
                 {
