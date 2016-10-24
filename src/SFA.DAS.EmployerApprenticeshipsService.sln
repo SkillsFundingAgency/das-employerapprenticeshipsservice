@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client.UnitTests", "SFA.DAS.Account.Api.Client.UnitTests\SFA.DAS.Account.Api.Client.UnitTests.csproj", "{47A8FD28-BC68-4938-A508-95482FB98BA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyMonthlyUpdate.Worker", "SFA.DAS.EAS.LevyMonthlyUpdater.Worker\SFA.DAS.EAS.LevyMonthlyUpdate.Worker.csproj", "{EB0153CF-D20B-4FB2-8C81-8491DB51B2BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0153CF-D20B-4FB2-8C81-8491DB51B2BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0153CF-D20B-4FB2-8C81-8491DB51B2BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0153CF-D20B-4FB2-8C81-8491DB51B2BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0153CF-D20B-4FB2-8C81-8491DB51B2BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
