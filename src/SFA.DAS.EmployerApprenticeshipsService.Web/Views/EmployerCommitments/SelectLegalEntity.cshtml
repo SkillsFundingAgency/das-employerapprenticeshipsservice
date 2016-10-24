@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
 
 @model SelectLegalEntityViewModel
 
@@ -23,7 +24,13 @@
                     <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
                 </div>
                 @Html.ValidationMessageFor(m => m.LegalEntityCode)
-                @Html.DropDownListFor(m => m.LegalEntityCode, new SelectList(ViewBag.LegalEntities, "Code", "Name"), "Select", new { @class = "form-control", aria_label = "Legal Entity" })
+                @foreach (LegalEntity entity in ViewBag.LegalEntities)
+                {
+                    <label class="block-label" for="@Html.IdFor(m => m.LegalEntityCode)">
+                        @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = entity.Code })
+                        @entity.Name
+                    </label>
+                }
             </div>
             <button type="submit" class="button">Next</button>
         </form>
