@@ -18,6 +18,7 @@
       <Setting name="LogLevel" />
       <Setting name="EventHubConnectionString" />
       <Setting name="EventHubName" />
+      <Setting name="RedisConnection" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />

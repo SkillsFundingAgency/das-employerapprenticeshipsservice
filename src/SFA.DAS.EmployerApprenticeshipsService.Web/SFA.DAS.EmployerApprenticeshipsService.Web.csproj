@@ -344,6 +344,7 @@
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
+    <Compile Include="Models\ConfirmProviderView.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\CreateCommitmentViewModel.cs" />

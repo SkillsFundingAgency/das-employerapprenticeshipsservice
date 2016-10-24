@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -15,11 +14,12 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegal
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
+using SFA.DAS.EmployerApprenticeshipsService.Domain;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Extensions;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
@@ -84,40 +84,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(string hashedAccountId, string externalUserId)
-        {
-            var providers = await GetProviders();
-
-            return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
-            {
-                Data = new ExtendedCreateCommitmentViewModel
-                {
-                    Commitment = new CreateCommitmentViewModel
-                    {
-                        HashedAccountId = hashedAccountId,
-                    },
-                    Providers = providers.Providers
-                }
-            };
-        }
-
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
         {
-            var providers = await GetProviders();
-            var legalEntities = await GetActiveLegalEntities(commitment.HashedAccountId, externalUserId);
-
-            var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(commitment.LegalEntityCode, StringComparison.InvariantCultureIgnoreCase));
-
             return new OrchestratorResponse<CreateCommitmentViewModel>
             {
                 Data = new CreateCommitmentViewModel
                 {
                     HashedAccountId = commitment.HashedAccountId,
                     LegalEntityCode = commitment.LegalEntityCode,
-                    LegalEntityName = legalEntity.Name,
-                    ProviderId = commitment.ProviderId,
-                    ProviderName = provider.Name
+                    LegalEntityName = commitment.LegalEntityName,
+                    UkPrn = commitment.UkPrn,
+                    ProviderCode = commitment.ProviderCode,
+                    ProviderName = commitment.ProviderName
                 }
             };
         }
@@ -132,7 +110,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
-                    ProviderId = commitment.ProviderId,
+                    ProviderId = commitment.UkPrn,
                     ProviderName = commitment.ProviderName
                 }
             });
@@ -321,6 +299,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 return new DateTime(year.Value, month.Value, 1);
 
             return null;
+        }
+
+        public async Task<List<Provider>> FindProviders(int ukPrn)
+        {
+            var data = await _mediator.SendAsync(new GetProviderQueryRequest
+            {
+                UkPrn = ukPrn
+            });
+
+            return data.ProvidersView.Providers;
         }
     }
 }

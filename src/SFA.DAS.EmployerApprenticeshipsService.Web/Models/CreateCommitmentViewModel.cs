@@ -18,7 +18,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
     public class CreateCommitmentModel : CreateCommitmentModelBase
     {
-
     }
 
     public abstract class CreateCommitmentModelBase
@@ -27,7 +26,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string HashedAccountId { get; set; }
         public string LegalEntityCode { get; set; }
         public string LegalEntityName { get; set; }
-        public long ProviderId { get; set; }
-        public string ProviderName { get; set; }    
+        public int UkPrn { get; set; }
+        public string ProviderCode { get; set; }
+        public string ProviderName { get; set; }
     }
 }

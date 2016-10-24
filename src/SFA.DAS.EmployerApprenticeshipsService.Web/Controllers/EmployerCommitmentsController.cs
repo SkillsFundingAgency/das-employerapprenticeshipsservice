@@ -61,17 +61,35 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Commitments/Create/LegalEntity")]
         public ActionResult SetLegalEntity(CreateCommitmentModel commitment)
         {
-            return RedirectToAction("SelectProvider", commitment);
+            return RedirectToAction("SelectProvider", new { hashedAccountId = commitment.HashedAccountId, legalEntityCode = commitment.LegalEntityCode});
         }
 
         [HttpGet]
-        [Route("Commitments/Create/Provider")]
-        public async Task<ActionResult> SelectProvider(string hashedAccountId, string legalEntityCode, string legalEntityName)
+        //[Route("Commitments/Create/Provider")]
+        public ActionResult SelectProvider(string hashedAccountId, string legalEntityCode)
         {
-            var model = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = new CreateCommitmentViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                LegalEntityCode = legalEntityCode
+            };
 
-            model.Data.Commitment.LegalEntityCode = legalEntityCode;
-            model.Data.Commitment.LegalEntityName = legalEntityName;
+            return View(model);
+        }
+
+        [HttpPost]
+        //[Route("Commitments/Create/Provider")]
+        public async Task<ActionResult> ConfirmProvider(CreateCommitmentModel commitment)
+        {
+            var providers = await _employerCommitmentsOrchestrator.FindProviders(commitment.UkPrn);
+
+            var model = new ConfirmProviderView
+            {
+                HashedAccountId = commitment.HashedAccountId,
+                LegalEntityCode = commitment.LegalEntityCode,
+                UkPrn = commitment.UkPrn,
+                Providers = providers
+            };
 
             return View(model);
         }

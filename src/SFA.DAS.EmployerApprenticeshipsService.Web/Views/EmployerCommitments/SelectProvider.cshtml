@@ -1,7 +1,6 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
-@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+@model CreateCommitmentViewModel
 
 <div class="grid-row">
 
@@ -10,19 +9,21 @@
         <p class="lede">Search for the training provider that will be training your apprentices.</p>
 
 
-        <form action="provider-list">
+        <form action="@Url.Action("ConfirmProvider")" method="POST">
             <fieldset>
                 <legend class="visuallyhidden">Find your provider</legend>
                 <div class="form-group">
-                    <label class="form-label-bold" for="search">
+                    <label class="form-label-bold" for="ukPrn">
                         Search for training provider
                         <span class="form-hint">Search by UK Provider Reference Number  (UKPRN)</span>
                     </label>
-                    <input class="form-control" id="find-a-provider" type="text">
+                    <input class="form-control" id="ukPrn" name="ukPrn" type="text">
                 </div>
 
             </fieldset>
-            <input class="button" id="search-provider" type="submit" value="Find provider">
+            <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
+            <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
+            <button class="button" type="submit">Find provider</button>
         </form>
 
         <div style="margin-top:50px"></div>
