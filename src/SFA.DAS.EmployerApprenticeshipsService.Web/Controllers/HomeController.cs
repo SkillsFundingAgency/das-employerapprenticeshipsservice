@@ -47,8 +47,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 
 
                 var c = new Constants(_configuration.Identity?.BaseAddress);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?myaccount={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
-                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?myaccount={Url?.Encode(Request?.Url?.AbsoluteUri)}"; 
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?redirect_uri={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?redirect_uri={Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
                 
                 return View(accounts);
             }
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
 
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistration");
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?redirect_uri={schema}://{authority}/Home/HandleNewRegistration");
         }
 
         [Authorize]
@@ -86,9 +86,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpGet]
         public ActionResult HandlePasswordChanged()
         {
-            //TempData["successMessage"] = @"You've changed your password";
+            TempData["successMessage"] = @"You've changed your password";
             TempData["virtualPageUrl"] = @"/user-changed-password";
             TempData["virtualPageTitle"] = @"User Action - Changed Password";
+
+            return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult HandleEmailChanged()
+        {
+            TempData["successMessage"] = @"You've changed your email";
+            TempData["virtualPageUrl"] = @"/user-changed-email";
+            TempData["virtualPageTitle"] = @"User Action - Changed Email";
 
             return RedirectToAction("Index");
         }
