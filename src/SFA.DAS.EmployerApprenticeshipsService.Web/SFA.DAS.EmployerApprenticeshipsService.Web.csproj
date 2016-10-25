@@ -133,6 +133,7 @@
       <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -190,6 +191,10 @@
     <Reference Include="SFA.DAS.NLog.Targets.AzureEventHub, Version=1.0.0.12237, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Targets.AzureEventHub.1.0.0.12237\lib\net45\SFA.DAS.NLog.Targets.AzureEventHub.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=1.0.0.8638, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.1.0.0.8638\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
@@ -391,6 +396,7 @@
     <Compile Include="Models\UserAccountsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
@@ -403,8 +409,10 @@
     <Content Include="assets\images\gov.uk_logotype_crown_invert_trans.png" />
     <Content Include="assets\images\icon-pointer-2x.png" />
     <Content Include="assets\images\opengraph-image.png" />
+    <Content Include="assets\javascripts\app.js" />
     <Content Include="assets\javascripts\govuk-template.js" />
     <Content Include="assets\javascripts\ie.js" />
+    <Content Include="assets\javascripts\jquery-1.11.0.min.js" />
     <Content Include="assets\javascripts\respond.min.js" />
     <Content Include="assets\stylesheets\external-links\external-link-24x24.png" />
     <Content Include="assets\stylesheets\external-links\external-link-black-12x12.png" />
@@ -462,6 +470,9 @@
     <Content Include="App_Data\WhiteList\user_white_list.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="AppInit.cmd">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -497,7 +508,6 @@
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Detail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
-    <Content Include="Views\EmployerAccount\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
@@ -541,7 +551,6 @@
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
     <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
-    <Content Include="Views\EmployerAccount\ViewAccountAgreement.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectName.cshtml" />

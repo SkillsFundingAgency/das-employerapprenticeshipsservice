@@ -60,6 +60,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
 
         public object Get(HttpContextBase context, string name)
         {
+            if (context.Request.Cookies[name] == null)
+                return null;
+
             var base64EncodedBytes = System.Convert.FromBase64String(context.Request.Cookies[name].Value);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }

@@ -45,6 +45,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             });
             return result.SingleOrDefault();
         }
+
+        public async Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@toDate", toDate);
+            var offset = pageSize * (pageNumber - 1);
+
+            var countResult = await WithConnection(async c=> await c.QueryAsync<int>(sql: $"select count(*) from [account].[Account] a;"));
+
+            var result = await WithConnection(async c => await c.QueryAsync<Account>(
+                sql:    $"select a.* from [account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;", 
+                commandType: CommandType.Text));
+
+            return new Accounts() {AccountsCount = countResult.First(), AccountList = result.ToList()};
+        }
     }
 }
 

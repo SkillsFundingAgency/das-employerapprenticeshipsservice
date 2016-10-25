@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
         private string _hashedAccountId;
+        private static Mock<ICookieService> _cookieService;
 
 
         [BeforeFeature]
@@ -32,8 +33,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
+            _cookieService = new Mock<ICookieService>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
             
         }
 
@@ -64,14 +66,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Invit
             if (createdStatus.ToLower() == "created")
             {
                 Assert.IsTrue(teamMembers.Data.TeamMembers.Any(c=>c.Email.Equals(invitedTeamMember,StringComparison.CurrentCultureIgnoreCase)));
-                //Check to make sure an email has been sent
-                _messagePublisher.Verify(x=>x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.AtLeastOnce);
             }
             else
             {
                 Assert.IsFalse(teamMembers.Data.TeamMembers.Any(c => c.Email.Equals(invitedTeamMember, StringComparison.CurrentCultureIgnoreCase)));
-                //Check to make sure an email has not been sent
-                //_messagePublisher.Verify(x => x.PublishAsync(It.IsAny<SendNotificationQueueMessage>()), Times.Never);
             }
         }
 

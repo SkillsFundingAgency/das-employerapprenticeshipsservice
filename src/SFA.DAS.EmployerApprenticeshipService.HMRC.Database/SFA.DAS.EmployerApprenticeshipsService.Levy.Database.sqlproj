@@ -76,6 +76,7 @@
     <Build Include="StoredProcedures\CreateDeclaration.sql" />
     <Build Include="Tables\TopUpPercentage.sql" />
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountId.sql" />
+    <Build Include="StoredProcedures\GetLastLevyDeclarations_ByEmpRef.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

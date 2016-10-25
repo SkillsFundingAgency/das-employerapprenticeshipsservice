@@ -30,6 +30,8 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
@@ -51,6 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                 });
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
+            For<INotificationsApiClientConfiguration>().Use<NotificationsApiClientConfiguration>();
 
             var config = this.GetConfiguration();
             if (config.Identity.UseFake)
@@ -64,7 +67,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
 
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-
+            
             RegisterMediator();
         }
 

@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
-        private const long AccountId = 10;
         private const string HashedId = "ABC123";
 
         [SetUp]
@@ -69,15 +68,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(),It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
         [Test]
-        public async Task ThenIfISignTheAgreementIShouldGoBackToTheEmployerTeamPage()
+        public async Task ThenIShouldGoBackToTheEmployerTeamPage()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount(true, "Sign") as RedirectToRouteResult;
+            var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);
@@ -86,25 +85,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.Emplo
         }
 
         [Test]
-        public async Task ThenIfISignTheAgreementButDoNotAcknowledgeIHaveAuthorityToIShouldGoBackToAgreementPage()
-        {
-            //Assign
-            _response.Status = HttpStatusCode.BadRequest;
-
-            //Act
-            var result = await _employerAccountController.CreateAccount(false, "Sign") as RedirectToRouteResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("ViewAccountAgreement", result.RouteValues["Action"]);
-            Assert.IsNull(result.RouteValues["Controller"]);
-        }
-
-        [Test]
         public async Task ThenIShouldGetBackTheAccountId()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount(true, "Sign") as RedirectToRouteResult;
+            var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);

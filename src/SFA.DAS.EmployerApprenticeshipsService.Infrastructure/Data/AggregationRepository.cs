@@ -41,9 +41,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
 
             var table = tableClient.GetTableReference("LevyAggregation");
 
-            var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(),1.ToString());
+            var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(), 1.ToString());
             var result = await table.ExecuteAsync(fetchOperation);
-            var row = (LevyAggregationEntity) result.Result;
+            var row = (LevyAggregationEntity)result.Result;
 
             if (row == null)
                 return new AggregationData
@@ -53,6 +53,39 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
                 };
 
             return JsonConvert.DeserializeObject<AggregationData>(row.Data);
+        }
+
+        public async Task<List<AggregationData>> GetByAccountIds(List<long> accountIds)
+        {
+            var tableClient = _storageAccount.CreateCloudTableClient();
+
+            var table = tableClient.GetTableReference("LevyAggregation");
+
+            var response = new List<AggregationData>();
+            
+            foreach (var accountId in accountIds)
+            {
+                var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(), 1.ToString());
+                var result = await table.ExecuteAsync(fetchOperation);
+                var row = (LevyAggregationEntity) result.Result;
+
+                if (row == null)
+                {
+                    response.Add(new AggregationData
+                    {
+                        AccountId = accountId,
+                        Data = new List<AggregationLine>()
+                    });
+                }
+                else
+                {
+                    response.Add(JsonConvert.DeserializeObject<AggregationData>(row.Data));
+                }
+            }
+
+            return response;
+
+
         }
     }
 }

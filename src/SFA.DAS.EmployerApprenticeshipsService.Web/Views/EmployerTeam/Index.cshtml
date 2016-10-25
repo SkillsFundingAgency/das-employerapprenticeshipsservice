@@ -1,4 +1,11 @@
-﻿@model SFA.DAS.EmployerApprenticeshipsService.Web.OrchestratorResponse<SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account.Account>
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
+@using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
+
+@model OrchestratorResponse<Account>
+
+@{
+    ViewBag.Title = Model.Data.Name;
+}
 
 <h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
 

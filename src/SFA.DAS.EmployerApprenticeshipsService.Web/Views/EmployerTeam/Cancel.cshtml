@@ -1,43 +1,28 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Domain
-@model SFA.DAS.EmployerApprenticeshipsService.Domain.InvitationView
+@using SFA.DAS.EmployerApprenticeshipsService.Web
+
+@model OrchestratorResponse<InvitationView>
+
+@{
+    ViewBag.Title = "Cancel invitation";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-large">Cancel invitation</h1>
-        <h2 class="heading-medium">@Model.Name</h2>
-        <table class="th-nopadding">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Email</td>
-                    <td>@Model.Email</td>
-                </tr>
-                <tr>
-                    <td>What they can do</td>
-                    <td>@RoleStrings.ToWhatTheyCanDo(Model.RoleName)<td>
-                </tr>
-            </tbody>
-        </table>
-        <p></p>
-        <form action="@Url.Action("Cancel")" method="POST">
-            @Html.AntiForgeryToken()
-            <input type="hidden" id="cancel" name="cancel" value="1" />
-            <input type="hidden" id="Email" name="Email" value="@Model.Email"/>
-            <button type="submit" class="button" id="cancel_invitation">Cancel invitation</button>
-        </form>
-        <p></p>
-        <form action="@Url.Action("Resend")" method="POST">
-            @Html.AntiForgeryToken()
-            <input type="hidden" id="Email" name="Email" value="@Model.Email" />
-            <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
-        </form>
+        <h1 class="heading-xlarge">Cancel invitation</h1>
+        <p class="lede">Are you sure you want to cancel @Model.Data.Name's invitation?</p>
+        <div class="form-group">
+            <form action="@Url.Action("Cancel")" method="POST">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="cancel" name="cancel" value="1" />
+                <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
+                <button type="submit" class="button" id="cancel_invitation">Yes, cancel invitation</button>
+            </form>
+            <a href="@Url.Action("Viewteam", "EmployerTeam")" class="button button-link">No, don't cancel invitation</a>
+        </div>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">

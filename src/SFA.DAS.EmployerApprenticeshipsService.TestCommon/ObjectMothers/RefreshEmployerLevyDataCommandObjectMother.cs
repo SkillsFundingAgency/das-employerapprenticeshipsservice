@@ -36,6 +36,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                             Id = "2",
                             LevyDueYtd = 70,
                             Date = DateTime.UtcNow.AddMonths(1)
+                        },
+                        new DasDeclaration
+                        {
+                            Id = "3",
+                            NoPaymentForPeriod = true,
+                            Date = DateTime.UtcNow.AddMonths(2)
+                        },
+                        new DasDeclaration
+                        {
+                            Id = "4",
+                            LevyDueYtd = 80,
+                            Date = DateTime.UtcNow.AddMonths(3)
                         }
                     }
                 },

@@ -1,25 +1,39 @@
-﻿
+﻿@{ViewBag.Title = "Enter your Companies House number"; }
+@if (TempData["companyNumberError"] != null)
+{
+    <div class="grid-row">
+        <div class="column-full error-summary-wrapper">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-message-companies-house" data-focuses="error-message-companies-house">Enter a valid Companies House number</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Search for your organisation</h1>
-        <p>Use the companies house number for an organisation that your apprentices will be employed through</p>
-            <form method="POST" action="@Url.Action("SelectEmployer")">
-                <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
-                    @Html.AntiForgeryToken()
+        <h1 class="heading-xlarge">Enter your Companies House number</h1>
+        <p>Use the Companies House number for an organisation that your apprentices will be employed through.</p>
+        <p><a href="https://beta.companieshouse.gov.uk/search/" rel="external" target="_blank">Find my Companies House number</a></p>
+        <form method="POST" action="@Url.Action("SelectEmployer")">
+            <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
+                @Html.AntiForgeryToken()
 
-                    <label class="form-label" for="EmployerRef">Companies House number</label>
+                <label class="form-label" for="EmployerRef">Companies House number</label>
 
-                    @if (TempData["companyNumberError"] != null)
-                    {
-                        <legend>
-                            <span class="error-message">@TempData["companyNumberError"]</span>
-                        </legend>
-                    }
-                    <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text"
-                           aria-required="true"/>
-                </div>
-                <button type="submit" class="button" id="submit">Continue</button>
-            </form>     
+                @if (TempData["companyNumberError"] != null)
+                {
+                    <span class="error-message" id="error-message-companies-house">Enter a valid Companies House number</span>
+                }
+                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text" aria-required="true" />
+            </div>
+            <button type="submit" class="button" id="submit">Continue</button>
+        </form>
     </div>
 </div>
 

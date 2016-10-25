@@ -20,12 +20,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<ICookieService> _cookieService;
+
         public UserCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
+            _cookieService = new Mock<ICookieService>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
         }
 
         public void UpsertUser(SignInUserModel user)
@@ -53,7 +56,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.Commo
         {
             var userRepository = _container.GetInstance<IUserRepository>();
             var membershipRepository = _container.GetInstance<IMembershipRepository>();
-            var userRecord = userRepository.GetById(user.UserRef).Result;
+            var userRecord = userRepository.GetByUserRef(user.UserRef).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short) role).Wait();
 

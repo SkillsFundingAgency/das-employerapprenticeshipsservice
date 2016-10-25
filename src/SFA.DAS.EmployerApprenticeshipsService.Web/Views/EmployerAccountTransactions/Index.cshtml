@@ -3,7 +3,7 @@
 @{
     var culture = new CultureInfo("en-GB");
 }
-
+@{ViewBag.Title = "View your transactions";}
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View your transactions</h1>
@@ -16,7 +16,7 @@
             <div class="home-figures">
                 <h2 class="heading-small">This is your current balance:</h2>
                 <h2 class="bold-xlarge" data-bind="text: displayBalance">@Model.CurrentBalance.ToString("C0", culture)</h2> <!--style="color:#08c"-->
-                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToString("d MMM yyyy")</span></p>
+                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                         <div class="responsive-tr">
                             <div class="responsive-td">
                                 <div>
-                                    @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToString("d MMM yyyy");} @date
+                                    @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToGdsFormat();} @date
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>

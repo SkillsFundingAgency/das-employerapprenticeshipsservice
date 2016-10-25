@@ -56,7 +56,24 @@ table {
     max-width: 640px;
 }
 
+.radios-inline h3 {
+    margin-top: 0;
+}
+
+.radios-inline .error {
+    clear: both;
+}
+
 @media (min-width: 641px) {
+    .radios-inline {
+        margin-left: 20px;
+    }
+    .radios-inline .block-label {
+        display: inline-block;
+        clear: none;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
     .form-group > form {
         display: inline-block;
     }
@@ -515,3 +532,8 @@ table.top-border {
 .panel-filled {
     background: #DEE0E2;
 }
+
+b, strong {
+    font-weight: 600;
+}
+

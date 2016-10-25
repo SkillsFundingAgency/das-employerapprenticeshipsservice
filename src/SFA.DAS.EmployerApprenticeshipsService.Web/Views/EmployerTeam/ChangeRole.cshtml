@@ -1,9 +1,13 @@
 @using SFA.DAS.EmployerApprenticeshipsService.Domain
-@model SFA.DAS.EmployerApprenticeshipsService.Domain.TeamMember
+@using SFA.DAS.EmployerApprenticeshipsService.Web
+
+@model OrchestratorResponse<TeamMember>
 
 @{
-    var name = Model.Name ?? Model.Email;
+    var name = Model.Data.Name ?? Model.Data.Email;
+    ViewBag.Title = name;
 }
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@name</h1>
@@ -24,37 +28,38 @@
             @Html.AntiForgeryToken()
             <div class="form-group">
                 <label class="block-label" for="radio1">
-                    <input id="radio1" type="radio" name="Role" value="3" @(Model.Role == Role.Viewer ? "checked" : "") />
+                    <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
                    
                     @(RoleStrings.ToWhatTheyCanDo(Role.Viewer)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio2">
-                    <input id="radio2" type="radio" name="Role" value="2" @(Model.Role == Role.Transactor ? "checked" : "") />
+                    <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
                     
                     @(RoleStrings.ToWhatTheyCanDo(Role.Transactor)).
                 </label>
             </div>
             <div class="form-group">
                 <label class="block-label" for="radio3">
-                    <input id="radio3" type="radio" name="Role" value="1" @(Model.Role == Role.Owner ? "checked" : "") />
+                    <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
                     @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
                 </label>
             </div>
-            <input type="hidden" id="Email" name="Email" value="@Model.Email" />
+            <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
             <button type="submit" class="button" id="update">Update</button>
             <p></p>
         </form>
     </div>
 </div>
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.HashedId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.HashedId })">Manage Team Members</a></li>
-            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.HashedId, email = @Model.Email })">@name</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId })">Manage Team Members</a></li>
+            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.Data.HashedId, email = @Model.Data.Email })">@name</a></li>
             <li>Change Role</li>
         </ol>
     </div>

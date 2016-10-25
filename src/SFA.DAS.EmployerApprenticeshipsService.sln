@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -37,10 +37,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprentices
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Notification.Worker", "SFA.DAS.EAS.Notification.Worker\SFA.DAS.EAS.Notification.Worker.csproj", "{275B7C02-04EA-4064-867D-C15025A55D7D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Notification.Worker.UnitTests", "SFA.DAS.EAS.Notification.Worker.UnitTests\SFA.DAS.EAS.Notification.Worker.UnitTests.csproj", "{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests", "SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests\SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.csproj", "{456CA894-116B-4708-A5AB-4B81FAAA1FAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Infrastructure.UnitTests", "SFA.DAS.EAS.Infrastructure.UnitTests\SFA.DAS.EAS.Infrastructure.UnitTests.csproj", "{8A2A2059-CB81-4336-8D08-BDCB37901B96}"
@@ -57,6 +53,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client", "SFA.DAS.Account.Api.Client\SFA.DAS.Account.Api.Client.csproj", "{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client.UnitTests", "SFA.DAS.Account.Api.Client.UnitTests\SFA.DAS.Account.Api.Client.UnitTests.csproj", "{47A8FD28-BC68-4938-A508-95482FB98BA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,14 +118,6 @@ Global
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0226F97A-704E-49B0-A100-B75FEEC9C8AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{275B7C02-04EA-4064-867D-C15025A55D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{275B7C02-04EA-4064-867D-C15025A55D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{275B7C02-04EA-4064-867D-C15025A55D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{275B7C02-04EA-4064-867D-C15025A55D7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -145,6 +139,18 @@ Global
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40190475-1220-4CF8-8A60-223FACAFEDA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,10 +161,10 @@ Global
 		{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{88E7DB8E-7A95-4EA1-8CDF-7406188D642D} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{05D7C094-E2C9-4CCD-B0D7-85D263254B26} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
-		{9E9A26C8-BFE9-4DA7-A7D9-06A5CF63C0EB} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{456CA894-116B-4708-A5AB-4B81FAAA1FAD} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{8A2A2059-CB81-4336-8D08-BDCB37901B96} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{47A8FD28-BC68-4938-A508-95482FB98BA5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

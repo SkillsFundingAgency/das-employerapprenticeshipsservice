@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegi
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var user = await _userRepository.GetById(message.UserRef);
+            var user = await _userRepository.GetByUserRef(message.UserRef);
 
             if (user == null)
             {
