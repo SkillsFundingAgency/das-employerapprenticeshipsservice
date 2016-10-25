@@ -37,8 +37,8 @@
                 @Html.LabelFor(m => m.Name, "Cohort name", new { @class = "form-label" })
                 <p>Your training provider will see this.</p>
                 @Html.ValidationMessageFor(m => m.Name, "Please enter a name for your group of apprentices.", new { id = "error-message-" + Html.IdFor(m => m.Name) })
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-3-4", aria_required = "true" })
-                <hr />
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control apprenticeGroupName", aria_required = "true" })
+            
             </div>
             <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
             <input type="hidden" id="providerId" name="providerId" value="@Model.ProviderId" />

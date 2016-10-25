@@ -533,10 +533,21 @@ table.top-border {
     background: #DEE0E2;
 }
 
-.validation-summary-valid {
+.validation-summary-valid,
+.form-group .field-validation-valid  {
     display: none;
 }
+
 b, strong {
     font-weight: 600;
 }
 
+details .summary{
+    cursor: pointer;
+}
+
+.form-group .trainingProvider, 
+.form-group .apprenticeGroupName,
+.form-group .input-validation-error{
+    margin-left:0;
+}

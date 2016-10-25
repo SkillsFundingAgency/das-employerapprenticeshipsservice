@@ -7,34 +7,37 @@
     @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
 }
 
+
 <div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Choose employer</h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("SetLegalEntity")">
+    <form method="POST" action="@Url.Action("SetLegalEntity")">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Choose employer</h1>
+
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-            <hr />
+          
             @Html.AntiForgeryToken()
             <div class="form-group">
-                @Html.LabelFor(m => m.LegalEntityCode, "Organisation", new { @class = "form-label" })
-                <div class="form-group">
+
+                <fieldset>
+
+                    @Html.LabelFor(m => m.LegalEntityCode, "Organisation", new { @class = "form-label" })
+
                     <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
-                </div>
-                <div>
-                    @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option from the list.")
-                </div>
-                @foreach (LegalEntity entity in ViewBag.LegalEntities)
-                {
-                    <label class="block-label" for="@Html.IdFor(m => m.LegalEntityCode)">
-                        @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = entity.Code })
-                        @entity.Name
-                    </label>
-                }
+
+                    <div>
+                        @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option from the list.")
+                    </div>
+                    @foreach (LegalEntity entity in ViewBag.LegalEntities)
+                    {
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)">
+                            @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = entity.Code })
+                            @entity.Name
+                        </label>
+                    }
+               </fieldset>
             </div>
             <button type="submit" class="button">Next</button>
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>
