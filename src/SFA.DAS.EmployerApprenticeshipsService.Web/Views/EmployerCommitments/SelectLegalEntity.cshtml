@@ -29,8 +29,8 @@
                     </div>
                     @foreach (LegalEntity entity in ViewBag.LegalEntities)
                     {
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)">
-                            @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = entity.Code })
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)-@entity.Code">
+                        @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = Html.IdFor(m => m.LegalEntityCode) + "-" + @entity.Code })
                             @entity.Name
                         </label>
                     }
