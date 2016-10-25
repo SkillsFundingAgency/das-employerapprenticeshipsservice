@@ -48,7 +48,7 @@ button, a.button {
 }
 
 table {
-    max-width: 640px;
+  
     margin-bottom: 20px;
 }
 
@@ -533,6 +533,7 @@ table.top-border {
     background: #DEE0E2;
 }
 
+<<<<<<< HEAD
 .validation-summary-valid,
 .form-group .field-validation-valid  {
     display: none;
@@ -541,6 +542,15 @@ table.top-border {
 b, strong {
     font-weight: 600;
 }
+=======
+main .column-one-third .spacer{
+    margin-top:60px;
+    float:right;
+}
+.validation-summary-valid {
+    display: none;
+}
+>>>>>>> d862d1ed851a65ec04b1a4a8dcd4e26f09d2987a
 
 details .summary{
     cursor: pointer;

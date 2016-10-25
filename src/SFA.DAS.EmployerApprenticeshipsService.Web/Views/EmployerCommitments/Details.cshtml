@@ -4,7 +4,7 @@
 @model CommitmentViewModel
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">View commitment</h1>
         <table>
             <tbody>
@@ -39,10 +39,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Apprentice</th>
-                    <th>Training</th>
-                    <th colspan="3">Status</th>
-                   
+
+                    <th scope="col">Apprentice</th>
+                    <th scope="col">Training</th>
+                    <th scope="col" colspan="3">Status</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -50,7 +51,7 @@
                 {
                     <tr>
                         <td>
-                            
+        
                             @apprenticeship.ApprenticeshipName
                         </td>
                         <td>
@@ -71,6 +72,32 @@
                                         @Html.AntiForgeryToken()
                                         <button type="submit" name="commitment" class="button">Approve</button>
                                     </form>                                
+                          
+                            @apprenticeship.ApprenticeshipName
+                        </td>
+                        <td>
+                            
+                            @apprenticeship.TrainingId
+                        </td>
+                        <td>
+                           
+                            @apprenticeship.Status.GetDescription()
+                        </td>
+                        <td>
+                         
+                                <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })" >View</a>
+                           
+                          
+                        </td>
+                        <td>
+                            @if (apprenticeship.CanBeApproved())
+                            {
+                               
+                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" name="commitment" class="button">Approve</button>
+                                    </form>
+                              
                             }
                         </td>
                     </tr>
