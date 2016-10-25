@@ -43,7 +43,7 @@
         }
         else
         {
-<<<<<<< HEAD
+
         <table>
             <thead>
                 <tr>
@@ -90,63 +90,15 @@
         </table>
         }
 
-        <a href="@Url.Action("Inform")" class="button">Add new commitment</a>
-    </div>
-=======
-            <!--table replacement to gds standards -->
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Provider</th>
-                        <th scope="col">Legal entity</th>
-                        <th scope="col" colspan="3">Name</th>
-                     
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var commitment in Model.Data.Commitments)
-                {
-                        <tr>
-                            <td>
-                                @commitment.ProviderName
-                            
-                            </td>
-                            <td>
-                                @commitment.LegalEntityName
-                             
-                            </td>
-                            <td>
-                              
-                                @commitment.Name
-                            </td>
-                            <td>
-                              
-                                    <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
-                              
-                               
-                            </td>
-                            <td>
-                                @if (commitment.CanBeSubmitted())
-                                {
-                                    
-                                        <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })">Submit</a>
-                                    
-                                   
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
+
     </div> <!-- /column-two-thirds-->
+
     <div class="column-one-third pull-right">
         <a href="@Url.Action("Inform")" class="button spacer">Add new commitment</a>
     </div><!-- /column-one-third -->
 
 </div>
->>>>>>> d862d1ed851a65ec04b1a4a8dcd4e26f09d2987a
-</div>
+
 
 
 @section breadcrumb {
