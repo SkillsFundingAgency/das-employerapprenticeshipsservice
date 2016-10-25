@@ -23,7 +23,9 @@
                 <div class="form-group">
                     <p>Search by UK Provider Reference Number (UKPRN).</p>
                 </div>
-                @Html.ValidationMessageFor(m => m.ProviderId)
+                <div>
+                    @Html.ValidationMessageFor(m => m.ProviderId, "Please choose a training provider from the list.")
+                </div>
                 @Html.DropDownListFor(m => m.ProviderId, new SelectList(ViewBag.Providers, "Id", "Name"), "Select", new { @class = "form-control", aria_label = "Training Provider" })
             </div>
             <a href="#" class="toggle toggle-closed">What is a UKPRN?</a>

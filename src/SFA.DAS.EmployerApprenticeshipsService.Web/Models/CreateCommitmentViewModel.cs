@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
     public sealed class SelectLegalEntityViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Choose organisation")]
         public string LegalEntityCode { get; set; }
     }
 
@@ -13,13 +13,13 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         [Required]
         public string LegalEntityCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Choose training provider")]
         public string ProviderId { get; set; }
     }
 
     public sealed class CreateCommitmentViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Enter a name")]
         public string Name { get; set; }
 
         [Required]

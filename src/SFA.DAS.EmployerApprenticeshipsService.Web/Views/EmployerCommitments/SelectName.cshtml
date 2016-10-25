@@ -36,7 +36,7 @@
             <div class="form-group @Html.AddClassIfPropertyInError(x => x, "error")">
                 @Html.LabelFor(m => m.Name, "Cohort name", new { @class = "form-label" })
                 <p>Your training provider will see this.</p>
-                @Html.ValidationMessageFor(m => m.Name, null, new { id = "error-message-" + Html.IdFor(m => m.Name) })
+                @Html.ValidationMessageFor(m => m.Name, "Please enter a name for your group of apprentices.", new { id = "error-message-" + Html.IdFor(m => m.Name) })
                 @Html.TextBoxFor(m => m.Name, new { @class = "form-control form-control-3-4", aria_required = "true" })
                 <hr />
             </div>

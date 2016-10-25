@@ -23,7 +23,9 @@
                 <div class="form-group">
                     <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
                 </div>
-                @Html.ValidationMessageFor(m => m.LegalEntityCode)
+                <div>
+                    @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option from the list.")
+                </div>
                 @foreach (LegalEntity entity in ViewBag.LegalEntities)
                 {
                     <label class="block-label" for="@Html.IdFor(m => m.LegalEntityCode)">
