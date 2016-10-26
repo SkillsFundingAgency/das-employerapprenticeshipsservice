@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
                     var mainApplicationPool = serverManager.ApplicationPools[mainApplication.ApplicationPoolName];
                     mainApplicationPool["startMode"] = "AlwaysRunning";
 
+					serverManager.ApplicationPoolDefaults.ProcessModel.IdleTimeout = new System.TimeSpan(0);
                     serverManager.CommitChanges();
                 }
             }
