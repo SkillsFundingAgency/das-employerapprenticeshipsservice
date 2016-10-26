@@ -30,15 +30,15 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Commitments</h1>
+            <h1 class="heading-xlarge">Cohorts</h1>
 
-            <p>Any commitments that are new or in discussion with your training provider are listed below:</p>
+            <p>Any cohorts that are new or in discussion with your training provider are listed below:</p>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
         {
             <p class="panel panel-info">
-                There are no commitments.
+                There are no cohorts.
             </p>
         }
         else
@@ -94,7 +94,7 @@
     </div> <!-- /column-two-thirds-->
 
     <div class="column-one-third pull-right">
-        <a href="@Url.Action("Inform")" class="button spacer">Add new commitment</a>
+        <a href="@Url.Action("Inform")" class="button spacer">Add new cohort</a>
     </div><!-- /column-one-third -->
 
 </div>
@@ -106,7 +106,8 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
-            <li>Commitments</li>
+            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticships Home</a></li>
+            <li>Cohorts</li>
         </ol>
     </div>
 }
