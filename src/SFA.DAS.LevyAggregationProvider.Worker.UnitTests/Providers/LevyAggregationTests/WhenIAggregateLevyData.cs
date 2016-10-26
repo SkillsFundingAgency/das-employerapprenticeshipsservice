@@ -387,7 +387,7 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             //Assert
             var actualLineItem = actualData.Data.FirstOrDefault();
             Assert.IsNotNull(actualLineItem);
-            Assert.AreEqual(1800.86m,actualLineItem.Amount);
+            Assert.AreEqual(1936.74m, actualLineItem.Amount);
         }
 
         [Test]
@@ -400,7 +400,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             var actualData = _levyAggregator.BuildAggregate(sourceData);
 
             //Assert
-            Assert.AreEqual(3601.72,actualData.Data.Last().Balance);
+            Assert.AreEqual(3873.48m, actualData.Data.Last().Balance);
         }
+        
     }
 }

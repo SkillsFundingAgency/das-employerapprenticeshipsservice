@@ -46,14 +46,15 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                     AccountId = 1,
                     EmpRef = "123/ABC",
                     EmprefAddedDate = new DateTime(2016, 01, 01),
-                    EnglishFraction = 0.89544m,
+                    EnglishFraction = 0.87544m,
                     Id = 1,
                     LastSubmission = 1,
                     LevyDueYtd = 2011.145m,
                     PayrollDate = new DateTime(2016, 01, 01),
                     PayrollMonth = 1,
                     PayrollYear = "15-16",
-                    SubmissionDate = new DateTime(2016, 01, 16)
+                    SubmissionDate = new DateTime(2016, 01, 16),
+                    TopUp = 201.1545m
 
                 });
             }
