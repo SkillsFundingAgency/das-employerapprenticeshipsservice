@@ -48,7 +48,7 @@ button, a.button {
 }
 
 table {
-    max-width: 640px;
+  
     margin-bottom: 20px;
 }
 
@@ -533,7 +533,30 @@ table.top-border {
     background: #DEE0E2;
 }
 
+.validation-summary-valid,
+.form-group .field-validation-valid  {
+    display: none;
+}
+
 b, strong {
     font-weight: 600;
 }
 
+main .column-one-third .spacer{
+    margin-top:60px;
+    float:right;
+}
+.validation-summary-valid {
+    display: none;
+}
+
+
+details .summary{
+    cursor: pointer;
+}
+
+.form-group .trainingProvider, 
+.form-group .apprenticeGroupName,
+.form-group .input-validation-error{
+    margin-left:0;
+}
