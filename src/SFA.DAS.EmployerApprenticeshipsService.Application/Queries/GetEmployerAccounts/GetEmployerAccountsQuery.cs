@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
 {
     public class GetEmployerAccountsQuery : IAsyncRequest<GetEmployerAccountsResponse>
     {
-        public string FromDate { get; set; }
+        public string ToDate { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
     }

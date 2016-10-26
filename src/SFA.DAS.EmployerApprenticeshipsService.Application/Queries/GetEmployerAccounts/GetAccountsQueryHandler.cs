@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployer
         public async Task<GetEmployerAccountsResponse> Handle(GetEmployerAccountsQuery message)
         {
 
-            var accounts = await _employerAccountRepository.GetAccounts(message.FromDate, message.PageNumber, message.PageSize);
+            var accounts = await _employerAccountRepository.GetAccounts(message.ToDate, message.PageNumber, message.PageSize);
             return new GetEmployerAccountsResponse() {AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList};
         }
     }
