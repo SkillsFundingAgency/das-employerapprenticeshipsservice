@@ -53,8 +53,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
                 });
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-            For<INotificationsApiClientConfiguration>().Use<NotificationsApiClientConfiguration>();
-
+            
             var config = this.GetConfiguration();
             if (config.Identity.UseFake)
             {
