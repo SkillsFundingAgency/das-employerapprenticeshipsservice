@@ -36,7 +36,7 @@
         }
         else
         {
-        <table>
+            <table>
             <thead>
                 <tr>
 
@@ -67,37 +67,11 @@
                         </td>
                         <td>
                             @if (apprenticeship.CanBeApproved())
-                            {                             
+                            {
                                     <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" name="commitment" class="button">Approve</button>
                                     </form>                                
-                          
-                            @apprenticeship.ApprenticeshipName
-                        </td>
-                        <td>
-                            
-                            @apprenticeship.TrainingId
-                        </td>
-                        <td>
-                           
-                            @apprenticeship.Status.GetDescription()
-                        </td>
-                        <td>
-                         
-                                <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })" >View</a>
-                           
-                          
-                        </td>
-                        <td>
-                            @if (apprenticeship.CanBeApproved())
-                            {
-                               
-                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" name="commitment" class="button">Approve</button>
-                                    </form>
-                              
                             }
                         </td>
                     </tr>
