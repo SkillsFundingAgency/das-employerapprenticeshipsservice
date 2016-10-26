@@ -22,6 +22,45 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
             return item;
         }
 
+        public static LevyDeclarationSourceData CreateStatic(int numberOfItems = 1)
+        {
+            var returnValue =  new LevyDeclarationSourceData
+            {
+                AccountId = 1,
+                Data = NewLevyDeclarationSourceDataItem(numberOfItems)
+            
+            };
+
+            return returnValue;
+        }
+
+        private static List<LevyDeclarationSourceDataItem> NewLevyDeclarationSourceDataItem(int numberOfItems)
+        {
+
+            var items = new List<LevyDeclarationSourceDataItem>();
+
+            for (var i = 0; i < numberOfItems; i++)
+            {
+                items.Add(new LevyDeclarationSourceDataItem
+                {
+                    AccountId = 1,
+                    EmpRef = "123/ABC",
+                    EmprefAddedDate = new DateTime(2016, 01, 01),
+                    EnglishFraction = 0.89544m,
+                    Id = 1,
+                    LastSubmission = 1,
+                    LevyDueYtd = 2011.145m,
+                    PayrollDate = new DateTime(2016, 01, 01),
+                    PayrollMonth = 1,
+                    PayrollYear = "15-16",
+                    SubmissionDate = new DateTime(2016, 01, 16)
+
+                });
+            }
+
+            return items;
+        }
+
         private static List<LevyDeclarationSourceDataItem> BuildItems(int numberOfDeclarations, List<Emprefs> emprefs, int declarationsPerperiodPerPaye, bool randomEnglishFraction, bool addTopup, DateTime submissionStartDate, long accountId, bool multipleAccountIds)
         {
             var randomLevyDueYtd = new Random();
@@ -37,6 +76,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
                     {
                         submissionDate = submissionDate.AddDays(j);
                         var levyDueYtd = randomLevyDueYtd.Next(20, 1000);
+
 
                         //var newAccountId = 
                         if (empref.DeclarationsForScheme!= 0 && i > empref.DeclarationsForScheme && !idUpdated)
