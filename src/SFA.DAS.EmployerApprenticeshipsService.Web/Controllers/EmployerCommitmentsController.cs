@@ -10,7 +10,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedaccountId}")]
+    [RoutePrefix("accounts/{hashedaccountId}/Commitments")]
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
@@ -27,8 +27,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        [Route("Home")]
+        public ActionResult Index(string hashedAccountId)
+        {
+            ViewBag.HashedAccountId = hashedAccountId;
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("Cohorts")]
+        public async Task<ActionResult> Cohorts(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId);
 

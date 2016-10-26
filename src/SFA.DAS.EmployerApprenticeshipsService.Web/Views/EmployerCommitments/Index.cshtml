@@ -1,112 +1,32 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
-
-@model OrchestratorResponse<CommitmentListViewModel>
+﻿@model String
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        @if (Model.Data.NumberOfTasks > 0)
-        {
-            <h2 class="heading-medium">Tasks</h2>
-            <p>Any commitments that need your attention are shown below:</p>
-            if (Model.Data.NumberOfTasks == 1)
-            {
-                <p>You have <span class="bold-small">1</span> task to complete.</p>
-            }
-            else
-            {
-                <p>You have <span class="bold-small">@Model.Data.NumberOfTasks.ToString()</span> tasks to complete.</p>
-            }
+    <form method="POST" action="@Url.Action("SetLegalEntity")">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Add Apprenticeships</h1>
 
-            if (Model.Data.NumberOfTasks > 0)
-            {
-                <a href="@Url.Action("Index", "EmployerTasks")" class="link">View tasks</a>
-            }
-            <hr />
-        }
-    </div>
-</div>
+            <div class="grid-row">
+                <div class="column-half ">
+                    <h3 class="heading-medium"><a href="@Url.Action("Inform")">Add new apprenticeships</a></h3>
+                    <p class="rj-home-spacer">Add new apprenticeships to your account</p>
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <div class="hgroup">
-            <h1 class="heading-xlarge">Commitments</h1>
-
-            <p>Any commitments that are new or in discussion with your training provider are listed below:</p>
+                </div>
+                <div class="column-half">
+                    <h3 class="heading-medium">Apprenticeships in progress</h3>
+                    <p class="rj-home-spacer">Check the status of an apprenticeship program being added to your account</p>
+                </div>
+            </div>
         </div>
-
-        @if (Model.Data.Commitments.Count == 0)
-        {
-            <p class="panel panel-info">
-                There are no commitments.
-            </p>
-        }
-        else
-        {
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Provider</th>
-                    <th>Legal entity</th>
-                    <th colspan="3">Name</th>
-                 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var commitment in Model.Data.Commitments)
-                {
-                    <tr>
-                        <td>
-                           @commitment.ProviderName
-                         
-                        </td>
-                        <td>
-                            @commitment.LegalEntityName
-                          
-                        </td>
-                        <td>
-                          
-                        @commitment.Name
-                        </td>
-                        <td>
-                          
-                                <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
-                         
-                           
-                        </td>
-                        <td>
-                            @if (commitment.CanBeSubmitted())
-                            {
-                               
-                                    <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })">Submit</a>
-                               
-                               
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        }
-
-
-    </div> <!-- /column-two-thirds-->
-
-    <div class="column-one-third pull-right">
-        <a href="@Url.Action("Inform")" class="button spacer">Add new commitment</a>
-    </div><!-- /column-one-third -->
-
+    </form>
 </div>
-
 
 
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
-            <li>Commitments</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
+            <li>Add Apprenticeships</li>
         </ol>
     </div>
 }
