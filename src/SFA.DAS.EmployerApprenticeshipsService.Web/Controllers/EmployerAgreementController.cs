@@ -65,14 +65,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var agreement = await _orchestrator.GetById(agreementid, accountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (TempData.ContainsKey("notunderstood"))
-            {
-                agreement.FlashMessage = new FlashMessageViewModel
-                {
-                    Message = "You must indicate that you have read and understood the terms",
-                    Severity = FlashMessageSeverityLevel.Danger
-                };
-            }
 
             return View(agreement);
         }
