@@ -569,7 +569,8 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\Acknowlegement.cshtml" />
+    <Content Include="Views\EmployerCommitments\FinishedEditing.cshtml" />
+    <Content Include="Views\EmployerCommitments\Acknowledgement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
