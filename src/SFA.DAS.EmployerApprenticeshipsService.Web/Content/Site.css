@@ -565,17 +565,3 @@ details .summary{
    padding: 4px;
 }
 
-.form-date .form-group-year{
-    margin-left:15px;
-}
-
-.form-group #startMonth, .form-group #endMonth{
-    width:50px;
-    text-align:center;
-}
-
-.form-group #startYear, .form-group #endYear {
-    width:70px;
-    text-align:center;
-}
-
