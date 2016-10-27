@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.LevyAccountUpdater.Updater
                
                 var employerAccounts = await _accountRepository.GetAllAccounts();
 
-                _logger.Info($"{ServiceName}: Updating {employerAccounts.Count} levy accounts");
+                _logger.Debug($"{ServiceName}: Updating {employerAccounts.Count} levy accounts");
 
                 var tasks = employerAccounts.Select(
                     x =>
