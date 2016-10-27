@@ -224,8 +224,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             var actual = _levyAggregator.BuildAggregate(actualData);
 
             //Assert
-            var expectedTotal = (actualData.Data[0].LevyDueYtd * actualData.Data[0].EnglishFraction) + (actualData.Data[0].TopUp * actualData.Data[0].EnglishFraction);
-            Assert.AreEqual(expectedTotal, actual.Data[0].Balance);
+            var expectedTotal = Math.Round(actualData.Data[0].LevyDueYtd * actualData.Data[0].EnglishFraction,2) + Math.Round(actualData.Data[0].TopUp * actualData.Data[0].EnglishFraction,2);
+            Assert.AreEqual(Math.Round(expectedTotal,2), actual.Data[0].Balance);
         }
 
         [Test]
