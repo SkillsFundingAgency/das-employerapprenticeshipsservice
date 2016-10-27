@@ -66,31 +66,16 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Teams/Invite")]
         public async Task<ActionResult> Invite(InviteTeamMemberViewModel model)
         {
-            Exception exception;
-            HttpStatusCode httpStatusCode;
+            var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            try
-            {
-                var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
-
+            if(response.Status == HttpStatusCode.OK)
                 return View("ViewTeam", response);
-            }
-            catch (InvalidRequestException e)
-            {
-                httpStatusCode = HttpStatusCode.BadRequest;
-                exception = e;
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                httpStatusCode = HttpStatusCode.Unauthorized;
-                exception = e;
-            }
-
+           
             var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
             {
                 Data = model,
-                Status = httpStatusCode,
-                Exception = exception
+                Status = response.Status,
+                Exception = response.Exception
             };
 
             return View(errorResponse);

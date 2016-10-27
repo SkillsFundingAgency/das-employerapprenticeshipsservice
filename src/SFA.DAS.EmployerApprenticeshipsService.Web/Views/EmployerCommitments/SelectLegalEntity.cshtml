@@ -1,32 +1,43 @@
-﻿@using SFA.DAS.EmployerApprenticeshipsService.Web
-@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+@using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
 
-@model OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+@model SelectLegalEntityViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+}
+
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Choose employer</h1>
-        <hr />
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("SetLegalEntity")">
+    <form method="POST" action="@Url.Action("SetLegalEntity")">
+        <div class="column-two-thirds">
+            <h1 class="heading-xlarge">Choose employer</h1>
+
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+          
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <label class="form-label" for="LegalEntityCode">Organisation</label>
-                    <div class="form-group">
-                        <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
+
+                <fieldset>
+
+                    @Html.LabelFor(m => m.LegalEntityCode, "Organisation", new { @class = "form-label" })
+
+                    <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
+
+                    <div>
+                        @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option from the list.")
                     </div>
-                    <select name="LegalEntityCode" id="LegalEntityCode" class="form-control" aria-label="Legal Entity">
-                        <option value=""></option>
-                        @foreach (var legalEntity in Model.Data.LegalEntities)
-                        {
-                            <option value="@legalEntity.Code">@legalEntity.Name</option>
-                        }
-                    </select>
+                    @foreach (LegalEntity entity in ViewBag.LegalEntities)
+                    {
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)-@entity.Code">
+                        @Html.RadioButtonFor(m => m.LegalEntityCode, entity.Code, new { id = Html.IdFor(m => m.LegalEntityCode) + "-" + @entity.Code })
+                            @entity.Name
+                        </label>
+                    }
+               </fieldset>
             </div>
             <button type="submit" class="button">Next</button>
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>

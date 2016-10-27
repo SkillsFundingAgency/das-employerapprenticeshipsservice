@@ -5,28 +5,21 @@
   "CompaniesHouse": { "ApiKey": "" },
   "ServiceBusConnectionString": "",
   "Identity": {
-    "UseFake": "false",
     "ClientId": "000123",
     "ClientSecret": "7wKJNYFaKKg4FxUdi8_R75GGYsiWezvAbcdN1uSumE4",
     "BaseAddress": "https://ppidentity.apprenticeships.sfa.bis.gov.uk"
   },
-  "SmtpServer": {
-    "ServerName": "localhost",
-    "UserName": "",
-    "Password": "",
-    "Port": "25"
-  },
-  "DashboardUrl": "http://localhost:57196/",
+  "DashboardUrl": "localhost",
   "Hmrc": {
     "BaseUrl": "",
     "ClientId": "",
     "Scope": "",
     "ClientSecret": ""
   },
-  "Privacy": {
-    "GoogleAnalyticsUrl": "https://tools.google.com/dlpage/gaoptout",
-    "ApplicationInsightsUrl": "https://azure.microsoft.com/en-us/documentation/articles/app-insights-data-retention-privacy/",
-    "AboutCookiesUrl": "http://www.aboutcookies.org/",
-    "SurveyProviderUrl": "http://www.surveymonkey.com/"
-  }
+  "EmailTemplates": [
+    {
+      "TemplateKey": "Invitation",
+      "Key": "3edf7c6e-0f1d-4d4f-a092-f2f73cce1bf0"
+    }
+  ]
 }

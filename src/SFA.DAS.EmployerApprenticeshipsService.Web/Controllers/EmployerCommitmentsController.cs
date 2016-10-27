@@ -51,72 +51,76 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [Route("Commitments/Create/LegalEntity")]
         public async Task<ActionResult> SelectLegalEntity(string hashedAccountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(model);
+            ViewBag.LegalEntities = legalEntities.Data;
+
+            return View(new SelectLegalEntityViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create/LegalEntity")]
-        public ActionResult SetLegalEntity(CreateCommitmentModel commitment)
+        public async Task<ActionResult> SetLegalEntity(string hashedAccountId, SelectLegalEntityViewModel selectedLegalEntity)
         {
-            return RedirectToAction("SelectProvider", new { hashedAccountId = commitment.HashedAccountId, legalEntityCode = commitment.LegalEntityCode});
+            if (!ModelState.IsValid)
+            {
+                var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                ViewBag.LegalEntities = legalEntities.Data;
+
+                return View("SelectLegalEntity", selectedLegalEntity);
+            }
+
+            return RedirectToAction("SelectProvider", selectedLegalEntity);
         }
 
         [HttpGet]
-        //[Route("Commitments/Create/Provider")]
-        public ActionResult SelectProvider(string hashedAccountId, string legalEntityCode)
+        [Route("Commitments/Create/Provider")]
+        public async Task<ActionResult> SelectProvider(string hashedAccountId, string legalEntityCode)
         {
-            var model = new CreateCommitmentViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                LegalEntityCode = legalEntityCode
-            };
+            var providers = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(model);
-        }
+            ViewBag.Providers = providers.Data;
 
-        [HttpPost]
-        //[Route("Commitments/Create/Provider")]
-        public async Task<ActionResult> ConfirmProvider(CreateCommitmentModel commitment)
-        {
-            var providers = await _employerCommitmentsOrchestrator.FindProviders(commitment.UkPrn);
-
-            var model = new ConfirmProviderView
-            {
-                HashedAccountId = commitment.HashedAccountId,
-                LegalEntityCode = commitment.LegalEntityCode,
-                UkPrn = commitment.UkPrn,
-                Providers = providers
-            };
-
-            return View(model);
+            return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create/Provider")]
-        public ActionResult SetProvider(CreateCommitmentModel commitment)
+        public async Task<ActionResult> SetProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
         {
-            return RedirectToAction("SelectName", commitment);
+            if (!ModelState.IsValid)
+            {
+                var providers = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                ViewBag.Providers = providers.Data;
+
+                return View("SelectProvider", viewModel);
+            }
+
+            return RedirectToAction("SelectName", viewModel);
         }
 
         [HttpGet]
         [Route("Commitments/Create/Name")]
-        public async Task<ActionResult> SelectName(CreateCommitmentModel commitment)
+        public async Task<ActionResult> SelectName(string hashedAccountId, string legalEntityCode, string providerId)
         {
-            var model = await _employerCommitmentsOrchestrator.CreateSummary(commitment, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(model);
+            return View(model.Data);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create")]
-        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel commitment)
+        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
         {
-            await _employerCommitmentsOrchestrator.Create(commitment, OwinWrapper.GetClaimValue(@"sub"));
+            if (!ModelState.IsValid)
+            {
+                return View("SelectName", viewModel);
+            }
+
+            await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
             return RedirectToAction("Index");
         }
@@ -212,7 +216,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
 
-            return View(model);
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View(model.Apprenticeship);
         }
 
         [HttpPost]
@@ -221,22 +227,38 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayCreateApprenticeshipView(apprenticeship);
+                }
+
                 await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
             }
             catch (InvalidRequestException ex)
             {
-                var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
-                model.Apprenticeship = apprenticeship;
+                AddErrorsToModelState(ex);
 
-                foreach (var error in ex.ErrorMessages)
-                {
-                    ModelState.AddModelError(error.Key, error.Value);
-                }
-
-                return View("CreateApprenticeshipEntry", model);
+                return await RedisplayCreateApprenticeshipView(apprenticeship);
             }
 
             return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        }
+
+        private void AddErrorsToModelState(InvalidRequestException ex)
+        {
+            foreach (var error in ex.ErrorMessages)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+        }
+
+        private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
+            model.Apprenticeship = apprenticeship;
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View("CreateApprenticeshipEntry", model.Apprenticeship);
         }
     }
 }

@@ -13,5 +13,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
         public decimal LevyAllowanceForFullYear { get; set; }
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
+        public bool NoPaymentForPeriod { get; set; }
+        public DateTime DateCeased { get; set; }
+        public DateTime InactiveFrom { get; set; }
+        public DateTime InactiveTo { get; set; }
     }
 }

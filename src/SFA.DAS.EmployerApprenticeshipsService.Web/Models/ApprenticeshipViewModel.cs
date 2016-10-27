@@ -1,9 +1,12 @@
 ﻿using System.Globalization;
+using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EmployerApprenticeshipsService.Web.Validators;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 {
-    public sealed class ApprenticeshipViewModel
+    [Validator(typeof(ApprenticeshipViewModelValidator))]
+    public class ApprenticeshipViewModel
     {
         public string HashedId { get; set; }
         public string HashedCommitmentId { get; set; }
@@ -15,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public TrainingType TrainingType { get; set; }
         public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
-        public decimal? Cost { get; set; }
+        public string Cost { get; set; }
         public int? StartMonth { get; set; }
 
         public string StartMonthName

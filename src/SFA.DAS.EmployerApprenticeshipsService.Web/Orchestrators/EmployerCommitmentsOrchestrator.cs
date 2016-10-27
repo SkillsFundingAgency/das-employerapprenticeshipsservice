@@ -19,6 +19,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProviders;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetStandards;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
 using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
 using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
 
@@ -63,7 +64,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetLegalEntities(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<IList<LegalEntity>>> GetLegalEntities(string hashedAccountId, string externalUserId)
         {
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
@@ -71,36 +72,47 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 UserId = externalUserId
             });
 
-            return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+            return new OrchestratorResponse<IList<LegalEntity>>
             {
-                Data = new ExtendedCreateCommitmentViewModel
-                {
-                    Commitment = new CreateCommitmentViewModel
-                    {
-                        HashedAccountId = hashedAccountId
-                    },
-                    LegalEntities = legalEntities.Entites.LegalEntityList
-                }
+                Data = legalEntities.Entites.LegalEntityList
             };
         }
 
-        public OrchestratorResponse<CreateCommitmentViewModel> CreateSummary(CreateCommitmentModel commitment)
+        public async Task<OrchestratorResponse<ExtendedCreateCommitmentViewModel>> GetProviders(string hashedAccountId, string externalUserId)
+            return new OrchestratorResponse<ExtendedCreateCommitmentViewModel>
+                Data = providers.Providers
+            };
+        }
+
+        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string externalUserId)
         {
+            var providers = await GetProviders();
+            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
+
+            var provider = providers.Providers.Single(x => x.Id == long.Parse(providerId));
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
+
             return new OrchestratorResponse<CreateCommitmentViewModel>
             {
                 Data = new CreateCommitmentViewModel
                 {
-                    HashedAccountId = commitment.HashedAccountId,
-                    LegalEntityCode = commitment.LegalEntityCode,
-                    LegalEntityName = commitment.LegalEntityName,
-                    ProviderId = commitment.ProviderId,
-                    ProviderName = commitment.ProviderName
+                    HashedAccountId = hashedAccountId,
+                    LegalEntityCode = legalEntityCode,
+                    LegalEntityName = legalEntity.Name,
+                    ProviderId = provider.Id,
+                    ProviderName = provider.Name
                 }
             };
         }
 
         public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
+            var providers = await GetProviders();
+            var legalEntities = await GetActiveLegalEntities(commitment.HashedAccountId, externalUserId);
+
+            var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
+            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(commitment.LegalEntityCode, StringComparison.InvariantCultureIgnoreCase));
+
             await _mediator.SendAsync(new CreateCommitmentCommand
             {
                 Commitment = new Commitment
@@ -108,9 +120,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     Name = commitment.Name,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
-                    LegalEntityName = commitment.LegalEntityName,
+                    LegalEntityName = legalEntity.Name,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = commitment.ProviderName
+                    ProviderName = provider.Name
                 }
             });
         }
@@ -265,7 +277,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 TrainingType = apprenticeship.TrainingType,
                 TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost,
+                Cost = apprenticeship.Cost.ToString(),
                 StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
@@ -286,7 +298,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                 TrainingType = viewModel.TrainingType,
                 TrainingCode = viewModel.TrainingCode,
                 TrainingName = viewModel.TrainingName,
-                Cost = viewModel.Cost,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
             };

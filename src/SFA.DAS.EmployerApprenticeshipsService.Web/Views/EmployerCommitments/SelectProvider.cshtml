@@ -1,62 +1,51 @@
 ﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
-@model CreateCommitmentViewModel
+@model SelectProviderViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+}
 
 <div class="grid-row">
-
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find your training provider</h1>
-        <p class="lede">Search for the training provider that will be training your apprentices.</p>
-
-
-        <form action="@Url.Action("ConfirmProvider")" method="POST">
-            <fieldset>
-                <legend class="visuallyhidden">Find your provider</legend>
-                <div class="form-group">
-                    <label class="form-label-bold" for="providerId">
-                        Search for training provider
-                        <span class="form-hint">Search by UK Provider Reference Number  (UKPRN)</span>
-                    </label>
-                    <input class="form-control" id="providerId" name="providerId" type="text">
-                </div>
-
-            </fieldset>
-            <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
-            <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
-            <input id="legalEntityName" name="legalEntityName" type="hidden" value="@Model.LegalEntityName">
-            <button class="button" type="submit">Find provider</button>
-        </form>
-
-        <div style="margin-top:50px"></div>
-        <details style="margin-bottom:25px">
-            <summary><span class="summary">What is a UKPRN?</span></summary>
-            <div class="panel panel-border-narrow">
-                <p>
-                    A UK provider registration number (UKPRN) is a unique number that each training provider has to help identify them. Your training provider will be able to tell you their UKPRN.
-                </p>
-            </div>
-        </details>
-
-        <div class="js-tab-content tab-content">
-                <div class="js-tab-pane tab-pane" id="before-you-start">
-                    <p>To create an account you will need the following information:</p>
-                    <p>1. Organisation type, name and details. If the organisation is a company we require the companies house number and the registered address.</p>
-                    <p>2. The email address of the person in your organisation who holds Government Gateway credentials.
-        This information will usually be held by those working in the Payroll department who deal with HMRC through the Government Gateway.</p>
-        <p>You will need to grant them access to the system so that they can enter the Government Gateway credentials and the PAYE scheme reference number.</p>
-         <p>Read more about <a href="#">why the levy account requires this information</a>.</p>
-
-                </div>
-
-
-
-        </div>
-
-
-         -->
-
+        <p>Search for the training provider that will be training your apprentices.</p>
     </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("SetProvider")">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            <hr />
+            @Html.AntiForgeryToken()
 
-    <div class="column-one-third">
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProviderId, "Search for training provider", new { @class = "form-label" })
+
+                <p>Search by UK Provider Reference Number (UKPRN).</p>
+
+                <div>
+                    @Html.ValidationMessageFor(m => m.ProviderId, "Please choose a training provider from the list.")
+                </div>
+                @Html.DropDownListFor(m => m.ProviderId, new SelectList(ViewBag.Providers, "Id", "Name"), "Select", new { @class = "form-control trainingProvider", aria_label = "Training Provider" })
+            </div>
+            <div class="form-group">
+                <details role="group">
+                    <summary role="button" aria-controls="ukprn" aria-expanded="false">
+                        <span class="summary">What is a UKPRN?</span>
+                    </summary>
+                    <div class="panel panel-border-narrow" id="ukprn" aria-hidden="true">
+                        <p>
+                            A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.
+                        </p>
+                    </div>
+                </details>
+            </div>
+             
+                    <button type="submit" class="button">Search</button>
+              
+         
+            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
+        </form>
     </div>
 </div>

@@ -46,10 +46,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Accounts> GetAccounts(string fromDate, int pageNumber, int pageSize)
+        public async Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@fromDate", fromDate);
+            parameters.Add("@toDate", toDate);
             var offset = pageSize * (pageNumber - 1);
 
             var countResult = await WithConnection(async c=> await c.QueryAsync<int>(sql: $"select count(*) from [account].[Account] a;"));

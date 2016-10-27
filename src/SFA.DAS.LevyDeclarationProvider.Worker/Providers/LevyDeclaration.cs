@@ -91,6 +91,11 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
                                 PayrollYear = declaration.PayrollPeriod?.Year,
                                 LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
                                 LevyDueYtd = declaration.LevyDueYearToDate,
+                                NoPaymentForPeriod = declaration.NoPaymentForPeriod,
+                                DateCeased = declaration.DateCeased,
+                                InactiveFrom = declaration.InactiveFrom,
+                                InactiveTo = declaration.InactiveTo
+                                
                             };
                             
                             employerData.EmpRef = scheme.Ref;
