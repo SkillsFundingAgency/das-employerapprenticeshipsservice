@@ -1575,19 +1575,8 @@ legend .form-label-bold {
   margin: -2px 5px 0 0;
 }
 
-.form-control-3-4 {
-  width: 100%;
-}
 
-@media (min-width: 641px) {
-  .form-control-3-4 {
-    width: 75%;
-  }
-}
 
-.form-control-2-3 {
-  width: 100%;
-}
 
 @media (min-width: 641px) {
   .form-control-2-3 {
