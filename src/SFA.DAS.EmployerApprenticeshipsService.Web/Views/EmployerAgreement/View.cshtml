@@ -11,10 +11,11 @@
         <div class="column-full error-summary-wrapper">
             <div tabindex="-1" role="group" class="error-summary">
                 <h1 id="error-summary" class="heading-medium error-summary-heading">
-                    There's a problem
+                    Errors to fix
                 </h1>
+                <p>Check the following details:</p>
                 <ul class="error-summary-list">
-                    <li><a href="#error-message-understand" data-focuses="error-message-understand">You must indicate that you have read and understood the terms</a></li>
+                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">Authorisation to sign agreement</a></li>
                 </ul>
             </div>
         </div>
@@ -37,16 +38,18 @@
                             <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName" />
                             <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
                                 @if (TempData["notunderstood"] != null)
-                    {
-                                    <span class="error-message" id="error-message-understand">You must indicate that you have read and understood the terms</span>
-
+                                {
+                                    <span class="error-message" id="error-message-agreement">You must be authorised to sign the agreement</span>
                                 }
                                 <label class="block-label" for="understood">
                                     <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
                                     I have read and understood the agreement
                                 </label>
                             </div>
-                            <input class="button" id="signAgreement" type="submit" value="Sign agreement">
+                            <div class="form-group">
+                                <input class="button" id="signAgreement" type="submit" value="Sign agreement">
+                                <a href="@Url.Action("Index", "EmployerAgreement")" class="button button-link">Return to your organisations</a>
+                            </div>
                         </form>
                     }
                     else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
