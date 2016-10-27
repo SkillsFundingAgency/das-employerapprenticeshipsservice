@@ -2597,10 +2597,8 @@ input[type=number] {
 
 .validation-summary,.validation-summary-errors {
     background: #fef7f7;
-    border-left: 3px solid #df3034;
     box-sizing: content-box;
     margin-bottom: 30px;
-    margin-left: -18px;
     padding: 15px 0 30px 15px
 }
 
