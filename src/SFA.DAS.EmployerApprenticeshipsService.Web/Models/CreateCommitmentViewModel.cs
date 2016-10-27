@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         [Required]
         public string LegalEntityCode { get; set; }
 
-        [Required(ErrorMessage = "Choose training provider")]
+        [Required]
         public string ProviderId { get; set; }
     }
 

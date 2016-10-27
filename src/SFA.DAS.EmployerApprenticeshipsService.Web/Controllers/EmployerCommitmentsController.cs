@@ -76,29 +76,50 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("Commitments/Create/Provider")]
-        public async Task<ActionResult> SelectProvider(string hashedAccountId, string legalEntityCode)
+        public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode)
         {
-            var providers = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            ViewBag.Providers = providers.Data;
-
             return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Commitments/Create/Provider")]
-        public async Task<ActionResult> SetProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
+        public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] SelectProviderViewModel viewModel)
+        {
+            var providerId = int.Parse(viewModel.ProviderId);
+
+            var providers = await _employerCommitmentsOrchestrator.GetProvider(providerId);
+
+            return View(new ConfirmProviderView
+            {
+                HashedAccountId = hashedAccountId,
+                LegalEntityCode = viewModel.LegalEntityCode,
+                ProviderId = providerId,
+                Providers = providers
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Commitments/Create/ConfirmProvider")]
+        public ActionResult ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
-                var providers = await _employerCommitmentsOrchestrator.GetProviders(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                ViewBag.Providers = providers.Data;
+                var model = new SelectProviderViewModel
+                {
+                    LegalEntityCode = viewModel.LegalEntityCode
+                };
 
-                return View("SelectProvider", viewModel);
+                if (string.IsNullOrWhiteSpace(viewModel.ProviderId))
+                {
+                    return RedirectToAction("SearchProvider", model);
+                }
+
+                return View("SearchProvider", model);
             }
 
-            return RedirectToAction("SelectName", viewModel);
+            return RedirectToAction("SelectName", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
