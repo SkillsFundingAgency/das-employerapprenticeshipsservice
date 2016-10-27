@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
 
     public sealed class CreateCommitmentViewModel
     {
-        [Required(ErrorMessage = "Enter a name")]
+        // TODO: LWA No longer needed. Delete.
         public string Name { get; set; }
 
         [Required]

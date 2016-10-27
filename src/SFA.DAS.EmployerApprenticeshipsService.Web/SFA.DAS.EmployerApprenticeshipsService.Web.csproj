@@ -548,7 +548,7 @@
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
-    <Content Include="Views\EmployerCommitments\Index.cshtml" />
+    <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\ApprenticeshipDetails.cshtml" />
@@ -564,10 +564,12 @@
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
-    <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
+    <Content Include="Views\EmployerCommitments\ChoosePath.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
+    <Content Include="Views\EmployerCommitments\Index.cshtml" />
+    <Content Include="Views\EmployerCommitments\Acknowlegement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
