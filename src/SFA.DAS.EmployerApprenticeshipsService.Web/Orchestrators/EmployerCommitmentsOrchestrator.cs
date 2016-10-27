@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(CreateCommitmentModel commitment, string externalUserId)
+        public OrchestratorResponse<CreateCommitmentViewModel> CreateSummary(CreateCommitmentModel commitment)
         {
             return new OrchestratorResponse<CreateCommitmentViewModel>
             {
@@ -93,8 +93,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     HashedAccountId = commitment.HashedAccountId,
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
-                    UkPrn = commitment.UkPrn,
-                    ProviderCode = commitment.ProviderCode,
+                    ProviderId = commitment.ProviderId,
                     ProviderName = commitment.ProviderName
                 }
             };
@@ -110,7 +109,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
-                    ProviderId = commitment.UkPrn,
+                    ProviderId = commitment.ProviderId,
                     ProviderName = commitment.ProviderName
                 }
             });
@@ -301,11 +300,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             return null;
         }
 
-        public async Task<List<Provider>> FindProviders(int ukPrn)
+        public async Task<List<Provider>> FindProviders(int providerId)
         {
             var data = await _mediator.SendAsync(new GetProviderQueryRequest
             {
-                UkPrn = ukPrn
+                ProviderId = providerId
             });
 
             return data.ProvidersView.Providers;

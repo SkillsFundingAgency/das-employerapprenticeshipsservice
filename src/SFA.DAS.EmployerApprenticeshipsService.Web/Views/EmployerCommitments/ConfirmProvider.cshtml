@@ -5,29 +5,34 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your training provider</h1>
-        <p class="">Your search for <span style="font-weight:700">'@Model.UkPrn'</span> has found the following:</p>
+        <p class="">Your search for <span style="font-weight:700">'@Model.ProviderId'</span> has found the following:</p>
 
-        <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].Name</h2>
-        <h3 class="heading-small" style="margin-top:0px; margin-bottom:0px;color:#6F777B ">Address not available in service</h3>
-        <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.UkPrn</h3>
+        <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
+        @*<h3 class="heading-small" style="margin-top:0px; margin-bottom:0px;color:#6F777B ">Address not available in service</h3>*@
+        <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
 
-        <form action="provider-contact">
+        <form action="@Url.Action("SetProvider")" method="POST">
+            @Html.AntiForgeryToken()
             <fieldset>
-            <legend class="visuallyhidden">Training provider</legend>
-            <div class="form-group">
-                <label class="form-label-bold" for="">Will this training provider be training the apprentices you’re about to add?</label>
-                <label class="block-label" for="provider-1">
-                    <input id="provider-1" type="radio" name="radio-group" value="provider-1">
-                    Yes, use @Model.Providers[0].Name
-                </label>
-                <label class="block-label" for="provider-2">
-                    <input id="provider-2" type="radio" name="radio-group" value="provider-2">
-                    No, search again
-                </label>
-            </div>
+                <legend class="visuallyhidden">Training provider</legend>
+                <div class="form-group">
+                    <label class="form-label-bold" for="">Will this training provider be training the apprentices you’re about to add?</label>
+                    <label class="block-label" for="provider-1">
+                        <input id="provider-1" type="radio" name="selectedProvider" value="@Model.ProviderId">
+                        Yes, use @Model.Providers[0].ProviderName
+                    </label>
+                    <label class="block-label" for="provider-2">
+                        <input id="provider-2" type="radio" name="selectedProvider" value="">
+                        No, search again
+                    </label>
+                </div>
             </fieldset>
-            <div style="margin-top:50px"></div>
-            <input class="button" id="saveAndContinue" type="button" onclick="whereNow()" value="Save and continue">
+            <div style="margin-top: 50px"></div>
+            <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
+            <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
+            <input id="legalEntityName" name="legalEntityName" type="hidden" value="@Model.LegalEntityName">
+            <input id="providerName" name="providerName" type="hidden" value="@Model.ProviderName">
+            <button class="button" type="submit">Save and continue</button>
         </form>
         <div style="margin-top:50px"></div>
     </div>

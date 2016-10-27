@@ -13,16 +13,17 @@
             <fieldset>
                 <legend class="visuallyhidden">Find your provider</legend>
                 <div class="form-group">
-                    <label class="form-label-bold" for="ukPrn">
+                    <label class="form-label-bold" for="providerId">
                         Search for training provider
                         <span class="form-hint">Search by UK Provider Reference Number  (UKPRN)</span>
                     </label>
-                    <input class="form-control" id="ukPrn" name="ukPrn" type="text">
+                    <input class="form-control" id="providerId" name="providerId" type="text">
                 </div>
 
             </fieldset>
             <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
             <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
+            <input id="legalEntityName" name="legalEntityName" type="hidden" value="@Model.LegalEntityName">
             <button class="button" type="submit">Find provider</button>
         </form>
 

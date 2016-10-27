@@ -26,8 +26,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
         public string HashedAccountId { get; set; }
         public string LegalEntityCode { get; set; }
         public string LegalEntityName { get; set; }
-        public int UkPrn { get; set; }
-        public string ProviderCode { get; set; }
+        public int ProviderId { get; set; }
         public string ProviderName { get; set; }
     }
 }

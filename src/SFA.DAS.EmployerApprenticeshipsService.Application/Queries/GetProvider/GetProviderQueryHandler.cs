@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider
 
         public async Task<GetProviderQueryResponse> Handle(GetProviderQueryRequest message)
         {
-            var provider = _apprenticeshipInfoServiceWrapper.GetProvider(message.UkPrn);
+            var provider = _apprenticeshipInfoServiceWrapper.GetProvider(message.ProviderId);
 
             return await Task.FromResult(new GetProviderQueryResponse
             {
