@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
 using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
 using SFA.DAS.LevyAggregationProvider.Worker.Providers;
 
@@ -223,8 +224,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             var actual = _levyAggregator.BuildAggregate(actualData);
 
             //Assert
-            var expectedTotal = (actualData.Data[0].LevyDueYtd * actualData.Data[0].EnglishFraction) + (actualData.Data[0].TopUp * actualData.Data[0].EnglishFraction);
-            Assert.AreEqual(expectedTotal, actual.Data[0].Balance);
+            var expectedTotal = Math.Round(actualData.Data[0].LevyDueYtd * actualData.Data[0].EnglishFraction,2) + Math.Round(actualData.Data[0].TopUp * actualData.Data[0].EnglishFraction,2);
+            Assert.AreEqual(Math.Round(expectedTotal,2), actual.Data[0].Balance);
         }
 
         [Test]
@@ -373,5 +374,34 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggrega
             Assert.AreEqual(expectedAmount2, actualAccount2.Data[0].Amount);
 
         }
+
+        [Test]
+        public void ThenTheValuesAreRoundedToTheNearestPenny()
+        {
+            //Arrange
+            var sourceData = LevyDeclarationSourceDataObjectMother.CreateStatic();
+
+            //Act
+            var actualData = _levyAggregator.BuildAggregate(sourceData);
+
+            //Assert
+            var actualLineItem = actualData.Data.FirstOrDefault();
+            Assert.IsNotNull(actualLineItem);
+            Assert.AreEqual(1936.74m, actualLineItem.Amount);
+        }
+
+        [Test]
+        public void ThenTheTotalsAreRoundedToTheNearestPenny()
+        {
+            //Arrange
+            var sourceData = LevyDeclarationSourceDataObjectMother.CreateStatic(2);
+
+            //Act
+            var actualData = _levyAggregator.BuildAggregate(sourceData);
+
+            //Assert
+            Assert.AreEqual(3873.48m, actualData.Data.Last().Balance);
+        }
+        
     }
 }
