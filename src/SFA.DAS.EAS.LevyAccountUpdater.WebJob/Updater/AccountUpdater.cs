@@ -8,7 +8,7 @@ using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
 using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EAS.LevyAccountUpdater.Updater
+namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater
 {
     public class AccountUpdater : IAccountUpdater
     {

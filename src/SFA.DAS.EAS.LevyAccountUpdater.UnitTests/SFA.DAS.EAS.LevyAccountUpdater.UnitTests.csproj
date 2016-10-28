@@ -76,9 +76,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.LevyMonthlyUpdater\SFA.DAS.EAS.LevyAccountUpdater.csproj">
-      <Project>{7220fb76-1ddb-4f58-9d67-f073cd6bba02}</Project>
-      <Name>SFA.DAS.EAS.LevyAccountUpdater</Name>
+    <ProjectReference Include="..\SFA.DAS.EAS.LevyAccountUpdater.WebJob\SFA.DAS.EAS.LevyAccountUpdater.WebJob.csproj">
+      <Project>{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}</Project>
+      <Name>SFA.DAS.EAS.LevyAccountUpdater.WebJob</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>

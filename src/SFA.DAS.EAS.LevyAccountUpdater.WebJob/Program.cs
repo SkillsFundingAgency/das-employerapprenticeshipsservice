@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EAS.LevyAccountUpdater.DependencyResolution;
-using SFA.DAS.EAS.LevyAccountUpdater.Updater;
+﻿using SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution;
+using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
 
-namespace SFA.DAS.EAS.LevyAccountUpdater
+namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob
 {
     class Program
     {
