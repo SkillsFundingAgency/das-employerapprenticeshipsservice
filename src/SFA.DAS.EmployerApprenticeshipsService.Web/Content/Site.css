@@ -560,3 +560,21 @@ details .summary{
 .form-group .input-validation-error{
     margin-left:0;
 }
+
+.error .form-control {
+   padding: 4px;
+}
+
+/*remove focus from radio buttons*/
+
+input[type=radio]:focus{
+    outline:0 !important;
+}
+
+.js-enabled label.selected{
+    outline: 3px solid #ffbf47;
+}
+
+textarea#Message{
+    width:100%;
+}

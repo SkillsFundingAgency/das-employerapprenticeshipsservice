@@ -24,7 +24,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web
             bundles.Add(new ScriptBundle("~/bundles/footer").Include(
                       "~/assets/javascripts/jquery-1.11.0.min.js",
                       "~/assets/javascripts/govuk-template.js",
-                      "~/assets/javascripts/app.js"));
+                      "~/assets/javascripts/app.js",
+                      "~/assets/javascripts/commitments-custom.js"));
 
                bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/elements.css",
