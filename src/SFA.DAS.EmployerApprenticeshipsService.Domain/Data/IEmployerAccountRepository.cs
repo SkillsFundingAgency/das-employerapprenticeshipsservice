@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
         Task<Account> GetAccountById(long id);
         Task<Account> GetAccountByHashedId(string hashedId);
         Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize);
+        Task<List<Account>> GetAllAccounts();
     }
 }
