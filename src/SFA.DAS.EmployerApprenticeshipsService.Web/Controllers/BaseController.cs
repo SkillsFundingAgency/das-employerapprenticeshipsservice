@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers
 {
     public class BaseController : Controller
     {

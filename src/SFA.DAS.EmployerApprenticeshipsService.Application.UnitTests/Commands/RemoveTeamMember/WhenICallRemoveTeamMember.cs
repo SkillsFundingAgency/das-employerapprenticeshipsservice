@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.RemoveTeamMember
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
 {
     [TestFixture]
     public class WhenICallRemoveTeamMember

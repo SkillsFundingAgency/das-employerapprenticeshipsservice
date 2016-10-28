@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement
+namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {
     public class SignEmployerAgreementCommand : IAsyncRequest
     {

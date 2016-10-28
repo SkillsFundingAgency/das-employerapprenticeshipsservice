@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLevyAggregation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.LevyAggregationProvider.Worker.Providers;
+using SFA.DAS.EAS.Application.Commands.CreateLevyAggregation;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EAS.LevyAggregationProvider.Worker.Providers;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggregationManagerTests
+namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggregationManagerTests
 {
     public class WhenIReceiveAMessage
     {

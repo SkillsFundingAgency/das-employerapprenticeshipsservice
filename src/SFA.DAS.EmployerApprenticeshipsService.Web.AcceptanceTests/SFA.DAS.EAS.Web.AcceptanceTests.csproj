@@ -7,8 +7,8 @@
     <ProjectGuid>{456CA894-116B-4708-A5AB-4B81FAAA1FAD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests</RootNamespace>
-    <AssemblyName>SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests</AssemblyName>
+    <RootNamespace>SFA.DAS.EAS.Web.AcceptanceTests</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.Web.AcceptanceTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -118,6 +118,14 @@
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.2.0.0.6450\lib\net45\SFA.DAS.Messaging.AzureServiceBus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.1.0.12760, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TimeProvider.1.0.0.3956\lib\net45\SFA.DAS.TimeProvider.dll</HintPath>
       <Private>True</Private>
@@ -206,25 +214,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226f97a-704e-49b0-a100-b75feec9c8ad}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
+      <Name>SFA.DAS.EAS.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EmployerApprenticeshipsService.Infrastructure.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EAS.Web.csproj">
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
+      <Name>SFA.DAS.EAS.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

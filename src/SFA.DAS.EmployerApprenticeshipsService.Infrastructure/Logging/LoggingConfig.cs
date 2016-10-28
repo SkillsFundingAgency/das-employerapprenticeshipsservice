@@ -1,9 +1,8 @@
-﻿using Microsoft.Azure;
+﻿using System.Linq;
+using Microsoft.Azure;
 using NLog;
-using System.Linq;
 
-
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging
+namespace SFA.DAS.EAS.Infrastructure.Logging
 {
     public static class LoggingConfig
     {

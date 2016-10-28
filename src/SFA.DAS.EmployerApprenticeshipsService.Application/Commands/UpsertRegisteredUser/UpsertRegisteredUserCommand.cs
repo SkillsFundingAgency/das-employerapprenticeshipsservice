@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegisteredUser
+namespace SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommand : IAsyncRequest
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
+using SFA.DAS.EAS.Infrastructure.Caching;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class FeatureToggleService : AzureServiceBase<FeatureToggleLookup>, IFeatureToggle
     {

@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+﻿using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities
+namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
 {
     public class GetAccountLegalEntitiesResponse
     {

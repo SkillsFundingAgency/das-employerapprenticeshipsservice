@@ -1,7 +1,6 @@
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts
+namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
 {
     public class GetUserAccountsQueryResponse
     {

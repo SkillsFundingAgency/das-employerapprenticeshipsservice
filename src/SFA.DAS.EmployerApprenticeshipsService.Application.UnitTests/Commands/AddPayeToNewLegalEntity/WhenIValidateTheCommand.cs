@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
+using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
 {
     public class WhenIValidateTheCommand
     {

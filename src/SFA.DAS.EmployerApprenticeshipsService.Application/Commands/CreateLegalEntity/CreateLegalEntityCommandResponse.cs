@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
     public class CreateLegalEntityCommandResponse
     {

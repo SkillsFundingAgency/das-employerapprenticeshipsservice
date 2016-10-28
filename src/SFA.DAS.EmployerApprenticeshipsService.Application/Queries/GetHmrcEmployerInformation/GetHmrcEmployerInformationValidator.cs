@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation
+namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 {
     public class GetHmrcEmployerInformationValidator : IValidator<GetHmrcEmployerInformationQuery>
     {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.PauseApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
 {
     public sealed class PauseApprenticeshipCommand : IAsyncRequest
     {

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IUserRepository
     {

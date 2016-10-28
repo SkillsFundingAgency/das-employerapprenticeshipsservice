@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEmployerAccountTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
 {
     public class WhenIGetEmployerAccountsByAccountId : QueryBaseTest<GetEmployerAccountHandler, GetEmployerAccountQuery, GetEmployerAccountResponse>
     {

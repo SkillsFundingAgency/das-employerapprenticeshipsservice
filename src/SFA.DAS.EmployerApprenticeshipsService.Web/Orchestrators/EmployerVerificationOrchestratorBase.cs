@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Data;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
+using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
+using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public abstract class EmployerVerificationOrchestratorBase
     {

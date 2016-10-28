@@ -2,16 +2,16 @@
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
+using SFA.DAS.EAS.Application.Commands.CreateInvitation;
+using SFA.DAS.EAS.Application.Queries.GetInvitation;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.ViewModels;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class InvitationOrchestrator
     {

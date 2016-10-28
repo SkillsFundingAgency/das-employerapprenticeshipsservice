@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
 using SFA.DAS.Messaging;
 
 

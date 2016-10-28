@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLegalEntityAgreement
+namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement
 {
     public class GetLegalEntityAgreementRequest : IAsyncRequest<GetLegalEntityAgreementResponse>
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments
+namespace SFA.DAS.EAS.Application.Queries.GetCommitments
 {
     public sealed class GetCommitmentsResponse
     {

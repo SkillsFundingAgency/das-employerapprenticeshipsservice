@@ -1,4 +1,6 @@
-﻿namespace System
+﻿using System;
+
+namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class DateTimeExtensions
     {

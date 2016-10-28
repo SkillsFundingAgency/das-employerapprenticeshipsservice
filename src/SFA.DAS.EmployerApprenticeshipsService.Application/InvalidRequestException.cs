@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application
+namespace SFA.DAS.EAS.Application
 {
     public interface INoRegistration
     {

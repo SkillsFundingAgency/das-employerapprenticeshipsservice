@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
+namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IEmpRefFileBasedService
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.Account.Api.Client
+namespace SFA.DAS.EAS.Account.Api.Client
 {
     public class AccountApiClient : IAccountApiClient
     {

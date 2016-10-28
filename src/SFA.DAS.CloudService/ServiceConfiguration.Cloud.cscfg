@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
-  <Role name="SFA.DAS.EmployerApprenticeshipsService.Web">
+  <Role name="SFA.DAS.EAS.Web">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -16,7 +16,7 @@
       <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyDeclarationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -30,7 +30,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyAggregationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyAggregationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -44,7 +44,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.Account.Api">
+  <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -54,9 +54,9 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
-      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__"/>
-      <Setting name="ApiIssuer" value="__ApiIssuer__"/>
-      <Setting name="ApiAudiences" value="__ApiAudiences__"/>
+      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__" />
+      <Setting name="ApiIssuer" value="__ApiIssuer__" />
+      <Setting name="ApiAudiences" value="__ApiAudiences__" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

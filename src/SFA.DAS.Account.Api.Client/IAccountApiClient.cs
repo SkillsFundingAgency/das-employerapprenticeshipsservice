@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Account.Api.Client
+namespace SFA.DAS.EAS.Account.Api.Client
 {
     public interface IAccountApiClient
     {

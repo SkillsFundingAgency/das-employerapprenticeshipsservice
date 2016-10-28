@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions
+namespace SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions
 {
     public class GetBatchEmployerAccountTransactionsQuery : IAsyncRequest<GetBatchEmployerAccountTransactionsResponse>
     {

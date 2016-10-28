@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</ProjectGuid>
+    <ProjectGuid>{88E7DB8E-7A95-4EA1-8CDF-7406188D642D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EmployerApprenticeshipsService.TestCommon</RootNamespace>
-    <AssemblyName>SFA.DAS.EmployerApprenticeshipsService.TestCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,10 +34,6 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Dapper, Version=1.50.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Dapper.1.50.0\lib\net45\Dapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
@@ -54,16 +50,12 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="nunit.framework, Version=3.4.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.6450\lib\net45\SFA.DAS.Messaging.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StructureMap, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="StructureMap.Net4, Version=4.2.0.402, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\structuremap.4.2.0.402\lib\net40\StructureMap.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -76,31 +68,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DbCleanup\CleanDatabase.cs" />
-    <Compile Include="DbCleanup\ICleanDatabase.cs" />
-    <Compile Include="MockPolicy\MockMessagePolicy.cs" />
-    <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
-    <Compile Include="ObjectMothers\DeclarationsObjectMother.cs" />
-    <Compile Include="ObjectMothers\GetHMRCLevyDeclarationResponseObjectMother.cs" />
-    <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />
-    <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
-    <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
-    <Compile Include="ObjectMothers\RefreshEmployerLevyDataCommandObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
-      <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
-      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
-    </ProjectReference>
+    <Compile Include="Providers\LevyAggregationManagerTests\WhenIReceiveAMessage.cs" />
+    <Compile Include="Providers\LevyAggregationTests\WhenIAggregateLevyData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
+      <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
+      <Name>SFA.DAS.EAS.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
+      <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.EAS.LevyAggregationProvider.Worker.csproj">
+      <Project>{C1AB252E-8041-41CC-B192-CF543F4AEB13}</Project>
+      <Name>SFA.DAS.EAS.LevyAggregationProvider.Worker</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

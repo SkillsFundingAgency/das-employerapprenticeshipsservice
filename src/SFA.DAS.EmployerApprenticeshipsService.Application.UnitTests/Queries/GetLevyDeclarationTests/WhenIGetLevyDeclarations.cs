@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
+using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetLevyDeclarationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
 {
     public class WhenIGetLevyDeclarations : QueryBaseTest<GetLevyDeclarationQueryHandler,GetLevyDeclarationRequest, GetLevyDeclarationResponse>
     {

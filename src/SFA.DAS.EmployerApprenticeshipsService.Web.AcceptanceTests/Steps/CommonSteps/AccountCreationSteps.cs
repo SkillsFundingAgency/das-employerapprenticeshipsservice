@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Moq;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.CommonSteps
+namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 {
     [Binding]
     public class AccountCreationSteps

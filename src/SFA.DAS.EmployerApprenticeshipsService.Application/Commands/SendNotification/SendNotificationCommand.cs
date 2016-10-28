@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.Notifications.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification
+namespace SFA.DAS.EAS.Application.Commands.SendNotification
 {
     public class SendNotificationCommand : IAsyncRequest
     {

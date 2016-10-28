@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.Tasks.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application
+namespace SFA.DAS.EAS.Application
 {
     public static class TaskFactory
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IEmployerAccountRepository
     {

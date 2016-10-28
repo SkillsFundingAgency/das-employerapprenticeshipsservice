@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.ResendInvitation;
+using SFA.DAS.EAS.Application.Commands.SendNotification;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ResendInvitationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
 {
     //TODO Refactor, lots of CTRL C CTRL V
     [TestFixture]

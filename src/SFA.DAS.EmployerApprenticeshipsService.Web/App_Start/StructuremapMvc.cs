@@ -17,15 +17,15 @@
 
 using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using SFA.DAS.EmployerApprenticeshipsService.Web;
-using SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution;
+using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.DependencyResolution;
 using StructureMap;
 using WebActivatorEx;
 
 [assembly: PreApplicationStartMethod(typeof(StructuremapMvc), "Start")]
 [assembly: ApplicationShutdownMethod(typeof(StructuremapMvc), "End")]
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web {
+namespace SFA.DAS.EAS.Web {
     public static class StructuremapMvc {
         #region Public Properties
 

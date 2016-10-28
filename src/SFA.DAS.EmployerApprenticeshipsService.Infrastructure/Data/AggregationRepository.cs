@@ -4,11 +4,11 @@ using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Entities;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Infrastructure.Entities;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class AggregationRepository : IAggregationRepository
     {

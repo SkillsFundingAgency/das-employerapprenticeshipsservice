@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
 {
     public class CreateApprenticeshipCommand : IAsyncRequest
     {

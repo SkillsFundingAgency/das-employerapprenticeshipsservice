@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Notification
+namespace SFA.DAS.EAS.Domain.Models.Notification
 {
     public class EmailMessage
     {

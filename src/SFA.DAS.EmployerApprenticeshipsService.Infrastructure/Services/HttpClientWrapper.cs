@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class HttpClientWrapper : IHttpClientWrapper
     {

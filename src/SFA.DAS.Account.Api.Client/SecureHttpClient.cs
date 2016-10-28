@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.Account.Api.Client
+namespace SFA.DAS.EAS.Account.Api.Client
 {
     internal class SecureHttpClient
     {

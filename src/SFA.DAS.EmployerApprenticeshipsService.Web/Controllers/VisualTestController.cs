@@ -1,16 +1,16 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.ViewModels;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers
 {
     public class VisualTestController : Controller
     {

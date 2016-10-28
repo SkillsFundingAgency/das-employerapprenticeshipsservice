@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
+namespace SFA.DAS.EAS.Domain.Configuration
 {
     public class EmployerApprenticeshipsServiceConfiguration : IConfiguration
     {

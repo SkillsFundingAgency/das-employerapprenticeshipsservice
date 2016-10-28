@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
-using SFA.DAS.LevyAggregationProvider.Worker.Providers;
+using SFA.DAS.EAS.LevyAggregationProvider.Worker.Providers;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggregationTests
+namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests.Providers.LevyAggregationTests
 {
     public class WhenIAggregateLevyData
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
 {
     public class CreateApprenticeshipCommandHandler : AsyncRequestHandler<CreateApprenticeshipCommand>
     {

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.ManagedCompany;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ManagedCompany;
+using SFA.DAS.EAS.Infrastructure.Caching;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class ManagedCompanyLookupService : AzureServiceBase<ManagedCompanyLookup>, IManagedCompanyLookupService
     {

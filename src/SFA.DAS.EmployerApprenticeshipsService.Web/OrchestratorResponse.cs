@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.InteropServices;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public class OrchestratorResponse
     {

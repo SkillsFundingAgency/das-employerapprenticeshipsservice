@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAgreementTemplate
+namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreementTemplate
 {
     public class CreateEmployerAgreementTemplateCommand : IAsyncRequest
     {

@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+﻿using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLevyDeclaration
+namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
 {
     public class GetLevyDeclarationResponse
     {

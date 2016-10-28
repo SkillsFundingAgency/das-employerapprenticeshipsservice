@@ -7,8 +7,8 @@
     <ProjectGuid>{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests</RootNamespace>
-    <AssemblyName>SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests</AssemblyName>
+    <RootNamespace>SFA.DAS.EAS.Application.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.Application.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -169,17 +169,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
+      <Name>SFA.DAS.EAS.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

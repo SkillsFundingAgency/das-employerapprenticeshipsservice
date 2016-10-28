@@ -14,13 +14,14 @@ using Owin;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.OidcMiddleware;
 
-[assembly: OwinStartup(typeof(SFA.DAS.EmployerApprenticeshipsService.Web.Startup))]
+[assembly: OwinStartup(typeof(Startup))]
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public class Startup
     {

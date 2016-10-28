@@ -3,7 +3,7 @@ using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using Task = System.Threading.Tasks.Task;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResumeApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
 {
     public sealed class ResumeApprenticeshipCommandHandler : AsyncRequestHandler<ResumeApprenticeshipCommand>
     {

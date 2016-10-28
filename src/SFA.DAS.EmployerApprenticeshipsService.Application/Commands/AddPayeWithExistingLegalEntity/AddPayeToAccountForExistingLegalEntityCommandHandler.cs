@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity
 {
     public class AddPayeToAccountForExistingLegalEntityCommandHandler : AsyncRequestHandler<AddPayeToAccountForExistingLegalEntityCommand>
     {

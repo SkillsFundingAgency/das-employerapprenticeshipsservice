@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace SFA.DAS.Account.Api.Client.UnitTests.AccountApiClientTests
+namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
     public class WhenGettingAPageOfAccounts
     {

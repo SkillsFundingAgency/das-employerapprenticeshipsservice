@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class FileSystemStandardsRepository : FileSystemRepository, IStandardsRepository
     {

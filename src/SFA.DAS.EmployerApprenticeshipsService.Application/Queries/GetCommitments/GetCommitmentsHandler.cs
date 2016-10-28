@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitments
+namespace SFA.DAS.EAS.Application.Queries.GetCommitments
 {
     public sealed class GetCommitmentsHandler : IAsyncRequestHandler<GetCommitmentsQuery, GetCommitmentsResponse>
     {

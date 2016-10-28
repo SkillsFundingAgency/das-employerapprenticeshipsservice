@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
+using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.LevyDeclarationProvider.Worker.Providers
+namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 {
     public class LevyDeclaration : ILevyDeclaration
     {

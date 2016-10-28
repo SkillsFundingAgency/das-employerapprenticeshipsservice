@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Moq;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.Messaging;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.MockPolicy
+namespace SFA.DAS.EAS.TestCommon.MockPolicy
 {
     public class MockMessagePolicy : ConfiguredInstancePolicy
     {

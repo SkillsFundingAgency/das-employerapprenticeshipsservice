@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Caching;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching
+namespace SFA.DAS.EAS.Infrastructure.Caching
 {
     public class InProcessCacheProvider : ICacheProvider
     {

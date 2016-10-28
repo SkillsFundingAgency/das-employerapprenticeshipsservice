@@ -1,13 +1,13 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData
+namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
     public class RefreshEmployerLevyDataCommandHandler : AsyncRequestHandler<RefreshEmployerLevyDataCommand>
     {

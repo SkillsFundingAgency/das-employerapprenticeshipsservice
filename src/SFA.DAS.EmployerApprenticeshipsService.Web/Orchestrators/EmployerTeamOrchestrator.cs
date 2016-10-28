@@ -2,22 +2,22 @@
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ResendInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
+using SFA.DAS.EAS.Application.Commands.CreateInvitation;
+using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
+using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
+using SFA.DAS.EAS.Application.Commands.ResendInvitation;
+using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetInvitation;
+using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerTeamOrchestrator
     {

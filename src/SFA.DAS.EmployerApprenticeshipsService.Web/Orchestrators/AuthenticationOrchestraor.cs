@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpsertRegisteredUser;
+using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class AuthenticationOrchestraor
     {

@@ -1,18 +1,17 @@
 ﻿using System.Collections.Specialized;
 using System.Threading.Tasks;
-using System.Web;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
 {
     public class WhenGettingTheTokenResponse 
     {

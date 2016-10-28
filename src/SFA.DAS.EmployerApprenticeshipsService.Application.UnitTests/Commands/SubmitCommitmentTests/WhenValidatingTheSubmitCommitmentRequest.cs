@@ -1,8 +1,8 @@
-﻿using NUnit.Framework;
-using System;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
+﻿using System;
+using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitmentTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 {
     [TestFixture]
     public class WhenValidatingTheSubmitCommitmentRequest

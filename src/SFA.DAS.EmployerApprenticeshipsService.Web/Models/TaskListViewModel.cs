@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.Tasks.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+namespace SFA.DAS.EAS.Web.Models
 {
     public class TaskListViewModel
     {

@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater

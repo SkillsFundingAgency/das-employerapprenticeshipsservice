@@ -82,17 +82,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
+      <Name>SFA.DAS.EAS.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EmployerApprenticeshipsService.Infrastructure.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

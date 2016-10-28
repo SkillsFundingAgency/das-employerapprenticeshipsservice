@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions
+namespace SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions
 {
     public class GetBatchEmployerAccountTransactionsHandler : IAsyncRequestHandler<GetBatchEmployerAccountTransactionsQuery, GetBatchEmployerAccountTransactionsResponse>
     {

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity
 {
     public class AddPayeToAccountForExistingLegalEntityCommandValidator : IValidator<AddPayeToAccountForExistingLegalEntityCommand>
     {

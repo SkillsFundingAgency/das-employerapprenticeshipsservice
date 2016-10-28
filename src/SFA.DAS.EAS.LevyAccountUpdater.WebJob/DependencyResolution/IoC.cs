@@ -16,8 +16,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.DependencyResolution {

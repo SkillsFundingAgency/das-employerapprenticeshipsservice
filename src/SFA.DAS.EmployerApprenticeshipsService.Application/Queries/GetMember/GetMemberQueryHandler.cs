@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember
+namespace SFA.DAS.EAS.Application.Queries.GetMember
 {
     public class GetMemberQueryHandler : IAsyncRequestHandler<GetMemberRequest, GetMemberResponse>
     {

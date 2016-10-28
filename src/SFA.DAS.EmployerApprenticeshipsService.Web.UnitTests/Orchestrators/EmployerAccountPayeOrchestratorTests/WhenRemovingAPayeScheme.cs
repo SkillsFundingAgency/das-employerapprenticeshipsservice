@@ -6,14 +6,14 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
     public class WhenRemovingAPayeScheme
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+namespace SFA.DAS.EAS.Web.Models
 {
     public class ConfirmNewPayeScheme : AddNewPayeScheme
     {

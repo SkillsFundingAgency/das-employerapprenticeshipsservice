@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetPayeSchemeInUseTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeInUseTests
 {
     public class WhenIValidateTheQuery
     {

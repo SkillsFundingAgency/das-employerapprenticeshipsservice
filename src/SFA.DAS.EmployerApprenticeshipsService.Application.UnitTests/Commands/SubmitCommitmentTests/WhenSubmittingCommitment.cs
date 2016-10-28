@@ -1,12 +1,12 @@
-﻿using NUnit.Framework;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment;
-using SFA.DAS.Commitments.Api.Client;
+﻿using System.Threading.Tasks;
 using Moq;
+using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
 using SFA.DAS.Tasks.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SubmitCommitmentTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 {
     [TestFixture]
     public class WhenSubmittingCommitment
