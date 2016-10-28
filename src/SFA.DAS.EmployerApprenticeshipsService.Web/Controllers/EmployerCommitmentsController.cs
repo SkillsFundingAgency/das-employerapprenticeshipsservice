@@ -10,14 +10,14 @@ using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
 namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedaccountId}")]
+    [RoutePrefix("accounts/{hashedaccountId}/Commitments")]
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
 
-        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
-            : base(owinWrapper,featureToggle, userWhiteList)
+        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
+            : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (employerCommitmentsOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
@@ -27,8 +27,17 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        [Route("Home")]
+        public ActionResult Index(string hashedAccountId)
+        {
+            ViewBag.HashedAccountId = hashedAccountId;
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("Cohorts")]
+        public async Task<ActionResult> Cohorts(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId);
 
@@ -36,7 +45,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/Inform")]
+        [Route("Inform")]
         public ActionResult Inform(string hashedAccountId)
         {
             var model = new CommitmentInformViewModel
@@ -48,7 +57,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/Create/LegalEntity")]
+        [Route("Create/LegalEntity")]
         public async Task<ActionResult> SelectLegalEntity(string hashedAccountId)
         {
             var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -60,7 +69,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/Create/LegalEntity")]
+        [Route("Create/LegalEntity")]
         public async Task<ActionResult> SetLegalEntity(string hashedAccountId, SelectLegalEntityViewModel selectedLegalEntity)
         {
             if (!ModelState.IsValid)
@@ -75,7 +84,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/Create/Provider")]
+        [Route("Create/Provider")]
         public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode)
         {
             return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode });
@@ -83,7 +92,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/Create/Provider")]
+        [Route("Create/Provider")]
         public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] SelectProviderViewModel viewModel)
         {
             var providerId = int.Parse(viewModel.ProviderId);
@@ -101,7 +110,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/Create/ConfirmProvider")]
+        [Route("Create/ConfirmProvider")]
         public ActionResult ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -119,12 +128,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                 return View("SearchProvider", model);
             }
 
-            return RedirectToAction("SelectName", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId });
+            return RedirectToAction("ChoosePath", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId });
         }
 
         [HttpGet]
-        [Route("Commitments/Create/Name")]
-        public async Task<ActionResult> SelectName(string hashedAccountId, string legalEntityCode, string providerId)
+        [Route("Create/ChoosePath")]
+        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName)
         {
             var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -133,21 +142,18 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/Create")]
-        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
+        [Route("Create")]
+        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel, string selectedRoute)
         {
-            if (!ModelState.IsValid)
-            {
-                return View("SelectName", viewModel);
-            }
+            viewModel.Name = CreateReference(); // TODO: LWA - Name needs to be deleted
 
-            await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
+            var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("Index");
+            return RedirectToAction("SubmitCommitmentEntry", new { hashedCommitmentId = hashedCommitmentId });
         }
 
         [HttpGet]
-        [Route("Commitments/{hashedCommitmentId}/Details")]
+        [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
             var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
@@ -156,7 +162,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
+        [Route("{hashedCommitmentId}/FinishedEditing")]
+        public ActionResult FinishedEditing(string hashedAccountId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("{hashedCommitmentId}/FinishedEditing")]
+        public ActionResult FinishedEditingChoice(string hashedAccountId)
+        {
+            return RedirectToAction("SubmitCommitmentEntry");
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
         public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
@@ -173,19 +193,20 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId)
+        [Route("{hashedCommitmentId}/Submit")]
+        public ActionResult SubmitCommitmentEntry(string hashedAccountId)
         {
-            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            // TODO: LWA Implement 
+            //var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
             
             var model = new SubmitCommitmentViewModel
             {
                 SubmitCommitmentModel = new SubmitCommitmentModel
                 {
                     HashedAccountId = hashedAccountId,
-                    HashedCommitmentId = hashedCommitmentId
+                    //HashedCommitmentId = hashedCommitmentId
                 },
-                Commitment = commitment
+               // Commitment = commitment
             };
 
             return View(model);
@@ -193,17 +214,25 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model)
+        [Route("{hashedCommitmentId}/Submit")]
+        public ActionResult SubmitCommitment(SubmitCommitmentModel model)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message);
+            // TODO: LWA Implement
+            //await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message);
 
-            return RedirectToAction("Index", new { accountid = model.HashedAccountId });
+            return RedirectToAction("Acknowledgement");
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/Acknowledgement")]
+        public ActionResult Acknowledgement(string hashedAccountId)
+        {
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Approve")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Approve")]
         public async Task<ActionResult> ApproveApprenticeship([System.Web.Http.FromUri]ApproveApprenticeshipModel model)
         {
             await _employerCommitmentsOrchestrator.ApproveApprenticeship(model);
@@ -213,7 +242,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Pause")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Pause")]
         public async Task<ActionResult> PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _employerCommitmentsOrchestrator.PauseApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
@@ -223,7 +252,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Resume")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Resume")]
         public async Task<ActionResult> ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _employerCommitmentsOrchestrator.ResumeApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
@@ -232,7 +261,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/Create")]
+        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
@@ -243,7 +272,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Commitments/{hashedCommitmentId}/Apprenticeships/Create")]
+        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             try
@@ -280,6 +309,11 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
             ViewBag.ApprenticeshipProducts = model.Standards;
 
             return View("CreateApprenticeshipEntry", model.Apprenticeship);
+        }
+
+        private static string CreateReference()
+        {
+            return Guid.NewGuid().ToString().ToUpper();
         }
     }
 }

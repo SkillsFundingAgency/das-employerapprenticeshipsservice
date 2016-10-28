@@ -1,0 +1,48 @@
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model CreateCommitmentViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Create cohort</h1>
+        <hr />
+        <p>You're about to create a cohort that you can add one or more apprentices to.</p>
+        <p>You can give your cohort a name, such as 'September cohort' or 'Coventry apprentices', to help you and your training provider identify it.</p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("CreateCommitment")">
+            @Html.Partial("ValidationSummary", ViewData.ModelState)
+            <table>
+                <tbody>
+                    <tr>
+                        <th scope="row">Employer</th>
+                        <td>@Model.LegalEntityName</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Training provider</th>
+                        <td>@Model.ProviderName</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            @Html.AntiForgeryToken()
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x, "error")">
+                @Html.LabelFor(m => m.Name, "Cohort name", new { @class = "form-label" })
+                <p>Your training provider will see this.</p>
+                @Html.ValidationMessageFor(m => m.Name, "Please enter a name for your group of apprentices.", new { id = "error-message-" + Html.IdFor(m => m.Name) })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control apprenticeGroupName", aria_required = "true" })
+            
+            </div>
+            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
+            <input type="hidden" id="providerId" name="providerId" value="@Model.ProviderId" />
+            <button type="submit" class="button">Create</button>
+        </form>
+    </div>
+</div>

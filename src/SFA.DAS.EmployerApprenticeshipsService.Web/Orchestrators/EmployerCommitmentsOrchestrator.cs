@@ -109,9 +109,9 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
+        public async Task<string> Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
-            await _mediator.SendAsync(new CreateCommitmentCommand
+            var response = await _mediator.SendAsync(new CreateCommitmentCommand
             {
                 Commitment = new Commitment
                 {
@@ -123,6 +123,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
                     ProviderName = commitment.ProviderName
                 }
             });
+
+            return _hashingService.HashValue(response.CommitmentId);
         }
 
         public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
