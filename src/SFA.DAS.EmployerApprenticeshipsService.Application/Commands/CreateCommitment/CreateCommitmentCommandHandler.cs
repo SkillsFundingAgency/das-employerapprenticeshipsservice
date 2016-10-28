@@ -5,7 +5,8 @@ using SFA.DAS.Commitments.Api.Client;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment
 {
-    public sealed class CreateCommitmentCommandHandler : IAsyncRequestHandler<CreateCommitmentCommand, CreateCommitmentCommandResponse>
+    public sealed class CreateCommitmentCommandHandler :
+        IAsyncRequestHandler<CreateCommitmentCommand, CreateCommitmentCommandResponse>
     {
         private readonly ICommitmentsApi _commitmentApi;
 
@@ -19,12 +20,21 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateComm
 
         public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand message)
         {
-            var commitment = await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
-
-            return new CreateCommitmentCommandResponse
+            try
             {
-                CommitmentId = commitment.Id
-            };
+                var commitment = await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
+
+                return new CreateCommitmentCommandResponse
+                {
+                    CommitmentId = commitment.Id
+                };
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
         }
     }
 }

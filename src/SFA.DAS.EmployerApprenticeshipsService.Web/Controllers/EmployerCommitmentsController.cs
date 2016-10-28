@@ -194,19 +194,19 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Submit")]
-        public ActionResult SubmitCommitmentEntry(string hashedAccountId)
+        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId)
         {
             // TODO: LWA Implement 
-            //var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
             
             var model = new SubmitCommitmentViewModel
             {
                 SubmitCommitmentModel = new SubmitCommitmentModel
                 {
                     HashedAccountId = hashedAccountId,
-                    //HashedCommitmentId = hashedCommitmentId
+                    HashedCommitmentId = hashedCommitmentId
                 },
-               // Commitment = commitment
+                Commitment = commitment
             };
 
             return View(model);
