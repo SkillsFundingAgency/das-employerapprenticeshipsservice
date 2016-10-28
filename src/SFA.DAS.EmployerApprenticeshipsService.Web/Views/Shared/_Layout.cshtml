@@ -32,11 +32,12 @@
     @Styles.Render("~/Content/css")
 
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5QC5KD');</script>
+    <script>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','GTM-T3CZC2');</script>
     <!-- End Google Tag Manager -->
 
     <script type="text/javascript">
@@ -49,15 +50,16 @@
         window.appInsights = appInsights;
         appInsights.trackPageView();
     </script>
-    
-    <!--[if lt IE 9]><script src="/assets/javascripts/respond.min.js"></script><![endif]-->
 
+    <!--[if lt IE 9]><script src="/assets/javascripts/respond.min.js"></script><![endif]-->
+   
+     @RenderSection("scripts", false)
 </head>
 <body>
 
     <!-- Google Tag Manager (noscript) -->
     <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5QC5KD"
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T3CZC2"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
@@ -78,15 +80,15 @@
     </div>
 
     <header role="banner" id="global-header" class="">
-        <div class="header-wrapper">          
+        <div class="header-wrapper">
             <div class="header-global">
-                
-                    <div class="header-global__title">
-                        <a title="Skills Funding Agency" href="/">
-                            Manage your apprenticeships
-                        </a>
-                    </div>
-          
+
+                <div class="header-global__title">
+                    <a title="Skills Funding Agency" href="/">
+                        Manage your apprenticeships
+                    </a>
+                </div>
+
             </div>
         </div>
     </header>
@@ -96,25 +98,26 @@
     <main role="main">
         <div class="service-info">
             <div class="phase-banner-beta">
-                <p><strong class="phase-tag">BETA</strong>
-                <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
-               </p>
+                <p>
+                    <strong class="phase-tag">BETA</strong>
+                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
+                </p>
             </div>
         </div>
         <div class="user-menu @(HttpContext.Current.User.Identity.IsAuthenticated ? "logged-in" : string.Empty)">
             <ul id="service-info-list" role="navigation">
-            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
-            }
-            else
-            {
-                if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
-                {
-                    <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
+                    <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                    <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
                 }
-            }
+                else
+                {
+                    if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                    {
+                        <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
+                    }
+                }
             </ul>
         </div>
 
@@ -123,7 +126,7 @@
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
 
         @RenderBody()
-     
+
     </main>
 
     <footer class="group js-footer" id="footer" role="contentinfo">
@@ -132,9 +135,9 @@
             <div class="footer-meta">
                 <div class="footer-meta-inner">
                     <ul class="platform-help-links">
-                        <li><a href="mailto:digitalapprenticeshipservicepilot@sfa.bis.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
+                        <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
                         <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
-			<li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
+                        <li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>
                     </ul>
                     <div class="open-government-licence">
@@ -148,14 +151,14 @@
 
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
 
     @Scripts.Render("~/bundles/footer")
-   
+
     @RenderSection("pageSpecificJS", required: false)
 
     @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))

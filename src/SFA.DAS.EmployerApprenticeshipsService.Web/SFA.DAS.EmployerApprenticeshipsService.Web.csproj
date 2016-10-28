@@ -48,6 +48,14 @@
       <HintPath>..\packages\Dapper.1.50.0\lib\net45\Dapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.MVC5.6.2.1.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="IdentityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.1.11.0\lib\net45\IdentityModel.dll</HintPath>
       <Private>True</Private>
@@ -335,6 +343,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -397,6 +406,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebRole.cs" />
+    <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\images\apple-touch-icon-120x120.png" />
@@ -483,6 +493,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.custom.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -537,7 +548,7 @@
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
-    <Content Include="Views\EmployerCommitments\Index.cshtml" />
+    <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\ApprenticeshipDetails.cshtml" />
@@ -553,9 +564,13 @@
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
-    <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
+    <Content Include="Views\EmployerCommitments\ChoosePath.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Shared\ValidationSummary.cshtml" />
+    <Content Include="Views\EmployerCommitments\Index.cshtml" />
+    <Content Include="Views\EmployerCommitments\FinishedEditing.cshtml" />
+    <Content Include="Views\EmployerCommitments\Acknowledgement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">

@@ -1,0 +1,42 @@
+﻿<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Finished editing</h1>
+        <div>
+            <p>
+                What do you want to do with this commitment?
+            </p>
+            <!--h2 class="heading-medium">
+              What do you want to update?
+            </h2-->
+
+            <form action="@Url.Action("FinishedEditingChoice")" method="post">
+                <legend class="visuallyhidden">Things to do next</legend>
+                <div class="form-group">
+                    <label class="block-label" for="radio-1">
+                        <input id="radio-1" type="radio" name="radio-group" value="send-amend">
+                        <span id="changeOne">Send to provider to amend or add details</span>
+                    </label>
+                    <label class="block-label" for="radio-2">
+                        <input id="radio-2" type="radio" name="radio-group" value="send-approve">
+                        <span id="changeTwo">Approve and send to provider</span>
+                    </label>
+                    <label class="block-label" for="radio-3">
+                        <input id="radio-3" type="radio" name="radio-group" value="save-no-send">
+                        <span id="changeThree">Save but do not send to provider</span>
+                    </label>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <input type="submit" class="button" id="paymentPlan" value="Save and continue">
+                </div>
+            </form>
+
+        </div>
+        <div style="margin-top:35px"></div>
+        <div style="margin-top:50px"></div>
+    </div>
+
+    <div class="column-one-third">
+      
+    </div>
+</div>

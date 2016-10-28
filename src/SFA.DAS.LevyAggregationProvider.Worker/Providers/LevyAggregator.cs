@@ -176,14 +176,14 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
 
         private AggregationLineItem MapFrom(LevyDeclarationSourceDataItem item, Dictionary<string, decimal> previousAmount)
         {
-            var calculatedAmount = (item.LevyDueYtd * item.EnglishFraction) - (previousAmount.ContainsKey(item.EmpRef) ? previousAmount[item.EmpRef] : 0m);
+            var calculatedAmount = Math.Round(item.LevyDueYtd * item.EnglishFraction, 2) - (previousAmount.ContainsKey(item.EmpRef) ? previousAmount[item.EmpRef] : 0m);
             return new AggregationLineItem
             {
                 Id = item.Id,
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
                 LevyDueYtd = item.LevyDueYtd,
-                Amount = item.LevyDueYtd * item.EnglishFraction,
+                Amount = Math.Round(item.LevyDueYtd * item.EnglishFraction,2),
                 EnglishFraction = item.EnglishFraction,
                 CalculatedAmount = calculatedAmount,
                 LevyItemType = LevyItemType.Declaration,
@@ -200,8 +200,8 @@ namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
                 EmpRef = item.EmpRef,
                 ActivityDate = item.SubmissionDate,
                 LevyDueYtd = 0,
-                Amount = item.TopUp * item.EnglishFraction,
-                CalculatedAmount = item.TopUp * item.EnglishFraction,
+                Amount = Math.Round(item.TopUp * item.EnglishFraction,2),
+                CalculatedAmount = Math.Round(item.TopUp * item.EnglishFraction,2),
                 EnglishFraction = item.EnglishFraction,
                 LevyItemType = LevyItemType.TopUp,
                 IsLastSubmission = true,

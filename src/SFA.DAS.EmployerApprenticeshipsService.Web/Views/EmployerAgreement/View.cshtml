@@ -4,72 +4,80 @@
 
 @model OrchestratorResponse<EmployerAgreementViewModel>
 @{ViewBag.Title = "Employer agreement";}
-<div class="grid-row">
-    <div class="column-two-thirds">
 
 @if (TempData["notunderstood"] != null)
 {
-        <div tabindex="-1" role="group" class="error-summary">
-            <h1 id="error-summary" class="heading-medium error-summary-heading">
-                There's a problem
-            </h1>
-            <ul class="error-summary-list">
-                <li><a href="#error-message-understand" data-focuses="error-message-understand">You must indicate that you have read and understood the terms</a></li>
-            </ul>
+    <div class="grid-row">
+        <div class="column-full error-summary-wrapper">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-message-agreement" data-focuses="error-message-agreement">Authorisation to sign agreement</a></li>
+                </ul>
+            </div>
         </div>
+    </div>
 }
 
-        <h1 class="heading-xlarge">Employer agreement</h1>
-        <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
-        <h3>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h3>
-        <p>@Html.Raw(Model.Data.EmployerAgreement.TemplateText)</p>
-    
-        @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
-        {
-            <form action="@Url.Action("Sign")" method="POST">
-                @Html.AntiForgeryToken()
-                <input type="hidden" id="HashedAgreementId" name="HashedAgreementId" value="@Model.Data.EmployerAgreement.HashedAgreementId"/>
-                <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName"/>
-                <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
-                    @if (TempData["notunderstood"] != null)
+            <div class="grid-row">
+                <div class="column-two-thirds">
+
+                    <h1 class="heading-xlarge">Employer agreement</h1>
+                    <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
+                    <h3>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h3>
+                    <p>@Html.Raw(Model.Data.EmployerAgreement.TemplateText)</p>
+
+                    @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
                     {
-                        <span class="error-message" id="error-message-understand">You must indicate that you have read and understood the terms</span>
+                        <form action="@Url.Action("Sign")" method="POST">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" id="HashedAgreementId" name="HashedAgreementId" value="@Model.Data.EmployerAgreement.HashedAgreementId" />
+                            <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.Data.EmployerAgreement.LegalEntityName" />
+                            <div class="form-group @(TempData["notunderstood"] != null ? "error" : "")">
+                                @if (TempData["notunderstood"] != null)
+                                {
+                                    <span class="error-message" id="error-message-agreement">You must be authorised to sign the agreement</span>
+                                }
+                                <label class="block-label" for="understood">
+                                    <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
+                                    I have read and understood the agreement
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="button" id="signAgreement" type="submit" value="Sign agreement">
+                                <a href="@Url.Action("Index", "EmployerAgreement")" class="button button-link">Return to your organisations</a>
+                            </div>
+                        </form>
+                    }
+                    else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
+                    {
+                        <dl>
+                            <dt>Signed by</dt>
+                            <dd>@Model.Data.EmployerAgreement.SignedByName</dd>
+                            <dt>Signed date</dt>
+                            <dd>@(Model.Data.EmployerAgreement.SignedDate?.ToGMTStandardTime().ToGdsFormat() ?? "N/A")</dd>
+                        </dl>
+                        if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
+                        {
+                            <dl>
+                                <dt>Expired Date</dt>
+                                <dd>@Model.Data.EmployerAgreement.ExpiredDate</dd>
+                            </dl>
+                        }
 
                     }
-                    <label class="block-label" for="understood">
-                        <input type="checkbox" id="understood" name="understood" value="understood" @(TempData?["notunderstood"] != null ? "aria-describedby=\"error-message-understand\"" : string.Empty)>
-                        I have read and understood the agreement
-                    </label>
                 </div>
-                <input class="button" id="signAgreement" type="submit" value="Sign agreement">
-            </form>
-        }
-        else if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Signed || Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
-        {
-            <dl>
-                <dt>Signed by</dt>
-                <dd>@Model.Data.EmployerAgreement.SignedByName</dd>
-                <dt>Signed date</dt>
-                <dd>@(Model.Data.EmployerAgreement.SignedDate?.ToGMTStandardTime().ToGdsFormat() ?? "N/A")</dd>
-            </dl>
-            if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Expired)
-            {
-                <dl>
-                    <dt>Expired Date</dt>
-                    <dd>@Model.Data.EmployerAgreement.ExpiredDate</dd>
-               </dl>
+            </div>
+            @section breadcrumb {
+                <div class="breadcrumbs">
+                    <ol role="navigation">
+                        <li><a href="/">Your User Profile</a></li>
+                        <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+                        <li><a href="@Url.Action("Index", "EmployerAgreement")">Your Organisations</a></li>
+                        <li>Employer agreement</li>
+                    </ol>
+                </div>
             }
-
-        }
-    </div>
-</div>
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your Organisations</a></li>
-            <li>Employer agreement</li>
-        </ol>
-    </div>
-}
