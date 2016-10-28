@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -59,6 +60,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.Text));
 
             return new Accounts() {AccountsCount = countResult.First(), AccountList = result.ToList()};
+        }
+
+        public async Task<List<Account>> GetAllAccounts()
+        {
+            var result = await WithConnection(async c => 
+                await c.QueryAsync<Account>("select * from [account].[Account]", commandType: CommandType.Text));
+
+            return result.AsList();
         }
     }
 }
