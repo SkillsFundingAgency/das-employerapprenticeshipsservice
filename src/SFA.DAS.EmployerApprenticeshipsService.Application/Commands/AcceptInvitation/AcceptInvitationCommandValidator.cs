@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation
+namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {
     public class AcceptInvitationCommandValidator : IValidator<AcceptInvitationCommand>
     {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.DeleteInvitation
+namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
 {
     public class DeleteInvitationCommand : IAsyncRequest
     {

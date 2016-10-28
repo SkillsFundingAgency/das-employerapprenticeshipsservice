@@ -1,8 +1,5 @@
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using System.Web;
-
-    using SFA.DAS.EAS.Api.App_Start;
-
     using StructureMap.Web.Pipeline;
 
     public class StructureMapScopeModule : IHttpModule {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IMembershipRepository
     {

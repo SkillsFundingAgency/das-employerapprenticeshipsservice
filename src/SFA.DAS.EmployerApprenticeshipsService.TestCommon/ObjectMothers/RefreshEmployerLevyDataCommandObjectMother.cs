@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
+namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
     public static class RefreshEmployerLevyDataCommandObjectMother
     {

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation
+namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {
     public class AcceptInvitationCommandHandler : AsyncRequestHandler<AcceptInvitationCommand>
     {

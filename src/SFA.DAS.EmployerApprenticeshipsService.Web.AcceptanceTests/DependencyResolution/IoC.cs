@@ -1,12 +1,12 @@
 ﻿using Moq;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.MockPolicy;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.MockPolicy;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Messaging;
 using StructureMap;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution
+namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
 {
     public static class IoC
     {

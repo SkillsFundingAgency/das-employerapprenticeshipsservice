@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+namespace SFA.DAS.EAS.Domain
 {
     public enum EmployerAgreementStatus : short
     {

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>SFA.DAS.EmployerApprenticeshipsService.Account.Database</Name>
+    <Name>SFA.DAS.EAS.Account.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{927a0bea-b043-4a03-9311-f49cb60541d5}</ProjectGuid>

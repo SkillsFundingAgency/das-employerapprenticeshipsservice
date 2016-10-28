@@ -2,7 +2,7 @@
 using System.Text;
 using System.Web;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public interface ICookieService
     {

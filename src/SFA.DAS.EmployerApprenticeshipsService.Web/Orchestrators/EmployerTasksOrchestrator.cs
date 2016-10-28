@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTask;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application.Queries.GetTask;
+using SFA.DAS.EAS.Application.Queries.GetTasks;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.Tasks.Api.Types.Templates;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerTasksOrchestrator
     {

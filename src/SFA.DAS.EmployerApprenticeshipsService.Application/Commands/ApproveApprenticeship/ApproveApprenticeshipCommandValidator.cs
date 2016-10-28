@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
 {
     public sealed class ApproveApprenticeshipCommandValidator : IValidator<ApproveApprenticeshipCommand>
     {

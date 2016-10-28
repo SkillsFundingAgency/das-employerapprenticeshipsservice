@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetGatewayTokenTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetGatewayTokenTests
 {
     public class WhenGettingTokenResponseFromHmrc
     {

@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEnglishFractionsUpdateRequired
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFractionsUpdateRequired
 {
     class WhenGettingIfEnglishFractionsUpdateIsRequired
     {

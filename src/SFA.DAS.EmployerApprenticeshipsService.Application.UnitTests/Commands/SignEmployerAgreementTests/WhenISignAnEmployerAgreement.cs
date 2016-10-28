@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SignEmployerAgreementTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
     [TestFixture]
     public class WhenISignAnEmployerAgreement

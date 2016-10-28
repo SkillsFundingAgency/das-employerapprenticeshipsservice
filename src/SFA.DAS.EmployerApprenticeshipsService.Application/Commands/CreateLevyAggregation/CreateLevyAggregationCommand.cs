@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLevyAggregation
+namespace SFA.DAS.EAS.Application.Commands.CreateLevyAggregation
 {
     public class CreateLevyAggregationCommand : IAsyncRequest
     {

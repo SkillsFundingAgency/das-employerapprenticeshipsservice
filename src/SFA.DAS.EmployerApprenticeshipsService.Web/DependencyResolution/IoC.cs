@@ -16,13 +16,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
-using SFA.DAS.Notifications.Api.Client.Configuration;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using StructureMap;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
-    using StructureMap;
-	
+namespace SFA.DAS.EAS.Web.DependencyResolution {
     public static class IoC {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
 

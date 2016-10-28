@@ -9,9 +9,9 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging;
+using SFA.DAS.EAS.Infrastructure.Logging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {

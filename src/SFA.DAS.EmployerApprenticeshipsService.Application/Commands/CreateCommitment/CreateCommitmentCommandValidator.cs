@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment
+namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
     public sealed class CreateCommitmentCommandValidator : IValidator<CreateCommitmentCommand>
     {

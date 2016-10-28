@@ -15,16 +15,14 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Microsoft.Practices.ServiceLocation;
+using StructureMap;
 
-    using Microsoft.Practices.ServiceLocation;
-
-    using StructureMap;
-	
+namespace SFA.DAS.EAS.Web.DependencyResolution {
     /// <summary>
     /// The structure map dependency scope.
     /// </summary>

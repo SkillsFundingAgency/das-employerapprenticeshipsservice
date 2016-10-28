@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Application.Messages
+﻿namespace SFA.DAS.EAS.Application.Messages
 {
     public class QueueMessage
     {

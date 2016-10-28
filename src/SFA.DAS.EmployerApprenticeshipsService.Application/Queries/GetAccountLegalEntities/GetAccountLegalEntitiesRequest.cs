@@ -1,7 +1,6 @@
-﻿using System;
-using MediatR;
+﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities
+namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
 {
     public class GetAccountLegalEntitiesRequest : IAsyncRequest<GetAccountLegalEntitiesResponse>
     {

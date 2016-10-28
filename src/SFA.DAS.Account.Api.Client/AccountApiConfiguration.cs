@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Account.Api.Client
+﻿namespace SFA.DAS.EAS.Account.Api.Client
 {
     public class AccountApiConfiguration
     {

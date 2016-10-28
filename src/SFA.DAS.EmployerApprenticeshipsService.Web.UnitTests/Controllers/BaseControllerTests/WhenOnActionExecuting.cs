@@ -3,12 +3,12 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Controllers;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.BaseControllerTests
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 {
     public class WhenOnActionExecuting : ControllerTestBase
     {

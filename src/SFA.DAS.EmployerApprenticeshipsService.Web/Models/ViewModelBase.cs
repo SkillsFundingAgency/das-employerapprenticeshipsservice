@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+namespace SFA.DAS.EAS.Web.Models
 {
     public class ViewModelBase
     {

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayInformation
+namespace SFA.DAS.EAS.Application.Queries.GetGatewayInformation
 {
     public class GetGatewayInformationQuery : IAsyncRequest<GetGatewayInformationResponse>
     {

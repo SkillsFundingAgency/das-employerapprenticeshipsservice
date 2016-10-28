@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
+using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
     class WhenIRemoveATeamMember
     {

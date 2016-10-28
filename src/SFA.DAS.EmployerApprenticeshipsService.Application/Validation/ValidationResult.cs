@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Validation
+namespace SFA.DAS.EAS.Application.Validation
 {
     public class ValidationResult
     {

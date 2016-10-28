@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.WhileList;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.EAS.Domain.Models.WhileList;
+using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
 {

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccountCreatedNotification
+namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAccountCreatedNotification
 {
     public class CreateEmployerAccountCreatedNotificationCommand : IAsyncRequest
     {

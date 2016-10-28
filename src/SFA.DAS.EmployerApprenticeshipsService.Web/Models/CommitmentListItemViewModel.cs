@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Commitments.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+namespace SFA.DAS.EAS.Web.Models
 {
     public sealed class CommitmentListItemViewModel
     {

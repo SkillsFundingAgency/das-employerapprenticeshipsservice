@@ -1,9 +1,9 @@
-﻿using Microsoft.Web.Administration;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using System;
+﻿using System;
 using System.Diagnostics;
+using Microsoft.Web.Administration;
+using Microsoft.WindowsAzure.ServiceRuntime;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public class WebRole : RoleEntryPoint
     {

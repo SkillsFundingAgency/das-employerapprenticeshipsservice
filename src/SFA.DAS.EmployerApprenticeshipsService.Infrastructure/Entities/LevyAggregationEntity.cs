@@ -1,6 +1,6 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Entities
+namespace SFA.DAS.EAS.Infrastructure.Entities
 {
     public class LevyAggregationEntity : TableEntity
     {

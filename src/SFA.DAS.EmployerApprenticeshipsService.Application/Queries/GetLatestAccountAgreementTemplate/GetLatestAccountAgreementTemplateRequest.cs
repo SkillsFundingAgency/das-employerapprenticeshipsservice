@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate
+namespace SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate
 {
     public class GetLatestAccountAgreementTemplateRequest : IAsyncRequest<GetLatestAccountAgreementResponse>
     {

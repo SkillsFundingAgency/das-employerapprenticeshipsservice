@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Validators;
+using SFA.DAS.EAS.Web.Validators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
+namespace SFA.DAS.EAS.Web.Models
 {
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel

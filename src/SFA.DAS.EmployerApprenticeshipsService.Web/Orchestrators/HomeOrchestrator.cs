@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Application.Queries.GetUsers;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class HomeOrchestrator : IOrchestrator
     {

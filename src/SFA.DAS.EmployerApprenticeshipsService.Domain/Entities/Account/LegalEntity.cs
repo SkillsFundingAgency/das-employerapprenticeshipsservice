@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account
+namespace SFA.DAS.EAS.Domain.Entities.Account
 {
     public class LegalEntity
     {

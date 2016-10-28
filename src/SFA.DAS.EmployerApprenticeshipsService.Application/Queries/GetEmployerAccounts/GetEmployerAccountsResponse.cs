@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccounts
+namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccounts
 {
     public class GetEmployerAccountsResponse
     {

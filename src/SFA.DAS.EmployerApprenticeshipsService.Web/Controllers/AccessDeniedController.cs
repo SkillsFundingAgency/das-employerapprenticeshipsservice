@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
+namespace SFA.DAS.EAS.Web.Controllers
 {
     public class AccessDeniedController : Controller
     {

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount
+namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
 {
     public class GetEmployerAccountValidator : IValidator<GetEmployerAccountQuery>
     {

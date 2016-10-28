@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+﻿using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
+namespace SFA.DAS.EAS.Domain.Models.HmrcLevy
 {
     public class EmployerLevyData
     {

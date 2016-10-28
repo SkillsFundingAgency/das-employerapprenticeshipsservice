@@ -2,9 +2,9 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data
 {
     public abstract class BaseRepository
     {

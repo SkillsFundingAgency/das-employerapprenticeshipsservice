@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole
+namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
 {
     public class ChangeTeamMemberRoleCommand : IAsyncRequest
     {

@@ -5,20 +5,20 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
-using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
+using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
+using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.FileSystem;
 
-namespace SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclarationTests
+namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDeclarationTests
 {
     public class WhenHandlingTheTask
     {

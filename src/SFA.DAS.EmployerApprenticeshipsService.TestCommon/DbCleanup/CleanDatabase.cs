@@ -1,10 +1,10 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup
+namespace SFA.DAS.EAS.TestCommon.DbCleanup
 {
     public class CleanDatabase : BaseRepository, ICleanDatabase
     {

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Account.Api.Client.Dtos
+﻿namespace SFA.DAS.EAS.Account.Api.Client.Dtos
 {
     public class AccountWithBalanceViewModel
     {

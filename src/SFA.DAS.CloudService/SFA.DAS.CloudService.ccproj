@@ -42,50 +42,47 @@
   <ItemGroup>
     <Folder Include="Profiles" />
     <Folder Include="Configuration" />
-    <Folder Include="SFA.DAS.Account.ApiContent" />
+    <Folder Include="SFA.DAS.EAS.Account.ApiContent" />
     <Folder Include="SFA.DAS.EAS.Notification.WorkerContent" />
-    <Folder Include="SFA.DAS.EmployerApprenticeshipsService.WebContent" />
-    <Folder Include="SFA.DAS.LevyAggregationProvider.WorkerContent\" />
-    <Folder Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\" />
+    <Folder Include="SFA.DAS.EAS.WebContent" />
+    <Folder Include="SFA.DAS.EAS.LevyAggregationProvider.WorkerContent" />
+    <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
   </ItemGroup>
   <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.Account.ApiContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.Notification.WorkerContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EmployerApprenticeshipsService.WebContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.LevyAggregationProvider.WorkerContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyAggregationProvider.WorkerContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj">
-      <Name>SFA.DAS.Account.Api</Name>
+    <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj">
+      <Name>SFA.DAS.EAS.Account.Api</Name>
       <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
-      <RoleName>SFA.DAS.Account.Api</RoleName>
+      <RoleName>SFA.DAS.EAS.Account.Api</RoleName>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj">
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Web</Name>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EAS.Web.csproj">
+      <Name>SFA.DAS.EAS.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
-      <RoleName>SFA.DAS.EmployerApprenticeshipsService.Web</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+      <RoleName>SFA.DAS.EAS.Web</RoleName>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.LevyAggregationProvider.Worker.csproj">
-      <Name>SFA.DAS.LevyAggregationProvider.Worker</Name>
+    <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.EAS.LevyAggregationProvider.Worker.csproj">
+      <Name>SFA.DAS.EAS.LevyAggregationProvider.Worker</Name>
       <Project>{c1ab252e-8041-41cc-b192-cf543f4aeb13}</Project>
       <Private>True</Private>
       <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.LevyAggregationProvider.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+      <RoleName>SFA.DAS.EAS.LevyAggregationProvider.Worker</RoleName>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj">
-      <Name>SFA.DAS.LevyDeclarationProvider.Worker</Name>
+    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
+      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
       <Project>{386adb6f-ce56-4afd-b762-de93e74afd41}</Project>
       <Private>True</Private>
       <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.LevyDeclarationProvider.Worker</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+      <RoleName>SFA.DAS.EAS.LevyDeclarationProvider.Worker</RoleName>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

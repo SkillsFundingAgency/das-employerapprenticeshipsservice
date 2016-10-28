@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount
+namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
     public class RemovePayeFromAccountCommandValidator : IValidator<RemovePayeFromAccountCommand>
     {

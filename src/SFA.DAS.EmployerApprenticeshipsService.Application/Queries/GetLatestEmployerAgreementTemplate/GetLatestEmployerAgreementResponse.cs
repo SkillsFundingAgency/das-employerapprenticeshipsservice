@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEmployerAgreementTemplate
+namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
 {
     public class GetLatestEmployerAgreementResponse
     {

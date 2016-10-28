@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class HmrcService : IHmrcService
     {

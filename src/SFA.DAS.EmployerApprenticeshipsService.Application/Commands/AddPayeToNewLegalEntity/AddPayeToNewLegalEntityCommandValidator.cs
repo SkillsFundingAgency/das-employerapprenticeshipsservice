@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
 {
     public class AddPayeToNewLegalEntityCommandValidator : IValidator<AddPayeToNewLegalEntityCommand>
     {

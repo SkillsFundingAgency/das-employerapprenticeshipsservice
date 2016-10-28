@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+﻿namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public interface IOrchestrator
     {

@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUserInvitations
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
 {
     public class WhenIRequestHowManyInvitationsIHave
     {

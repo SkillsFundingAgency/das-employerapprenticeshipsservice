@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web
+namespace SFA.DAS.EAS.Web
 {
     public class FilterConfig
     {

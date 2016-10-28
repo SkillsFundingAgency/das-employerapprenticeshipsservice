@@ -5,7 +5,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public abstract class AzureServiceBase<T>
     {

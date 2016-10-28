@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle
+﻿namespace SFA.DAS.EAS.Domain.Models.FeatureToggle
 {
     public class FeatureToggleItem
     {
