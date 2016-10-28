@@ -159,7 +159,6 @@
       <DependentUpon>app.config</DependentUpon>
     </Content>
     <None Include="packages.config" />
-    <None Include="Properties\PublishProfiles\SFA.DAS.EmployerApprenticeshipsServicePublishProfile.pubxml" />
     <None Include="Properties\webjob-publish-settings.json" />
   </ItemGroup>
   <ItemGroup>
