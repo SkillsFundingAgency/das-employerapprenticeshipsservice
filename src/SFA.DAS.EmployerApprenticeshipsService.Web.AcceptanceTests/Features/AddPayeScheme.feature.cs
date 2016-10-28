@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Features
+namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
 {
     using TechTalk.SpecFlow;
     

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse
+namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse
 {
     public class GetPayeSchemeInUseQuery : IAsyncRequest<GetPayeSchemeInUseResponse>
     {

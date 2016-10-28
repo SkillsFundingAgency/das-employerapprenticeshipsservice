@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using IdentityServer3.Core.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Authentication
+namespace SFA.DAS.EAS.Web.Authentication
 {
     public interface IOwinWrapper
     {

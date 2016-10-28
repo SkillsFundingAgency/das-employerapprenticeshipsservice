@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
-  <Role name="SFA.DAS.EmployerApprenticeshipsService.Web">
+  <Role name="SFA.DAS.EAS.Web">
     <Instances count="2" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -16,7 +16,7 @@
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyDeclarationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
     <Instances count="2" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -30,7 +30,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyAggregationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyAggregationProvider.Worker">
     <Instances count="2" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
@@ -39,24 +39,24 @@
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
-      <Setting name="EventHubName" value="__EventHubName__" />    
+      <Setting name="EventHubName" value="__EventHubName__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.Account.Api">
+  <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
-    <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__"/>
-      <Setting name="ApiIssuer" value="__ApiIssuer__"/>
-      <Setting name="ApiAudiences" value="__ApiAudiences__"/>
+      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__" />
+      <Setting name="ApiIssuer" value="__ApiIssuer__" />
+      <Setting name="ApiAudiences" value="__ApiAudiences__" />
     </ConfigurationSettings>
   </Role>
   <NetworkConfiguration>

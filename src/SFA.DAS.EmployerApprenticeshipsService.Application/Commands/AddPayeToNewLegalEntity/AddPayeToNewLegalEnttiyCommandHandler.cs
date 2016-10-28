@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
 {
     public class AddPayeToNewLegalEnttiyCommandHandler : AsyncRequestHandler<AddPayeToNewLegalEntityCommand>
     {

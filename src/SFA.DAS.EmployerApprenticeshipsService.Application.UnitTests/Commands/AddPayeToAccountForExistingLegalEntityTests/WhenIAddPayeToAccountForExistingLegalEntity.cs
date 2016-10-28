@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AddPayeToAccountForExistingLegalEntityTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountForExistingLegalEntityTests
 {
     [TestFixture]
     public class WhenIAddPayeToAccountForExistingLegalEntity

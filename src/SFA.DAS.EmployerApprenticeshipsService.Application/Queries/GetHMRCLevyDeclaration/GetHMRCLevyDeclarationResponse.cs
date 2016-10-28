@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+﻿using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration
+namespace SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration
 {
     public class GetHMRCLevyDeclarationResponse
     {

@@ -3,15 +3,15 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
 using StructureMap;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
+namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 {
     public class WhenAddingMessaging
     {

@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLegalEntityAgreement
+namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement
 {
     public class GetLegalEntityAgreementResponse
     {

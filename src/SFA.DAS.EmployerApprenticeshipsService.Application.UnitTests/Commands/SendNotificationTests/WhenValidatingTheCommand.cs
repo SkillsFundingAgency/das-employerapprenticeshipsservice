@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification;
+using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.Notifications.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.SendNotificationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.SendNotificationTests
 {
     public class WhenValidatingTheCommand
     {

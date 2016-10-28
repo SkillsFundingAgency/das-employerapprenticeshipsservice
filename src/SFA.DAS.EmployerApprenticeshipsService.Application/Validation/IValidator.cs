@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Validation
+namespace SFA.DAS.EAS.Application.Validation
 {
     public interface IValidator<T>
     {

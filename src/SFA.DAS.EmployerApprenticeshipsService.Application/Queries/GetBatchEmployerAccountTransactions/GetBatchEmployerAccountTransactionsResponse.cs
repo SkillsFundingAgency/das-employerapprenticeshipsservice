@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions
+namespace SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions
 {
     public class GetBatchEmployerAccountTransactionsResponse
     {

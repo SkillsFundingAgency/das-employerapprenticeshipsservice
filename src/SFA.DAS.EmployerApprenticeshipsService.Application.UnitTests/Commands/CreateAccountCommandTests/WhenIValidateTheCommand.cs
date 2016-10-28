@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.CreateAccount;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.CreateAccountCommandTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 {
     public class WhenIValidateTheCommand
     {

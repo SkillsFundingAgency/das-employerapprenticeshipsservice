@@ -4,19 +4,17 @@ using System.Net;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.InviteMember
+namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
 {
     [Binding, Explicit]
     public class InviteMemberSteps

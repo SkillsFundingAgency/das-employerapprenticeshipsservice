@@ -1,4 +1,4 @@
-﻿namespace System
+﻿namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class StringExtensions
     {

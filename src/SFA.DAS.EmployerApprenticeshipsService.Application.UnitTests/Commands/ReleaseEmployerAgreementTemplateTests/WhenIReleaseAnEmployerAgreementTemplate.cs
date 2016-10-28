@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ReleaseEmployerAgreementTemplate;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.ReleaseEmployerAgreementTemplate;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ReleaseEmployerAgreementTemplateTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.ReleaseEmployerAgreementTemplateTests
 {
     [TestFixture]
     public class WhenIReleaseAnEmployerAgreementTemplate

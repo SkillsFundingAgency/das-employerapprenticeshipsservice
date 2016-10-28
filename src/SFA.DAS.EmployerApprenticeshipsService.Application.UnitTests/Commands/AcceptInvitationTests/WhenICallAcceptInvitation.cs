@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.TimeProvider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.AcceptInvitationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
 {
     [TestFixture]
     public class WhenICallAcceptInvitation

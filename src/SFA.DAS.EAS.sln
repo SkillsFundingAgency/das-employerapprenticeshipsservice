@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EmployerApprenticeshipsService.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web", "SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EAS.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A009A248-48A7-4CD5-BF80-8EBD092D6FD4}"
 	ProjectSection(SolutionItems) = preProject
@@ -13,31 +13,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{331690B3-1DA8-408E-B6A7-A3237310E6AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.csproj", "{BED31C59-63BE-4F2A-A814-4FF848E3F440}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests\SFA.DAS.EAS.Web.UnitTests.csproj", "{BED31C59-63BE-4F2A-A814-4FF848E3F440}"
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.CloudService", "SFA.DAS.CloudService\SFA.DAS.CloudService.ccproj", "{97F77CF7-A13E-4441-8081-F941AC1B8BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Infrastructure", "SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EmployerApprenticeshipsService.Infrastructure.csproj", "{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Infrastructure", "SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj", "{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain", "SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj", "{EC415CDA-9294-4967-BD27-AA900985427D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Domain", "SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj", "{EC415CDA-9294-4967-BD27-AA900985427D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EAS.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Account.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EmployerApprenticeshipsService.Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Account.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EAS.Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyDeclarationProvider.Worker.UnitTests", "SFA.DAS.LevyDeclarationProvider.Worker.UnitTests\SFA.DAS.LevyDeclarationProvider.Worker.UnitTests.csproj", "{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests", "SFA.DAS.LevyDeclarationProvider.Worker.UnitTests\SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.csproj", "{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker", "SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.LevyAggregationProvider.Worker.csproj", "{C1AB252E-8041-41CC-B192-CF543F4AEB13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAggregationProvider.Worker", "SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.EAS.LevyAggregationProvider.Worker.csproj", "{C1AB252E-8041-41CC-B192-CF543F4AEB13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.UnitTests", "SFA.DAS.LevyAggregationProvider.Worker.UnitTests\SFA.DAS.LevyAggregationProvider.Worker.UnitTests.csproj", "{88E7DB8E-7A95-4EA1-8CDF-7406188D642D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests", "SFA.DAS.LevyAggregationProvider.Worker.UnitTests\SFA.DAS.EAS.LevyAggregationProvider.Worker.UnitTests.csproj", "{88E7DB8E-7A95-4EA1-8CDF-7406188D642D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.TestCommon", "SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj", "{05D7C094-E2C9-4CCD-B0D7-85D263254B26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.TestCommon", "SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj", "{05D7C094-E2C9-4CCD-B0D7-85D263254B26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Application", "SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj", "{0226F97A-704E-49B0-A100-B75FEEC9C8AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests", "SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests\SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.csproj", "{456CA894-116B-4708-A5AB-4B81FAAA1FAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web.AcceptanceTests", "SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests\SFA.DAS.EAS.Web.AcceptanceTests.csproj", "{456CA894-116B-4708-A5AB-4B81FAAA1FAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Infrastructure.UnitTests", "SFA.DAS.EAS.Infrastructure.UnitTests\SFA.DAS.EAS.Infrastructure.UnitTests.csproj", "{8A2A2059-CB81-4336-8D08-BDCB37901B96}"
 EndProject
@@ -48,17 +48,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE
 		localhost.pfx = localhost.pfx
 	EndProjectSection
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EmployerApprenticeshipsService.Levy.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EmployerApprenticeshipsService.Levy.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Levy.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EAS.Levy.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Domain.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests\SFA.DAS.EAS.Domain.UnitTests.csproj", "{2CD30C50-6D64-4880-ACDC-D14E6BDF4462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api", "SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj", "{40190475-1220-4CF8-8A60-223FACAFEDA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client", "SFA.DAS.Account.Api.Client\SFA.DAS.Account.Api.Client.csproj", "{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api.Client", "SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj", "{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Account.Api.Client.UnitTests", "SFA.DAS.Account.Api.Client.UnitTests\SFA.DAS.Account.Api.Client.UnitTests.csproj", "{47A8FD28-BC68-4938-A508-95482FB98BA5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api.Client.UnitTests", "SFA.DAS.Account.Api.Client.UnitTests\SFA.DAS.EAS.Account.Api.Client.UnitTests.csproj", "{47A8FD28-BC68-4938-A508-95482FB98BA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAccountUpdater.WebJob", "SFA.DAS.EAS.LevyAccountUpdater.WebJob\SFA.DAS.EAS.LevyAccountUpdater.WebJob.csproj", "{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAccountUpdater.UnitTests", "SFA.DAS.EAS.LevyAccountUpdater.UnitTests\SFA.DAS.EAS.LevyAccountUpdater.UnitTests.csproj", "{604152AB-9AB4-4A97-9A09-131F6C040CFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -151,6 +155,14 @@ Global
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47A8FD28-BC68-4938-A508-95482FB98BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7220FB76-1DDB-4F58-9D67-F073CD6BBA02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -166,5 +178,6 @@ Global
 		{093678BE-45CD-4EC9-9EB0-3665C74E0E38} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{2CD30C50-6D64-4880-ACDC-D14E6BDF4462} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{47A8FD28-BC68-4938-A508-95482FB98BA5} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{604152AB-9AB4-4A97-9A09-131F6C040CFD} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

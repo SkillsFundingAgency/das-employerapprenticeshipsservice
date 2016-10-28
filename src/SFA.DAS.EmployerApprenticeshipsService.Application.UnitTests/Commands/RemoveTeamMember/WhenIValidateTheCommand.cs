@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember;
+using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.RemoveTeamMember
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
 {
     public class WhenIValidateTheCommand
     {

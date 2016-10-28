@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.Steps.LevyAggregation
+namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests.Steps.LevyAggregation
 {
     [Binding]
     public class LevyAggregationSteps

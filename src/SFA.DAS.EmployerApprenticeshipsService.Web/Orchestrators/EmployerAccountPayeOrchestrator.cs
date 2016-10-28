@@ -5,20 +5,20 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountPayeSchemes;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetMember;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
+using SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetMember;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountPayeOrchestrator : EmployerVerificationOrchestratorBase
     {

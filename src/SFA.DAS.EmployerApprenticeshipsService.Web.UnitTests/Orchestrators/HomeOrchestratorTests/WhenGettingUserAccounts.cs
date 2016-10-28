@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserAccounts;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.HomeOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
 {
     public class WhenGettingUserAccounts
     {

@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
+namespace SFA.DAS.EAS.Domain.Configuration
 {
     public enum EmailTemplateType
     {

@@ -4,20 +4,20 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLegalEntity;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SignEmployerAgreement;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAgreement;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestEmployerAgreementTemplate;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLegalEntityAgreement;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Web.Models;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
+namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAgreementOrchestrator
     {

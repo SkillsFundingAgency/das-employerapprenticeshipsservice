@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemovePayeFromAccount
+namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
 {
     public class RemovePayeFromAccountCommand : IAsyncRequest
     {

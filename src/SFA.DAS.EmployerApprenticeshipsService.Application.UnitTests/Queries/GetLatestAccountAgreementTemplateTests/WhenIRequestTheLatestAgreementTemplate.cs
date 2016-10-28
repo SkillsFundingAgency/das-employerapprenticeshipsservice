@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetLatestAccountAgreementTemplateTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLatestAccountAgreementTemplateTests
 {
     public class WhenIRequestTheLatestAgreementTemplate
     {

@@ -3,9 +3,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship;
+using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ApproveApprenticeshipCommandTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipCommandTests
 {
     [TestFixture]
     public sealed class WhenApprovingApprenticeship

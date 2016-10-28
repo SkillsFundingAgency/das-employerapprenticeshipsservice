@@ -3,16 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
+using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
     public class WhenIReceiveTheCommand
     {

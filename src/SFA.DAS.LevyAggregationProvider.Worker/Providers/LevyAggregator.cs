@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.LevyAggregationProvider.Worker.Providers
+namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.Providers
 {
     public class LevyAggregator
     {

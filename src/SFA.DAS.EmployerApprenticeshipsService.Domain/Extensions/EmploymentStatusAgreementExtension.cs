@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Extensions
+namespace SFA.DAS.EAS.Domain.Extensions
 {
     public static class EmploymentStatusAgreementExtension
     {

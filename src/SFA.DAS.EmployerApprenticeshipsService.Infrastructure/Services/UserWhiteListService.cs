@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Azure;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.WhileList;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.WhileList;
+using SFA.DAS.EAS.Infrastructure.Caching;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services
+namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class UserWhiteListService : AzureServiceBase<UserWhiteListLookUp>, IUserWhiteList
     {

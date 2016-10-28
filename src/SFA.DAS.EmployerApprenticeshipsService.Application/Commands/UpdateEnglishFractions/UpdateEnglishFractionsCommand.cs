@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions
+namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 {
     public class UpdateEnglishFractionsCommand : IAsyncRequest
     {

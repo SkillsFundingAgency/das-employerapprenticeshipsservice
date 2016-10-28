@@ -6,13 +6,13 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.ViewModels;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
 {
     public class WhenGettingAllInvitations
     {

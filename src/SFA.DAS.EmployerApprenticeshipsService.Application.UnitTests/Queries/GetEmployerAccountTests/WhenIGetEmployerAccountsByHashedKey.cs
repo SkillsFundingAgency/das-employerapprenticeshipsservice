@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEmployerAccountTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
 {
     public class WhenIGetEmployerAccountsByHashedKey : QueryBaseTest<GetEmployerAccountHashedHandler,GetEmployerAccountHashedQuery, GetEmployerAccountResponse>
     {

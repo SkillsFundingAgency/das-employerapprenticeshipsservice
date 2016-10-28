@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Messages;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
+using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAccountCreatedNotification
+namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAccountCreatedNotification
 {
     public class CreateEmployerAccountCreatedNotificationCommandHandler : AsyncRequestHandler<CreateEmployerAccountCreatedNotificationCommand>
     {

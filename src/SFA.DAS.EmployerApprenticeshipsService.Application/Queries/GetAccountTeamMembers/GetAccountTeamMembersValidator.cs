@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountTeamMembers
+namespace SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers
 {
     public class GetAccountTeamMembersValidator : IValidator<GetAccountTeamMembersQuery>
     {

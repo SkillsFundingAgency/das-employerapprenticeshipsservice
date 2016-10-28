@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.DbCleanup;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
+﻿using Moq;
+using SFA.DAS.EAS.TestCommon.DbCleanup;
+using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.CommonSteps
+namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 {
     [Binding]
     public class GlobalTestSteps

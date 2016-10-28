@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetPayeSchemeInUseTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeInUseTests
 {
     public class WhenIQueryExistingSchemes : QueryBaseTest<GetPayeSchemeInUseHandler, GetPayeSchemeInUseQuery, GetPayeSchemeInUseResponse>
     {

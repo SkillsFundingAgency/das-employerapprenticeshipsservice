@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment
+namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
     public sealed class CreateCommitmentCommandHandler : AsyncRequestHandler<CreateCommitmentCommand>
     {

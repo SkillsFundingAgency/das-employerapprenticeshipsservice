@@ -7,8 +7,8 @@
     <ProjectGuid>{8EFAE9BB-8F29-4E3D-9EA4-C1F3D07E78D5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.LevyDeclarationProvider.Worker.UnitTests</RootNamespace>
-    <AssemblyName>SFA.DAS.LevyDeclarationProvider.Worker.UnitTests</AssemblyName>
+    <RootNamespace>SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -76,21 +76,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EmployerApprenticeshipsService.Application.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
+      <Name>SFA.DAS.EAS.Application</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EmployerApprenticeshipsService.Domain.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EmployerApprenticeshipsService.TestCommon.csproj">
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.TestCommon</Name>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.LevyDeclarationProvider.Worker.csproj">
+    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
       <Project>{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}</Project>
-      <Name>SFA.DAS.LevyDeclarationProvider.Worker</Name>
+      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

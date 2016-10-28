@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
     public class WhenValidatingTheRequest
     {

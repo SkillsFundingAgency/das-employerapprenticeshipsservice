@@ -2,9 +2,9 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.EAS.Application.Queries.GetEmployerSchemes;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasAccountServiceTests
 {

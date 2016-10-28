@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AcceptInvitation
+namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
 {
     public class AcceptInvitationCommand : IAsyncRequest
     {

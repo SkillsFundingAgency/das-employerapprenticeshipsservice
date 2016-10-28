@@ -6,7 +6,7 @@ using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SubmitCommitment
+namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 {
     public sealed class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {

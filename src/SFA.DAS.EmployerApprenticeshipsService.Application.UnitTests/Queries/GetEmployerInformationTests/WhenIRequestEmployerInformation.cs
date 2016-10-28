@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetEmployerInformationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
 {
     [TestFixture]
     public class WhenIRequestEmployerInformation

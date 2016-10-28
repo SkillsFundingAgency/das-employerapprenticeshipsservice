@@ -5,15 +5,14 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHmrcEmployerInformation;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
     public class WhenRequestingEmployerInformation
     {

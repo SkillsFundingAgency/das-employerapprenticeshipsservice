@@ -1,7 +1,7 @@
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution {
-    using System.Web;
-    using StructureMap.Web.Pipeline;
+using System.Web;
+using StructureMap.Web.Pipeline;
 
+namespace SFA.DAS.EAS.Web.DependencyResolution {
     public class StructureMapScopeModule : IHttpModule {
         #region Public Methods and Operators
 

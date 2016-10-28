@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
 {
     public class AddPayeToNewLegalEntityCommand : IAsyncRequest
     {

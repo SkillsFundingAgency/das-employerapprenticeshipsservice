@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateEmployerAgreementTemplate
+namespace SFA.DAS.EAS.Application.Commands.CreateEmployerAgreementTemplate
 {
     public class CreateEmployerAgreementTemplateCommandHandler : AsyncRequestHandler<CreateEmployerAgreementTemplateCommand>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy
+namespace SFA.DAS.EAS.Domain.Models.Levy
 {
     public class LevyDeclarationSourceDataItem
     {

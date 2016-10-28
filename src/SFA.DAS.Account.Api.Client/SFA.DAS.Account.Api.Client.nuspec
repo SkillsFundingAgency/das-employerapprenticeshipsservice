@@ -18,6 +18,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\SFA.DAS.Account.Api.Client.dll" target="lib\net45\SFA.DAS.Account.Api.Client.dll" />
+    <file src="bin\Release\SFA.DAS.EAS.Account.Api.Client.dll" target="lib\net45\SFA.DAS.EAS.Account.Api.Client.dll" />
   </files>
 </package>
