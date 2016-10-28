@@ -97,6 +97,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         {
             var providerId = int.Parse(viewModel.ProviderId);
 
+            // The api returns a list but there should only ever be one per ukprn.
             var providers = await _employerCommitmentsOrchestrator.GetProvider(providerId);
 
             return View(new ConfirmProviderView
@@ -149,7 +150,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
             var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("SubmitCommitmentEntry", new { hashedCommitmentId = hashedCommitmentId });
+            if (selectedRoute == "employer")
+            {
+                return RedirectToAction("Details", new { hashedCommitmentId = hashedCommitmentId });
+            }
+            else
+            {
+                return RedirectToAction("SubmitCommitmentEntry", new { hashedCommitmentId = hashedCommitmentId });
+            }
         }
 
         [HttpGet]
