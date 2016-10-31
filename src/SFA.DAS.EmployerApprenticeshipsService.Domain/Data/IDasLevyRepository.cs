@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Domain.Data
        
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
         Task<DasDeclaration> GetLastSubmissionForScheme(string empRef);
+        Task ProcessDeclarations();
     }
 }

@@ -88,6 +88,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.SingleOrDefault();
         }
+
+        public Task ProcessDeclarations()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
 

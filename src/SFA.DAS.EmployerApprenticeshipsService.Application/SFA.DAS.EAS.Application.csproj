@@ -175,6 +175,7 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
+    <Compile Include="Events\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessDeclarationsEvent.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
