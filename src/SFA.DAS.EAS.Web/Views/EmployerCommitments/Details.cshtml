@@ -36,7 +36,7 @@
         }
         else
         {
-            <table class="tableResponsive">
+            <table class="tableResponsive viewCommitment">
             <thead>
                 <tr>
 
@@ -52,15 +52,15 @@
                     <tr>
                         <td>
         
-                            @apprenticeship.ApprenticeshipName
+                           @apprenticeship.ApprenticeshipName &nbsp; 
                         </td>
                         <td>
                           
-                            @apprenticeship.TrainingName
+                            @apprenticeship.TrainingName &nbsp;
                         </td>
                         <td>
                             
-                            @apprenticeship.Status.GetDescription()
+                            @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
                                 <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })">View</a>                   
