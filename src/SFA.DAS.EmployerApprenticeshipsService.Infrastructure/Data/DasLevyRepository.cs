@@ -89,9 +89,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public Task ProcessDeclarations()
+        public async Task ProcessDeclarations()
         {
-            throw new System.NotImplementedException();
+            await WithConnection(async c => await c.ExecuteAsync(
+                sql: "[levy].[ProcessDeclarationsTransactions]",
+                param: null,
+                commandType: CommandType.StoredProcedure));
         }
     }
 }
