@@ -1,4 +1,8 @@
-﻿<div class="grid-row">
+﻿@using SFA.DAS.EmployerApprenticeshipsService.Web.Models
+
+@model SubmitCommitmentModel
+
+<div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Finished editing</h1>
         <div>
@@ -13,15 +17,15 @@
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-group">
                     <label class="block-label" for="radio-1">
-                        <input id="radio-1" type="radio" name="radio-group" value="send-amend">
+                        <input id="radio-1" type="radio" name="saveOrSend" value="send-amend">
                         <span id="changeOne">Send to provider to amend or add details</span>
                     </label>
                     <label class="block-label" for="radio-2">
-                        <input id="radio-2" type="radio" name="radio-group" value="send-approve">
+                        <input id="radio-2" type="radio" name="saveOrSend" value="send-approve">
                         <span id="changeTwo">Approve and send to provider</span>
                     </label>
                     <label class="block-label" for="radio-3">
-                        <input id="radio-3" type="radio" name="radio-group" value="save-no-send">
+                        <input id="radio-3" type="radio" name="saveOrSend" value="save-no-send">
                         <span id="changeThree">Save but do not send to provider</span>
                     </label>
                 </div>

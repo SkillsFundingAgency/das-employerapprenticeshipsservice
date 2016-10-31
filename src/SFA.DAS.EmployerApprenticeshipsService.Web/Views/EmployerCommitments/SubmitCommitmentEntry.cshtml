@@ -32,6 +32,7 @@
                           cols="40" rows="10"
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
                 </div>
+                <input type="hidden" id="saveOrSend" name="saveOrSend" value="@Model.SaveOrSend" />
                 <button type="submit" class="button">Send request to provider</button>
             </form>
         </div>

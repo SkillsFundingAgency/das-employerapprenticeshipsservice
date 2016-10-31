@@ -171,18 +171,29 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/FinishedEditing")]
-        public ActionResult FinishedEditing(string hashedAccountId)
+        public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            return View();
+            var model = new SubmitCommitmentModel
+            {
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [Route("{hashedCommitmentId}/FinishedEditing")]
-        public ActionResult FinishedEditingChoice(string hashedAccountId)
+        public ActionResult FinishedEditingChoice(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
-            return RedirectToAction("SubmitCommitmentEntry");
-        }
+            if (saveOrSend == "save-no-send")
+            {
+                return RedirectToAction("Cohorts", new {hashedAccountId = hashedAccountId});
+            }
 
+            return RedirectToAction("SubmitCommitmentEntry", new {hashedAccountId = hashedAccountId, hashedCommitmentId = hashedAccountId, saveOrSend = saveOrSend});
+        }
+        
         [HttpGet]
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
         public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -202,7 +213,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId)
+        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             // TODO: LWA Implement 
             var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
@@ -214,7 +225,8 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
                     HashedAccountId = hashedAccountId,
                     HashedCommitmentId = hashedCommitmentId
                 },
-                Commitment = commitment
+                Commitment = commitment,
+                SaveOrSend = saveOrSend
             };
 
             return View(model);
@@ -223,10 +235,10 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Submit")]
-        public ActionResult SubmitCommitment(SubmitCommitmentModel model)
+        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model, string saveOrSend)
         {
             // TODO: LWA Implement
-            //await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message, saveOrSend);
 
             return RedirectToAction("Acknowledgement");
         }

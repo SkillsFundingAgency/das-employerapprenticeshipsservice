@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Models
     {
         public CommitmentViewModel Commitment { get; set; }
         public SubmitCommitmentModel SubmitCommitmentModel { get; set; }
+        public string SaveOrSend { get; set; }
     }
 }

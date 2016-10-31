@@ -196,13 +196,14 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message)
+        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message, string saveOrSend)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
                 CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
-                Message = message
+                Message = message,
+                SaveOrSend = saveOrSend
             });
         }
         
