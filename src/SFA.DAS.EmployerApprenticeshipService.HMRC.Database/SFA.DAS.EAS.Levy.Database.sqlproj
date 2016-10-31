@@ -79,6 +79,7 @@
     <Build Include="StoredProcedures\GetLastLevyDeclarations_ByEmpRef.sql" />
     <Build Include="Tables\TransactionLine.sql" />
     <Build Include="StoredProcedures\ProcessDeclarationsTransactions.sql" />
+    <Build Include="StoredProcedures\GetTransactionLines_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

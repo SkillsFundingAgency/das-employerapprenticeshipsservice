@@ -55,8 +55,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        
-
         public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
         {
             var result = await WithConnection(async c =>
@@ -95,6 +93,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 sql: "[levy].[ProcessDeclarationsTransactions]",
                 param: null,
                 commandType: CommandType.StoredProcedure));
+        }
+
+        public async Task<List<TransactionLine>> GetTransactions(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<TransactionLine>(
+                    sql: "[levy].[GetTransactionLines_ByAccountId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
         }
     }
 }
