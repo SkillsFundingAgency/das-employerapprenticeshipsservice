@@ -624,10 +624,14 @@ only screen and (max-width: 760px),
 	/*
 	Label for the data
 	*/
-	.tableResponsive td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; }
-	.tableResponsive td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
-	.tableResponsive td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px;}
+	.viewCommitment td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; min-height:30px; }
+	.viewCommitment td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
+	.viewCommitment td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px;}
 	
+    .cohort td:nth-of-type(1):before { content: "Provider"; font-weight:bold; margin-top:5px; }
+	.cohort td:nth-of-type(2):before { content: "Legal Entity"; font-weight:bold; margin-top:5px; }
+	.cohort td:nth-of-type(3):before { content: "Name"; font-weight:bold; margin-top:5px;}
+
     /*finished editing button spacing*/
     .column-one-third .finishEditingBtn{margin-top:0.25em;}
 
