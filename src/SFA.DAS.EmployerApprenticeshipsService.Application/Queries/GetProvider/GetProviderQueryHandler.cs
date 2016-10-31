@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Queries.GetProvider;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider
 {

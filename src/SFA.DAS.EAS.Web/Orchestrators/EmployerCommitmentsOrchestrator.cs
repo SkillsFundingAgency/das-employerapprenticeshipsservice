@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetCommitments;
+using SFA.DAS.EAS.Application.Queries.GetProvider;
 using SFA.DAS.EAS.Application.Queries.GetProviders;
 using SFA.DAS.EAS.Application.Queries.GetStandards;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
@@ -21,6 +22,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+namespace SFA.DAS.EAS.Domain
 {
     public class FrameworksView
     {

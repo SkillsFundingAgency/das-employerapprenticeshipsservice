@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment
+﻿namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
     public class CreateCommitmentCommandResponse
     {

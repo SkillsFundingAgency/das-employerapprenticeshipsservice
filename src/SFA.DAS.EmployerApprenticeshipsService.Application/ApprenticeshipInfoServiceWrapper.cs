@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using Framework = SFA.DAS.EmployerApprenticeshipsService.Domain.Framework;
-using Provider = SFA.DAS.EmployerApprenticeshipsService.Domain.Provider;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
+using Framework = SFA.DAS.EAS.Domain.Framework;
+using Provider = SFA.DAS.EAS.Domain.Provider;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application
+namespace SFA.DAS.EAS.Application
 {
     public class ApprenticeshipInfoServiceWrapper : IApprenticeshipInfoServiceWrapper
     {
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application
             return new StandardsView
             {
                 CreationDate = DateTime.UtcNow,
-                Standards = standards.Select(x => new Domain.Standard
+                Standards = standards.Select(x => new EAS.Domain.Standard
                 {
                     Id = int.Parse(x.Id),
                     Level = x.Level,

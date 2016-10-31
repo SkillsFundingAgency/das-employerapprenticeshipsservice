@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider
+namespace SFA.DAS.EAS.Application.Queries.GetProvider
 {
     public class GetProviderQueryResponse
     {
