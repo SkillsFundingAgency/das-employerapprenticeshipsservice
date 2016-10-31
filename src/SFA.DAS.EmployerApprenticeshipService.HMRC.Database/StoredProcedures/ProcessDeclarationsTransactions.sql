@@ -22,8 +22,7 @@ select
 	left join 
 		[levy].[GetLevyDeclarations] y on y.lastsubmission = 1 and y.id = x.id
 	where
-	x.EmpRef in (Select Empref from levy.LevyDeclaration where AccountId = 20868)
- 	AND y.LevyDueYTD is not null
+		y.LevyDueYTD is not null
 	
 	
 
@@ -49,6 +48,5 @@ select
 	left join 
 		[levy].[GetLevyDeclarations] y on y.lastsubmission = 1 and y.id = x.id
 	where
-	x.EmpRef in (Select Empref from levy.LevyDeclaration where AccountId = 20868)
- 	AND y.LevyDueYTD is not null
+		y.LevyDueYTD is not null
 	
