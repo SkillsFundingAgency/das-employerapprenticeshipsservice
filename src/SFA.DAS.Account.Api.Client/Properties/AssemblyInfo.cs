@@ -35,5 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-[assembly: InternalsVisibleTo("SFA.DAS.Account.Api.Client.UnitTests")]
+[assembly: InternalsVisibleTo("SFA.DAS.EAS.Account.Api.Client.UnitTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

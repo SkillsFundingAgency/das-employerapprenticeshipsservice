@@ -1,0 +1,46 @@
+﻿@model SFA.DAS.EAS.Web.Models.AddNewPayeScheme
+@{ViewBag.Title = "Choose company";}  
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Choose company</h1>
+        <p>You can choose your existing company to be used for the legal agreement or search for a new one.</p>
+
+
+        <form method="post" action="@Url.Action("ChooseCompany")">
+            
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="HashedId" value="@Model.HashedId" />
+            <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />
+            <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
+            <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
+
+            @{ int index; }
+            @for (index = 0; index < Model.LegalEntities.Count; index++)
+            {
+                var entity = Model.LegalEntities[index];
+                <div class="form-group">
+                    <label class="block-label">
+                        <input type="radio" name="selectedCompanyId" value="@entity.Id" @(index==0 ? "checked=''" : ""  )/>
+                        <input type="hidden" name="LegalEntities[@index].Id" value="@entity.Id"/>
+                        <input type="hidden" name="LegalEntities[@index].Name" value="@entity.Name"/>
+                        <input type="hidden" name="LegalEntities[@index].Code" value="@entity.Code"/>
+                        <span class="heading-small">@entity.Name</span>
+                    </label>
+                </div>
+            }
+            
+            <div class="form-group">
+                <label class="block-label">
+                    <input type="radio" name="selectedCompanyId" value="-1" />
+                    <input type="hidden" name="LegalEntities[@index].Id" value="-1" />
+                    <input type="hidden" name="LegalEntities[@index].Name" value="new-company" />
+                    <span class="heading-small">Add new legal entity</span>
+                </label>
+            </div>
+
+            <button type="submit" class="button" id="continue">Continue</button>
+        </form>
+        
+
+    </div>
+</div>

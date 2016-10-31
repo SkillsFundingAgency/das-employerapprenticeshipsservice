@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ReleaseEmployerAgreementTemplate
+namespace SFA.DAS.EAS.Application.Commands.ReleaseEmployerAgreementTemplate
 {
     public class ReleaseEmployerAgreementTemplateCommand : IAsyncRequest
     {

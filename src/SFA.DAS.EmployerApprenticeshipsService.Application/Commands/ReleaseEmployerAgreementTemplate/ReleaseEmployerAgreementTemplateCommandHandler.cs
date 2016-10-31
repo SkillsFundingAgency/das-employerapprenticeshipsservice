@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ReleaseEmployerAgreementTemplate
+namespace SFA.DAS.EAS.Application.Commands.ReleaseEmployerAgreementTemplate
 {
     public class ReleaseEmployerAgreementTemplateCommandHandler : AsyncRequestHandler<ReleaseEmployerAgreementTemplateCommand>
     {

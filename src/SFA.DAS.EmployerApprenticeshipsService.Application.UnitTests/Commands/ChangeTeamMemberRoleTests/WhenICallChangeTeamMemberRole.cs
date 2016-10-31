@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ChangeTeamMemberRole;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
 {
     //TODO - lots of CTRL C CTRL V here. Refactor!
     [TestFixture]

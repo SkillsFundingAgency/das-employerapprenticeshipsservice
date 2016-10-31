@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+﻿namespace SFA.DAS.EAS.Domain
 {
     public class Paye
     {

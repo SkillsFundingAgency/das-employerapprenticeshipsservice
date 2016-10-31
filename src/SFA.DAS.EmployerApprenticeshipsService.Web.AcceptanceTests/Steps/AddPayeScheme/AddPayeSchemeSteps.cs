@@ -2,15 +2,15 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.AcceptanceTests.Steps.AddPayeScheme
+namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
 {
     [Binding, Explicit]
     public class AddPayeSchemeSteps

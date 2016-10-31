@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
 {
     public sealed class ApproveApprenticeshipCommand : IAsyncRequest
     {

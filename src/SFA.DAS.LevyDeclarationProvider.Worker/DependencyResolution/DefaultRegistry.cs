@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Services;
 using StructureMap;
 using StructureMap.Graph;
 
-namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
+namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {
@@ -16,8 +16,7 @@ namespace SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution
             
             Scan(scan =>
             {
-                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
-                   a.GetName().Name.StartsWith("SFA.DAS.LevyDeclarationProvider"));
+                scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 

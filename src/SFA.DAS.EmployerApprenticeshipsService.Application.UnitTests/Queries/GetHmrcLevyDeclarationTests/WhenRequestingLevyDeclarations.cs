@@ -3,13 +3,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers;
+using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
 {
     public class WhenRequestingLevyDeclarations
     {

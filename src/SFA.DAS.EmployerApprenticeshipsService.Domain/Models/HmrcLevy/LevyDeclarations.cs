@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy
+namespace SFA.DAS.EAS.Domain.Models.HmrcLevy
 {
     public class LevyDeclarations
     {

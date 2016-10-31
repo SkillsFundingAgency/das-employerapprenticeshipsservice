@@ -6,14 +6,14 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.EmployerAccountControllerTests
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
     class WhenIHaveSelectedAnEmployer : ControllerTestBase
     {

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching
+namespace SFA.DAS.EAS.Infrastructure.Caching
 {
     public interface ICacheProvider
     {

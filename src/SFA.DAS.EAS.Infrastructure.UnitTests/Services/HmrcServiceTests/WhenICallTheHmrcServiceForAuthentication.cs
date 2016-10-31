@@ -4,11 +4,10 @@ using Moq;
 using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcEmployer;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {

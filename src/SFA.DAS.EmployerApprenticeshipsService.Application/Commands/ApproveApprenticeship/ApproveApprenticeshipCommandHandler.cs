@@ -2,9 +2,8 @@
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.Tasks.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.ApproveApprenticeship
+namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
 {
     public sealed class ApproveApprenticeshipCommandHandler : AsyncRequestHandler<ApproveApprenticeshipCommand>
     {

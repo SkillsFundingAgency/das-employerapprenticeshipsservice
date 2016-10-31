@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
+using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateInvitation
+namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 {
     public class CreateInvitationCommand : IAsyncRequest
     {

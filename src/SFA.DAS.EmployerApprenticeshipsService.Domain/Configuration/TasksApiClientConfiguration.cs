@@ -1,6 +1,6 @@
 using SFA.DAS.Tasks.Api.Client.Configuration;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
+namespace SFA.DAS.EAS.Domain.Configuration
 {
     public class TasksApiClientConfiguration : ITasksApiClientConfiguration
     {

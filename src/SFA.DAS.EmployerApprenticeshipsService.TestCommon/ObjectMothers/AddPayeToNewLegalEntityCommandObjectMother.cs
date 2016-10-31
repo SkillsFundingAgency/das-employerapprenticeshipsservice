@@ -1,7 +1,7 @@
 ﻿using System;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeToNewLegalEntity;
+using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
+namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
     public static class AddPayeToNewLegalEntityCommandObjectMother
     {

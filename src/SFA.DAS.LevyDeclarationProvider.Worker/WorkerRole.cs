@@ -3,14 +3,14 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Logging;
-using SFA.DAS.LevyDeclarationProvider.Worker.DependencyResolution;
-using SFA.DAS.LevyDeclarationProvider.Worker.Providers;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution;
+using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using StructureMap;
 
-namespace SFA.DAS.LevyDeclarationProvider.Worker
+namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations;
+using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetUserInvitations
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserInvitations
 {
     public class WhenIValidateTheRequestForNumberOfInvitations
     {

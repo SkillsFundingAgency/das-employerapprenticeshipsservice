@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUsers
+namespace SFA.DAS.EAS.Application.Queries.GetUsers
 {
     public class GetUsersQueryHandler : IAsyncRequestHandler<GetUsersQuery, GetUsersQueryResponse>
     {

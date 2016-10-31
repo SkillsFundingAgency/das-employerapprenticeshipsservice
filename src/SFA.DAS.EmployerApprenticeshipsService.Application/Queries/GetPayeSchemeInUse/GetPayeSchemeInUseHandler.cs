@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetPayeSchemeInUse
+namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse
 {
     public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
     {

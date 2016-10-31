@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.EmployerApprenticeshipsService.Web" vmsize="Small">
+  <WebRole name="SFA.DAS.EAS.Web" vmsize="Small">
     <Runtime executionContext="elevated" />
     <Startup>
       <Task commandLine="AppInit.cmd" executionContext="elevated" taskType="simple" />
@@ -34,7 +34,7 @@
     <Imports>
     </Imports>
   </WebRole>
-  <WorkerRole name="SFA.DAS.LevyDeclarationProvider.Worker" vmsize="small">
+  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -49,7 +49,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.LevyAggregationProvider.Worker" vmsize="small">
+  <WorkerRole name="SFA.DAS.EAS.LevyAggregationProvider.Worker" vmsize="small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -62,8 +62,7 @@
     <Imports>
     </Imports>
   </WorkerRole>
- 
-  <WebRole name="SFA.DAS.Account.Api" vmsize="Small">
+  <WebRole name="SFA.DAS.EAS.Account.Api" vmsize="Small">
     <Sites>
       <Site name="Web">
         <Bindings>

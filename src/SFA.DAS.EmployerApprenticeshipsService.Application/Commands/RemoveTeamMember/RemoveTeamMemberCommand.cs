@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.RemoveTeamMember
+namespace SFA.DAS.EAS.Application.Commands.RemoveTeamMember
 {
     public class RemoveTeamMemberCommand : IAsyncRequest
     {

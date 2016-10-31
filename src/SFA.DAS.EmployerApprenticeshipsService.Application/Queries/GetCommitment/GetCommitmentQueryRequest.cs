@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment
+namespace SFA.DAS.EAS.Application.Queries.GetCommitment
 {
     public class GetCommitmentQueryRequest : IAsyncRequest<GetCommitmentQueryResponse>
     {

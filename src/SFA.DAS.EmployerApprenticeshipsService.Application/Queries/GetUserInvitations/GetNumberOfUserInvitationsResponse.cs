@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUserInvitations
+﻿namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
 {
     public class GetNumberOfUserInvitationsResponse
     {

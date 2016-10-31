@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLatestAccountAgreementTemplate
+namespace SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate
 {
     public class GetLatestAccountAgreementTemplateQueryHandler : 
         IAsyncRequestHandler<GetLatestAccountAgreementTemplateRequest, GetLatestAccountAgreementResponse>

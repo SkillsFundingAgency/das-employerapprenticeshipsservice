@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions
+namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 {
     public class UpdateEnglishFractionsCommandHandler : AsyncRequestHandler<UpdateEnglishFractionsCommand>
     {

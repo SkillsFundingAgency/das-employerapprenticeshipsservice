@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration

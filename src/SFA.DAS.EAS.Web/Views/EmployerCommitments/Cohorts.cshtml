@@ -1,0 +1,113 @@
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
+
+@model OrchestratorResponse<CommitmentListViewModel>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (Model.Data.NumberOfTasks > 0)
+        {
+            <h2 class="heading-medium">Tasks</h2>
+            <p>Any commitments that need your attention are shown below:</p>
+            if (Model.Data.NumberOfTasks == 1)
+            {
+                <p>You have <span class="bold-small">1</span> task to complete.</p>
+            }
+            else
+            {
+                <p>You have <span class="bold-small">@Model.Data.NumberOfTasks.ToString()</span> tasks to complete.</p>
+            }
+
+            if (Model.Data.NumberOfTasks > 0)
+            {
+                <a href="@Url.Action("Index", "EmployerTasks")" class="link">View tasks</a>
+            }
+            <hr />
+        }
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="hgroup">
+            <h1 class="heading-xlarge">Cohorts</h1>
+
+            <p>Any cohorts that are new or in discussion with your training provider are listed below:</p>
+        </div>
+
+        @if (Model.Data.Commitments.Count == 0)
+        {
+            <p class="panel panel-info">
+                There are no cohorts.
+            </p>
+        }
+        else
+        {
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Provider</th>
+                    <th>Legal entity</th>
+                    <th colspan="3">Name</th>
+                 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var commitment in Model.Data.Commitments)
+                {
+                    <tr>
+                        <td>
+                           @commitment.ProviderName
+                         
+                        </td>
+                        <td>
+                            @commitment.LegalEntityName
+                          
+                        </td>
+                        <td>
+                          
+                        @commitment.Name
+                        </td>
+                        <td>
+                          
+                                <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
+                         
+                           
+                        </td>
+                        <td>
+                            @if (commitment.CanBeSubmitted())
+                            {
+                               
+                                    <a href="@Url.Action("SubmitCommitmentEntry", new { hashedCommitmentId = commitment.HashedId })">Submit</a>
+                               
+                               
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        }
+
+
+    </div> <!-- /column-two-thirds-->
+
+    <div class="column-one-third pull-right">
+        <a href="@Url.Action("Inform")" class="button spacer">Add new cohort</a>
+    </div><!-- /column-one-third -->
+
+</div>
+
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticships Home</a></li>
+            <li>Cohorts</li>
+        </ol>
+    </div>
+}

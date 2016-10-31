@@ -6,15 +6,15 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Attributes;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging;
 using SFA.DAS.Messaging.AzureServiceBus;
 using SFA.DAS.Messaging.FileSystem;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution
+namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
     public class MessagePolicy<T> : ConfiguredInstancePolicy where T : IConfiguration
     {

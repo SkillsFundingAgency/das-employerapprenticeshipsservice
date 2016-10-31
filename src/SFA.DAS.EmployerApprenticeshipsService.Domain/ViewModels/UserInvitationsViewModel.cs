@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.ViewModels
+namespace SFA.DAS.EAS.Domain.ViewModels
 {
     public class UserInvitationsViewModel
     {

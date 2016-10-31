@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
+﻿using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces
+namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IFeatureToggle
     {

@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Commitments.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetCommitment
+namespace SFA.DAS.EAS.Application.Queries.GetCommitment
 {
     public class GetCommitmentQueryResponse
     {

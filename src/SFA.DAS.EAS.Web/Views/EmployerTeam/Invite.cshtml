@@ -1,0 +1,114 @@
+@using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
+
+@model OrchestratorResponse<InviteTeamMemberViewModel>
+
+@{
+    ViewBag.Title = "Create invitation";
+}
+
+@{
+    var nameError = ViewContext.ViewData.ModelState["Name"]?.Errors?.Any() ?? false;
+    var emailError = ViewContext.ViewData.ModelState["Email"]?.Errors?.Any() ?? false;
+}
+
+@if (nameError || emailError)
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="error-summary" role="group" tabindex="-1">
+                <h1 class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>
+                    Check the following details:
+                </p>
+                <ul class="error-summary-list">
+                   @if (emailError)
+                   {
+                       <li><a href="#Email">Enter valid email address</a></li>
+                   }
+                    @if (nameError)
+                    {
+                        <li><a href="#Name">Enter name</a></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h1 class="heading-xlarge">
+                    Create invitation
+                </h1>
+                <p class="lede">Invite somebody to access this levy account.</p>
+                <form method="POST" action="@Url.Action("Invite")">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group @(emailError ? "error" : "")">
+
+                        <label for="Email">
+                            <span class="form-label-bold">Email</span>
+                            <span class="form-hint">An invitation will be sent to this email address</span>
+                            @if (emailError)
+                            {
+                                <span class="error-message" id="error-message-email">Enter a valid email address</span>
+                            }
+                        </label>
+                        <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
+                               @(emailError ? " aria-describedby=\"error-message-email\" " : "")
+                               aria-required="true" value="@Model.Data.Email" />
+                    </div>
+
+                    <div class="form-group @(nameError ? "error" : "")">
+                        <label for="Name">
+                            <span class="form-label-bold" id="error-message-name">Full name</span>
+                            @if (nameError)
+                            {
+                                <span class="error-message">Enter name</span>
+                            }
+                        </label>
+                        <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
+                               @(emailError ? " aria-describedby=\"error-message-name\" " : "")
+                               aria-required="true" value="@Model.Data.Name" />
+                    </div>
+                    <label class="form-label">
+                        Team member access
+                        <span class="form-hint">Choose the level of access this user can have.</span>
+                    </label>
+                    <div class="form-group">
+                        <label class="block-label" for="radio1">
+                            <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
+                            @(RoleStrings.ToWhatTheyCanDo(Role.Viewer)).
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="block-label" for="radio2">
+                            <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
+                            @(RoleStrings.ToWhatTheyCanDo(Role.Transactor)).
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="block-label" for="radio3">
+                            <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
+                            @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
+                        </label>
+                    </div>
+                    <input type="hidden" id="HashedId" name="HashedId" value="@Model.Data.HashedId" />
+                    <button type="submit" class="button" id="send_invitation">Send invitation</button>
+                </form>
+            </div>
+        </div>
+
+        @section breadcrumb {
+            <div class="breadcrumbs">
+                <ol role="navigation">
+                    <li><a href="/">Your User Profile</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Employer Account Homepage</a></li>
+                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Manage Team Members</a></li>
+                    <li>Create Invitation</li>
+                </ol>
+            </div>
+        }

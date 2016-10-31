@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetApprenticeship
+namespace SFA.DAS.EAS.Application.Queries.GetApprenticeship
 {
     public class GetApprenticeshipQueryHandler : IAsyncRequestHandler<GetApprenticeshipQueryRequest, GetApprenticeshipQueryResponse>
     {

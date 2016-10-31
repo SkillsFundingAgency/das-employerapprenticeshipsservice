@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MediatR;
+﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetGatewayToken
+namespace SFA.DAS.EAS.Application.Queries.GetGatewayToken
 {
     public class GetGatewayTokenQuery : IAsyncRequest<GetGatewayTokenQueryResponse>
     {

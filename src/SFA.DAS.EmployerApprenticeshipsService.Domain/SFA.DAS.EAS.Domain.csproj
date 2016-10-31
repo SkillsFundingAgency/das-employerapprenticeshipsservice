@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EC415CDA-9294-4967-BD27-AA900985427D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SFA.DAS.EAS.Domain</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.1\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Notifications.Api.Client">
+      <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AggregationData.cs" />
+    <Compile Include="AggregationLine.cs" />
+    <Compile Include="AggregationLineItem.cs" />
+    <Compile Include="Attributes\QueueNameAttribute.cs" />
+    <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
+    <Compile Include="Configuration\EmailTemplateConfigurationItem.cs" />
+    <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
+    <Compile Include="Configuration\HmrcConfiguration.cs" />
+    <Compile Include="Configuration\IdentityServerConfiguration.cs" />
+    <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
+    <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\TasksApiClientConfiguration.cs" />
+    <Compile Include="Data\BaseRepository.cs" />
+    <Compile Include="Data\IAccountRepository.cs" />
+    <Compile Include="Data\IAccountTeamRepository.cs" />
+    <Compile Include="Data\IAggregationRepository.cs" />
+    <Compile Include="Data\IEnglishFractionRepository.cs" />
+    <Compile Include="Data\IDasLevyRepository.cs" />
+    <Compile Include="Data\IEmployerAccountRepository.cs" />
+    <Compile Include="Data\IEmployerAgreementRepository.cs" />
+    <Compile Include="Data\IEmployerSchemesRepository.cs" />
+    <Compile Include="Data\IInvitationRepository.cs" />
+    <Compile Include="Data\IMembershipRepository.cs" />
+    <Compile Include="Data\IProviderRepository.cs" />
+    <Compile Include="Data\IStandardsRepository.cs" />
+    <Compile Include="Data\IUserAccountRepository.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Duration.cs" />
+    <Compile Include="EmployerAgreementStatus.cs" />
+    <Compile Include="EmployerAgreementTemplate.cs" />
+    <Compile Include="EmployerAgreementView.cs" />
+    <Compile Include="EmployerInformation.cs" />
+    <Compile Include="Entities\Account\Account.cs" />
+    <Compile Include="Entities\Account\Accounts.cs" />
+    <Compile Include="Entities\Account\LegalEntities.cs" />
+    <Compile Include="Entities\Account\LegalEntity.cs" />
+    <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
+    <Compile Include="Framework.cs" />
+    <Compile Include="FrameworksView.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
+    <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
+    <Compile Include="Interfaces\ICache.cs" />
+    <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
+    <Compile Include="Interfaces\IConfiguration.cs" />
+    <Compile Include="Interfaces\IDasAccountService.cs" />
+    <Compile Include="Interfaces\IEmployerVerificationService.cs" />
+    <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
+    <Compile Include="Interfaces\IFeatureToggle.cs" />
+    <Compile Include="Interfaces\IHashingService.cs" />
+    <Compile Include="Interfaces\IHmrcService.cs" />
+    <Compile Include="Interfaces\IHttpClientWrapper.cs" />
+    <Compile Include="Interfaces\ILevyDeclarationService.cs" />
+    <Compile Include="Interfaces\IUserWhiteList.cs" />
+    <Compile Include="Invitation.cs" />
+    <Compile Include="InvitationStatus.cs" />
+    <Compile Include="InvitationView.cs" />
+    <Compile Include="LevyDeclarationView.cs" />
+    <Compile Include="LevyItemType.cs" />
+    <Compile Include="Membership.cs" />
+    <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
+    <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
+    <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
+    <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
+    <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
+    <Compile Include="Models\HmrcLevy\Employer.cs" />
+    <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
+    <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
+    <Compile Include="Models\HmrcLevy\HmrcTokenResponse.cs" />
+    <Compile Include="Models\HmrcLevy\Link.cs" />
+    <Compile Include="Models\HmrcLevy\Links.cs" />
+    <Compile Include="Models\HmrcLevy\Name.cs" />
+    <Compile Include="Models\Levy\DasDeclaration.cs" />
+    <Compile Include="Models\Levy\DasDeclarations.cs" />
+    <Compile Include="Models\Levy\DasEnglishFraction.cs" />
+    <Compile Include="Models\Levy\DasEnglishFractions.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />
+    <Compile Include="Models\ManagedCompany\ManagedCompanyLookup.cs" />
+    <Compile Include="Models\Notification\EmailContent.cs" />
+    <Compile Include="Models\Notification\EmailMessage.cs" />
+    <Compile Include="Models\Notification\MessageFormat.cs" />
+    <Compile Include="Models\Notification\NotificationMessage.cs" />
+    <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
+    <Compile Include="Paye.cs" />
+    <Compile Include="PayeView.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider.cs" />
+    <Compile Include="Providers.cs" />
+    <Compile Include="ProvidersView.cs" />
+    <Compile Include="Role.cs" />
+    <Compile Include="Scheme.cs" />
+    <Compile Include="Schemes.cs" />
+    <Compile Include="Standard.cs" />
+    <Compile Include="StandardsView.cs" />
+    <Compile Include="TeamMember.cs" />
+    <Compile Include="User.cs" />
+    <Compile Include="Users.cs" />
+    <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

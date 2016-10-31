@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
-  <Role name="SFA.DAS.EmployerApprenticeshipsService.Web">
+  <Role name="SFA.DAS.EAS.Web">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
@@ -17,7 +17,7 @@
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyDeclarationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
@@ -31,7 +31,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.LevyAggregationProvider.Worker">
+  <Role name="SFA.DAS.EAS.LevyAggregationProvider.Worker">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
@@ -45,7 +45,7 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.Account.Api">
+  <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />

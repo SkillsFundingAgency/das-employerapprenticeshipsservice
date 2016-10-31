@@ -1,8 +1,8 @@
 ﻿using System;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
     public class CreateLegalEntityCommand : IAsyncRequest<CreateLegalEntityCommandResponse>
     {

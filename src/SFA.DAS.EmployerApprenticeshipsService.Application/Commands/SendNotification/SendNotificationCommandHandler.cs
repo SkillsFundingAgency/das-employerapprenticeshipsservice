@@ -2,11 +2,10 @@
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.SendNotification
+namespace SFA.DAS.EAS.Application.Commands.SendNotification
 {
     public class SendNotificationCommandHandler : AsyncRequestHandler<SendNotificationCommand>
     {

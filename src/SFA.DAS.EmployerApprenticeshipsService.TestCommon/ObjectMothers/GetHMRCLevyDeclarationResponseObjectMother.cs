@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetHMRCLevyDeclaration;
+﻿using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
+namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
     public static class GetHMRCLevyDeclarationResponseObjectMother
     {

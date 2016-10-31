@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerApprenticeshipsService.Domain;
+﻿using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetUser
+namespace SFA.DAS.EAS.Application.Queries.GetUser
 {
     public class GetUserResponse
     {

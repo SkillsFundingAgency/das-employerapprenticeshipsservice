@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries.GetAccountLegalEntities
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
 {
     public class WhenValidatingAccountLegalEntities
     {
