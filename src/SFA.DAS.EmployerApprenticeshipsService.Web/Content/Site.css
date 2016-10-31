@@ -578,3 +578,58 @@ input[type=radio]:focus{
 textarea#Message{
     width:100%;
 }
+
+.column-one-third .finishEditingBtn{
+    margin-top: 3.35em;
+}
+
+/* responsive table */ 
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr { 
+		display: block; 
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.tableResponsive thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	.tableResponsive tr { border: 1px solid #ccc; margin-bottom:20px; }
+	
+	.tableResponsive td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	.tableResponsive td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	/*
+	Label for the data
+	*/
+	.tableResponsive td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; }
+	.tableResponsive td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
+	.tableResponsive td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px;}
+	
+    /*finished editing button spacing*/
+    .column-one-third .finishEditingBtn{margin-top:0.25em;}
+
+}
+
