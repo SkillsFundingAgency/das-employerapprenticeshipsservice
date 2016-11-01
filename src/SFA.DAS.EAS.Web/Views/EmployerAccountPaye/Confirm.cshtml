@@ -2,38 +2,53 @@
 @{ViewBag.Title = "Link this scheme to this entity";}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Link this scheme to this entity</h1>
-        <p>Confirm that you wish to link this legal entity, to this PAYE scheme ref to your account</p>
+        <h1 class="heading-xlarge">Link this scheme to this organisation</h1>
+        <p>Confirm that you wish to link this organisation, to this PAYE scheme ref to your account</p>
+        <table class="top-border">
+            <tr>
+                <th scope="row">
+                    Organisation
+                </th>
+                <td>
+                    <dl class="inline">
+                        <dt>Name:</dt>
+                        <dd>@Model.LegalEntityName</dd>
+                        <dt>Companies House number:</dt>
+                        <dd>@Model.LegalEntityCode</dd>
+                    </dl>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    PAYE scheme
+                </th>
+                <td>
+                    @Model.PayeScheme
+                </td>
+            </tr>
+        </table>
         <form method="post" action="@Url.Action("Confirm",Model)">
             @Html.AntiForgeryToken()
-            <div class="form-group">
-                <label class="form-label">PAYE Scheme <b>@Model.PayeScheme</b></label>
-                <input type="hidden" name="PayeScheme" value="@Model.PayeScheme" />
-            </div>
-            <div class="form-group">
-                <label class="form-label">@Model.LegalEntityName</label>
-                <input type="hidden" name="LegalEntityName" value="@Model.LegalEntityName" />
-                <input type="hidden" name="LegalEntityCode" value="@Model.LegalEntityCode" />
-                <input type="hidden" name="LegalEntityDateOfIncorporation" value="@Model.LegalEntityDateOfIncorporation" />
-                <input type="hidden" name="LegalEntityId" value="@Model.LegalEntityId" />
-                <input type="hidden" name="LegalEntityRegisteredAddress" value="@Model.LegalEntityRegisteredAddress"/>
-            </div>
-            <div class="form-group">
-                <label class="form-label">@Model.LegalEntityRegisteredAddress</label>
-            </div>
+            <input type="hidden" name="PayeScheme" value="@Model.PayeScheme" />
+            <input type="hidden" name="LegalEntityName" value="@Model.LegalEntityName" />
+            <input type="hidden" name="LegalEntityCode" value="@Model.LegalEntityCode" />
+            <input type="hidden" name="LegalEntityDateOfIncorporation" value="@Model.LegalEntityDateOfIncorporation" />
+            <input type="hidden" name="LegalEntityId" value="@Model.LegalEntityId" />
+            <input type="hidden" name="LegalEntityRegisteredAddress" value="@Model.LegalEntityRegisteredAddress"/>
             <input type="hidden" name="HashedId" value="@Model.HashedId"/>
             <input type="hidden" value="@Model.RefreshToken" name="RefreshToken" />
             <input type="hidden" value="@Model.AccessToken" name="AccessToken" />
-            <button type="submit" class="button" id="create">Create</button>
+            <div class="form-group">
+                <button type="submit" class="button" id="create">Create</button>
+                <a href="@Url.Action("ChooseExistingLegalEntity", Model)" class="button button-link">Choose a different organisation</a>
+            </div>
         </form>
-
-        
-
-
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <a href="@Url.Action("ChooseExistingLegalEntity", Model)">Choose a different legal entity</a>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.HashedId })" class="back-link">Back to PAYE schemes</a></li>
+        </ol>
     </div>
-</div>
+}

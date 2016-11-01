@@ -13,8 +13,6 @@
             <h1 class="heading-xlarge">PAYE Schemes</h1>
             <p>Add PAYE schemes to allow levy funds to be added to your account.</p>    
         </div>
-        
-
         @if (Model.Data.PayeSchemes.Any())
         {
             <div class="responsive-table">
@@ -68,7 +66,7 @@
         else
         {
             <div class="notice">
-                <p class="">There are no PAYE schemes added.</p>
+                <p>There are no PAYE schemes added.</p>
             </div>
         }
 
