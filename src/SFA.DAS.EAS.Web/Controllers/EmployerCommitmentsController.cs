@@ -58,13 +58,19 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Create/LegalEntity")]
-        public async Task<ActionResult> SelectLegalEntity(string hashedAccountId)
+        public async Task<ActionResult> SelectLegalEntity(string hashedAccountId, string cohortRef = "")
         {
             var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             ViewBag.LegalEntities = legalEntities.Data;
 
-            return View(new SelectLegalEntityViewModel());
+            if (string.IsNullOrWhiteSpace(cohortRef))
+                cohortRef = CreateReference();
+
+            return View(new SelectLegalEntityViewModel
+            {
+                CohortRef = cohortRef
+            });
         }
 
         [HttpPost]
@@ -85,9 +91,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Create/Provider")]
-        public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode)
+        public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
         {
-            return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode });
+            return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode, CohortRef = cohortRef });
         }
 
         [HttpPost]
@@ -105,7 +111,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 HashedAccountId = hashedAccountId,
                 LegalEntityCode = viewModel.LegalEntityCode,
                 ProviderId = providerId,
-                Providers = providers
+                Providers = providers,
+                CohortRef = viewModel.CohortRef
             });
         }
 
@@ -118,7 +125,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 var model = new SelectProviderViewModel
                 {
-                    LegalEntityCode = viewModel.LegalEntityCode
+                    LegalEntityCode = viewModel.LegalEntityCode,
+                    CohortRef = viewModel.CohortRef
                 };
 
                 if (string.IsNullOrWhiteSpace(viewModel.ProviderId))
@@ -129,14 +137,16 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("SearchProvider", model);
             }
 
-            return RedirectToAction("ChoosePath", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId });
+            return RedirectToAction("ChoosePath", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId, cohortRef = viewModel.CohortRef });
         }
 
         [HttpGet]
         [Route("Create/ChoosePath")]
-        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName)
+        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef)
         {
             var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, OwinWrapper.GetClaimValue(@"sub"));
+
+            model.Data.CohortRef = cohortRef;
 
             return View(model.Data);
         }
@@ -146,8 +156,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Create")]
         public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel, string selectedRoute)
         {
-            viewModel.Name = CreateReference(); // TODO: LWA - Name needs to be deleted
-
             var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
             if (selectedRoute == "employer")

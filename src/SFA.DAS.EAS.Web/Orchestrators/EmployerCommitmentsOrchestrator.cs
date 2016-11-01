@@ -117,7 +117,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Commitment = new Commitment
                 {
-                    Name = commitment.Name,
+                    Name = commitment.CohortRef,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
