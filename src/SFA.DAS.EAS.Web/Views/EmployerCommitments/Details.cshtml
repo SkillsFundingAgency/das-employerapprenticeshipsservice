@@ -5,7 +5,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View commitment</h1>
+        <h1 class="heading-xlarge">View cohort</h1>
         <table>
             <tbody>
                 <tr>
@@ -21,6 +21,11 @@
                 <tr>
                     <th scope="row">Provider</th>
                     <td>@Model.ProviderName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>@Model.Status.GetDescription()</td>
                     <td></td>
                 </tr>
             </tbody>
