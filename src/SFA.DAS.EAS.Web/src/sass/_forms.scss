@@ -12,3 +12,18 @@
         }   
     }
  }
+
+.button-start {
+    background-image: url('/dist/images/icon-pointer.png');
+}
+
+.error-summary-wrapper {
+    .error-summary {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+
+.button-link {
+    @include button($grey-3);
+}

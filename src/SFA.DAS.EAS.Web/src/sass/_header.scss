@@ -23,6 +23,12 @@
     }
 }
 
+.phase-banner-alpha {
+	.phase-tag {
+		background: $beta-colour
+	}
+}
+
 #global-header-bar {
     background: $grey-1;
 }
@@ -33,7 +39,6 @@
 
 .user-menu.logged-in {
     border-bottom: 1px solid $grey-2;
-    margin-bottom: 10px;
 }
 
 .user-menu {
@@ -57,4 +62,10 @@
 
 .link-user-profile {
     font-weight: 700;
+}
+
+.breadcrumbs {
+    li {
+        background-image:  url('/dist/images/separator.png');
+    }
 }

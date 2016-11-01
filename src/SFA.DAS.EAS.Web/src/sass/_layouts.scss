@@ -1,0 +1,25 @@
+main {
+    margin-bottom: 30px;
+}
+
+@include media(tablet) {
+    .pull-right {
+        float: right;
+    }
+}
+
+aside.sidebar {
+    font-size: 14px;
+    @include media(tablet) {
+        border-top: 10px solid $govuk-blue;
+        margin-top: 60px;
+        font-size: 16px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+}
+
+table.top-border {
+    border-top: 1px solid $grey-2;
+}
