@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     // Watches styles and specs for changes
     watch: {
       css: {
-        files: ['src/sass/**/*.scss', 'src/govuk_frontend_toolkit/stylesheets/*.scss'],
+        files: ['src/sass/*.scss'],
         tasks: ['sass'],
         options: { nospawn: true }
       }
