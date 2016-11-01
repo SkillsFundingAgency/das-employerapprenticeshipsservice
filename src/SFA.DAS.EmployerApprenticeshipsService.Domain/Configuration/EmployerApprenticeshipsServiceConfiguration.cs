@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
+namespace SFA.DAS.EAS.Domain.Configuration
 {
     public class EmployerApprenticeshipsServiceConfiguration : IConfiguration
     {
@@ -14,6 +14,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
         public string Hashstring { get; set; }
-        public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }
+        public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
+		public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }
+    }
+
+    public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
+    {
+        public string BaseUrl { get; set; }
     }
 }

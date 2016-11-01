@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.AddPayeWithExistingLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity
 {
     public class AddPayeToAccountForExistingLegalEntityCommand : IAsyncRequest
     {

@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateLevyAggregation
+namespace SFA.DAS.EAS.Application.Commands.CreateLevyAggregation
 {
     public class CreateLevyAggregationCommandHandler : AsyncRequestHandler<CreateLevyAggregationCommand>
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Tasks.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTasks
+namespace SFA.DAS.EAS.Application.Queries.GetTasks
 {
     public class GetTasksQueryResponse
     {

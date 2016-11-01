@@ -1,9 +1,9 @@
 ﻿using System;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateCommitment;
+using SFA.DAS.EAS.Application.Commands.CreateCommitment;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.CreateCommitmentTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateCommitmentTests
 {
     [TestFixture]
     public class WhenValidatingTheCreateCommitmentCommand

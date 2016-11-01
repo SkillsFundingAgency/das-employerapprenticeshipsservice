@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Tasks.Api.Types;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTask
+namespace SFA.DAS.EAS.Application.Queries.GetTask
 {
     public class GetTaskQueryResponse
     {

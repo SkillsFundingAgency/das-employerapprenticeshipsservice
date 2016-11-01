@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
+namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class FileSystemStandardsRepository : FileSystemRepository, IStandardsRepository
     {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Data
         {
             var standards = await ReadFileById<Standard[]>(fileName);
 
-            return standards.SingleOrDefault(x => x.Code == code);
+            return standards.SingleOrDefault(x => x.Id == code);
         }
     }
 }

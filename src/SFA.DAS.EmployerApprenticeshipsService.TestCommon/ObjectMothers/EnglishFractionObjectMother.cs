@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.TestCommon.ObjectMothers
+namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
     public static class EnglishFractionObjectMother
     {

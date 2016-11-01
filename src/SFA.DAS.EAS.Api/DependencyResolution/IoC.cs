@@ -16,8 +16,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 
 namespace SFA.DAS.EAS.Api.DependencyResolution {
     using StructureMap;

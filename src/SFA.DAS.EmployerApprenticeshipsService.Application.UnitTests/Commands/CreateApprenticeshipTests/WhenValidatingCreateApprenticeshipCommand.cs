@@ -1,10 +1,10 @@
-﻿using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.CreateApprenticeship;
-using SFA.DAS.Commitments.Api.Types;
-using Moq;
+﻿using Moq;
+using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.CreateApprenticeshipTests
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateApprenticeshipTests
 {
     [TestFixture]
     public sealed class WhenValidatingCreateApprenticeshipCommand

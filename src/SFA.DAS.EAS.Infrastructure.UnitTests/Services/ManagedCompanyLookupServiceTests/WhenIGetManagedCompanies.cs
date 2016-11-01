@@ -5,11 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.FeatureToggle;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.ManagedCompany;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Services;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
+using SFA.DAS.EAS.Domain.Models.ManagedCompany;
+using SFA.DAS.EAS.Infrastructure.Caching;
+using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ManagedCompanyLookupServiceTests
 {

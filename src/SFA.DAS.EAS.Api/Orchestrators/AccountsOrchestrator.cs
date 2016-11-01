@@ -7,8 +7,8 @@ using System.Web.UI;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Api.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetBatchEmployerAccountTransactions;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerAccounts;
+using SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccounts;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {

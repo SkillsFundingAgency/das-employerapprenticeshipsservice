@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetEmployerSchemes
+namespace SFA.DAS.EAS.Application.Queries.GetEmployerSchemes
 {
     public class GetEmployerSchemesHandler : IAsyncRequestHandler<GetEmployerSchemesQuery, GetEmployerSchemesResponse>
     {

@@ -1,0 +1,109 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom");    
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Add an apprentice</h1>
+        <p>
+            Add the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
+        </p>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("CreateApprenticeship")">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+           
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
+                @Html.LabelFor(m => m.FirstName, "Apprentice first name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
+                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
+             
+            </div>
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
+                @Html.LabelFor(m => m.LastName, "Apprentice last name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
+                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+              
+            </div>
+            <hr />
+            <div class="form-group">
+                <label class="form-label" for="TrainingId">Find apprenticeship</label>
+                <select name="TrainingId" id="TrainingId" class="form-control" aria-label="Training standard">
+                    <option value=""></option>
+                    @foreach (var standard in ViewBag.ApprenticeshipProducts)
+                    {
+                        <option value="@standard.Id">@standard.Title</option>
+                    }
+                </select>
+             
+            </div>
+
+            <div class="form-group error">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Projected start date</span>
+                    </legend>
+                    <div class="form-date">
+                        <div class="form-group form-group-month">
+                            <label for="startMonth">Month</label>
+                            <input class="form-control" id="startMonth" name="startMonth" type="number"
+                                   min="1" max="12" placeholder="MM" value="@Model.StartMonth">
+                        </div>
+                        <div class="form-group form-group-year">
+
+                            <label for="startYear">Year</label>
+                            <input class="form-control" id="startYear" name="startYear" type="number"
+                                   min="2016" max="2030" placeholder="YYYY" value="@Model.StartYear">
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="form-group error">
+                <fieldset>
+                    <legend>
+                        <span class="form-label-bold">Projected finish date</span>
+                    </legend>
+                    <div class="form-date">
+                        <div class="form-group form-group-month">
+                            <label for="endMonth">Month</label>
+                            <input class="form-control" id="endMonth" name="endMonth" type="number"
+                                   min="1" max="12" placeholder="MM" value="@Model.EndMonth">
+                        </div>
+                        <div class="form-group form-group-year">
+                            <label for="endYear">Year</label>
+                            <input class="form-control" id="endYear" name="endYear" type="number"
+                                   min="2016" max="2030" placeholder="YYYY" value="@Model.EndYear">
+                        </div>
+                    </div>
+                </fieldset>
+             
+            </div>
+
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
+                <label for="@Html.IdFor(m => m.Cost)">
+                    <span class="form-label-bold">Cost</span>
+                    @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+                </label>
+                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
+            </div>
+
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
+                <label for="@Html.IdFor(m => m.ULN)">
+                    <span class="form-label-bold">Unique learner number</span>
+                    @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
+                </label>
+                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.ULN) })
+            </div>
+          
+            <input type="hidden" id="status" name="status" value="@Model.Status" />
+            <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
+            <button type="submit" class="button">Add apprentice</button>
+        </form>
+    </div>
+</div>

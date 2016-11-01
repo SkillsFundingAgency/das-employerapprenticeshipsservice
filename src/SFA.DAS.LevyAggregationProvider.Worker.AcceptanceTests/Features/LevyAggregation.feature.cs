@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests.Features
+namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests.Features
 {
     using TechTalk.SpecFlow;
     

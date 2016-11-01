@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Tasks.Api.Client;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetTask
+namespace SFA.DAS.EAS.Application.Queries.GetTask
 {
     public class GetTaskQueryHandler : IAsyncRequestHandler<GetTaskQueryRequest, GetTaskQueryResponse>
     {

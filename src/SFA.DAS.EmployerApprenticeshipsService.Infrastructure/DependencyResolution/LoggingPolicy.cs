@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using NLog;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution
+namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
     public class LoggingPolicy : ConfiguredInstancePolicy
     {

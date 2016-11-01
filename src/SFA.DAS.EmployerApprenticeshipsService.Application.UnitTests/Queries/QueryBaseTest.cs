@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Validation;
+using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Queries
+namespace SFA.DAS.EAS.Application.UnitTests.Queries
 {
     public abstract class QueryBaseTest<THandler, TRequest, TResponse> 
         where THandler : IAsyncRequestHandler<TRequest, TResponse> 

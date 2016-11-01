@@ -1,11 +1,10 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Configuration;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution;
-using SFA.DAS.EmployerApprenticeshipsService.Web.DependencyResolution;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
+namespace SFA.DAS.EAS.Web.UnitTests.Infrastructure.StructureMapRegistrationTests
 {
     public class WhenInitalisingTheContainer
     {

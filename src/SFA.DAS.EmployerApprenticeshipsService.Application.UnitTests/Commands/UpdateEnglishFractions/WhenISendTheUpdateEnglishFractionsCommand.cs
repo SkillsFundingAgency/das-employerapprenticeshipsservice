@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Commands.UpdateEnglishFractions;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.HmrcLevy;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Models.Levy;
+using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
+using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests.Commands.UpdateEnglishFractions
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 {
     class WhenISendTheUpdateEnglishFractionsCommand
     {

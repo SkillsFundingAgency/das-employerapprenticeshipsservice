@@ -1,12 +1,12 @@
 ﻿using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Authentication;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Controllers;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Orchestrators;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers.InvitationControllerTests
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
 {
     public class WhenViewingInvitations : ControllerTestBase
     {

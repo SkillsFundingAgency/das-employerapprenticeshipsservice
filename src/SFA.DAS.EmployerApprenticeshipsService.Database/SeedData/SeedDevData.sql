@@ -56,16 +56,16 @@ SET IDENTITY_INSERT  [account].[Role] OFF
 
 -- Account seed data
 SET IDENTITY_INSERT  [account].[Account] ON
-IF (NOT EXISTS(SELECT * FROM [account].[Account] WHERE Id = 1
-    AND Name = 'Floyd Price Ltd'))
+IF (NOT EXISTS(SELECT * FROM [account].[Account] WHERE Id = 1))
 BEGIN 
-    INSERT INTO [account].[Account](Id, Name) 
-    VALUES(1, 'Floyd Price Ltd') 
+    INSERT INTO [account].[Account](Id, Name, HashedId) 
+    VALUES(1, 'ACME LTD', 'KAKAKAKA') 
 END 
 ELSE 
 BEGIN 
     UPDATE [account].[Account] 
-    SET Name = 'Floyd Price Ltd'
+    SET Name = 'ACME LTD',
+	HashedId = 'KAKAKAKA'
     WHERE Id = 1
 END 
 SET IDENTITY_INSERT  [account].[Account] OFF

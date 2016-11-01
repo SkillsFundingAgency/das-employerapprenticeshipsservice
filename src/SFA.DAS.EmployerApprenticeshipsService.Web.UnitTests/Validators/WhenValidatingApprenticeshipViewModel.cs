@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Web.Validators;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Validators;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Validators
+namespace SFA.DAS.EAS.Web.UnitTests.Validators
 {
     [TestFixture]
     public sealed class WhenValidatingApprenticeshipViewModel

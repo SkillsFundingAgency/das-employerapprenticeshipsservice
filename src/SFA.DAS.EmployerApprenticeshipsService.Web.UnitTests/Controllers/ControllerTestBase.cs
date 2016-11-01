@@ -10,7 +10,7 @@ using MediatR;
 using Moq;
 using NLog;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Web.UnitTests.Controllers
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
     public abstract class ControllerTestBase
     {

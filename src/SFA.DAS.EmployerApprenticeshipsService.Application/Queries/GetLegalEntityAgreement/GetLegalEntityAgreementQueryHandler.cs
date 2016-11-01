@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerApprenticeshipsService.Domain;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Data;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetLegalEntityAgreement
+namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement
 {
     public class GetLegalEntityAgreementQueryHandler : IAsyncRequestHandler<GetLegalEntityAgreementRequest, GetLegalEntityAgreementResponse>
     {

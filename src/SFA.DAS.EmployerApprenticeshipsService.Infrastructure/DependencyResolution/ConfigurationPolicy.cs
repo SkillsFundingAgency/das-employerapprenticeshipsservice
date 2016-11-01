@@ -5,12 +5,11 @@ using Microsoft.Azure;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EmployerApprenticeshipsService.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
-using StructureMap.TypeRules;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Infrastructure.DependencyResolution
+namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 {
     
     public class ConfigurationPolicy<T> : ConfiguredInstancePolicy where T : IConfiguration

@@ -1,10 +1,10 @@
-﻿namespace SFA.DAS.EmployerApprenticeshipsService.Domain
+﻿namespace SFA.DAS.EAS.Domain
 {
     public class Standard
     {
-        public int Code { get; set; }
-        public string Name { get; set; }
-        public int Price { get; set; }
-        public int Duration { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int Level { get; set; }
+        public Duration Duration { get; set; }
     }
 }
