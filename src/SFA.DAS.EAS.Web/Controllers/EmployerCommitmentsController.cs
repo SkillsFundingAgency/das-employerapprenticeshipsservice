@@ -191,7 +191,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Cohorts", new {hashedAccountId = hashedAccountId});
             }
 
-            return RedirectToAction("SubmitCommitmentEntry", new {hashedAccountId = hashedAccountId, hashedCommitmentId = hashedAccountId, saveOrSend = saveOrSend});
+            return RedirectToAction("SubmitCommitmentEntry", new {hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId, saveOrSend = saveOrSend});
         }
         
         [HttpGet]
