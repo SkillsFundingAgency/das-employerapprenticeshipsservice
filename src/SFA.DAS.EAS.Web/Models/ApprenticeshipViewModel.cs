@@ -43,19 +43,5 @@ namespace SFA.DAS.EAS.Web.Models
         public int? EndYear { get; set; }
         public ApprenticeshipStatus Status { get; set; }
         public string AgreementStatus { get; set; }
-        public bool CanBeApproved()
-        {
-            return Status == ApprenticeshipStatus.ReadyForApproval;
-        }
-
-        public bool CanBePaused()
-        {
-            return Status == ApprenticeshipStatus.Approved;
-        }
-
-        public bool CanBeResumed()
-        {
-            return Status == ApprenticeshipStatus.Paused;
-        }
     }
 }
