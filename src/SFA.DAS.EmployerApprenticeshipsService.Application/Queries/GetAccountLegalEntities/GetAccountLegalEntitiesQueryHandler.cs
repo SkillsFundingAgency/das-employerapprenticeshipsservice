@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
             if (membership.RoleId != (short)Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
 
-            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, message.SignedOnly);
 
             return new GetAccountLegalEntitiesResponse
             {

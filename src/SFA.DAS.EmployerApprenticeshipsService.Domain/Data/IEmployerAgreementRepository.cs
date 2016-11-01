@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IEmployerAgreementRepository
     {
-        Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId);
+        Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly);
         Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
         Task SignAgreement(long agreementId, long signedById, string signedByName, DateTime signedDate);
         Task ReleaseEmployerAgreementTemplate(int templateId);
