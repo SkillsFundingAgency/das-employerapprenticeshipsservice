@@ -6,6 +6,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Infrastructure.Entities;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -49,7 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return new AggregationData
                 {
                     AccountId = accountId,
-                    Data = new List<AggregationLine>()
+                    TransactionLines = new List<TransactionLine>()
                 };
 
             return JsonConvert.DeserializeObject<AggregationData>(row.Data);
@@ -74,7 +75,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     response.Add(new AggregationData
                     {
                         AccountId = accountId,
-                        Data = new List<AggregationLine>()
+                        TransactionLines = new List<TransactionLine>()
                     });
                 }
                 else

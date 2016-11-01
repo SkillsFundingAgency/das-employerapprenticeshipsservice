@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public DateTime TransactionDate { get; set; }
         public LevyItemType TransactionType { get; set; }
         public decimal Amount { get; set; }
+        public decimal Balance { get; set; }
     }
 }

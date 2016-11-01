@@ -214,6 +214,7 @@
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedHandler.cs" />

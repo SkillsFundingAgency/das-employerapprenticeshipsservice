@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             accountsResult.Accounts.ForEach(account =>
             {
                 var transactions = transactionResult.Data.Find(aggregationData => aggregationData.AccountId == account.Id);
-                var latestLineItem = transactions?.Data.FirstOrDefault();
+                var latestLineItem = transactions?.TransactionLines.FirstOrDefault();
                 var currentBalance = latestLineItem?.Balance ?? 0;
                 data.Add(new AccountWithBalanceViewModel() { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = currentBalance });
             });

@@ -26,7 +26,7 @@
     <div class="column-full">
         <div>
             <h2 class="heading-medium">Transactions</h2>
-            @if (Model.Data.Data.Count == 0)
+            @if (Model.Data.TransactionLines.Count == 0)
             {
                 <p class="panel panel-info">
                     No transaction data exists for this account, please try again later.
@@ -38,42 +38,35 @@
                     <div class="responsive-tr">
                         <div class="responsive-th" scope="col">Date</div>
                         <div class="responsive-th" scope="col">Description</div>
-                        <div class="responsive-th" scope="col">Credit</div>
-                        <div class="responsive-th" scope="col">Debit</div>
+                        <div class="responsive-th" scope="col">Amount</div>
                         <div class="responsive-th" scope="col">Balance</div>
                         <div class="responsive-th" scope="col"></div>
                     </div>
                     </div>
                     <div class="responsive-tbody">
-                    @foreach (var aggregationLine in Model.Data.Data)
+                    @foreach (var aggregationLine in Model.Data.TransactionLines)
                     {
 
                         <div class="responsive-tr">
                             <div class="responsive-td">
                                 <div>
-                                    @{var date = new DateTime(aggregationLine.Year, aggregationLine.Month, 1).ToGdsFormat();} @date
+                                    @{var date = new DateTime(aggregationLine.TransactionDate.Year, aggregationLine.TransactionDate.Month, 1).ToGdsFormat();} @date
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Description</div>
                                 <div>
-                                    Levy Credit
+                                    @aggregationLine.TransactionType.ToString()
                                 </div>
                             </div>
                             <div class="responsive-td">
-                                <div class="responsive-inner-caption">Credit</div>
+                                <div class="responsive-inner-caption">@aggregationLine.TransactionType.ToString()</div>
                                 <div>
                                     @(aggregationLine.Amount.ToString("C0", culture))
                                 </div>
                             </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Debit</div>
-                                <div>
-                                    
-                                    @("£0")
-                                </div>
-                            </div>
+                            
 
                             <div class="responsive-td">
                                 <div class="responsive-inner-caption">Balance</div>
@@ -85,12 +78,12 @@
                                 <div>
                                     <a aria-label="View details for the transaction on @date"
                                        title="View details for the transaction on @date" 
-                                       href="@Url.Action("Detail", "EmployerAccountTransactions", new {accountId = Model.Data.HashedId, itemId = aggregationLine.Id})">View</a>
+                                       href="#">View</a>
                                 </div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                         </div>
-                    }
+                                        }
                     </div>
                 </div>
             }
