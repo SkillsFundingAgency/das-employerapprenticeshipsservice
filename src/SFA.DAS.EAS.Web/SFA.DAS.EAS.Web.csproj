@@ -168,12 +168,12 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -358,6 +358,7 @@
     <Compile Include="Models\CommitmentListViewModel.cs" />
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
+    <Compile Include="Models\ConfirmProviderView.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\CreateCommitmentViewModel.cs" />
@@ -564,11 +565,13 @@
     <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
-    <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
+    <Content Include="Views\EmployerCommitments\SearchProvider.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectName.cshtml" />
     <Content Include="Views\EmployerCommitments\ChoosePath.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
+    <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />
     <Content Include="Views\EmployerCommitments\FinishedEditing.cshtml" />
     <Content Include="Views\EmployerCommitments\Acknowledgement.cshtml" />

@@ -58,12 +58,12 @@
       <HintPath>..\packages\NUnit.3.4.1\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.4.0.14463, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.4.0.14463\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">

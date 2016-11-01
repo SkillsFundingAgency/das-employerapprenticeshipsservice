@@ -25,11 +25,15 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.Notifications.Api.Client;
+using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
@@ -62,6 +66,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
                 For<IUserRepository>().Use<UserRepository>();
             }
 
+            For<ICache>().Use<RedisCache>();
+            For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             

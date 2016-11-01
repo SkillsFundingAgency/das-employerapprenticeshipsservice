@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetCommitments;
+using SFA.DAS.EAS.Application.Queries.GetProvider;
 using SFA.DAS.EAS.Application.Queries.GetProviders;
 using SFA.DAS.EAS.Application.Queries.GetStandards;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
@@ -21,6 +22,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -89,10 +91,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string externalUserId)
         {
-            var providers = await GetProviders();
+            var providers = await GetProvider(int.Parse(providerId));
             var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
 
-            var provider = providers.Providers.Single(x => x.Id == long.Parse(providerId));
+            var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
             var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
 
             return new OrchestratorResponse<CreateCommitmentViewModel>
@@ -102,32 +104,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     LegalEntityCode = legalEntityCode,
                     LegalEntityName = legalEntity.Name,
-                    ProviderId = provider.Id,
-                    ProviderName = provider.Name
+                    ProviderId = provider.Ukprn,
+                    ProviderName = provider.ProviderName
                 }
             };
         }
 
-        public async Task Create(CreateCommitmentViewModel commitment, string externalUserId)
+        public async Task<string> Create(CreateCommitmentViewModel commitment, string externalUserId)
         {
-            var providers = await GetProviders();
-            var legalEntities = await GetActiveLegalEntities(commitment.HashedAccountId, externalUserId);
-
-            var provider = providers.Providers.Single(x => x.Id == commitment.ProviderId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(commitment.LegalEntityCode, StringComparison.InvariantCultureIgnoreCase));
-
-            await _mediator.SendAsync(new CreateCommitmentCommand
+            var response = await _mediator.SendAsync(new CreateCommitmentCommand
             {
                 Commitment = new Commitment
                 {
                     Name = commitment.Name,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
-                    LegalEntityName = legalEntity.Name,
+                    LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = provider.Name
+                    ProviderName = commitment.ProviderName
                 }
             });
+
+            return _hashingService.HashValue(response.CommitmentId);
         }
 
         public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
@@ -199,13 +197,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message)
+        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message, string saveOrSend)
         {
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
                 CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
-                Message = message
+                Message = message,
+                SaveOrSend = saveOrSend
             });
         }
         
@@ -277,7 +276,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 ULN = apprenticeship.ULN,
-                TrainingId = apprenticeship.TrainingId,
+                TrainingType = apprenticeship.TrainingType,
+                TrainingCode = apprenticeship.TrainingCode,
+                TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost.ToString(),
                 StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
@@ -296,7 +297,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,
-                TrainingId = viewModel.TrainingId,
+                TrainingType = viewModel.TrainingType,
+                TrainingCode = viewModel.TrainingCode,
+                TrainingName = viewModel.TrainingName,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
@@ -309,6 +312,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return new DateTime(year.Value, month.Value, 1);
 
             return null;
+        }
+
+        public async Task<List<Provider>> GetProvider(int providerId)
+        {
+            var data = await _mediator.SendAsync(new GetProviderQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return data.ProvidersView.Providers;
         }
     }
 }

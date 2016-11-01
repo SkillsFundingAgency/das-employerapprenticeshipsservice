@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using System.IO;
+using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
@@ -28,9 +30,12 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            // TODO: LWA - Validate commitment is for the correct employer
             var commitment = await _commitmentApi.GetEmployerCommitment(message.EmployerAccountId, message.CommitmentId);
 
+            if (commitment.EmployerAccountId != message.EmployerAccountId)
+                throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
+
+            // TODO: Use saveOrSend to patch commitment.
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, CommitmentStatus.Active);
 
             var taskTemplate = new CreateCommitmentTemplate
