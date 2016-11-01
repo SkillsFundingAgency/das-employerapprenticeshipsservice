@@ -565,9 +565,9 @@ details .summary{
    padding: 4px;
 }
 
-/*remove focus from radio buttons*/
+/*remove focus from radio & checkboxes */
 
-input[type=radio]:focus{
+input[type=radio]:focus, input[type=checkbox]:focus{
     outline:0 !important;
 }
 
@@ -634,6 +634,9 @@ only screen and (max-width: 760px),
 
     .levyAccountsListing td:nth-of-type(1):before { content: "Account name"; font-weight:bold; margin-top:5px; }
 	.levyAccountsListing td:nth-of-type(2):before { content: "What you can do"; font-weight:bold; margin-top:5px; }
+
+     .orgListing td:nth-of-type(1):before { content: "Name"; font-weight:bold; margin-top:5px; }
+	.orgListing td:nth-of-type(2):before { content: "Agreement status"; font-weight:bold; margin-top:5px; }
 
 
     /*finished editing button spacing*/
