@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetUser
 {
-    class GetUserQueryValidator : IValidator<GetUserQuery>
+    public class GetUserQueryValidator : IValidator<GetUserQuery>
     {
         public ValidationResult Validate(GetUserQuery item)
         {
