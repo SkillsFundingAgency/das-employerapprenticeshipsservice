@@ -43,7 +43,7 @@
              
             </div>
 
-            <div class="form-group error">
+            <div class="form-group">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected start date</span>
@@ -51,20 +51,17 @@
                     <div class="form-date">
                         <div class="form-group form-group-month">
                             <label for="startMonth">Month</label>
-                            <input class="form-control" id="startMonth" name="startMonth" type="number"
-                                   min="1" max="12" placeholder="MM" value="@Model.StartMonth">
+                            <input class="form-control" id="startMonth" name="startMonth" type="number" placeholder="MM" value="@Model.StartMonth">
                         </div>
                         <div class="form-group form-group-year">
-
                             <label for="startYear">Year</label>
-                            <input class="form-control" id="startYear" name="startYear" type="number"
-                                   min="2016" max="2030" placeholder="YYYY" value="@Model.StartYear">
+                            <input class="form-control" id="startYear" name="startYear" type="number" placeholder="YYYY" value="@Model.StartYear">
                         </div>
                     </div>
                 </fieldset>
             </div>
 
-            <div class="form-group error">
+            <div class="form-group">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected finish date</span>
@@ -92,15 +89,8 @@
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
-
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.ULN, "error")">
-                <label for="@Html.IdFor(m => m.ULN)">
-                    <span class="form-label-bold">Unique learner number</span>
-                    @Html.ValidationMessageFor(m => m.ULN, null, new { id = "error-message-" + Html.IdFor(m => m.ULN), @class = "error-message" })
-                </label>
-                @Html.TextBoxFor(m => m.ULN, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.ULN) })
-            </div>
-          
+         
+            @Html.HiddenFor(m =>m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
             <button type="submit" class="button">Add apprentice</button>
