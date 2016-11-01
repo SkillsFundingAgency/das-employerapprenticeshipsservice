@@ -1,0 +1,26 @@
+@import "../govuk_elements/sass/main";
+@import "mixins";
+@import "layouts";
+@import "header";
+@import "forms";
+
+body {
+    @include media(tablet) {
+        
+    }
+}
+
+main {
+    margin-bottom: 20px;
+}
+
+.phase-banner-alpha {
+	.phase-tag {
+		background: $beta-colour
+	}
+}
+
+.list-bullet {
+    margin-bottom: 40px;
+    list-style: disc;
+}
