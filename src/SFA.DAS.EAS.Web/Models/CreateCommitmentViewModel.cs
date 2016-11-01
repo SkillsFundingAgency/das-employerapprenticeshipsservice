@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.Models
         [Required]
         public string LegalEntityCode { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Enter a valid UK Provider Reference Number")]
         public string ProviderId { get; set; }
     }
 
