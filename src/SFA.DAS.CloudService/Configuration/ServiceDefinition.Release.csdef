@@ -47,22 +47,6 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.LevyAggregationProvider.Worker" vmsize="Standard_D1_v2">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
-    </ConfigurationSettings>
-    <Endpoints>
-      <InputEndpoint name="Fake" protocol="tcp" port="50122" />
-    </Endpoints>
-    <Imports>
-    </Imports>
-  </WorkerRole>
   <WebRole name="SFA.DAS.EAS.Account.Api" vmsize="Small">
     <Sites>
       <Site name="Web">
