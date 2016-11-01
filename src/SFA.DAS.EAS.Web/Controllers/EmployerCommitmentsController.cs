@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("SelectLegalEntity", selectedLegalEntity);
             }
 
-            return RedirectToAction("SelectProvider", selectedLegalEntity);
+            return RedirectToAction("SearchProvider", selectedLegalEntity);
         }
 
         [HttpGet]
