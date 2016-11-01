@@ -60,6 +60,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAccountUpda
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAccountUpdater.UnitTests", "SFA.DAS.EAS.LevyAccountUpdater.UnitTests\SFA.DAS.EAS.LevyAccountUpdater.UnitTests.csproj", "{604152AB-9AB4-4A97-9A09-131F6C040CFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.WebJob", "SFA.DAS.EAS.PaymentUpdater.WebJob\SFA.DAS.EAS.PaymentUpdater.WebJob.csproj", "{09CAD527-1455-44F2-A857-14C695FDEE3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{604152AB-9AB4-4A97-9A09-131F6C040CFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09CAD527-1455-44F2-A857-14C695FDEE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09CAD527-1455-44F2-A857-14C695FDEE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09CAD527-1455-44F2-A857-14C695FDEE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09CAD527-1455-44F2-A857-14C695FDEE3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

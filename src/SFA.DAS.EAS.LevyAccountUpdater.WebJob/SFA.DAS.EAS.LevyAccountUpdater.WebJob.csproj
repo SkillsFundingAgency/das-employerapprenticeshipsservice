@@ -164,15 +164,15 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226f97a-704e-49b0-a100-b75feec9c8ad}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Application</Name>
+      <Name>SFA.DAS.EAS.Application</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{ec415cda-9294-4967-bd27-aa900985427d}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Domain</Name>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
-      <Name>SFA.DAS.EmployerApprenticeshipsService.Infrastructure</Name>
+      <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
