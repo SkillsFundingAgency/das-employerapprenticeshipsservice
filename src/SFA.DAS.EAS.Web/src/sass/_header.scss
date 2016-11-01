@@ -22,3 +22,39 @@
         text-decoration: none;
     }
 }
+
+#global-header-bar {
+    background: $grey-1;
+}
+
+.service-info {
+    margin-bottom: 10px;
+}
+
+.user-menu.logged-in {
+    border-bottom: 1px solid $grey-2;
+    margin-bottom: 10px;
+}
+
+.user-menu {
+    @include media(tablet) {
+        text-align: right;
+    }
+    li {
+        font-size: 14px;
+        display: inline-block;  
+        margin-bottom: 10px;
+        margin-left: 10px;
+        &:first-child {
+            margin-left: 0;
+        }
+        @include media(tablet) {
+            font-size: 16px;
+            line-height: 1.25;
+        }
+    }
+}
+
+.link-user-profile {
+    font-weight: 700;
+}
