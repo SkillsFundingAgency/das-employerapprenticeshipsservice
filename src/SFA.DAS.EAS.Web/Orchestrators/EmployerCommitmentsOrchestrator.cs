@@ -70,7 +70,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
                 HashedId = hashedAccountId,
-                UserId = externalUserId
+                UserId = externalUserId,
+                SignedOnly = false //TODO: This should be true when signed agreements is being used
             });
 
             return new OrchestratorResponse<IList<LegalEntity>>
