@@ -7,7 +7,7 @@
 @{ViewBag.Title = "Your organisations";}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your organisations</h1>
+        <h1 class="heading-xlarge">Your organisations </h1>
     </div>
     <div class="column-one-third">
         <form action="@Url.Action("Add")" method="GET">
@@ -23,45 +23,45 @@
             apprentices through that organisation.
         </p>
 
-        <div class="responsive-table">
-            <div class="responsive-thead">
-                <div class="responsive-tr">
-                    <div class="responsive-th">Name</div>
-                    <div class="responsive-th">Agreement status</div>
-                    <div class="responsive-th"> </div>
-                </div>
-            </div>
-            <div class="responsive-tbody">
+        <table class="tableResponsive orgListing">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th colspan="2">Agreement status</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
 
                 @foreach (var employerAgreement in Model.Data.EmployerAgreements)
             {
-                    <div class="responsive-tr">
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Employer</div>
-                            <div>
+                    <tr class="responsive-tr">
+                        <td class="responsive-td">
+                         
+                            
                                 @employerAgreement.LegalEntityName
-                            </div>
-                        </div>
-                        <div class="responsive-td">
-                            <div class="responsive-inner-caption">Status</div>
-                            <div>
+                           
+                        </td>
+                        <td>
+                          
+                           
                                 @employerAgreement.Status.GetDescription()
-                            </div>
-                        </div>
-                        <div class="responsive-td">
-                            <div>
+                            
+                        </td>
+                        <td>
+                          
                                 <a aria-label="View Employer Agreement @employerAgreement.HashedAgreementId"
                                    title="View Employer Agreement @employerAgreement.HashedAgreementId"
                                    href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
                                     @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
                                 </a>
-                            </div>
-                            <div class="responsive-inner-caption"></div>
-                        </div>
-                    </div>
+                           
+                           
+                        </td>
+                    </tr>
                 }
-            </div>
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
 @section breadcrumb {
