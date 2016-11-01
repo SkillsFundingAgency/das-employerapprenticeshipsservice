@@ -11,7 +11,8 @@ select
 		null,
 		x.SubmissionDate,
 		1,
-		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.EnglishFraction as Amount
+		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.EnglishFraction as Amount,
+		x.EmpRef
 	FROM 
 		[levy].[GetLevyDeclarations] x
 	inner join (
@@ -36,8 +37,8 @@ select
 		null,
 		x.SubmissionDate,
 		2,
-		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.TopUpPercentage as Amount
-		
+		(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.TopUpPercentage as Amount,
+		x.EmpRef
 	FROM 
 		[levy].[GetLevyDeclarations] x
 	inner join (
