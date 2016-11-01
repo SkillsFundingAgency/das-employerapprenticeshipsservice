@@ -565,12 +565,6 @@ details .summary{
    padding: 4px;
 }
 
-/*remove focus from radio & checkboxes */
-
-input[type=radio]:focus, input[type=checkbox]:focus{
-    outline:0 !important;
-}
-
 .js-enabled label.selected{
     outline: 3px solid #ffbf47;
 }
