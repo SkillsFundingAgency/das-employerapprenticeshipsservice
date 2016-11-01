@@ -4,3 +4,23 @@
         margin-top: 1.25em;
     }
 }
+
+.list-bullet {
+    margin-bottom: 40px;
+    list-style: disc;
+}
+
+dl.inline {
+    dt, dd {
+        display: inline;
+    }
+    dt {
+        &:before {
+            content: "";
+            display: block;
+        }
+    }
+    dd {
+        font-weight: bold;
+    }
+}
