@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
@@ -29,13 +30,25 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
 
             var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
-            
+
+            var orderedTransactions = response.OrderBy(x => x.TransactionDate).ToList();
+
+            decimal runningTotal = 0;
+            orderedTransactions.ForEach(x =>
+            {
+                runningTotal += x.Amount;
+                x.Balance = runningTotal;
+            });
+
+            orderedTransactions.Reverse();
+
             var returnValue = new AggregationData
             {
                 HashedId = message.HashedId,
                 AccountId = message.AccountId,
-                TransactionLines = response
+                TransactionLines = orderedTransactions
             };
+
             return new GetEmployerAccountTransactionsResponse {Data = returnValue };
         }
     }
