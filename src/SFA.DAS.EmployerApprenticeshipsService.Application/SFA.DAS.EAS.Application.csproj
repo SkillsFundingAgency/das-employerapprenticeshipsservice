@@ -182,6 +182,9 @@
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
