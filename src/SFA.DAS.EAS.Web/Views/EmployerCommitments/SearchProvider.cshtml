@@ -18,9 +18,7 @@
             @Html.AntiForgeryToken()
 
             <div class="form-group">
-                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label" })
-
-              
+                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label" })           
 
                 <div>
                     @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number")
