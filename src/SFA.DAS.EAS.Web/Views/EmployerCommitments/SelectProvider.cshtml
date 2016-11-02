@@ -4,8 +4,8 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your training provider</h1>
-        <p class="">Your search for <span style="font-weight:700">'@Model.ProviderId'</span> has found the following:</p>
+        <h1 class="heading-xlarge">Confirm training provider</h1>
+        <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.ProviderId'</span> matches:</p>
 
         <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
         @*<h3 class="heading-small" style="margin-top:0px; margin-bottom:0px;color:#6F777B ">Address not available in service</h3>*@
@@ -16,14 +16,14 @@
             <fieldset>
                 <legend class="visuallyhidden">Training provider</legend>
                 <div class="form-group">
-                    <label class="form-label-bold" for="">Will this training provider be training the apprentices you’re about to add?</label>
+                    <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
                     <label class="block-label" for="provider-1">
                         <input id="provider-1" type="radio" name="providerId" value="@Model.ProviderId">
                         Yes, use @Model.Providers[0].ProviderName
                     </label>
                     <label class="block-label" for="provider-2">
                         <input id="provider-2" type="radio" name="providerId" value="">
-                        No, search again
+                        No, change UK Provider Reference Number
                     </label>
                 </div>
             </fieldset>

@@ -6,8 +6,8 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Find your training provider</h1>
-        <p>Search for the training provider that will be training your apprentices.</p>
+        <h1 class="heading-xlarge">Add training provider details</h1>
+      
     </div>
 </div>
 <div class="grid-row">
@@ -18,29 +18,18 @@
             @Html.AntiForgeryToken()
 
             <div class="form-group">
-                @Html.LabelFor(m => m.ProviderId, "Search for training provider", new { @class = "form-label" })
+                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label" })
 
-                <p>Search by UK Provider Reference Number (UKPRN).</p>
+              
 
                 <div>
-                    @Html.ValidationMessageFor(m => m.ProviderId, "Please choose a training provider from the list.")
+                    @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number")
                 </div>
                 @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_label = "Training Provider" })
             </div>
-            <div class="form-group">
-                <details role="group">
-                    <summary role="button" aria-controls="ukprn" aria-expanded="false">
-                        <span class="summary">What is a UKPRN?</span>
-                    </summary>
-                    <div class="panel panel-border-narrow" id="ukprn" aria-hidden="true">
-                        <p>
-                            A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.
-                        </p>
-                    </div>
-                </details>
-            </div>
+           
              
-                    <button type="submit" class="button">Search</button>
+                    <button type="submit" class="button">Continue</button>
               
          
             <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />

@@ -4,9 +4,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Finished editing</h1>
         <div>
-            <p>
-                What do you want to do with this commitment?
-            </p>
+           
             <!--h2 class="heading-medium">
               What do you want to update?
             </h2-->
@@ -29,7 +27,7 @@
                 </div>
 
                 <div style="margin-top:20px;">
-                    <input type="submit" class="button" id="paymentPlan" value="Save and continue">
+                    <input type="submit" class="button" id="paymentPlan" value="Continue">
                     <a class="button" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
             </form>
