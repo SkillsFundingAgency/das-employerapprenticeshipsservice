@@ -13,7 +13,7 @@
 
         <form action="@Url.Action("ConfirmProvider")" method="POST">
             @Html.AntiForgeryToken()
-            <fieldset>
+            <fieldset class="spacerConfirmProvider">
                 <legend class="visuallyhidden">Training provider</legend>
                 <div class="form-group">
                     <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
@@ -27,12 +27,12 @@
                     </label>
                 </div>
             </fieldset>
-            <div style="margin-top: 50px"></div>
+           
             <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
             <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
             <button class="button" type="submit">Continue</button>
         </form>
-        <div style="margin-top:50px"></div>
+      
     </div>
     <div class="column-one-third">
     </div>
