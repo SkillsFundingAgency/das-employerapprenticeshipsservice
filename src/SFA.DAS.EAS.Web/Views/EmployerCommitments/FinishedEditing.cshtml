@@ -9,7 +9,7 @@
               What do you want to update?
             </h2-->
 
-            <form action="@Url.Action("FinishedEditingChoice")" method="post">
+            <form action="@Url.Action("FinishedEditing")" method="post">
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-group">
                     <label class="block-label" for="radio-1">
@@ -30,6 +30,12 @@
                     <input type="submit" class="button" id="paymentPlan" value="Continue">
                     <a class="button" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
+                @Html.HiddenFor(x => x.HashedCommitmentId)
+                @Html.HiddenFor(x => x.LegalEntityCode)
+                @Html.HiddenFor(x => x.LegalEntityName)
+                @Html.HiddenFor(x => x.ProviderId)
+                @Html.HiddenFor(x => x.ProviderName)
+                @Html.HiddenFor(x => x.CohortRef)
             </form>
 
         </div>

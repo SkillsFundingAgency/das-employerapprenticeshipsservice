@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { hashedCommitmentId = hashedCommitmentId });
             }
 
-            return RedirectToAction("SubmitCommitmentEntry", new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef });
+            return RedirectToAction("SubmitNewCommitment", new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef });
         }
 
         [HttpGet]
@@ -189,15 +189,27 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [Route("FinishedCreating")]
+        public ActionResult FinishedCreating(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
+        {
+            if (saveOrSend == "save-no-send")
+            {
+                return RedirectToAction("Cohorts", new { hashedAccountId = hashedAccountId });
+            }
+
+            return RedirectToAction("SubmitNewCommitment", new { hashedAccountId = hashedAccountId, legalEntityCode = legalEntityCode, legalEntityName = legalEntityName, providerId = providerId, providerName = providerName, cohortRef = cohortRef, saveOrSend = saveOrSend });
+        }
+
+        [HttpPost]
         [Route("{hashedCommitmentId}/FinishedEditing")]
-        public ActionResult FinishedEditingChoice(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
+        public ActionResult FinishedEditingExistingChoice(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             if (saveOrSend == "save-no-send")
             {
                 return RedirectToAction("Cohorts", new {hashedAccountId = hashedAccountId});
             }
 
-            return RedirectToAction("SubmitCommitmentEntry", new { hashedAccountId = hashedAccountId, legalEntityCode = legalEntityCode, legalEntityName = legalEntityName, providerId = providerId, providerName = providerName, cohortRef = cohortRef, saveOrSend = saveOrSend});
+            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId, saveOrSend = saveOrSend});
         }
         
         [HttpGet]
@@ -218,38 +230,72 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/Submit")]
-        public ActionResult SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
+        [Route("SubmitNew")]
+        public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
+        {
+            var model = new SubmitCommitmentViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                LegalEntityCode = legalEntityCode,
+                LegalEntityName = legalEntityName,
+                ProviderId = long.Parse(providerId),
+                ProviderName = providerName,
+                CohortRef = cohortRef,
+                SaveOrSend = saveOrSend
+            };
+
+            return View("SubmitCommitmentEntry", model);
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/SubmitExisting")]
+        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             var model = new SubmitCommitmentViewModel
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId,
-                LegalEntityCode = legalEntityCode,
-                LegalEntityName = legalEntityName,
-                ProviderId = long.Parse(providerId),
-                ProviderName = providerName,
                 SaveOrSend = saveOrSend
             };
 
-            return View(model);
+            return View("SubmitCommitmentEntry", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model)
+        public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmentModel model)
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("Acknowledgement", new {cohortRef = model.CohortRef});
+            return RedirectToAction("AcknowledgementExisting", new { cohortRef = model.CohortRef });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Submit")]
+        public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmentModel model)
+        {
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
+
+            return RedirectToAction("AcknowledgementNew", new {cohortRef = model.CohortRef});
+        }
+
+        [HttpGet]
+        [Route("Acknowledgement")]
+        public ActionResult AcknowledgementNew(string hashedAccountId, string cohortRef)
+        {
+            return View("Acknowledgement", new AcknowledgementViewModel
+            {
+                CohortRef = cohortRef
+            });
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult Acknowledgement(string hashedAccountId, string cohortRef)
+        public ActionResult AcknowledgementExisting(string hashedAccountId, string cohortRef)
         {
-            return View(new AcknowledgementViewModel
+            return View("Acknowledgement", new AcknowledgementViewModel
             {
                 CohortRef = cohortRef
             });

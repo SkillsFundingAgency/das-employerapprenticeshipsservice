@@ -26,11 +26,11 @@
                     </label>
                 </div>
             </fieldset>
-            <input type="hidden" id="name" name="name" value="@Model.CohortRef" />
-            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
-            <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.LegalEntityName" />
-            <input type="hidden" id="providerId" name="providerId" value="@Model.ProviderId" />
-            <input type="hidden" id="providerName" name="providerName" value="@Model.ProviderName" />
+            @Html.HiddenFor(x => x.CohortRef)
+            @Html.HiddenFor(x => x.LegalEntityCode)
+            @Html.HiddenFor(x => x.LegalEntityName)
+            @Html.HiddenFor(x => x.ProviderId)
+            @Html.HiddenFor(x => x.ProviderName)
             <button type="submit" class="button">Continue</button>
         </form>
     </div>
