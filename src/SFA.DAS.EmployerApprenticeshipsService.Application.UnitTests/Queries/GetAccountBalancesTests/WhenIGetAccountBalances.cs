@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountBalances
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountBalancesTests
 {
     public class WhenIGetAccountBalances
     {
