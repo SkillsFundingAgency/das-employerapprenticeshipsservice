@@ -135,6 +135,7 @@
     <Compile Include="EmployerAgreementView.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
+    <Compile Include="Entities\Account\AccountBalance.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />

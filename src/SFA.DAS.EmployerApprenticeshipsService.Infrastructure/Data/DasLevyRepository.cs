@@ -6,6 +6,7 @@ using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -110,6 +111,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.ToList();
         }
-    }
+        
+        public async Task<List<AccountBalance>> GetAccountBalances()
+        {
+
+             var result = await WithConnection(async c => await c.QueryAsync<AccountBalance>(
+                 "[levy].[GetAccountBalanceForAllAccounts]",
+                 commandType: CommandType.StoredProcedure));
+
+            return result.ToList();
+            
+        }
+}
 }
 
