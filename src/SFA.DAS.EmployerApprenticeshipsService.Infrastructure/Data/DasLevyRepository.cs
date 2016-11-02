@@ -112,12 +112,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
         
-        public async Task<List<AccountBalance>> GetAccountBalances()
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
         {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountIds", accountIds.ToArray(), DbType.Object);
 
-             var result = await WithConnection(async c => await c.QueryAsync<AccountBalance>(
+                return await c.QueryAsync<AccountBalance>(
                  "[levy].[GetAccountBalanceForAllAccounts]",
-                 commandType: CommandType.StoredProcedure));
+                 parameters,
+                 commandType: CommandType.StoredProcedure);
+            });
+            
 
             return result.ToList();
             

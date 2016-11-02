@@ -185,6 +185,7 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />

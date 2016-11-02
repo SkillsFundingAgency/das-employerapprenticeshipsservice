@@ -13,6 +13,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<DasDeclaration> GetLastSubmissionForScheme(string empRef);
         Task ProcessDeclarations();
         Task<List<TransactionLine>> GetTransactions(long accountId);
-        Task<List<AccountBalance>> GetAccountBalances();
+        Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
     }
 }

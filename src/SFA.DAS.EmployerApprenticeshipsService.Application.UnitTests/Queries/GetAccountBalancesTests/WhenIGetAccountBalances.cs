@@ -3,52 +3,50 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountBalancesTests
 {
-    public class WhenIGetAccountBalances
+    public class WhenIGetAccountBalances :QueryBaseTest<GetAccountBalancesQueryHandler,GetAccountBalancesRequest,GetAccountBalancesResponse>
     {
-        private GetAccountBalancesQueryHandler _handler;
         private Mock<IDasLevyRepository> _repository;
+        public override GetAccountBalancesRequest Query { get; set; }
+        public override GetAccountBalancesQueryHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetAccountBalancesRequest>> RequestValidator { get; set; }
+        private List<long> _expectedAccountIds;
 
         [SetUp]
         public void Arrange()
         {
+            _expectedAccountIds = new List<long> {234234,515151,12312312};
+
+            SetUp();
+
             _repository = new Mock<IDasLevyRepository>();
+            _repository.Setup(x => x.GetAccountBalances(It.IsAny<List<long>>())).ReturnsAsync(new List<AccountBalance> {new AccountBalance()});
 
-            _handler = new GetAccountBalancesQueryHandler(_repository.Object);
+            Query = new GetAccountBalancesRequest {AccountIds = _expectedAccountIds };
+
+            RequestHandler = new GetAccountBalancesQueryHandler(_repository.Object,RequestValidator.Object);
         }
 
         [Test]
-        public async Task ThenTheDasLevyRepositoryIsCalled()
+        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await _handler.Handle(new GetAccountBalancesRequest());
+            await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x => x.GetAccountBalances());
+            _repository.Verify(x=>x.GetAccountBalances(_expectedAccountIds));
         }
 
         [Test]
-        public async Task ThenTheReturnTypeIsAssignableToTheResponse()
+        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await _handler.Handle(new GetAccountBalancesRequest());
-
-            //Assert
-            Assert.IsAssignableFrom<GetAccountBalancesResponse>(actual);
-        }
-
-        [Test]
-        public async Task ThenTheValuesReturnedFromTheRepositoryAreMappedToTheResponse()
-        {
-            //Arrange
-            _repository.Setup(x => x.GetAccountBalances()).ReturnsAsync(new List<AccountBalance> { new AccountBalance() });
-
-            //Act
-            var actual = await _handler.Handle(new GetAccountBalancesRequest());
+            var actual = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.IsNotEmpty(actual.Accounts);
