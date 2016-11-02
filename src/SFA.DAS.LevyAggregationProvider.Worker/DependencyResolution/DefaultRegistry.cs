@@ -15,8 +15,7 @@ namespace SFA.DAS.EAS.LevyAggregationProvider.Worker.DependencyResolution
             Scan(
                 scan =>
                 {
-                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS.EmployerApprenticeshipsService") ||
-                        a.GetName().Name.StartsWith(ServiceName));
+                    scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS."));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                 });
 

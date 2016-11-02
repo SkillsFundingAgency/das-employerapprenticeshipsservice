@@ -63,7 +63,7 @@
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EAS.Account.Api</RoleName>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Web\SFA.DAS.EAS.Web.csproj">
+    <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Name>SFA.DAS.EAS.Web</Name>
       <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>
       <Private>True</Private>

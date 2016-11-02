@@ -1,0 +1,72 @@
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Domain.Entities.Account
+
+@model OrchestratorResponse<Account>
+
+@{
+    ViewBag.Title = Model.Data.Name;
+}
+
+<h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+     
+            <div class="grid-row">
+                <div class="column-half">
+                    <h3 class="heading-medium" style="margin-top: 0;">
+                        <a href="@Url.Action("ViewTeam", new { accountId = Model.Data.HashedId })">Team</a>
+                    </h3>
+                    <p>Invite new users and manage existing ones</p>
+                </div>
+                <div class="column-half ">
+                    <h3 class="heading-medium" style="margin-top: 0">
+                        <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Data.HashedId })">Funding</a>
+                    </h3>
+                    <p>Manage your funds including how much you have available to spend, your transactions and funds you could lose</p>
+                </div>
+
+            </div>
+            <div class="grid-row">
+                <div class="column-half ">
+                    <h3 class="heading-medium" style="margin-top: 0">
+                        <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.HashedId })">Organisations</a>
+                    </h3>
+                    <p>Manage organisations and sign your agreements</p>
+                </div>
+                <div class="column-half">
+                    <h3 class="heading-medium" style="margin-top: 0;">
+                        <a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })">PAYE</a>
+                    </h3>
+                    <p>Manage the PAYE schemes associated with your Account</p>
+                </div>
+            </div>
+            <div class="grid-row">
+                <div class="column-half ">
+                    <h3 class="heading-medium" style="margin-top: 0">
+                        <a href="@Url.Action("Index", "EmployerCommitments", new { hashedAccountId = Model.Data.HashedId })">Apprentices</a>
+                    </h3>
+                    <p>Add apprentices, review and approve cohorts and pause or stop apprentices</p>
+                </div>
+            </div>
+        </div>
+    <div class="column-one-third">
+
+        <section>
+            <div class="panel panel-filled">
+                <h2 class="heading-large">Give us your feedback</h2>
+                <p>This is a new service and your feedback will help us improve it. Use the link below to take part in a short survey.</p>
+                <p><a href="https://www.surveymonkey.co.uk/r/accessmylevysurveyend" target="_blank" class="button">Take the survey</a></p>
+            </div>
+        </section>
+    </div>
+</div>
+
+@section breadcrumb {
+<div class="breadcrumbs">
+    <ol role="navigation">
+        <li><a href="/">Your User Profile</a></li>
+        <li>Employer Account Homepage</li>
+    </ol>
+</div>
+}

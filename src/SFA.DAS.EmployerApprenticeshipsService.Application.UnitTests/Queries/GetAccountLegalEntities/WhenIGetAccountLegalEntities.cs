@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
                 RoleId = (short)Role.Owner,
                 AccountId = ExpectedAccountId
             });
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId)).ReturnsAsync(_legalEntities);
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false)).ReturnsAsync(_legalEntities);
 
         }
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
             await RequestHandler.Handle(Query);
 
             //Assert
-            _employerAgreementRepository.Verify(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId), Times.Once);
+            _employerAgreementRepository.Verify(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false), Times.Once);
         }
 
         [Test]

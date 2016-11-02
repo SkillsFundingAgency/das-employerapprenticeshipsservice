@@ -1,0 +1,69 @@
+﻿@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Domain.ViewModels.UserInvitationsViewModel
+
+
+<div class="grid-row">
+    <div class="column-full">
+        <h1 class="heading-xlarge">Invitations</h1>
+        @if (Model.Invitations.Count == 0)
+        {
+            <p>You have no invitations. Invitations expire after 7 days.</p>
+            <a class="button" href="@Url.Action("Index","Home")">Return to your profile</a>
+        }
+        else
+        {
+            if (Model.Invitations.Count == 1)
+            {
+                <p>You have @Model.Invitations.Count invitation to a levy account.</p>
+            }
+            else
+            {
+                <p>You have @Model.Invitations.Count invitations to levy accounts.</p>
+            }
+            <form method="post" action="~/Invitation/Accept">
+                @Html.AntiForgeryToken()
+                <div class="responsive-table">
+                    <div class="responsive-thead">
+                        <div class="responsive-tr">
+                            <div class="responsive-th">Account name</div>
+                            <div class="responsive-th">What you can do</div>
+                            <div class="responsive-th">Expires in</div>
+                            <div class="responsive-th"> </div>
+                        </div>
+                    </div>
+
+                    <div class="responsive-tbody">
+                        @for (var index = 0; index < Model.Invitations.Count; index++)
+                        {
+                            var invitation = Model.Invitations[index];
+                            <div class="responsive-tr">
+                                <div class="responsive-td">
+                                    <div>@invitation.AccountName</div>
+                                    <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName"/>
+                                    <div class="responsive-inner-caption"></div>
+                                </div>
+                                <div class="responsive-td">
+                                    <div class="responsive-inner-caption">what you can do</div>
+                                    <div>@RoleStrings.ToWhatTheyCanDo(@invitation.RoleName)</div>
+                                </div>
+                                <div class="responsive-td">
+                                    <div class="responsive-inner-caption">Expires in</div>
+                                    <div>@invitation.ExpiryDays()</div>
+                                </div>
+                                <div class="responsive-td">
+                                    <div>
+                                        <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
+                                        <button type="submit" id="invitationId" value="@invitation.Id" name="invitation" class="button">Accept</button>
+                                    </div>
+                                    <div class="responsive-inner-caption"></div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+
+                </div>
+            </form>
+        }
+    </div>
+</div>

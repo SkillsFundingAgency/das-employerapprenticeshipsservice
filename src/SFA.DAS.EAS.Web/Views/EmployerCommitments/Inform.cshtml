@@ -1,0 +1,44 @@
+﻿@using SFA.DAS.EAS.Web.Models
+
+@model CommitmentInformViewModel
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Add an apprentice</h1>
+       
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <p>Use this service to:</p>
+            <ul class="list-bullet">
+                <li>add one or more apprentices (a cohort) to your account</li>
+                <li>create a link between your levy account and training provider</li>
+                <li>make sure your training provider gets paid</li>
+            </ul>
+        <p>You'll need to know:</p>
+            <ul class="list-bullet">
+                <li>who your apprentices will be employed by, if your organisation has more than one legal entity</li>
+                <li>the UK Provider Reference Number (UKPRN) of your training provider</li>
+             </ul>        
+        <details role="group">
+            <summary role="button" aria-controls="ukprn" aria-expanded="false">
+                <span class="summary">What is a UKPRN?</span>
+            </summary>
+            <div class="panel panel-border-narrow" id="ukprn" aria-hidden="true">
+                <p>
+                    A UK Provider Reference Number (UKPRN) is a unique number that identifies an individual training provider. Your training provider will be able to tell you their UKPRN.
+                </p>
+            </div>
+        </details>
+          <h2 class="heading-medium">Before you start</h2>
+        <p>You will need:</p>
+            <ul class="list-bullet" >
+                <li>an employer agreement with the Skills Funding Agency</li>
+                <li>a training contract with your training provider</li>
+                <li>the names of your apprentices</li>
+            </ul>
+        <p>Once you start, you can choose to add details of each apprentice or allow your training provider to add details for you.</p>
+        <a href="@Url.Action("SelectLegalEntity")" class="button">Start</a>
+    </div>
+</div>

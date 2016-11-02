@@ -11,6 +11,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
       <Setting name="EventHubName" value="__EventHubName__" />
+      <Setting name="RedisConnection" value="__RedisConnection__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />

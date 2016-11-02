@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountForExisting
             _accountRepository = new Mock<IAccountRepository>(); 
             _membershipRepository = new Mock<IMembershipRepository>();
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId))
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
                 .ReturnsAsync(new List<LegalEntity> { new LegalEntity { Id = 2 } });
 
             _handler = new AddPayeToAccountForExistingLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _employerAgreementRepository.Object, _messagePublisher.Object);
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountForExisting
         [Test]
         public void ThenIThrowAnExceptionWhenLegalEntityNotLinkedToAccount()
         {
-            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId))
+            _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false))
                 .ReturnsAsync(new List<LegalEntity>());
 
             var requestException = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));

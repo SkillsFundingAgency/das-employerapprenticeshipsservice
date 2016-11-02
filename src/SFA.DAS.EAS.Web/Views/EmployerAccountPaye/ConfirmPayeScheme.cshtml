@@ -1,0 +1,45 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddNewPayeScheme>
+@{ViewBag.Title = "Confirm PAYE Scheme";}    
+<div class="grid-row">
+    <div class="column-two-thirds">
+        
+
+        @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
+        {
+            <h1 class="heading-xlarge">Confirm PAYE scheme</h1>
+            <form method="post">
+                @Html.AntiForgeryToken()
+
+                <p>Do you want to associate @Model.Data.PayeScheme with your account?</p>
+
+                <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
+                <input type="hidden" value="@Model.Data.PayeScheme" name="PayeScheme"/>
+                <input type="hidden" value="@Model.Data.RefreshToken" name="RefreshToken"/>
+                <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
+
+                <div class="form-group">
+                    <button type="submit" class="button" id="accept">Accept</button>
+                    <a class="button button-link" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Search Again</a>
+                </div>
+            </form>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">PAYE scheme already in use</h1>
+            <p>The PAYE scheme for the Government Gateway details you entered is already added to an account. </p>
+            <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Use different details</a></p>
+        }
+
+
+
+       
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })" class="back-link">Back to PAYE schemes</a></li>
+        </ol>
+    </div>
+}
