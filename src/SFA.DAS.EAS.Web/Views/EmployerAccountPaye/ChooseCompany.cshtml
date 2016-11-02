@@ -31,7 +31,7 @@
                     <input type="radio" name="selectedCompanyId" value="-1" />
                     <input type="hidden" name="LegalEntities[@index].Id" value="-1" />
                     <input type="hidden" name="LegalEntities[@index].Name" value="new-company" />
-                    <span class="heading-small">Add new legal entity</span>
+                    <span class="heading-small">Add new organisation</span>
                 </label>
             </div>
 
@@ -41,3 +41,11 @@
 
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.HashedId })" class="back-link">Back to PAYE schemes</a></li>
+        </ol>
+    </div>
+}

@@ -11,6 +11,7 @@
       <Setting name="LogLevel" value="Debug" />
       <Setting name="EventHubConnectionString" value="" />
       <Setting name="EventHubName" value="" />
+      <Setting name="RedisConnection" value="localhost" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />

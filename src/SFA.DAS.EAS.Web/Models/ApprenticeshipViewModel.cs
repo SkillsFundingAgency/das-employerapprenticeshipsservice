@@ -15,7 +15,9 @@ namespace SFA.DAS.EAS.Web.Models
         public string LastName { get; set; }
         public string ApprenticeshipName => $"{FirstName} {LastName}";
         public string ULN { get; set; }
-        public string TrainingId { get; set; } //standard or framework
+        public TrainingType TrainingType { get; set; }
+        public string TrainingCode { get; set; }
+        public string TrainingName { get; set; }
         public string Cost { get; set; }
         public int? StartMonth { get; set; }
 
@@ -41,19 +43,5 @@ namespace SFA.DAS.EAS.Web.Models
         public int? EndYear { get; set; }
         public ApprenticeshipStatus Status { get; set; }
         public string AgreementStatus { get; set; }
-        public bool CanBeApproved()
-        {
-            return Status == ApprenticeshipStatus.ReadyForApproval;
-        }
-
-        public bool CanBePaused()
-        {
-            return Status == ApprenticeshipStatus.Approved;
-        }
-
-        public bool CanBeResumed()
-        {
-            return Status == ApprenticeshipStatus.Paused;
-        }
     }
 }

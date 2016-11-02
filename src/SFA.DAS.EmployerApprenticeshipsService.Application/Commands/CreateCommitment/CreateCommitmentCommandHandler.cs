@@ -5,7 +5,8 @@ using SFA.DAS.Commitments.Api.Client;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
-    public sealed class CreateCommitmentCommandHandler : AsyncRequestHandler<CreateCommitmentCommand>
+    public sealed class CreateCommitmentCommandHandler :
+        IAsyncRequestHandler<CreateCommitmentCommand, CreateCommitmentCommandResponse>
     {
         private readonly ICommitmentsApi _commitmentApi;
 
@@ -17,9 +18,23 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
             _commitmentApi = commitmentApi;
         }
 
-        protected override async Task HandleCore(CreateCommitmentCommand message)
+        public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand message)
         {
-            await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
+            try
+            {
+                var commitment = await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
+
+                return new CreateCommitmentCommandResponse
+                {
+                    CommitmentId = commitment.Id
+                };
+
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
         }
     }
 }

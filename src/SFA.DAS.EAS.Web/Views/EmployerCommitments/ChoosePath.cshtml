@@ -16,18 +16,21 @@
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
                 <div class="form-group">
                     <label class="block-label" for="radio1">
-                        <input id="radio1" type="radio" name="radio-group" value="employer">
+                        <input id="radio1" type="radio" name="selectedRoute" value="employer">
                         I will add apprentices
                     </label>
                     <label class="block-label selected" for="radio2">
-                        <input id="radio2" type="radio" name="radio-group" value="provider">
+                        <input id="radio2" type="radio" name="selectedRoute" value="provider">
                         I'd like my provider to add apprentices
                     </label>
                 </div>
             </fieldset>
+            <input type="hidden" id="name" name="name" value="@Model.Name" />
             <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
+            <input type="hidden" id="legalEntityName" name="legalEntityName" value="@Model.LegalEntityName" />
             <input type="hidden" id="providerId" name="providerId" value="@Model.ProviderId" />
-            <button type="submit" class="button">Save and continue</button>
+            <input type="hidden" id="providerName" name="providerName" value="@Model.ProviderName" />
+            <button type="submit" class="button">Continue</button>
         </form>
     </div>
     <div class="column-one-third"></div>

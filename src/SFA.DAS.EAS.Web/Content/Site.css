@@ -560,3 +560,81 @@ details .summary{
 .form-group .input-validation-error{
     margin-left:0;
 }
+
+.error .form-control {
+   padding: 4px;
+}
+
+.js-enabled label.selected{
+    outline: 3px solid #ffbf47;
+}
+
+textarea#Message{
+    width:100%;
+}
+
+.column-one-third .finishEditingBtn{
+    margin-top: 3.35em;
+}
+
+/* responsive table */ 
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr { 
+		display: block; 
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.tableResponsive thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	.tableResponsive tr { border: 1px solid #ccc; margin-bottom:20px; }
+	
+	.tableResponsive td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	.tableResponsive td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	/*
+	Label for the data
+	*/
+	.viewCommitment td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; min-height:30px; }
+	.viewCommitment td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
+	.viewCommitment td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px;}
+	
+    .cohort td:nth-of-type(1):before { content: "Provider"; font-weight:bold; margin-top:5px; }
+	.cohort td:nth-of-type(2):before { content: "Legal Entity"; font-weight:bold; margin-top:5px; }
+	.cohort td:nth-of-type(3):before { content: "Name"; font-weight:bold; margin-top:5px;}
+
+    .levyAccountsListing td:nth-of-type(1):before { content: "Account name"; font-weight:bold; margin-top:5px; }
+	.levyAccountsListing td:nth-of-type(2):before { content: "What you can do"; font-weight:bold; margin-top:5px; }
+
+     .orgListing td:nth-of-type(1):before { content: "Name"; font-weight:bold; margin-top:5px; }
+	.orgListing td:nth-of-type(2):before { content: "Agreement status"; font-weight:bold; margin-top:5px; }
+
+
+    /*finished editing button spacing*/
+    .column-one-third .finishEditingBtn{margin-top:0.25em;}
+
+}
+

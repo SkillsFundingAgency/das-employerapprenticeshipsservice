@@ -5,7 +5,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View commitment</h1>
+        <h1 class="heading-xlarge">View cohort</h1>
         <table>
             <tbody>
                 <tr>
@@ -23,6 +23,11 @@
                     <td>@Model.ProviderName</td>
                     <td></td>
                 </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>@Model.Status.GetDescription()</td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
    
@@ -36,13 +41,13 @@
         }
         else
         {
-            <table>
+            <table class="tableResponsive viewCommitment">
             <thead>
                 <tr>
 
                     <th scope="col">Apprentice</th>
                     <th scope="col">Training</th>
-                    <th scope="col" colspan="3">Status</th>
+                    <th scope="col" colspan="2">Status</th>
 
                 </tr>
             </thead>
@@ -52,27 +57,18 @@
                     <tr>
                         <td>
         
-                            @apprenticeship.ApprenticeshipName
+                           @apprenticeship.ApprenticeshipName &nbsp; 
                         </td>
                         <td>
                           
-                            @apprenticeship.TrainingId
+                            @apprenticeship.TrainingName &nbsp;
                         </td>
                         <td>
                             
-                            @apprenticeship.Status.GetDescription()
+                            @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
                                 <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })">View</a>                   
-                        </td>
-                        <td>
-                            @if (apprenticeship.CanBeApproved())
-                            {
-                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" name="commitment" class="button">Approve</button>
-                                    </form>                                
-                            }
                         </td>
                     </tr>
                 }
@@ -82,6 +78,6 @@
         <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add an apprentice</a>
     </div>
     <div class="column-one-third">
-        <a class="button" href="@Url.Action("FinishedEditing")">Finish Editing</a>
+        <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")">Finish Editing</a>
     </div>
 </div>
