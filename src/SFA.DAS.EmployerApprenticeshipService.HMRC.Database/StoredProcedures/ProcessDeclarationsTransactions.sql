@@ -7,6 +7,7 @@ INSERT INTO levy.TransactionLine
 	
 select 
 		x.AccountId,
+		GetDate(),
 		x.SubmissionId,
 		null,
 		x.SubmissionDate,
@@ -33,6 +34,7 @@ INSERT INTO levy.TransactionLine
 	
 select 
 		x.AccountId,
+		GetDate(),
 		x.SubmissionId,
 		null,
 		x.SubmissionDate,

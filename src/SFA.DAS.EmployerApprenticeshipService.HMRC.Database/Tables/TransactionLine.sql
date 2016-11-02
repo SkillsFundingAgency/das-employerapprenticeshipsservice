@@ -1,6 +1,7 @@
 ﻿CREATE TABLE levy.TransactionLine
 (
 	AccountId BIGINT NOT NULL,
+	DateCreated DATETIME NOT NULL,
 	SubmissionId BIGINT NULL,
 	PaymentId UNIQUEIDENTIFIER NULL,
 	TransactionDate DATETIME NOT NULL,
