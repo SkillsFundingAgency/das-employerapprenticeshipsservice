@@ -1,4 +1,6 @@
-﻿<div class="grid-row">
+﻿@model SFA.DAS.EAS.Web.Models.AcknowledgementViewModel
+
+<div class="grid-row">
     <div class="column-two-thirds">
 
 
@@ -12,7 +14,7 @@
             <tbody>
                 <tr>
                     <td>Reference</td>
-                    <td class="strong">98HGS3F</td>
+                    <td class="strong">@Model.CohortRef</td>
                 </tr>
                 <tr>
                     <td>Sent to </td>

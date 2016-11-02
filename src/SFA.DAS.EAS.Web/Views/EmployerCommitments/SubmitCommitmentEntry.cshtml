@@ -19,8 +19,14 @@
                           cols="40" rows="10"
                           aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
                 </div>
-                <input type="hidden" id="saveOrSend" name="saveOrSend" value="@Model.SaveOrSend" />
-                <button type="submit" class="button">Send </button>
+                 @Html.HiddenFor(x => x.HashedCommitmentId)
+                 @Html.HiddenFor(x => x.LegalEntityCode)
+                 @Html.HiddenFor(x => x.LegalEntityName)
+                 @Html.HiddenFor(x => x.ProviderId)
+                 @Html.HiddenFor(x => x.ProviderName)
+                 @Html.HiddenFor(x => x.CohortRef)
+                 @Html.HiddenFor(x => x.SaveOrSend)
+                <button type="submit" class="button">Send request to provider</button>
             </form>
         </div>
     </div>

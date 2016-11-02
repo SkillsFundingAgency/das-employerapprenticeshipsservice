@@ -156,16 +156,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Create")]
         public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel, string selectedRoute)
         {
-            var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
-
             if (selectedRoute == "employer")
             {
+                var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
+
                 return RedirectToAction("Details", new { hashedCommitmentId = hashedCommitmentId });
             }
-            else
-            {
-                return RedirectToAction("SubmitCommitmentEntry", new { hashedCommitmentId = hashedCommitmentId });
-            }
+
+            return RedirectToAction("SubmitCommitmentEntry", new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef });
         }
 
         [HttpGet]
@@ -192,14 +190,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("{hashedCommitmentId}/FinishedEditing")]
-        public ActionResult FinishedEditingChoice(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public ActionResult FinishedEditingChoice(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
         {
             if (saveOrSend == "save-no-send")
             {
                 return RedirectToAction("Cohorts", new {hashedAccountId = hashedAccountId});
             }
 
-            return RedirectToAction("SubmitCommitmentEntry", new {hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId, saveOrSend = saveOrSend});
+            return RedirectToAction("SubmitCommitmentEntry", new { hashedAccountId = hashedAccountId, legalEntityCode = legalEntityCode, legalEntityName = legalEntityName, providerId = providerId, providerName = providerName, cohortRef = cohortRef, saveOrSend = saveOrSend});
         }
         
         [HttpGet]
@@ -221,19 +219,16 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public ActionResult SubmitCommitmentEntry(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
         {
-            // TODO: LWA Implement 
-            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
-            
             var model = new SubmitCommitmentViewModel
             {
-                SubmitCommitmentModel = new SubmitCommitmentModel
-                {
-                    HashedAccountId = hashedAccountId,
-                    HashedCommitmentId = hashedCommitmentId
-                },
-                Commitment = commitment,
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId,
+                LegalEntityCode = legalEntityCode,
+                LegalEntityName = legalEntityName,
+                ProviderId = long.Parse(providerId),
+                ProviderName = providerName,
                 SaveOrSend = saveOrSend
             };
 
@@ -243,19 +238,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model, string saveOrSend)
+        public async Task<ActionResult> SubmitCommitment(SubmitCommitmentModel model)
         {
-            // TODO: LWA Implement
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.Message, saveOrSend);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("Acknowledgement");
+            return RedirectToAction("Acknowledgement", new {cohortRef = model.CohortRef});
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult Acknowledgement(string hashedAccountId)
+        public ActionResult Acknowledgement(string hashedAccountId, string cohortRef)
         {
-            return View();
+            return View(new AcknowledgementViewModel
+            {
+                CohortRef = cohortRef
+            });
         }
 
         [HttpPost]
