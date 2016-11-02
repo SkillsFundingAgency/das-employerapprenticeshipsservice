@@ -7,7 +7,7 @@ using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions
 {
-    public class GetAccountTransactionsRequest : IAsyncRequest<GetAccountTransactionsResponse>, IAsyncRequest
+    public class GetAccountTransactionsRequest : IAsyncRequest<GetAccountTransactionsResponse>
     {
         public long AccountId { get; set; }
     }
