@@ -491,6 +491,7 @@
     <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\SFA.DAS.EASPublishProfile.pubxml" />
     <Content Include="Properties\webjobs-list.json" />
+    <Content Include="README" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
