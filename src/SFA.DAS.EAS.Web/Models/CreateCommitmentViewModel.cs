@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation.Attributes;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
@@ -8,12 +10,11 @@ namespace SFA.DAS.EAS.Web.Models
         public string LegalEntityCode { get; set; }
     }
 
+    [Validator(typeof(SelectProviderViewModelValidator))]
     public sealed class SelectProviderViewModel
     {
-        [Required]
         public string LegalEntityCode { get; set; }
 
-        [Required(ErrorMessage = "Enter a valid UK Provider Reference Number")]
         public string ProviderId { get; set; }
     }
 
