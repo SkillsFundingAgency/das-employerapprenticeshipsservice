@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity
             if ((Role)caller.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
-            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(caller.AccountId);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(caller.AccountId, false);
 
             var isLinked = legalEntities.Exists(x => x.Id == message.LegalEntityId);
 

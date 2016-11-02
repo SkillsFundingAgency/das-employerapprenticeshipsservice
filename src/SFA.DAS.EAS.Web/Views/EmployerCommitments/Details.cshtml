@@ -5,7 +5,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View commitment</h1>
+        <h1 class="heading-xlarge">View cohort</h1>
         <table>
             <tbody>
                 <tr>
@@ -21,6 +21,11 @@
                 <tr>
                     <th scope="row">Provider</th>
                     <td>@Model.ProviderName</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Status</th>
+                    <td>@Model.Status.GetDescription()</td>
                     <td></td>
                 </tr>
             </tbody>
@@ -42,7 +47,7 @@
 
                     <th scope="col">Apprentice</th>
                     <th scope="col">Training</th>
-                    <th scope="col" colspan="3">Status</th>
+                    <th scope="col" colspan="2">Status</th>
 
                 </tr>
             </thead>
@@ -65,15 +70,6 @@
                         </td>
                         <td>
                                 <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })">View</a>                   
-                        </td>
-                        <td>
-                            @if (apprenticeship.CanBeApproved())
-                            {
-                                    <form action="@Url.Action("ApproveApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" method="POST">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" name="commitment" class="button">Approve</button>
-                                    </form>                                
-                            }
                         </td>
                     </tr>
                 }
