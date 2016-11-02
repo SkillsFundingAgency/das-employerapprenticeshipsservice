@@ -93,9 +93,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string externalUserId)
         {
             var providers = await GetProvider(int.Parse(providerId));
-            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
-
             var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
+
+            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
             var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
 
             return new OrchestratorResponse<CreateCommitmentViewModel>
@@ -322,7 +322,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            return data.ProvidersView.Providers;
+            return data?.ProvidersView?.Providers;
         }
     }
 }

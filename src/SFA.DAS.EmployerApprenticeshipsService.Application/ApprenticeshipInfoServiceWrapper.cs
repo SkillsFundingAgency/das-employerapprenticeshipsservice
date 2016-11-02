@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
@@ -59,9 +60,17 @@ namespace SFA.DAS.EAS.Application
 
         public ProvidersView GetProvider(int ukPrn)
         {
-            var api = new ProviderApiClient(_configuration.BaseUrl);
+            try
+            {
+                var api = new ProviderApiClient(_configuration.BaseUrl);
+                var providersView = MapFrom(api.Get(ukPrn));
 
-            return MapFrom(api.Get(ukPrn));
+                return providersView;
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
