@@ -80,6 +80,7 @@
     <Build Include="Tables\TransactionLine.sql" />
     <Build Include="StoredProcedures\ProcessDeclarationsTransactions.sql" />
     <Build Include="StoredProcedures\GetTransactionLines_ByAccountId.sql" />
+    <Build Include="StoredProcedures\GetAccountBalanceForAllAccounts.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
