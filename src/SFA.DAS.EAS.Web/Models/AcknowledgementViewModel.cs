@@ -2,6 +2,6 @@
 {
     public class AcknowledgementViewModel
     {
-        public string CohortRef { get; set; }
+        public string HashedCommitmentId { get; set; }
     }
 }

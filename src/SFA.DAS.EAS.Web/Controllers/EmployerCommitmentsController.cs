@@ -268,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementExisting", new { cohortRef = model.CohortRef });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
         }
 
         [HttpPost]
@@ -278,26 +278,26 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementNew", new {cohortRef = model.CohortRef});
+            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId = model.HashedCommitmentId});
         }
 
         [HttpGet]
         [Route("Acknowledgement")]
-        public ActionResult AcknowledgementNew(string hashedAccountId, string cohortRef)
+        public ActionResult AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
         {
             return View("Acknowledgement", new AcknowledgementViewModel
             {
-                CohortRef = cohortRef
+                HashedCommitmentId = hashedCommitmentId
             });
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult AcknowledgementExisting(string hashedAccountId, string cohortRef)
+        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
         {
             return View("Acknowledgement", new AcknowledgementViewModel
             {
-                CohortRef = cohortRef
+                HashedCommitmentId = hashedCommitmentId
             });
         }
 
