@@ -14,7 +14,7 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("SelectProvider")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-            <hr />
+         
             @Html.AntiForgeryToken()
 
             <div class="form-group">
