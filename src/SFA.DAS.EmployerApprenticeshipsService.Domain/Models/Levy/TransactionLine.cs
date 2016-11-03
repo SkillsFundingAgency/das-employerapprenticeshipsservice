@@ -15,5 +15,6 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public LevyItemType TransactionType { get; set; }
         public decimal Amount { get; set; }
         public decimal Balance { get; set; }
+        public string EmpRef { get; set; }
     }
 }
