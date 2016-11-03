@@ -1,6 +1,7 @@
 ﻿// custom jquery scripts 
 $(document).ready(function () {
 
+    $('label').removeClass('selected');
 
     // Radio with outline on click
     $('input:radio').click(function () {

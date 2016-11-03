@@ -18,7 +18,7 @@
 
             <form action="@Url.Action("ConfirmProvider")" method="POST">
                 @Html.AntiForgeryToken()
-                <fieldset>
+                <fieldset class="spacerConfirmProvider">
                     <legend class="visuallyhidden">Training provider</legend>
                     <div class="form-group">
                         <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
