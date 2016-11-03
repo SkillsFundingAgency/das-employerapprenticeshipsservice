@@ -23,3 +23,12 @@ aside.sidebar {
 table.top-border {
     border-top: 1px solid $grey-2;
 }
+
+.action-add {
+    margin-bottom: 20px;
+    @include media(tablet) {
+        margin-top: 60px;
+        float: right;
+        clear: both;
+    }
+}

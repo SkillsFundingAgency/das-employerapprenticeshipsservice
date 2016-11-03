@@ -27,3 +27,9 @@
 .button-link {
     @include button($grey-3);
 }
+
+.form-group {
+    form {
+        display: inline-block;
+    }
+}

@@ -6,3 +6,10 @@ td.link-right {
     text-align: right;
     padding-right: 0;
 }
+
+table th, table td {
+    font-size: 14px;
+    @include media(tablet) {
+        font-size: 16px;
+    }
+}
