@@ -74,6 +74,10 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +141,9 @@
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommand.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandHandler.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />

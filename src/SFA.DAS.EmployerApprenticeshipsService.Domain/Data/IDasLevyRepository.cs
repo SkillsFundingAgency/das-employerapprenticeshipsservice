@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Domain.Data
 {
@@ -14,5 +15,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task ProcessDeclarations();
         Task<List<TransactionLine>> GetTransactions(long accountId);
         Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
+        Task CreateNewPeriodEnd(PeriodEnd periodEnd);
     }
 }
