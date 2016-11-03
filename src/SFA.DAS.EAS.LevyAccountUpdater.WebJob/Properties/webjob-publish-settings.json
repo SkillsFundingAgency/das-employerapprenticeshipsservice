@@ -4,6 +4,6 @@
   "startTime": "2016-10-27T10:30:00+00:00",
   "endTime": null,
   "jobRecurrenceFrequency": "Minute",
-  "interval": __WebJobIntervalMinutes__,
+  "interval": 5,
   "runMode": "Scheduled"
 }
