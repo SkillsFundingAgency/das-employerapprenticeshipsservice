@@ -9,7 +9,7 @@ using NLog;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccounts;
+using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         {
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
