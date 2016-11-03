@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccounts
+namespace SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts
 {
-    public class GetEmployerAccountsResponse
+    public class GetPagedEmployerAccountsResponse
     {
         public List<Account> Accounts { get; set; }
         public int AccountsCount { get; set; }
