@@ -63,6 +63,7 @@
     <Folder Include="StoredProcedures" />
     <Folder Include="Schemas" />
     <Folder Include="SeedData" />
+    <Folder Include="Types" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -80,7 +81,8 @@
     <Build Include="Tables\TransactionLine.sql" />
     <Build Include="StoredProcedures\ProcessDeclarationsTransactions.sql" />
     <Build Include="StoredProcedures\GetTransactionLines_ByAccountId.sql" />
-    <Build Include="StoredProcedures\GetAccountBalanceForAllAccounts.sql" />
+    <Build Include="StoredProcedures\GetAccountBalance_ByAccountIds.sql" />
+    <Build Include="Types\AccountIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

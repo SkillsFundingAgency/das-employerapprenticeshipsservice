@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,11 +117,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = await WithConnection(async c =>
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountIds", accountIds.ToArray(), DbType.Object);
 
+                var dataTable = new DataTable("[levy].[AccountIds]");
+                dataTable.Columns.Add("AccountId", typeof(long));
+                foreach (var item in accountIds)
+                {
+                    dataTable.Rows.Add(item);
+                }
+
+                var parameters = new AccountIdUserTableParam(accountIds);
+                
                 return await c.QueryAsync<AccountBalance>(
-                 "[levy].[GetAccountBalanceForAllAccounts]",
+                 "[levy].[GetAccountBalance_ByAccountIds]",
                  parameters,
                  commandType: CommandType.StoredProcedure);
             });
@@ -129,6 +137,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
             
         }
-}
+    }
 }
 

@@ -124,6 +124,7 @@
   <ItemGroup>
     <Compile Include="Caching\ICacheProvider.cs" />
     <Compile Include="Caching\InProcessCacheProvider.cs" />
+    <Compile Include="Data\AccountIdUserTableParam.cs" />
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\EnglishFractionRepository.cs" />
