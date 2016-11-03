@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider
@@ -19,12 +20,12 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider
 
         public async Task<GetProviderQueryResponse> Handle(GetProviderQueryRequest message)
         {
-            var provider = _apprenticeshipInfoServiceWrapper.GetProvider(message.ProviderId);
+            var provider = await Task.Run(() => _apprenticeshipInfoServiceWrapper.GetProvider(message.ProviderId));
 
-            return await Task.FromResult(new GetProviderQueryResponse
+            return new GetProviderQueryResponse
             {
                 ProvidersView = provider
-            });
+            };
         }
     }
 }

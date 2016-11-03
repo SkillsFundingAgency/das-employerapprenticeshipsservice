@@ -406,6 +406,7 @@
     <Compile Include="Models\UserAccountsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
