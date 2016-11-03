@@ -577,6 +577,27 @@ textarea#Message{
     margin-top: 3.35em;
 }
 
+.spacerConfirmProvider{
+    margin-top:50px;
+}
+
+.spacerConfirmProvider .form-label-bold {
+    margin-bottom: 15px;
+}
+
+.instructionSent td{
+    width:25%;
+}
+
+.instructionSent td.strong{
+    font-weight:bold;
+    width:75%;
+}
+
+.govuk-box-highlight .heading-xlarge{
+    margin: 0 0 10px;
+}
+
 /* responsive table */ 
 @media 
 only screen and (max-width: 760px),

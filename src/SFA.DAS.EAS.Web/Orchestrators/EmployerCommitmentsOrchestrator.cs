@@ -22,7 +22,6 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetProvider;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -93,9 +92,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string externalUserId)
         {
             var providers = await GetProvider(int.Parse(providerId));
-            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
-
             var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
+
+            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
             var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
 
             return new OrchestratorResponse<CreateCommitmentViewModel>
@@ -117,7 +116,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Commitment = new Commitment
                 {
-                    Name = commitment.Name,
+                    Name = commitment.CohortRef,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
@@ -198,15 +197,41 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string message, string saveOrSend)
+        public async Task<string> SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string message, string saveOrSend)
         {
+            var commitmentId = 0L;
+
+            if (string.IsNullOrWhiteSpace(hashedCommitmentId))
+            {
+                var response = await _mediator.SendAsync(new CreateCommitmentCommand
+                {
+                    Commitment = new Commitment
+                    {
+                        Name = cohortRef,
+                        EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                        LegalEntityCode = legalEntityCode,
+                        LegalEntityName = legalEntityName,
+                        ProviderId = long.Parse(providerId),
+                        ProviderName = providerName
+                    }
+                });
+
+                commitmentId = response.CommitmentId;
+            }
+            else
+            {
+                commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            }
+
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                CommitmentId = commitmentId,
                 Message = message,
                 SaveOrSend = saveOrSend
             });
+
+            return _hashingService.HashValue(commitmentId);
         }
         
 	    public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -322,7 +347,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            return data.ProvidersView.Providers;
+            return data?.ProvidersView?.Providers;
         }
     }
 }

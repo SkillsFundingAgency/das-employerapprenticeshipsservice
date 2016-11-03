@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;

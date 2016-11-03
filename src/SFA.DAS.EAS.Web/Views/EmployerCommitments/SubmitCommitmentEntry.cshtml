@@ -2,32 +2,34 @@
 
 @model SubmitCommitmentViewModel
 
+@{
+    var targetName = string.IsNullOrWhiteSpace(Model.HashedCommitmentId) ? "SubmitNewCommitmentEntry" : "SubmitExistingCommitmentEntry";
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add a note</h1>
-        <div class="form-group">
-            <p>You're about to send a request to your training provider, asking them to add one or more apprentices to your cohort. Once you send it, they'll be able to see your request in their online account.</p>
-            <p>Before you send your request, you can add a note for your training provider to read.</p>
-        </div>
-        <form method="POST" action="@Url.Action("SubmitCommitment")">
+        <h1 class="heading-xlarge">Instructions for your training provider</h1>
+      
+            <p>Let <span class="heading-medium">@Model.ProviderName</span> know which apprentices you'd like them to add.
+</p>
+    
+        <form method="POST" action="@Url.Action(targetName)">
             @Html.AntiForgeryToken()
-            <table>
-                <tbody>
-                    <tr>
-                        <th scope="row">Training provider name</th>
-                        <td>@Model.Commitment.ProviderName</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+         
             <div class="form-group">
-                <label class="form-label" for="Message">Note (optional)</label>
-                <p>For example, please add the 25 engineers we agreed on contract #30815</p>
+                <label class="form-label" for="Message">Instructions</label>
+                <p class="form-hint">For example, please add the 12 admin level 2 apprentices and 13 engineering level 3 apprentices.</p>
                 <textarea class="form-control form-control-3-4" id="Message" name="Message"
                           cols="40" rows="10"
-                          aria-required="true">@Model.SubmitCommitmentModel.Message</textarea>
+                          aria-required="true"></textarea>
                 </div>
-                <input type="hidden" id="saveOrSend" name="saveOrSend" value="@Model.SaveOrSend" />
+                 @Html.HiddenFor(x => x.HashedCommitmentId)
+                 @Html.HiddenFor(x => x.LegalEntityCode)
+                 @Html.HiddenFor(x => x.LegalEntityName)
+                 @Html.HiddenFor(x => x.ProviderId)
+                 @Html.HiddenFor(x => x.ProviderName)
+                 @Html.HiddenFor(x => x.CohortRef)
+                 @Html.HiddenFor(x => x.SaveOrSend)
                 <button type="submit" class="button">Send request to provider</button>
             </form>
         </div>

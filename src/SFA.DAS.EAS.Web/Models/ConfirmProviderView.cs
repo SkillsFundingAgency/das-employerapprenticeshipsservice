@@ -5,6 +5,7 @@ namespace SFA.DAS.EAS.Web.Models
 {
     public class ConfirmProviderView
     {
+        public string CohortRef { get; set; }
         public string HashedAccountId { get; set; }
         public string LegalEntityCode { get; set; }
         public string LegalEntityName { get; set; }
