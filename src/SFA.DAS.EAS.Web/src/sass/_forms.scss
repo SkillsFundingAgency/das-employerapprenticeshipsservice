@@ -1,4 +1,8 @@
-﻿.radios-inline {  
+﻿legend {
+    margin-bottom: 10px;
+}
+
+.radios-inline {  
     @include media(tablet) {
         margin-left: 20px;
         h3 {
@@ -10,6 +14,9 @@
             margin-right: 5px;
             margin-bottom: 5px;
         }   
+    }
+    .error {
+        clear: both;
     }
  }
 

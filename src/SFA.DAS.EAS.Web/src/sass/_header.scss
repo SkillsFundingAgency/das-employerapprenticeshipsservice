@@ -69,3 +69,21 @@
         background-image:  url('/dist/images/separator.png');
     }
 }
+
+.back-link {
+    padding-left: 15px;
+    position: relative;
+    &:before {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-right: 6px solid #0b0c0c;
+        border-bottom: 5px solid transparent;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -6px;
+    }
+}
