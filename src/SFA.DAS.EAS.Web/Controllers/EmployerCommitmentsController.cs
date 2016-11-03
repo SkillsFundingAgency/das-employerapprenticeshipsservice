@@ -176,7 +176,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/FinishedEditing")]
+        [Route("{hashedCommitmentId}/Finished")]
         public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
             var model = new SubmitCommitmentModel
@@ -189,7 +189,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("FinishedCreating")]
+        [Route("Finished")]
         public ActionResult FinishedCreating(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
         {
             if (saveOrSend == "save-no-send")
@@ -230,7 +230,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("SubmitNew")]
+        [Route("Submit")]
         public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
         {
             var model = new SubmitCommitmentViewModel
@@ -248,7 +248,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/SubmitExisting")]
+        [Route("{hashedCommitmentId}/Submit")]
         public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             var model = new SubmitCommitmentViewModel
