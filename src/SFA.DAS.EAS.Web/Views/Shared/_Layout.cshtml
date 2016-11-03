@@ -12,24 +12,28 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage your apprentices</title>
     <!--[if gt IE 8]><!-->
-    <link href="/assets/stylesheets/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
-    <!--[if IE 6]><link href="/assets/stylesheets/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 7]><link href="/assets/stylesheets/govuk-template-ie7.css" media="screen" rel="stylesheet" /><![endif]-->
-    <!--[if IE 8]><link href="/assets/stylesheets/govuk-template-ie8.css" media="screen" rel="stylesheet" /><![endif]-->
-    <link href="/assets/stylesheets/govuk-template-print.css" media="print" rel="stylesheet" />
-    <!--[if IE 8]><link href="/assets/stylesheets/fonts-ie8.css" media="all" rel="stylesheet" /><![endif]-->
+    <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
+    <!--[if IE 6]><link href="/dist/css/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
+    <!--[if IE 7]><link href="/dist/css/govuk-template-ie7.css" media="screen" rel="stylesheet" /><![endif]-->
+    <!--[if IE 8]><link href="/dist/css/govuk-template-ie8.css" media="screen" rel="stylesheet" /><![endif]-->
+    <link href="~/dist/css/govuk-template-print.css" media="print" rel="stylesheet" />
+    <!--[if IE 8]><link href="/dist/css/fonts-ie8.css" media="all" rel="stylesheet" /><![endif]-->
     <!--[if gte IE 9]><!-->
-    <link href="/assets/stylesheets/fonts.css" media="all" rel="stylesheet" /><!--<![endif]-->
-    <!--[if lt IE 9]><script src="/assets/javascripts/ie.js"></script><![endif]-->
-    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="mask-icon" href="/assets/images/gov.uk_logotype_crown.svg" color="#0b0c0c">
-    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/images/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/assets/images/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/assets/images/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon-precomposed" href="/assets/images/apple-touch-icon-60x60.png">
+    <link href="~/dist/css/fonts.css" media="all" rel="stylesheet" /><!--<![endif]-->
+    <!--[if lt IE 9]><script src="/dist/css/javascripts/ie.js"></script><![endif]-->
+    <link rel="shortcut icon" href="/dist/images/favicon.ico" type="image/x-icon" />
+    <link rel="mask-icon" href="/dist/images/gov.uk_logotype_crown.svg" color="#0b0c0c">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/dist/images/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/dist/images/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/dist/images/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:image" content="/assets/images/opengraph-image.png">
-    @Styles.Render("~/Content/css")
+    <meta property="og:image" content="/dist/images/opengraph-image.png">
+
+    <link href="~/dist/css/screen.css" media="all" rel="stylesheet" />
+    <!--[if IE 6]><link href="/dist/css/screen-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
+    <!--[if IE 7]><link href="/dist/css/screen-ie7.css" media="screen" rel="stylesheet" /><![endif]-->
+    <!--[if IE 8]><link href="/dist/css/screen-ie8.css" media="screen" rel="stylesheet" /><![endif]-->
 
     <!-- Google Tag Manager -->
     <script>
@@ -51,7 +55,7 @@
         appInsights.trackPageView();
     </script>
 
-    <!--[if lt IE 9]><script src="/assets/javascripts/respond.min.js"></script><![endif]-->
+    <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
    
      @RenderSection("scripts", false)
 </head>
@@ -157,7 +161,7 @@
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
 
-    @Scripts.Render("~/bundles/footer")
+    @Scripts.Render("~/dist/js/sfa.min.js")
 
     @RenderSection("pageSpecificJS", required: false)
 

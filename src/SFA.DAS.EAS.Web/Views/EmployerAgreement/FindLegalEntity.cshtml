@@ -2,11 +2,11 @@
 @{ViewBag.Title = "Confirm organisation";}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-large bold-large">Confirm organisation</h1>
-        <p>
-            <div class="bold-xlarge">@Model.Data.CompanyName</div>
-            <div class="text-secondary font-medium">Companies House number: @Model.Data.CompanyNumber</div>
-        </p>
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">Confirm organisation</span>
+            @Model.Data.CompanyName
+        </h1>
+        <p class="lede">Companies House number: @Model.Data.CompanyNumber</p>
         <p class="heading-medium">Is this the correct organisation?</p>
         <form action="@Url.Action("ViewEntityAgreement")" method="POST">
             @Html.AntiForgeryToken()
@@ -18,8 +18,7 @@
                 <input class="button" type="submit" value="Yes, continue" />
                 <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.HashedId})">No, search again</a>
             </span>
-        </form>
-        
+        </form> 
     </div>
 </div>
 @section breadcrumb {
