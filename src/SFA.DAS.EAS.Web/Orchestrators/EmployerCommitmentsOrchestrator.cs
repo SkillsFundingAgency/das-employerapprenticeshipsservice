@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string message, string saveOrSend)
+        public async Task<string> SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string message, string saveOrSend)
         {
             var commitmentId = 0L;
 
@@ -230,6 +230,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Message = message,
                 SaveOrSend = saveOrSend
             });
+
+            return _hashingService.HashValue(commitmentId);
         }
         
 	    public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)

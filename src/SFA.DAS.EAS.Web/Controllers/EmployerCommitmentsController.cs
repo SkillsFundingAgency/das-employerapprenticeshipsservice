@@ -276,9 +276,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Submit")]
         public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmentModel model)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
+            var hashedCommitmentId = await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId = model.HashedCommitmentId});
+            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId = hashedCommitmentId });
         }
 
         [HttpGet]
