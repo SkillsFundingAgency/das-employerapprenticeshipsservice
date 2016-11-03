@@ -594,6 +594,11 @@ textarea#Message{
     width:75%;
 }
 
+.strong{
+    font-weight:bold;
+}
+
+
 .govuk-box-highlight .heading-xlarge{
     margin: 0 0 10px;
 }

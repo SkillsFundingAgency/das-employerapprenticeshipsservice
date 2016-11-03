@@ -70,7 +70,7 @@
                         @commitment.Name
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
+                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
                         </td>
                     </tr>
                 }
