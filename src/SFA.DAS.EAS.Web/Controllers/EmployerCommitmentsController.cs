@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{hashedCommitmentId}/FinishedEditing")]
+        [Route("{hashedCommitmentId}/Finished")]
         public ActionResult FinishedEditingExistingChoice(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             if (saveOrSend == "save-no-send")
