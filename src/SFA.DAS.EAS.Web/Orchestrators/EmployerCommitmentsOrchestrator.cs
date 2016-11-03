@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.UI;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
@@ -10,6 +11,7 @@ using SFA.DAS.EAS.Application.Commands.CreateCommitment;
 using SFA.DAS.EAS.Application.Commands.PauseApprenticeship;
 using SFA.DAS.EAS.Application.Commands.ResumeApprenticeship;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
+using SFA.DAS.EAS.Application.Commands.UpdateApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
@@ -180,6 +182,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            await _mediator.SendAsync(new UpdateApprenticeshipCommand
+            {
+                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
+                Apprenticeship = MapFrom(apprenticeship)
+            });
+        }
+
         public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId)
         {
             var standards = await _mediator.SendAsync(new GetStandardsQueryRequest());
@@ -320,6 +331,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
+                Id = _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,

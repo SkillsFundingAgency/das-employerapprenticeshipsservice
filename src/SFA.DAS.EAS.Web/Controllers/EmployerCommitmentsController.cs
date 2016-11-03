@@ -214,20 +214,22 @@ namespace SFA.DAS.EAS.Web.Controllers
         
         [HttpGet]
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
-        public async Task<ActionResult> ApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
-            return View(model);
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View("EditApprenticeshipEntry", model.Apprenticeship);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("UpdateApprenticeship")]
-        public ActionResult UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            return RedirectToAction("Index", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[Route("UpdateApprenticeship")]
+        //public ActionResult UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        //{
+        //    return RedirectToAction("Index", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        //}
 
         [HttpGet]
         [Route("Submit")]
@@ -371,6 +373,29 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
         }
 
+        [HttpPost]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedId}/Edit")]
+        public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayEditApprenticeshipView(apprenticeship);
+                }
+
+                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex);
+
+                return await RedisplayEditApprenticeshipView(apprenticeship);
+            }
+
+            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        }
+
         private void AddErrorsToModelState(InvalidRequestException ex)
         {
             foreach (var error in ex.ErrorMessages)
@@ -386,6 +411,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             ViewBag.ApprenticeshipProducts = model.Standards;
 
             return View("CreateApprenticeshipEntry", model.Apprenticeship);
+        }
+
+        private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
+            model.Apprenticeship = apprenticeship;
+            ViewBag.ApprenticeshipProducts = model.Standards;
+
+            return View("EditApprenticeshipEntry", model.Apprenticeship);
         }
 
         private static string CreateReference()
