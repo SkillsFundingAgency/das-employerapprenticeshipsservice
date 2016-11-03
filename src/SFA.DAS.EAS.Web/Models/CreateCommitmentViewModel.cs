@@ -8,6 +8,8 @@ namespace SFA.DAS.EAS.Web.Models
     {
         [Required(ErrorMessage = "Choose organisation")]
         public string LegalEntityCode { get; set; }
+
+        public string CohortRef { get; set; }
     }
 
     [Validator(typeof(SelectProviderViewModelValidator))]
@@ -16,12 +18,13 @@ namespace SFA.DAS.EAS.Web.Models
         public string LegalEntityCode { get; set; }
 
         public string ProviderId { get; set; }
+
+        public string CohortRef { get; set; }
     }
 
     public sealed class CreateCommitmentViewModel
     {
-        // TODO: LWA No longer needed. Delete.
-        public string Name { get; set; }
+        public string CohortRef { get; set; }
 
         [Required]
         public string HashedAccountId { get; set; }

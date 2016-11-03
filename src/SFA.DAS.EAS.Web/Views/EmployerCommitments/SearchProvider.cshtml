@@ -31,7 +31,8 @@
             <button type="submit" class="button">Continue</button>
 
 
-            <input type="hidden" id="legalEntityCode" name="legalEntityCode" value="@Model.LegalEntityCode" />
+            @Html.HiddenFor(x => x.LegalEntityCode)
+            @Html.HiddenFor(x => x.CohortRef)
         </form>
     </div>
 </div>
