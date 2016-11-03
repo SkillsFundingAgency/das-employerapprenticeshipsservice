@@ -5,7 +5,10 @@ module.exports = function(grunt) {
     sass: {
       dev: {
         files: {
-          'dist/css/screen.css': 'src/sass/screen.scss'
+            'dist/css/screen.css': 'src/sass/screen.scss',
+            'dist/css/screen-ie6.css': 'src/sass/screen-ie6.scss',
+            'dist/css/screen-ie7.css': 'src/sass/screen-ie7.scss',
+            'dist/css/screen-ie8.css': 'src/sass/screen-ie8.scss'
         },
         options: {
 	      includePaths: [

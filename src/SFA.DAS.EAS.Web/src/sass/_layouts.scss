@@ -1,5 +1,13 @@
 main {
-    margin-bottom: 30px;
+    max-width: 960px;
+    margin: 0 15px;
+    margin-bottom: 30px;  
+    @include media(tablet) {
+        margin: 0 30px 30px;
+    }
+    @include media(desktop) {
+        margin: 0 auto 50px;
+    }
 }
 
 @include media(tablet) {
