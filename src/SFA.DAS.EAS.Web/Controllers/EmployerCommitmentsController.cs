@@ -343,7 +343,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
 
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
@@ -383,7 +383,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
             model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View("CreateApprenticeshipEntry", model.Apprenticeship);
         }

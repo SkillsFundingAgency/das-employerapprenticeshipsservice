@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain
 {
-    public class Framework
+    public class Framework : ITrainingProgramme
     {
         public int FrameworkCode { get; set; }
         public string FrameworkName { get; set; }

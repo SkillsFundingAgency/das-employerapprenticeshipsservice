@@ -75,6 +75,8 @@ namespace SFA.DAS.EAS.Application
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
         {
+            var lee = frameworks.Where(f => f.TypicalLength == null).ToList();
+
             return new FrameworksView
             {
                 CreatedDate = DateTime.UtcNow,
@@ -87,7 +89,7 @@ namespace SFA.DAS.EAS.Application
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
-                    Duration = new Duration
+                    Duration = x.TypicalLength  == null ? null : new Duration // TODO: LWA - Should frameworks have a null typical length?
                     {
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
