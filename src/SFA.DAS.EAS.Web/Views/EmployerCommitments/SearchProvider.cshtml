@@ -23,7 +23,7 @@
                 <p>Search by UK Provider Reference Number (UKPRN).</p>
 
                 <div>
-                    @Html.ValidationMessageFor(m => m.ProviderId, "Please choose a training provider from the list.")
+                    @Html.ValidationMessageFor(m => m.ProviderId, "Please enter a valid, 8-digit number.")
                 </div>
                 @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_label = "Training Provider" })
             </div>
