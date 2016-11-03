@@ -268,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
         }
 
         [HttpPost]
@@ -278,26 +278,32 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var hashedCommitmentId = await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId = hashedCommitmentId });
+            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId = hashedCommitmentId, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
         }
 
         [HttpGet]
         [Route("Acknowledgement")]
-        public ActionResult AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
         {
             return View("Acknowledgement", new AcknowledgementViewModel
             {
-                HashedCommitmentId = hashedCommitmentId
+                HashedCommitmentId = hashedCommitmentId,
+                ProviderName = providerName,
+                LegalEntityName = legalEntityName,
+                Message = message
             });
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
+        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
         {
             return View("Acknowledgement", new AcknowledgementViewModel
             {
-                HashedCommitmentId = hashedCommitmentId
+                HashedCommitmentId = hashedCommitmentId,
+                ProviderName = providerName,
+                LegalEntityName = legalEntityName,
+                Message = message
             });
         }
 

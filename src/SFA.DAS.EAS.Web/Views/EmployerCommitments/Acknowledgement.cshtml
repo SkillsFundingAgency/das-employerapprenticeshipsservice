@@ -18,25 +18,25 @@
                 </tr>
                 <tr>
                     <td>Sent to </td>
-                    <td  class="strong">Hackney Skills and Training Ltd</td>
+                    <td  class="strong">@Model.ProviderName</td>
                     
                 </tr>
-                <tr>
+                @*<tr>
                     <td>Sent from</td>
                     <td  class="strong">Alice Jones</td>
                    
-                </tr>
+                </tr>*@
                 <tr>
                     <td>On behalf of</td>
-                    <td  class="strong">Acme Ltd Coventry</td>
+                    <td  class="strong">@Model.LegalEntityName</td>
                 </tr>
-                <tr>
+                @*<tr>
                     <td>Date</td>
                     <td  class="strong">Thursday 18 May 2017</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td>Message</td>
-                    <td  class="strong">Please add the 12x admin level 2 apprentices and 13 x engineering level 3 apprentices, as agreed on contract #51314.</td>
+                    <td  class="strong">@Model.Message</td>
                 </tr>
             </tbody>
         </table>
