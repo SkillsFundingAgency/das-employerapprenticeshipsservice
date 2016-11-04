@@ -268,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model.HashedAccountId, model.HashedCommitmentId, model.LegalEntityCode, model.LegalEntityName, model.ProviderId, model.ProviderName, model.CohortRef, model.Message, model.SaveOrSend);
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
         }
 
         [HttpPost]
@@ -296,13 +296,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public ActionResult AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
+        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
         {
+            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+
             return View("Acknowledgement", new AcknowledgementViewModel
             {
                 HashedCommitmentId = hashedCommitmentId,
-                ProviderName = providerName,
-                LegalEntityName = legalEntityName,
+                ProviderName = model.ProviderName,
+                LegalEntityName = model.LegalEntityName,
                 Message = message
             });
         }
@@ -343,7 +345,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
 
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View(model.Apprenticeship);
         }
@@ -383,7 +385,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
             model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.Standards;
+            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View("CreateApprenticeshipEntry", model.Apprenticeship);
         }
