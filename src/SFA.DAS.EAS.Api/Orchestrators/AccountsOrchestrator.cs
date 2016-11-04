@@ -7,8 +7,9 @@ using System.Web.UI;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Api.Models;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccounts;
+using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
@@ -30,8 +31,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         {
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
-            var transactionResult = await _mediator.SendAsync(new GetBatchEmployerAccountTransactionsQuery()
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
+            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
             });
@@ -40,10 +41,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             accountsResult.Accounts.ForEach(account =>
             {
-                var transactions = transactionResult.Data.Find(aggregationData => aggregationData.AccountId == account.Id);
-                var latestLineItem = transactions?.Data.FirstOrDefault();
-                var currentBalance = latestLineItem?.Balance ?? 0;
-                data.Add(new AccountWithBalanceViewModel() { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = currentBalance });
+                var accountBalance = transactionResult.Accounts.SingleOrDefault(c=>c.AccountId==account.Id);
+                data.Add(new AccountWithBalanceViewModel() { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = accountBalance?.Balance ?? 0 });
             });
 
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1} };

@@ -37,14 +37,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 AccountId = employerAccountResult.Account.Id
             });
-            var latestLineItem = data.Data.Data.FirstOrDefault();
+            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
 
             if (latestLineItem != null)
             {
                 currentBalance = latestLineItem.Balance;
-                currentBalanceCalcultedOn = new DateTime(latestLineItem.Year, latestLineItem.Month, 1);
+                currentBalanceCalcultedOn = latestLineItem.TransactionDate;
             }
             else
             {
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            var selectedLineItem = data.Data.Data.FirstOrDefault(line => line.Id == lineItemId);
+           // var selectedLineItem = data.Data.Data.FirstOrDefault(line => line.Id == lineItemId);
             return new TransactionLineItemViewResult
             {
                 Account = employerAccountResult.Account,
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     CurrentBalance = currentBalance,
                     CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
-                    LineItem = selectedLineItem
+                    //LineItem = selectedLineItem
                 }
             };
         }
@@ -77,15 +77,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return new TransactionViewResult();
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id});
-            var latestLineItem = data.Data.Data.FirstOrDefault();
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedId = hashedId});
+            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
 
             if (latestLineItem != null)
             {
                 currentBalance = latestLineItem.Balance;
-                currentBalanceCalcultedOn = new DateTime(latestLineItem.Year, latestLineItem.Month, 1);
+                currentBalanceCalcultedOn = latestLineItem.TransactionDate;
             }
             else
             {

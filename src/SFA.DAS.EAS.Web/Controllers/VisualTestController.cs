@@ -6,6 +6,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.ViewModels;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -48,20 +49,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 RoleId = 213,
                 RoleName = "Owner"
             };
-            var aggregationLine = new AggregationLine
+            var aggregationLine = new TransactionLine
             {
                 Amount = 12m,
-                Id = "12345",
+                
                 Balance = 12m,
-                LevyItemType = LevyItemType.TopUp,
-                Year = 2016,
-                Month = 5,
-                Items = new List<AggregationLineItem>
-                {
-                    aggregationLineItem,
-                    aggregationLineItem,
-                    aggregationLineItem
-                }
+                TransactionType = LevyItemType.TopUp,
+                
 
             };
 
@@ -225,7 +219,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Data = new AggregationData()
                     {
                         AccountId = 1234567890,
-                        Data = new List<AggregationLine>
+                        TransactionLines = new List<TransactionLine>
                         {
                             aggregationLine,
                             aggregationLine,
@@ -237,7 +231,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     {
                         CurrentBalance = 12.0m,
                         CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
-                        LineItem = aggregationLine
+                        LineItem = new AggregationLine()
                     }},
                 {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { HashedId = "3", ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
