@@ -118,14 +118,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var result = await WithConnection(async c =>
             {
-
-                var dataTable = new DataTable("[levy].[AccountIds]");
-                dataTable.Columns.Add("AccountId", typeof(long));
-                foreach (var item in accountIds)
-                {
-                    dataTable.Rows.Add(item);
-                }
-
                 var parameters = new AccountIdUserTableParam(accountIds);
                 
                 return await c.QueryAsync<AccountBalance>(
@@ -157,6 +149,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
+        }
+
+        public async Task<PeriodEnd> GetLatestPeriodEnd()
+        {
+            var result = await WithConnection(async c => await c.QueryAsync<PeriodEnd>(
+                "[levy].[GetLatestPeriodEnd]",
+                null,
+                commandType: CommandType.StoredProcedure));
+            
+            return result.SingleOrDefault();
         }
     }
 }
