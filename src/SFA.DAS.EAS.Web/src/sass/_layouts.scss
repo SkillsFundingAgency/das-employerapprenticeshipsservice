@@ -5,7 +5,7 @@ main {
     @include media(tablet) {
         margin: 0 30px 30px;
     }
-    @include media(desktop) {
+    @include media(1020px) {
         margin: 0 auto 50px;
     }
 }
