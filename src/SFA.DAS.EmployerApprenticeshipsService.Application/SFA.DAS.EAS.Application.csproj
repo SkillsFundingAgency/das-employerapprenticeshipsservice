@@ -82,6 +82,10 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -147,6 +151,9 @@
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
     <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommand.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandHandler.cs" />
+    <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
@@ -185,11 +192,22 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
+    <Compile Include="Events\ProcessDeclarationsEventHandler.cs" />
+    <Compile Include="Events\ProcessDeclarationsEvent.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
+    <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsValidator.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
@@ -204,6 +222,9 @@
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
+    <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsRequest.cs" />
+    <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsResponse.cs" />
+    <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
@@ -216,12 +237,13 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccounts\GetAccountsQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccounts\GetEmployerAccountsQuery.cs" />
-    <Compile Include="Queries\GetEmployerAccounts\GetEmployerAccountsResponse.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedHandler.cs" />
@@ -314,6 +336,9 @@
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserQueryValidator.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndQueryHandler.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndRequest.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndResponse.cs" />
     <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />

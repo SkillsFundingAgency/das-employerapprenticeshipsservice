@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
-using SFA.DAS.EAS.Application.Messages;
+using SFA.DAS.EAS.Application.Events;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
-using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTests
 {
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         private Mock<IValidator<RefreshEmployerLevyDataCommand>> _validator;
         private Mock<IDasLevyRepository> _levyRepository;
         private Mock<IEnglishFractionRepository> _englishFractionRepository;
-        private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IMediator> _mediator;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
 
@@ -32,9 +33,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
             _validator = new Mock<IValidator<RefreshEmployerLevyDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
-            _messagePublisher = new Mock<IMessagePublisher>();
+            
+            _mediator = new Mock<IMediator>();
+
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(
-                _validator.Object, _levyRepository.Object, _englishFractionRepository.Object, _messagePublisher.Object);
+                _validator.Object, _levyRepository.Object, _englishFractionRepository.Object, _mediator.Object);
 
         }
 
@@ -95,19 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(), ExpectedEmpRef, ExpectedAccountId));
         }
-
-        [Test]
-        public async Task ThenTheMessageIsPublishedIfThereAreChanges()
-        {
-            //Arrange
-            _levyRepository.Setup(x => x.GetEmployerDeclaration("2", ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
-
-            //Act
-            await _refreshEmployerLevyDataCommandHandler.Handle(RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId));
-
-            //Assert
-            _messagePublisher.Verify(x=>x.PublishAsync(It.Is< EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
-        }
+        
 
         [Test]
         public async Task ThenIfTheDeclarationHasNoSubmissionForPeriodThenTheLAstSubmissionIsReadFromTheRepository()
@@ -131,6 +122,34 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             _levyRepository.Verify(x=>x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c=>c.NoPaymentForPeriod && c.LevyDueYtd.Equals(1000) && c.LevyAllowanceForFullYear.Equals(1200m)),ExpectedEmpRef,ExpectedAccountId),Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfThereAreDeclarationsToProcessTheProcessDeclarationsEventIsPublished()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessDeclarationsEvent>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfThereAreNoNewDeclarationsThenTheProcessDeclarationEventIsNotPublished()
+        {
+            //Arrange
+            _levyRepository.Setup(x => x.GetEmployerDeclaration(It.IsAny<string>(), ExpectedEmpRef)).ReturnsAsync(new DasDeclaration());
+            _englishFractionRepository.Setup(x => x.GetEmployerFraction(It.IsAny<DateTime>(), It.IsAny<string>())).ReturnsAsync(new DasEnglishFraction());
+            var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessDeclarationsEvent>()), Times.Never);
         }
     }
 }
