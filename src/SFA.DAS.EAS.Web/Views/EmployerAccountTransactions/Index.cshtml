@@ -4,91 +4,56 @@
 @{
     var culture = new CultureInfo("en-GB");
 }
-@{ViewBag.Title = "View your transactions";}
+@{ViewBag.Title = "Your levy transactions";}
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View your transactions</h1>
+        <h1 class="heading-xlarge">Your levy transactions</h1>
     </div>
 </div>
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <div>
-            <div class="home-figures">
-                <h2 class="heading-small">This is your current balance:</h2>
-                <h2 class="bold-xlarge" data-bind="text: displayBalance">@Model.CurrentBalance.ToString("C0", culture)</h2> <!--style="color:#08c"-->
-                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="grid-row">
     <div class="column-full">
-        <div>
-            <h2 class="heading-medium">Transactions</h2>
-            @if (Model.Data.TransactionLines.Count == 0)
-            {
-                <p class="panel panel-info">
-                    No transaction data exists for this account, please try again later.
-                </p>
-            } else {
-                <div class="responsive-table" id="transactions">
-
-                    <div class="responsive-thead">
-                    <div class="responsive-tr">
-                        <div class="responsive-th" scope="col">Date</div>
-                        <div class="responsive-th" scope="col">Description</div>
-                        <div class="responsive-th" scope="col">Amount</div>
-                        <div class="responsive-th" scope="col">Balance</div>
-                        <div class="responsive-th" scope="col"></div>
-                    </div>
-                    </div>
-                    <div class="responsive-tbody">
+        <div class="data">
+            <h2 class="heading-small">Current balance</h2>
+            <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C0", culture)</h2>
+            <p  class="bold-xsmall">on <span>@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
+        </div>
+        @if (Model.Data.TransactionLines.Count == 0)
+        {
+            <p class="panel panel-info">
+                No transaction data exists for this account, please try again later.
+            </p>
+        }
+        else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Payment date</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" class="numeric">Amount</th>
+                        <th scope="col" class="numeric">Balance</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var aggregationLine in Model.Data.TransactionLines)
                     {
-
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div>
-                                    @{var date = new DateTime(aggregationLine.TransactionDate.Year, aggregationLine.TransactionDate.Month, 1).ToGdsFormat();} @date
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Description</div>
-                                <div>
-                                    @aggregationLine.TransactionType.ToString()
-                                </div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">@aggregationLine.TransactionType.ToString()</div>
-                                <div>
-                                    @(aggregationLine.Amount.ToString("C0", culture))
-                                </div>
-                            </div>
-                            
-
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Balance</div>
-                                <div>
-                                    @(aggregationLine.Balance.ToString("C0", culture))
-                                </div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
-                                    <a aria-label="View details for the transaction on @date"
-                                       title="View details for the transaction on @date" 
-                                       href="#">View</a>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                        </div>
-                                        }
-                    </div>
-                </div>
+                        <tr>
+                            <td>@{var date = new DateTime(aggregationLine.TransactionDate.Year, aggregationLine.TransactionDate.Month, 1).ToGdsFormat();} @date </td>
+                            <td>@aggregationLine.TransactionType.ToString()</td>
+                            <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
+                            <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
+                            <td class="link-right">
+                                <a title="View details for the transaction on @date" href="#">
+                                    Details <span class="vh"> for the transaction on @date</span>
+                                </a>
+                            </td>
+                        </tr>
+                        }
+                </tbody>
+            </table>
             }
-            
-        </div>
     </div>
 </div>
 @section breadcrumb {
