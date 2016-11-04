@@ -39,8 +39,8 @@
                         <tr>
                             <th scope="col">Date</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Balance</th>
+                            <th scope="col" class="numeric">Amount</th>
+                            <th scope="col" class="numeric">Balance</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -51,37 +51,21 @@
                         @foreach (var aggregationLine in Model.Data.TransactionLines)
                         {
 
-                            <tr class="responsive-tr">
-                                <td class="responsive-td">
-                                    <div>
+                            <tr>
+                                <td>
+                                  
                                         @{var date = new DateTime(aggregationLine.TransactionDate.Year, aggregationLine.TransactionDate.Month, 1).ToGdsFormat();} @date
-                                    </div>
+                                   
                                 </td>
-                                <td class="responsive-td">
-                                    <div>
-                                        @aggregationLine.TransactionType.ToString()
-                                    </div>
-                                </td>
-                                <td class="responsive-td">
-                                    @aggregationLine.TransactionType.ToString()
-                                    <div>
-                                        @(aggregationLine.Amount.ToString("C0", culture))
-                                    </div>
-                                </td>
-
-
-                                <td class="responsive-td">
-                                    <div>
-                                        @(aggregationLine.Balance.ToString("C0", culture))
-                                    </div>
-                                </td>
-                                <td class="responsive-td">
-                                    <div>
+                                <td>@aggregationLine.TransactionType.ToString()</td>
+                                <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
+                                <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
+                                <td class="link-right">
+                                  
                                         <a aria-label="View details for the transaction on @date"
                                            title="View details for the transaction on @date"
-                                           href="#">View</a>
-                                    </div>
-                                    <div class="responsive-inner-caption"></div>
+                                           href="#">View <span class="vh"></span></a>
+                                  
                                 </td>
                             </tr>
                             }
