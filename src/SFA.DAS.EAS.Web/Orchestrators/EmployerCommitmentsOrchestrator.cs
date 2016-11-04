@@ -324,21 +324,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
-            ITrainingProgramme training = await GetTrainingProgramme(viewModel.TrainingId);
-
-            return new Apprenticeship
+            var apprenticeship = new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,
-                TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework,
-                TrainingCode = viewModel.TrainingId,
-                TrainingName = training.Title,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
                 EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
             };
+
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingId))
+            {
+                var training = await GetTrainingProgramme(viewModel.TrainingId);
+                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                apprenticeship.TrainingCode = viewModel.TrainingId;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
