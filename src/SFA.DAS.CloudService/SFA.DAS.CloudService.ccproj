@@ -43,16 +43,12 @@
     <Folder Include="Profiles" />
     <Folder Include="Configuration" />
     <Folder Include="SFA.DAS.EAS.Account.ApiContent" />
-    <Folder Include="SFA.DAS.EAS.Notification.WorkerContent" />
     <Folder Include="SFA.DAS.EAS.WebContent" />
-    <Folder Include="SFA.DAS.EAS.LevyAggregationProvider.WorkerContent" />
     <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Notification.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyAggregationProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
@@ -69,13 +65,6 @@
       <Private>True</Private>
       <RoleType>Web</RoleType>
       <RoleName>SFA.DAS.EAS.Web</RoleName>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyAggregationProvider.Worker\SFA.DAS.EAS.LevyAggregationProvider.Worker.csproj">
-      <Name>SFA.DAS.EAS.LevyAggregationProvider.Worker</Name>
-      <Project>{c1ab252e-8041-41cc-b192-cf543f4aeb13}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.LevyAggregationProvider.Worker</RoleName>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
       <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>

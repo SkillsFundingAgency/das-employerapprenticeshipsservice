@@ -3,6 +3,9 @@
   "WebJobs": [
     {
       "filePath": "../SFA.DAS.EAS.LevyAccountUpdater.WebJob/SFA.DAS.EAS.LevyAccountUpdater.WebJob.csproj"
+    },
+    {
+      "filePath": "../SFA.DAS.EAS.PaymentUpdater.WebJob/SFA.DAS.EAS.PaymentUpdater.WebJob.csproj"
     }
   ]
 }
