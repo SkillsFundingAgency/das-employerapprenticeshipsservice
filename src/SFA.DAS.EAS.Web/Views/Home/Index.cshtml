@@ -15,7 +15,6 @@
 }
 <div class="grid-row">
     <div class="column-one-third pull-right">
-        
         <aside class="sidebar">
             <h3 class="heading-small">Manage your account</h3>
             <ul role="navigation">
@@ -25,12 +24,10 @@
         </aside>
     </div>
     <div class="column-two-thirds">
-       
         <section>
             <h1 class="heading-xlarge">Levy accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
             {
-
                 <p>With levy accounts you can:</p>
                 <ul class="list list-bullet">
                     <li>view financial information</li>
@@ -38,50 +35,44 @@
                     <li>spend money</li>
                 </ul>
                 <p>At the moment, you don't have access to any levy accounts. You need to be invited to an account or add a new one.</p>
-
             }
             else
             {
                 <p>Select an account or add a new one.</p>
-                <div class="responsive-table">
-                    <div class="responsive-thead">
-                        <div class="responsive-tr">
-                            <div class="responsive-th">Account name</div>
-                            <div class="responsive-th">What you can do</div>
-                            <div class="responsive-th"> </div>
-                        </div>
-                    </div>
-                    <div class="responsive-tbody">
-
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Account name</th>
+                            <th scope="col">What you can do</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @foreach (var account in Model.Data.Accounts.AccountList)
                         {
-                            <div class="responsive-tr" id="list_of_accounts">
-                                <div class="responsive-td">
-                                    <div class="full-width">@account.Name</div>
-                                </div>
-                                <div class="responsive-td">
-                                    <div class="responsive-inner-caption">What you can do</div>
-                                    <div>
-                                        @RoleStrings.ToWhatYouCanDo(account.RoleName)
-                                    </div>
-                                </div>
-                                <div class="responsive-td">
-                                    <div>
-                                        <a aria-label="View transactions for @account.Name"
-                                           title="View transactions for @account.Name"
-                                           href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">Open</a>
-                                    </div>
-                                    <div class="responsive-inner-caption"></div>
-                                </div>
-                            </div>
+                            <tr>
+                                <td class="responsive-td">
+                                    @account.Name
+                                </td>
+                                <td class="responsive-td">
+                                     @RoleStrings.ToWhatYouCanDo(account.RoleName)
+                                </td>
+                                <td class="responsive-td link-right">
+                                    <a aria-label="View account homepage for @account.Name"
+                                           title="View account homepage for @account.Name"
+                                           href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">
+                                    Open<span class="vh"> @account.Name account homepage</span>
+                                   </a>
+                                </td>
+                            </tr>
 
                         }
 
-                    </div>
-                </div>
+                    </tbody>
+                </table>
             }
             <p>
-                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button action-add" id="add_new_account">Add new account</a>
+                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account">Add new account</a>
             </p>
         </section>
         

@@ -18,17 +18,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId)
+        public async Task<List<LegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
+                var sql = "SELECT le.* FROM[account].[LegalEntity] le INNER JOIN[account].[EmployerAgreement] ea ON ea.LegalEntityId = le.Id INNER JOIN[account].[AccountEmployerAgreement] aea ON aea.EmployerAgreementId = ea.Id WHERE aea.AccountId = @accountId";
+
+                if (signedOnly)
+                    sql += " AND ea.StatusId = 2";
+
                 return await c.QueryAsync<LegalEntity>(
-                    sql: "[account].[GetLegalEntitiesLinkedToAccount]",
+                    sql: sql,
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.Text);
             });
 
             return result.ToList();

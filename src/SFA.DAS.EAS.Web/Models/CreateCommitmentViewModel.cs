@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation.Attributes;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
@@ -6,21 +8,23 @@ namespace SFA.DAS.EAS.Web.Models
     {
         [Required(ErrorMessage = "Choose organisation")]
         public string LegalEntityCode { get; set; }
+
+        public string CohortRef { get; set; }
     }
 
+    [Validator(typeof(SelectProviderViewModelValidator))]
     public sealed class SelectProviderViewModel
     {
-        [Required]
         public string LegalEntityCode { get; set; }
 
-        [Required(ErrorMessage = "Choose training provider")]
         public string ProviderId { get; set; }
+
+        public string CohortRef { get; set; }
     }
 
     public sealed class CreateCommitmentViewModel
     {
-        // TODO: LWA No longer needed. Delete.
-        public string Name { get; set; }
+        public string CohortRef { get; set; }
 
         [Required]
         public string HashedAccountId { get; set; }

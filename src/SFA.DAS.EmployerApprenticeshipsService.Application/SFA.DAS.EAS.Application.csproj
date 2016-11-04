@@ -50,12 +50,20 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=0.9.52.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.9.52\lib\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.2.0.12349, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.2.0.12349\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.9.52.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.52\lib\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.5.0.14819, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.5.0.14819\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.5.0.14819, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.5.0.14819\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -103,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandHandler.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandValidator.cs" />
@@ -123,6 +132,7 @@
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommand.cs" />
+    <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandResponse.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandValidator.cs" />
     <Compile Include="Commands\CreateCommitment\CreateCommitmentCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAccountCreatedNotification\CreateEmployerAccountCreatedNotificationCommand.cs" />
@@ -253,6 +263,9 @@
     <Compile Include="Queries\GetEnglishFractionUpdateRequired\GetEnglishFractionsUpdateRequiredQueryHandler.cs" />
     <Compile Include="Queries\GetEnglishFractionUpdateRequired\GetEnglishFractionUpdateRequiredResponse.cs" />
     <Compile Include="Queries\GetEnglishFractionUpdateRequired\GetEnglishFractionUpdateRequiredRequest.cs" />
+    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryHandler.cs" />
+    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryRequest.cs" />
+    <Compile Include="Queries\GetFrameworks\GetFrameworksQueryResponse.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationHandler.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationRequest.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationResponse.cs" />
@@ -294,6 +307,9 @@
     <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />
+    <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
+    <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
+    <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />

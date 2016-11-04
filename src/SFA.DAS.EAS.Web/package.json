@@ -1,0 +1,16 @@
+{
+  "name": "manage-my-apprenticeships",
+  "description": "SASS and JS",
+  "license": "UNLICENSED",
+  "author": "Skills Funding Agency",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sass": "^1.2.1"
+  }
+}
