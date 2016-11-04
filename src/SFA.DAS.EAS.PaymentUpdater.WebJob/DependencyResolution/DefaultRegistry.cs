@@ -1,4 +1,5 @@
 ﻿using System;
+using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
@@ -20,6 +21,15 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             For<IPaymentProcessor>().Use<PaymentProcessor>();
+
+            RegisterMediator();
+        }
+
+        private void RegisterMediator()
+        {
+            For<SingleInstanceFactory>().Use<SingleInstanceFactory>(ctx => t => ctx.GetInstance(t));
+            For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
+            For<IMediator>().Use<Mediator>();
         }
     }
 }
