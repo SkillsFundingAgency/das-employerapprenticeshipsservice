@@ -64,6 +64,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests", "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests\SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.csproj", "{1E6E4E4E-D876-4D0B-8672-85D385FE640E}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\SFA.DAS.API.ccproj", "{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,10 @@ Global
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

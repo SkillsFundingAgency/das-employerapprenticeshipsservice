@@ -5,14 +5,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>2.9</ProductVersion>
-    <ProjectGuid>97f77cf7-a13e-4441-8081-f941ac1b8bb1</ProjectGuid>
+    <ProjectGuid>d89c34dd-1a5b-4a18-9ea1-3d5846f228cf</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SFA.DAS.EmployerApprenticeshipsService</RootNamespace>
-    <AssemblyName>SFA.DAS.EmployerApprenticeshipsService</AssemblyName>
+    <RootNamespace>SFA.DAS.CloudService.API</RootNamespace>
+    <AssemblyName>SFA.DAS.CloudService.API</AssemblyName>
     <StartDevelopmentStorage>True</StartDevelopmentStorage>
-    <Name>SFA.DAS.CloudService</Name>
-    <PackageEnableRemoteDebugger>False</PackageEnableRemoteDebugger>
+    <Name>SFA.DAS.API</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,33 +39,21 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Profiles" />
-    <Folder Include="Configuration" />
-    <Folder Include="SFA.DAS.EAS.WebContent" />
-    <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
-  </ItemGroup>
-  <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
-      <Name>SFA.DAS.EAS.Web</Name>
-      <Project>{65db60b1-80f0-432c-926e-7a6dd02a5645}</Project>
+    <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj">
+      <Name>SFA.DAS.EAS.Account.Api</Name>
+      <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
       <Private>True</Private>
       <RoleType>Web</RoleType>
-      <RoleName>SFA.DAS.EAS.Web</RoleName>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj">
-      <Name>SFA.DAS.EAS.LevyDeclarationProvider.Worker</Name>
-      <Project>{386adb6f-ce56-4afd-b762-de93e74afd41}</Project>
-      <Private>True</Private>
-      <RoleType>Worker</RoleType>
-      <RoleName>SFA.DAS.EAS.LevyDeclarationProvider.Worker</RoleName>
+      <RoleName>SFA.DAS.EAS.Account.Api</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PublishProfile Include="Profiles\das-at-eas-cs (stage).azurePubxml" />
+    <Folder Include="SFA.DAS.EAS.Account.ApiContent\" />
+    <Folder Include="Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\PreDeployment.ps1">
@@ -79,8 +66,4 @@
     <CloudExtensionsDir Condition=" '$(CloudExtensionsDir)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Windows Azure Tools\2.9\</CloudExtensionsDir>
   </PropertyGroup>
   <Import Project="$(CloudExtensionsDir)Microsoft.WindowsAzure.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
 </Project>

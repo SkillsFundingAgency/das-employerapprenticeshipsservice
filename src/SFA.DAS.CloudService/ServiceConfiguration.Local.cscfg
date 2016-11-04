@@ -31,19 +31,4 @@
     <Certificates>
     </Certificates>
   </Role>
-  <Role name="SFA.DAS.EAS.Account.Api">
-    <Instances count="1" />
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="EnvironmentName" value="LOCAL" />
-      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="LogLevel" value="Debug" />
-      <Setting name="EventHubConnectionString" value="" />
-      <Setting name="EventHubName" value="" />
-      <Setting name="ApiTokenSecret" value="These are not the secrets you are looking for" />
-      <Setting name="ApiIssuer" value="http://localhost:51693" />
-      <Setting name="ApiAudiences" value="http://example" />
-    </ConfigurationSettings>
-  </Role>
 </ServiceConfiguration>
