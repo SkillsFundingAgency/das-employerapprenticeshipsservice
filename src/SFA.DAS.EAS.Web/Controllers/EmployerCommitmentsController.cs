@@ -223,14 +223,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("EditApprenticeshipEntry", model.Apprenticeship);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Route("UpdateApprenticeship")]
-        //public ActionResult UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        //{
-        //    return RedirectToAction("Index", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
-        //}
-
         [HttpGet]
         [Route("Submit")]
         public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
