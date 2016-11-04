@@ -159,6 +159,7 @@
     <Compile Include="Invitation.cs" />
     <Compile Include="InvitationStatus.cs" />
     <Compile Include="InvitationView.cs" />
+    <Compile Include="ITrainingProgramme.cs" />
     <Compile Include="LevyDeclarationView.cs" />
     <Compile Include="LevyItemType.cs" />
     <Compile Include="Membership.cs" />
