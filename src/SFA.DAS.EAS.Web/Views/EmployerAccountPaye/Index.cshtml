@@ -2,78 +2,60 @@
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.EmployerAccountPayeListViewModel>
 @{ViewBag.Title = "PAYE Schemes";}
-<div class="grid-row">
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">PAYE Schemes</h1>
+        <p class="lede">Add PAYE schemes to allow levy funds to be added to your account.</p>
+    </div>
     <div class="column-one-third pull-right">
         <form action="@Url.Action("Add")" method="GET">
-            <input class="button button-add" id="addNewPaye" type="submit" value="Add new scheme">
+            <input class="button action-add" id="addNewPaye" type="submit" value="Add new scheme">
         </form>
     </div>
+</div>
+
+<div class="grid-row">
     <div class="column-two-thirds">
-        <div class="hgroup">
-            <h1 class="heading-xlarge">PAYE Schemes</h1>
-            <p>Add PAYE schemes to allow levy funds to be added to your account.</p>    
-        </div>
         @if (Model.Data.PayeSchemes.Any())
         {
-            <div class="responsive-table">
-                <div class="responsive-thead">
-                    <div class="responsive-tr">
-                        <div class="responsive-th">Scheme ID</div>
-                        <div class="responsive-th">Legal Entity</div>
-                        <div class="responsive-th"> </div>
-                        <div class="responsive-th"> </div>
-                    </div>
-                </div>
-                <div class="responsive-tbody">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Scheme ID</th>
+                        <th scope="col">Organisation</th>
+                        <th colspan="2"> </th>
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var scheme in Model.Data.PayeSchemes)
                     {
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div>@scheme.EmpRef</div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Legal Entity</div>
-                                <div>
-                                    @scheme.LegalEntityName
-                                </div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
+                        <tr>
+                            <td>@scheme.EmpRef</td>
+                            <td>@scheme.LegalEntityName</td>
+                            <td>
                                     <a aria-label="Remove PAYE scheme @scheme.EmpRef"
-                                       title="Remove PAYE scheme @scheme.EmpRef"
-                                       href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove</a>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
-                                    <a aria-label="View PAYE scheme @scheme.EmpRef"
-                                       title="View PAYE scheme @scheme.EmpRef"
-                                       href="@Url.Action("Details", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">View</a>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                        </div>
-
+                                        title="Remove PAYE scheme @scheme.EmpRef"
+                                        href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove <span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
+                            </td>
+                            <td class="link-right">
+                                <a aria-label="View PAYE scheme @scheme.EmpRef"
+                                        title="View PAYE scheme @scheme.EmpRef"
+                                        href="@Url.Action("Details", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">View<span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
+                            </td>
+                        </tr>
                     }
-
-
-                </div>
-            </div>
-
+                </tbody>
+            </table>
         }
         else
         {
-            <div class="notice">
-                <p>There are no PAYE schemes added.</p>
+            <div class="panel panel-no-records">
+                <p>There are no PAYE schemes associated with this organisation.</p>
             </div>
         }
-
-
     </div>
-  
-    </div>
+</div>
 
 
 @section breadcrumb {

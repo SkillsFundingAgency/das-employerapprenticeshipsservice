@@ -23,14 +23,14 @@
         <form method="POST" action="@Url.Action("SelectEmployer")">
             <div class="form-group @(TempData["companyNumberError"] != null ? "error" : "")">
                 @Html.AntiForgeryToken()
-
-                <label class="form-label" for="EmployerRef">Companies House number</label>
-
-                @if (TempData["companyNumberError"] != null)
-                {
-                    <span class="error-message" id="error-message-companies-house">Enter a valid Companies House number</span>
-                }
-                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text" aria-required="true" />
+                <label for="EmployerRef">
+                    <span class="form-label-bold">Companies House number</span>
+                    @if (TempData["companyNumberError"] != null)
+                    {
+                        <span class="error-message" id="error-message-companies-house">Enter a valid Companies House number</span>
+                    }
+                </label>
+                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text" aria-required="true" aria-describedby="error-message-companies-house" />
             </div>
             <button type="submit" class="button" id="submit">Continue</button>
         </form>

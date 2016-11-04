@@ -70,7 +70,7 @@
                         @commitment.Name
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
+                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
                         </td>
                     </tr>
                 }
@@ -95,7 +95,7 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticships Home</a></li>
+            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticeships Home</a></li>
             <li>Cohorts</li>
         </ol>
     </div>

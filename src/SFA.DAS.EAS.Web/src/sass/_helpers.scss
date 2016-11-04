@@ -1,0 +1,11 @@
+
+.vh {
+    @extend .visually-hidden;
+}
+
+.mobile-hide {
+    display: none;
+    @include media(tablet) {
+        display: block;
+    }
+}

@@ -13,8 +13,8 @@
         <table>     
             <thead>
                 <tr>
-                    <th>Email</th>
-                    <th>What they can do</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">What they can do</th>
                     <th></th>
                 </tr>
             </thead> 
@@ -24,7 +24,9 @@
                     <td>@RoleStrings.ToWhatTheyCanDo(@Model.Data.Role)</td>
                     @if (Model.Data.IsUser)
                     {
-                        <td>@Html.ActionLink("Change", "ChangeRole", new { AccountId = Model.Data.HashedId, Email = Model.Data.Email })</td>
+                        <td class="link-right">
+                            <a href="@Url.Action("ChangeRole", new { AccountId = Model.Data.HashedId, Email = Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                        </td>
                     }
                     else
                     {

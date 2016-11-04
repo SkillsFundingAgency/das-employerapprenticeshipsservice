@@ -5,14 +5,11 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        <h1 class="heading-xlarge">Confirm training provider</h1>
-        <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.ProviderId'</span> matches:</p>
-
-
-
         @if (Model.Providers != null && Model.Providers.Count > 0)
         {
-          
+            <h1 class="heading-xlarge">Confirm training provider</h1>
+            <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.ProviderId'</span> matches:</p>
+
             <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
             <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
 
@@ -41,15 +38,15 @@
         }
         else
         {
-            <p class="">Your search for <span style="font-weight:700">'@Model.ProviderId'</span></p>
-            <h3 class="heading-small">Address not available in service</h3>
+            <h1 class="heading-xlarge">Training provider not found</h1>
+            <p class="">No matches found for <span style="font-weight:700">'@Model.ProviderId'.</span>Please search again.</p>
             <form action="@Url.Action("ConfirmProvider")" method="POST">
                 @Html.AntiForgeryToken()
                 <input id="providerId" type="hidden" name="providerId" value="">
                 @Html.HiddenFor(x => x.HashedAccountId)
                 @Html.HiddenFor(x => x.LegalEntityCode)
                 @Html.HiddenFor(x => x.CohortRef)
-                <button class="button" type="submit">Back</button>
+                <button class="button" type="submit">Search again</button>
             </form>
         }
 

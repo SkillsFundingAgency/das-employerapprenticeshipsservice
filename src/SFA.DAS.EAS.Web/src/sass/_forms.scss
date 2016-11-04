@@ -1,0 +1,42 @@
+﻿legend {
+    margin-bottom: 10px;
+}
+
+.radios-inline {  
+    @include media(tablet) {
+        margin-left: 20px;
+        h3 {
+            margin-top: 0;
+        }
+        .block-label {
+            display: inline-block;
+            clear: none;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }   
+    }
+    .error {
+        clear: both;
+    }
+ }
+
+.button-start {
+    background-image: url('/dist/images/icon-pointer.png');
+}
+
+.error-summary-wrapper {
+    .error-summary {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+
+.button-link {
+    @include button($grey-3);
+}
+
+.form-group {
+    form {
+        display: inline-block;
+    }
+}
