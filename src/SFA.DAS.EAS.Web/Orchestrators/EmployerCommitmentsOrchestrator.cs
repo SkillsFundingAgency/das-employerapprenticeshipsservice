@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.UI;
 using MediatR;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
@@ -186,7 +185,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
             {
                 AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                Apprenticeship = MapFrom(apprenticeship)
+                Apprenticeship = await MapFrom(apprenticeship)
             });
         }
 
