@@ -319,6 +319,9 @@
     <Compile Include="Queries\GetUser\GetUserQuery.cs" />
     <Compile Include="Queries\GetUser\GetUserQueryValidator.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndQueryHandler.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndRequest.cs" />
+    <Compile Include="Queries\Payments\GetCurrentPeriodEnd\GetCurrentPeriodEndResponse.cs" />
     <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
