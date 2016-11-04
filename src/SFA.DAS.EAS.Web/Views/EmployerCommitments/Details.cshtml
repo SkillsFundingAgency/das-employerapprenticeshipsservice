@@ -69,7 +69,7 @@
                             @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
-                                <a href="@Url.Action("EditApprenticeship", new { hashedCommitmentId = apprenticeship.HashedCommitmentId, hashedApprenticeshipId = apprenticeship.HashedId })">Edit</a>                   
+                                <a href="@Url.Action("EditApprenticeship", new { hashedCommitmentId = Model.HashedId, hashedApprenticeshipId = apprenticeship.HashedId })">Edit</a>                   
                         </td>
                     </tr>
                 }

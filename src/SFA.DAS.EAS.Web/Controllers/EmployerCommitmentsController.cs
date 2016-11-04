@@ -213,7 +213,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [HttpGet]
-        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Details")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Edit")]
         public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);

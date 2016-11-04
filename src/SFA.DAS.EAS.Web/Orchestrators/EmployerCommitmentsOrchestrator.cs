@@ -331,7 +331,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
-                Id = _hashingService.DecodeValue(viewModel.HashedId),
+                Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,
