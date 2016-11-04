@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
                 {
                     await _publisher.PublishAsync(new PaymentProcessorQueueMessage
                     {
-                        AccountPaymentUrl = $"{periodEnd.Links.PaymentsForPeriod}&accountId={account.Id}",
+                        AccountPaymentUrl = $"{periodEnd.Links.PaymentsForPeriod}&employeraccountid={account.Id}",
                         AccountId = account.Id,
                         PeriodEndId = periodEnd.Id
                     });

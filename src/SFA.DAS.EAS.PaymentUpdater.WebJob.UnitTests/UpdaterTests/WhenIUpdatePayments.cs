@@ -111,7 +111,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
             _messagePublisher.Verify(x=>x.PublishAsync(It.Is<PaymentProcessorQueueMessage>(
                                             c=>c.AccountId.Equals(ExpectedAccountId) 
                                             && c.PeriodEndId.Equals(expectedPeriodEnd)
-                                            && c.AccountPaymentUrl.Equals($"{expectedPaymentsForPeriodUrl}&accountId={ExpectedAccountId}")
+                                            && c.AccountPaymentUrl.Equals($"{expectedPaymentsForPeriodUrl}&employeraccountid={ExpectedAccountId}")
                                             )), Times.Once());
         }
 
