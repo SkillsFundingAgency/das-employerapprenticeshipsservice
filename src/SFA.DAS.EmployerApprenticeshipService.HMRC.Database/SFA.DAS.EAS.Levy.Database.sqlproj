@@ -83,6 +83,8 @@
     <Build Include="StoredProcedures\GetTransactionLines_ByAccountId.sql" />
     <Build Include="StoredProcedures\GetAccountBalance_ByAccountIds.sql" />
     <Build Include="Types\AccountIds.sql" />
+    <Build Include="Tables\PeriodEnd.sql" />
+    <Build Include="StoredProcedures\CreatePeriodEnd.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
