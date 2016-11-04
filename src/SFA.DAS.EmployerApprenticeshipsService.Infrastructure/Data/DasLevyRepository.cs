@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@PeriodEndId", periodEnd.Id, DbType.Decimal);
+                parameters.Add("@PeriodEndId", periodEnd.Id, DbType.String);
                 parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriod.Month, DbType.Int32);
                 parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriod.Year, DbType.Int32);
                 parameters.Add("@AccountDataValidAt", periodEnd.ReferenceData.AccountDataValidAt, DbType.DateTime);
