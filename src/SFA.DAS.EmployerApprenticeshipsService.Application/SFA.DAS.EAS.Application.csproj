@@ -204,6 +204,10 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
