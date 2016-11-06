@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 AccountId = employerAccountResult.Account.Id
             });
-            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
+            var latestLineItem = data.Data.TransactionSummary.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedId = hashedId});
-            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
+            var latestLineItem = data.Data.TransactionSummary.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
 

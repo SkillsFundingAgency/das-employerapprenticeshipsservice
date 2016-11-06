@@ -193,6 +193,7 @@
     <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />
     <Compile Include="Models\Levy\TransactionLine.cs" />
+    <Compile Include="Models\Levy\TransactionSummary.cs" />
     <Compile Include="Models\ManagedCompany\ManagedCompanyLookup.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
     <Compile Include="Models\Notification\EmailMessage.cs" />

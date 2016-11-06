@@ -219,12 +219,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Data = new AggregationData()
                     {
                         AccountId = 1234567890,
-                        TransactionLines = new List<TransactionLine>
-                        {
-                            aggregationLine,
-                            aggregationLine,
-                            aggregationLine
-                        }
+                        //TransactionSummary = new List<TransactionLine>
+                        //{
+                        //    aggregationLine,
+                        //    aggregationLine,
+                        //    aggregationLine
+                        //}
                     }
                 }},
                 {"~/Views/EmployerAccountTransactions/Detail.cshtml", new TransactionLineItemViewModel()
