@@ -16,9 +16,9 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString"/>
-      <Setting name="EventHubName" />
       <Setting name="RedisConnection" />
+      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>
