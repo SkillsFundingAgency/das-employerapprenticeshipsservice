@@ -113,7 +113,29 @@ textarea#Message{
    float:right;
 }
 
+.reviewApprove{
+    p{
+        margin-bottom: 0.25em;
+    }
+    .trainingProvider{
+        font-weight:bold;
+        text-decoration:underline;
+        font-size:20px;
 
+    }
+    .deleteRequest{
+        float:right;
+        margin-bottom: 1.25em;
+    }
+    hr{
+        clear:both;
+    }
+}
+
+a.links{
+    margin-top:30px;
+    display:block;
+}
 
 
 

@@ -2,33 +2,33 @@
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
 @section pageSpecificJS {
-    @Scripts.Render("~/bundles/jqueryvalcustom");    
+    @Scripts.Render("~/bundles/jqueryvalcustom");
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add an apprentice</h1>
+        <h1 class="heading-xlarge">Edit an apprentice</h1>
         <p>
-            Add the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
+            Change the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
         </p>
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("CreateApprenticeship")">
+        <form method="POST" action="@Url.Action("EditApprenticeship")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-           
+
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "Apprentice first name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
-             
+
             </div>
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
                 @Html.LabelFor(m => m.LastName, "Apprentice last name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
-              
+
             </div>
             <hr />
             <div class="form-group">
@@ -37,10 +37,10 @@
                     <option value=""></option>
                     @foreach (var standard in ViewBag.ApprenticeshipProducts)
                     {
-                        <option value="@standard.Id">@standard.Title</option>
+                        <option value="@standard.Id" @if (standard.Id.ToString() == Model.TrainingId) { @Html.Raw("selected") }> @standard.Title</option>
                     }
                 </select>
-             
+
             </div>
 
             <div class="form-group">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                 </fieldset>
-             
+
             </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
@@ -89,12 +89,12 @@
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
-         
-            @Html.HiddenFor(m =>m.ULN)
+
+            @Html.HiddenFor(m => m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
-            <button type="submit" class="button" aria-label="Add apprentice">Add apprentice</button>
-            <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+            <button type="submit" class="button">Finish</button>
+            <a class="button" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
         </form>
     </div>
 </div>
