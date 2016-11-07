@@ -4,21 +4,25 @@
     @Scripts.Render("~/bundles/jqueryvalcustom")
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add training provider details</h1>
+<form method="POST" action="@Url.Action("SelectProvider")">
 
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("SelectProvider")">
+    <div class="grid-row">
+
+      
+
+        <div class="column-two-thirds">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            <h1 class="heading-xlarge">Add training provider details</h1>
+
+        </div>
+    </div>
+    <div class="grid-row">
+        <div class="column-two-thirds">
 
             @Html.AntiForgeryToken()
 
             <div class="form-group">
-                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label" })
+                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
                 <div>
                     @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number")
@@ -33,6 +37,7 @@
 
             @Html.HiddenFor(x => x.LegalEntityCode)
             @Html.HiddenFor(x => x.CohortRef)
-        </form>
+
+        </div>
     </div>
-</div>
+</form>
