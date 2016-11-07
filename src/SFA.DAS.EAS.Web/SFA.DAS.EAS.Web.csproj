@@ -365,6 +365,7 @@
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
+    <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="Models\CreateCommitmentViewModel.cs" />
@@ -890,6 +891,7 @@
     <Content Include="src\sass\_tables.scss" />
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
+    <Content Include="src\sass\_panels.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
