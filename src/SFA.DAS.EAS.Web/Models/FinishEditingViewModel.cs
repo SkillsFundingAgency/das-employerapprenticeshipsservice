@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string HashedAccountId { get; set; }
         public string HashedCommitmentId { get; set; }
 
-        [Required(ErrorMessage = "Select an option.")]
+        [Required(ErrorMessage = "Select an option")]
         public string SaveOrSend { get; set; }
     }
 }
