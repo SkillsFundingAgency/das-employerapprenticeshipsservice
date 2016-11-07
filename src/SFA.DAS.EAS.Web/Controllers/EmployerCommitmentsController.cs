@@ -188,7 +188,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Finished")]
         public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = new SubmitCommitmentModel
+            var model = new FinishEditingViewModel
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId
@@ -198,27 +198,20 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Finished")]
-        public ActionResult FinishedCreating(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string saveOrSend)
-        {
-            if (saveOrSend == "save-no-send")
-            {
-                return RedirectToAction("Cohorts", new { hashedAccountId = hashedAccountId });
-            }
-
-            return RedirectToAction("SubmitNewCommitment", new { hashedAccountId = hashedAccountId, legalEntityCode = legalEntityCode, legalEntityName = legalEntityName, providerId = providerId, providerName = providerName, cohortRef = cohortRef, saveOrSend = saveOrSend });
-        }
-
-        [HttpPost]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditingExistingChoice(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public ActionResult FinishedEditing(FinishEditingViewModel viewModel)
         {
-            if (saveOrSend == "save-no-send")
+            if (!ModelState.IsValid)
             {
-                return RedirectToAction("Cohorts", new {hashedAccountId = hashedAccountId});
+                return View(viewModel);
             }
 
-            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId, saveOrSend = saveOrSend});
+            if (viewModel.SaveOrSend == "save-no-send")
+            {
+                return RedirectToAction("Cohorts", new {hashedAccountId = viewModel.HashedAccountId});
+            }
+
+            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend});
         }
         
         [HttpGet]

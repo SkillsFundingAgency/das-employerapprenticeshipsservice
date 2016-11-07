@@ -1,4 +1,8 @@
-﻿@model SFA.DAS.EAS.Web.Models.SubmitCommitmentModel
+﻿@model SFA.DAS.EAS.Web.Models.FinishEditingViewModel
+
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom")
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -8,10 +12,14 @@
             <!--h2 class="heading-medium">
               What do you want to update?
             </h2-->
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <form action="@Url.Action("FinishedEditing")" method="post">
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-group">
+                    <div>
+                        @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option")
+                    </div>
                     <label class="block-label" for="radio-1">
                         <input id="radio-1" type="radio" name="saveOrSend" value="send-amend">
                         <span id="changeOne">Send to provider to amend or add details</span>
@@ -31,11 +39,6 @@
                     <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
                 @Html.HiddenFor(x => x.HashedCommitmentId)
-                @Html.HiddenFor(x => x.LegalEntityCode)
-                @Html.HiddenFor(x => x.LegalEntityName)
-                @Html.HiddenFor(x => x.ProviderId)
-                @Html.HiddenFor(x => x.ProviderName)
-                @Html.HiddenFor(x => x.CohortRef)
             </form>
 
         </div>
