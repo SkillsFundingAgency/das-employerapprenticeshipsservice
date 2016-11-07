@@ -17,6 +17,7 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("EditApprenticeship")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "Apprentice first name", new { @class = "form-label" })
