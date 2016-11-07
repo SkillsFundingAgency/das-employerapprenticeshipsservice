@@ -154,9 +154,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create")]
-        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel, string selectedRoute)
+        public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
         {
-            if (selectedRoute == "employer")
+            if (!ModelState.IsValid)
+            {
+                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.ProviderId.ToString(), OwinWrapper.GetClaimValue(@"sub"));
+
+                model.Data.CohortRef = viewModel.CohortRef;
+
+                return View("ChoosePath", model.Data);
+            }
+
+            if (viewModel.SelectedRoute == "employer")
             {
                 var hashedCommitmentId = await _employerCommitmentsOrchestrator.Create(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
