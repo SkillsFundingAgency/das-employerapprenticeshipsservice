@@ -5,19 +5,17 @@
 
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 @{ViewBag.Title = "Your organisations";}
-<div class="grid-row">
+<div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your organisations </h1>
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Add")" method="GET">
-            <input class="button button-add" id="addNewPaye" type="submit" value="Add new organisation">
-        </form>
+      
     </div>
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>Add the organisations that you want to hire apprentices through.</p>
+        <p class="lede">Add the organisations that you want to hire apprentices through.</p>
         <p>
             You need to sign an agreement for each organisation before you can access levy funds and hire
             apprentices through that organisation.
@@ -26,42 +24,34 @@
         <table class="tableResponsive orgListing">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th colspan="2">Agreement status</th>
-                   
+                    <th scope="col">Name</th>
+                    <th scope="col">Agreement status</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
 
                 @foreach (var employerAgreement in Model.Data.EmployerAgreements)
             {
-                    <tr class="responsive-tr">
-                        <td class="responsive-td">
-                         
-                            
-                                @employerAgreement.LegalEntityName
-                           
-                        </td>
-                        <td>
-                          
-                           
-                                @employerAgreement.Status.GetDescription()
-                            
-                        </td>
-                        <td>
-                          
-                                <a aria-label="View Employer Agreement @employerAgreement.HashedAgreementId"
-                                   title="View Employer Agreement @employerAgreement.HashedAgreementId"
+                    <tr>
+                        <td>@employerAgreement.LegalEntityName</td>
+                        <td> @employerAgreement.Status.GetDescription()</td>
+                        <td class="link-right">
+                                <a title="View the Employer Agreement for @employerAgreement.LegalEntityName"
                                    href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
                                     @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
+                                    <span class="vh"> the employer agreement for @employerAgreement.LegalEntityName</span>
                                 </a>
-                           
-                           
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
+
+        <form action="@Url.Action("Add")" method="GET">
+            <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
+        </form>
+
     </div>
 </div>
 @section breadcrumb {

@@ -1,0 +1,42 @@
+main {
+    max-width: 960px;
+    margin: 0 15px;
+    margin-bottom: 30px;  
+    @include media(tablet) {
+        margin: 0 30px 30px;
+    }
+    @include media(1020px) {
+        margin: 0 auto 50px;
+    }
+}
+
+@include media(tablet) {
+    .pull-right {
+        float: right;
+    }
+}
+
+aside.sidebar {
+    font-size: 14px;
+    @include media(tablet) {
+        border-top: 10px solid $govuk-blue;
+        margin-top: 60px;
+        font-size: 16px;
+    }
+    li {
+        margin-bottom: 5px;
+    }
+}
+
+table.top-border {
+    border-top: 1px solid $grey-2;
+}
+
+.action-add {
+    margin-bottom: 20px;
+    @include media(tablet) {
+        margin-top: 60px;
+        float: right;
+        clear: both;
+    }
+}

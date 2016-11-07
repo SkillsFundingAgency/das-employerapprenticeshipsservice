@@ -63,6 +63,7 @@
     <Folder Include="StoredProcedures" />
     <Folder Include="Schemas" />
     <Folder Include="SeedData" />
+    <Folder Include="Types" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -77,6 +78,14 @@
     <Build Include="Tables\TopUpPercentage.sql" />
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountId.sql" />
     <Build Include="StoredProcedures\GetLastLevyDeclarations_ByEmpRef.sql" />
+    <Build Include="Tables\TransactionLine.sql" />
+    <Build Include="StoredProcedures\ProcessDeclarationsTransactions.sql" />
+    <Build Include="StoredProcedures\GetTransactionLines_ByAccountId.sql" />
+    <Build Include="StoredProcedures\GetAccountBalance_ByAccountIds.sql" />
+    <Build Include="Types\AccountIds.sql" />
+    <Build Include="Tables\PeriodEnd.sql" />
+    <Build Include="StoredProcedures\CreatePeriodEnd.sql" />
+    <Build Include="StoredProcedures\GetLatestPeriodEnd.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

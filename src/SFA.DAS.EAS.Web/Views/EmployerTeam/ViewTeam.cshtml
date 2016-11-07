@@ -18,9 +18,8 @@
         </div>
     </div>
 }
-<div class="grid-row">
+<div class="grid-row header-index">
     <div class="column-two-thirds">
-
         <h1 class="heading-xlarge">Manage team members</h1>
         @if (Model.Data.TeamMembers.Count == 0)
         {
@@ -33,9 +32,9 @@
             </p>
         }
     </div>  
-    <div class="column-one-third ">
+    <div class="column-one-third">
         <form action="@Url.Action("Invite")" method="get">
-            <input class="button nextto-h1" id="addNewUser" type="submit" value="Invite a new member">
+            <input class="button action-add" id="addNewUser" type="submit" value="Invite a new member">
         </form>
     </div>
 </div>
@@ -43,54 +42,43 @@
 @if (Model.Data.TeamMembers.Count > 0)
 {
     <div class="grid-row">
-        <div class="column-full">
-            <div class="responsive-table th-nopadding">
-                <div class="responsive-thead">
-                    <div class="responsive-tr">
+        <div class="column-two-thirds">
 
-
-                        <div class="responsive-th" scope="col">User name</div>
-                        
-                        <div class="responsive-th" scope="col">What they can do</div>
-                        <div class="responsive-th" scope="col">Status</div>
-
-                        <div class="responsive-th" scope="col"></div>
-                    </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">What they can do</th>
+                        <th scope="col">Status</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var teamMember in Model.Data.TeamMembers)
+                {
+                    <tr>
+                        <td>
+                            <span>@teamMember.Name</span> 
+                            <span class="responsive-detail mobile-hide">@teamMember.Email</span>
+                        </td>
+                        <td>@RoleStrings.ToWhatTheyCanDo(teamMember.Role)</td>
+                        <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
+                        <td class="link-right">
+                            <a aria-label="View details for @teamMember.Name"
+   title="View details for @teamMember.Name"
+   href="@Url.Action("Review", new { accountId = Model.Data.HashedId, email = teamMember.Email })">View <span class="vh"> details for @teamMember.Name</span></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <section>
+                <div class="panel panel-filled">
+                    <h2 class="heading-medium">Give us your feedback</h2>
+                    <p>Use the link below to take part in a short survey about your experience of managing team members so that we can improve the service.</p>
+                    <p><a href="https://www.surveymonkey.co.uk/r/managelevyaccount" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing team members</span></a></p>
                 </div>
-                <div class="responsive-tbody">
-
-                    @foreach (var teamMember in Model.Data.TeamMembers)
-                    {
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div>
-                                    <span>@teamMember.Name</span>
-                                    <br />
-                                    <span class="responsive-detail">@teamMember.Email</span>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">What they can do</div>
-                                <div>@RoleStrings.ToWhatTheyCanDo(teamMember.Role)</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Status</div>
-                                <div>@InvitationStatusStrings.ToString(teamMember.Status)</div>
-                            </div>
-                            <div class="responsive-td">
-                             
-                                    <a aria-label="View details for @teamMember.Name" 
-                                       title="View details for @teamMember.Name" 
-                                       href="@Url.Action("Review", new { accountId = Model.Data.HashedId, email = teamMember.Email })">View</a>
-                            
-                                
-                            </div>
-                        </div>
-                    }
-
-                </div>
-            </div>
+            </section>
         </div>
     </div>
 }

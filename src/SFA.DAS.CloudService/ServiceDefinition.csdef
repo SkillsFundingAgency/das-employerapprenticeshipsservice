@@ -20,9 +20,9 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
       <Setting name="RedisConnection" />
+      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
@@ -46,19 +46,6 @@
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
-    <Imports>
-    </Imports>
-  </WorkerRole>
-  <WorkerRole name="SFA.DAS.EAS.LevyAggregationProvider.Worker" vmsize="small">
-    <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="ConfigurationStorageConnectionString" />
-      <Setting name="EnvironmentName" />
-      <Setting name="StorageConnectionString" />
-      <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
-    </ConfigurationSettings>
     <Imports>
     </Imports>
   </WorkerRole>

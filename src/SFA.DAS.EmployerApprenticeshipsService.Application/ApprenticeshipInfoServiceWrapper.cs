@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
@@ -59,13 +60,23 @@ namespace SFA.DAS.EAS.Application
 
         public ProvidersView GetProvider(int ukPrn)
         {
-            var api = new ProviderApiClient(_configuration.BaseUrl);
+            try
+            {
+                var api = new ProviderApiClient(_configuration.BaseUrl);
+                var providersView = MapFrom(api.Get(ukPrn));
 
-            return MapFrom(api.Get(ukPrn));
+                return providersView;
+            }
+            catch (HttpRequestException)
+            {
+                return null;
+            }
         }
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
         {
+            var lee = frameworks.Where(f => f.TypicalLength == null).ToList();
+
             return new FrameworksView
             {
                 CreatedDate = DateTime.UtcNow,
@@ -78,7 +89,7 @@ namespace SFA.DAS.EAS.Application
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
-                    Duration = new Duration
+                    Duration = x.TypicalLength  == null ? null : new Duration // TODO: LWA - Should frameworks have a null typical length?
                     {
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,

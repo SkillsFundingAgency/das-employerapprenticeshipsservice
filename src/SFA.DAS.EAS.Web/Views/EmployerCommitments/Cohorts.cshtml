@@ -30,26 +30,52 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Cohorts</h1>
+            <h1 class="heading-xlarge">Review and approve apprentices</h1>
 
-            <p>Any cohorts that are new or in discussion with your training provider are listed below:</p>
+
+
+            <p>You have the following requests in progress:</p>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
         {
-            <p class="panel panel-info">
-                There are no cohorts.
-            </p>
+            <div id="addApprenticesEmptyState" class="emptyState">
+                <div class="emptyStateAlert">
+                    <div class="emptyStateCopy">
+                        <p>You currently have no requests. </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="emptyStateButton">
+                <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
+            </div>
         }
         else
         {
+<!-- Requested layout for wave2       -->       
+    
+   <!-- <p>You have <span class="strong">24</span> requests in progress</p>
+
+            <div class="reviewApprove">
+                <p class="trainingProvider">Hackney Skills &amp; Training Ltd</p>
+                <p><span class="strong">Reference:</span> 98HGS3F</p>
+                <p><span class="strong">Status:</span> With providers</p>
+                <p><span class="strong">Last message:</span></p>
+                <p>This is a message that has been added.  It runs along the bottom of the card for now. </p>
+                <a href="#" class="button deleteRequest">Delete request</a>
+                <hr />
+            </div>
+          
+    -->
+
 
         <table class="tableResponsive cohort">
             <thead>
                 <tr>
-                    <th>Provider</th>
-                    <th>Legal entity</th>
-                    <th colspan="2">Name</th>
+                    <th>Training provider</th>
+                    <th>Organisation</th>
+                    <th colspan="2">Reference</th>
                  
                 </tr>
             </thead>
@@ -70,13 +96,15 @@
                         @commitment.Name
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })">View</a>
+                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-        <a href="@Url.Action("Inform")" class="button spacer">Add new cohort</a>
+
+        <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
+
         }
 
 
@@ -95,7 +123,7 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticships Home</a></li>
+            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticeships Home</a></li>
             <li>Cohorts</li>
         </ol>
     </div>

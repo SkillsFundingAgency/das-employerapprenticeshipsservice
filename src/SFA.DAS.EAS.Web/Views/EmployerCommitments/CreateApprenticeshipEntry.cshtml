@@ -1,8 +1,8 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom");    
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom");    
 }
 
 <div class="grid-row">
@@ -17,7 +17,8 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("CreateApprenticeship")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-           
+            @Html.AntiForgeryToken()
+
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "Apprentice first name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
@@ -93,8 +94,20 @@
             @Html.HiddenFor(m =>m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
-            <button type="submit" class="button">Add apprentice</button>
-            <a class="button" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+            <button type="submit" class="button" aria-label="Add apprentice">Add apprentice</button>
+            <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
         </form>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.HashedAccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", new {hashedAccountId = @Model.HashedAccountId})">Apprenticeships Home</a></li>
+            <li><a href="@Url.Action("Details", new {hashedAccountId = @Model.HashedAccountId})">Cohort</a></li>
+            <li>Add an apprentice</li>
+        </ol>
+    </div>
+}

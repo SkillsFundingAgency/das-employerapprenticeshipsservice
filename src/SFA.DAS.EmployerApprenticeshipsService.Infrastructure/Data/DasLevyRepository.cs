@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +7,9 @@ using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -55,8 +58,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        
-
         public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId)
         {
             var result = await WithConnection(async c =>
@@ -86,6 +87,77 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
 
+            return result.SingleOrDefault();
+        }
+
+        public async Task ProcessDeclarations()
+        {
+            await WithConnection(async c => await c.ExecuteAsync(
+                sql: "[levy].[ProcessDeclarationsTransactions]",
+                param: null,
+                commandType: CommandType.StoredProcedure));
+        }
+
+        public async Task<List<TransactionLine>> GetTransactions(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<TransactionLine>(
+                    sql: "[levy].[GetTransactionLines_ByAccountId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
+        
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new AccountIdUserTableParam(accountIds);
+                
+                return await c.QueryAsync<AccountBalance>(
+                 "[levy].[GetAccountBalance_ByAccountIds]",
+                 parameters,
+                 commandType: CommandType.StoredProcedure);
+            });
+            
+
+            return result.ToList();
+            
+        }
+
+        public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@PeriodEndId", periodEnd.Id, DbType.String);
+                parameters.Add("@CalendarPeriodMonth", periodEnd.CalendarPeriod.Month, DbType.Int32);
+                parameters.Add("@CalendarPeriodYear", periodEnd.CalendarPeriod.Year, DbType.Int32);
+                parameters.Add("@AccountDataValidAt", periodEnd.ReferenceData.AccountDataValidAt, DbType.DateTime);
+                parameters.Add("@CommitmentDataValidAt", periodEnd.ReferenceData.CommitmentDataValidAt, DbType.DateTime);
+                parameters.Add("@CompletionDateTime", periodEnd.CompletionDateTime, DbType.DateTime);
+                parameters.Add("@PaymentsForPeriod", periodEnd.Links.PaymentsForPeriod, DbType.String);
+                
+                return await c.ExecuteAsync(
+                    sql: "[levy].[CreatePeriodEnd]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        public async Task<PeriodEnd> GetLatestPeriodEnd()
+        {
+            var result = await WithConnection(async c => await c.QueryAsync<PeriodEnd>(
+                "[levy].[GetLatestPeriodEnd]",
+                null,
+                commandType: CommandType.StoredProcedure));
+            
             return result.SingleOrDefault();
         }
     }

@@ -2,38 +2,64 @@
 
 @model ConfirmProviderView
 
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom")
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your training provider</h1>
-        <p class="">Your search for <span style="font-weight:700">'@Model.ProviderId'</span> has found the following:</p>
 
-        <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
-        @*<h3 class="heading-small" style="margin-top:0px; margin-bottom:0px;color:#6F777B ">Address not available in service</h3>*@
-        <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
+        @if (Model.Providers != null && Model.Providers.Count > 0)
+        {
+            <h1 class="heading-xlarge">Confirm training provider</h1>
+            <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.ProviderId'</span> matches:</p>
 
-        <form action="@Url.Action("ConfirmProvider")" method="POST">
-            @Html.AntiForgeryToken()
-            <fieldset>
-                <legend class="visuallyhidden">Training provider</legend>
-                <div class="form-group">
-                    <label class="form-label-bold" for="">Will this training provider be training the apprentices you’re about to add?</label>
-                    <label class="block-label" for="provider-1">
-                        <input id="provider-1" type="radio" name="providerId" value="@Model.ProviderId">
-                        Yes, use @Model.Providers[0].ProviderName
-                    </label>
-                    <label class="block-label" for="provider-2">
-                        <input id="provider-2" type="radio" name="providerId" value="">
-                        No, search again
-                    </label>
-                </div>
-            </fieldset>
-            <div style="margin-top: 50px"></div>
-            <input id="hashedAccountId" name="hashedAccountId" type="hidden" value="@Model.HashedAccountId">
-            <input id="legalEntityCode" name="legalEntityCode" type="hidden" value="@Model.LegalEntityCode">
-            <button class="button" type="submit">Continue</button>
-        </form>
-        <div style="margin-top:50px"></div>
+            <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
+            <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
+            
+
+            <form action="@Url.Action("ConfirmProvider")" method="POST">
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+                @Html.AntiForgeryToken()
+                <fieldset class="spacerConfirmProvider">
+                    <legend class="visuallyhidden">Training provider</legend>
+                    <div class="form-group">
+                        <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
+                        <div>
+                            @Html.ValidationMessageFor(m => m.Confirmation, "Please choose an option")
+                        </div>
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-Yes">
+                            @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-Yes" })
+                            Yes, use @Model.Providers[0].ProviderName
+                        </label>
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-No">
+                            @Html.RadioButtonFor(m => m.Confirmation, "No", new { id = Html.IdFor(m => m.Confirmation) + "-No" })
+                            No, change UK Provider Reference Number
+                        </label>
+                    </div>
+                </fieldset>
+            
+                @Html.HiddenFor(x => x.HashedAccountId)
+                @Html.HiddenFor(x => x.LegalEntityCode)
+                @Html.HiddenFor(x => x.CohortRef)
+                @Html.HiddenFor(x => x.ProviderId)
+                <button class="button" type="submit">Continue</button>
+            </form>
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Training provider not found</h1>
+            <p class="">No matches found for <span style="font-weight:700">'@Model.ProviderId'</span>. Please search again.</p>
+            <form action="@Url.Action("ConfirmProvider")" method="POST">
+                @Html.AntiForgeryToken()
+                <input id="providerId" type="hidden" name="providerId" value="">
+                @Html.HiddenFor(x => x.HashedAccountId)
+                @Html.HiddenFor(x => x.LegalEntityCode)
+                @Html.HiddenFor(x => x.CohortRef)
+                <button class="button" type="submit">Search again</button>
+            </form>
+        }
+
     </div>
-    <div class="column-one-third">
-    </div>
+    <div class="column-one-third"></div>
 </div>

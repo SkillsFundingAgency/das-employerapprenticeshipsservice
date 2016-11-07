@@ -3,15 +3,16 @@
 
 @model SelectLegalEntityViewModel
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryvalcustom")
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom")
 }
 
 
 <div class="grid-row">
     <form method="POST" action="@Url.Action("SetLegalEntity")">
         <div class="column-two-thirds">
-            <h1 class="heading-xlarge">Choose employer</h1>
+            <h1 class="heading-xlarge">Choose organisation
+</h1>
 
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
           
@@ -20,12 +21,12 @@
 
                 <fieldset>
 
-                    @Html.LabelFor(m => m.LegalEntityCode, "Organisation", new { @class = "form-label" })
+                 
 
-                    <p>Choose the organisation that's entered into the contract for the apprentices you're adding.</p>
+                    <p>Choose the organisation your apprentices will be employed through:</p>
 
                     <div>
-                        @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option from the list.")
+                        @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option")
                     </div>
                     @foreach (LegalEntity entity in ViewBag.LegalEntities)
                     {
@@ -36,7 +37,8 @@
                     }
                </fieldset>
             </div>
-            <button type="submit" class="button">Next</button>
+            @Html.HiddenFor(x => x.CohortRef)
+            <button type="submit" class="button">Continue</button>
 
         </div>
     </form>

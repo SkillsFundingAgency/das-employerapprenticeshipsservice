@@ -1,37 +1,45 @@
-﻿@model SFA.DAS.EAS.Web.Models.SubmitCommitmentModel
+﻿@model SFA.DAS.EAS.Web.Models.FinishEditingViewModel
+
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom")
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Finished editing</h1>
         <div>
-            <p>
-                What do you want to do with this commitment?
-            </p>
+           
             <!--h2 class="heading-medium">
               What do you want to update?
             </h2-->
 
-            <form action="@Url.Action("FinishedEditingChoice")" method="post">
+            <form action="@Url.Action("FinishedEditing")" method="post">
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+                @Html.AntiForgeryToken()
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-group">
-                    <label class="block-label" for="radio-1">
-                        <input id="radio-1" type="radio" name="saveOrSend" value="send-amend">
+                    <div>
+                        @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option")
+                    </div>
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                         <span id="changeOne">Send to provider to amend or add details</span>
                     </label>
-                    <label class="block-label" for="radio-2">
-                        <input id="radio-2" type="radio" name="saveOrSend" value="send-approve">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
                         <span id="changeTwo">Approve and send to provider</span>
                     </label>
-                    <label class="block-label" for="radio-3">
-                        <input id="radio-3" type="radio" name="saveOrSend" value="save-no-send">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SaveNoSend">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "save-no-send", new { id = Html.IdFor(m => m.SaveOrSend) + "-SaveNoSend" })
                         <span id="changeThree">Save but do not send to provider</span>
                     </label>
                 </div>
 
                 <div style="margin-top:20px;">
-                    <input type="submit" class="button" id="paymentPlan" value="Save and continue">
-                    <a class="button" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+                    <input type="submit" class="button" id="paymentPlan" value="Continue">
+                    <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
+                @Html.HiddenFor(x => x.HashedCommitmentId)
             </form>
 
         </div>

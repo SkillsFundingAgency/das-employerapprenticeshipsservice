@@ -4,10 +4,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Choose company</h1>
         <p>You can choose your existing company to be used for the legal agreement or search for a new one.</p>
-
-
         <form method="post" action="@Url.Action("ChooseCompany")">
-            
             @Html.AntiForgeryToken()
             <input type="hidden" name="HashedId" value="@Model.HashedId" />
             <input type="hidden" value="@Model.PayeScheme" name="PayeScheme" />

@@ -1,32 +1,28 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Events;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
     public class RefreshEmployerLevyDataCommandHandler : AsyncRequestHandler<RefreshEmployerLevyDataCommand>
     {
-        [QueueName]
-        public string refresh_employer_levy { get; set; }
-
+        
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IEnglishFractionRepository _englishFractionRepository;
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IMediator _mediator;
 
-        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, 
-            IDasLevyRepository dasLevyRepository, IEnglishFractionRepository englishFractionRepository, 
-            IMessagePublisher messagePublisher)
+        public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IEnglishFractionRepository englishFractionRepository, IMediator mediator)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
             _englishFractionRepository = englishFractionRepository;
-            _messagePublisher = messagePublisher;
+            _mediator = mediator;
         }
 
         protected override async Task HandleCore(RefreshEmployerLevyDataCommand message)
@@ -73,8 +69,10 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 
             if (sendLevyDataChanged)
             {
-                await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage { AccountId = message.AccountId });
+                await _mediator.PublishAsync(new ProcessDeclarationsEvent());
             }
+
+            
 
         }
     }
