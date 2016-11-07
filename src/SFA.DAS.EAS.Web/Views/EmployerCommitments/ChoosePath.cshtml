@@ -23,12 +23,12 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SelectedRoute, "Please choose an option")
                     </div>
-                    <label class="block-label" for="radio1">
-                        <input id="radio1" type="radio" name="selectedRoute" value="employer">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Employer">
+                        @Html.RadioButtonFor(m => m.SelectedRoute, "employer", new { id = Html.IdFor(m => m.SelectedRoute) + "-Employer" })
                         I'll add apprentices
                     </label>
-                    <label class="block-label" for="radio2">
-                        <input id="radio2" type="radio" name="selectedRoute" value="provider">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Provider">
+                        @Html.RadioButtonFor(m => m.SelectedRoute, "provider", new { id = Html.IdFor(m => m.SelectedRoute) + "-Provider" })
                         I'd like my provider to add apprentices
                     </label>
                 </div>

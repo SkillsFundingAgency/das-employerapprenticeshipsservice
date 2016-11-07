@@ -119,22 +119,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create/ConfirmProvider")]
-        public ActionResult ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]SelectProviderViewModel viewModel)
+        public async Task<ActionResult> ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]ConfirmProviderView viewModel)
         {
             if (!ModelState.IsValid)
             {
-                var model = new SelectProviderViewModel
+                if (viewModel.Confirmation == null)
                 {
-                    LegalEntityCode = viewModel.LegalEntityCode,
-                    CohortRef = viewModel.CohortRef
-                };
+                    viewModel.Providers = await _employerCommitmentsOrchestrator.GetProvider(viewModel.ProviderId);
 
-                if (string.IsNullOrWhiteSpace(viewModel.ProviderId))
-                {
-                    return RedirectToAction("SearchProvider", model);
+                    return View("SelectProvider", viewModel);
                 }
+            }
 
-                return View("SearchProvider", model);
+            if (!viewModel.Confirmation.Value)
+            {
+                return RedirectToAction("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModel.LegalEntityCode, CohortRef = viewModel.CohortRef });
             }
 
             return RedirectToAction("ChoosePath", new {hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId, cohortRef = viewModel.CohortRef });

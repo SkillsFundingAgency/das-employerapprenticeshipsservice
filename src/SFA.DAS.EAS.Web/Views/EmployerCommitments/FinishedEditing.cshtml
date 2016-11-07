@@ -20,16 +20,16 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option")
                     </div>
-                    <label class="block-label" for="radio-1">
-                        <input id="radio-1" type="radio" name="saveOrSend" value="send-amend">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                         <span id="changeOne">Send to provider to amend or add details</span>
                     </label>
-                    <label class="block-label" for="radio-2">
-                        <input id="radio-2" type="radio" name="saveOrSend" value="send-approve">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
                         <span id="changeTwo">Approve and send to provider</span>
                     </label>
-                    <label class="block-label" for="radio-3">
-                        <input id="radio-3" type="radio" name="saveOrSend" value="save-no-send">
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SaveNoSend">
+                        @Html.RadioButtonFor(m => m.SaveOrSend, "save-no-send", new { id = Html.IdFor(m => m.SaveOrSend) + "-SaveNoSend" })
                         <span id="changeThree">Save but do not send to provider</span>
                     </label>
                 </div>

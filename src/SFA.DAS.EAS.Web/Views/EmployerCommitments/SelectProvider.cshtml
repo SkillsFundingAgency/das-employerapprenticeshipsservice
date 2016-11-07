@@ -2,6 +2,10 @@
 
 @model ConfirmProviderView
 
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/jqueryvalcustom")
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
 
@@ -12,6 +16,8 @@
 
             <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
             <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
+            
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <form action="@Url.Action("ConfirmProvider")" method="POST">
                 @Html.AntiForgeryToken()
@@ -19,21 +25,25 @@
                     <legend class="visuallyhidden">Training provider</legend>
                     <div class="form-group">
                         <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
-                        <label class="block-label" for="provider-1">
-                            <input id="provider-1" type="radio" name="providerId" value="@Model.ProviderId">
+                        <div>
+                            @Html.ValidationMessageFor(m => m.Confirmation, "Please choose an option")
+                        </div>
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-Yes">
+                            @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-Yes" })
                             Yes, use @Model.Providers[0].ProviderName
                         </label>
-                        <label class="block-label" for="provider-2">
-                            <input id="provider-2" type="radio" name="providerId" value="">
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-No">
+                            @Html.RadioButtonFor(m => m.Confirmation, "No", new { id = Html.IdFor(m => m.Confirmation) + "-No" })
                             No, change UK Provider Reference Number
                         </label>
                     </div>
                 </fieldset>
             
-            @Html.HiddenFor(x => x.HashedAccountId)
-            @Html.HiddenFor(x => x.LegalEntityCode)
-            @Html.HiddenFor(x => x.CohortRef)
-            <button class="button" type="submit">Continue</button>
+                @Html.HiddenFor(x => x.HashedAccountId)
+                @Html.HiddenFor(x => x.LegalEntityCode)
+                @Html.HiddenFor(x => x.CohortRef)
+                @Html.HiddenFor(x => x.ProviderId)
+                <button class="button" type="submit">Continue</button>
             </form>
         }
         else
