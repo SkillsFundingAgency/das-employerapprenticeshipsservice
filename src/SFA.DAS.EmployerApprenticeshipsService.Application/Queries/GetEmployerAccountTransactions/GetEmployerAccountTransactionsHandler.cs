@@ -33,22 +33,23 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
 
             var balance = 0m;
-            var transactionSummary = response.GroupBy(c => new { c.SubmissionId}, (submission, group) => new
+            var transactionSummary = response.OrderBy(c=>c.TransactionDate).GroupBy(c => new { c.SubmissionId}, (submission, group) => new
             {
                 submission.SubmissionId,
                 Data = group.ToList()
             }).Select(item =>
             {
+                var amount = item.Data.Sum(c => c.Amount);
                 return new TransactionSummary
                 {
                     Id = item.SubmissionId.ToString(),
                     TransactionLines = item.Data,
-                    Amount = item.Data.Sum(c => c.Amount),
+                    Amount = amount,
                     Description = "Levy Credit",
                     TransactionDate = item.Data.First().TransactionDate,
-                    Balance = balance += item.Data.Sum(c => c.Amount)
+                    Balance = balance += amount
             };
-            });
+            }).OrderByDescending(c=>c.TransactionDate);
             
             var returnValue = new AggregationData
             {

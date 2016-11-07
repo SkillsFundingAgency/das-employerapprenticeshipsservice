@@ -6,7 +6,7 @@
     var culture = new CultureInfo("en-GB");
     var paymentType = "Credit";
     ViewBag.Title = paymentType + " details";
-    if (1 == 2)
+    if (Model.TotalAmount < 0)
     {
         paymentType = "Adjustment";
     }
@@ -48,7 +48,7 @@
                 }
                 <tr class="total">
                     <th scope="row" colspan="4"><span class="vh">Total</span></th>
-                    <td class="numeric">£ SUM HERE</td>
+                    <td class="numeric">@Model.TotalAmount.ToString("C0",culture)</td>
                 </tr>
             </tbody>
         </table>

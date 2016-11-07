@@ -37,6 +37,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Model = new TransactionLineItemViewModel
                 {
+                    TotalAmount = data.Total,
                     LineItem = data.TransactionDetail
                 }
             };
@@ -97,6 +98,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class TransactionLineItemViewModel
     {
         public List<TransactionDetailSummary> LineItem { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 
     public class TransactionViewResult

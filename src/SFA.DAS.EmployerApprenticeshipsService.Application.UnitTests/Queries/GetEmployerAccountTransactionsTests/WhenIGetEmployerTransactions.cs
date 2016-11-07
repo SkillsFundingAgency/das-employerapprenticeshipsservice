@@ -123,14 +123,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 {
                     AccountId = expectedAcountId,
                     Amount=500,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
+                    SubmissionId = 102,
+                    TransactionDate = new DateTime(2016,02,10),
                     TransactionType = LevyItemType.Declaration
                 },
                 new TransactionLine
                 {
                     AccountId = expectedAcountId,
-                    Amount=-200,
+                    Amount=200,
                     SubmissionId = 101,
                     TransactionDate = new DateTime(2016,01,10),
                     TransactionType = LevyItemType.Declaration
@@ -154,8 +154,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             });
 
             //Assert
-            var transactionLine = response.Data.TransactionSummary.FirstOrDefault();
-            Assert.AreEqual(350, transactionLine.Balance);
+            Assert.AreEqual(750, response.Data.TransactionSummary[0].Balance);
+            Assert.AreEqual(250, response.Data.TransactionSummary[1].Balance);
         }
     }
 }

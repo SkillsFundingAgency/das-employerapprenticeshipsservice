@@ -51,9 +51,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                     TransactionDate = item.Data.First().TransactionDate,
                     EnglishFraction = item.Data.First().EnglishFraction
                 };
-            });
-
-            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary.ToList() };
+            }).ToList();
+            var totalAmount = transactionDetailSummary.Sum(c => c.Amount);
+            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary,Total = totalAmount };
 
         }
     }
