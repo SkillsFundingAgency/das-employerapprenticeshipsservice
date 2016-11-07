@@ -4,7 +4,7 @@
 @model CommitmentViewModel
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
         <!--<table>
             <tbody>
@@ -37,9 +37,16 @@
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
         {
-            <p class="panel panel-info">
-                You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.
-            </p>
+         
+            <div id="addApprenticesEmptyState" class="emptyState">
+                <div class="emptyStateAlert">
+                    <div class="emptyStateCopyDetails">
+                        <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
+
+                    </div>
+                </div>
+            </div>
+          
         }
         else
         {
@@ -71,16 +78,19 @@
                             @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
-                                <a href="@Url.Action("EditApprenticeship", new { hashedCommitmentId = Model.HashedId, hashedApprenticeshipId = apprenticeship.HashedId })">Edit</a>                   
+                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="View  @apprenticeship.ApprenticeshipName">View</a>                   
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
         }
-        <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add an apprentice</a>
+      
+        <div class="emptyStateButton">
+            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add an apprentice</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")">Finish editing</a>
+        </div>
+      
     </div>
-    <div class="column-one-third">
-        <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")">Finish Editing</a>
-    </div>
+
 </div>

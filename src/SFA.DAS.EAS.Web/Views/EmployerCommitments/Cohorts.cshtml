@@ -30,16 +30,26 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Cohorts</h1>
+            <h1 class="heading-xlarge">Review and approve apprentices</h1>
 
-            <p>Any cohorts that are new or in discussion with your training provider are listed below:</p>
+
+
+            <p>You have the following requests in progress:</p>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
         {
-            <p class="panel panel-info">
-                There are no cohorts.
-            </p>
+            <div id="addApprenticesEmptyState" class="emptyState">
+                <div class="emptyStateAlert">
+                    <div class="emptyStateCopy">
+                        <p>You currently have no requests. </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="emptyStateButton">
+                <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
+            </div>
         }
         else
         {
@@ -47,9 +57,9 @@
         <table class="tableResponsive cohort">
             <thead>
                 <tr>
-                    <th>Provider</th>
-                    <th>Legal entity</th>
-                    <th colspan="2">Name</th>
+                    <th>Training provider</th>
+                    <th>Organisation</th>
+                    <th colspan="2">Reference</th>
                  
                 </tr>
             </thead>
@@ -76,7 +86,7 @@
                 }
             </tbody>
         </table>
-        <a href="@Url.Action("Inform")" class="button spacer">Add new cohort</a>
+        <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
         }
 
 
