@@ -37,7 +37,7 @@
                         <td>@employerAgreement.LegalEntityName</td>
                         <td> @employerAgreement.Status.GetDescription()</td>
                         <td class="link-right">
-                                <a title="View the Employer Agreement for @employerAgreement.LegalEntityName"
+                                <a title="View the Employer Agreement for @employerAgreement.LegalEntityName" aria-label="View the Employer Agreement for @employerAgreement.LegalEntityName"
                                    href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
                                     @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
                                     <span class="vh"> the employer agreement for @employerAgreement.LegalEntityName</span>

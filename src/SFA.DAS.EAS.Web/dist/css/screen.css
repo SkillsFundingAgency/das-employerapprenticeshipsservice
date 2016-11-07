@@ -2070,6 +2070,10 @@ dl.inline dd {
   font-weight: bold;
 }
 
+.responsive-detail {
+  color: #6f777b;
+}
+
 main {
   max-width: 960px;
   margin: 0 15px;
@@ -2367,6 +2371,25 @@ tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
 }
+.panel p {
+  font-size: 14px;
+}
+
+@media (min-width: 641px) {
+  .panel p {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 641px) {
+  .panel .heading-medium {
+    margin-bottom: 10px;
+  }
+}
+
+.panel-filled {
+  background: #dee0e2;
+}
 
 .validation-summary-valid,
 .form-group .field-validation-valid {
@@ -2493,6 +2516,14 @@ a.links {
 
 form .action-add {
   float: left;
+}
+
+aside {
+  margin-top: 50px;
+}
+
+.govuk-box-highlight {
+  margin-top: 50px;
 }
 
 /* responsive table */
