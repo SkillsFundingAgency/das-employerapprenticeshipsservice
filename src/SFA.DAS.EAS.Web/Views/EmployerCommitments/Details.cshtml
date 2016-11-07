@@ -8,26 +8,26 @@
         <h1 class="heading-xlarge">Add apprentices</h1>
         <!--<table>
             <tbody>
-                <tr>
-                    <th scope="row">Name</th>
-                    <td>@Model.Name</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Legal entity</th>
-                    <td>@Model.LegalEntityName</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Provider</th>
-                    <td>@Model.ProviderName</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Status</th>
-                    <td>@Model.Status.GetDescription()</td>
-                    <td></td>
-                </tr>
+            <tr>
+                <th scope="row">Name</th>
+                <td>@Model.Name</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Legal entity</th>
+                <td>@Model.LegalEntityName</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Provider</th>
+                <td>@Model.ProviderName</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Status</th>
+                <td>@Model.Status.GetDescription()</td>
+                <td></td>
+            </tr>
             </tbody>
         </table>-->
    
@@ -51,7 +51,7 @@
         else
         {
             <table class="tableResponsive viewCommitment">
-            <thead>
+                <thead>
                 <tr>
 
                     <th scope="col">Apprentice</th>
@@ -59,14 +59,14 @@
                     <th scope="col" colspan="2">Status</th>
 
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var apprenticeship in Model.Apprenticeships)
                 {
                     <tr>
                         <td>
         
-                           @apprenticeship.ApprenticeshipName &nbsp; 
+                            @apprenticeship.ApprenticeshipName &nbsp; 
                         </td>
                         <td>
 
@@ -78,12 +78,12 @@
                             @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
-                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
+                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         }
       
         <div class="emptyStateButton">
@@ -94,3 +94,13 @@
     </div>
 
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
+            <li>Cohort details</li>
+        </ol>
+    </div>
+}
