@@ -2458,6 +2458,30 @@ textarea#Message {
   float: right;
 }
 
+.reviewApprove p {
+  margin-bottom: 0.25em;
+}
+
+.reviewApprove .trainingProvider {
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 20px;
+}
+
+.reviewApprove .deleteRequest {
+  float: right;
+  margin-bottom: 1.25em;
+}
+
+.reviewApprove hr {
+  clear: both;
+}
+
+a.links {
+  margin-top: 30px;
+  display: block;
+}
+
 /* responsive table */
 @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
   /* Force table to not be like tables anymore */
