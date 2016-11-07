@@ -322,7 +322,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost.ToString(),
+                Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
@@ -330,6 +330,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = apprenticeship.Status,
                 AgreementStatus = apprenticeship.AgreementStatus.ToString()
             };
+        }
+
+        private static string NullableDecimalToString(decimal? item)
+        {
+            return (item.HasValue) ? ((int)item).ToString() : "";
         }
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)

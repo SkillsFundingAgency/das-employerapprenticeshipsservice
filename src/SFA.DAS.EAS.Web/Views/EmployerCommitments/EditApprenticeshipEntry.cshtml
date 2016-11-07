@@ -37,7 +37,7 @@
                     <option value=""></option>
                     @foreach (var standard in ViewBag.ApprenticeshipProducts)
                     {
-                        <option value="@standard.Id">@standard.Title</option>
+                        <option value="@standard.Id" @if (standard.Id.ToString() == Model.TrainingId) { @Html.Raw("selected") }> @standard.Title</option>
                     }
                 </select>
 
