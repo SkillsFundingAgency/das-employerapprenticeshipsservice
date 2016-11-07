@@ -4,7 +4,6 @@
 
 @{
     var culture = new CultureInfo("en-GB");
-    var accountId = Model.LineItem.Items[0].AccountId;
 }
 @{ViewBag.Title = "Credit details";}
 <div class="grid-row">
@@ -38,44 +37,38 @@
                     </tr>
                     <tr>
                         <td class="rjTableName">Date</td>
-                        <td class="">@{ var date = new DateTime(Model.LineItem.Year, Model.LineItem.Month, 1); }@date.ToGdsFormat()</td>
+                       <td class="">@Model.LineItem.First().TransactionDate.ToGdsFormat()</td>
 
                     </tr>
-                    <tr>
-                        <td class="rjTableName">Payment amount</td>
-                        <td class="">£@($"{Model.LineItem.Amount:n0}")</td>
-                    </tr>
+                
                 </tbody>
             </table>
             <h2 class="heading-medium">Payroll</h2>
             <div class="responsive-table table-19-font">
                 <div class="responsive-thead">
                     <div class="responsive-tr">
-                        <div class="responsive-th" scope="col">Payroll number</div>
-                        <div class="responsive-th" scope="col">Type</div>
-                        <div class="responsive-th numeric" scope="col">English percentage</div>
-                        <div class="responsive-th numeric" scope="col">Date submitted</div>
-                        <div class="responsive-th numeric" scope="col">Levy YTD</div>
-                        <div class="responsive-th numeric" scope="col">Amount</div>
-                        <div class="responsive-th numeric" scope="col">Total</div>
-
+                        <div class="responsive-th" scope="col">PAYE scheme</div>
+                        <div class="responsive-th numeric" scope="col">Levy Declared</div>
+                        <div class="responsive-th numeric" scope="col">English Percentage</div>
+                        <div class="responsive-th numeric" scope="col">Top up</div>
+                        <div class="responsive-th numeric" scope="col">Paid in</div>
                     </div>
                 </div>
                 <div class="responsive-tbody">
 
 
-                    @foreach (var aggregationLineItem in Model.LineItem.Items)
+                    @foreach (var aggregationLineItem in Model.LineItem)
                     {
                         
                       
 
                         <div class="responsive-tr">
                             <div class="responsive-td rjTableName">
-                                <div>@aggregationLineItem.EmpRef</div>
+                                <div>@aggregationLineItem.Empref</div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td rjTableName">
-                                <div>@aggregationLineItem.LevyItemType</div>
+                                <div>@aggregationLineItem.Amount</div>
                                 <div class="responsive-inner-caption"></div>
                             </div>
                             <div class="responsive-td numeric">
@@ -83,21 +76,12 @@
                                 <div>@($"{aggregationLineItem.EnglishFraction*100:n0}")%</div>
                             </div>
                             <div class="responsive-td numeric">
-                                <div class="responsive-inner-caption">DateSubmitted</div>
-                                <div>@aggregationLineItem.ActivityDate.ToGdsFormat()</div>
+                                <div class="responsive-inner-caption">Top up</div>
+                                <div>@(aggregationLineItem.TopUp.ToString("C0", culture))</div>
                             </div>
                             <div class="responsive-td numeric">
-                                <div class="responsive-inner-caption">LevyYtd</div>
-                                <div>@(aggregationLineItem.LevyDueYtd.ToString("C0", culture))</div>
-                            </div>
-                            <div class="responsive-td numeric">
-                                <div class="responsive-inner-caption">Amount</div>
-                                <div>@(aggregationLineItem.Amount.ToString("C0", culture))</div>
-                            </div>
-                            <div class="responsive-td numeric">
-                                <div class="responsive-inner-caption">CalculatedAmount</div>
-                                <div>@(aggregationLineItem.CalculatedAmount.ToString("C0", culture))</div>
-                                
+                                <div class="responsive-inner-caption">Paid in</div>
+                                <div>@((aggregationLineItem.Amount + aggregationLineItem.TopUp).ToString("C0", culture))</div>
                             </div>
                         </div>
                     }

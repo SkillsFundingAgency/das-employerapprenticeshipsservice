@@ -229,9 +229,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }},
                 {"~/Views/EmployerAccountTransactions/Detail.cshtml", new TransactionLineItemViewModel()
                     {
-                        CurrentBalance = 12.0m,
-                        CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
-                        LineItem = new AggregationLine()
+                        
                     }},
                 {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { HashedId = "3", ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
