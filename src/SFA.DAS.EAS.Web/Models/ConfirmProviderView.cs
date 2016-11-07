@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string ProviderName { get; set; }
         public List<Provider> Providers { get; set; }
 
-        [Required(ErrorMessage = "Select an option.")]
+        [Required(ErrorMessage = "Select a training provider")]
         public bool? Confirmation { get; set; }
     }
 }
