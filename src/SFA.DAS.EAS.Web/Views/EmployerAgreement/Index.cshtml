@@ -10,9 +10,7 @@
         <h1 class="heading-xlarge">Your organisations </h1>
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Add")" method="GET">
-            <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
-        </form>
+      
     </div>
 </div>
 <div class="grid-row">
@@ -49,6 +47,11 @@
                 }
             </tbody>
         </table>
+
+        <form action="@Url.Action("Add")" method="GET">
+            <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
+        </form>
+
     </div>
 </div>
 @section breadcrumb {
