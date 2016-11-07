@@ -241,6 +241,10 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQueryValidator.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailResponse.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
