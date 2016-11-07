@@ -1759,6 +1759,10 @@ dl.inline dd {
   font-weight: bold;
 }
 
+.responsive-detail {
+  color: #6f777b;
+}
+
 main {
   max-width: 960px;
   margin: 0 15px;
