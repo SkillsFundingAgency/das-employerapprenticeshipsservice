@@ -2070,6 +2070,10 @@ dl.inline dd {
   font-weight: bold;
 }
 
+.responsive-detail {
+  color: #6f777b;
+}
+
 main {
   max-width: 960px;
   margin: 0 15px;
@@ -2357,6 +2361,26 @@ table th, table td {
   table th, table td {
     font-size: 16px;
   }
+}
+
+.panel p {
+  font-size: 14px;
+}
+
+@media (min-width: 641px) {
+  .panel p {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 641px) {
+  .panel .heading-medium {
+    margin-bottom: 10px;
+  }
+}
+
+.panel-filled {
+  background: #dee0e2;
 }
 
 .validation-summary-valid,

@@ -749,6 +749,7 @@
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen.scss" />
+    <Content Include="src\sass\_tables.scss" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -886,9 +887,9 @@
     <Content Include="src\sass\_helpers.scss" />
     <Content Include="src\sass\_layouts.scss" />
     <Content Include="src\sass\_mixins.scss" />
-    <Content Include="src\sass\_tables.scss" />
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
+    <Content Include="src\sass\_panels.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
