@@ -9,6 +9,7 @@ using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using NLog;
+using NLog.Targets;
 using SFA.DAS.EAS.Infrastructure.Logging;
 
 namespace SFA.DAS.EAS.Web
@@ -16,7 +17,8 @@ namespace SFA.DAS.EAS.Web
     public class MvcApplication : System.Web.HttpApplication
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        
+        private static RedisTarget _redisTarget; // Required to ensure assembly is copied to output.
+
         protected void Application_Start()
         {
             LoggingConfig.ConfigureLogging();
