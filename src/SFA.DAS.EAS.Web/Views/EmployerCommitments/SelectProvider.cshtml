@@ -17,9 +17,9 @@
             <h2 class="heading-large" style="margin-bottom:0; ">@Model.Providers[0].ProviderName</h2>
             <h3 class="heading-small" style="margin-top:0px;  color:#6F777B ">UKPRN: @Model.ProviderId</h3>
             
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <form action="@Url.Action("ConfirmProvider")" method="POST">
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
                 @Html.AntiForgeryToken()
                 <fieldset class="spacerConfirmProvider">
                     <legend class="visuallyhidden">Training provider</legend>

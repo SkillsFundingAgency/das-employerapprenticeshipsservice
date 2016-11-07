@@ -197,6 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Finished")]
         public ActionResult FinishedEditing(FinishEditingViewModel viewModel)
         {
@@ -346,6 +347,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
@@ -369,6 +371,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedId}/Edit")]
         public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
         {

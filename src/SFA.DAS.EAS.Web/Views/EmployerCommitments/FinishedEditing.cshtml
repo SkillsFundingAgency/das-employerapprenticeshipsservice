@@ -12,9 +12,10 @@
             <!--h2 class="heading-medium">
               What do you want to update?
             </h2-->
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <form action="@Url.Action("FinishedEditing")" method="post">
+                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+                @Html.AntiForgeryToken()
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-group">
                     <div>
