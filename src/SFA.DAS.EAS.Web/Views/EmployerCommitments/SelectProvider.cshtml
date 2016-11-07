@@ -28,12 +28,12 @@
                         <div>
                             @Html.ValidationMessageFor(m => m.Confirmation, "Please choose an option")
                         </div>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-Yes">
-                            @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-Yes" })
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-True">
+                            @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-True" })
                             Yes, use @Model.Providers[0].ProviderName
                         </label>
                         <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-No">
-                            @Html.RadioButtonFor(m => m.Confirmation, "No", new { id = Html.IdFor(m => m.Confirmation) + "-No" })
+                            @Html.RadioButtonFor(m => m.Confirmation, "False", new { id = Html.IdFor(m => m.Confirmation) + "-False" })
                             No, change UK Provider Reference Number
                         </label>
                     </div>
@@ -50,7 +50,7 @@
         {
             <h1 class="heading-xlarge">Training provider not found</h1>
             <p class="">No matches found for <span style="font-weight:700">'@Model.ProviderId'</span>. Please search again.</p>
-            <form action="@Url.Action("ConfirmProvider")" method="POST">
+            <form action="@Url.Action("SearchProvider")" method="GET">
                 @Html.AntiForgeryToken()
                 <input id="providerId" type="hidden" name="providerId" value="">
                 @Html.HiddenFor(x => x.HashedAccountId)
