@@ -207,6 +207,10 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
@@ -240,6 +244,10 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQueryValidator.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailResponse.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />

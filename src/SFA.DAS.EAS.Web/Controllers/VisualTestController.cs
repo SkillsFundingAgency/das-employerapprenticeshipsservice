@@ -219,19 +219,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Data = new AggregationData()
                     {
                         AccountId = 1234567890,
-                        TransactionLines = new List<TransactionLine>
-                        {
-                            aggregationLine,
-                            aggregationLine,
-                            aggregationLine
-                        }
+                        //TransactionSummary = new List<TransactionLine>
+                        //{
+                        //    aggregationLine,
+                        //    aggregationLine,
+                        //    aggregationLine
+                        //}
                     }
                 }},
                 {"~/Views/EmployerAccountTransactions/Detail.cshtml", new TransactionLineItemViewModel()
                     {
-                        CurrentBalance = 12.0m,
-                        CurrentBalanceCalcultedOn = new DateTime(2016, 05, 16),
-                        LineItem = new AggregationLine()
+                        
                     }},
                 {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { HashedId = "3", ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},

@@ -144,12 +144,16 @@
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIGetAccountTransactionDetails.cs" />
+    <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetailsTests\WhenIGetEmployerTransactionDetails.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetailsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
