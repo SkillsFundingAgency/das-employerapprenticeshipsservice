@@ -13,3 +13,12 @@ table th, table td {
         font-size: 16px;
     }
 }
+
+tr.total {
+    th {
+        border: none;
+    }
+    td {
+        border-bottom: 2px solid $black;
+    }
+}

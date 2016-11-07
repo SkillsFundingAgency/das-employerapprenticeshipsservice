@@ -2359,6 +2359,14 @@ table th, table td {
   }
 }
 
+tr.total th {
+  border: none;
+}
+
+tr.total td {
+  border-bottom: 2px solid #0b0c0c;
+}
+
 .validation-summary-valid,
 .form-group .field-validation-valid {
   display: none;
