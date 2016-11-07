@@ -245,12 +245,16 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Submit")]
-        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
+            // TODO: Should this be a different Orchestrator call?
+            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+
             var model = new SubmitCommitmentViewModel
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId,
+                ProviderName = commitment.ProviderName,
                 SaveOrSend = saveOrSend
             };
 
