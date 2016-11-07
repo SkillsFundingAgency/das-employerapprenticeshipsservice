@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
@@ -33,7 +36,24 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 
             var data = await _dasLevyService.GetTransactionDetailById(message.Id);
 
-            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = data};
+
+            var transactionDetailSummary = data.GroupBy(c => new { c.SubmissionId }, (submission, group) => new
+            {
+                submission.SubmissionId,
+                Data = group.ToList()
+            }).Select(item =>
+            {
+                return new TransactionDetailSummary
+                {
+                    Amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount),
+                    Empref = item.Data.First().EmpRef,
+                    TopUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount),
+                    TransactionDate = item.Data.First().TransactionDate,
+                    EnglishFraction = item.Data.First().EnglishFraction
+                };
+            });
+
+            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary.ToList() };
 
         }
     }

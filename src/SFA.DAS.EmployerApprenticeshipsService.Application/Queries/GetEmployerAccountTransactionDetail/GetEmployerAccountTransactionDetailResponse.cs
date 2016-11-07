@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
     public class GetEmployerAccountTransactionDetailResponse
     {
-        public List<TransactionLineDetail> TransactionDetail { get; set; }
+        public List<TransactionDetailSummary> TransactionDetail { get; set; }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -18,7 +16,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public override GetEmployerAccountTransactionDetailQuery Query { get; set; }
         public override GetEmployerAccountTransactionDetailHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountTransactionDetailQuery>> RequestValidator { get; set; }
-
+        private const long ExpectedId = 123123123;
         [SetUp]
         public void Arrange()
         {
@@ -27,20 +25,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetTransactionDetailById(It.IsAny<long>())).ReturnsAsync(new List<TransactionLineDetail> {new TransactionLineDetail()});
 
+            Query = new GetEmployerAccountTransactionDetailQuery {Id = ExpectedId};
+
             RequestHandler = new GetEmployerAccountTransactionDetailHandler(RequestValidator.Object, _dasLevyService.Object);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            //Arrange
-            var expectedId = 12344123;
 
             //Act
-            await RequestHandler.Handle(new GetEmployerAccountTransactionDetailQuery {Id = expectedId });
+            await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyService.Verify(x=>x.GetTransactionDetailById(expectedId));
+            _dasLevyService.Verify(x=>x.GetTransactionDetailById(ExpectedId));
         }
 
         [Test]
@@ -50,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var expectedId = 12344123;
 
             //Act
-            var actual = await RequestHandler.Handle(new GetEmployerAccountTransactionDetailQuery { Id = expectedId });
+            var actual = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.IsNotNull(actual);
