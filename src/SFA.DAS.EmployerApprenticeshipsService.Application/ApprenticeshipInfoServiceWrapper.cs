@@ -75,8 +75,6 @@ namespace SFA.DAS.EAS.Application
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
         {
-            var lee = frameworks.Where(f => f.TypicalLength == null).ToList();
-
             return new FrameworksView
             {
                 CreatedDate = DateTime.UtcNow,
