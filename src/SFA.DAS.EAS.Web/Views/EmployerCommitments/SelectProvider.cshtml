@@ -32,7 +32,7 @@
                             @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-True" })
                             Yes, use @Model.Providers[0].ProviderName
                         </label>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-No">
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-False">
                             @Html.RadioButtonFor(m => m.Confirmation, "False", new { id = Html.IdFor(m => m.Confirmation) + "-False" })
                             No, change UK Provider Reference Number
                         </label>
