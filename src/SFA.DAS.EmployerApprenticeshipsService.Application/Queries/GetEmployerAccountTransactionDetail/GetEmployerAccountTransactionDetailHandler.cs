@@ -43,16 +43,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                 Data = group.ToList()
             }).Select(item =>
             {
+                var amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount * c.EnglishFraction);
+                var topUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount * c.EnglishFraction);
                 return new TransactionDetailSummary
                 {
-                    Amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount),
+                    Amount = amount,
                     Empref = item.Data.First().EmpRef,
-                    TopUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount),
+                    TopUp = topUp,
                     TransactionDate = item.Data.First().TransactionDate,
-                    EnglishFraction = item.Data.First().EnglishFraction
+                    EnglishFraction = item.Data.First().EnglishFraction,
+                    LineAmount = amount + topUp
                 };
             }).ToList();
-            var totalAmount = transactionDetailSummary.Sum(c => c.Amount);
+            var totalAmount = transactionDetailSummary.Sum(c => c.LineAmount);
             return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary,Total = totalAmount };
 
         }

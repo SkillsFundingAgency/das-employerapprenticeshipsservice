@@ -42,7 +42,7 @@
                             @(aggregationLineItem.TopUp.ToString("C0", culture))
                         </td>
                         <td class="numeric">
-                            @((aggregationLineItem.Amount + aggregationLineItem.TopUp).ToString("C0", culture))
+                            @((aggregationLineItem.LineAmount).ToString("C0", culture))
                         </td>
                     </tr>
                 }

@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
@@ -44,9 +45,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
-            //Arrange
-            var expectedId = 12344123;
-
             //Act
             var actual = await RequestHandler.Handle(Query);
 
@@ -65,6 +63,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetEmployerAccountTransactionDetailQuery()));
 
 
+        }
+
+        [Test]
+        public async Task ThenTheLineItemTotalIsCalculatedFromTheAmountTopupAndPercentageOfFraction()
+        {
+            //Arrange
+            _dasLevyService.Setup(x => x.GetTransactionDetailById(It.IsAny<long>())).ReturnsAsync(new List<TransactionLineDetail>
+            {
+                new TransactionLineDetail {Amount=10,EnglishFraction = 0.5m,TransactionType = LevyItemType.Declaration},
+                new TransactionLineDetail {Amount=1,EnglishFraction = 0.5m,TransactionType = LevyItemType.TopUp}
+            });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.AreEqual(5.5,actual.Total);
         }
     }
 }
