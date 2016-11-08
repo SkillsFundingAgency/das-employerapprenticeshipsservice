@@ -50,8 +50,8 @@
                         <span class="form-label-bold">Projected start date</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.StartMonth, null, new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.StartYear, null, new { id = "error-message-" + Html.IdFor(m => m.StartYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.StartMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.StartYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.StartYear), @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.StartMonth)">
                                 <span class="form-label-bold">Month</span>
@@ -74,8 +74,8 @@
                         <span class="form-label-bold">Projected finish date</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.EndMonth, null, new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.EndYear, null, new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.EndMonth)">
                                 <span class="form-label-bold">Month</span>

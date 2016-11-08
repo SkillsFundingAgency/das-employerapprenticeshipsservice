@@ -14,7 +14,7 @@
             <h1 class="heading-xlarge">Add an apprentice</h1>
             <div class="panel panel-border-wide">
                 <p>You can return to this apprentice later to make changes or add more information, if you need to.</p>
-                <p> All the fields must be complete and accurate for your training provider to get paid - this excludes the Reference field. </p>
+                <p> All the fields must be complete and accurate for your training provider to get paid.</p>
             </div>
 
             <hr />
@@ -105,13 +105,13 @@
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
 
-            <div class="form-group">
+            @*<div class="form-group">
                 <hr />
                 <label class="form-label-bold">Reference (optional)</label>
                 <span class="helpText">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
                 <input type="text" class="form-control" />
 
-            </div>
+            </div>*@
 
             @Html.HiddenFor(m => m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
