@@ -1,68 +1,67 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Domain.ViewModels.UserInvitationsViewModel
+@{ViewBag.Title = "Invitations"; }
 
 
 <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">Invitations</h1>
         @if (Model.Invitations.Count == 0)
         {
             <p>You have no invitations. Invitations expire after 7 days.</p>
-            <a class="button" href="@Url.Action("Index","Home")">Return to your profile</a>
+            <p><a class="button" href="@Url.Action("Index","Home")">Return to your profile</a></p>
         }
         else
         {
             if (Model.Invitations.Count == 1)
             {
-                <p>You have @Model.Invitations.Count invitation to a levy account.</p>
+                <p class="lede">You have @Model.Invitations.Count invitation to a levy account.</p>
             }
             else
             {
-                <p>You have @Model.Invitations.Count invitations to levy accounts.</p>
+                <p class="lede">You have @Model.Invitations.Count invitations to levy accounts.</p>
             }
             <form method="post" action="~/Invitation/Accept">
                 @Html.AntiForgeryToken()
-                <div class="responsive-table">
-                    <div class="responsive-thead">
-                        <div class="responsive-tr">
-                            <div class="responsive-th">Account name</div>
-                            <div class="responsive-th">What you can do</div>
-                            <div class="responsive-th">Expires in</div>
-                            <div class="responsive-th"> </div>
-                        </div>
-                    </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Account name</th>
+                            <th scope="col">What you can do</th>
+                            <th scope="col">Expires in</th>
+                            <th> </th>
+                        </tr>
+                    </thead>
 
-                    <div class="responsive-tbody">
+                    <tbody>
                         @for (var index = 0; index < Model.Invitations.Count; index++)
                         {
                             var invitation = Model.Invitations[index];
-                            <div class="responsive-tr">
-                                <div class="responsive-td">
+                            <tr>
+                                <td>
                                     <div>@invitation.AccountName</div>
                                     <input type="hidden" name="Invitations[@index].AccountName" value="@invitation.AccountName"/>
-                                    <div class="responsive-inner-caption"></div>
-                                </div>
-                                <div class="responsive-td">
-                                    <div class="responsive-inner-caption">what you can do</div>
+                               
+                                </td>
+                                <td>
+                                
                                     <div>@RoleStrings.ToWhatTheyCanDo(@invitation.RoleName)</div>
-                                </div>
-                                <div class="responsive-td">
-                                    <div class="responsive-inner-caption">Expires in</div>
+                                </td>
+                                <td>
+                                 
                                     <div>@invitation.ExpiryDays()</div>
-                                </div>
-                                <div class="responsive-td">
+                                </td>
+                                <td class="link-right">
                                     <div>
                                         <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
                                         <button type="submit" id="invitationId" value="@invitation.Id" name="invitation" class="button">Accept</button>
                                     </div>
-                                    <div class="responsive-inner-caption"></div>
-                                </div>
-                            </div>
+                                 
+                                </td>
+                            </tr>
                         }
-                    </div>
-
-
-                </div>
+                    </tbody>
+                </table>
             </form>
         }
     </div>

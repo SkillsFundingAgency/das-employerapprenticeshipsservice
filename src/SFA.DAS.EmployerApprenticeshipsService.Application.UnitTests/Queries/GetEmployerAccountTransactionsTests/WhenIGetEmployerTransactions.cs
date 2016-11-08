@@ -157,5 +157,79 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(750, response.Data.TransactionSummary[0].Balance);
             Assert.AreEqual(250, response.Data.TransactionSummary[1].Balance);
         }
+
+        [Test]
+        public async Task ThenTheCorrectDescriptionIsDisplayedForPositiveAndNegativeAmounts()
+        {
+            //Arrange
+            var expectedAcountId = 1;
+            var expectedHashedId = "RTF34";
+            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
+                new TransactionLine
+                {
+                    AccountId = expectedAcountId,
+                    Amount=500,
+                    SubmissionId = 102,
+                    TransactionDate = new DateTime(2016,02,10),
+                    TransactionType = LevyItemType.Declaration
+                },
+                new TransactionLine
+                {
+                    AccountId = expectedAcountId,
+                    Amount=-200,
+                    SubmissionId = 101,
+                    TransactionDate = new DateTime(2016,01,10),
+                    TransactionType = LevyItemType.Declaration
+                } });
+
+            //Act
+            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
+            {
+                AccountId = expectedAcountId,
+                ExternalUserId = "3EFR",
+                HashedId = expectedHashedId
+            });
+
+            //Assert
+            Assert.AreEqual("Credit", response.Data.TransactionSummary[0].Description);
+            Assert.AreEqual("Adjustment", response.Data.TransactionSummary[1].Description);
+        }
+
+        [Test]
+        public async Task ThenTheTransactionDateIsAlwaysTheTwnentiethOfTheMonth()
+        {
+            //Arrange
+            var expectedAcountId = 1;
+            var expectedHashedId = "RTF34";
+            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
+                new TransactionLine
+                {
+                    AccountId = expectedAcountId,
+                    Amount=500,
+                    SubmissionId = 102,
+                    TransactionDate = new DateTime(2016,02,10),
+                    TransactionType = LevyItemType.Declaration
+                },
+                new TransactionLine
+                {
+                    AccountId = expectedAcountId,
+                    Amount=-200,
+                    SubmissionId = 101,
+                    TransactionDate = new DateTime(2016,01,10),
+                    TransactionType = LevyItemType.Declaration
+                } });
+
+            //Act
+            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
+            {
+                AccountId = expectedAcountId,
+                ExternalUserId = "3EFR",
+                HashedId = expectedHashedId
+            });
+
+            //Assert
+            Assert.AreEqual(20, response.Data.TransactionSummary[0].TransactionDate.Day);
+            Assert.AreEqual(20, response.Data.TransactionSummary[1].TransactionDate.Day);
+        }
     }
 }

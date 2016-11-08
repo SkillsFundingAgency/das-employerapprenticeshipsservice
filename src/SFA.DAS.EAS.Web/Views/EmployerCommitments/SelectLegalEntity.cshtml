@@ -10,11 +10,13 @@
 
 <div class="grid-row">
     <form method="POST" action="@Url.Action("SetLegalEntity")">
+      
         <div class="column-two-thirds">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <h1 class="heading-xlarge">Choose organisation
 </h1>
 
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+         
           
             @Html.AntiForgeryToken()
             <div class="form-group">
