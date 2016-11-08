@@ -8,19 +8,18 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Start adding apprentices</h1>
-        <p class="lede">You can start adding details of your apprentices or ask your training provider to add them for you.</p>
-        <p>If you ask your training provider to add them, you can still check and agree the details before any payments are made.</p>
-
         <form method="POST" action="@Url.Action("CreateCommitment")">
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+            <h1 class="heading-xlarge">Start adding apprentices</h1>
+            <p class="lede">You can start adding details of your apprentices or ask your training provider to add them for you.</p>
+            <p>If you ask your training provider to add them, you can still check and agree the details before any payments are made.</p>
             <fieldset>
-                <!--h2 class="heading-medium">Choose</h2-->
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
                 <div class="form-group">
                     <div>
-                        @Html.ValidationMessageFor(m => m.SelectedRoute, "Please choose an option")
+                        @Html.ValidationMessageFor(m => m.SelectedRoute, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SelectedRoute) + "-Employer" })
                     </div>
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Employer">
                         @Html.RadioButtonFor(m => m.SelectedRoute, "employer", new { id = Html.IdFor(m => m.SelectedRoute) + "-Employer" })

@@ -6,48 +6,40 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Finished editing</h1>
-        <div>
-           
-            <!--h2 class="heading-medium">
-              What do you want to update?
-            </h2-->
+        <form action="@Url.Action("FinishedEditing")" method="post">
+            @Html.AntiForgeryToken()
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-            <form action="@Url.Action("FinishedEditing")" method="post">
-                @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-                @Html.AntiForgeryToken()
-                <legend class="visuallyhidden">Things to do next</legend>
-                <div class="form-group">
-                    <div>
-                        @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option")
-                    </div>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
-                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
-                        <span id="changeOne">Send to provider to amend or add details</span>
-                    </label>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
-                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
-                        <span id="changeTwo">Approve and send to provider</span>
-                    </label>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SaveNoSend">
-                        @Html.RadioButtonFor(m => m.SaveOrSend, "save-no-send", new { id = Html.IdFor(m => m.SaveOrSend) + "-SaveNoSend" })
-                        <span id="changeThree">Save but do not send to provider</span>
-                    </label>
+            <h1 class="heading-xlarge">Finished editing</h1>
+
+            <legend class="visuallyhidden">Things to do next</legend>
+            <div class="form-group">
+                <div>
+                    @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                 </div>
+                <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
+                    @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
+                    <span id="changeOne">Send to provider to amend or add details</span>
+                </label>
+                <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
+                    @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
+                    <span id="changeTwo">Approve and send to provider</span>
+                </label>
+                <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SaveNoSend">
+                    @Html.RadioButtonFor(m => m.SaveOrSend, "save-no-send", new { id = Html.IdFor(m => m.SaveOrSend) + "-SaveNoSend" })
+                    <span id="changeThree">Save but do not send to provider</span>
+                </label>
+            </div>
 
-                <div style="margin-top:20px;">
-                    <input type="submit" class="button" id="paymentPlan" value="Continue">
-                    <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
-                </div>
-                @Html.HiddenFor(x => x.HashedCommitmentId)
-            </form>
-
-        </div>
-        <div style="margin-top:35px"></div>
-        <div style="margin-top:50px"></div>
+            <div style="margin-top:20px;">
+                <input type="submit" class="button" id="paymentPlan" value="Continue">
+                <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+            </div>
+            @Html.HiddenFor(x => x.HashedCommitmentId)
+        </form>
+     
     </div>
 
     <div class="column-one-third">
-      
     </div>
 </div>

@@ -86,6 +86,7 @@
     <Build Include="Tables\PeriodEnd.sql" />
     <Build Include="StoredProcedures\CreatePeriodEnd.sql" />
     <Build Include="StoredProcedures\GetLatestPeriodEnd.sql" />
+    <Build Include="StoredProcedures\GetTransactionDetail_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

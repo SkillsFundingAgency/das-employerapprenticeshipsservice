@@ -342,10 +342,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
-    <Compile Include="dist\css\external-links\DependencyResolution\DefaultRegistry.cs" />
-    <Compile Include="dist\css\external-links\DependencyResolution\IoC.cs" />
-    <Compile Include="dist\css\external-links\DependencyResolution\StructureMapDependencyScope.cs" />
-    <Compile Include="dist\css\external-links\DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
+    <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
