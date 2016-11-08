@@ -143,9 +143,12 @@
       <DependentUpon>app.config</DependentUpon>
     </Content>
     <None Include="packages.config" />
-    <Content Include="Properties\webjob-publish-settings.json">
+    <None Include="Properties\webjob-publish-settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
+    <None Include="settings.job">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
