@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actual = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual(5.5,actual.Total);
+            Assert.AreEqual(11,actual.Total);
         }
     }
 }
