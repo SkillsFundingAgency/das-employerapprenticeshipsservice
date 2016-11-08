@@ -2020,3 +2020,12 @@ table th, table td {
   font-size: 14px;
   font-size: 16px;
 }
+
+tr.total th {
+  border: none;
+}
+
+tr.total td {
+  border-bottom: 2px solid #0b0c0c;
+  font-weight: 700;
+}

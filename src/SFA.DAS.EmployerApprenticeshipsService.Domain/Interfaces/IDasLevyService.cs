@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<List<TransactionLine>> GetTransactionsByAccountId(long accountId);
 
         Task<List<AccountBalance>> GetAllAccountBalances();
+        Task<List<TransactionLineDetail>>  GetTransactionDetailById(long id);
     }
 }
