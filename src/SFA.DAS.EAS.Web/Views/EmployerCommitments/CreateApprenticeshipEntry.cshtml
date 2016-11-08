@@ -5,38 +5,36 @@
     @Scripts.Render("~/bundles/jqueryvalcustom");    
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Add an apprentice</h1>
-        <div class="panel panel-border-wide">
-            <p>You can return to this apprentice later to make changes or add more information, if you need to.</p>
-            <p> All the fields must be complete and accurate for your training provider to get paid - this excludes the Reference field. </p>
-        </div>
-    </div>
-</div>
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("CreateApprenticeship")">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
+            <h1 class="heading-xlarge">Add an apprentice</h1>
+            <div class="panel panel-border-wide">
+                <p>You can return to this apprentice later to make changes or add more information, if you need to.</p>
+                <p> All the fields must be complete and accurate for your training provider to get paid - this excludes the Reference field. </p>
+            </div>
+
             <hr />
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
-             
+
             </div>
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
                 @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label" })
                 @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
-              
+
             </div>
             <hr />
             <div class="form-group">
                 <hr />
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
-               <!-- <span class="helpText" aria-label="Search by course name">Search by course name</span> -->
+                <!-- <span class="helpText" aria-label="Search by course name">Search by course name</span> -->
                 <select name="TrainingId" id="TrainingId" class="form-control" aria-label="Training standard">
                     <option value=""></option>
                     @foreach (var standard in ViewBag.ApprenticeshipProducts)
@@ -44,7 +42,7 @@
                         <option value="@standard.Id">@standard.Title</option>
                     }
                 </select>
-             
+
             </div>
 
             <div class="form-group">
@@ -85,7 +83,7 @@
                         </div>
                     </div>
                 </fieldset>
-             
+
             </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
@@ -96,16 +94,16 @@
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4 trainingCost", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
-          
+
             <div class="form-group">
                 <hr />
                 <label class="form-label-bold">Reference (optional)</label>
                 <span class="helpText">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
-              <input type="text" class="form-control"/>
+                <input type="text" class="form-control" />
 
             </div>
-         
-            @Html.HiddenFor(m =>m.ULN)
+
+            @Html.HiddenFor(m => m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
             <button type="submit" class="button" aria-label="Add apprentice">Save</button>
