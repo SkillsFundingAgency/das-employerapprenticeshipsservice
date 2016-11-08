@@ -123,7 +123,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = commitment.ProviderName
+                    ProviderName = commitment.ProviderName,
+                    Status = (commitment.SelectedRoute == "employer") ? CommitmentStatus.Draft : CommitmentStatus.Active
                 }
             });
 
