@@ -143,9 +143,6 @@
       <DependentUpon>app.config</DependentUpon>
     </Content>
     <None Include="packages.config" />
-    <None Include="Properties\webjob-publish-settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="settings.job">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

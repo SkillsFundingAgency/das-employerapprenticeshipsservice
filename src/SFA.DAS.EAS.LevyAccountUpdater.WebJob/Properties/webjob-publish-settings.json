@@ -1,9 +1,0 @@
-﻿{
-  "$schema": "http://schemastore.org/schemas/json/webjob-publish-settings.json",
-  "webJobName": "LevyAccountUpdater",
-  "startTime": "2016-11-06T00:00:00+00:00",
-  "endTime": null,
-  "jobRecurrenceFrequency": "Hour",
-  "interval": 1,
-  "runMode": "Scheduled"
-}
