@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -40,13 +41,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }).Select(item =>
             {
                 var amount = item.Data.Sum(c => c.Amount);
+                var transactionDate = item.Data.First().TransactionDate;
                 return new TransactionSummary
                 {
                     Id = item.SubmissionId.ToString(),
                     TransactionLines = item.Data,
                     Amount = amount,
                     Description = amount>=0 ?"Credit":"Adjustment",
-                    TransactionDate = item.Data.First().TransactionDate,
+                    TransactionDate = new DateTime(transactionDate.Year,transactionDate.Month,20),
                     Balance = balance += amount
             };
             }).OrderByDescending(c=>c.TransactionDate);
