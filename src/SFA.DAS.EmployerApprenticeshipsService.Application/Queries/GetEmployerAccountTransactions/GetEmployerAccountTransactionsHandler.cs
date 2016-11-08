@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     Id = item.SubmissionId.ToString(),
                     TransactionLines = item.Data,
                     Amount = amount,
-                    Description = "Levy Credit",
+                    Description = amount>=0 ?"Credit":"Adjustment",
                     TransactionDate = item.Data.First().TransactionDate,
                     Balance = balance += amount
             };
