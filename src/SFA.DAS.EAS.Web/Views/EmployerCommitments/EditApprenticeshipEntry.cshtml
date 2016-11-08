@@ -1,9 +1,9 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
-@section pageSpecificJS {
+@*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom");
-}
+}*@
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -44,39 +44,49 @@
 
             </div>
 
-            <div class="form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartMonth, "error") @Html.AddClassIfPropertyInError(x => x.StartYear, "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected start date</span>
                     </legend>
                     <div class="form-date">
+                        @Html.ValidationMessageFor(m => m.StartMonth, null, new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.StartYear, null, new { id = "error-message-" + Html.IdFor(m => m.StartYear), @class = "error-message" })
                         <div class="form-group form-group-month">
-                            <label for="startMonth">Month</label>
-                            <input class="form-control" id="startMonth" name="startMonth" type="number" placeholder="MM" value="@Model.StartMonth">
+                            <label for="@Html.IdFor(m => m.StartMonth)">
+                                <span class="form-label-bold">Month</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.StartMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartMonth) })
                         </div>
-                        <div class="form-group form-group-year">
-                            <label for="startYear">Year</label>
-                            <input class="form-control" id="startYear" name="startYear" type="number" placeholder="YYYY" value="@Model.StartYear">
+                        <div class="form-group form-group-month">
+                            <label for="@Html.IdFor(m => m.StartYear)">
+                                <span class="form-label-bold">Year</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.StartYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartYear) })
                         </div>
                     </div>
                 </fieldset>
             </div>
 
-            <div class="form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected finish date</span>
                     </legend>
                     <div class="form-date">
+                        @Html.ValidationMessageFor(m => m.EndMonth, null, new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndYear, null, new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
                         <div class="form-group form-group-month">
-                            <label for="endMonth">Month</label>
-                            <input class="form-control" id="endMonth" name="endMonth" type="number"
-                                   min="1" max="12" placeholder="MM" value="@Model.EndMonth">
+                            <label for="@Html.IdFor(m => m.EndMonth)">
+                                <span class="form-label-bold">Month</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
                         </div>
-                        <div class="form-group form-group-year">
-                            <label for="endYear">Year</label>
-                            <input class="form-control" id="endYear" name="endYear" type="number"
-                                   min="2016" max="2030" placeholder="YYYY" value="@Model.EndYear">
+                        <div class="form-group form-group-month">
+                            <labefdfl for="@Html.IdFor(m => m.EndYear)">
+                                <span class="form-label-bold">Year</span>
+                            </labefdfl>
+                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
                         </div>
                     </div>
                 </fieldset>
@@ -88,7 +98,7 @@
                     <span class="form-label-bold">Cost</span>
                     @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                 </label>
-                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
+                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
 
             @Html.HiddenFor(m => m.ULN)
