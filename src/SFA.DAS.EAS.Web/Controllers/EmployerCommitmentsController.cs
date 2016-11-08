@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedaccountId}/Commitments")]
+    [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
@@ -180,6 +180,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
 
+            ViewBag.HashedAccountId = hashedAccountId;
+
             return View(model);
         }
 
@@ -245,12 +247,16 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Submit")]
-        public ActionResult SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
+            // TODO: Should this be a different Orchestrator call?
+            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+
             var model = new SubmitCommitmentViewModel
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId,
+                ProviderName = commitment.ProviderName,
                 SaveOrSend = saveOrSend
             };
 
