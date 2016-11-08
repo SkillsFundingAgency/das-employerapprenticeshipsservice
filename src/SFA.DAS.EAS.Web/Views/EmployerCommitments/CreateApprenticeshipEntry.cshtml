@@ -31,6 +31,12 @@
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
               
             </div>
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error")">
+                @Html.LabelFor(m => m.NINumber, "Apprentice NI number", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.NINumber, null, new { id = "error-message-" + Html.IdFor(m => m.NINumber) })
+                @Html.TextBoxFor(m => m.NINumber, new { @class = "form-control form-control-3-4" })
+
+            </div>
             <hr />
             <div class="form-group">
                 <label class="form-label" for="TrainingId">Find apprenticeship</label>
@@ -90,8 +96,16 @@
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>
+
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
+                @Html.LabelFor(m => m.EmployerRef, "Apprentice employer reference", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.EmployerRef, null, new { id = "error-message-" + Html.IdFor(m => m.EmployerRef) })
+                @Html.TextBoxFor(m => m.EmployerRef, new { @class = "form-control form-control-3-4" })
+
+            </div>
          
-            @Html.HiddenFor(m =>m.ULN)
+            @Html.HiddenFor(m => m.ULN)
+            @Html.HiddenFor(m => m.DateOfBirth)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
             <button type="submit" class="button" aria-label="Add apprentice">Add apprentice</button>
