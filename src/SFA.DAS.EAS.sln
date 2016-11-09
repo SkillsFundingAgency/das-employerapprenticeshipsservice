@@ -64,7 +64,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests", "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests\SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.csproj", "{1E6E4E4E-D876-4D0B-8672-85D385FE640E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.WebJobHost", "SFA.DAS.EAS.WebJobHost\SFA.DAS.EAS.WebJobHost.csproj", "{75D748C3-A999-4F0C-A910-F4C06C457EBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Host.WebJob", "SFA.DAS.EAS.Host.WebJob\SFA.DAS.EAS.Host.WebJob.csproj", "{75D748C3-A999-4F0C-A910-F4C06C457EBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

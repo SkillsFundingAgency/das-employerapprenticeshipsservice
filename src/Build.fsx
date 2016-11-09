@@ -346,7 +346,7 @@ Target "Build WebJob Project" ( fun _ ->
                         ("ToolsVersion","14");
                     ]
 
-    !! (@".\**\*.WebJobHost.csproj")
+    !! (@".\**\*.WebJob.csproj")
         |> MSBuildReleaseExt null properties "Build"
         |> Log "Build-Output: "
     
