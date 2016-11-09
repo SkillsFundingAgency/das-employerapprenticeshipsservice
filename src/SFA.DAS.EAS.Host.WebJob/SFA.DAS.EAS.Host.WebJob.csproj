@@ -69,7 +69,6 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Properties\webjobs-list.json" />
-    <None Include="Properties\PublishProfiles\das-at-eas-as - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
