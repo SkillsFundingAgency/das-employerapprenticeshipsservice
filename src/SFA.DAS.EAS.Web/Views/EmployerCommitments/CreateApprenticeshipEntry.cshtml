@@ -30,6 +30,21 @@
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
 
             </div>
+
+            @*<div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error")">
+                @Html.LabelFor(m => m.DateOfBirth, "Last name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth) })
+                @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control form-control-3-4" })
+
+            </div>
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error")">
+                @Html.LabelFor(m => m.NINumber, "Last name", new { @class = "form-label" })
+                @Html.ValidationMessageFor(m => m.NINumber, null, new { id = "error-message-" + Html.IdFor(m => m.NINumber) })
+                @Html.TextBoxFor(m => m.NINumber, new { @class = "form-control form-control-3-4" })
+
+            </div>*@
+
+
             <hr />
             <div class="form-group">
                 <hr />
