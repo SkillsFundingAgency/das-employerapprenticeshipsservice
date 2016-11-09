@@ -17,5 +17,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
+        Task<List<TransactionLineDetail>>  GetTransactionDetail(long id);
     }
 }

@@ -35,6 +35,26 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
 
+            var balance = 0m;
+            var transactionSummary = response.OrderBy(c=>c.TransactionDate).GroupBy(c => new { c.SubmissionId}, (submission, group) => new
+            {
+                submission.SubmissionId,
+                Data = group.ToList()
+            }).Select(item =>
+            {
+                var amount = item.Data.Sum(c => c.Amount);
+                var transactionDate = item.Data.First().TransactionDate;
+                return new TransactionSummary
+                {
+                    Id = item.SubmissionId.ToString(),
+                    TransactionLines = item.Data,
+                    Amount = amount,
+                    Description = amount>=0 ?"Credit":"Adjustment",
+                    TransactionDate = new DateTime(transactionDate.Year,transactionDate.Month,20),
+                    Balance = balance += amount
+            };
+            }).OrderByDescending(c=>c.TransactionDate);
+
             var orderedTransactions = response.OrderBy(x => x.TransactionDate).ToList();
 
             decimal runningTotal = 0;
@@ -81,9 +101,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 HashedId = message.HashedId,
                 AccountId = message.AccountId,
-                TransactionLines = orderedTransactions
+                TransactionSummary = transactionSummary.ToList()
             };
-
             return new GetEmployerAccountTransactionsResponse {Data = returnValue };
         }
     }

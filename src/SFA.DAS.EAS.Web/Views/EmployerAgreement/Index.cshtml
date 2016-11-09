@@ -10,9 +10,7 @@
         <h1 class="heading-xlarge">Your organisations </h1>
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Add")" method="GET">
-            <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
-        </form>
+      
     </div>
 </div>
 <div class="grid-row">
@@ -27,8 +25,7 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Agreement status</th>
-                    <th></th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -37,18 +34,16 @@
             {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        <td> @employerAgreement.Status.GetDescription()</td>
-                        <td class="link-right">
-                                <a title="View the Employer Agreement for @employerAgreement.LegalEntityName"
-                                   href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
-                                    @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
-                                    <span class="vh"> the employer agreement for @employerAgreement.LegalEntityName</span>
-                                </a>
-                        </td>
+                        
                     </tr>
                 }
             </tbody>
         </table>
+
+        <form action="@Url.Action("Add")" method="GET">
+            <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
+        </form>
+
     </div>
 </div>
 @section breadcrumb {

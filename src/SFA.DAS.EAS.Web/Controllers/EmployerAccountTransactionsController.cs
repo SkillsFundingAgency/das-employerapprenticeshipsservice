@@ -34,20 +34,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("Balance/{itemId}/Detail")]
-        public async Task<ActionResult> Detail(string accountId, string itemId)
+        public async Task<ActionResult> Detail(string accountId, long itemId)
         {
             var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (transactionViewResult.Account == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (transactionViewResult.Model.LineItem == null)
-            {
-                return RedirectToAction("Index", "EmployerAccountTransactions", new {accountId});
-            }
-           
             return View(transactionViewResult.Model);
         }
     }

@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Commands.CreateCommitment;
 using SFA.DAS.EAS.Application.Commands.PauseApprenticeship;
 using SFA.DAS.EAS.Application.Commands.ResumeApprenticeship;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
+using SFA.DAS.EAS.Application.Commands.UpdateApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
@@ -179,6 +180,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            await _mediator.SendAsync(new UpdateApprenticeshipCommand
+            {
+                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
+                Apprenticeship = await MapFrom(apprenticeship)
+            });
+        }
+
         public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId)
         {
             var apprenticeship = new ApprenticeshipViewModel
@@ -312,7 +322,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost.ToString(),
+                Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartMonth = apprenticeship.StartDate?.Month,
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
@@ -322,11 +332,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        private static string NullableDecimalToString(decimal? item)
+        {
+            return (item.HasValue) ? ((int)item).ToString() : "";
+        }
+
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
             var apprenticeship = new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
+                Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 ULN = viewModel.ULN,

@@ -4,30 +4,30 @@
 @model CommitmentViewModel
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
         <!--<table>
             <tbody>
-                <tr>
-                    <th scope="row">Name</th>
-                    <td>@Model.Name</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Legal entity</th>
-                    <td>@Model.LegalEntityName</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Provider</th>
-                    <td>@Model.ProviderName</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <th scope="row">Status</th>
-                    <td>@Model.Status.GetDescription()</td>
-                    <td></td>
-                </tr>
+            <tr>
+                <th scope="row">Name</th>
+                <td>@Model.Name</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Legal entity</th>
+                <td>@Model.LegalEntityName</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Provider</th>
+                <td>@Model.ProviderName</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Status</th>
+                <td>@Model.Status.GetDescription()</td>
+                <td></td>
+            </tr>
             </tbody>
         </table>-->
    
@@ -37,14 +37,21 @@
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
         {
-            <p class="panel panel-info">
-                You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.
-            </p>
+         
+            <div id="addApprenticesEmptyState" class="emptyState">
+                <div class="emptyStateAlert">
+                    <div class="emptyStateCopyDetails">
+                        <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
+
+                    </div>
+                </div>
+            </div>
+          
         }
         else
         {
             <table class="tableResponsive viewCommitment">
-            <thead>
+                <thead>
                 <tr>
 
                     <th scope="col">Apprentice</th>
@@ -52,14 +59,14 @@
                     <th scope="col" colspan="2">Status</th>
 
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach (var apprenticeship in Model.Apprenticeships)
                 {
                     <tr>
                         <td>
         
-                           @apprenticeship.ApprenticeshipName &nbsp; 
+                            @apprenticeship.ApprenticeshipName &nbsp; 
                         </td>
                         <td>
 
@@ -71,16 +78,31 @@
                             @apprenticeship.Status.GetDescription() &nbsp; 
                         </td>
                         <td>
-                                <a href="@Url.Action("ApprenticeshipDetails", new { hashedApprenticeshipId = apprenticeship.HashedId })">View</a>                   
+                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
                         </td>
                     </tr>
                 }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         }
-        <a href="@Url.Action("CreateApprenticeshipEntry")" class="button">Add an apprentice</a>
+      
+        <div class="emptyStateButton">
+            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button" aria-label="Add an apprentice">Add an apprentice</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Finished editing">Finish editing</a>
+        </div>
+      
     </div>
-    <div class="column-one-third">
-        <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")">Finish Editing</a>
-    </div>
+
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", new {accountId = ViewBag.HashedAccountId})">Apprenticeships Home</a></li>
+            <li><a href="@Url.Action("Cohorts", new {accountId = ViewBag.HashedAccountId})">Review and approve apprentices</a></li>
+            <li>Add apprentices</li>
+        </ol>
+    </div>
+}

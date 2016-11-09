@@ -24,7 +24,7 @@
                     <tr>
                         <th scope="col">Scheme ID</th>
                         <th scope="col">Organisation</th>
-                        <th colspan="2"> </th>
+                        <th> </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,16 +33,12 @@
                         <tr>
                             <td>@scheme.EmpRef</td>
                             <td>@scheme.LegalEntityName</td>
-                            <td>
+                            <td class="link-right">
                                     <a aria-label="Remove PAYE scheme @scheme.EmpRef"
                                         title="Remove PAYE scheme @scheme.EmpRef"
                                         href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove <span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
                             </td>
-                            <td class="link-right">
-                                <a aria-label="View PAYE scheme @scheme.EmpRef"
-                                        title="View PAYE scheme @scheme.EmpRef"
-                                        href="@Url.Action("Details", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">View<span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
-                            </td>
+                          
                         </tr>
                     }
                 </tbody>
