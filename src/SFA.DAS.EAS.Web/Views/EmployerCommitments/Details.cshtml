@@ -38,6 +38,7 @@
    
 
         <p><span class="strong">Provider:</span> @Model.ProviderName</p>
+        <p><span class="strong">Status:</span> @status</p>
 
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
@@ -60,8 +61,8 @@
                 <tr>
 
                     <th scope="col">Apprentice</th>
-                    <th scope="col">Training</th>
-                    <th scope="col" colspan="2">Status</th>
+                    <th scope="col" colspan="2">Training</th>
+                    <th scope="col"></th>
 
                 </tr>
                 </thead>
@@ -79,8 +80,7 @@
 
                         </td>
                         <td>
-                            
-                            @status &nbsp; 
+                             &nbsp;
                         </td>
                         <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
