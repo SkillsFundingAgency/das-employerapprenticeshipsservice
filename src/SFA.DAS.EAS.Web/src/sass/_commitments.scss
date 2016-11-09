@@ -151,9 +151,13 @@ span.helpText{
 }
 
 
+.form-date{ 
+     input#StartYear, input#EndYear{width:60px;}
+} 
 
-
-
+.form-group{
+         input#Cost{width:200px;}
+}
 
 
 

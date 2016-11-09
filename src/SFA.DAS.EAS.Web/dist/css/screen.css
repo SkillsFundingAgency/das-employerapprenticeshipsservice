@@ -2537,6 +2537,14 @@ span.helpText {
   width: 25%;
 }
 
+.form-date input#StartYear, .form-date input#EndYear {
+  width: 60px;
+}
+
+.form-group input#Cost {
+  width: 200px;
+}
+
 /* responsive table */
 @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
   /* Force table to not be like tables anymore */

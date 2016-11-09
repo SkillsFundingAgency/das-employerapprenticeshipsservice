@@ -30,7 +30,7 @@
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
 
             </div>
-            <hr />
+         
             <div class="form-group">
                 <hr />
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
@@ -86,9 +86,9 @@
                             @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
                         </div>
                         <div class="form-group form-group-month">
-                            <labefdfl for="@Html.IdFor(m => m.EndYear)">
+                            <label for="@Html.IdFor(m => m.EndYear)">
                                 Year
-                            </labefdfl>
+                            </label>
                             @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
                         </div>
                     </div>
@@ -116,7 +116,7 @@
             @Html.HiddenFor(m => m.ULN)
             <input type="hidden" id="status" name="status" value="@Model.Status" />
             <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
-            <button type="submit" class="button" aria-label="Add apprentice">Save</button>
+            <button type="submit" class="button" aria-label="Save">Save</button>
             <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
         </form>
     </div>
