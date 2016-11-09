@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -44,32 +43,23 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 var amount = item.Data.Sum(c => c.Amount);
                 var transactionDate = item.Data.First().TransactionDate;
-                return new TransactionSummary
+                return new TransactionLine
                 {
-                    Id = item.SubmissionId.ToString(),
-                    TransactionLines = item.Data,
+                    SubmissionId = item.SubmissionId,
+                    SubTransactions = item.Data,
                     Amount = amount,
-                    Description = amount>=0 ?"Credit":"Adjustment",
-                    TransactionDate = new DateTime(transactionDate.Year,transactionDate.Month,20),
+                    Description = amount>=0 ? "Credit":"Adjustment",
+                    TransactionDate = transactionDate,
                     Balance = balance += amount
             };
-            }).OrderByDescending(c=>c.TransactionDate);
-
-            var orderedTransactions = response.OrderBy(x => x.TransactionDate).ToList();
-
-            decimal runningTotal = 0;
-            orderedTransactions.ForEach(x =>
-            {
-                runningTotal += x.Amount;
-                x.Balance = runningTotal;
-            });
-
+            }).OrderBy(x => x.TransactionDate).ToList();
+            
             var history = await _employerAccountRepository.GetAccountHistory(message.AccountId);
 
             var payeSchemeEndDate = DateTime.MinValue;
             history.ForEach(x =>
             {
-                var transactions = orderedTransactions.Where(t => t.TransactionDate < x.DateAdded &&
+                var transactions = transactionSummary.Where(t => t.TransactionDate < x.DateAdded &&
                                                t.TransactionDate > payeSchemeEndDate).ToList();
 
                 if (transactions.Any())
@@ -78,30 +68,30 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     {
                         AccountId = x.AccountId,
                         EmpRef = x.PayeRef,
-                        TransactionDate = x.DateAdded
+                        TransactionDate = x.DateAdded,
+                        SubTransactions = transactions,
+                        Amount = transactions.Sum(t => t.Amount),
+                        Balance = transactions.OrderBy(t => t.TransactionDate).Last().Balance
                     };
 
-                    aggregateTransaction.SubTransactions = transactions;
-                    aggregateTransaction.Amount = transactions.Sum(t => t.Amount);
-                    aggregateTransaction.Balance = transactions.OrderBy(t => t.TransactionDate).Last().Balance;
 
-                    var lastIndex = orderedTransactions.IndexOf(transactions.Last());
+                    var lastIndex = transactionSummary.IndexOf(transactions.Last());
 
-                    orderedTransactions.Insert(lastIndex, aggregateTransaction);
+                    transactionSummary.Insert(lastIndex, aggregateTransaction);
 
-                    transactions.ForEach(t => orderedTransactions.Remove(t));
+                    transactions.ForEach(t => transactionSummary.Remove(t));
 
                     payeSchemeEndDate = x.DateRemoved;
                 }
             });
 
-            orderedTransactions.Reverse();
+            transactionSummary.Reverse();
 
             var returnValue = new AggregationData
             {
                 HashedId = message.HashedId,
                 AccountId = message.AccountId,
-                TransactionSummary = transactionSummary.ToList()
+                TransactionLines = transactionSummary.ToList()
             };
             return new GetEmployerAccountTransactionsResponse {Data = returnValue };
         }

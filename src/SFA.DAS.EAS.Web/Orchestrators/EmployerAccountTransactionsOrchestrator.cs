@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedId = hashedId});
-            var latestLineItem = data.Data.TransactionSummary.FirstOrDefault();
+            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
 

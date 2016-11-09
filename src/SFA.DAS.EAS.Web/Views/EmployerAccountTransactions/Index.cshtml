@@ -18,7 +18,7 @@
             <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C0", culture)</h2>
             <p  class="bold-xsmall">on <span>@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
         </div>
-        @if (Model.Data.TransactionSummary.Count == 0)
+        @if (Model.Data.TransactionLines.Count == 0)
         {
             <p class="panel panel-info">
                 No transaction data exists for this account, please try again later.
@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var aggregationLine in Model.Data.TransactionSummary)
+                    @foreach (var aggregationLine in Model.Data.TransactionLines)
                     {
                         <tr>
                             <td>@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </td>
@@ -45,7 +45,7 @@
                             <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
                             <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
                             <td class="link-right">
-                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId,itemId = aggregationLine.Id})">
+                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId,itemId = aggregationLine.SubmissionId})">
                                     Details <span class="vh"> for the transaction on @date</span>
                                 </a>
                             </td>

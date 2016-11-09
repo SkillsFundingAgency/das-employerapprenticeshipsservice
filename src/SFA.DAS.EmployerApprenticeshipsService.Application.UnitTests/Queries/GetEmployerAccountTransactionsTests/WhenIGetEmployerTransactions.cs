@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.AreEqual(expectedHashedId, response.Data.HashedId);
             Assert.AreEqual(expectedAcountId, response.Data.AccountId);
-            Assert.AreEqual(1,response.Data.TransactionSummary.Count);
+            Assert.AreEqual(1,response.Data.TransactionLines.Count);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var expectedAcountId = 1;
             var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
                 new TransactionLine
                 {
                     AccountId = expectedAcountId,
@@ -110,8 +110,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             });
 
             //Assert
-            Assert.IsAssignableFrom<List<TransactionSummary>>(response.Data.TransactionSummary);
-            var transactionLine = response.Data.TransactionSummary.FirstOrDefault();
+            Assert.IsAssignableFrom<List<TransactionLine>>(response.Data.TransactionLines);
+            var transactionLine = response.Data.TransactionLines.FirstOrDefault();
             Assert.IsNotNull(transactionLine);
             Assert.AreEqual(550,transactionLine.Amount);
             Assert.AreEqual(550,transactionLine.Balance);
@@ -123,7 +123,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var expectedAcountId = 1;
             var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
                 new TransactionLine
                 {
                     AccountId = expectedAcountId,
@@ -159,8 +159,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             });
 
             //Assert
-            Assert.AreEqual(750, response.Data.TransactionSummary[0].Balance);
-            Assert.AreEqual(250, response.Data.TransactionSummary[1].Balance);
+            Assert.AreEqual(750, response.Data.TransactionLines[0].Balance);
+            Assert.AreEqual(250, response.Data.TransactionLines[1].Balance);
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var expectedAcountId = 1;
             var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
                 new TransactionLine
                 {
                     AccountId = expectedAcountId,
@@ -196,47 +196,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             });
 
             //Assert
-            Assert.AreEqual("Credit", response.Data.TransactionSummary[0].Description);
-            Assert.AreEqual("Adjustment", response.Data.TransactionSummary[1].Description);
+            Assert.AreEqual("Credit", response.Data.TransactionLines[0].Description);
+            Assert.AreEqual("Adjustment", response.Data.TransactionLines[1].Description);
         }
-
-        [Test]
-        public async Task ThenTheTransactionDateIsAlwaysTheTwnentiethOfTheMonth()
-        {
-            //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=500,
-                    SubmissionId = 102,
-                    TransactionDate = new DateTime(2016,02,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=-200,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.Declaration
-                } });
-
-            //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
-
-            //Assert
-            Assert.AreEqual(20, response.Data.TransactionSummary[0].TransactionDate.Day);
-            Assert.AreEqual(20, response.Data.TransactionSummary[1].TransactionDate.Day);
-        }
-
+        
         [Test]
         public async Task ThenTheTransactionsWillHaveACorrectRunningBalance()
         {
