@@ -35,7 +35,9 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
             // TODO: Use saveOrSend to patch commitment.
-            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, CommitmentStatus.Active);
+            var status = (message.SaveOrSend == "save-no-send") ? CommitmentStatus.Draft : CommitmentStatus.Active;
+
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, status);
 
             var taskTemplate = new CreateCommitmentTemplate
             {
