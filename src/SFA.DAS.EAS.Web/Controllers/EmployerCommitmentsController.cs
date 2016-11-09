@@ -101,6 +101,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Create/Provider")]
         public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] SelectProviderViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModel.LegalEntityCode, CohortRef = viewModel.CohortRef });
+            }
+
             var providerId = int.Parse(viewModel.ProviderId);
 
             // The api returns a list but there should only ever be one per ukprn.

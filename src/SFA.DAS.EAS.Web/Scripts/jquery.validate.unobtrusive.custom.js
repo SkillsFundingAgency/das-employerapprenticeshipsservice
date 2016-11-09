@@ -59,14 +59,15 @@
 
         container.removeClass("field-validation-valid").addClass("field-validation-error");
         error.data("unobtrusiveContainer", container);
-        $(inputElement.closest('div.form-group')).addClass('error');
 
         if (replace) {
             container.empty();
             error.removeClass("input-validation-error").appendTo(container);
+            $(inputElement.closest('div.form-error-group')).addClass('error');
         }
         else {
             error.hide();
+            $(inputElement.closest('div.form-error-group')).addClass('error');
         }
     }
 
@@ -85,7 +86,7 @@
                 } else {
                     $("<li />").html(this.message).appendTo(list);
                 }
-                $(this.element.closest('div.form-group')).addClass('error');
+                $(this.element.closest('div.form-error-group')).addClass('error');
             });
         }
     }
@@ -95,7 +96,7 @@
             replaceAttrValue = container.attr("data-valmsg-replace"),
             replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
 
-        $(container.closest('div.form-group')).removeClass('error');
+        $(container.closest('div.form-error-group')).removeClass('error');
 
         if (container) {
             container.addClass("field-validation-valid").removeClass("field-validation-error");

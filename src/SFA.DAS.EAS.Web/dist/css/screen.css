@@ -2371,6 +2371,7 @@ tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
 }
+
 .panel p {
   font-size: 14px;
 }
@@ -2524,6 +2525,16 @@ aside {
 
 .govuk-box-highlight {
   margin-top: 50px;
+}
+
+span.helpText {
+  color: #6f777b;
+  display: block;
+  clear: both;
+}
+
+.trainingCost {
+  width: 25%;
 }
 
 /* responsive table */
