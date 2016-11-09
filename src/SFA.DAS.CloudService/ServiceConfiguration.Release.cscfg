@@ -49,7 +49,7 @@
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
-      <InstanceAddress roleName="SFA.DAS.EmployerApprenticeshipsService.Web">
+      <InstanceAddress roleName="SFA.DAS.EAS.Web">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
@@ -59,7 +59,7 @@
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.LevyAggregationProvider.Worker">
+      <InstanceAddress roleName="SFA.DAS.EAS.Account.Api">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
