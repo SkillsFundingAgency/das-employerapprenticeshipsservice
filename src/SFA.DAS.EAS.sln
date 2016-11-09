@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Web", "SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj", "{65DB60B1-80F0-432C-926E-7A6DD02A5645}"
 EndProject
@@ -63,6 +63,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.WebJob", "SFA.DAS.EAS.PaymentUpdater.WebJob\SFA.DAS.EAS.PaymentUpdater.WebJob.csproj", "{09CAD527-1455-44F2-A857-14C695FDEE3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests", "SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests\SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.csproj", "{1E6E4E4E-D876-4D0B-8672-85D385FE640E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Host.WebJob", "SFA.DAS.EAS.Host.WebJob\SFA.DAS.EAS.Host.WebJob.csproj", "{75D748C3-A999-4F0C-A910-F4C06C457EBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,10 @@ Global
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D748C3-A999-4F0C-A910-F4C06C457EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D748C3-A999-4F0C-A910-F4C06C457EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D748C3-A999-4F0C-A910-F4C06C457EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D748C3-A999-4F0C-A910-F4C06C457EBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

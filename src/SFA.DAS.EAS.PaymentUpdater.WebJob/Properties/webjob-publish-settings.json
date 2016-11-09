@@ -1,9 +1,9 @@
 ﻿{
   "$schema": "http://schemastore.org/schemas/json/webjob-publish-settings.json",
   "webJobName": "PaymentUpdater",
-  "startTime": "2016-11-01T01:00:00+00:00",
+  "startTime": null,
   "endTime": null,
-  "jobRecurrenceFrequency": "Day",
-  "interval": 1,
-  "runMode": "Scheduled"
+  "jobRecurrenceFrequency": null,
+  "interval": null,
+  "runMode": "OnDemand"
 }
