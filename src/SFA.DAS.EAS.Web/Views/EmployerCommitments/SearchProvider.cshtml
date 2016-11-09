@@ -1,4 +1,5 @@
 ﻿@model SFA.DAS.EAS.Web.Models.SelectProviderViewModel
+@using SFA.DAS.EAS.Web.Extensions
 
 @*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom")
@@ -21,7 +22,7 @@
 
             @Html.AntiForgeryToken()
 
-            <div class="form-error-group form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ProviderId, "error")">
                 @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
                 <div>

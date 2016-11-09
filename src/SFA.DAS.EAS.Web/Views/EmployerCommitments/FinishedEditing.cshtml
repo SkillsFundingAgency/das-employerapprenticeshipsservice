@@ -1,4 +1,5 @@
 ﻿@model SFA.DAS.EAS.Web.Models.FinishEditingViewModel
+@using SFA.DAS.EAS.Web.Extensions
 
 @*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom")
@@ -13,7 +14,7 @@
             <h1 class="heading-xlarge">Finished editing</h1>
 
             <legend class="visuallyhidden">Things to do next</legend>
-            <div class="form-error-group form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveOrSend, "error")">
                 <div>
                     @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                 </div>
