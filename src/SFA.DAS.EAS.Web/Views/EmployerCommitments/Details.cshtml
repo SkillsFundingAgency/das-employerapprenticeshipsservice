@@ -1,7 +1,12 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.Commitments.Api.Types
+@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
 @model CommitmentViewModel
+    
+@{
+    var status = Model.Status == CommitmentStatus.Draft ? "Saved" : "Sent to provider";
+}
 
 <div class="grid-row">
     <div class="column-full">
@@ -33,6 +38,7 @@
    
 
         <p><span class="strong">Provider:</span> @Model.ProviderName</p>
+        <p><span class="strong">Status:</span> @status</p>
 
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
@@ -55,8 +61,8 @@
                 <tr>
 
                     <th scope="col">Apprentice</th>
-                    <th scope="col">Training</th>
-                    <th scope="col" colspan="2">Status</th>
+                    <th scope="col" colspan="2">Training</th>
+                    <th scope="col"></th>
 
                 </tr>
                 </thead>
@@ -74,8 +80,7 @@
 
                         </td>
                         <td>
-                            
-                            @apprenticeship.Status.GetDescription() &nbsp; 
+                             &nbsp;
                         </td>
                         <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
