@@ -9,44 +9,44 @@
 
 <h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
 
-<div class="grid-row">
+<div class="grid-row page-dashboard">
     <div class="column-two-thirds">
      
             <div class="grid-row">
                 <div class="column-half">
-                    <h3 class="heading-medium" style="margin-top: 0;">
-                        <a href="@Url.Action("ViewTeam", new { accountId = Model.Data.HashedId })">Team</a>
+                    <h3 class="heading-medium">
+                        <a href="@Url.Action("ViewTeam", new { accountId = Model.Data.HashedId })">Your team</a>
                     </h3>
-                    <p>Invite new users and manage existing ones</p>
+                    <p>Control what your team can do and invite new team members.</p>
                 </div>
                 <div class="column-half ">
-                    <h3 class="heading-medium" style="margin-top: 0">
-                        <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Data.HashedId })">Funding</a>
+                    <h3 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountTransactions", new { accountId = Model.Data.HashedId })">Finance</a>
                     </h3>
-                    <p>Manage your funds including how much you have available to spend, your transactions and funds you could lose</p>
+                    <p>View transactions and forecast your funds.</p>
                 </div>
 
             </div>
             <div class="grid-row">
                 <div class="column-half ">
-                    <h3 class="heading-medium" style="margin-top: 0">
-                        <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.HashedId })">Organisations</a>
+                    <h3 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.HashedId })">Your organisations</a>
                     </h3>
-                    <p>Manage organisations and sign your agreements</p>
+                    <p>Add and manage organisations that'll hire apprentices.</p>
                 </div>
                 <div class="column-half">
-                    <h3 class="heading-medium" style="margin-top: 0;">
-                        <a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })">PAYE</a>
+                    <h3 class="heading-medium">
+                        <a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })">PAYE schemes</a>
                     </h3>
-                    <p>Manage the PAYE schemes associated with your Account</p>
+                    <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
                 </div>
             </div>
             <div class="grid-row">
                 <div class="column-half ">
-                    <h3 class="heading-medium" style="margin-top: 0">
+                    <h3 class="heading-medium">
                         <a href="@Url.Action("Index", "EmployerCommitments", new { hashedAccountId = Model.Data.HashedId })">Apprentices</a>
                     </h3>
-                    <p>Add apprentices, review and approve cohorts and pause or stop apprentices</p>
+                    <p>Update the status of your apprentices, or recruit new ones.</p>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
         <section>
             <div class="panel panel-filled">
                 <h2 class="heading-medium">Help us improve this section</h2>
-                <p>Use the link below to take part in a short survey about your experience of managing your own account or being invited to a team so that we can improve the service.</p>
+                <p>Take a 3 minute survey about managing your account or invitations so that we can improve the service.</p>
                 <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing your own account or being invited to a team</span></a></p>
             </div>
         </section>
