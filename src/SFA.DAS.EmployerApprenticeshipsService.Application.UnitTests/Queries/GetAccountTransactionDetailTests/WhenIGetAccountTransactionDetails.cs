@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -12,22 +13,33 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
     public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountTransactionDetailQueryHandler, GetAccountTransactionDetailQuery, GetAccountTransactionDetailResponse>
     {
         private Mock<IDasLevyRepository> _repository;
+        private DateTime _fromDate;
+        private DateTime _toDate;
+        private long _accountId;
         public override GetAccountTransactionDetailQuery Query { get; set; }
         public override GetAccountTransactionDetailQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountTransactionDetailQuery>> RequestValidator { get; set; }
-        private const long ExpectedId = 123124;
-
+      
         [SetUp]
         public void Arrange()
         {
-            _repository = new Mock<IDasLevyRepository>();
-            _repository.Setup(x => x.GetTransactionDetail(ExpectedId)).ReturnsAsync(new List<TransactionLineDetail> { new TransactionLineDetail() });
+            _fromDate = DateTime.Now.AddDays(-10);
+            _toDate = DateTime.Now.AddDays(-2);
+            _accountId = 1;
 
-            Query = new GetAccountTransactionDetailQuery {Id= ExpectedId};
+            _repository = new Mock<IDasLevyRepository>();
+            _repository.Setup(x => x.GetTransactionDetail(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync(new List<TransactionLineDetail> { new TransactionLineDetail() });
+
+            Query = new GetAccountTransactionDetailQuery
+            {
+                AccountId = _accountId,
+                FromDate= _fromDate,
+                ToDate = _toDate
+            };
 
             SetUp();
+
             RequestHandler = new GetAccountTransactionDetailQueryHandler(RequestValidator.Object, _repository.Object);
-            
         }
 
         [Test]
@@ -37,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactionDetail(It.IsAny<long>()));
+            _repository.Verify(x=>x.GetTransactionDetail(_accountId, _fromDate, _toDate));
         }
 
         [Test]

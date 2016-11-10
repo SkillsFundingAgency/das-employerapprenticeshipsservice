@@ -24,13 +24,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, long lineItemId, string externalUserId)
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             var data = await _mediator.SendAsync(new GetEmployerAccountTransactionDetailQuery
             {
-                HashedId = hashedId,
-                ExternalUserId = externalUserId,
-                Id = lineItemId
+                HashedAccountId = hashedId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                ExternalUserId = externalUserId
             });
            
             return new TransactionLineItemViewResult
@@ -70,6 +71,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalance = 0;
                 currentBalanceCalcultedOn = DateTime.Today;
             }
+
             return new TransactionViewResult
             {
                 Account = employerAccountResult.Account,
@@ -81,8 +83,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-
-
+        
         private AggregationData SortDataForViewModel(AggregationData data)
         {
             return data;

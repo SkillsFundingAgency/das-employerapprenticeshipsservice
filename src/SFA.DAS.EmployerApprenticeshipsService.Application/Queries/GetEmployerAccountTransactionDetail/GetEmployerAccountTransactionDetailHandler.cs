@@ -13,11 +13,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
     {
         private readonly IValidator<GetEmployerAccountTransactionDetailQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
+        private readonly IHashingService _hashingService;
 
-        public GetEmployerAccountTransactionDetailHandler(IValidator<GetEmployerAccountTransactionDetailQuery> validator, IDasLevyService dasLevyService)
+        public GetEmployerAccountTransactionDetailHandler(
+            IValidator<GetEmployerAccountTransactionDetailQuery> validator, 
+            IDasLevyService dasLevyService,
+            IHashingService hashingService)
         {
             _validator = validator;
             _dasLevyService = dasLevyService;
+            _hashingService = hashingService;
         }
 
         public async Task<GetEmployerAccountTransactionDetailResponse> Handle(GetEmployerAccountTransactionDetailQuery message)
@@ -34,17 +39,21 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                 throw new UnauthorizedAccessException();
             }
 
-            var data = await _dasLevyService.GetTransactionDetailById(message.Id);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var data = await _dasLevyService.GetTransactionDetailByDateRange(accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
+            var transactionSubmissionItems = data.GroupBy(c => 
+                new { c.SubmissionId }, (submission, group) => 
+                   new{
+                        submission.SubmissionId,
+                        Data = group.ToList()
+                       });
 
-            var transactionDetailSummary = data.GroupBy(c => new { c.SubmissionId }, (submission, group) => new
-            {
-                submission.SubmissionId,
-                Data = group.ToList()
-            }).Select(item =>
+            var transactionDetailSummaries = transactionSubmissionItems.Select(item =>
             {
                 var amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount);
                 var topUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount);
+
                 return new TransactionDetailSummary
                 {
                     Amount = amount,
@@ -55,9 +64,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                     LineAmount = amount + topUp
                 };
             }).ToList();
-            var totalAmount = transactionDetailSummary.Sum(c => c.LineAmount);
-            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary,Total = totalAmount };
-
+            
+            return new GetEmployerAccountTransactionDetailResponse
+            {
+                TransactionDetail = transactionDetailSummaries,
+                Total = transactionDetailSummaries.Sum(c => c.LineAmount)
+            };
         }
     }
 }

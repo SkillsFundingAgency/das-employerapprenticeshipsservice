@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
 {
@@ -20,20 +18,16 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
 
         public async Task<GetAccountTransactionDetailResponse> Handle(GetAccountTransactionDetailQuery message)
         {
-            var validationResult = _validator.Validate(message);
-
-            //TODO do validation for the account
-
+            var validationResult = await _validator.ValidateAsync(message);
+            
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var response = await _dasLevyRepository.GetTransactionDetail(message.Id);
+            var response = await _dasLevyRepository.GetTransactionDetail(message.AccountId, message.FromDate, message.ToDate);
 
             return new GetAccountTransactionDetailResponse { Data = response};
         }
-        
     }
-
 }
