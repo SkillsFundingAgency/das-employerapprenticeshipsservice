@@ -308,8 +308,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException e)
             {
-
                 response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
                 response.Exception = e;
             }
             catch (UnauthorizedAccessException e)
