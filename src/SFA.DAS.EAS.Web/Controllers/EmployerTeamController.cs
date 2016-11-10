@@ -71,11 +71,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             if(response.Status == HttpStatusCode.OK)
                 return View("ViewTeam", response);
            
+            model.ErrorDictionary = response.FlashMessage.ErrorMessages; 
             var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
             {
                 Data = model,
-                Status = response.Status,
-                Exception = response.Exception
+                FlashMessage = response.FlashMessage,
             };
 
             return View(errorResponse);
