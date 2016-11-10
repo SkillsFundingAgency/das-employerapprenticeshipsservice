@@ -39,13 +39,16 @@
                 <tbody>
                     @foreach (var aggregationLine in Model.Data.TransactionLines)
                     {
+                        var fromDate = aggregationLine.SubTransactions.Min(x => x.TransactionDate);
+                        var toDate = aggregationLine.SubTransactions.Max(x => x.TransactionDate);
+
                         <tr>
                             <td>@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </td>
                             <td>@aggregationLine.Description</td>
                             <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
                             <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
                             <td class="link-right">
-                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId,itemId = aggregationLine.SubmissionId})">
+                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId, fromDate, toDate})">
                                     Details <span class="vh"> for the transaction on @date</span>
                                 </a>
                             </td>
