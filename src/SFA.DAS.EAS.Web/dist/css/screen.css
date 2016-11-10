@@ -2130,6 +2130,14 @@ table.top-border {
   }
 }
 
+.data h2.bold-xlarge {
+  margin-bottom: 30px;
+}
+
+.page-dashboard h3.heading-medium {
+  margin-top: 0;
+}
+
 .header-global {
   margin: 0 auto;
   max-width: 960px;
@@ -2513,10 +2521,6 @@ textarea#Message {
 a.links {
   margin-top: 30px;
   display: block;
-}
-
-form .action-add {
-  float: left;
 }
 
 aside {
