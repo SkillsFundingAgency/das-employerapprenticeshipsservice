@@ -303,6 +303,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 response.Status = HttpStatusCode.BadRequest;
                 response.Exception = e;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
             }
             catch (UnauthorizedAccessException e)
             {
