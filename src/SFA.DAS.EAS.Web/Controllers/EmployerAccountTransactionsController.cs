@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult.Model);
         }
 
-        [Route("Balance/{itemId}/Detail")]
+        [Route("Balance/Detail")]
         public async Task<ActionResult> Detail(string accountId, DateTime fromDate, DateTime toDate)
         {
             var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));

@@ -73,8 +73,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                         Amount = transactions.Sum(t => t.Amount),
                         Balance = transactions.OrderBy(t => t.TransactionDate).Last().Balance
                     };
-
-
+                    
                     var lastIndex = transactionSummary.IndexOf(transactions.Last());
 
                     transactionSummary.Insert(lastIndex, aggregateTransaction);

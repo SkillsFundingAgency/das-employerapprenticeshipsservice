@@ -166,6 +166,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@fromDate", fromDate, DbType.DateTime);
                 parameters.Add("@toDate", toDate, DbType.DateTime);
 
