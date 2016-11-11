@@ -92,19 +92,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual("ServiceLandingPage", actualViewResult.ViewName);
         }
-
-        [Test]
-        public async Task ThenTheModelIsPassedToTheView()
-        {
-            //Act
-            var actual = await _homeController.FakeUserSignIn();
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
-            Assert.IsNotNull(actualViewResult);
-            var actualModel = actualViewResult.Model as SignInUserViewModel;
-            Assert.IsNotNull(actualModel);
-        }
+        
     }
 }
