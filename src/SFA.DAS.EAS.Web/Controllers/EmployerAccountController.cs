@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-            TempData["successMessage"] = "";
+            TempData["successMessage"] = "You can now invite team members and spend your levy";
 
             return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }
