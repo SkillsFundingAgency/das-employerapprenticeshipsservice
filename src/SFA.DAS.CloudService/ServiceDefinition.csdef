@@ -21,12 +21,12 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
       <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnectionString"/>
-      <Setting name="LoggingRedisKey"/>
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
-      <InputEndpoint name="HttpIn" protocol="http" port="80"/>
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
+      <InputEndpoint name="HttpIn" protocol="http" port="80" />
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
@@ -42,7 +42,7 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName"  />
+      <Setting name="EventHubName" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
@@ -63,14 +63,19 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString"/>
+      <Setting name="EventHubConnectionString" />
       <Setting name="EventHubName" />
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
-      <Setting name="ApiAudiences"  />
+      <Setting name="ApiAudiences" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
   </WebRole>
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>
