@@ -1,9 +1,13 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
 {
     public class GetAccountTransactionDetailQuery : IAsyncRequest<GetAccountTransactionDetailResponse>
     {
-        public long Id { get; set; }
+        public long AccountId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public string ExternalUserId { get; set; }
     }
 }

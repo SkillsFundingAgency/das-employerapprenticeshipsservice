@@ -7,7 +7,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
@@ -15,221 +14,223 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 {
     public class WhenIGetEmployerTransactions : QueryBaseTest<GetEmployerAccountTransactionsHandler, GetEmployerAccountTransactionsQuery, GetEmployerAccountTransactionsResponse>
     {
-        private Mock<IDasLevyService> _dasLevyRepository;
+        private Mock<IDasLevyService> _dasLevyService;
+        private GetEmployerAccountTransactionsQuery _request;
+
+        public override GetEmployerAccountTransactionsQuery Query { get; set; }
+        public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
 
         [SetUp]
         public void Arrange()
         {
             SetUp();
+          
+            _request = new GetEmployerAccountTransactionsQuery
+            {
+                AccountId = 1,
+                ExternalUserId = "3EFR",
+                HashedId = "RTF34"
+            };
 
-            _dasLevyRepository = new Mock<IDasLevyService>();
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
-
-            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyRepository.Object, RequestValidator.Object);
+            _dasLevyService = new Mock<IDasLevyService>();
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+                           .ReturnsAsync(new List<TransactionLine>());
+           
+            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object);
             Query = new GetEmployerAccountTransactionsQuery();
         }
-        public override GetEmployerAccountTransactionsQuery Query { get; set; }
-        public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetEmployerAccountTransactionsQuery>> RequestValidator { get; set; }
 
-        [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            //Arrange
-            var expectedAcountId = 1;
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAccountTransactionsQuery>())).ReturnsAsync(new ValidationResult());
-
             //Act
-            await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery { 
-                    AccountId = expectedAcountId,
-                    ExternalUserId = "3EFR",
-                    HashedId = "RTF34"
-                });
+            await RequestHandler.Handle(_request);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.GetTransactionsByAccountId(expectedAcountId));
+            _dasLevyService.Verify(x => x.GetTransactionsByAccountId(_request.AccountId));
         }
 
-        [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAccountTransactionsQuery>())).ReturnsAsync(new ValidationResult());
+            var transactions = new List<TransactionLine>
+                {
+                    new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 1000,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    }
+                };
+
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+                           .ReturnsAsync(transactions);
 
             //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
+            var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(expectedHashedId, response.Data.HashedId);
-            Assert.AreEqual(expectedAcountId, response.Data.AccountId);
-            Assert.AreEqual(1,response.Data.TransactionSummary.Count);
+            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
 
-        [Test]
-        public async Task ThenTheTransactionSummaryIsAggregatedFromTheLines()
+        public async Task ThenMessagesWithSameSubmissionIdShouldBeAggregatedIntoSingleTransaction()
         {
             //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
-                new TransactionLine
+            var transactions = new List<TransactionLine>
                 {
-                    AccountId = expectedAcountId,
-                    Amount=500,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=50,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.TopUp
-                } });
+                    new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 1000,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                     new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 500,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    }
+                };
+
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+                           .ReturnsAsync(transactions);
 
             //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
+            var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.IsAssignableFrom<List<TransactionSummary>>(response.Data.TransactionSummary);
-            var transactionLine = response.Data.TransactionSummary.FirstOrDefault();
-            Assert.IsNotNull(transactionLine);
-            Assert.AreEqual(550,transactionLine.Amount);
-            Assert.AreEqual(550,transactionLine.Balance);
+            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(1, response.Data.TransactionLines.Count);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
         }
 
-        [Test]
-        public async Task ThenTheBalanceIsCalculatedAsARunningTotal()
+        public async Task ThenMessagesInTheSameMonthShouldBeAggregatedTogether()
         {
             //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
-                new TransactionLine
+            var transactions = new List<TransactionLine>
                 {
-                    AccountId = expectedAcountId,
-                    Amount=500,
-                    SubmissionId = 102,
-                    TransactionDate = new DateTime(2016,02,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=200,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=50,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.TopUp
-                } });
+                    new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 1000,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                     new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 2,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 500,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                      new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 3,
+                        TransactionDate = DateTime.Now.AddMonths(-2),
+                        Amount = 500,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    }
+                };
 
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+                           .ReturnsAsync(transactions);
 
             //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
+            var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(750, response.Data.TransactionSummary[0].Balance);
-            Assert.AreEqual(250, response.Data.TransactionSummary[1].Balance);
+            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(2, response.Data.TransactionLines.Count);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
+            Assert.AreEqual(500, response.Data.TransactionLines.ElementAt(1).Amount);
         }
 
-        [Test]
-        public async Task ThenTheCorrectDescriptionIsDisplayedForPositiveAndNegativeAmounts()
+        public async Task ThenIfNoTransactionAreFoundAnEmptyTransactionListIsReturned()
         {
-            //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=500,
-                    SubmissionId = 102,
-                    TransactionDate = new DateTime(2016,02,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=-200,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.Declaration
-                } });
-
             //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
+            var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual("Credit", response.Data.TransactionSummary[0].Description);
-            Assert.AreEqual("Adjustment", response.Data.TransactionSummary[1].Description);
+            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.IsEmpty(response.Data.TransactionLines);
         }
 
-        [Test]
-        public async Task ThenTheTransactionDateIsAlwaysTheTwnentiethOfTheMonth()
+        public async Task ThenTheBalanceShouldBeInDescendingDateOrder()
         {
             //Arrange
-            var expectedAcountId = 1;
-            var expectedHashedId = "RTF34";
-            _dasLevyRepository.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(new List<TransactionLine> {
-                new TransactionLine
+            var transactions = new List<TransactionLine>
                 {
-                    AccountId = expectedAcountId,
-                    Amount=500,
-                    SubmissionId = 102,
-                    TransactionDate = new DateTime(2016,02,10),
-                    TransactionType = LevyItemType.Declaration
-                },
-                new TransactionLine
-                {
-                    AccountId = expectedAcountId,
-                    Amount=-200,
-                    SubmissionId = 101,
-                    TransactionDate = new DateTime(2016,01,10),
-                    TransactionType = LevyItemType.Declaration
-                } });
+                    new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 1000,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                     new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 2,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 500,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                      new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 3,
+                        TransactionDate = DateTime.Now.AddMonths(-2),
+                        Amount = 600,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    },
+                      new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 3,
+                        TransactionDate = DateTime.Now.AddMonths(-1),
+                        Amount = 250,
+                        TransactionType = LevyItemType.TopUp,
+                        EmpRef = "123"
+                    }
+                };
+
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+                           .ReturnsAsync(transactions);
 
             //Act
-            var response = await RequestHandler.Handle(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = expectedAcountId,
-                ExternalUserId = "3EFR",
-                HashedId = expectedHashedId
-            });
+            var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(20, response.Data.TransactionSummary[0].TransactionDate.Day);
-            Assert.AreEqual(20, response.Data.TransactionSummary[1].TransactionDate.Day);
+            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.AccountId, response.Data.AccountId);
+            Assert.AreEqual(3, response.Data.TransactionLines.Count);
+            Assert.AreEqual(250, response.Data.TransactionLines.ElementAt(0).Balance);
+            Assert.AreEqual(850, response.Data.TransactionLines.ElementAt(1).Balance);
+            Assert.AreEqual(2350, response.Data.TransactionLines.ElementAt(2).Balance);
         }
     }
 }

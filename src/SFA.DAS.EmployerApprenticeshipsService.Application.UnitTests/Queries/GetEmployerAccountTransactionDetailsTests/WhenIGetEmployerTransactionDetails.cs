@@ -14,32 +14,56 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
     public class WhenIGetEmployerTransactionDetails : QueryBaseTest<GetEmployerAccountTransactionDetailHandler, GetEmployerAccountTransactionDetailQuery, GetEmployerAccountTransactionDetailResponse>
     {
         private Mock<IDasLevyService> _dasLevyService;
+        private Mock<IHashingService> _hashingService;
+        private DateTime _fromDate;
+        private DateTime _toDate;
+        private long _accountId;
+        private string _hashedAccountId;
+        private string _externalUserId;
         public override GetEmployerAccountTransactionDetailQuery Query { get; set; }
         public override GetEmployerAccountTransactionDetailHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAccountTransactionDetailQuery>> RequestValidator { get; set; }
-        private const long ExpectedId = 123123123;
+       
         [SetUp]
         public void Arrange()
         {
             SetUp();
 
+            _fromDate = DateTime.Now.AddDays(-10);
+            _toDate = DateTime.Now.AddDays(-2);
+            _accountId = 1;
+            _hashedAccountId = "123ABC";
+            _externalUserId = "test";
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);
+
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetTransactionDetailById(It.IsAny<long>())).ReturnsAsync(new List<TransactionLineDetail> {new TransactionLineDetail()});
+            _dasLevyService.Setup(x => x.GetTransactionDetailByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).ReturnsAsync(new List<TransactionLineDetail> {new TransactionLineDetail()});
 
-            Query = new GetEmployerAccountTransactionDetailQuery {Id = ExpectedId};
+            Query = new GetEmployerAccountTransactionDetailQuery
+            {
+                HashedAccountId = _hashedAccountId,
+                FromDate = _fromDate,
+                ToDate = _toDate,
+                ExternalUserId = _externalUserId
+            };
 
-            RequestHandler = new GetEmployerAccountTransactionDetailHandler(RequestValidator.Object, _dasLevyService.Object);
+            RequestHandler = new GetEmployerAccountTransactionDetailHandler(
+                RequestValidator.Object, 
+                _dasLevyService.Object,
+                _hashingService.Object);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-
             //Act
             await RequestHandler.Handle(Query);
 
             //Assert
-            _dasLevyService.Verify(x=>x.GetTransactionDetailById(ExpectedId));
+            _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
+            _dasLevyService.Verify(x=>x.GetTransactionDetailByDateRange(_accountId, _fromDate, _toDate, _externalUserId));
         }
 
         [Test]
@@ -61,15 +85,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetEmployerAccountTransactionDetailQuery()));
-
-
         }
 
         [Test]
         public async Task ThenTheLineItemTotalIsCalculatedFromTheAmountTopupAndPercentageOfFraction()
         {
             //Arrange
-            _dasLevyService.Setup(x => x.GetTransactionDetailById(It.IsAny<long>())).ReturnsAsync(new List<TransactionLineDetail>
+            _dasLevyService.Setup(x => x.GetTransactionDetailByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).ReturnsAsync(new List<TransactionLineDetail>
             {
                 new TransactionLineDetail {Amount=10,EnglishFraction = 0.5m,TransactionType = LevyItemType.Declaration},
                 new TransactionLineDetail {Amount=1,EnglishFraction = 0.5m,TransactionType = LevyItemType.TopUp}

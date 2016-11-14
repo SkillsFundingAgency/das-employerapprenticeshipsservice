@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -19,8 +17,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-
-
             _validator = new GetEmployerAccountTransactionDetailQueryValidator(_membershipRepository.Object);
         }
 
@@ -31,8 +27,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actual = await _validator.ValidateAsync(new GetEmployerAccountTransactionDetailQuery
                 {
                     ExternalUserId = "test",
-                    HashedId = "test",
-                    Id = 123123
+                    HashedAccountId = "test",
+                    FromDate = DateTime.Now.AddDays(-10),
+                    ToDate = DateTime.Now.AddDays(-2)
                 });
 
             //Assert
@@ -47,8 +44,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("Id", "Id has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedId", "HashedId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("FromDate", "From date has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("ToDate", "To date has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
         }
 
@@ -62,17 +60,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actual = await _validator.ValidateAsync(new GetEmployerAccountTransactionDetailQuery
             {
                 ExternalUserId = "test",
-                HashedId = "test",
-                Id = 123123
+                HashedAccountId = "test",
+                FromDate = DateTime.Now.AddDays(-10),
+                ToDate = DateTime.Now.AddDays(-2)
             });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
         }
-
-
-
-
-
     }
 }

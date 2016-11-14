@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
     public class GetEmployerAccountTransactionDetailQuery : IAsyncRequest<GetEmployerAccountTransactionDetailResponse>
     {
-        public long Id { get; set; }
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
         public string ExternalUserId { get; set; }
     }
 }
