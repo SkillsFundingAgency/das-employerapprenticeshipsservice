@@ -178,6 +178,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.ToList();
         }
+
+        public Task CreatePaymentData(Payment payment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Payment> GetPaymentData(Guid paymentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
