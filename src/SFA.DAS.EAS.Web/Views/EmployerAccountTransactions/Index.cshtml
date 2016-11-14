@@ -5,18 +5,13 @@
     var culture = new CultureInfo("en-GB");
 }
 @{ViewBag.Title = "Your levy transactions";}
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your levy transactions</h1>
-    </div>
-</div>
-
-<div class="grid-row">
-    <div class="column-full">
         <div class="data">
             <h2 class="heading-small">Current balance</h2>
             <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C0", culture)</h2>
-            <p  class="bold-xsmall">on <span>@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
         </div>
         @if (Model.Data.TransactionLines.Count == 0)
         {
@@ -57,6 +52,15 @@
                 </tbody>
             </table>
             }
+    </div>
+    <div class="column-one-third">
+        <section>
+            <div class="panel panel-filled">
+                <h2 class="heading-medium">Help us improve this section</h2>
+                <p>Take a 3 minute survey about viewing levy transactions so that we can improve the service.</p>
+                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about viewing levy transactions</span></a></p>
+            </div>
+        </section>
     </div>
 </div>
 @section breadcrumb {

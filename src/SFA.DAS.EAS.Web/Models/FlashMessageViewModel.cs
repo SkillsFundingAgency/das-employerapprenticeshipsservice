@@ -1,7 +1,13 @@
-﻿namespace SFA.DAS.EAS.Web.Models
+﻿using System.Collections.Generic;
+
+namespace SFA.DAS.EAS.Web.Models
 {
     public class FlashMessageViewModel 
     {
+        public FlashMessageViewModel()
+        {
+            ErrorMessages = new Dictionary<string, string>();
+        }
         public string Headline { get; set; }
 
         public string Message { get; set; }
@@ -30,8 +36,8 @@
             }
         }
 
+        public Dictionary<string,string> ErrorMessages { get; set; }
         public string RedirectButtonMessage { get; set; }
-        public string RedirectButtonClass { get; set; }
     }
 
     public enum FlashMessageSeverityLevel

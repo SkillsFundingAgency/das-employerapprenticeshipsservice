@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Domain.Entities.Account
+@using SFA.DAS.EAS.Web.Extensions
 
 @model SelectLegalEntityViewModel
 
@@ -19,7 +20,7 @@
          
           
             @Html.AntiForgeryToken()
-            <div class="form-error-group form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
 
                 <fieldset>
 

@@ -10,7 +10,7 @@
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="RedisConnection" value="__RedisConnection__" />
-      <Setting name="LoggingRedisConnnectionString" value="__LoggingRedisConnnectionString__"/>
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__"/>
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__"/>
     </ConfigurationSettings>
     <Certificates>
@@ -49,17 +49,17 @@
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
-      <InstanceAddress roleName="SFA.DAS.EmployerApprenticeshipsService.Web">
+      <InstanceAddress roleName="SFA.DAS.EAS.Web">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.LevyDeclarationProvider.Worker">
+      <InstanceAddress roleName="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>
       </InstanceAddress>
-      <InstanceAddress roleName="SFA.DAS.LevyAggregationProvider.Worker">
+      <InstanceAddress roleName="SFA.DAS.EAS.Account.Api">
         <Subnets>
           <Subnet name="__subnet__" />
         </Subnets>

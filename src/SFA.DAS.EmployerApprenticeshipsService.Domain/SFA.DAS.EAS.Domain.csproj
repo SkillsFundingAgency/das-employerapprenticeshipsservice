@@ -74,6 +74,14 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.5.0.14819\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
@@ -123,6 +131,7 @@
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
     <Compile Include="Configuration\PaymentsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\TasksApiClientConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
