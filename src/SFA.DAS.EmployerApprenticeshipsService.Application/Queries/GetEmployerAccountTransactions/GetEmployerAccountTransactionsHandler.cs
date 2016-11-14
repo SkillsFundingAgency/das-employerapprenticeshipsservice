@@ -1,26 +1,25 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
-    public class GetEmployerAccountTransactionsHandler : IAsyncRequestHandler<GetEmployerAccountTransactionsQuery, GetEmployerAccountTransactionsResponse>
+    public class GetEmployerAccountTransactionsHandler :
+        IAsyncRequestHandler<GetEmployerAccountTransactionsQuery, GetEmployerAccountTransactionsResponse>
     {
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
-        private readonly IEmployerAccountRepository _employerAccountRepository;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IEmployerAccountRepository employerAccountRepository)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService,
+            IValidator<GetEmployerAccountTransactionsQuery> validator)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
-            _employerAccountRepository = employerAccountRepository;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -34,65 +33,84 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
 
-            var balance = 0m;
-            var transactionSummary = response.OrderBy(c=>c.TransactionDate).GroupBy(c => new { c.SubmissionId}, (submission, group) => new
+            if (!response.Any())
             {
-                submission.SubmissionId,
-                Data = group.ToList()
-            }).Select(item =>
+                return GetResponse(message.HashedId, message.AccountId);
+            }
+
+            //// Aggregate by submission ID
+            var balance = 0m;
+            var transactionSubmissionGroups = response.OrderBy(c => c.TransactionDate)
+                .GroupBy(c => new { c.SubmissionId }, (submission, group) => new
+                {
+                    submission.SubmissionId,
+                    Data = group.ToList()
+                });
+
+            var transactionSubmissions = transactionSubmissionGroups.Select(item =>
             {
                 var amount = item.Data.Sum(c => c.Amount);
                 var transactionDate = item.Data.First().TransactionDate;
+                var empRef = item.Data.First().EmpRef;
+
+                return new
+                {
+                    Period = $"{transactionDate.Month}/{transactionDate.Year}",
+                    Transaction = new TransactionLine
+                    {
+                        SubmissionId = item.SubmissionId,
+                        SubTransactions = item.Data,
+                        Amount = amount,
+                        Description = amount >= 0 ? "Credit" : "Adjustment",
+                        TransactionDate = transactionDate,
+                        Balance = balance += amount,
+                        EmpRef = empRef
+                    }
+                };
+            }).ToList();
+
+            var transactionSummaries = transactionSubmissions.GroupBy(t => t.Period, (period, transactionPeriod) =>
+            {
+                var transactions = transactionPeriod.Select(x => x.Transaction).ToList();
+                var combinedTotal = transactions.Sum(t => t.Amount);
+                var accountId = transactions.First().AccountId;
+                var payeSchemeRef = transactions.First().EmpRef;
+                var transactionDate = transactions.Max(t => t.TransactionDate);
+                var transactionBalance = transactions.OrderBy(t => t.TransactionDate).Last().Balance;
+
                 return new TransactionLine
                 {
-                    SubmissionId = item.SubmissionId,
-                    SubTransactions = item.Data,
-                    Amount = amount,
-                    Description = amount>=0 ? "Credit":"Adjustment",
+                    AccountId = accountId,
+                    EmpRef = payeSchemeRef,
+                    Description = combinedTotal >= 0 ? "Credit" : "Adjustment",
                     TransactionDate = transactionDate,
-                    Balance = balance += amount
-            };
-            }).OrderBy(x => x.TransactionDate).ToList();
-            
-            var history = await _employerAccountRepository.GetAccountHistory(message.AccountId);
+                    SubTransactions = transactions,
+                    Amount = combinedTotal,
+                    Balance = transactionBalance
+                };
+            }).OrderByDescending(t => t.TransactionDate)
+                .ToList();
 
-            var payeSchemeEndDate = DateTime.MinValue;
-            history.ForEach(x =>
+            return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
+        }
+
+        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
+        {
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>());
+        }
+
+        private static GetEmployerAccountTransactionsResponse GetResponse(
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions)
+        {
+            return new GetEmployerAccountTransactionsResponse
             {
-                var transactions = transactionSummary.Where(t => t.TransactionDate < x.DateAdded &&
-                                               t.TransactionDate > payeSchemeEndDate).ToList();
-
-                if (transactions.Any())
+                Data = new AggregationData
                 {
-                    var aggregateTransaction = new TransactionLine
-                    {
-                        AccountId = x.AccountId,
-                        EmpRef = x.PayeRef,
-                        TransactionDate = x.DateAdded,
-                        SubTransactions = transactions,
-                        Amount = transactions.Sum(t => t.Amount),
-                        Balance = transactions.OrderBy(t => t.TransactionDate).Last().Balance
-                    };
-                    
-                    var lastIndex = transactionSummary.IndexOf(transactions.Last());
-
-                    transactionSummary.Insert(lastIndex, aggregateTransaction);
-
-                    transactions.ForEach(t => transactionSummary.Remove(t));
-
-                    payeSchemeEndDate = x.DateRemoved;
+                    HashedId = hashedAccountId,
+                    AccountId = accountId,
+                    TransactionLines = transactions
                 }
-            });
-
-            transactionSummary.Reverse();
-
-            var returnValue = new AggregationData
-            {
-                HashedId = message.HashedId,
-                AccountId = message.AccountId,
-                TransactionLines = transactionSummary.ToList()
             };
-            return new GetEmployerAccountTransactionsResponse {Data = returnValue };
         }
     }
 }
