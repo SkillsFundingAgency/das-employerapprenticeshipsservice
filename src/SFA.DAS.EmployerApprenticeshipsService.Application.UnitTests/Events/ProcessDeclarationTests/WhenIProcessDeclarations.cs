@@ -3,6 +3,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Events;
+using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessDeclarationTests

@@ -3,7 +3,7 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EAS.Application.Events
+namespace SFA.DAS.EAS.Application.Events.ProcessDeclaration
 {
     public class ProcessDeclarationsEventHandler : IAsyncNotificationHandler<ProcessDeclarationsEvent>
     {

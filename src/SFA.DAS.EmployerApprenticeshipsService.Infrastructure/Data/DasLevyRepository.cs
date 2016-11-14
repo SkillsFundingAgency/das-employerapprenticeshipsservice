@@ -188,6 +188,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             throw new NotImplementedException();
         }
+
+        public Task ProcessPaymentData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
