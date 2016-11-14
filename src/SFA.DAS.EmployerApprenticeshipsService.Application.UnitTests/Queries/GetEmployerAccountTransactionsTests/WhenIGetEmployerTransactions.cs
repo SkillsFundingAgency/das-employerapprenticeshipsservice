@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -112,7 +113,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(_request.HashedId, response.Data.HashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
-            Assert.AreEqual(1500, response.Data.TransactionLines[0].Amount);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
         }
 
         public async Task ThenMessagesInTheSameMonthShouldBeAggregatedTogether()
@@ -159,8 +160,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(_request.HashedId, response.Data.HashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(2, response.Data.TransactionLines.Count);
-            Assert.AreEqual(1500, response.Data.TransactionLines[0].Amount);
-            Assert.AreEqual(500, response.Data.TransactionLines[1].Amount);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
+            Assert.AreEqual(500, response.Data.TransactionLines.ElementAt(1).Amount);
         }
 
         public async Task ThenIfNoTransactionAreFoundAnEmptyTransactionListIsReturned()
@@ -227,9 +228,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(_request.HashedId, response.Data.HashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(3, response.Data.TransactionLines.Count);
-            Assert.AreEqual(250, response.Data.TransactionLines[0].Balance);
-            Assert.AreEqual(850, response.Data.TransactionLines[1].Balance);
-            Assert.AreEqual(2350, response.Data.TransactionLines[2].Balance);
+            Assert.AreEqual(250, response.Data.TransactionLines.ElementAt(0).Balance);
+            Assert.AreEqual(850, response.Data.TransactionLines.ElementAt(1).Balance);
+            Assert.AreEqual(2350, response.Data.TransactionLines.ElementAt(2).Balance);
         }
     }
 }

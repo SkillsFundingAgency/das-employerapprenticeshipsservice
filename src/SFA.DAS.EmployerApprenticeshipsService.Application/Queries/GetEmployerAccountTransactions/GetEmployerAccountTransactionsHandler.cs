@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -38,40 +39,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 return GetResponse(message.HashedId, message.AccountId);
             }
 
-            //// Aggregate by submission ID
-            var balance = 0m;
-            var transactionSubmissionGroups = response.OrderBy(c => c.TransactionDate)
-                .GroupBy(c => new { c.SubmissionId }, (submission, group) => new
-                {
-                    submission.SubmissionId,
-                    Data = group.ToList()
-                });
+            var transactionSubmissions = GroupTransactionsBySubmissionId(response);
+            var transactionSummaries = GroupTransactionsByPeriod(transactionSubmissions);
 
-            var transactionSubmissions = transactionSubmissionGroups.Select(item =>
+            return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
+        }
+
+        private static ICollection<TransactionLine> GroupTransactionsByPeriod(
+            IEnumerable<Tuple<string, TransactionLine>> transactionSubmissions)
+        {
+            var transations = transactionSubmissions.GroupBy(t => t.Item1, (period, transactionPeriod) =>
             {
-                var amount = item.Data.Sum(c => c.Amount);
-                var transactionDate = item.Data.First().TransactionDate;
-                var empRef = item.Data.First().EmpRef;
-
-                return new
-                {
-                    Period = $"{transactionDate.Month}/{transactionDate.Year}",
-                    Transaction = new TransactionLine
-                    {
-                        SubmissionId = item.SubmissionId,
-                        SubTransactions = item.Data,
-                        Amount = amount,
-                        Description = amount >= 0 ? "Credit" : "Adjustment",
-                        TransactionDate = transactionDate,
-                        Balance = balance += amount,
-                        EmpRef = empRef
-                    }
-                };
-            }).ToList();
-
-            var transactionSummaries = transactionSubmissions.GroupBy(t => t.Period, (period, transactionPeriod) =>
-            {
-                var transactions = transactionPeriod.Select(x => x.Transaction).ToList();
+                var transactions = transactionPeriod.Select(x => x.Item2).ToList();
                 var combinedTotal = transactions.Sum(t => t.Amount);
                 var accountId = transactions.First().AccountId;
                 var payeSchemeRef = transactions.First().EmpRef;
@@ -88,10 +67,45 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     Amount = combinedTotal,
                     Balance = transactionBalance
                 };
-            }).OrderByDescending(t => t.TransactionDate)
-                .ToList();
+            });
 
-            return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
+            return transations.OrderByDescending(t => t.TransactionDate).ToList();
+        }
+        
+        private static IEnumerable<Tuple<string, TransactionLine>> GroupTransactionsBySubmissionId(
+           IEnumerable<TransactionLine> response)
+        {
+            var orderedTransactions = response.OrderBy(c => c.TransactionDate);
+
+            var transactionGroups = orderedTransactions.GroupBy(c => c.SubmissionId, (submission, group) =>
+                new
+                {
+                    SubmissionId = submission,
+                    Transactions = group.ToList()
+                });
+
+            var balance = 0m;
+
+            return transactionGroups.Select(group =>
+            {
+                var amount = group.Transactions.Sum(c => c.Amount);
+                var transactionDate = group.Transactions.First().TransactionDate;
+                var empRef = group.Transactions.First().EmpRef;
+                var transactionPeriod = $"{transactionDate.Month}/{transactionDate.Year}";
+
+                var transaction = new TransactionLine
+                {
+                    SubmissionId = group.SubmissionId,
+                    SubTransactions = group.Transactions,
+                    Amount = amount,
+                    Description = amount >= 0 ? "Credit" : "Adjustment",
+                    TransactionDate = transactionDate,
+                    Balance = balance += amount,
+                    EmpRef = empRef
+                };
+
+                return new Tuple<string, TransactionLine>(transactionPeriod, transaction);
+            }).ToList();
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
