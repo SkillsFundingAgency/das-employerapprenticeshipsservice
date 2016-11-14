@@ -10,7 +10,7 @@
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="LogLevel" value="Debug" />
       <Setting name="RedisConnection" value="localhost" />
-      <Setting name="LoggingRedisConnnectionString" value=""/>
+      <Setting name="LoggingRedisConnectionString" value=""/>
       <Setting name="LoggingRedisKey" value=""/>
     </ConfigurationSettings>
     <Certificates>

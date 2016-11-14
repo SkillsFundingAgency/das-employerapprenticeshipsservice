@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);
 
             if (existingInvitation != null && existingInvitation.Status != InvitationStatus.Deleted && existingInvitation.Status != InvitationStatus.Accepted)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "There is already an Invitation for this email" } });
+                throw new InvalidRequestException(new Dictionary<string, string> { { "ExistingMember", $"{message.Email} is already invited" } });
 
             var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
             if (existingInvitation == null)

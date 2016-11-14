@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -113,9 +114,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException e)
             {
-                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
+                    FlashMessage =  new FlashMessageViewModel
+                    {
+                        Headline = "Errors to fix",
+                        Message = "Check the following details:",
+                        ErrorMessages = e.ErrorMessages,
+                        Severity = FlashMessageSeverityLevel.Error
+                    },
                     Exception = e
                 };
             }
@@ -300,9 +308,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException e)
             {
-
                 response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
                 response.Exception = e;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
             }
             catch (UnauthorizedAccessException e)
             {
