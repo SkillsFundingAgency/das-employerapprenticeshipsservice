@@ -1,34 +1,27 @@
 ﻿@model SFA.DAS.EAS.Web.Models.SelectProviderViewModel
+@using SFA.DAS.EAS.Web.Extensions
 
-@section pageSpecificJS {
+@*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom")
-}
+}*@
 
 <form method="POST" action="@Url.Action("SelectProvider")">
 
     <div class="grid-row">
-
-      
-
         <div class="column-two-thirds">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <h1 class="heading-xlarge">Add training provider details</h1>
 
-        </div>
-    </div>
-    <div class="grid-row">
-        <div class="column-two-thirds">
-
             @Html.AntiForgeryToken()
 
-            <div class="form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ProviderId, "error")">
                 @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
-                <div>
-                    @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number")
+             
+                    @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-" + Html.IdFor(m => m.ProviderId) })
 
-                </div>
-                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_label = "Training Provider" })
+          
+                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
             </div>
 
 

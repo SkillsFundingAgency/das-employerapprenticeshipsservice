@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
@@ -31,20 +32,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
+        private readonly ILogger _logger;
 
-        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService)
+        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashId)
         {
+            _logger.Debug("Getting all Commitments");
+
             var data = await _mediator.SendAsync(new GetCommitmentsQuery
             {
                 AccountHashId = hashId
@@ -123,7 +130,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LegalEntityCode = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = commitment.ProviderName
+                    ProviderName = commitment.ProviderName,
+                    Status = (commitment.SelectedRoute == "employer") ? CommitmentStatus.Draft : CommitmentStatus.Active
                 }
             });
 

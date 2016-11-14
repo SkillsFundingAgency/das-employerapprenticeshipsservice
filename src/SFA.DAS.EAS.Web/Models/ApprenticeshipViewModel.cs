@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Web.Validators;
@@ -19,6 +21,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string TrainingId { get; set; }
         public string TrainingName { get; set; }
         public string Cost { get; set; }
+
         public int? StartMonth { get; set; }
 
         public string StartMonthName

@@ -32,6 +32,8 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.Notifications.Api.Client;
 using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
@@ -71,6 +73,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
+            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
             
             RegisterMediator();
         }

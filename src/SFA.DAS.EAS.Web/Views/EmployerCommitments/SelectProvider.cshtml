@@ -1,10 +1,11 @@
 ﻿@using SFA.DAS.EAS.Web.Models
+@using SFA.DAS.EAS.Web.Extensions
 
 @model ConfirmProviderView
 
-@section pageSpecificJS {
+@*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom")
-}
+}*@
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -21,9 +22,9 @@
                 <h2 class="heading-large" style="margin-bottom:0;">@Model.Providers[0].ProviderName</h2>
                 <h3 class="heading-small" style="margin-top:0px; color:#6F777B">UKPRN: @Model.ProviderId</h3>
 
-                <fieldset class="spacerConfirmProvider">
+                <fieldset class="spacerConfirmProvider" role="radiogroup" aria-required="true">
                     <legend class="visuallyhidden">Training provider</legend>
-                    <div class="form-group">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Confirmation, "error")">
                         <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
                         <div>
                             @Html.ValidationMessageFor(m => m.Confirmation, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirmation) + "-True" })

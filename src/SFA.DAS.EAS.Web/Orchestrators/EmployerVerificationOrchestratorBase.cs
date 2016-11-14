@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Net;
 using System.Threading.Tasks;
@@ -62,9 +63,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Severity = FlashMessageSeverityLevel.Error,
                             Headline = "Account not added",
                             Message = "You need to grant authority to HMRC to add an account.",
-                            RedirectButtonMessage = "Add new account",
-                            RedirectButtonClass = "add_new_account"
+                            ErrorMessages = new Dictionary<string, string> { { "add_new_account", "Add new account" } }
                         }
+                        
                     };
                 }
                 return new OrchestratorResponse<HmrcTokenResponse>

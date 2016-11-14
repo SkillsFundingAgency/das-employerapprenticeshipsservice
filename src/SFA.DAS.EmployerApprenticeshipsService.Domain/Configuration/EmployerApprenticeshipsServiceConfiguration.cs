@@ -13,6 +13,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string DatabaseConnectionString { get; set; }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
+        public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
 		public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }

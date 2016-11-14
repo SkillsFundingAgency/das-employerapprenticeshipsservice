@@ -127,10 +127,6 @@ a.links{
     display:block;
 }
 
-form .action-add{
-    float:left;
-}
-
 aside{
     margin-top:50px;
 }
@@ -151,9 +147,13 @@ span.helpText{
 }
 
 
+.form-date{ 
+     input#StartYear, input#EndYear{width:60px;}
+} 
 
-
-
+.form-group{
+         input#Cost{width:200px;}
+}
 
 
 

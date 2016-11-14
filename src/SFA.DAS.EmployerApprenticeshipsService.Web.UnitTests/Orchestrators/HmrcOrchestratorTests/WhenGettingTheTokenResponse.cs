@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -64,8 +65,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
             Assert.AreEqual("Account not added", actual.FlashMessage.Headline);
             Assert.AreEqual("error-summary", actual.FlashMessage.SeverityCssClass);
             Assert.AreEqual(FlashMessageSeverityLevel.Error, actual.FlashMessage.Severity);
-            Assert.AreEqual("Add new account", actual.FlashMessage.RedirectButtonMessage);
-            Assert.AreEqual("add_new_account", actual.FlashMessage.RedirectButtonClass);
+            Assert.Contains(new KeyValuePair<string,string>("add_new_account", "Add new account"), actual.FlashMessage.ErrorMessages);
+            
         }
     }
 }
