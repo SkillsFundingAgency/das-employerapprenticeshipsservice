@@ -7,6 +7,6 @@ namespace SFA.DAS.EAS.Domain
     {
         public long AccountId { get; set; }
         public string HashedId { get; set; }
-        public List<TransactionLine> TransactionLines { get; set; }
+        public ICollection<TransactionLine> TransactionLines { get; set; }
     }
 }
