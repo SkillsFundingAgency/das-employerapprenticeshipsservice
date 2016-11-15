@@ -47,16 +47,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams/Invite")]
-        public ActionResult Invite(string accountId)
+        public async Task<ActionResult> Invite(string accountId)
         {
-            var response = new OrchestratorResponse<InviteTeamMemberViewModel>
-            {
-                Data = new InviteTeamMemberViewModel
-                {
-                    HashedId = accountId,
-                    Role = Role.Viewer
-                }
-            };
+            var response = await _employerTeamOrchestrator.GetNewInvitation(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -14,6 +15,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
@@ -406,6 +408,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Exception = e
                 };
             }
+        }
+
+        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(string hashedAccountId, string externalUserId)
+        {
+
+            var response = await _mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
+            
+            return new OrchestratorResponse<InviteTeamMemberViewModel>
+            {
+                Data = new InviteTeamMemberViewModel
+                {
+                    HashedId = hashedAccountId,
+                    Role = Role.Viewer
+                },
+                Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
+            };
+
+
         }
     }
 }

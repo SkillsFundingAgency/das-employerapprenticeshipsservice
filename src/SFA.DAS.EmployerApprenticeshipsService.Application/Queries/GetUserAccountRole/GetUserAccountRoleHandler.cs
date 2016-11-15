@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccountRole
         private readonly IMembershipRepository _membershipRepository;
         private readonly IValidator<GetUserAccountRoleQuery> _validator;
 
-        public GetUserAccountRoleHandler(IMembershipRepository membershipRepository, IValidator<GetUserAccountRoleQuery> validator)
+        public GetUserAccountRoleHandler(IValidator<GetUserAccountRoleQuery> validator, IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
             _validator = validator;
@@ -26,11 +26,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccountRole
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var caller = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             return new GetUserAccountRoleResponse
             {
-                UserRole = (Role) (caller?.RoleId ?? (short) Role.None)
+                UserRole = (Role)(caller?.RoleId ?? (short)Role.None)
             };
         }
     }

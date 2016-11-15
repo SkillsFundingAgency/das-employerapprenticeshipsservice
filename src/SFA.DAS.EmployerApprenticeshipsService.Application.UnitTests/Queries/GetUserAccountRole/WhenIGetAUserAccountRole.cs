@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
@@ -13,15 +10,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
 {
     class WhenIGetAUserAccountRole: QueryBaseTest<GetUserAccountRoleHandler, GetUserAccountRoleQuery, GetUserAccountRoleResponse>
     {
+        private const string HashedAccountId = "123ABC";
+        private const string ExternalUserId = "4";
+
         private Mock<IMembershipRepository> _membershipRepository;
+        private MembershipView _membershipView;
+
         public override GetUserAccountRoleQuery Query { get; set; }
         public override GetUserAccountRoleHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetUserAccountRoleQuery>> RequestValidator { get; set; }
-
-        private MembershipView _membershipView;
-
-        private const long AccountId = 2;
-        private const string ExternalUserId = "4";
         
         [SetUp]
         public void Arrange()
@@ -30,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
 
             _membershipView = new MembershipView
             {
-                AccountId = AccountId,
+                AccountId = 2,
                 UserId = long.Parse(ExternalUserId),
                 RoleName = Role.Owner.ToString()
             };
@@ -38,10 +35,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
                                  .ReturnsAsync(_membershipView);
-          
 
-            Query = new GetUserAccountRoleQuery {AccountId = AccountId, ExternalUserId = ExternalUserId};
-            RequestHandler = new GetUserAccountRoleHandler(_membershipRepository.Object, RequestValidator.Object);
+            Query = new GetUserAccountRoleQuery {HashedAccountId = HashedAccountId, ExternalUserId = ExternalUserId};
+            RequestHandler = new GetUserAccountRoleHandler(RequestValidator.Object, _membershipRepository.Object);
         }
         
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
@@ -50,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             await RequestHandler.Handle(Query);
 
             //Assert
-            _membershipRepository.Verify(x => x.GetCaller(AccountId, ExternalUserId), Times.Once());
+            _membershipRepository.Verify(x => x.GetCaller(HashedAccountId, ExternalUserId), Times.Once());
         }
 
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
@@ -62,13 +58,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             Assert.AreEqual(Role.Owner, result.UserRole);
         }
 
-
         [Test]
         public async Task ThenIfTheUserIsNotInTheTeamTheRoleWillBeNone()
         {
             //Arrange
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
-                                .ReturnsAsync(null);
+                                 .ReturnsAsync(null);
 
             //Act
             var result = await RequestHandler.Handle(Query);

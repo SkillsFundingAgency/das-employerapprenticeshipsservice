@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetUserAccountRoleQuery {AccountId = 12587, ExternalUserId = "123"});
+            var actual = _validator.Validate(new GetUserAccountRoleQuery {HashedAccountId = "12587", ExternalUserId = "123"});
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -28,11 +28,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
         public void ThenFalseIsReturnedWhenTheFieldsArentPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetUserAccountRoleQuery { AccountId = 0, ExternalUserId = string.Empty});
+            var actual = _validator.Validate(new GetUserAccountRoleQuery { HashedAccountId = string.Empty, ExternalUserId = string.Empty});
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
         }
     }
