@@ -15,7 +15,8 @@ select mainUpdate.* from
 			3 as TransactionType,
 			x.Amount * -1 Amount,
 			null as empref,
-			PeriodEnd
+			PeriodEnd,
+			UkPrn
 		FROM 
 			[levy].[Payment] x
 		inner join
