@@ -8,6 +8,7 @@ SELECT [AccountId]
       ,[TransactionType]
       ,[Amount]
 	  ,[EmpRef]
+	  ,[PeriodEnd]
 	  ,SUM(Amount) OVER(ORDER BY TransactionDate asc, TransactionType asc
 		RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
          AS Balance

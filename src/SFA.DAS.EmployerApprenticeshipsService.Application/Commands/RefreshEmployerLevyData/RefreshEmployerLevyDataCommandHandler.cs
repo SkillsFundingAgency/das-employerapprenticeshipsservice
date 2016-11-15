@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Events;
+using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;

@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EAS.Application.Events;
+using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Models.Levy;

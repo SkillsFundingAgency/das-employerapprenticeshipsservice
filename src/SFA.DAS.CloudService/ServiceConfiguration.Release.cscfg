@@ -10,8 +10,8 @@
       <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="RedisConnection" value="__RedisConnection__" />
-      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__"/>
-      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__"/>
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />
@@ -46,6 +46,17 @@
       <Setting name="ApiAudiences" value="__ApiAudiences__" />
     </ConfigurationSettings>
   </Role>
+  <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
+      <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
+      <Setting name="EnvironmentName" value="__EnvironmentName__" />
+      <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
+      <Setting name="InstrumentationKey" value="__InstrumentationKey__" />
+      <Setting name="LogLevel" value="__loglevel__" />
+    </ConfigurationSettings>
+  </Role>
   <NetworkConfiguration>
     <VirtualNetworkSite name="__vnet__" />
     <AddressAssignments>
@@ -74,4 +85,5 @@
       </LoadBalancer>
     </LoadBalancers>
   </NetworkConfiguration>
+  
 </ServiceConfiguration>
