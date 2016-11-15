@@ -25,5 +25,5 @@ select mainUpdate.* from
 	inner join (
 		select PaymentId from levy.Payment
 	EXCEPT
-		select PaymentId from levy.Payment where TransactionType = 3
+		select PaymentId from levy.transactionline where TransactionType = 3
 	) dervx on dervx.PaymentId = mainUpdate.PaymentId
