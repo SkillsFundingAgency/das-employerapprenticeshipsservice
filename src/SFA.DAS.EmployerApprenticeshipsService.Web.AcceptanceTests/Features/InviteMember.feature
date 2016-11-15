@@ -22,5 +22,5 @@ Scenario Outline: View team members
 Examples:
 	| account_role | view   |
 	| Owner        | can    |
-	| Transactor   | cannot |
-	| Viewer       | cannot |
+	| Transactor   | can	|
+	| Viewer       | can	|
