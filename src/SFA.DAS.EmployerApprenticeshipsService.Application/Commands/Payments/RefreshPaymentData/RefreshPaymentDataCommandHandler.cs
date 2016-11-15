@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                     continue;
                 }
 
-                await _dasLevyRepository.CreatePaymentData(payment);
+                await _dasLevyRepository.CreatePaymentData(payment,message.AccountId,message.PeriodEnd);
                 sendPaymentDataChanged = true;
             }
 

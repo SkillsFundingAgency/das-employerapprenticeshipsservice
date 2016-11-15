@@ -179,19 +179,58 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
-        public Task CreatePaymentData(Payment payment)
+        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd)
         {
-            throw new NotImplementedException();
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@PaymentId", Guid.Parse(payment.Id), DbType.Guid);
+                parameters.Add("@Ukprn", payment.Ukprn, DbType.Int64);
+                parameters.Add("@Uln", payment.Uln, DbType.Int64);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@ApprenticeshipId", payment.ApprenticeshipId, DbType.Int64);
+                parameters.Add("@DeliveryPeriodMonth", payment.DeliveryPeriod.Month, DbType.Int32);
+                parameters.Add("@DeliveryPeriodYear", payment.DeliveryPeriod.Year, DbType.Int32);
+                parameters.Add("@CollectionPeriodId", payment.CollectionPeriod.Id, DbType.String);
+                parameters.Add("@CollectionPeriodMonth", payment.CollectionPeriod.Month, DbType.Int32);
+                parameters.Add("@CollectionPeriodYear", payment.CollectionPeriod.Year, DbType.Int32);
+                parameters.Add("@EvidenceSubmittedOn", payment.EvidenceSubmittedOn, DbType.DateTime);
+                parameters.Add("@EmployerAccountVersion", payment.EmployerAccountVersion, DbType.String);
+                parameters.Add("@ApprenticeshipVersion", payment.ApprenticeshipVersion, DbType.String);
+                parameters.Add("@FundingSource", payment.FundingSource, DbType.String);
+                parameters.Add("@TransactionType", payment.TransactionType, DbType.String);
+                parameters.Add("@Amount", payment.Amount, DbType.Decimal);
+                parameters.Add("@PeriodEnd", periodEnd, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "[levy].[CreatePayment]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
         }
 
-        public Task<Payment> GetPaymentData(Guid paymentId)
+        public async Task<Payment> GetPaymentData(Guid paymentId)
         {
-            throw new NotImplementedException();
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@paymentId", paymentId, DbType.Guid);
+
+                return await c.QueryAsync<Payment>(
+                    sql: "[levy].[GetPaymentData_ById]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
         }
 
-        public Task ProcessPaymentData()
+        public async Task ProcessPaymentData()
         {
-            throw new NotImplementedException();
+            await WithConnection(async c => await c.ExecuteAsync(
+                sql: "[levy].[ProcessPaymentDataTransactions]",
+                param: null,
+                commandType: CommandType.StoredProcedure));
         }
     }
 }

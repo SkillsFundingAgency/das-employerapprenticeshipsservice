@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<Payment>()),Times.Never);
+            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<Payment>(),It.IsAny<long>(),It.IsAny<string>()),Times.Never);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>()),Times.Exactly(_paymentData.Items.Length));
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(),_command.AccountId,_command.PeriodEnd),Times.Exactly(_paymentData.Items.Length));
         }
 
         [Test]
