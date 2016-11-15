@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
-  <WebRole name="SFA.DAS.EAS.Web" vmsize="Small">
-    <Runtime executionContext="elevated" />
-    <Startup>
-      <Task commandLine="AppInit.cmd" executionContext="elevated" taskType="simple" />
-    </Startup>
+  <WebRole name="SFA.DAS.EAS.Web" vmsize="Standard_D2_v2">
     <Sites>
       <Site name="Web">
         <Bindings>
@@ -21,12 +17,12 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
       <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="LoggingRedisKey" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />
-      <InputEndpoint name="HttpIn" protocol="http" port="80" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-eas-ilb"/>
+      <InputEndpoint name="HttpIn" protocol="http" port="80" loadBalancer="das-pp-eas-ilb"/>
     </Endpoints>
     <Certificates>
       <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
@@ -34,7 +30,7 @@
     <Imports>
     </Imports>
   </WebRole>
-  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Standard_D1_v2">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />
@@ -42,8 +38,11 @@
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
+      <Setting name="EventHubName"  />
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50121" />
+    </Endpoints>
     <LocalResources>
     </LocalResources>
     <Imports>
@@ -63,24 +62,27 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
+      <Setting name="EventHubConnectionString"/>
       <Setting name="EventHubName" />
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
-      <Setting name="ApiAudiences" />
+      <Setting name="ApiAudiences"  />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
   </WebRole>
-  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Standard_D1_v2">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="LogLevel" />
       <Setting name="InstrumentationKey" />
-      <Setting name="LogLevel" />      
     </ConfigurationSettings>
+    <Endpoints>
+      <InputEndpoint name="Fake" protocol="tcp" port="50122" />
+    </Endpoints>
   </WorkerRole>
 </ServiceDefinition>
