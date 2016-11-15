@@ -76,6 +76,11 @@
   <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="InstrumentationKey" />
+      <Setting name="LogLevel" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

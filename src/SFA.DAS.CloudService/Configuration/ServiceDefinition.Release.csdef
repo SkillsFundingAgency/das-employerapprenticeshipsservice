@@ -72,4 +72,14 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
     </Endpoints>
   </WebRole>
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name="StorageConnectionString" />
+      <Setting name="EnvironmentName" />
+      <Setting name="ConfigurationStorageConnectionString" />
+      <Setting name="LogLevel" />
+      <Setting name="InstrumentationKey" />
+    </ConfigurationSettings>
+  </WorkerRole>
 </ServiceDefinition>
