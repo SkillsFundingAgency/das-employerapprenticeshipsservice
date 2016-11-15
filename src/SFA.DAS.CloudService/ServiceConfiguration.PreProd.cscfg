@@ -14,7 +14,7 @@
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" /> <!-- CHANGE THIS THUMBPRINT -->
+      <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" /> <!-- CHANGE THIS THUMBPRINT -->
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
@@ -89,6 +89,5 @@
         <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.118.159" />
       </LoadBalancer>
     </LoadBalancers>
-  </NetworkConfiguration>
-  
+  </NetworkConfiguration>  
 </ServiceConfiguration>
