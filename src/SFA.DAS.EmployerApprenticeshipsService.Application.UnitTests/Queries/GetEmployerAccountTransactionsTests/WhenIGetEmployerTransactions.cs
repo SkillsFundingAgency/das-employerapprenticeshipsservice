@@ -41,6 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Query = new GetEmployerAccountTransactionsQuery();
         }
 
+        [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
@@ -50,6 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Verify(x => x.GetTransactionsByAccountId(_request.AccountId));
         }
 
+        [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
@@ -78,6 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
 
+        [Test]
         public async Task ThenMessagesWithSameSubmissionIdShouldBeAggregatedIntoSingleTransaction()
         {
             //Arrange
@@ -116,6 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
         }
 
+        [Test]
         public async Task ThenMessagesInTheSameMonthShouldBeAggregatedTogether()
         {
             //Arrange
@@ -160,10 +164,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(_request.HashedId, response.Data.HashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(2, response.Data.TransactionLines.Count);
-            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(0).Amount);
-            Assert.AreEqual(500, response.Data.TransactionLines.ElementAt(1).Amount);
+            Assert.AreEqual(500, response.Data.TransactionLines.ElementAt(0).Amount);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(1).Amount);
         }
 
+        [Test]
         public async Task ThenIfNoTransactionAreFoundAnEmptyTransactionListIsReturned()
         {
             //Act
@@ -175,6 +180,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.IsEmpty(response.Data.TransactionLines);
         }
 
+        [Test]
         public async Task ThenTheBalanceShouldBeInDescendingDateOrder()
         {
             //Arrange
@@ -227,10 +233,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.AreEqual(_request.HashedId, response.Data.HashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
-            Assert.AreEqual(3, response.Data.TransactionLines.Count);
-            Assert.AreEqual(250, response.Data.TransactionLines.ElementAt(0).Balance);
-            Assert.AreEqual(850, response.Data.TransactionLines.ElementAt(1).Balance);
-            Assert.AreEqual(2350, response.Data.TransactionLines.ElementAt(2).Balance);
+            Assert.AreEqual(2, response.Data.TransactionLines.Count);
+            Assert.AreEqual(1500, response.Data.TransactionLines.ElementAt(1).Balance);
+            Assert.AreEqual(2350, response.Data.TransactionLines.ElementAt(0).Balance);
         }
     }
 }
