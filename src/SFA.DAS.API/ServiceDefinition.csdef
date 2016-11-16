@@ -4,7 +4,8 @@
     <Sites>
       <Site name="Web">
         <Bindings>
-          <Binding name="Endpoint1" endpointName="Endpoint1" />
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
         </Bindings>
       </Site>
     </Sites>
@@ -14,14 +15,18 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />   
+      <Setting name="EventHubConnectionString"/>
+      <Setting name="EventHubName" />
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
-      <Setting name="ApiAudiences" />
+      <Setting name="ApiAudiences"  />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert"/>
+      <InputEndpoint name="HttpIn" protocol="http" port="80"/>
     </Endpoints>
+    <Certificates>
+      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
   </WebRole>
 </ServiceDefinition>

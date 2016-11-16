@@ -4,7 +4,8 @@
     <Sites>
       <Site name="Web">
         <Bindings>
-          <Binding name="Endpoint1" endpointName="Endpoint1" />
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
+          <Binding name="HttpIn" endpointName="HttpIn" />
         </Bindings>
       </Site>
     </Sites>
@@ -21,7 +22,8 @@
       <Setting name="ApiAudiences"  />
     </ConfigurationSettings>
     <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
+      <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-acc-ilb"/>
+      <InputEndpoint name="HttpIn" protocol="http" port="80" loadBalancer="das-prd-acc-ilb"/>
     </Endpoints>
   </WebRole>
 </ServiceDefinition>
