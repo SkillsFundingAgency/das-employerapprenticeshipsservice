@@ -34,8 +34,8 @@
                 <tbody>
                     @foreach (var aggregationLine in Model.Data.TransactionLines)
                     {
-                        var fromDate = aggregationLine.SubTransactions.Min(x => x.TransactionDate);
-                        var toDate = aggregationLine.SubTransactions.Max(x => x.TransactionDate);
+                        var fromDate = aggregationLine.TransactionDate;
+                        var toDate = aggregationLine.TransactionDate;
 
                         <tr>
                             <td>@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </td>
