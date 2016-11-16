@@ -14,7 +14,7 @@
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="87A28DF77BBA73983918DF4288A132588AE820F4" thumbprintAlgorithm="sha1" /> <!-- CHANGE THIS THUMBPRINT -->
+      <Certificate name="WebSslCert" thumbprint="EDCEF8D64D09C1D1FEDFD534CACB55E0437CFAD3" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
