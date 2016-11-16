@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 else if (transaction.TransactionType == LevyItemType.Payment)
                 {
                     var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
-                    description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    description = providerName.Providers[0].ProviderName;
                 }
 
                 var transactionLine = new TransactionLine

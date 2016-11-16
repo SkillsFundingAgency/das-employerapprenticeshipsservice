@@ -9,5 +9,4 @@
 	EmpRef nVarchar(50) null,
 	PeriodEnd nVarchar(50) null,
 	UkPrn BIGINT null,
-    CONSTRAINT [AK_TransactionLine_Column] UNIQUE ([SubmissionId],[TransactionType]),
 )
