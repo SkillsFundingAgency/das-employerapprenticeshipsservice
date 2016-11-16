@@ -17,5 +17,6 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public string PeriodEnd { get; set; }
 
         public List<TransactionLine> SubTransactions { get; set; }
+        public long UkPrn { get; set; }
     }
 }

@@ -15,12 +15,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
     {
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
+        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService,
-            IValidator<GetEmployerAccountTransactionsQuery> validator)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
+            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -39,74 +40,37 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 return GetResponse(message.HashedId, message.AccountId);
             }
 
-            var transactionSubmissions = GroupTransactionsBySubmissionId(response);
-            var transactionSummaries = GroupTransactionsByPeriod(transactionSubmissions);
+            var transactionSummaries = new List<TransactionLine>();
 
+            foreach (var transaction in response)
+            {
+
+                var description = "";
+                if (transaction.TransactionType == LevyItemType.Declaration)
+                {
+                    description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
+                }
+                else if (transaction.TransactionType == LevyItemType.Payment)
+                {
+                    var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
+                    description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                }
+
+                var transactionLine = new TransactionLine
+                {
+                    UkPrn = transaction.UkPrn,
+                    Amount = transaction.Amount,
+                    TransactionDate = transaction.TransactionDate,
+                    Description = description,
+                    Balance = transaction.Balance
+                };
+
+                transactionSummaries.Add(transactionLine);
+            }
+            
             return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
         }
 
-        private static ICollection<TransactionLine> GroupTransactionsByPeriod(
-            IEnumerable<Tuple<string, TransactionLine>> transactionSubmissions)
-        {
-            var transations = transactionSubmissions.GroupBy(t => t.Item1, (period, transactionPeriod) =>
-            {
-                var transactions = transactionPeriod.Select(x => x.Item2).ToList();
-                var combinedTotal = transactions.Sum(t => t.Amount);
-                var accountId = transactions.First().AccountId;
-                var payeSchemeRef = transactions.First().EmpRef;
-                var transactionDate = transactions.Max(t => t.TransactionDate);
-                var transactionBalance = transactions.OrderBy(t => t.TransactionDate).Last().Balance;
-
-                return new TransactionLine
-                {
-                    AccountId = accountId,
-                    EmpRef = payeSchemeRef,
-                    Description = combinedTotal >= 0 ? "Credit" : "Adjustment",
-                    TransactionDate = transactionDate,
-                    SubTransactions = transactions,
-                    Amount = combinedTotal,
-                    Balance = transactionBalance
-                };
-            });
-
-            return transations.OrderByDescending(t => t.TransactionDate).ToList();
-        }
-        
-        private static IEnumerable<Tuple<string, TransactionLine>> GroupTransactionsBySubmissionId(
-           IEnumerable<TransactionLine> response)
-        {
-            var orderedTransactions = response.OrderBy(c => c.TransactionDate);
-
-            var transactionGroups = orderedTransactions.GroupBy(c => c.SubmissionId, (submission, group) =>
-                new
-                {
-                    SubmissionId = submission,
-                    Transactions = group.ToList()
-                });
-
-            var balance = 0m;
-
-            return transactionGroups.Select(group =>
-            {
-                var amount = group.Transactions.Sum(c => c.Amount);
-                var transactionDate = group.Transactions.First().TransactionDate;
-                var empRef = group.Transactions.First().EmpRef;
-                var transactionPeriod = $"{transactionDate.Month}/{transactionDate.Year}";
-
-                var transaction = new TransactionLine
-                {
-                    SubmissionId = group.SubmissionId,
-                    SubTransactions = group.Transactions,
-                    Amount = amount,
-                    Description = amount >= 0 ? "Credit" : "Adjustment",
-                    TransactionDate = transactionDate,
-                    Balance = balance += amount,
-                    EmpRef = empRef
-                };
-
-                return new Tuple<string, TransactionLine>(transactionPeriod, transaction);
-            }).ToList();
-        }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
         {
@@ -126,5 +90,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 }
             };
         }
+        
     }
 }
