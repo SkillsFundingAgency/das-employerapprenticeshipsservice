@@ -145,6 +145,7 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />
+    <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetATeamMembersDetails.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIInviteATeamMember.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIRemoveATeamMember.cs" />
     <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenCallingHmrcService.cs" />

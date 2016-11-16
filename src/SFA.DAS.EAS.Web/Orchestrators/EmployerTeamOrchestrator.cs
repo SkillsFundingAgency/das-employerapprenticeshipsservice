@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -33,7 +31,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse<Account>> GetAccount(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<Account>> GetAccount(
+            string accountId, string externalUserId)
         {
             try
             {
@@ -59,8 +58,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId,
-            string userId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(
+            string hashedId, string userId)
         {
             try
             {
@@ -153,7 +152,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<InvitationViewModel>> Review(string accountId, string email)
+        public async Task<OrchestratorResponse<InvitationViewModel>> Review(
+            string accountId, string email)
         {
             var response = new OrchestratorResponse<InvitationViewModel>();
 
@@ -183,7 +183,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(
+            string email, string hashedId, string externalUserId)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -224,7 +225,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(
+            string email, string hashedId, string externalUserId)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -262,7 +264,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(
+            long userId, string accountId, string externalUserId)
         {
             var response = await GetTeamMembers(accountId, externalUserId);
 
@@ -336,37 +339,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)
+        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(
+            string hashedAccountId, string email, string externalUserId)
         {
+            var userRoleResponse = await _mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
+
+            if (!userRoleResponse.UserRole.Equals(Role.Owner))
+            {
+                return new OrchestratorResponse<TeamMember>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
-                HashedId = accountId,
+                HashedId = hashedAccountId,
                 Email = email
             });
 
-            return new OrchestratorResponse<TeamMember>()
+            return new OrchestratorResponse<TeamMember>
             {
                 Data = response.TeamMember
             };
         }
 
-        private InvitationViewModel MapFrom(TeamMember teamMember)
-        {
-            return new InvitationViewModel
-            {
-                IsUser = teamMember.IsUser,
-                Id = teamMember.Id,
-                AccountId = teamMember.AccountId,
-                Email = teamMember.Email,
-                Name = teamMember.Name,
-                Role = teamMember.Role,
-                Status = teamMember.Status,
-                ExpiryDate = teamMember.ExpiryDate
-            };
-        }
-
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email,
-            short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(
+            string hashedId, string email, short role, string externalUserId)
         {
             try
             {
@@ -402,7 +405,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (UnauthorizedAccessException e)
             {
-                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
                     Exception = e
@@ -410,7 +413,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(
+            string hashedAccountId, string externalUserId)
         {
 
             var response = await _mediator.SendAsync(new GetUserAccountRoleQuery
@@ -430,6 +434,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
 
 
+        }
+
+        private static InvitationViewModel MapFrom(TeamMember teamMember)
+        {
+            return new InvitationViewModel
+            {
+                IsUser = teamMember.IsUser,
+                Id = teamMember.Id,
+                AccountId = teamMember.AccountId,
+                Email = teamMember.Email,
+                Name = teamMember.Name,
+                Role = teamMember.Role,
+                Status = teamMember.Status,
+                ExpiryDate = teamMember.ExpiryDate
+            };
         }
     }
 }
