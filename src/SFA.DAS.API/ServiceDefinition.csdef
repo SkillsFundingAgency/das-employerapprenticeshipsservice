@@ -15,7 +15,7 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
+      <Setting name="EventHubName" />   
       <Setting name="ApiTokenSecret" />
       <Setting name="ApiIssuer" />
       <Setting name="ApiAudiences" />
