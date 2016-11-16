@@ -117,7 +117,7 @@
             </div>*@
 
                 @Html.HiddenFor(m => m.ULN)
-                <input type="hidden" id="status" name="status" value="@Model.Status" />
+                <input type="hidden" id="status" name="status" value="@Model.AgreementStatus" />
                 <input type="hidden" id="agreementStatus" name="agreementStatus" value="@Model.AgreementStatus" />
                 <button type="submit" class="button" aria-label="Save">Save</button>
                 <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>

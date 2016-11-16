@@ -5,7 +5,7 @@
 @model CommitmentViewModel
     
 @{
-    var status = Model.Status == CommitmentStatus.Draft ? "Saved" : "Sent to provider";
+    var status = Model.Status == CommitmentStatus.New ? "Saved" : "Sent to provider";
 }
 
 <div class="grid-row">
