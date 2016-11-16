@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
 
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId);
 
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, ApprenticeshipStatus.Approved);
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, PaymentStatus.Active);
         }
     }
 }

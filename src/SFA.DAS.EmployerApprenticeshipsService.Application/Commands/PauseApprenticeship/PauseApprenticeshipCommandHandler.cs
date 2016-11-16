@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
 
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId);
 
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, ApprenticeshipStatus.Paused);
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, PaymentStatus.Paused);
         }
     }
 }

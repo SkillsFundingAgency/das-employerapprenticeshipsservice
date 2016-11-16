@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
@@ -44,7 +43,7 @@ namespace SFA.DAS.EAS.Web.Models
         }
 
         public int? EndYear { get; set; }
-        public ApprenticeshipStatus Status { get; set; }
-        public string AgreementStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
+        public AgreementStatus AgreementStatus { get; set; }
     }
 }
