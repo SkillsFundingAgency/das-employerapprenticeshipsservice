@@ -55,11 +55,6 @@
   <ItemGroup>
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\PreDeployment.ps1">
-      <SubType>Content</SubType>
-    </Content>
-  </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
