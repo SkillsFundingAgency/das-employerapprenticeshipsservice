@@ -91,6 +91,7 @@
     <Build Include="StoredProcedures\CreatePayment.sql" />
     <Build Include="StoredProcedures\GetPaymentData_ById.sql" />
     <Build Include="StoredProcedures\ProcessPaymentDataTransactions.sql" />
+    <Build Include="Tables\LevyDeclarationTopup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
