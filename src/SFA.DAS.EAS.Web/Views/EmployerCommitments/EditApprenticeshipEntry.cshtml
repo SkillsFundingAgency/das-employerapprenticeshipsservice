@@ -2,8 +2,8 @@
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
 @*@section pageSpecificJS {
-    @Scripts.Render("~/bundles/jqueryvalcustom");
-}*@
+        @Scripts.Render("~/bundles/jqueryvalcustom");
+    }*@
 
 
 <div class="grid-row">
@@ -32,7 +32,7 @@
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
 
             </div>
-          
+
             <div class="form-group">
                 <hr />
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
@@ -40,7 +40,7 @@
                     <option value=""></option>
                     @foreach (var standard in ViewBag.ApprenticeshipProducts)
                     {
-                        <option value="@standard.Id" @if (standard.Id.ToString() == Model.TrainingId) { @Html.Raw("selected")  }> @standard.Title</option>
+                        <option value="@standard.Id" @if (standard.Id == Model.TrainingId) { @Html.Raw("selected")   }> @standard.Title</option>
                     }
                 </select>
 

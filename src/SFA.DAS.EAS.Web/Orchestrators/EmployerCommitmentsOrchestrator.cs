@@ -372,9 +372,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            var id = int.Parse(trainingCode);
-
-            return (await GetTrainingProgrammes()).Where(x => x.Id == id).Single();
+            return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
         }
 
         private DateTime? GetDateTime(int? month, int? year)
