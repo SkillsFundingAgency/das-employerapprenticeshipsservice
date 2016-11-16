@@ -38,36 +38,47 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (commitment.EmployerAccountId != message.EmployerAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
-            // TODO: Use saveOrSend to patch commitment.
-            var status = (message.SaveOrSend == "save-no-send") ? CommitmentStatus.New : CommitmentStatus.Active;
+            var agreementStatus = (message.SaveOrSend == "send-approve") 
+                ? AgreementStatus.EmployerAgreed 
+                : AgreementStatus.NotAgreed;
 
-            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, status);
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, agreementStatus);
 
-            var agreementEvent = new AgreementEvent
-            {
-                EmployerAccountId = message.EmployerAccountId.ToString(),
-                ProviderId = commitment.ProviderId?.ToString(),
-                Event = "INITIATED"
-            };
+            await CreateAgreementEvent(message, commitment);
 
-            await _eventsApi.CreateAgreementEvent(agreementEvent);
+            await CreateTask(message, commitment);
+        }
 
+        private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)
+        {
             var taskTemplate = new CreateCommitmentTemplate
-            {
-                CommitmentId = message.CommitmentId,
-                Message = message.Message,
-                Source = $"EMPLOYER-{message.EmployerAccountId}"
-            };
+                                   {
+                                       CommitmentId = message.CommitmentId,
+                                       Message = message.Message,
+                                       Source = $"EMPLOYER-{message.EmployerAccountId}"
+                                   };
 
             var task = new Tasks.Api.Types.Task
-            {
-                Assignee = $"PROVIDER-{commitment.ProviderId}",
-                TaskTemplateId = CreateCommitmentTemplate.TemplateId,
-                Name = "Create Commitment",
-                Body = JsonConvert.SerializeObject(taskTemplate)
-            };
+                           {
+                               Assignee = $"PROVIDER-{commitment.ProviderId}",
+                               TaskTemplateId = CreateCommitmentTemplate.TemplateId,
+                               Name = "Create Commitment",
+                               Body = JsonConvert.SerializeObject(taskTemplate)
+                           };
 
-            await _tasksApi.CreateTask(task.Assignee, task);
+            await this._tasksApi.CreateTask(task.Assignee, task);
+        }
+
+        private async Task CreateAgreementEvent(SubmitCommitmentCommand message, Commitment commitment)
+        {
+            var agreementEvent = new AgreementEvent
+                                     {
+                                         EmployerAccountId = message.EmployerAccountId.ToString(),
+                                         ProviderId = commitment.ProviderId?.ToString(),
+                                         Event = "INITIATED"
+                                     };
+
+            await this._eventsApi.CreateAgreementEvent(agreementEvent);
         }
     }
 }
