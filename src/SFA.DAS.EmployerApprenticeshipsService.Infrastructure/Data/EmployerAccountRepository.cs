@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Entities.Account;
@@ -68,6 +69,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 await c.QueryAsync<Account>("select * from [account].[Account]", commandType: CommandType.Text));
 
             return result.AsList();
+        }
+
+        public async Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+
+                return await c.QueryAsync<AccountHistoryEntry>(
+                    sql: "[account].[GetAccountHistory]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
         }
     }
 }

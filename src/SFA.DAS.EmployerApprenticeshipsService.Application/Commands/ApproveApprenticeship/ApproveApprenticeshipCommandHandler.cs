@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
             // TODO: LWA - Validate Employer is that of the commitment and apprenticeship is in the commitment.
             var commitment = await _commitmentsApi.GetEmployerCommitment(command.EmployerAccountId, command.CommitmentId);
 
-            await _commitmentsApi.PatchEmployerApprenticeship(command.EmployerAccountId, command.CommitmentId, command.ApprenticeshipId, ApprenticeshipStatus.Approved);
+            await _commitmentsApi.PatchEmployerApprenticeship(command.EmployerAccountId, command.CommitmentId, command.ApprenticeshipId, PaymentStatus.Active);
         }
     }
 }

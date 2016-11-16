@@ -25,14 +25,16 @@
                 {
                     <p>@viewModel.FlashMessage.SubMessage</p>
                 }
-                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.RedirectButtonMessage))
+                @if (viewModel.FlashMessage.ErrorMessages.Any())
                 {
                     <ul class="error-summary-list">
-                        <li>
-                            <a class="danger" data-focuses="@viewModel.FlashMessage.RedirectButtonClass" href="#@viewModel.FlashMessage.RedirectButtonClass">@viewModel.FlashMessage.RedirectButtonMessage</a>
-                        </li>
+                        @foreach (var errorMessage in viewModel.FlashMessage.ErrorMessages)
+                        {
+                            <li>
+                                <a class="danger" href="#@errorMessage.Key">@errorMessage.Value</a>
+                            </li>
+                        }
                     </ul>
-
                 }
             </div>
 

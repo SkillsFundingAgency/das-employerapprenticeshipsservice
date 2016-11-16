@@ -4,76 +4,63 @@
 @{
     var culture = new CultureInfo("en-GB");
 }
-@{ViewBag.Title = "View your transactions";}
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View your transactions</h1>
-    </div>
-</div>
+@{ViewBag.Title = "Your levy transactions";}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div>
-            <div class="home-figures">
-                <h2 class="heading-small">This is your current balance:</h2>
-                <h2 class="bold-xlarge" data-bind="text: displayBalance">@Model.CurrentBalance.ToString("C0", culture)</h2> <!--style="color:#08c"-->
-                <p style="font-size: 16px">on <span data-bind="text: displaySystemDate">@Model.CurrentBalanceCalcultedOn.ToGdsFormat()</span></p>
-            </div>
+        <h1 class="heading-xlarge">Your levy transactions</h1>
+        <div class="data">
+            <h2 class="heading-small">Current balance</h2>
+            <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C0", culture)</h2>
         </div>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-full">
-        <div>
-            <h2 class="heading-medium">Transactions</h2>
-            @if (Model.Data.TransactionLines.Count == 0)
-            {
-                <p class="panel panel-info">
-                    No transaction data exists for this account, please try again later.
-                </p>
-            }
-            else
-            {
-                <table>
-                    <thead>
+        @if (Model.Data.TransactionLines.Count == 0)
+        {
+            <p class="panel panel-info">
+                No transaction data exists for this account, please try again later.
+            </p>
+        }
+        else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Payment date</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" class="numeric">Amount</th>
+                        <th scope="col" class="numeric">Balance</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var aggregationLine in Model.Data.TransactionLines)
+                    {
+                        var fromDate = aggregationLine.SubTransactions.Min(x => x.TransactionDate);
+                        var toDate = aggregationLine.SubTransactions.Max(x => x.TransactionDate);
+
                         <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Description</th>
-                            <th scope="col" class="numeric">Amount</th>
-                            <th scope="col" class="numeric">Balance</th>
-                            <th></th>
+                            <td>@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </td>
+                            <td>@aggregationLine.Description</td>
+                            <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
+                            <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
+                            <td class="link-right">
+                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId, fromDate, toDate})">
+                                    Details <span class="vh"> for the transaction on @date</span>
+                                </a>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-
-
-
-                        @foreach (var aggregationLine in Model.Data.TransactionLines)
-                        {
-
-                            <tr>
-                                <td>
-                                  
-                                        @{var date = new DateTime(aggregationLine.TransactionDate.Year, aggregationLine.TransactionDate.Month, 1).ToGdsFormat();} @date
-                                   
-                                </td>
-                                <td>@aggregationLine.TransactionType.ToString()</td>
-                                <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
-                                <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
-                                <td class="link-right">
-                                  
-                                        <a aria-label="View details for the transaction on @date"
-                                           title="View details for the transaction on @date"
-                                           href="#">View <span class="vh"></span></a>
-                                  
-                                </td>
-                            </tr>
-                            }
-                    </tbody>
-                </table>
-                }
-
-        </div>
+                        }
+                </tbody>
+            </table>
+            }
+    </div>
+    <div class="column-one-third">
+        <section>
+            <div class="panel panel-filled">
+                <h2 class="heading-medium">Help us improve this section</h2>
+                <p>Take a 3 minute survey about viewing levy transactions so that we can improve the service.</p>
+                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about viewing levy transactions</span></a></p>
+            </div>
+        </section>
     </div>
 </div>
 @section breadcrumb {

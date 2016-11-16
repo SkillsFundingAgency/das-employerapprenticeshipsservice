@@ -14,22 +14,14 @@
     </div>
 }
 <div class="grid-row">
-    <div class="column-one-third pull-right">
-        <aside class="sidebar">
-            <h3 class="heading-small">Manage your account</h3>
-            <ul role="navigation">
-                <li><a href="@ViewBag.ChangeEmailLink">Change your email address</a></li>
-                <li><a href="@ViewBag.ChangePasswordLink">Change your password</a></li>
-            </ul>
-        </aside>
-    </div>
+
     <div class="column-two-thirds">
         <section>
-            <h1 class="heading-xlarge">Levy accounts</h1>
+            <h1 class="heading-xlarge" id="Levy-accounts">Levy accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
             {
                 <p>With levy accounts you can:</p>
-                <ul class="list list-bullet">
+                <ul class="list list-bullet" aria-labelledby="Levy-accounts">
                     <li>view financial information</li>
                     <li>create or amend apprenticeships</li>
                     <li>spend money</li>
@@ -72,14 +64,14 @@
                 </table>
             }
             <p>
-                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account">Add new account</a>
+                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
             </p>
         </section>
         
             @if (Model.Data.Invitations > 0)
             {
                 <section>
-                    <h2 class="heading-medium">Invitiations</h2>
+                    <h2 class="heading-medium">Invitations</h2>
                     <p>
                         You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
                     </p>
@@ -91,6 +83,17 @@
 
       
     </div>  
+
+    <div class="column-one-third pull-right">
+        <aside class="sidebar">
+            <h2 class="heading-medium" id="Manage-Account">Manage your account</h2>
+            <ul aria-labelledby="Manage-Account">
+                <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
+                <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
+            </ul>
+        </aside>
+    </div>
+
 </div>
 
 @if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))

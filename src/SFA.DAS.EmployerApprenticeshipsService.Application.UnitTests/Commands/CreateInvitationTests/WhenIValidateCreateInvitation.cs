@@ -51,9 +51,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("Email", "No Email supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("Email", "Enter email address"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedId", "No HashedId supplied"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("Name", "No Name supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("Name", "Enter name"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("RoleId", "No RoleId supplied"),result.ValidationDictionary );
         }
 
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Email", "Email is not valid format"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("Email", "Enter a valid email address"), result.ValidationDictionary);
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("ExistingMember", "Invitee is already a Member of this team"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("Email", $"{_createInvitationCommand.Email} is already invited"), result.ValidationDictionary);
         }
         
     }

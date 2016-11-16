@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -21,46 +24,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, string lineItemId, string externalUserId)
+        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery()
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionDetailQuery
             {
-                HashedId = hashedId,
-                UserId = externalUserId
+                HashedAccountId = hashedId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                ExternalUserId = externalUserId
             });
-            if (employerAccountResult.Account == null)
-            {
-                return new TransactionLineItemViewResult();
-            }
-
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
-            {
-                AccountId = employerAccountResult.Account.Id
-            });
-            var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
-            decimal currentBalance;
-            DateTime currentBalanceCalcultedOn;
-
-            if (latestLineItem != null)
-            {
-                currentBalance = latestLineItem.Balance;
-                currentBalanceCalcultedOn = latestLineItem.TransactionDate;
-            }
-            else
-            {
-                currentBalance = 0;
-                currentBalanceCalcultedOn = DateTime.Today;
-            }
-
-           // var selectedLineItem = data.Data.Data.FirstOrDefault(line => line.Id == lineItemId);
+           
             return new TransactionLineItemViewResult
             {
-                Account = employerAccountResult.Account,
                 Model = new TransactionLineItemViewModel
                 {
-                    CurrentBalance = currentBalance,
-                    CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
-                    //LineItem = selectedLineItem
+                    TotalAmount = data.Total,
+                    LineItem = data.TransactionDetail
                 }
             };
         }
@@ -92,6 +71,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalance = 0;
                 currentBalanceCalcultedOn = DateTime.Today;
             }
+
             return new TransactionViewResult
             {
                 Account = employerAccountResult.Account,
@@ -103,8 +83,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-
-
+        
         private AggregationData SortDataForViewModel(AggregationData data)
         {
             return data;
@@ -119,9 +98,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
     public class TransactionLineItemViewModel
     {
-        public AggregationLine LineItem { get; set; }
-        public decimal CurrentBalance { get; set; }
-        public DateTime CurrentBalanceCalcultedOn { get; set; }
+        public List<TransactionDetailSummary> LineItem { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 
     public class TransactionViewResult

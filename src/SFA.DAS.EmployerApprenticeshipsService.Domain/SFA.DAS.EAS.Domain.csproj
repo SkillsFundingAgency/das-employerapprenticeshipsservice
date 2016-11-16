@@ -66,12 +66,20 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.5.0.14819, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.5.0.14819\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.7.0.15731, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.7.0.15731\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.5.0.14819, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.5.0.14819\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.7.0.15731, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.7.0.15731\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client">
@@ -109,6 +117,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountHistoryEntry.cs" />
     <Compile Include="AggregationData.cs" />
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
@@ -121,7 +130,9 @@
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\NotificationsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\PaymentProviderConfiguration.cs" />
     <Compile Include="Configuration\PaymentsApiClientConfiguration.cs" />
+    <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\TasksApiClientConfiguration.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
@@ -192,7 +203,10 @@
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />
+    <Compile Include="Models\Levy\TransactionDetailSummary.cs" />
     <Compile Include="Models\Levy\TransactionLine.cs" />
+    <Compile Include="Models\Levy\TransactionLineDetail.cs" />
+    <Compile Include="Models\Levy\TransactionSummary.cs" />
     <Compile Include="Models\ManagedCompany\ManagedCompanyLookup.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
     <Compile Include="Models\Notification\EmailMessage.cs" />

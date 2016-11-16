@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -33,21 +34,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(transactionViewResult.Model);
         }
 
-        [Route("Balance/{itemId}/Detail")]
-        public async Task<ActionResult> Detail(string accountId, string itemId)
+        [Route("Balance/Detail")]
+        public async Task<ActionResult> Detail(string accountId, DateTime fromDate, DateTime toDate)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, itemId, OwinWrapper.GetClaimValue(@"sub"));
+            var transactionViewResult = await _accountTransactionsOrchestrator.GetAccounTransactionLineItem(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (transactionViewResult.Account == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            if (transactionViewResult.Model.LineItem == null)
-            {
-                return RedirectToAction("Index", "EmployerAccountTransactions", new {accountId});
-            }
-           
             return View(transactionViewResult.Model);
         }
     }

@@ -28,8 +28,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
             if (string.IsNullOrWhiteSpace(command.Commitment.EmployerAccountName))
                 result.AddError(nameof(command.Commitment.EmployerAccountName), $"{nameof(command.Commitment.EmployerAccountName)} must have a value.");
 
-            if (string.IsNullOrWhiteSpace(command.Commitment.LegalEntityCode))
-                result.AddError(nameof(command.Commitment.LegalEntityCode), $"{nameof(command.Commitment.LegalEntityCode)} has an invalid value.");
+            if (string.IsNullOrWhiteSpace(command.Commitment.LegalEntityId))
+                result.AddError(nameof(command.Commitment.LegalEntityId), $"{nameof(command.Commitment.LegalEntityId)} has an invalid value.");
 
             if (string.IsNullOrWhiteSpace(command.Commitment.LegalEntityName))
                 result.AddError(nameof(command.Commitment.LegalEntityName), $"{nameof(command.Commitment.LegalEntityName)} must have a value.");

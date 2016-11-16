@@ -30,26 +30,50 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Cohorts</h1>
+            <h1 class="heading-xlarge">Review and approve apprentices</h1>
 
-            <p>Any cohorts that are new or in discussion with your training provider are listed below:</p>
+
+
+            <p>You have the following requests in progress:</p>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
         {
-            <p class="panel panel-info">
-                There are no cohorts.
-            </p>
+            <div id="addApprenticesEmptyState" class="emptyState">
+                <div class="emptyStateAlert">
+                    <div class="emptyStateCopy">
+                        <p>You currently have no requests. </p>
+
+                    </div>
+                </div>
+            </div>
+      
         }
         else
         {
+<!-- Requested layout for wave2       -->       
+    
+   <!-- <p>You have <span class="strong">24</span> requests in progress</p>
+
+            <div class="reviewApprove">
+                <p class="trainingProvider">Hackney Skills &amp; Training Ltd</p>
+                <p><span class="strong">Reference:</span> 98HGS3F</p>
+                <p><span class="strong">Status:</span> With providers</p>
+                <p><span class="strong">Last message:</span></p>
+                <p>This is a message that has been added.  It runs along the bottom of the card for now. </p>
+                <a href="#" class="button deleteRequest">Delete request</a>
+                <hr />
+            </div>
+          
+    -->
+
 
         <table class="tableResponsive cohort">
             <thead>
                 <tr>
-                    <th>Provider</th>
-                    <th>Legal entity</th>
-                    <th colspan="2">Name</th>
+                    <th>Training provider</th>
+                    <th>Organisation</th>
+                    <th colspan="2">Reference</th>
                  
                 </tr>
             </thead>
@@ -76,14 +100,16 @@
                 }
             </tbody>
         </table>
-        <a href="@Url.Action("Inform")" class="button spacer">Add new cohort</a>
+
+      
+
         }
 
 
     </div> <!-- /column-two-thirds-->
 
     <div class="column-one-third pull-right">
-       
+        <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
     </div><!-- /column-one-third -->
 
 </div>
@@ -94,9 +120,9 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.AccountHashId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", new {accountId = @Model.Data.AccountHashId})">Apprenticeships Home</a></li>
-            <li>Cohorts</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = Model.Data.AccountHashId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", new {accountId = Model.Data.AccountHashId})">Apprenticeships Home</a></li>
+            <li>Review and approve apprentices</li>
         </ol>
     </div>
 }

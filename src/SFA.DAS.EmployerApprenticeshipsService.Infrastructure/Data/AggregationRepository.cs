@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
@@ -38,53 +39,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<AggregationData> GetByAccountId(long accountId)
         {
-            var tableClient = _storageAccount.CreateCloudTableClient();
-
-            var table = tableClient.GetTableReference("LevyAggregation");
-
-            var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(), 1.ToString());
-            var result = await table.ExecuteAsync(fetchOperation);
-            var row = (LevyAggregationEntity)result.Result;
-
-            if (row == null)
-                return new AggregationData
-                {
-                    AccountId = accountId,
-                    TransactionLines = new List<TransactionLine>()
-                };
-
-            return JsonConvert.DeserializeObject<AggregationData>(row.Data);
+            throw new NotImplementedException();
         }
 
+        //TODO: Need to review this code as this method will need to be change complete
         public async Task<List<AggregationData>> GetByAccountIds(List<long> accountIds)
         {
-            var tableClient = _storageAccount.CreateCloudTableClient();
-
-            var table = tableClient.GetTableReference("LevyAggregation");
-
-            var response = new List<AggregationData>();
-            
-            foreach (var accountId in accountIds)
-            {
-                var fetchOperation = TableOperation.Retrieve<LevyAggregationEntity>(accountId.ToString(), 1.ToString());
-                var result = await table.ExecuteAsync(fetchOperation);
-                var row = (LevyAggregationEntity) result.Result;
-
-                if (row == null)
-                {
-                    response.Add(new AggregationData
-                    {
-                        AccountId = accountId,
-                        TransactionLines = new List<TransactionLine>()
-                    });
-                }
-                else
-                {
-                    response.Add(JsonConvert.DeserializeObject<AggregationData>(row.Data));
-                }
-            }
-
-            return response;
+            throw new NotImplementedException();
 
 
         }

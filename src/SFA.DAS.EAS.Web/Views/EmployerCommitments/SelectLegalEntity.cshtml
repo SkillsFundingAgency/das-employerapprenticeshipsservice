@@ -1,23 +1,26 @@
 ﻿@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Domain.Entities.Account
+@using SFA.DAS.EAS.Web.Extensions
 
 @model SelectLegalEntityViewModel
 
-@section pageSpecificJS {
+@*@section pageSpecificJS {
     @Scripts.Render("~/bundles/jqueryvalcustom")
-}
+}*@
 
 
 <div class="grid-row">
     <form method="POST" action="@Url.Action("SetLegalEntity")">
+      
         <div class="column-two-thirds">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <h1 class="heading-xlarge">Choose organisation
 </h1>
 
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+         
           
             @Html.AntiForgeryToken()
-            <div class="form-group">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
 
                 <fieldset>
 

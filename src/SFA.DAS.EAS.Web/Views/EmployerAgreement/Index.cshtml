@@ -18,17 +18,12 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <p class="lede">Add the organisations that you want to hire apprentices through.</p>
-        <p>
-            You need to sign an agreement for each organisation before you can access levy funds and hire
-            apprentices through that organisation.
-        </p>
 
         <table class="tableResponsive orgListing">
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Agreement status</th>
-                    <th></th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -37,18 +32,14 @@
             {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        <td> @employerAgreement.Status.GetDescription()</td>
-                        <td class="link-right">
-                                <a title="View the Employer Agreement for @employerAgreement.LegalEntityName"
-                                   href="@Url.Action("View", new {agreementId = employerAgreement.HashedAgreementId, accountId = Model.Data.HashedId})">
-                                    @(employerAgreement.Status == EmployerAgreementStatus.Pending ? "View or sign" : "View")
-                                    <span class="vh"> the employer agreement for @employerAgreement.LegalEntityName</span>
-                                </a>
-                        </td>
+                        
                     </tr>
                 }
             </tbody>
         </table>
+
+        
+
     </div>
 </div>
 @section breadcrumb {

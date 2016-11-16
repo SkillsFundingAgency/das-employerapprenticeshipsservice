@@ -9,9 +9,9 @@
       <Setting name="InstrumentationKey" value="" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="LogLevel" value="Debug" />
-      <Setting name="EventHubConnectionString" value="" />
-      <Setting name="EventHubName" value="" />
       <Setting name="RedisConnection" value="localhost" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LoggingRedisKey" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />
@@ -30,5 +30,16 @@
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
+  </Role>
+    <Role name="SFA.DAS.EAS.PaymentProvider.Worker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="InstrumentationKey" value="" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="LogLevel" value="Debug" />
+    </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -5,7 +5,7 @@ main {
     @include media(tablet) {
         margin: 0 30px 30px;
     }
-    @include media(desktop) {
+    @include media(1020px) {
         margin: 0 auto 50px;
     }
 }
@@ -38,5 +38,17 @@ table.top-border {
         margin-top: 60px;
         float: right;
         clear: both;
+    }
+}
+
+.data {
+    h2.bold-xlarge {
+        margin-bottom: 30px;
+    }
+}
+
+.page-dashboard {
+    h3.heading-medium {
+        margin-top: 0;
     }
 }

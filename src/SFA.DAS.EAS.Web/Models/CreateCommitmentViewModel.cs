@@ -38,5 +38,8 @@ namespace SFA.DAS.EAS.Web.Models
         public long ProviderId { get; set; }
 
         public string ProviderName { get; set; }    
+
+        [Required(ErrorMessage = "Choose an option")]
+        public string SelectedRoute { get; set; }
     }
 }

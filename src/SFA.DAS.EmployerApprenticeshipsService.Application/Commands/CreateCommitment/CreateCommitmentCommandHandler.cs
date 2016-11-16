@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
@@ -9,32 +11,34 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         IAsyncRequestHandler<CreateCommitmentCommand, CreateCommitmentCommandResponse>
     {
         private readonly ICommitmentsApi _commitmentApi;
+        private readonly IEventsApi _eventsApi;
 
-        public CreateCommitmentCommandHandler(ICommitmentsApi commitmentApi)
+        public CreateCommitmentCommandHandler(ICommitmentsApi commitmentApi, IEventsApi eventsApi)
         {
             if (commitmentApi == null)
                 throw new ArgumentNullException(nameof(commitmentApi));
 
             _commitmentApi = commitmentApi;
+            _eventsApi = eventsApi;
         }
 
         public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand message)
         {
-            try
+            var agreementEvent = new AgreementEvent
             {
-                var commitment = await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
+                EmployerAccountId = message.Commitment.EmployerAccountId.ToString(),
+                ProviderId = message.Commitment.ProviderId?.ToString(),
+                Event = "CREATED"
+            };
 
-                return new CreateCommitmentCommandResponse
-                {
-                    CommitmentId = commitment.Id
-                };
+            await _eventsApi.CreateAgreementEvent(agreementEvent);
 
-            }
-            catch (Exception ex)
+            var commitment = await _commitmentApi.CreateEmployerCommitment(message.Commitment.EmployerAccountId, message.Commitment);
+
+            return new CreateCommitmentCommandResponse
             {
-                
-                throw;
-            }
+                CommitmentId = commitment.Id
+            };
         }
     }
 }

@@ -3,6 +3,8 @@ using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
@@ -13,13 +15,15 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
     {
         private readonly ICommitmentsApi _commitmentApi;
         private readonly ITasksApi _tasksApi;
+        private readonly IEventsApi _eventsApi;
         private readonly SubmitCommitmentCommandValidator _validator;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentApi, ITasksApi tasksApi)
+        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentApi, ITasksApi tasksApi, IEventsApi eventsApi)
         {
             _commitmentApi = commitmentApi;
             _validator = new SubmitCommitmentCommandValidator();
             _tasksApi = tasksApi;
+            _eventsApi = eventsApi;
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
@@ -35,7 +39,18 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
             // TODO: Use saveOrSend to patch commitment.
-            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, CommitmentStatus.Active);
+            var status = (message.SaveOrSend == "save-no-send") ? CommitmentStatus.New : CommitmentStatus.Active;
+
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, status);
+
+            var agreementEvent = new AgreementEvent
+            {
+                EmployerAccountId = message.EmployerAccountId.ToString(),
+                ProviderId = commitment.ProviderId?.ToString(),
+                Event = "INITIATED"
+            };
+
+            await _eventsApi.CreateAgreementEvent(agreementEvent);
 
             var taskTemplate = new CreateCommitmentTemplate
             {
