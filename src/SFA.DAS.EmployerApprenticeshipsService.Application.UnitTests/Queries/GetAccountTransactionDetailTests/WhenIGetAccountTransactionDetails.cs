@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionD
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailTests
 {

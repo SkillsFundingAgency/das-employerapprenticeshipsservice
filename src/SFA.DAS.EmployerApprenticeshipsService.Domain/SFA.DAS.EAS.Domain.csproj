@@ -182,7 +182,9 @@
     <Compile Include="InvitationView.cs" />
     <Compile Include="ITrainingProgramme.cs" />
     <Compile Include="LevyDeclarationView.cs" />
-    <Compile Include="LevyItemType.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
+    <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
+    <Compile Include="TransactionItemType.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
@@ -203,10 +205,10 @@
     <Compile Include="Models\Levy\DasEnglishFractions.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceData.cs" />
     <Compile Include="Models\Levy\LevyDeclarationSourceDataItem.cs" />
-    <Compile Include="Models\Levy\TransactionDetailSummary.cs" />
-    <Compile Include="Models\Levy\TransactionLine.cs" />
-    <Compile Include="Models\Levy\TransactionLineDetail.cs" />
-    <Compile Include="Models\Levy\TransactionSummary.cs" />
+    <Compile Include="Models\Transaction\TransactionDetailSummary.cs" />
+    <Compile Include="Models\Transaction\TransactionLine.cs" />
+    <Compile Include="Models\Transaction\TransactionLineDetail.cs" />
+    <Compile Include="Models\Transaction\TransactionSummary.cs" />
     <Compile Include="Models\ManagedCompany\ManagedCompanyLookup.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
     <Compile Include="Models\Notification\EmailMessage.cs" />
@@ -235,6 +237,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

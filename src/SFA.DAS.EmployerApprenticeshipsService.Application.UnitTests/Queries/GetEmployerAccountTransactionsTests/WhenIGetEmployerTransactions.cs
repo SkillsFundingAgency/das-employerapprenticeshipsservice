@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -65,7 +66,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         SubmissionId = 1,
                         TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.TopUp,
+                        TransactionType = TransactionItemType.TopUp,
                         EmpRef = "123"
                     }
                 };
@@ -108,7 +109,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         SubmissionId = 1,
                         TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.Payment,
+                        TransactionType = TransactionItemType.Payment,
                         EmpRef = "123",
                         UkPrn = 54546
                     }

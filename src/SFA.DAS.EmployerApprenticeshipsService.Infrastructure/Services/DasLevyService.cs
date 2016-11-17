@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {

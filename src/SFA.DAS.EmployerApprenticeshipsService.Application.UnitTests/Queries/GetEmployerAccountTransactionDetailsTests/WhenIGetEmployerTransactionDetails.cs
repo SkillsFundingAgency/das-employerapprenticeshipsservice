@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionDetailsTests
 {
@@ -93,8 +94,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             _dasLevyService.Setup(x => x.GetTransactionDetailByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>())).ReturnsAsync(new List<TransactionLineDetail>
             {
-                new TransactionLineDetail {Amount=10,EnglishFraction = 0.5m,TransactionType = LevyItemType.Declaration},
-                new TransactionLineDetail {Amount=1,EnglishFraction = 0.5m,TransactionType = LevyItemType.TopUp}
+                new TransactionLineDetail {Amount=10,EnglishFraction = 0.5m,TransactionType = TransactionItemType.Declaration},
+                new TransactionLineDetail {Amount=1,EnglishFraction = 0.5m,TransactionType = TransactionItemType.TopUp}
             });
 
             //Act

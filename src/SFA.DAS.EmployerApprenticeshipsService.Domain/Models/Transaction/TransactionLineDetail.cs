@@ -1,6 +1,6 @@
 using System;
 
-namespace SFA.DAS.EAS.Domain.Models.Levy
+namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
     public class TransactionLineDetail
     {
@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public string EmpRef { get; set; }
         public decimal EnglishFraction { get; set; }
         public decimal Amount { get;set; }
-        public LevyItemType TransactionType { get; set; }
+        public TransactionItemType TransactionType { get; set; }
         public DateTime TransactionDate { get; set; }
     }
 }

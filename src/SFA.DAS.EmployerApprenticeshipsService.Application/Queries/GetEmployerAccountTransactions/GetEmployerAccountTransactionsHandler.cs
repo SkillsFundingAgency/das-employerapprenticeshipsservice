@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -46,11 +47,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
 
                 var description = "";
-                if (transaction.TransactionType == LevyItemType.Declaration)
+                if (transaction.TransactionType == TransactionItemType.Declaration)
                 {
                     description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
                 }
-                else if (transaction.TransactionType == LevyItemType.Payment)
+                else if (transaction.TransactionType == TransactionItemType.Payment)
                 {
                     var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
                     description = $"Payment to provider {providerName.Providers[0].ProviderName}";

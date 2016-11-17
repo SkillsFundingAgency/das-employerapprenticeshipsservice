@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.Data

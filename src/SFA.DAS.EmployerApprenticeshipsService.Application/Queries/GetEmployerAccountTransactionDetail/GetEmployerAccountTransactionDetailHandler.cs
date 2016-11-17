@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
@@ -51,8 +52,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 
             var transactionDetailSummaries = transactionSubmissionItems.Select(item =>
             {
-                var amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount);
-                var topUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount);
+                var amount = item.Data.Where(c=>c.TransactionType.Equals(TransactionItemType.Declaration)).Sum(c => c.Amount);
+                var topUp = item.Data.Where(c => c.TransactionType.Equals(TransactionItemType.TopUp)).Sum(c => c.Amount);
 
                 return new TransactionDetailSummary
                 {
