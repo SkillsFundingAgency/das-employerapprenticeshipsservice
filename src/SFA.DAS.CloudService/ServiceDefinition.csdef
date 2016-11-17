@@ -56,7 +56,7 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
-      <Setting name="LogLevel" />      
+      <Setting name="LogLevel" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
