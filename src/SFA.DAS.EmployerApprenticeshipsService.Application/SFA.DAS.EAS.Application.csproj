@@ -347,6 +347,10 @@
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleValidator.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />

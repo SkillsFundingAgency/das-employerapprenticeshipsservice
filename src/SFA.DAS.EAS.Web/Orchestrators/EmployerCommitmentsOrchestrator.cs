@@ -305,6 +305,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus,
                 Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
             };
         }
@@ -317,7 +318,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.CommitmentStatus
+                Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus
             };
         }
 

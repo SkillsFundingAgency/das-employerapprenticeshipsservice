@@ -9,5 +9,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string LegalEntityName { get; set; }
         public string ProviderName { get; set; }
         public CommitmentStatus Status { get; set; }
+
+        public EditStatus EditStatus { get; set; }
     }
 }

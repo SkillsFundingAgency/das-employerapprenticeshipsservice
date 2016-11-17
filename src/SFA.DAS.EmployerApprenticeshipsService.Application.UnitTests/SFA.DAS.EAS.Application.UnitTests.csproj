@@ -188,6 +188,8 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
+    <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />
     <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />

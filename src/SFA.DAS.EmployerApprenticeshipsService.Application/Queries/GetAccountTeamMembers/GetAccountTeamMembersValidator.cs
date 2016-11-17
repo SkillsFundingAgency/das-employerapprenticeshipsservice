@@ -40,11 +40,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers
                     validationResult.AddError(nameof(member), "Unauthorised: User not connected to account");
                     validationResult.IsUnauthorized = true;
                 }
-                else if(member.RoleId != (short)Role.Owner)
-                {
-                    validationResult.AddError(nameof(member), "Unauthorised: User is not an owner of this account");
-                    validationResult.IsUnauthorized = true;
-                }
             }
 
             return validationResult;

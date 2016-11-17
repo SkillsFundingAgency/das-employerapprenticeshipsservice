@@ -38,7 +38,20 @@
    
 
         <p><span class="strong">Provider:</span> @Model.ProviderName</p>
-        <p><span class="strong">Status:</span> @status</p>
+        <p><span class="strong">Status:</span>
+          @if (Model.EditStatus == EditStatus.ProviderOnly)
+          {
+            @Html.Raw("Sent to provider")
+          }
+          else if (Model.EditStatus == EditStatus.Both)
+          {
+            @Html.Raw("Approved")
+          }
+          else
+          {
+            @Html.Raw("Saved")
+          }
+        </p>
 
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
