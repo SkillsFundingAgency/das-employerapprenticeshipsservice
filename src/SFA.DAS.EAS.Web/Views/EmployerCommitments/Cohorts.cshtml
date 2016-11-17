@@ -5,7 +5,7 @@
 @model OrchestratorResponse<CommitmentListViewModel>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.Data.NumberOfTasks > 0)
         {
             <h2 class="heading-medium">Tasks</h2>
@@ -74,8 +74,9 @@
                 <tr>
                     <th>Training provider</th>
                     <th>Organisation</th>
-                    <th>Reference</th>
+                    <th>Cohort reference</th>
                     <th colspan="2">Status</th>
+                   
                  
                 </tr>
             </thead>
