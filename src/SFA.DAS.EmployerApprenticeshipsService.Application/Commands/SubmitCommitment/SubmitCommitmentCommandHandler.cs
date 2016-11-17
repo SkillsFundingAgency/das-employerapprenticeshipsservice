@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (commitment.EmployerAccountId != message.EmployerAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
+            // TODO: Refactor out these magic strings
             var agreementStatus = (message.SaveOrSend == "send-approve") 
                 ? AgreementStatus.EmployerAgreed 
                 : AgreementStatus.NotAgreed;
