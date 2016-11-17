@@ -2261,11 +2261,6 @@ span.helpText {
     font-weight: bold;
     margin-top: 5px;
   }
-  .viewCommitment td:nth-of-type(3):before {
-    content: "Status";
-    font-weight: bold;
-    margin-top: 5px;
-  }
   .cohort td:nth-of-type(1):before {
     content: "Training provider";
     font-weight: bold;
@@ -2278,6 +2273,11 @@ span.helpText {
   }
   .cohort td:nth-of-type(3):before {
     content: "Cohort reference";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(4):before {
+    content: "Status";
     font-weight: bold;
     margin-top: 5px;
   }
@@ -2301,9 +2301,20 @@ span.helpText {
     font-weight: bold;
     margin-top: 5px;
   }
-  /*finished editing button spacing*/
-  .column-one-third .finishEditingBtn {
-    margin-top: 0.25em;
+  .tasksList td:nth-of-type(1):before {
+    content: "Created on";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(2):before {
+    content: "Name";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(3):before {
+    content: "Status";
+    font-weight: bold;
+    margin-top: 5px;
   }
 }
 
