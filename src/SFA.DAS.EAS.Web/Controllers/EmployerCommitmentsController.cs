@@ -213,6 +213,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(viewModel);
             }
 
+            // TODO: Refactor out these magic strings
             if (viewModel.SaveOrSend == "save-no-send")
             {
                 return RedirectToAction("Cohorts", new {hashedAccountId = viewModel.HashedAccountId});

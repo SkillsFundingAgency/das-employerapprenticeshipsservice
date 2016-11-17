@@ -8,5 +8,5 @@
 	Amount DECIMAL(18,4) NOT NULL DEFAULT 0, 
 	EmpRef nVarchar(50) null,
 	PeriodEnd nVarchar(50) null,
-	UkPrn BIGINT null,  
+	UkPrn BIGINT null,
 )

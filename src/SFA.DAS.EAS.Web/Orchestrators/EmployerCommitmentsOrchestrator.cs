@@ -238,13 +238,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             }
 
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveOrSend != "save-no-send")
             {
-                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = commitmentId,
-                Message = message,
-                SaveOrSend = saveOrSend
-            });
+                await _mediator.SendAsync(new SubmitCommitmentCommand
+                {
+                    EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                    CommitmentId = commitmentId,
+                    Message = message,
+                    SaveOrSend = saveOrSend
+                });
+            }
 
             return _hashingService.HashValue(commitmentId);
         }
@@ -302,6 +305,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus,
                 Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
             };
         }
@@ -314,7 +318,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.CommitmentStatus
+                Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus
             };
         }
 

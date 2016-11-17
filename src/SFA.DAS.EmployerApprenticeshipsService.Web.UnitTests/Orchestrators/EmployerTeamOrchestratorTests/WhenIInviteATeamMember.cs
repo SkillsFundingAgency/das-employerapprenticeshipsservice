@@ -8,6 +8,9 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -28,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         [Test]
         public async Task ThenIShouldGetBackAnUpdatedTeamMembersListWithTheCorrectSuccessMessage()
         {
-            //Assign
+            //Arrange
             var request = new InviteTeamMemberViewModel()
             {
                 Email = "test@test.com"
@@ -51,7 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         [Test]
         public async Task ThenIShouldGetBackABadRequestIfOneIsRaiseForInvitingTeamMembers()
         {
-            //Assign
+            //Arrange
             var request = new InviteTeamMemberViewModel
             {
                 Email = "test@test.com"
@@ -74,7 +77,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         [Test]
         public async Task ThenIShouldGetBackAnUnauthorisedRequestIfOneIsRaiseForInvitingTeamMembers()
         {
-            //Assign
+            //Arrange
             var request = new InviteTeamMemberViewModel
             {
                 Email = "test@test.com"
@@ -97,7 +100,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         [Test]
         public async Task ThenIShouldGetBackABadRequestIfOneIsRaiseForViewingTeamMembers()
         {
-            //Assign
+            //Arrange
             var request = new InviteTeamMemberViewModel
             {
                 Email = "test@test.com"
@@ -113,6 +116,29 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
+        }
+
+        
+        [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
+        [TestCase(Role.Transactor, HttpStatusCode.Unauthorized)]
+        [TestCase(Role.Owner, HttpStatusCode.OK)]
+        public async Task ThenIShouldNotBeAllowedToGetANewInvitationIfIAmNotAnOwnerOfTheAccount(Role userRole, HttpStatusCode status)
+        {
+            //Arrange
+            const string hashAccountId = "123ABC";
+            const string externalUserId = "1234";
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+                     .ReturnsAsync(new GetUserAccountRoleResponse
+                     {
+                         UserRole = userRole
+                     });
+
+            //Act
+            var result = await _orchestrator.GetNewInvitation(hashAccountId, externalUserId);
+
+            //Assert
+            Assert.AreEqual(status, result.Status);
         }
     }
 }

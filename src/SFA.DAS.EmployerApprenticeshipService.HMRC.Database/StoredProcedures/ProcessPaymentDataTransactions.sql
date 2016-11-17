@@ -8,9 +8,9 @@ select mainUpdate.* from
 	(
 	select 
 			x.AccountId as AccountId,
-			GetDate() as TransactionDate,
+			GETDATE() as DateCreated,
 			null as submissionId,
-			Max(pe.CompletionDateTime) as CompletionDateTime,
+			Max(pe.CompletionDateTime) as TransactionDate,
 			3 as TransactionType,
 			Sum(x.Amount) * -1 Amount,
 			null as empref,

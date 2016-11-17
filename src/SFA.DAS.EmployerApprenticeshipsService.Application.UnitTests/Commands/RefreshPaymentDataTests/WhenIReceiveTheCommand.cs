@@ -1,9 +1,11 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NLog;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Events;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
@@ -23,6 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<IDasLevyRepository> _dasLevyRepository;
         private PageOfResults<Payment> _paymentData;
         private Mock<IMediator> _mediator;
+        private Mock<ILogger> _logger;
 
         private const string ExpectedPaymentUrl = "http://someurl";
         private const string ExpectedPeriodEnd = "R12-13";
@@ -54,8 +57,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(_paymentData);
 
             _mediator = new Mock<IMediator>();
+
+            _logger = new Mock<ILogger>();
             
-            _handler = new RefreshPaymentDataCommandHandler(_validator.Object, _paymentsApiClient.Object, _dasLevyRepository.Object, _mediator.Object);
+            _handler = new RefreshPaymentDataCommandHandler(_validator.Object, _paymentsApiClient.Object, _dasLevyRepository.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]
@@ -135,6 +140,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             //Assert
             _dasLevyRepository.Verify(x=>x.GetPaymentData(It.IsAny<Guid>()), Times.Exactly(_paymentData.Items.Length));
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenWhenAnExceptionIsThrownFromTheApiClientNothingIsProcessedAndAnErrorIsLogged()
+        {
+            //Assert
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).ThrowsAsync(new WebException());
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _dasLevyRepository.Verify(x => x.GetPaymentData(It.IsAny<Guid>()), Times.Never);
+            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
+            _logger.Verify(x=>x.Error(It.IsAny<WebException>(),$"Unable to get payment information for {_command.PeriodEnd} accountid {_command.AccountId}"));
         }
     }
 }

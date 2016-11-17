@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
@@ -18,6 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         private Mock<IDasLevyService> _dasLevyService;
         private GetEmployerAccountTransactionsQuery _request;
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
+        private Mock<ILogger> _logger;
 
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
@@ -41,7 +45,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
-            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object);
+            _logger = new Mock<ILogger>();
+
+            RequestHandler = new GetEmployerAccountTransactionsHandler(_dasLevyService.Object, RequestValidator.Object, _apprenticshipInfoService.Object, _logger.Object);
             Query = new GetEmployerAccountTransactionsQuery();
         }
 
@@ -110,17 +116,45 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                        TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
                         TransactionType = TransactionItemType.Payment,
-                        UkPrn = 54546
+                        UkPrn = expectedUkprn
                     }
                 };
             _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView {Providers = new List<Provider> {new Provider {ProviderName = "test"}}});
+            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Providers = new List<Provider> {new Provider {ProviderName = "test"}}});
 
             //Act
             await RequestHandler.Handle(_request);
 
             //Act
-            _apprenticshipInfoService.Verify(x=>x.GetProvider(It.IsAny<int>()),Times.Once);
+            _apprenticshipInfoService.Verify(x=>x.GetProvider(expectedUkprn),Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheProviderNameIsSetToUnknownProviderIfTheRecordCantBeFound()
+        {
+            //Arrange
+            var transactions = new List<TransactionLine>
+                {
+                    new TransactionLine
+                    {
+                        AccountId = 1,
+                        SubmissionId = 1,
+                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        Amount = 1000,
+                        TransactionType = LevyItemType.Payment,
+                        EmpRef = "123",
+                        UkPrn = 1254545
+                    }
+                };
+            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Throws(new WebException());
+
+            //Act
+            var actual = await RequestHandler.Handle(_request);
+            
+            //Assert
+            Assert.AreEqual("Unknown provider",actual.Data.TransactionLines.First().Description);
+            _logger.Verify(x=>x.Info(It.IsAny<Exception>(),"Provider not found for UkPrn:1254545"));
         }
     }
 }

@@ -50,21 +50,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
         }
 
         [Test]
-        public async Task ThenTheRequestIsMarkedAsInvaildIfTheUserIsNotAnOwner()
-        {
-            //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Viewer });
-
-            //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTeamMembersQuery { ExternalUserId = "123ABC", HashedId = "1" });
-
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User is not an owner of this account"), actual.ValidationDictionary);
-            Assert.IsTrue(actual.IsUnauthorized);
-        }
-
-        [Test]
         public async Task ThenTheRequestIsValidIfTheUSerIsAnOwnerOfTheAccount()
         {
             //Arrange

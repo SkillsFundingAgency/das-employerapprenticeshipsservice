@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -18,12 +19,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
+        private readonly ILogger _logger;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILogger logger)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
             _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
+            _logger = logger;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -51,11 +54,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
                 }
                 else if (transaction.GetType() == typeof(PaymentTransactionLine))
-                {
-                    var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
+                {                    
+                    try
+                    {
+                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
                         Convert.ToInt32(((PaymentTransactionLine)transaction).UkPrn));
 
-                    transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    	transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Description = "Unknown provider";
+                        _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
+                    }                     
                 }
 
                 transactionSummaries.Add(transaction);
