@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SFA.DAS.CloudService.API" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="SFA.DAS.EAS.Account.Api">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="EnvironmentName" value="LOCAL" />
+      <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="LogLevel" value="Debug" />
+      <Setting name="EventHubConnectionString" value="" />
+      <Setting name="EventHubName" value="" />
+      <Setting name="ApiTokenSecret" value="These are not the secrets you are looking for" />
+      <Setting name="ApiIssuer" value="http://localhost:51693" />
+      <Setting name="ApiAudiences" value="http://example" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />
+    </Certificates>
+  </Role>
+</ServiceConfiguration>

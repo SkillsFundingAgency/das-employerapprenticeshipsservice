@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateCommitmentTests
             {
                 Commitment = new Commitment
                 {
-                    LegalEntityCode = "001",
+                    LegalEntityId = "001",
                     LegalEntityName = "Test Legal Entity Name",
                     EmployerAccountId = 2,
                     EmployerAccountName = "Test Account Name"
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateCommitmentTests
         [TestCase("   ")]
         public void WhenLegalEntityIdIsNotPositiveNumberIsInvalid(string legalEntityId)
         {
-            _validCommand.Commitment.LegalEntityCode = legalEntityId;
+            _validCommand.Commitment.LegalEntityId = legalEntityId;
             var result = _validator.Validate(_validCommand);
 
             Assert.IsFalse(result.IsValid());
