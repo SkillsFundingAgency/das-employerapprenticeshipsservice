@@ -4,4 +4,7 @@ AS
 	DELETE FROM [levy].[LevyDeclaration]
 	DELETE FROM [levy].[TopUpPercentage]
 	DELETE FROM [levy].[TransactionLine]
+	DELETE FROM [levy].[Payment]
+	DELETE FROM [levy].[PeriodEnd]
+	DELETE FROM [levy].[LevyDeclarationTopup]
 RETURN 0
