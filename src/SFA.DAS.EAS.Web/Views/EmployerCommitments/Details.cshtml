@@ -38,7 +38,20 @@
    
 
         <p><span class="strong">Provider:</span> @Model.ProviderName</p>
-        <p><span class="strong">Status:</span> @status</p>
+        <p><span class="strong">Status:</span>
+          @if (Model.EditStatus == EditStatus.ProviderOnly)
+          {
+            @Html.Raw("Sent to provider")
+          }
+          else if (Model.EditStatus == EditStatus.Both)
+          {
+            @Html.Raw("Approved")
+          }
+          else
+          {
+            @Html.Raw("Saved")
+          }
+        </p>
 
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
@@ -93,7 +106,7 @@
       
         <div class="emptyStateButton">
             <a href="@Url.Action("CreateApprenticeshipEntry")" class="button" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Finished editing">Finish editing</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Save and continue">Save and continue</a>
         </div>
       
     </div>
