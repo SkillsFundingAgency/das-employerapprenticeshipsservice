@@ -24,8 +24,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th scope="col">Payment date</th>
-                        <th scope="col">Description</th>
+                        <th scope="col"><span class="no-wrap">Payment date</span></th>
+                        <th scope="col" class="mobile-hide-cell">Description</th>
                         <th scope="col" class="numeric">Amount</th>
                         <th scope="col" class="numeric">Balance</th>
                         <th></th>
@@ -36,10 +36,15 @@
                     {
                         var fromDate = aggregationLine.TransactionDate;
                         var toDate = aggregationLine.TransactionDate;
-
                         <tr>
-                            <td>@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </td>
-                            <td>@aggregationLine.Description</td>
+                            <td>
+                                <span class="no-wrap">@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </span>
+                            </td>
+                            <td class="mobile-hide-cell">
+                                <span class="description">
+                                    @aggregationLine.Description
+                                </span>
+                            </td>
                             <td class="numeric"> @(aggregationLine.Amount.ToString("C0", culture)) </td>
                             <td class="numeric">@(aggregationLine.Balance.ToString("C0", culture))</td>
                             <td class="link-right">
@@ -48,7 +53,7 @@
                                 </a>
                             </td>
                         </tr>
-                        }
+                    }
                 </tbody>
             </table>
             }

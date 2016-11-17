@@ -9,6 +9,7 @@ td.link-right {
 
 table th, table td {
     font-size: 14px;
+    vertical-align: top;
     @include media(tablet) {
         font-size: 16px;
     }
@@ -22,4 +23,14 @@ tr.total {
         border-bottom: 2px solid $black;
         font-weight: 700;
     }
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.description {
+    font-size: 90%;
+    display:inline-block;
+    line-height: 1.3;
 }
