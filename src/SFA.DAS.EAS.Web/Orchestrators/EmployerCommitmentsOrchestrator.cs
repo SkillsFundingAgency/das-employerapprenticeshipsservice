@@ -238,13 +238,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             }
 
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveOrSend != "save-no-send")
             {
-                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = commitmentId,
-                Message = message,
-                SaveOrSend = saveOrSend
-            });
+                await _mediator.SendAsync(new SubmitCommitmentCommand
+                {
+                    EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                    CommitmentId = commitmentId,
+                    Message = message,
+                    SaveOrSend = saveOrSend
+                });
+            }
 
             return _hashingService.HashValue(commitmentId);
         }
