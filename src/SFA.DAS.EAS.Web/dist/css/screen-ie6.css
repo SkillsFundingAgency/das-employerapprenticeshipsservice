@@ -2277,7 +2277,7 @@ span.helpText {
     margin-top: 5px;
   }
   .cohort td:nth-of-type(3):before {
-    content: "Reference";
+    content: "Cohort reference";
     font-weight: bold;
     margin-top: 5px;
   }
