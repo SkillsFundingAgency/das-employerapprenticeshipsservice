@@ -2256,3 +2256,9 @@ span.helpText {
     margin-top: 0.25em;
   }
 }
+
+@media only screen and (min-width: 641px) {
+  .finishEditingBtn {
+    margin-top: 0px;
+  }
+}
