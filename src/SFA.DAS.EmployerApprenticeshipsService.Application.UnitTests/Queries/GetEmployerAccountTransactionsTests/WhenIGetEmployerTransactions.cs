@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
@@ -60,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new LevyDeclarationTransactionLine
                     {
                         AccountId = 1,
                         SubmissionId = 1,
@@ -103,14 +104,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var expectedUkprn = 545646541;
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new PaymentTransactionLine()
                     {
                         AccountId = 1,
-                        SubmissionId = 1,
-                        TransactionDate = DateTime.Now.AddMonths(-3),
+                       TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
                         TransactionType = TransactionItemType.Payment,
-                        EmpRef = "123",
                         UkPrn = 54546
                     }
                 };

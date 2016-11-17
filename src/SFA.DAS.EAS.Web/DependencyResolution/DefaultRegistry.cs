@@ -17,7 +17,9 @@
 
 using System;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
 using SFA.DAS.Commitments.Api.Client;
@@ -25,7 +27,6 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -34,16 +35,17 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
-using SFA.DAS.Notifications.Api.Client;
-using SFA.DAS.Notifications.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
 using StructureMap.Graph;
+using WebGrease.Css.Extensions;
+using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution {
     
     public class DefaultRegistry : Registry {
+        private string _test;
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
         
@@ -74,8 +76,27 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
             For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
-            
+
+            RegisterMapper();
+
             RegisterMediator();
+        }
+
+        private void RegisterMapper()
+        {
+            var profiles = typeof(DefaultRegistry).Assembly.GetTypes()
+                            .Where(t => typeof(Profile).IsAssignableFrom(t))
+                            .Select(t => (Profile) Activator.CreateInstance(t));
+           
+            var config  = new MapperConfiguration(cfg =>
+            {
+                profiles.ForEach(cfg.AddProfile);
+            });
+
+            var mapper = config.CreateMapper();
+
+            For<IConfigurationProvider>().Use(config).Singleton();
+            For<IMapper>().Use(mapper).Singleton();
         }
 
         private EmployerApprenticeshipsServiceConfiguration GetConfiguration()

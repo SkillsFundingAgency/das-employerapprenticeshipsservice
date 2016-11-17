@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
@@ -45,28 +46,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             foreach (var transaction in response)
             {
-
-                var description = "";
-                if (transaction.TransactionType == TransactionItemType.Declaration)
+                if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
                 {
-                    description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
+                    transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
                 }
-                else if (transaction.TransactionType == TransactionItemType.Payment)
+                else if (transaction.GetType() == typeof(PaymentTransactionLine))
                 {
-                    var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
-                    description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
+                        Convert.ToInt32(((PaymentTransactionLine)transaction).UkPrn));
+
+                    transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
                 }
 
-                var transactionLine = new TransactionLine
-                {
-                    UkPrn = transaction.UkPrn,
-                    Amount = transaction.Amount,
-                    TransactionDate = transaction.TransactionDate,
-                    Description = description,
-                    Balance = transaction.Balance
-                };
-
-                transactionSummaries.Add(transactionLine);
+                transactionSummaries.Add(transaction);
             }
             
             return GetResponse(message.HashedId, message.AccountId, transactionSummaries);

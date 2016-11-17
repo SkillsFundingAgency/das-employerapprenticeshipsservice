@@ -159,6 +159,7 @@
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
+    <Compile Include="Entities\Transaction\TransactionEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
