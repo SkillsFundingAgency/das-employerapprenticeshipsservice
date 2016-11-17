@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     }
                     catch (Exception ex)
                     {
-                        transaction.Description = "Unknown provider";
+                        transaction.Description = "Training provider - name not recognised";
                         _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
                     }                     
                 }

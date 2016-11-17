@@ -151,7 +151,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actual = await RequestHandler.Handle(_request);
             
             //Assert
-            Assert.AreEqual("Unknown provider",actual.Data.TransactionLines.First().Description);
+            Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
             _logger.Verify(x=>x.Info(It.IsAny<Exception>(),"Provider not found for UkPrn:1254545"));
         }
     }
