@@ -54,18 +54,20 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
                 }
                 else if (transaction.GetType() == typeof(PaymentTransactionLine))
-                {                    
+                {
+                    var paymentTransaction = (PaymentTransactionLine) transaction;
+                    
                     try
                     {
-                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
-                        Convert.ToInt32(((PaymentTransactionLine)transaction).UkPrn));
+                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
+                        Convert.ToInt32(paymentTransaction.UkPrn));
 
                     	transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
                     }
                     catch (Exception ex)
                     {
                         transaction.Description = "Unknown provider";
-                        _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
+                        _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
                     }                     
                 }
 

@@ -135,14 +135,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new PaymentTransactionLine
                     {
                         AccountId = 1,
-                        SubmissionId = 1,
                         TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.Payment,
-                        EmpRef = "123",
+                        TransactionType = TransactionItemType.Payment,
                         UkPrn = 1254545
                     }
                 };
