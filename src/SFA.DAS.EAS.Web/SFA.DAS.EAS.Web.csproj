@@ -899,6 +899,7 @@
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
     <Content Include="src\sass\_panels.scss" />
+    <Content Include="src\sass\_commitments.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
