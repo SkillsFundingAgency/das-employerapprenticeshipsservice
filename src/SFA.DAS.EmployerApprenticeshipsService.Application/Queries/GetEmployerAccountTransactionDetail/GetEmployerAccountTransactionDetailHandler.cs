@@ -9,14 +9,14 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
-    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetAccountLevyDeclarationTransactionsByDateRangeQuery, GetAccountLevyDeclarationTransactionsByDateRangeResponse>
+    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery, GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse>
     {
-        private readonly IValidator<GetAccountLevyDeclarationTransactionsByDateRangeQuery> _validator;
+        private readonly IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
         private readonly IHashingService _hashingService;
 
         public GetEmployerAccountTransactionDetailHandler(
-            IValidator<GetAccountLevyDeclarationTransactionsByDateRangeQuery> validator, 
+            IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery> validator, 
             IDasLevyService dasLevyService,
             IHashingService hashingService)
         {
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             _hashingService = hashingService;
         }
 
-        public async Task<GetAccountLevyDeclarationTransactionsByDateRangeResponse> Handle(GetAccountLevyDeclarationTransactionsByDateRangeQuery message)
+        public async Task<GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse> Handle(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                 };
             }).ToList();
             
-            return new GetAccountLevyDeclarationTransactionsByDateRangeResponse
+            return new GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse
             {
                 Transactions = transactionDetailSummaries,
                 Total = transactionDetailSummaries.Sum(c => c.LineTotal)

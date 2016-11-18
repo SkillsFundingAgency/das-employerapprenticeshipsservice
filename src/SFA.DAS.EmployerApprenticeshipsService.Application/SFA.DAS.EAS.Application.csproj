@@ -261,10 +261,10 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetAccountLevyDeclarationTransactionsByDateRangeQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQueryValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetAccountLevyDeclarationTransactionsByDateRangeResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />

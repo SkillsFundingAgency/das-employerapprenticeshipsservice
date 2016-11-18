@@ -11,7 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionDetailsTests
 {
-    public class WhenIGetEmployerTransactionDetails : QueryBaseTest<GetEmployerAccountTransactionDetailHandler, GetAccountLevyDeclarationTransactionsByDateRangeQuery, GetAccountLevyDeclarationTransactionsByDateRangeResponse>
+    public class WhenIGetEmployerTransactionDetails : QueryBaseTest<GetEmployerAccountTransactionDetailHandler, GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery, GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse>
     {
         private Mock<IDasLevyService> _dasLevyService;
         private Mock<IHashingService> _hashingService;
@@ -20,9 +20,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         private long _accountId;
         private string _hashedAccountId;
         private string _externalUserId;
-        public override GetAccountLevyDeclarationTransactionsByDateRangeQuery Query { get; set; }
+        public override GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery Query { get; set; }
         public override GetEmployerAccountTransactionDetailHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetAccountLevyDeclarationTransactionsByDateRangeQuery>> RequestValidator { get; set; }
+        public override Mock<IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery>> RequestValidator { get; set; }
        
         [SetUp]
         public void Arrange()
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                     new LevyDeclarationTransactionLine()
                 });
 
-            Query = new GetAccountLevyDeclarationTransactionsByDateRangeQuery
+            Query = new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
             {
                 HashedAccountId = _hashedAccountId,
                 FromDate = _fromDate,
@@ -87,10 +87,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public void ThenAnUnauhtorizedExceptionIsThrownIfTheValidationResultReturnsUnauthorized()
         {
             //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountLevyDeclarationTransactionsByDateRangeQuery>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetAccountLevyDeclarationTransactionsByDateRangeQuery()));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery()));
         }
 
         [Test]
