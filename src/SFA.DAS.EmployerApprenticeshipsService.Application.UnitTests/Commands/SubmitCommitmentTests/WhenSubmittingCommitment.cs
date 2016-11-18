@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         [SetUp]
         public void Setup()
         {
-            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L };
+            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, SaveOrSend = "" };
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
 
@@ -49,6 +49,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         }
 
         [Test]
+        public void ThenValidationErrorsShouldThrowAnException2()
+        {
+            _validCommand.EmployerAccountId = 2;
+
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
+        }
+
+        [Test]
         public async Task ThenATaskShouldBeCreated()
         {
             await _handler.Handle(_validCommand);
@@ -62,6 +70,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             await _handler.Handle(_validCommand);
 
             _mockEventsApi.Verify(x => x.CreateAgreementEvent(It.IsAny<AgreementEvent>()));
+        }
+
+        [TestCase("", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
+        [TestCase("asdf", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is wrong")]
+        [TestCase("approve", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus EmployerAgreed if saveOrSend includes 'approved'")]
+        public async Task ThenCallingPatchEmployerCommitment(string saveOrSend, AgreementStatus expectedStatus)
+        {
+            _validCommand.SaveOrSend = saveOrSend;
+            await _handler.Handle(_validCommand);
+
+            this._mockCommitmentApi.Verify(x => x.PatchEmployerCommitment(It.IsAny<long>(), It.IsAny<long>(), expectedStatus));
         }
     }
 }

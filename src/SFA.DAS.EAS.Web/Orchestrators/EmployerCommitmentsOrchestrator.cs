@@ -214,29 +214,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<string> SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string message, string saveOrSend)
         {
-            var commitmentId = 0L;
-
-            if (string.IsNullOrWhiteSpace(hashedCommitmentId))
-            {
-                var response = await _mediator.SendAsync(new CreateCommitmentCommand
-                {
-                    Commitment = new Commitment
-                    {
-                        Reference = cohortRef,
-                        EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                        LegalEntityId = legalEntityCode,
-                        LegalEntityName = legalEntityName,
-                        ProviderId = long.Parse(providerId),
-                        ProviderName = providerName
-                    }
-                });
-
-                commitmentId = response.CommitmentId;
-            }
-            else
-            {
-                commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            }
+            long commitmentId = await CreateCommitmentIfNotExist(hashedAccountId, hashedCommitmentId, legalEntityCode, legalEntityName, providerId, providerName, cohortRef);
 
             if (saveOrSend != "save-no-send")
             {
@@ -251,8 +229,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return _hashingService.HashValue(commitmentId);
         }
-        
-	    public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+
+        private async Task<long> CreateCommitmentIfNotExist(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef)
+        {
+            if (!string.IsNullOrWhiteSpace(hashedCommitmentId))
+                return _hashingService.DecodeValue(hashedCommitmentId);
+
+            var response = await _mediator.SendAsync(new CreateCommitmentCommand
+                {
+                    Commitment = new Commitment
+                    {
+                        Reference = cohortRef,
+                        EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                        LegalEntityId = legalEntityCode,
+                        LegalEntityName = legalEntityName,
+                        ProviderId = long.Parse(providerId),
+                        ProviderName = providerName
+                    }
+                });
+
+            return response.CommitmentId;
+        }
+
+        public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _mediator.SendAsync(new PauseApprenticeshipCommand
             {
