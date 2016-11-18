@@ -52,21 +52,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult GatewayInform(SelectEmployerViewModel model)
         {
 
-
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult GatewayInfrom(SelectEmployerViewModel model, bool accepted)
-        {
-            return View("GatewayInform",model);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> Gateway(SelectEmployerViewModel model)
-        {
-            
             EmployerAccountData data;
             if (model?.CompanyName != null)
             {
@@ -91,9 +76,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
             }
             
-
             _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
 
+            return View();
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> Gateway()
+        {
             return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme)));
         }
 
