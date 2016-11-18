@@ -14,8 +14,8 @@
            
                 <h1 class="heading-xlarge">Add an apprentice</h1>
                 <div class="panel panel-border-wide">
-                    <p>You can return to this apprentice later to make changes or add more information, if you need to.</p>
-                    <p> All the fields must be complete and accurate for your training provider to get paid.</p>
+                    <p>Fill in as many fields as you can. You'll be able to return later to make changes or add more information.</p>
+                    <p>                        You'll only be able to approve the release of payments for this apprentice once all the fields have been completed - either by yourself or your training provider.</p>
                 </div>
 
                 <hr />
@@ -104,7 +104,7 @@
                     <hr />
                     <label for="@Html.IdFor(m => m.Cost)">
                         <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
-                        <span class="helpText">For example, for £1,500.18 enter 1500.18</span>
+                        <span class="helpText">For example, for £1,500 enter 1500</span>
                         @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                     </label>
                     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })

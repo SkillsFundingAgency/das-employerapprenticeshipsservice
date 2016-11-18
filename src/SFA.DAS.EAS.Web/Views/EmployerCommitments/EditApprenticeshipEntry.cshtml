@@ -14,7 +14,8 @@
 
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             <p>
-                Change the details of your apprentice below. If you don't have the information now you can leave it blank and add it later.
+                You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
+
             </p>
             <hr />
 
@@ -101,7 +102,7 @@
                 <hr />
                 <label for="@Html.IdFor(m => m.Cost)">
                     <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
-                    <span class="helpText">For example, for £1,500.18 enter 1500.18</span>
+                    <span class="helpText">For example, for £1,500 enter 1500</span>
                     @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })

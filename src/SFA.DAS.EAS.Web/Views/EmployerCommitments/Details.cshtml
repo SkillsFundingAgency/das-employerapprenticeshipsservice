@@ -11,33 +11,9 @@
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
-        <!--<table>
-            <tbody>
-            <tr>
-                <th scope="row">Name</th>
-                <td>@Model.Name</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Legal entity</th>
-                <td>@Model.LegalEntityName</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Provider</th>
-                <td>@Model.ProviderName</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Status</th>
-                <td>@Model.Status.GetDescription()</td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>-->
-   
 
-        <p><span class="strong">Provider:</span> @Model.ProviderName</p>
+  
+        <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
         <p><span class="strong">Status:</span>
           @if (Model.EditStatus == EditStatus.ProviderOnly)
           {
@@ -74,7 +50,7 @@
                 <tr>
 
                     <th scope="col">Apprentice</th>
-                    <th scope="col" colspan="2">Training</th>
+                    <th scope="col" colspan="2">Training course</th>
                  
 
                 </tr>
