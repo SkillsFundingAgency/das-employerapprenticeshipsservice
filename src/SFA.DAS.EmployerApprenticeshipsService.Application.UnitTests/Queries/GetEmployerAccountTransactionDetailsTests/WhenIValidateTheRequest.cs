@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenTrueIsReturnedWhenAllFieldsArePopulatedAndTheMemberIsPartOfTheAccount()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountTransactionDetailQuery
+            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
                 {
                     ExternalUserId = "test",
                     HashedAccountId = "test",
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenFalseIsReturnedAndTheValidtionDictionaryIsPopulatedWhenFieldsArentSupplied()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountTransactionDetailQuery());
+            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountTransactionDetailQuery
+            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
             {
                 ExternalUserId = "test",
                 HashedAccountId = "test",

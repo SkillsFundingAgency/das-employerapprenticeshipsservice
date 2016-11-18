@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
@@ -28,7 +29,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
             _externalUserId = "test";
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionDetailQuery>())).ReturnsAsync(new GetAccountTransactionDetailResponse() { Data= new List<TransactionLineDetail> { new TransactionLineDetail() } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsByDateRangeQuery>()))
+                     .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
+                    {
+                        Transactions= new List<LevyDeclarationTransactionLine>
+                        {
+                            new LevyDeclarationTransactionLine()
+                        }
+                    });
 
             _dasLevyService = new DasLevyService(_mediator.Object);
         }
@@ -37,11 +45,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheMediatorMethodIsCalled()
         {
             //Act
-            await _dasLevyService.GetTransactionDetailByDateRange(_accountId, _fromDate, _toDate, _externalUserId);
+            await _dasLevyService.GetTransactionsByDateRange< LevyDeclarationTransactionLine>
+                        (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert
             _mediator.Verify(x => 
-                x.SendAsync(It.Is<GetAccountTransactionDetailQuery>(c => 
+                x.SendAsync(It.Is<GetAccountTransactionsByDateRangeQuery>(c => 
                     c.AccountId.Equals(_accountId) &&
                     c.FromDate.Equals(_fromDate) && 
                     c.ToDate.Equals(_toDate) &&
@@ -52,23 +61,29 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheResponseFromTheQueryIsReturned()
         {
             //Act
-            var actual = await _dasLevyService.GetTransactionDetailByDateRange(_accountId, _fromDate, _toDate, _externalUserId);
+            var actual = await _dasLevyService.GetTransactionsByDateRange<LevyDeclarationTransactionLine>
+                                    (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert
             Assert.IsNotEmpty(actual);
         }
 
         [Test]
-        public async Task ThenIfNullIsReturnedFromTheResponseNullIsReturnedFromTheCall()
+        public async Task ThenIfNullIsReturnedFromTheResponseEmptyListIsReturnedFromTheCall()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionDetailQuery>())).ReturnsAsync(new GetAccountTransactionDetailResponse { Data = null });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsByDateRangeQuery>()))
+                .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
+                {
+                    Transactions = null
+                });
 
             //Act
-            var actual = await _dasLevyService.GetTransactionDetailByDateRange(_accountId, _fromDate, _toDate, _externalUserId);
+            var actual = await _dasLevyService.GetTransactionsByDateRange<LevyDeclarationTransactionLine>
+                                    (_accountId, _fromDate, _toDate, _externalUserId);
 
             //Assert
-            Assert.IsNull(actual);
+            Assert.IsEmpty(actual);
         }
     }
 }

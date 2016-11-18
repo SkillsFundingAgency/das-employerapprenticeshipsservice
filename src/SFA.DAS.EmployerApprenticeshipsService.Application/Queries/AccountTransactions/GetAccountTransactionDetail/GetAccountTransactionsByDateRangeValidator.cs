@@ -5,21 +5,21 @@ using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
 {
-    public class GetAccountTransactionDetailValidator : IValidator<GetAccountTransactionDetailQuery>
+    public class GetAccountTransactionsByDateRangeValidator : IValidator<GetAccountTransactionsByDateRangeQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetAccountTransactionDetailValidator(IMembershipRepository membershipRepository)
+        public GetAccountTransactionsByDateRangeValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetAccountTransactionDetailQuery item)
+        public ValidationResult Validate(GetAccountTransactionsByDateRangeQuery item)
         {
            throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountTransactionDetailQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountTransactionsByDateRangeQuery item)
         {
             var validationResult = new ValidationResult();
 

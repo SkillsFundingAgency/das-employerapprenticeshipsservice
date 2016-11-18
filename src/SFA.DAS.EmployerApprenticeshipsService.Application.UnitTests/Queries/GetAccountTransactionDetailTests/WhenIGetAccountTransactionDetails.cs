@@ -7,18 +7,19 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionD
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailTests
 {
-    public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountTransactionDetailQueryHandler, GetAccountTransactionDetailQuery, GetAccountTransactionDetailResponse>
+    public class WhenIGetAccountTransactionDetails : QueryBaseTest<GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler, GetAccountTransactionsByDateRangeQuery, GetAccountLevyDeclationTransactionsByDateRangeResponse>
     {
-        private Mock<IDasLevyRepository> _repository;
+        private Mock<IDasLevyRepository> _dasLevyRepository;
         private DateTime _fromDate;
         private DateTime _toDate;
         private long _accountId;
-        public override GetAccountTransactionDetailQuery Query { get; set; }
-        public override GetAccountTransactionDetailQueryHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetAccountTransactionDetailQuery>> RequestValidator { get; set; }
+        public override GetAccountTransactionsByDateRangeQuery Query { get; set; }
+        public override GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetAccountTransactionsByDateRangeQuery>> RequestValidator { get; set; }
       
         [SetUp]
         public void Arrange()
@@ -27,19 +28,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             _toDate = DateTime.Now.AddDays(-2);
             _accountId = 1;
 
-            _repository = new Mock<IDasLevyRepository>();
-            _repository.Setup(x => x.GetTransactionDetail(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>())).ReturnsAsync(new List<TransactionLineDetail> { new TransactionLineDetail() });
+            _dasLevyRepository = new Mock<IDasLevyRepository>();
+            _dasLevyRepository.Setup(x => x.GetTransactionsByDateRange(
+                    It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                            .ReturnsAsync(new List<TransactionLine>
+                            {
+                                new LevyDeclarationTransactionLine()
+                            });
 
-            Query = new GetAccountTransactionDetailQuery
+            Query = new GetAccountTransactionsByDateRangeQuery
             {
                 AccountId = _accountId,
                 FromDate= _fromDate,
-                ToDate = _toDate
+                ToDate = _toDate,
+                ExternalUserId = "ABC123"
             };
 
             SetUp();
 
-            RequestHandler = new GetAccountTransactionDetailQueryHandler(RequestValidator.Object, _repository.Object);
+            RequestHandler = new GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(RequestValidator.Object, _dasLevyRepository.Object);
         }
 
         [Test]
@@ -49,7 +56,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactionDetail(_accountId, _fromDate, _toDate));
+            _dasLevyRepository.Verify(x=>x.GetTransactionsByDateRange(Query.AccountId, Query.FromDate, Query.ToDate));
         }
 
         [Test]
@@ -60,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.IsNotEmpty(actual.Data);
+            Assert.IsNotEmpty(actual.Transactions);
         }
     }
 }

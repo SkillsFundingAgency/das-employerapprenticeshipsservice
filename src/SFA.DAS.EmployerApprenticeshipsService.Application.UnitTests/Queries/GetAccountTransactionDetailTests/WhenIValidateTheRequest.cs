@@ -11,14 +11,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
 {
     public class WhenIValidateTheRequest
     {
-        private GetAccountTransactionDetailValidator _validator;
+        private GetAccountTransactionsByDateRangeValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetAccountTransactionDetailValidator(_membershipRepository.Object);
+            _validator = new GetAccountTransactionsByDateRangeValidator(_membershipRepository.Object);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
                                  .ReturnsAsync(new MembershipView());
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionDetailQuery
+            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery
             {
                 AccountId = 1,
                 ExternalUserId = "2",
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
                                  .ReturnsAsync(new MembershipView());
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionDetailQuery());
+            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionDetailT
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountTransactionDetailQuery()
+            var actual = await _validator.ValidateAsync(new GetAccountTransactionsByDateRangeQuery()
             {
                 AccountId = 1,
                 ExternalUserId = "2",

@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.ViewModels;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Amount = 12,
                 EmpRef = "emp-123",
                 EnglishFraction = 0.3m,
-                LevyItemType = LevyItemType.TopUp
+                TransactionItemType = TransactionItemType.TopUp
             };
 
             var invitationView = new InvitationView()
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Amount = 12m,
                 
                 Balance = 12m,
-                TransactionType = LevyItemType.TopUp,
+                TransactionType = TransactionItemType.TopUp,
                 
 
             };

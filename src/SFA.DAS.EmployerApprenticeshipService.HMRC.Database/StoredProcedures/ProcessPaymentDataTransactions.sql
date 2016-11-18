@@ -12,6 +12,7 @@ select mainUpdate.* from
 			null as submissionId,
 			Max(pe.CompletionDateTime) as TransactionDate,
 			3 as TransactionType,
+			null as LevyDeclared,
 			Sum(x.Amount) * -1 Amount,
 			null as empref,
 			PeriodEnd,

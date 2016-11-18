@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain
 {
-    public enum LevyItemType
+    public enum TransactionItemType
     {
         Unknown = 0,
         Declaration = 1,

@@ -1690,6 +1690,11 @@ input[type=number] {
   display: block;
 }
 
+.mobile-hide-cell {
+  display: none;
+  display: table-cell;
+}
+
 .heading-xlarge {
   margin-bottom: 0.625em;
   margin-top: 1.25em;
@@ -1982,6 +1987,7 @@ td.link-right {
 
 table th, table td {
   font-size: 14px;
+  vertical-align: top;
   font-size: 16px;
 }
 
@@ -1992,6 +1998,16 @@ tr.total th {
 tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.description {
+  font-size: 90%;
+  display: inline-block;
+  line-height: 1.3;
 }
 
 .panel p {

@@ -39,6 +39,7 @@ select mainUpdate.* from
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
+			(y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) as LevyDeclared,
 			((y.LevyDueYTD - isnull(LAG(y.LevyDueYTD) OVER(Partition by y.empref order by y.SubmissionDate asc, y.submissionId),0)) * y.EnglishFraction) + ldt.amount as Amount,
 			x.EmpRef as EmpRef,
 			null as PeriodEnd,

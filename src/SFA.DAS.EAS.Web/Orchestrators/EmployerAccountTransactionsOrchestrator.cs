@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -7,8 +6,6 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -26,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionDetailQuery
+            var data = await _mediator.SendAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
             {
                 HashedAccountId = hashedId,
                 FromDate = fromDate,
@@ -39,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Model = new TransactionLineItemViewModel
                 {
                     TotalAmount = data.Total,
-                    LineItem = data.TransactionDetail
+                    LineItem = data.Transactions
                 }
             };
         }
@@ -88,23 +85,5 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return data;
         }
-    }
-
-    public class TransactionLineItemViewResult
-    {
-        public Account Account   { get; set; }
-        public TransactionLineItemViewModel Model { get; set; }
-    }
-
-    public class TransactionLineItemViewModel
-    {
-        public List<TransactionDetailSummary> LineItem { get; set; }
-        public decimal TotalAmount { get; set; }
-    }
-
-    public class TransactionViewResult
-    {
-        public Account Account { get; set; }
-        public TransactionViewModel Model { get; set; }
     }
 }

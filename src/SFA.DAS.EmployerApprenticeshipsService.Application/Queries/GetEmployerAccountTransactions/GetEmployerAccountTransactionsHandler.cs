@@ -8,6 +8,8 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -47,39 +49,29 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             foreach (var transaction in response)
             {
-
-                var description = "";
-                if (transaction.TransactionType == LevyItemType.Declaration)
+                if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
                 {
-                    description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
+                    transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
                 }
-                else if (transaction.TransactionType == LevyItemType.Payment)
+                else if (transaction.GetType() == typeof(PaymentTransactionLine))
                 {
-                    string providerName;
+                    var paymentTransaction = (PaymentTransactionLine) transaction;
+                    
                     try
                     {
-                        var provider = _apprenticeshipInfoServiceWrapper.GetProvider(Convert.ToInt32(transaction.UkPrn));
-                        providerName = provider.Providers[0].ProviderName;
+                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
+                        Convert.ToInt32(paymentTransaction.UkPrn));
+
+                    	transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
                     }
                     catch (Exception ex)
                     {
-                        providerName = "Unknown provider";
-                        _logger.Info(ex, $"Provider not found for UkPrn:{transaction.UkPrn}");
-                    }
-                    
-                    description = providerName;
+                        transaction.Description = "Training provider - name not recognised";
+                        _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
+                    }                     
                 }
 
-                var transactionLine = new TransactionLine
-                {
-                    UkPrn = transaction.UkPrn,
-                    Amount = transaction.Amount,
-                    TransactionDate = transaction.TransactionDate,
-                    Description = description,
-                    Balance = transaction.Balance
-                };
-
-                transactionSummaries.Add(transactionLine);
+                transactionSummaries.Add(transaction);
             }
             
             return GetResponse(message.HashedId, message.AccountId, transactionSummaries);

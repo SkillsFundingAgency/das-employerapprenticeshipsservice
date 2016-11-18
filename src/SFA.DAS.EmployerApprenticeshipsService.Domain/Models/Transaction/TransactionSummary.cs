@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Domain.Models.Levy
+namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
     public class TransactionSummary
     {

@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
-    public class GetEmployerAccountTransactionDetailQueryValidator : IValidator<GetEmployerAccountTransactionDetailQuery>
+    public class GetEmployerAccountTransactionDetailQueryValidator : IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
@@ -14,12 +14,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetEmployerAccountTransactionDetailQuery item)
+        public ValidationResult Validate(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountTransactionDetailQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery item)
         {
             var result = new ValidationResult();
 

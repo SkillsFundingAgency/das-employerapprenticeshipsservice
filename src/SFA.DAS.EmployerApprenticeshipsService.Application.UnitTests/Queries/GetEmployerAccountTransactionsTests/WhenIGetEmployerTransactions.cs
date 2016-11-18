@@ -11,6 +11,8 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -65,13 +67,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new LevyDeclarationTransactionLine
                     {
                         AccountId = 1,
                         SubmissionId = 1,
                         TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.TopUp,
+                        TransactionType = TransactionItemType.TopUp,
                         EmpRef = "123"
                     }
                 };
@@ -108,14 +110,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var expectedUkprn = 545646541;
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new PaymentTransactionLine()
                     {
                         AccountId = 1,
-                        SubmissionId = 1,
-                        TransactionDate = DateTime.Now.AddMonths(-3),
+                       TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.Payment,
-                        EmpRef = "123",
+                        TransactionType = TransactionItemType.Payment,
                         UkPrn = expectedUkprn
                     }
                 };
@@ -135,14 +135,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Arrange
             var transactions = new List<TransactionLine>
                 {
-                    new TransactionLine
+                    new PaymentTransactionLine
                     {
                         AccountId = 1,
-                        SubmissionId = 1,
                         TransactionDate = DateTime.Now.AddMonths(-3),
                         Amount = 1000,
-                        TransactionType = LevyItemType.Payment,
-                        EmpRef = "123",
+                        TransactionType = TransactionItemType.Payment,
                         UkPrn = 1254545
                     }
                 };
@@ -153,7 +151,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actual = await RequestHandler.Handle(_request);
             
             //Assert
-            Assert.AreEqual("Unknown provider",actual.Data.TransactionLines.First().Description);
+            Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
             _logger.Verify(x=>x.Info(It.IsAny<Exception>(),"Provider not found for UkPrn:1254545"));
         }
     }
