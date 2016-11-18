@@ -5,10 +5,10 @@
 @model OrchestratorResponse<CommitmentListViewModel>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.Data.NumberOfTasks > 0)
         {
-            <h2 class="heading-medium">Tasks</h2>
+            @*<h2 class="heading-medium">Tasks</h2>
             <p>Any commitments that need your attention are shown below:</p>
             if (Model.Data.NumberOfTasks == 1)
             {
@@ -23,7 +23,7 @@
             {
                 <a href="@Url.Action("Index", "EmployerTasks")" class="link">View tasks</a>
             }
-            <hr />
+            <hr />*@
         }
     </div>
 </div>
@@ -31,11 +31,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Review and approve apprentices</h1>
-
-
-
-            <p>You have the following requests in progress:</p>
+            <h1 class="heading-xlarge">Requests in progress</h1>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
@@ -74,8 +70,9 @@
                 <tr>
                     <th>Training provider</th>
                     <th>Organisation</th>
-                    <th>Reference</th>
+                    <th>Cohort reference</th>
                     <th colspan="2">Status</th>
+                   
                  
                 </tr>
             </thead>

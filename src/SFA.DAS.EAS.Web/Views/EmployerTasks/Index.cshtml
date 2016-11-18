@@ -4,7 +4,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Tasks</h1>
-        <hr />
+   
     </div>
 </div>
 <div class="grid-row">
@@ -17,41 +17,39 @@
         }
         else
         {
-            <div class="responsive-table">
-                <div class="responsive-thead">
-                    <div class="responsive-tr">
-                        <div class="responsive-th">CreatedOn</div>
-                        <div class="responsive-th">Name</div>
-                        <div class="responsive-th">Status</div>
-                        <div class="responsive-th"> </div>
-                    </div>
-                </div>
-                <div class="responsive-tbody">
+            <table class="tableResponsive tasksList">
+                <thead>
+                    <tr>
+                        <th>Created on</th>
+                        <th>Name</th>
+                        <th colspan="2">Status</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
                     @foreach (var task in Model.Tasks)
                     {
-                        <div class="responsive-tr">
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">CreatedOn</div>
-                                <div>@task.CreatedOn.ToGdsFormat()</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Name</div>
-                                <div>@task.Name</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div class="responsive-inner-caption">Status</div>
-                                <div>@task.Status.ToString()</div>
-                            </div>
-                            <div class="responsive-td">
-                                <div>
-                                    <a href="@Url.Action("ViewTask", new { hashedTaskId = task.HashedTaskId })" class="button">View</a>
-                                </div>
-                                <div class="responsive-inner-caption"></div>
-                            </div>
-                        </div>
+                        <tr>
+                            <td>
+                            
+                               @task.CreatedOn.ToGdsFormat() &nbsp;
+
+                            </td>
+                            <td>
+                                @task.Name &nbsp;
+                            </td>
+
+                            <td>
+                             
+                             @task.Status.ToString()
+                            </td>
+                            <td>
+                                <a href="@Url.Action("ViewTask", new { hashedTaskId = task.HashedTaskId })">View</a>
+                            </td>
+                       </tr>
                     }
-                </div>
-            </div>
+                </tbody>
+        </table>
         }
     </div>
 </div>
