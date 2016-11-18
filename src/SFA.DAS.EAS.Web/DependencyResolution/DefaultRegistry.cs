@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
 
         private void RegisterMapper()
         {
-            var profiles = typeof(DefaultRegistry).Assembly.GetTypes()
+            var profiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
                             .Where(t => typeof(Profile).IsAssignableFrom(t))
                             .Select(t => (Profile) Activator.CreateInstance(t));
            
