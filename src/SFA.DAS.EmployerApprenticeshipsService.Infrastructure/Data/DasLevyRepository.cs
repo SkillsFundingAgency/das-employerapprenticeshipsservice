@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<List<TransactionLineDetail>> GetTransactionDetail(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
@@ -175,13 +175,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@fromDate", fromDate, DbType.DateTime);
                 parameters.Add("@toDate", toDate, DbType.DateTime);
 
-                return await c.QueryAsync<TransactionLineDetail>(
+                return await c.QueryAsync<TransactionEntity>(
                     sql: "[levy].[GetTransactionDetail_ByDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result.ToList();
+            return MapTransactions(result);
         }
 
         public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd)

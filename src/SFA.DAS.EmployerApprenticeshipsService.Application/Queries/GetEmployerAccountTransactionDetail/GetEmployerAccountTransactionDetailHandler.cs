@@ -6,18 +6,17 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
-    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetEmployerAccountTransactionDetailQuery, GetEmployerAccountTransactionDetailResponse>
+    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetAccountLevyDeclarationTransactionsByDateRangeQuery, GetAccountLevyDeclarationTransactionsByDateRangeResponse>
     {
-        private readonly IValidator<GetEmployerAccountTransactionDetailQuery> _validator;
+        private readonly IValidator<GetAccountLevyDeclarationTransactionsByDateRangeQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
         private readonly IHashingService _hashingService;
 
         public GetEmployerAccountTransactionDetailHandler(
-            IValidator<GetEmployerAccountTransactionDetailQuery> validator, 
+            IValidator<GetAccountLevyDeclarationTransactionsByDateRangeQuery> validator, 
             IDasLevyService dasLevyService,
             IHashingService hashingService)
         {
@@ -26,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             _hashingService = hashingService;
         }
 
-        public async Task<GetEmployerAccountTransactionDetailResponse> Handle(GetEmployerAccountTransactionDetailQuery message)
+        public async Task<GetAccountLevyDeclarationTransactionsByDateRangeResponse> Handle(GetAccountLevyDeclarationTransactionsByDateRangeQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -41,24 +40,36 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var data = await _dasLevyService.GetTransactionDetailByDateRange(accountId, message.FromDate, message.ToDate, message.ExternalUserId);
+            var data = await _dasLevyService.GetTransactionsByDateRange<LevyDeclarationTransactionLine>
+                                    (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
-            
+            var transactionSubmissionItems = data.GroupBy(c => 
+                new { c.SubmissionId }, (submission, group) => 
+                   new{
+                        submission.SubmissionId,
+                        Data = group.ToList()
+                       });
 
-            var transactionDetailSummaries = data.Select(item => new TransactionDetailSummary
+            var transactionDetailSummaries = transactionSubmissionItems.Select(item =>
             {
-                Amount = item.Amount,
-                Empref = item.EmpRef,
-                TopUp = item.TopUp,
-                TransactionDate = item.TransactionDate,
-                EnglishFraction = item.EnglishFraction,
-                LineAmount = item.LineAmount
+                var amount = item.Data.Where(c=>c.TransactionType.Equals(TransactionItemType.Declaration)).Sum(c => c.Amount);
+                var topUp = item.Data.Where(c => c.TransactionType.Equals(TransactionItemType.TopUp)).Sum(c => c.Amount);
+
+                return new LevyDeclarationTransactionLine
+                {
+                    Amount = amount,
+                    EmpRef = item.Data.First().EmpRef,
+                    TopUp = topUp,
+                    TransactionDate = item.Data.First().TransactionDate,
+                    EnglishFraction = item.Data.First().EnglishFraction,
+                    LineTotal = amount + topUp
+                };
             }).ToList();
             
-            return new GetEmployerAccountTransactionDetailResponse
+            return new GetAccountLevyDeclarationTransactionsByDateRangeResponse
             {
                 TransactionDetail = transactionDetailSummaries,
-                Total = transactionDetailSummaries.Sum(c => c.LineAmount)
+                Total = transactionDetailSummaries.Sum(c => c.LineTotal)
             };
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
@@ -20,23 +21,24 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _mediator = mediator;
         }
 
-        public async Task<List<TransactionLine>> GetTransactionsByAccountId(long accountId)
+        public async Task<ICollection<TransactionLine>> GetTransactionsByAccountId(long accountId)
         {
             var result = await _mediator.SendAsync(new GetAccountTransactionsRequest {AccountId = accountId});
 
             return result.TransactionLines;
         }
 
-        public async Task<List<AccountBalance>> GetAllAccountBalances()
+        public async Task<ICollection<AccountBalance>> GetAllAccountBalances()
         {
             var result = await _mediator.SendAsync(new GetAccountBalancesRequest());
 
             return result.Accounts;
         }
 
-        public async Task<List<TransactionLineDetail>> GetTransactionDetailByDateRange(long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
+        public async Task<ICollection<T>> GetTransactionsByDateRange<T>(
+            long accountId, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
         {
-            var result = await _mediator.SendAsync(new GetAccountTransactionDetailQuery
+            var result = await _mediator.SendAsync(new GetAccountTransactionsByDateRangeQuery
             {
                 AccountId = accountId,
                 FromDate = fromDate,
@@ -44,7 +46,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 ExternalUserId = externalUserId
             });
 
-            return result.Data;
+            return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
         }
     }
 }

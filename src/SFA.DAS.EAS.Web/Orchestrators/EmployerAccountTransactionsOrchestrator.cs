@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionDetailQuery
+            var data = await _mediator.SendAsync(new GetAccountLevyDeclarationTransactionsByDateRangeQuery
             {
                 HashedAccountId = hashedId,
                 FromDate = fromDate,
