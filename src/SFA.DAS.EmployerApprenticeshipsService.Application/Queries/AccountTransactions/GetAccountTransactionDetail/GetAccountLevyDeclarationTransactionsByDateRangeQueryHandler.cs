@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail
@@ -10,12 +10,13 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
     public class GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler : IAsyncRequestHandler<GetAccountTransactionsByDateRangeQuery,GetAccountLevyDeclationTransactionsByDateRangeResponse>
     {
         private readonly IValidator<GetAccountTransactionsByDateRangeQuery> _validator;
-        private readonly IDasLevyService _dasLevyService;
-       
-        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, IDasLevyService dasLevyService)
+        private readonly IDasLevyRepository _dasLevyRepository;
+
+
+        public GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler(IValidator<GetAccountTransactionsByDateRangeQuery> validator, IDasLevyRepository dasLevyRepository)
         {
             _validator = validator;
-            _dasLevyService = dasLevyService;
+            _dasLevyRepository = dasLevyRepository;
         }
 
         public async Task<GetAccountLevyDeclationTransactionsByDateRangeResponse> Handle(GetAccountTransactionsByDateRangeQuery message)
@@ -27,10 +28,12 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var response = await _dasLevyService.GetTransactionsByDateRange<LevyDeclarationTransactionLine>(
-                message.AccountId, message.FromDate, message.ToDate, message.ExternalUserId);
+            var transactions = await _dasLevyRepository.GetTransactionsByDateRange(message.AccountId, message.FromDate,
+                message.ToDate);
 
-            return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = response.ToList() };
+            var levyDeclarationTransactions = transactions.OfType<LevyDeclarationTransactionLine>().ToList();
+
+            return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = levyDeclarationTransactions };
         }
     }
 }
