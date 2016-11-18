@@ -20,5 +20,10 @@ namespace SFA.DAS.EAS.Domain.Entities.Transaction
         public string PeriodEnd { get; set; }
 
         public decimal Balance { get; set; }
+
+        public decimal EnglishFraction { get; set; }
+        public decimal TopUp { get; set; }
+        public decimal LineAmount { get; set; }
+        
     }
 }

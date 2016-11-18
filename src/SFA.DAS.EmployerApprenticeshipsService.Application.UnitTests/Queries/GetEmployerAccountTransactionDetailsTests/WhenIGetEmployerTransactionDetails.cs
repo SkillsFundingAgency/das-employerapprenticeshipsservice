@@ -101,8 +101,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<LevyDeclarationTransactionLine>
             {
-                new LevyDeclarationTransactionLine {Amount=10,EnglishFraction = 0.5m,TransactionType = TransactionItemType.Declaration},
-                new LevyDeclarationTransactionLine {Amount=1,EnglishFraction = 0.5m,TransactionType = TransactionItemType.TopUp}
+                new LevyDeclarationTransactionLine {LineAmount=10,EnglishFraction = 0.5m,TransactionType = TransactionItemType.Declaration},
+                new LevyDeclarationTransactionLine {LineAmount=1,EnglishFraction = 0.5m,TransactionType = TransactionItemType.TopUp}
             });
 
             //Act

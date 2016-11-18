@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public decimal EnglishFraction { get; set; }
         public decimal TopUp { get; set; }
         public decimal LineTotal { get; set; }
+        public decimal LineAmount { get; set; }
 
         public ICollection<LevyDeclarationTransactionLine> SubLevyDeclarationTransactions =>
             SubTransactions?.OfType<LevyDeclarationTransactionLine>().ToList() ??
