@@ -33,22 +33,22 @@
                             @aggregationLineItem.Empref
                         </td>
                         <td class="numeric">
-                            @(aggregationLineItem.Amount.ToString("C0", culture))
+                            @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
                         <td class="numeric">
-                            @($"{aggregationLineItem.EnglishFraction*100:n0}")%
+                            @($"{aggregationLineItem.EnglishFraction*100:n2}")%
                         </td>
                         <td class="numeric">
-                            @(aggregationLineItem.TopUp.ToString("C0", culture))
+                            @(aggregationLineItem.TopUp.ToString("C2", culture))
                         </td>
                         <td class="numeric">
-                            @((aggregationLineItem.LineAmount).ToString("C0", culture))
+                            @((aggregationLineItem.LineAmount).ToString("C2", culture))
                         </td>
                     </tr>
                 }
                 <tr class="total">
                     <th scope="row" colspan="4"><span class="vh">Total</span></th>
-                    <td class="numeric">@Model.TotalAmount.ToString("C0",culture)</td>
+                    <td class="numeric">@Model.TotalAmount.ToString("C2",culture)</td>
                 </tr>
             </tbody>
         </table>

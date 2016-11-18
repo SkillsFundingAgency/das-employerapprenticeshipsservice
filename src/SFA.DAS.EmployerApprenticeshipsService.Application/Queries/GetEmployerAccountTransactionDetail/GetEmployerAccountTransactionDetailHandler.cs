@@ -43,27 +43,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var data = await _dasLevyService.GetTransactionDetailByDateRange(accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
-            var transactionSubmissionItems = data.GroupBy(c => 
-                new { c.SubmissionId }, (submission, group) => 
-                   new{
-                        submission.SubmissionId,
-                        Data = group.ToList()
-                       });
+            
 
-            var transactionDetailSummaries = transactionSubmissionItems.Select(item =>
+            var transactionDetailSummaries = data.Select(item => new TransactionDetailSummary
             {
-                var amount = item.Data.Where(c=>c.TransactionType.Equals(TransactionItemType.Declaration)).Sum(c => c.Amount);
-                var topUp = item.Data.Where(c => c.TransactionType.Equals(TransactionItemType.TopUp)).Sum(c => c.Amount);
-
-                return new TransactionDetailSummary
-                {
-                    Amount = amount,
-                    Empref = item.Data.First().EmpRef,
-                    TopUp = topUp,
-                    TransactionDate = item.Data.First().TransactionDate,
-                    EnglishFraction = item.Data.First().EnglishFraction,
-                    LineAmount = amount + topUp
-                };
+                Amount = item.Amount,
+                Empref = item.EmpRef,
+                TopUp = item.TopUp,
+                TransactionDate = item.TransactionDate,
+                EnglishFraction = item.EnglishFraction,
+                LineAmount = item.LineAmount
             }).ToList();
             
             return new GetEmployerAccountTransactionDetailResponse

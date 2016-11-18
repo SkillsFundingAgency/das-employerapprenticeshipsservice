@@ -18,5 +18,7 @@ namespace SFA.DAS.EAS.Domain.Entities.Transaction
         //Provider Payment fields
         public long UkPrn { get; set; }
         public string PeriodEnd { get; set; }
+
+        public decimal Balance { get; set; }
     }
 }
