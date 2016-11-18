@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Model = new TransactionLineItemViewModel
                 {
                     TotalAmount = data.Total,
-                    LineItem = data.TransactionDetail
+                    LineItem = data.Transactions
                 }
             };
         }

@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.IsNotEmpty(actual.TransactionDetail);
+            Assert.IsNotEmpty(actual.Transactions);
         }
 
         [Test]

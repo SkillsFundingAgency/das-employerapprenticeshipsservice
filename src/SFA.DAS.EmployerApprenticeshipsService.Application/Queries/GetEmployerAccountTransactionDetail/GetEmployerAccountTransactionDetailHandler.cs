@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
             
             return new GetAccountLevyDeclarationTransactionsByDateRangeResponse
             {
-                TransactionDetail = transactionDetailSummaries,
+                Transactions = transactionDetailSummaries,
                 Total = transactionDetailSummaries.Sum(c => c.LineTotal)
             };
         }
