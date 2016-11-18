@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.TransactionViewModel
 @{
@@ -48,9 +49,19 @@
                             <td class="numeric"> @(aggregationLine.Amount.ToString("C2", culture)) </td>
                             <td class="numeric">@(aggregationLine.Balance.ToString("C2", culture))</td>
                             <td class="link-right">
-                                <a title="View details for the transaction on @date" href="@Url.Action("Detail","EmployerAccountTransactions", new {accountId = Model.Data.HashedId, fromDate, toDate})">
-                                    Details <span class="vh"> for the transaction on @date</span>
-                                </a>
+                                @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
+                                     aggregationLine.TransactionType == TransactionItemType.TopUp)
+                                {
+                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {accountId = Model.Data.HashedId, fromDate, toDate})">
+                                        Details <span class="vh"> for the transaction on @date</span>
+                                    </a>
+                                }
+                                else if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                                {
+                                    <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {accountId = Model.Data.HashedId, fromDate, toDate})">
+                                        Details <span class="vh"> for the transaction on @date</span>
+                                    </a>
+                                    }
                             </td>
                         </tr>
                     }

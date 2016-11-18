@@ -423,7 +423,7 @@
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="Models\UserAccountsViewModel.cs" />
-    <Compile Include="Models\TransactionLineItemViewModel.cs" />
+    <Compile Include="Models\TransactionLineViewModel.cs" />
     <Compile Include="Models\TransactionLineItemViewResult.cs" />
     <Compile Include="Models\TransactionViewResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -906,7 +906,7 @@
     <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
     <Content Include="src\sass\_panels.scss" />
-<Content Include="src\sass\_commitments.scss" />
+    <Content Include="src\sass\_commitments.scss" />
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>

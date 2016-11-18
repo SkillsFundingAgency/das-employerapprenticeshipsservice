@@ -228,7 +228,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                         //}
                     }
                 }},
-                {"~/Views/EmployerAccountTransactions/Detail.cshtml", new TransactionLineItemViewModel()
+                {"~/Views/EmployerAccountTransactions/Detail.cshtml", new TransactionLineViewModel<LevyDeclarationTransactionLine>()
                     {
                         
                     }},

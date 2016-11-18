@@ -2,10 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
+using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -21,9 +24,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult> GetAccounTransactionLineItem(string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        public async Task<TransactionLineItemViewResult<LevyDeclarationTransactionLine>> FindAccountLevyDeclarationTransactions(
+            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
-            var data = await _mediator.SendAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
+            var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
             {
                 HashedAccountId = hashedId,
                 FromDate = fromDate,
@@ -31,12 +35,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ExternalUserId = externalUserId
             });
            
-            return new TransactionLineItemViewResult
+            return new TransactionLineItemViewResult<LevyDeclarationTransactionLine>
             {
-                Model = new TransactionLineItemViewModel
+                Model = new TransactionLineViewModel<LevyDeclarationTransactionLine>
                 {
-                    TotalAmount = data.Total,
-                    LineItem = data.Transactions
+                    Amount = data.Total,
+                    SubTransactions = data.Transactions
+                }
+            };
+        }
+
+        public async Task<TransactionLineItemViewResult<PaymentTransactionLine>> FindAccountPaymentTransactions(
+            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        {
+            var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+            {
+                HashedAccountId = hashedId,
+                FromDate = fromDate,
+                ToDate = toDate,
+                ExternalUserId = externalUserId
+            });
+
+            return new TransactionLineItemViewResult<PaymentTransactionLine>
+            {
+                Model = new TransactionLineViewModel<PaymentTransactionLine>
+                {
+                    Amount = data.Total,
+                    SubTransactions = data.Transactions
                 }
             };
         }
