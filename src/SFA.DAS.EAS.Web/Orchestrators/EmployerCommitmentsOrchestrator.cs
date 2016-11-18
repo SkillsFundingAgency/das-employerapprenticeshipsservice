@@ -282,6 +282,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return data?.ProvidersView?.Providers;
         }
 
+        public async Task<FinishEditingViewModel> GetFinishEditing(string hashedAccountId, string hashedCommitmentId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                    {
+                        AccountId = _hashingService.DecodeValue(hashedAccountId),
+                        CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+                    });
+
+            var approvedAndSend = PendingChanges(data.Commitment.Apprenticeships);
+
+            var model = new FinishEditingViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId,
+                ApproveAndSend = approvedAndSend
+            };
+
+            return model;
+        }
+
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        {
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                Message = string.Empty,
+                SaveOrSend = saveOrSend
+            });
+        }
+
         private async Task<GetProvidersQueryResponse> GetProviders()
         {
             return await _mediator.SendAsync(new GetProvidersQueryRequest());
@@ -371,7 +402,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 apprenticeship.TrainingCode = viewModel.TrainingId;
                 apprenticeship.TrainingName = training.Title;
             }
-
             return apprenticeship;
         }
 
@@ -396,6 +426,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             await Task.WhenAll(standardsTask, frameworksTask);
 
             return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
+        }
+
+
+        private static bool PendingChanges(List<Apprenticeship> apprenticeships)
+        {
+            if (apprenticeships == null || !apprenticeships.Any()) return true;
+            return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                   || m.AgreementStatus == AgreementStatus.EmployerAgreed) ?? false;
         }
     }
 }

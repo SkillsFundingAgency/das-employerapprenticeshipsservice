@@ -9,14 +9,19 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    using NLog;
+
     [Authorize]
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
 
-        public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
+        public EmployerCommitmentsController(
+            EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, 
+            IOwinWrapper owinWrapper,
+            IFeatureToggle featureToggle,
+            IUserWhiteList userWhiteList)
             : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (employerCommitmentsOrchestrator == null)
@@ -192,21 +197,16 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
+        public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = new FinishEditingViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HashedCommitmentId = hashedCommitmentId
-            };
-
+            var model = await _employerCommitmentsOrchestrator.GetFinishEditing(hashedAccountId, hashedCommitmentId);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditing(FinishEditingViewModel viewModel)
+        public async Task<ActionResult> FinishedEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -214,12 +214,22 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             // TODO: Refactor out these magic strings
-            if (viewModel.SaveOrSend == "save-no-send")
+            if (viewModel.SaveOrSend.StartsWith("send"))
             {
-                return RedirectToAction("Cohorts", new {hashedAccountId = viewModel.HashedAccountId});
+                return RedirectToAction("SubmitExistingCommitment", 
+                    new { hashedAccountId = viewModel.HashedAccountId,
+                          hashedCommitmentId = viewModel.HashedCommitmentId,
+                          saveOrSend = viewModel.SaveOrSend });
             }
 
-            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend});
+            if (viewModel.SaveOrSend == "approve")
+            {
+                await _employerCommitmentsOrchestrator
+                    .ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveOrSend);
+            }
+
+            return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
+
         }
         
         [HttpGet]
