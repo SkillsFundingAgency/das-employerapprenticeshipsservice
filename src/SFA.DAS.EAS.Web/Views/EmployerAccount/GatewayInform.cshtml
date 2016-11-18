@@ -1,7 +1,28 @@
-﻿<div class="grid-row">
+﻿@{ViewBag.Title = "Check details"; }
+<div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-medium">Goverment Inform</h1>
-        <p class="first-para-spacing">We are about to ....</p>
-        
+        <h1 class="heading-xlarge">Connecting to HMRC</h1>
+        <p>To access levy funds you need to connect your account to HMRC.</p>
+        <p>When you continue you'll be asked to:</p>
+        <ol class="list list-number">
+            <li>Enter the Government Gateway login details for one of your PAYE schemes. </li>
+            <li>'Grant authority' to allow HMRC to access your Government Gateway account.</li>
+        </ol>
+        <h2 class="heading-medium">By continuing you agree to the following:</h2>
+        <div class="panel">
+            <p>I have authority to add PAYE schemes to this account.</p>
+            <p>I understand that all account users will be able to see levy funds from any PAYE schemes I add.</p>
+            <p>All PAYE schemes I add are owned and operated by an organisation that'll use this account, or owned and operated by a <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external">connected organisation</a>.</p>
+        </div>
+        <p><a href="" class="button">Continue</a></p>
     </div>
 </div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+        </ol>
+    </div>
+}
