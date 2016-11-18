@@ -40,12 +40,27 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
             if (response.Status == HttpStatusCode.OK)
-                return RedirectToAction("Gateway", response.Data);
+                return RedirectToAction("GatewayInform", response.Data);
 
             TempData["companyNumberError"] = "No company found. Please try again";
             response.Status = HttpStatusCode.OK;
 
             return View(response);
+        }
+
+        [HttpGet]
+        public ActionResult GatewayInform(SelectEmployerViewModel model)
+        {
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult GatewayInfrom(SelectEmployerViewModel model, bool accepted)
+        {
+            return View("GatewayInform",model);
         }
 
         [HttpGet]
