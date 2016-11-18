@@ -8,11 +8,12 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IDasLevyService
     {
-        Task<List<TransactionLine>> GetTransactionsByAccountId(long accountId);
+        Task<ICollection<TransactionLine>> GetTransactionsByAccountId(long accountId);
 
-        Task<List<AccountBalance>> GetAllAccountBalances();
+        Task<ICollection<AccountBalance>> GetAllAccountBalances();
 
-        Task<List<TransactionLineDetail>> GetTransactionDetailByDateRange(
-            long accountId, DateTime fromDate, DateTime toDate, string externalUserId);
+        Task<ICollection<T>> GetTransactionsByDateRange<T>(
+            long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
+            where T : TransactionLine;
     }
 }

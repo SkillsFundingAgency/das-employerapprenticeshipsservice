@@ -30,7 +30,7 @@
                 {
                     <tr class="responsive-tr">
                         <td>
-                            @aggregationLineItem.Empref
+                            @aggregationLineItem.EmpRef
                         </td>
                         <td class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
@@ -42,7 +42,7 @@
                             @(aggregationLineItem.TopUp.ToString("C2", culture))
                         </td>
                         <td class="numeric">
-                            @((aggregationLineItem.LineAmount).ToString("C2", culture))
+                            @((aggregationLineItem.LineTotal).ToString("C2", culture))
                         </td>
                     </tr>
                 }
