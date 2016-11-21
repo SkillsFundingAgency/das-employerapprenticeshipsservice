@@ -71,39 +71,10 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
 
             Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
         }
+        
 
-        [When(@"I Add a new PAYE scheme to my existing legal entity")]
-        public void WhenIAddANewPAYESchemeToMyExistingLegalEntity()
-        {
-            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
-            
-            _newLegalEntity = false;
-
-            var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-
-            var legalEntity = employerPayeOrchestrator.Get(hashedId, userId).Result.Data.PayeSchemes.FirstOrDefault();
-
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme
-            {
-                HashedId = hashedId,
-                LegalEntityId = legalEntity.LegalEntityId,
-                PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
-                AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
-            };
-            try
-            {
-                employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Wait();
-            }
-            catch (Exception)
-            {
-                _exceptionCount++;
-            }
-        }
-
-        [When(@"I Add a new PAYE scheme to my new legal entity")]
-        public void WhenIAddANewPAYESchemeToMyNewLegalEntity()
+        [When(@"I Add a new PAYE scheme")]
+        public void WhenIAddANewPAYEScheme()
         {
             var hashedId = ScenarioContext.Current["HashedId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
@@ -114,24 +85,18 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
                 HashedId = hashedId,
-                LegalEntityId = 0,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                LegalEntityCode = "12345",
-                LegalEntityDateOfIncorporation = new DateTime(2016,10,30),
-                LegalEntityName = "Test Entity",
-                LegalEntityRegisteredAddress = "Test Address"
             };
             try
             {
                 employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Wait();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _exceptionCount ++;
+                _exceptionCount++;
             }
-            
         }
 
 
@@ -144,18 +109,15 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
 
             //Get the PAYE schemes
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
-            var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
-            var entities = legalEntities.Data.PayeSchemes.Select(c => c.LegalEntityId).Distinct().Count();
+            var payeSchemes = employerPayeOrchestrator.Get(hashedId, userId).Result;
             if (schemeStatus.Equals("created", StringComparison.CurrentCultureIgnoreCase))
             {
-                Assert.AreEqual(_newLegalEntity ? 2 : 1, entities);
-                Assert.AreEqual(2, legalEntities.Data.PayeSchemes.Count);
                 Assert.AreEqual(0, _exceptionCount);
+                Assert.AreEqual(2, payeSchemes.Data.PayeSchemes.Count);
             }
             else
             {
-                Assert.AreEqual(1, entities);
-                Assert.AreEqual(1, legalEntities.Data.PayeSchemes.Count);
+                Assert.AreEqual(1, payeSchemes.Data.PayeSchemes.Count);
                 Assert.AreEqual(1, _exceptionCount);
             }
 

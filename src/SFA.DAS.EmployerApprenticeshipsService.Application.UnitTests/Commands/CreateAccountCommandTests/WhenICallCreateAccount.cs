@@ -59,8 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             //Assert
             _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime>(),"123/abc", "123rd", "45YT"), Times.Once);
-            _accountRepository.Verify(x => x.GetPayeSchemes(ExpectedAccountId), Times.Once);
-            _accountRepository.Verify(x => x.AddPayeToAccountForExistingLegalEntity(ExpectedAccountId, ExpectedLegalEntityId, "456/123", "123rd", "45YT"), Times.Once);
+            _accountRepository.Verify(x => x.AddPayeToAccount(It.Is<Paye>(c => c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals("456/123") && c.AccessToken.Equals("123rd") && c.RefreshToken.Equals("45YT"))), Times.Once);
         }
 
         [Test]
