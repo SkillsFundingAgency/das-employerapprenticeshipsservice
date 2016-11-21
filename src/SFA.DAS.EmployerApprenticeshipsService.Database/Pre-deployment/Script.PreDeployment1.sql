@@ -12,7 +12,15 @@
 
 
 --Update for PAYE
-alter table account.paye drop constraint FK_Paye_LegalEntity
+
+IF EXISTS(select 1 from INFORMATION_SCHEMA.TABLE_CONSTRAINTS where CONSTRAINT_NAME = 'FK_Paye_LegalEntity')
+BEGIN
+	alter table account.paye drop constraint FK_Paye_LegalEntity	
+END
 GO
-alter table account.paye drop column legalentityid
+
+IF EXISTS(select 1 from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'PAYE' and COLUMN_NAME = 'legalentityid')
+BEGIN 
+	alter table account.paye drop column legalentityid
+END
 GO
