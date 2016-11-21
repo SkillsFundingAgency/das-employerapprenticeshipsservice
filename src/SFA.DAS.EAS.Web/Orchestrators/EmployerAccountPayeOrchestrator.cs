@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
-using SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
@@ -117,48 +116,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 RedirectUrl = redirectUrl
             };
         }
+        
 
-        public async Task<List<LegalEntity>> GetLegalEntities(string hashedId, string userId)
+        public async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
         {
-            var response = await Mediator.SendAsync(new GetAccountLegalEntitiesRequest
+            
+            await Mediator.SendAsync(new AddPayeToAccountCommand
             {
-                HashedId = hashedId,
-                UserId = userId
+                HashedId = model.HashedId,
+                AccessToken = model.AccessToken,
+                RefreshToken = model.RefreshToken,
+                Empref = model.PayeScheme,
+                ExternalUserId = userId,
             });
-
-            return response.Entites.LegalEntityList;
-        }
-
-
-        public async Task AddPayeSchemeToAccount(ConfirmNewPayeScheme model, string userId)
-        {
-            if (model.LegalEntityId == 0)
-            {
-                await Mediator.SendAsync(new AddPayeToNewLegalEntityCommand
-                {
-                    HashedId = model.HashedId,
-                    AccessToken = model.AccessToken,
-                    RefreshToken = model.RefreshToken,
-                    LegalEntityCode = model.LegalEntityCode,
-                    Empref = model.PayeScheme,
-                    ExternalUserId = userId,
-                    LegalEntityDate = model.LegalEntityDateOfIncorporation,
-                    LegalEntityAddress = model.LegalEntityRegisteredAddress,
-                    LegalEntityName = model.LegalEntityName
-                });
-            }
-            else
-            {
-                await Mediator.SendAsync(new AddPayeToAccountForExistingLegalEntityCommand
-                {
-                    HashedId = model.HashedId,
-                    ExternalUserId = userId,
-                    EmpRef = model.PayeScheme,
-                    LegalEntityId = model.LegalEntityId,
-                    RefreshToken = model.RefreshToken,
-                    AccessToken = model.AccessToken
-                });
-            }
+            
             
         }
 
