@@ -44,42 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return parameters.Get<long>("@accountId");
             });
         }
-
-        public async Task AddPayeToAccountForExistingLegalEntity(long accountId, long legalEntityId, string employerRef, string accessToken, string refreshToken)
-        {
-            await WithConnection(async c =>
-            {
-                var storedProcedureName = await GetPayeStoredProcedureForUpdateOrCreate(employerRef, c);
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
-                parameters.Add("@employerRef", employerRef, DbType.String);
-                parameters.Add("@accessToken", accessToken, DbType.String);
-                parameters.Add("@refreshToken",refreshToken, DbType.String);
-
-                var trans = c.BeginTransaction();
-                
-                var result = await c.ExecuteAsync(
-                    sql: storedProcedureName,
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure, transaction: trans);
-
-                var accountHistoryParams = new DynamicParameters();
-                accountHistoryParams.Add("@AccountId", accountId, DbType.Int64);
-                accountHistoryParams.Add("@PayeRef", employerRef, DbType.String);
-                accountHistoryParams.Add("@AddedDate", DateTime.UtcNow, DbType.DateTime);
-
-                await c.ExecuteAsync(
-                    sql: "[account].[CreateAccountHistory]",
-                    param: accountHistoryParams,
-                    commandType: CommandType.StoredProcedure, transaction: trans);
-
-
-                trans.Commit();
-                return result;
-            });
-        }
-
+        
         public async Task RemovePayeFromAccount(long accountId, string payeRef)
         {
             await WithConnection(async c =>
@@ -98,16 +63,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task AddPayeToAccountForNewLegalEntity(Paye payeScheme, LegalEntity legalEntity)
+        public async Task AddPayeToAccount(Paye payeScheme)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", payeScheme.AccountId, DbType.Int64);
-                parameters.Add("@companyNumber", legalEntity.Code, DbType.String);
-                parameters.Add("@companyName", legalEntity.Name, DbType.String);
-                parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
-                parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", payeScheme.EmpRef, DbType.String);
                 parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
                 parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
@@ -115,7 +76,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[AddPayeToAccountForNewLegalEntity]",
+                    sql: "[account].[AddPayeToAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -229,22 +190,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return result;
             });
         }
-
-        private static async Task<string> GetPayeStoredProcedureForUpdateOrCreate(string employerRef, IDbConnection c)
-        {
-            var searchParams = new DynamicParameters();
-            searchParams.Add("@employerRef", employerRef, DbType.String);
-
-            var payeResult =
-                await
-                    c.QueryAsync<int>("select 1 from [account].[paye] where Ref = @employerRef", searchParams,
-                        commandType: CommandType.Text);
-            var storedProcedureName = "[account].[CreatePaye]";
-            if (payeResult.SingleOrDefault() == 1)
-            {
-                storedProcedureName = "[account].[UpdatePaye]";
-            }
-            return storedProcedureName;
-        }
+        
     }
 }
