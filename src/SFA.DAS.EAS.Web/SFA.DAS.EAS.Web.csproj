@@ -908,6 +908,7 @@
     <Content Include="src\sass\_panels.scss" />
     <Content Include="src\sass\_commitments.scss" />
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
+    <Content Include="Views\EmployerAccount\GatewayInform.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

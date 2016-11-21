@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
         
         [Test]
-        public async Task ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
+        public void ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
         {
             //Arrange
             var companyName = "My Company";
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             
 
             //Act
-            await _employerAccountController.Gateway(new SelectEmployerViewModel());
+            _employerAccountController.GatewayInform(new SelectEmployerViewModel());
 
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
@@ -74,14 +74,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
 
         [Test]
-        public async Task ThenIfTheCompanyInformationModelIsNotEmptyTheDataIsNotReadFromTheCookie()
+        public void ThenIfTheCompanyInformationModelIsNotEmptyTheDataIsNotReadFromTheCookie()
         {
             //Act
             var companyName = "Test";
             var companyNumber = "123TEST";
             var registeredAddress = "Test Address";
             var dateOfIncorporation = new DateTime(2016, 05, 25);
-            await _employerAccountController.Gateway(new SelectEmployerViewModel
+            _employerAccountController.GatewayInform(new SelectEmployerViewModel
             {
                 CompanyName = companyName,
                 CompanyNumber = companyNumber,
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
 
             //Act
-            var actual = await _employerAccountController.Gateway(new SelectEmployerViewModel {CompanyName = "Test"});
+            var actual = await _employerAccountController.Gateway();
 
             //Assert
             Assert.IsNotNull(actual);

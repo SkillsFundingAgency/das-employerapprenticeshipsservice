@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
 
         [Test]
-        public async Task ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
+        public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
         {
             //Assign
             var request = new SelectEmployerViewModel
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
 
             //Act
-            await _employerAccountController.Gateway(request);
+            _employerAccountController.GatewayInform(request);
 
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
