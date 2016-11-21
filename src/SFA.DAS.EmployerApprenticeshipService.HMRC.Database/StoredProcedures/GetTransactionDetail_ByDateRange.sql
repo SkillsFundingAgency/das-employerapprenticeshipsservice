@@ -24,15 +24,16 @@ union all
 
 select 
     tl.AccountId,
-    p.Amount as Amount,
+    null as Amount,
     null as EnglishFraction,
     null as TopUp,
     null as empref,
-    tl.TransactionDate,
-    tl.Amount as LineAmount,
+    Max(tl.TransactionDate) as transactiondate,
+    Sum(tl.Amount) as LineAmount,
     tl.TransactionType
 from levy.TransactionLine tl
 inner join levy.Payment p on p.PeriodEnd = tl.PeriodEnd
 where    tl.TransactionDate >= @fromDate AND 
         tl.TransactionDate <= @toDate AND 
         tl.AccountId = @accountId
+GROUP BY tl.TransactionType, p.Uln, tl.AccountId
