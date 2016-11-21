@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Web.Models
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public string HashedId { get; set; }
+        public bool EmprefNotFound { get; set; }
     }
 }

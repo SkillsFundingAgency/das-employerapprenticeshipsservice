@@ -40,8 +40,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 model.FlashMessage = new FlashMessageViewModel
                 {
                     Headline = TempData["successMessage"].ToString(),
-                    Message = "Levy funds from this PAYE scheme will now credit your account"
+                    Message = TempData["subMessage"].ToString()
                 };
+                TempData.Remove("subMessage");
                 TempData.Remove("successMessage");
             }
 
@@ -110,7 +111,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
-            TempData["successMessage"] = $"{model.PayeScheme} has been added";
+            TempData["successMessage"] = $"You've added {model.PayeScheme}";
+            TempData["subMessage"] = "Levy funds from this PAYE scheme will now credit your account";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
         }
@@ -145,6 +147,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
+            TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
         }

@@ -23,6 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
         private Mock<ILogger> _logger;
         private const string ExpectedAuthToken = "token1";
         private const string ExpectedAuthTokenInUse = "token12";
+        private const string ExpectedAuthTokenNoScheme = "token5";
         private const string ExpectedEmpref = "123/avf123";
         private const string ExpectedEmprefInUse = "456/avf123";
         private const string ExpectedEmprefAssociatedName = "test company";
@@ -35,6 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthToken)).ReturnsAsync(ExpectedEmpref);
             _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthTokenInUse)).ReturnsAsync(ExpectedEmprefInUse);
+            _hmrcService.Setup(x => x.DiscoverEmpref(ExpectedAuthTokenNoScheme)).ReturnsAsync(null);
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedAuthToken, ExpectedEmpref)).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefAssociatedName } }, Links = new Links() });
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedAuthTokenInUse, ExpectedEmprefInUse)).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefAssociatedName } }, Links = new Links() });
 
@@ -124,6 +126,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
             //Assert
             Assert.IsNotNull(actual);
         }
-        
+
+        [Test]
+        public void ThenAnNotFoundExceptionIsRetrunedIfTheEmprefIsEmpty()
+        {
+            //Act Assert
+            Assert.ThrowsAsync<NotFoundException>(async ()=> await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }));
+            
+        }
     }
 }

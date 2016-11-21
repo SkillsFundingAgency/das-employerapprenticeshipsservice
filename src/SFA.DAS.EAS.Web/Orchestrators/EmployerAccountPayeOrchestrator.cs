@@ -53,6 +53,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
             {
+                response.FlashMessage.ErrorMessages.Clear();
                 response.FlashMessage.ErrorMessages.Add("addNewPaye", "Add new scheme");
                 response.FlashMessage.Headline = "PAYE scheme not added";
                 response.FlashMessage.Message = "You need to grant authority to HMRC to add a PAYE scheme.";
@@ -79,6 +80,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                  
                 HashedId = hashedId,
                 PayeScheme = hmrcResponse.Empref,
+                EmprefNotFound = hmrcResponse.EmprefNotFound,
                 AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
                 RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
                 }
