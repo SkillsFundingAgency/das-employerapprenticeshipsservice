@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsByDateRangeQuery>()))
                      .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
                     {
-                        Transactions= new List<LevyDeclarationTransactionLine>
+                        Transactions= new List<TransactionLine>
                         {
                             new LevyDeclarationTransactionLine()
                         }
