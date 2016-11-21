@@ -4,23 +4,23 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
-    public class AddPayeToNewLegalEntityCommandValidator : IValidator<AddPayeToNewLegalEntityCommand>
+    public class AddPayeToAccountCommandValidator : IValidator<AddPayeToAccountCommand>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public AddPayeToNewLegalEntityCommandValidator(IMembershipRepository membershipRepository)
+        public AddPayeToAccountCommandValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(AddPayeToNewLegalEntityCommand item)
+        public ValidationResult Validate(AddPayeToAccountCommand item)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(AddPayeToNewLegalEntityCommand item)
+        public async Task<ValidationResult> ValidateAsync(AddPayeToAccountCommand item)
         {
             var validationResult = new ValidationResult();
 
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
             return validationResult;
         }
 
-        private static void CheckFieldsArePopulated(AddPayeToNewLegalEntityCommand item, ValidationResult validationResult)
+        private static void CheckFieldsArePopulated(AddPayeToAccountCommand item, ValidationResult validationResult)
         {
             if (string.IsNullOrEmpty(item.AccessToken))
             {
@@ -63,22 +63,6 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
-            }
-            if (string.IsNullOrEmpty(item.LegalEntityAddress))
-            {
-                validationResult.AddError(nameof(item.LegalEntityAddress), "LegalEntityAddress has not been supplied");
-            }
-            if (string.IsNullOrEmpty(item.LegalEntityCode))
-            {
-                validationResult.AddError(nameof(item.LegalEntityCode), "LegalEntityCode has not been supplied");
-            }
-            if (item.LegalEntityDate == DateTime.MinValue)
-            {
-                validationResult.AddError(nameof(item.LegalEntityDate), "LegalEntityDate has not been supplied");
-            }
-            if (string.IsNullOrEmpty(item.LegalEntityName))
-            {
-                validationResult.AddError(nameof(item.LegalEntityName), "LegalEntityName has not been supplied");
             }
             if (string.IsNullOrEmpty(item.RefreshToken))
             {

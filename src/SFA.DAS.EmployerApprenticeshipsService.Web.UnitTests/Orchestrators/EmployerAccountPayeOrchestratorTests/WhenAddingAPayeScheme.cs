@@ -7,8 +7,7 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
-using SFA.DAS.EAS.Application.Commands.AddPayeWithExistingLegalEntity;
+using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
@@ -42,12 +41,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 HashedId = ExpectedHashedId,
-                PayeScheme = ExpectedEmpref,
-                LegalEntityId = 1,
-                LegalEntityCode = "mycode",
-                LegalEntityName = "name",
-                LegalEntityDateOfIncorporation = new DateTime(2016,01,01),
-                LegalEntityRegisteredAddress = "Test Address"
+                PayeScheme = ExpectedEmpref
             };
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration {Hmrc = new HmrcConfiguration()};
@@ -63,44 +57,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
 
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object,_logger.Object, _cookieService.Object, _configuration);
         }
+        
 
         [Test]
-        public async Task ThenTheMediatorIsCalledWithTheGetAccountLegalEntitesQuery()
-        {
-            //Arrange
-            var expectedUserId = Guid.NewGuid().ToString();
-
-            //Act
-            await _employerAccountPayeOrchestrator.GetLegalEntities(ExpectedHashedId, expectedUserId);
-
-            //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(c=>c.HashedId.Equals(ExpectedHashedId) && c.UserId.Equals(expectedUserId))));
-        }
-
-        [Test]
-        public async Task ThenTheAddPayeToAccountForExistingLegalEntityCommandIsCalledWhenTheLegalEntityIdIsNotZero()
+        public async Task ThenTheAddPayeToAccountCommandIsCalled()
         {
             //Act
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountForExistingLegalEntityCommand>(c=>c.HashedId.Equals(ExpectedHashedId) && c.EmpRef.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityId.Equals(1))),Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToNewLegalEntityCommand>()), Times.Never);
+            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountCommand>(c=>c.HashedId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) )),Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheAddPayeToAccountForNewLegalEntityCommandIsCalledWhenTheLegalEntityIsZero()
-        {
-            //Arrange
-            _model.LegalEntityId = 0;
-
-            //Act
-            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
-
-            //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToNewLegalEntityCommand>(c => c.HashedId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.LegalEntityCode.Equals(_model.LegalEntityCode))), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<AddPayeToAccountForExistingLegalEntityCommand>()), Times.Never);
-        }
+        
 
         [Test]
         public async Task ThenTheCallToHmrcIsPerformed()

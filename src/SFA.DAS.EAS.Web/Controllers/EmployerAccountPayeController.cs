@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -35,6 +34,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Index(string accountId)
         {
             var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (TempData["successMessage"] != null)
+            {
+                model.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = TempData["successMessage"].ToString(),
+                    Message = TempData["subMessage"].ToString()
+                };
+                TempData.Remove("subMessage");
+                TempData.Remove("successMessage");
+            }
 
             return View(model);
         }
@@ -72,7 +82,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             else
             {
-                return Redirect(Url.Action("Add", new { accountId = accountId,validationFailed=true }));
+                return Redirect(Url.Action("Add", new { accountId,validationFailed=true }));
             }
         }
 
@@ -99,93 +109,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Schemes/ConfirmPayeScheme")]
         public async Task<ActionResult> ConfirmPayeScheme(string accountId, AddNewPayeScheme model)
         {
-            model.LegalEntities = await _employerAccountPayeOrchestrator.GetLegalEntities(model.HashedId, OwinWrapper.GetClaimValue(@"sub"));
-            return View("ChooseCompany", model);
-        }
-
-        [HttpGet]
-        [Route("Schemes/ChooseCompany")]
-        public ActionResult ChooseCompany(string accountId)
-        {
-            return RedirectToAction("GetGateway");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Schemes/ChooseCompany")]
-        public ActionResult ChooseCompany(string accountId, int selectedCompanyId, AddNewPayeScheme model)
-        {
-            if (selectedCompanyId == -1)
-            {
-                var modelConfirm = new ConfirmNewPayeScheme(model);
-
-                return RedirectToAction("AddNewLegalEntity", modelConfirm);
-            }
-            else
-            {
-                var legalEntity = model.LegalEntities.SingleOrDefault(c => c.Id == selectedCompanyId);
-                var modelConfirm = new ConfirmNewPayeScheme(model)
-                {
-                    LegalEntityCode = legalEntity.Code,
-                    LegalEntityDateOfIncorporation = legalEntity.DateOfIncorporation,
-                    LegalEntityName = legalEntity.Name,
-                    LegalEntityRegisteredAddress = legalEntity.RegisteredAddress,
-                    LegalEntityId = legalEntity.Id
-                };
-
-                return View("Confirm", modelConfirm);
-            }
-
-        }
-
-        [HttpGet]
-        [Route("Schemes/AddNewLegalEntity")]
-        public ActionResult AddNewLegalEntity(string accountId, ConfirmNewPayeScheme model)
-        {
-            return View(model);
-        }
-
-        [HttpGet]
-        [Route("Schemes/ChooseExistingLegalEntity")]
-        public async Task<ActionResult> ChooseExistingLegalEntity(string accountId, AddNewPayeScheme model)
-        {
-            return await ConfirmPayeScheme(model.HashedId,model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Schemes/SelectCompany")]
-        public async Task<ActionResult> SelectCompany(string accountId, ConfirmNewPayeScheme model)
-        {
-            var result = await _employerAccountPayeOrchestrator.GetCompanyDetails(new SelectEmployerModel { EmployerRef = model.LegalEntityCode });
-
-            if (result.Status == HttpStatusCode.BadRequest)
-            {
-                TempData["companyNumberError"] = "No company found. Please try again";
-
-                return View("AddNewLegalEntity", model);
-            }
-
-            model.LegalEntityCode = result.Data.CompanyNumber;
-            model.LegalEntityDateOfIncorporation = result.Data.DateOfIncorporation;
-            model.LegalEntityName = result.Data.CompanyName;
-            model.LegalEntityRegisteredAddress = result.Data.RegisteredAddress;
-
-            return View("Confirm", model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Schemes/Confirm")]
-        public async Task<ActionResult> Confirm(string accountId, ConfirmNewPayeScheme model)
-        {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
-            TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
+            TempData["successMessage"] = $"You've added {model.PayeScheme}";
+            TempData["subMessage"] = "Levy funds from this PAYE scheme will now credit your account";
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
+            return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
         }
 
+        
         [HttpGet]
         [Route("Schemes/{empRef}/Remove")]
         public async Task<ActionResult> Remove(string accountId, string empRef)
@@ -215,6 +147,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
+            TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
         }

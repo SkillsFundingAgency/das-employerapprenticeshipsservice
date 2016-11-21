@@ -6,5 +6,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
     {
         public EmpRefLevyInformation EmployerLevyInformation { get; set; }
         public string Empref { get; set; }
+        public bool EmprefNotFound { get; set; }
     }
 }

@@ -127,12 +127,9 @@
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandHandler.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommandValidator.cs" />
-    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEntityCommand.cs" />
-    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEntityCommandValidator.cs" />
-    <Compile Include="Commands\AddPayeToNewLegalEntity\AddPayeToNewLegalEnttiyCommandHandler.cs" />
-    <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommand.cs" />
-    <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\AddPayeWithExistingLegalEntity\AddPayeToAccountForExistingLegalEntityCommandValidator.cs" />
+    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommand.cs" />
+    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandValidator.cs" />
+    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandHandler.cs" />
     <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\ApproveApprenticeship\ApproveApprenticeshipCommandValidator.cs" />
@@ -219,6 +216,7 @@
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
     <Compile Include="Messages\PaymentProcessorQueueMessage.cs" />
     <Compile Include="Messages\QueueMessage.cs" />
+    <Compile Include="NotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />

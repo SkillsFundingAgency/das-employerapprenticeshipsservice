@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -54,10 +55,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             if (emprefs.Length > 1)
             {
-                var schemes = await _accountRepository.GetPayeSchemes(accountId);
                 for (var i = 1; i < emprefs.Length; i++)
                 {
-                    await _accountRepository.AddPayeToAccountForExistingLegalEntity(accountId, schemes.First().LegalEntityId, emprefs[i], message.AccessToken, message.RefreshToken);
+                    await _accountRepository.AddPayeToAccount(new Paye {AccountId= accountId,EmpRef= emprefs[i], AccessToken= message.AccessToken, RefreshToken = message.RefreshToken});
                 }
             }
             

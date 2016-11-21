@@ -148,11 +148,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                             legalEntity,
                             legalEntity
                         },
-                LegalEntityCode = "MyLegalEntityCode",
-                LegalEntityDateOfIncorporation = new DateTime(2009, 07, 01),
-                LegalEntityId = 123,
-                LegalEntityName = "My little legal entity",
-                LegalEntityRegisteredAddress = "123 Fake street",
                 PayeScheme = "mypaye-123",
                 RefreshToken = "refresh-123"
             };

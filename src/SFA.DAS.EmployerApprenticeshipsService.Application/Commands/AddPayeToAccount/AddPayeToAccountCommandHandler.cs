@@ -5,23 +5,22 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging;
 
-namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
-    public class AddPayeToNewLegalEnttiyCommandHandler : AsyncRequestHandler<AddPayeToNewLegalEntityCommand>
+    public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccountCommand>
     {
         [QueueName]
         public string get_employer_levy { get; set; }
 
-        private readonly IValidator<AddPayeToNewLegalEntityCommand> _validator;
+        private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
 
-        public AddPayeToNewLegalEnttiyCommandHandler(IValidator<AddPayeToNewLegalEntityCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService)
+        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService)
         {
             _validator = validator;
             _accountRepository = accountRepository;
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
             _hashingService = hashingService;
         }
 
-        protected override async Task HandleCore(AddPayeToNewLegalEntityCommand message)
+        protected override async Task HandleCore(AddPayeToAccountCommand message)
         {
             var result = await _validator.ValidateAsync(message);
 
@@ -40,20 +39,13 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity
 
             var accountId = _hashingService.DecodeValue(message.HashedId);
 
-            await _accountRepository.AddPayeToAccountForNewLegalEntity(
+            await _accountRepository.AddPayeToAccount(
                     new Paye
                     {
                         AccessToken = message.AccessToken,
                         RefreshToken = message.RefreshToken,
                         AccountId = accountId,
                         EmpRef = message.Empref
-                    }, 
-                    new LegalEntity
-                    {
-                        Name = message.LegalEntityName,
-                        Code = message.LegalEntityCode,
-                        DateOfIncorporation = message.LegalEntityDate,
-                        RegisteredAddress = message.LegalEntityAddress
                     }
                 );
 
