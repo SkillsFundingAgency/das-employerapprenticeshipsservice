@@ -63,6 +63,7 @@
     <Folder Include="Views" />
     <Folder Include="Tables" />
     <Folder Include="Schemas" />
+    <Folder Include="Pre-deployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -124,5 +125,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Pre-deployment\Script.PreDeployment1.sql" />
   </ItemGroup>
 </Project>
