@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application
                 CreatedDate = DateTime.UtcNow,
                 Frameworks = frameworks.Select(x => new Framework
                 {
-                    Id = int.Parse(x.Id),
+                    Id = x.Id,
                     Title = x.Title,
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Application
                 CreationDate = DateTime.UtcNow,
                 Standards = standards.Select(x => new EAS.Domain.Standard
                 {
-                    Id = int.Parse(x.Id),
+                    Id = x.Id,
                     Level = x.Level,
                     Title = x.Title,
                     Duration = new Duration

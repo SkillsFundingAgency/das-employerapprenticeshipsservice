@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUser;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
@@ -30,7 +31,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse<Account>> GetAccount(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<Account>> GetAccount(
+            string accountId, string externalUserId)
         {
             try
             {
@@ -56,8 +58,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId,
-            string userId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(
+            string hashedId, string userId)
         {
             try
             {
@@ -113,9 +115,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException e)
             {
-                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
+                    FlashMessage =  new FlashMessageViewModel
+                    {
+                        Headline = "Errors to fix",
+                        Message = "Check the following details:",
+                        ErrorMessages = e.ErrorMessages,
+                        Severity = FlashMessageSeverityLevel.Error
+                    },
                     Exception = e
                 };
             }
@@ -143,7 +152,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<InvitationViewModel>> Review(string accountId, string email)
+        public async Task<OrchestratorResponse<InvitationViewModel>> Review(
+            string accountId, string email)
         {
             var response = new OrchestratorResponse<InvitationViewModel>();
 
@@ -173,7 +183,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(
+            string email, string hashedId, string externalUserId)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -214,7 +225,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(string email, string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Resend(
+            string email, string hashedId, string externalUserId)
         {
             var response = await GetTeamMembers(hashedId, externalUserId);
 
@@ -252,7 +264,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(long userId, string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Remove(
+            long userId, string accountId, string externalUserId)
         {
             var response = await GetTeamMembers(accountId, externalUserId);
 
@@ -300,9 +313,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (InvalidRequestException e)
             {
-
                 response.Status = HttpStatusCode.BadRequest;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
                 response.Exception = e;
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = e.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
             }
             catch (UnauthorizedAccessException e)
             {
@@ -313,37 +339,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string accountId, string email)
+        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(
+            string hashedAccountId, string email, string externalUserId)
         {
+            var userRoleResponse = await _mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
+
+            if (!userRoleResponse.UserRole.Equals(Role.Owner))
+            {
+                return new OrchestratorResponse<TeamMember>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
-                HashedId = accountId,
+                HashedId = hashedAccountId,
                 Email = email
             });
 
-            return new OrchestratorResponse<TeamMember>()
+            return new OrchestratorResponse<TeamMember>
             {
                 Data = response.TeamMember
             };
         }
 
-        private InvitationViewModel MapFrom(TeamMember teamMember)
-        {
-            return new InvitationViewModel
-            {
-                IsUser = teamMember.IsUser,
-                Id = teamMember.Id,
-                AccountId = teamMember.AccountId,
-                Email = teamMember.Email,
-                Name = teamMember.Name,
-                Role = teamMember.Role,
-                Status = teamMember.Status,
-                ExpiryDate = teamMember.ExpiryDate
-            };
-        }
-
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email,
-            short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(
+            string hashedId, string email, short role, string externalUserId)
         {
             try
             {
@@ -379,12 +405,50 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
             catch (UnauthorizedAccessException e)
             {
-                return new OrchestratorResponse<EmployerTeamMembersViewModel>()
+                return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
                     Exception = e
                 };
             }
+        }
+
+        public async Task<OrchestratorResponse<InviteTeamMemberViewModel>> GetNewInvitation(
+            string hashedAccountId, string externalUserId)
+        {
+
+            var response = await _mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
+            
+            return new OrchestratorResponse<InviteTeamMemberViewModel>
+            {
+                Data = new InviteTeamMemberViewModel
+                {
+                    HashedId = hashedAccountId,
+                    Role = Role.Viewer
+                },
+                Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
+            };
+
+
+        }
+
+        private static InvitationViewModel MapFrom(TeamMember teamMember)
+        {
+            return new InvitationViewModel
+            {
+                IsUser = teamMember.IsUser,
+                Id = teamMember.Id,
+                AccountId = teamMember.AccountId,
+                Email = teamMember.Email,
+                Name = teamMember.Name,
+                Role = teamMember.Role,
+                Status = teamMember.Status,
+                ExpiryDate = teamMember.ExpiryDate
+            };
         }
     }
 }

@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Entities.Transaction;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class DasLevyRepository : BaseRepository, IDasLevyRepository
     {
-        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration)
+        private readonly IMapper _mapper;
+
+        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, IMapper mapper)
             : base(configuration)
         {
+            _mapper = mapper;
         }
 
         public async Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef)
@@ -105,15 +112,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
-                return await c.QueryAsync<TransactionLine>(
+                return await c.QueryAsync<TransactionEntity>(
                     sql: "[levy].[GetTransactionLines_ByAccountId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
-
-            return result.ToList();
+            
+            return MapTransactions(result);
         }
-        
+
         public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
         {
             var result = await WithConnection(async c =>
@@ -125,10 +132,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                  parameters,
                  commandType: CommandType.StoredProcedure);
             });
-            
 
             return result.ToList();
-            
         }
 
         public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
@@ -161,20 +166,104 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<List<TransactionLineDetail>> GetTransactionDetail(long id)
+        public async Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@submissionId", id, DbType.Int64);
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@fromDate", fromDate, DbType.DateTime);
+                parameters.Add("@toDate", toDate, DbType.DateTime);
 
-                return await c.QueryAsync<TransactionLineDetail>(
-                    sql: "[levy].[GetTransactionDetail_ById]",
+                return await c.QueryAsync<TransactionEntity>(
+                    sql: "[levy].[GetTransactionDetail_ByDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result.ToList();
+            return MapTransactions(result);
+        }
+
+        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@PaymentId", Guid.Parse(payment.Id), DbType.Guid);
+                parameters.Add("@Ukprn", payment.Ukprn, DbType.Int64);
+                parameters.Add("@Uln", payment.Uln, DbType.Int64);
+                parameters.Add("@AccountId", accountId, DbType.Int64);
+                parameters.Add("@ApprenticeshipId", payment.ApprenticeshipId, DbType.Int64);
+                parameters.Add("@DeliveryPeriodMonth", payment.DeliveryPeriod.Month, DbType.Int32);
+                parameters.Add("@DeliveryPeriodYear", payment.DeliveryPeriod.Year, DbType.Int32);
+                parameters.Add("@CollectionPeriodId", payment.CollectionPeriod.Id, DbType.String);
+                parameters.Add("@CollectionPeriodMonth", payment.CollectionPeriod.Month, DbType.Int32);
+                parameters.Add("@CollectionPeriodYear", payment.CollectionPeriod.Year, DbType.Int32);
+                parameters.Add("@EvidenceSubmittedOn", payment.EvidenceSubmittedOn, DbType.DateTime);
+                parameters.Add("@EmployerAccountVersion", payment.EmployerAccountVersion, DbType.String);
+                parameters.Add("@ApprenticeshipVersion", payment.ApprenticeshipVersion, DbType.String);
+                parameters.Add("@FundingSource", payment.FundingSource, DbType.String);
+                parameters.Add("@TransactionType", payment.TransactionType, DbType.String);
+                parameters.Add("@Amount", payment.Amount, DbType.Decimal);
+                parameters.Add("@PeriodEnd", periodEnd, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "[levy].[CreatePayment]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+        }
+
+        public async Task<Payment> GetPaymentData(Guid paymentId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@paymentId", paymentId, DbType.Guid);
+
+                return await c.QueryAsync<Payment>(
+                    sql: "[levy].[GetPaymentData_ById]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
+
+        public async Task ProcessPaymentData()
+        {
+            await WithConnection(async c => await c.ExecuteAsync(
+                sql: "[levy].[ProcessPaymentDataTransactions]",
+                param: null,
+                commandType: CommandType.StoredProcedure));
+        }
+
+        private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
+        {
+            var transactions = new List<TransactionLine>();
+
+            foreach (var entity in transactionEntities)
+            {
+                switch (entity.TransactionType)
+                {
+                    case TransactionItemType.Declaration:
+                    case TransactionItemType.TopUp:
+                        transactions.Add(_mapper.Map<LevyDeclarationTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Payment:
+                        transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.Unknown:
+                        transactions.Add(_mapper.Map<TransactionLine>(entity));
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            return transactions;
         }
     }
 }

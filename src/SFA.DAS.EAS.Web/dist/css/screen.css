@@ -2045,6 +2045,16 @@ input[type=number] {
   }
 }
 
+.mobile-hide-cell {
+  display: none;
+}
+
+@media (min-width: 641px) {
+  .mobile-hide-cell {
+    display: table-cell;
+  }
+}
+
 @media (min-width: 641px) {
   .heading-xlarge {
     margin-bottom: 0.625em;
@@ -2128,6 +2138,14 @@ table.top-border {
     float: right;
     clear: both;
   }
+}
+
+.data h2.bold-xlarge {
+  margin-bottom: 30px;
+}
+
+.page-dashboard h3.heading-medium {
+  margin-top: 0;
 }
 
 .header-global {
@@ -2355,6 +2373,7 @@ td.link-right {
 
 table th, table td {
   font-size: 14px;
+  vertical-align: top;
 }
 
 @media (min-width: 641px) {
@@ -2370,6 +2389,16 @@ tr.total th {
 tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.description {
+  font-size: 90%;
+  display: inline-block;
+  line-height: 1.3;
 }
 
 .panel p {
@@ -2515,10 +2544,6 @@ a.links {
   display: block;
 }
 
-form .action-add {
-  float: left;
-}
-
 aside {
   margin-top: 50px;
 }
@@ -2535,6 +2560,14 @@ span.helpText {
 
 .trainingCost {
   width: 25%;
+}
+
+.form-date input#StartYear, .form-date input#EndYear {
+  width: 60px;
+}
+
+.form-group input#Cost {
+  width: 200px;
 }
 
 /* responsive table */
@@ -2592,11 +2625,6 @@ span.helpText {
     font-weight: bold;
     margin-top: 5px;
   }
-  .viewCommitment td:nth-of-type(3):before {
-    content: "Status";
-    font-weight: bold;
-    margin-top: 5px;
-  }
   .cohort td:nth-of-type(1):before {
     content: "Training provider";
     font-weight: bold;
@@ -2608,7 +2636,12 @@ span.helpText {
     margin-top: 5px;
   }
   .cohort td:nth-of-type(3):before {
-    content: "Reference";
+    content: "Cohort reference";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(4):before {
+    content: "Status";
     font-weight: bold;
     margin-top: 5px;
   }
@@ -2632,8 +2665,25 @@ span.helpText {
     font-weight: bold;
     margin-top: 5px;
   }
-  /*finished editing button spacing*/
-  .column-one-third .finishEditingBtn {
-    margin-top: 0.25em;
+  .tasksList td:nth-of-type(1):before {
+    content: "Created on";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(2):before {
+    content: "Name";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(3):before {
+    content: "Status";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+}
+
+@media only screen and (min-width: 641px) {
+  .finishEditingBtn {
+    margin-top: 0px;
   }
 }

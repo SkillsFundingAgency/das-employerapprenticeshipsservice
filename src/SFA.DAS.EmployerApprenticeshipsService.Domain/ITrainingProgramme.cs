@@ -2,7 +2,7 @@
 {
     public interface ITrainingProgramme
     {
-        int Id { get; set; }
+        string Id { get; set; }
         string Title { get; set; }
     }
 }

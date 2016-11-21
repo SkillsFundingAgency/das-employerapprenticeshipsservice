@@ -1732,6 +1732,11 @@ input[type=number] {
   display: block;
 }
 
+.mobile-hide-cell {
+  display: none;
+  display: table-cell;
+}
+
 .heading-xlarge {
   margin-bottom: 0.625em;
   margin-top: 1.25em;
@@ -1791,6 +1796,14 @@ table.top-border {
   margin-top: 60px;
   float: right;
   clear: both;
+}
+
+.data h2.bold-xlarge {
+  margin-bottom: 30px;
+}
+
+.page-dashboard h3.heading-medium {
+  margin-top: 0;
 }
 
 .header-global {
@@ -2018,6 +2031,7 @@ td.link-right {
 
 table th, table td {
   font-size: 14px;
+  vertical-align: top;
   font-size: 16px;
 }
 
@@ -2028,4 +2042,294 @@ tr.total th {
 tr.total td {
   border-bottom: 2px solid #0b0c0c;
   font-weight: 700;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+.description {
+  font-size: 90%;
+  display: inline-block;
+  line-height: 1.3;
+}
+
+.panel p {
+  font-size: 14px;
+  font-size: 16px;
+}
+
+.panel .heading-medium {
+  margin-bottom: 10px;
+}
+
+.panel-filled {
+  background: #dee0e2;
+}
+
+.validation-summary-valid,
+.form-group .field-validation-valid {
+  display: none;
+}
+
+b, strong {
+  font-weight: 600;
+}
+
+main .column-one-third .spacer {
+  margin-top: 60px;
+  float: right;
+}
+
+details .summary {
+  cursor: pointer;
+}
+
+.form-group .trainingProvider,
+.form-group .apprenticeGroupName,
+.form-group .input-validation-error {
+  margin-left: 0;
+}
+
+.error .form-control {
+  padding: 4px;
+}
+
+textarea#Message {
+  width: 100%;
+}
+
+.column-one-third .finishEditingBtn {
+  margin-top: 3.35em;
+}
+
+.spacerConfirmProvider {
+  margin-top: 50px;
+}
+
+.spacerConfirmProvider .form-label-bold {
+  margin-bottom: 15px;
+}
+
+.instructionSent td {
+  width: 25%;
+}
+
+.instructionSent td.strong {
+  font-weight: bold;
+  width: 75%;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+.govuk-box-highlight .heading-xlarge {
+  margin: 0 0 10px;
+}
+
+.field-validation-error {
+  font-size: 19px;
+  line-height: 1.31579;
+  clear: both;
+  color: #b10e1e;
+  display: block;
+  margin: 0;
+  padding: 2px 0;
+  text-transform: none;
+  font-weight: 700;
+}
+
+.emptyStateAlert {
+  background-color: #eaf4f9;
+  border-left: 8px solid #2b8cc4;
+  margin: 0 auto;
+  min-height: 110px;
+  width: 85%;
+}
+
+.emptyStateCopy {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.emptyStateCopyDetails {
+  padding-top: 25px;
+  text-align: center;
+}
+
+.emptyStateButton {
+  margin-top: 30px;
+}
+
+.finishEditingBtn {
+  float: right;
+}
+
+.reviewApprove p {
+  margin-bottom: 0.25em;
+}
+
+.reviewApprove .trainingProvider {
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: 20px;
+}
+
+.reviewApprove .deleteRequest {
+  float: right;
+  margin-bottom: 1.25em;
+}
+
+.reviewApprove hr {
+  clear: both;
+}
+
+a.links {
+  margin-top: 30px;
+  display: block;
+}
+
+aside {
+  margin-top: 50px;
+}
+
+.govuk-box-highlight {
+  margin-top: 50px;
+}
+
+span.helpText {
+  color: #6f777b;
+  display: block;
+  clear: both;
+}
+
+.trainingCost {
+  width: 25%;
+}
+
+.form-date input#StartYear, .form-date input#EndYear {
+  width: 60px;
+}
+
+.form-group input#Cost {
+  width: 200px;
+}
+
+/* responsive table */
+@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* Force table to not be like tables anymore */
+  table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr {
+    display: block;
+  }
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .tableResponsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  .tableResponsive tr {
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .tableResponsive td {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+  }
+  .tableResponsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+  .finishEditingBtn {
+    margin-left: 0px;
+    margin-top: 20px;
+  }
+  td.link-right {
+    padding-right: 0;
+    text-align: left;
+  }
+  /*
+	Label for the data
+	*/
+  .viewCommitment td:nth-of-type(1):before {
+    content: "Apprentice";
+    font-weight: bold;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .viewCommitment td:nth-of-type(2):before {
+    content: "Training";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(1):before {
+    content: "Training provider";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(2):before {
+    content: "Organisation";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(3):before {
+    content: "Cohort reference";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .cohort td:nth-of-type(4):before {
+    content: "Status";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .levyAccountsListing td:nth-of-type(1):before {
+    content: "Account name";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .levyAccountsListing td:nth-of-type(2):before {
+    content: "What you can do";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .orgListing td:nth-of-type(1):before {
+    content: "Name";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .orgListing td:nth-of-type(2):before {
+    content: "Agreement status";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(1):before {
+    content: "Created on";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(2):before {
+    content: "Name";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .tasksList td:nth-of-type(3):before {
+    content: "Status";
+    font-weight: bold;
+    margin-top: 5px;
+  }
+}
+
+@media only screen and (min-width: 641px) {
+  .finishEditingBtn {
+    margin-top: 0px;
+  }
 }

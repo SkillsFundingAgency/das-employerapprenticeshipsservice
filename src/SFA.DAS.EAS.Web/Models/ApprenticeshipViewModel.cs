@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
@@ -7,6 +6,8 @@ using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public class ApprenticeshipViewModel
     {
@@ -15,7 +16,9 @@ namespace SFA.DAS.EAS.Web.Models
         public string HashedAccountId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
         public string DateOfBirth { get; set; }
+
         public string NINumber { get; set; }
         public string ApprenticeshipName => $"{FirstName} {LastName}";
         public string ULN { get; set; }
@@ -46,9 +49,13 @@ namespace SFA.DAS.EAS.Web.Models
         }
 
         public int? EndYear { get; set; }
-        public ApprenticeshipStatus Status { get; set; }
-        public string AgreementStatus { get; set; }
+
         public string EmployerRef { get; set; }
+
         public string ProviderRef { get; set; }
+
+        public PaymentStatus PaymentStatus { get; set; }
+
+        public AgreementStatus AgreementStatus { get; set; }
     }
 }

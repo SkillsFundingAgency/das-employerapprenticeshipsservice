@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -109,27 +108,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectToAction("Index");
         }
-
-        [HttpPost]
-        public ActionResult SignInUser(string selectedUserId, SignInUserViewModel model)
-        {
-
-            var selected = model.AvailableUsers.FirstOrDefault(x => selectedUserId == x.UserId);
-
-            if (selected != null)
-            {
-                LoginUser(selected.UserId, selected.FirstName, selected.LastName);
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        public async Task<ActionResult> FakeUserSignIn()
-        {
-            var users = await _homeOrchestrator.GetUsers();
-
-            return View(users);
-        }
         
         public ActionResult SignOut()
         {
@@ -143,17 +121,5 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View();
         }
-
-        private void LoginUser(string id, string firstName, string lastName)
-        {
-            var displayName = $"{firstName} {lastName}";
-            OwinWrapper.SignInUser(id, displayName, $"{firstName.Trim()}.{lastName.Trim()}@test.local");
-
-            OwinWrapper.IssueLoginCookie(id, displayName);
-
-            OwinWrapper.RemovePartialLoginCookie();
-        }
-
-
     }
 }

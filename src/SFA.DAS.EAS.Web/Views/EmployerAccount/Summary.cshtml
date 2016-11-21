@@ -35,24 +35,11 @@
                     </td>
                 </tr>
             </table>
-            <h2 class="heading-medium">By continuing you agree to the following:</h2>
-            <div class="panel">
-                <p>
-                    I have authority to add PAYE schemes to this account.
-                </p>
-                <p>
-                    I understand that all account users will be able to see levy funds from any PAYE schemes I add.
-                </p>
-                <p>
-                    All PAYE schemes I add are owned and operated by an organisation that'll use this account, or owned and operated by a 
-                    <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external" target="_blank">connected organisation</a>.
-                </p>
-            </div>
             <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
                 @Html.AntiForgeryToken()
                 <input id="radio1" type="hidden" name="confirm_create" checked="checked" value="1">
                 <div class="form-group">
-                    <button type="submit" class="button" id="continue">Agree and submit details</button>
+                    <button type="submit" class="button" id="continue">These details are correct</button>
                     <a class="button-link" href="@Url.Action("SelectEmployer", "EmployerAccount")">Change details</a>
                 </div>
             </form>

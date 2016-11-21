@@ -47,16 +47,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams/Invite")]
-        public ActionResult Invite(string accountId)
+        public async Task<ActionResult> Invite(string accountId)
         {
-            var response = new OrchestratorResponse<InviteTeamMemberViewModel>
-            {
-                Data = new InviteTeamMemberViewModel
-                {
-                    HashedId = accountId,
-                    Role = Role.Viewer
-                }
-            };
+            var response = await _employerTeamOrchestrator.GetNewInvitation(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }
@@ -71,11 +64,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             if(response.Status == HttpStatusCode.OK)
                 return View("ViewTeam", response);
            
+            model.ErrorDictionary = response.FlashMessage.ErrorMessages; 
             var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
             {
                 Data = model,
-                Status = response.Status,
-                Exception = response.Exception
+                FlashMessage = response.FlashMessage,
             };
 
             return View(errorResponse);
@@ -162,7 +155,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Teams/{email}/ChangeRole/")]
         public async Task<ActionResult> ChangeRole(string accountId, string email)
         {
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(accountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(teamMember);
         }
@@ -179,7 +172,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("ViewTeam", response);
             }
             
-            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(accountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             //We have to override flash message as the change role view has different model to view team view
             teamMemberResponse.FlashMessage = response.FlashMessage;
@@ -188,12 +181,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(teamMemberResponse);
         }
 
-
         [HttpGet]
         [Route("Teams/{email}/Review/")]
         public async Task<ActionResult> Review(string accountId, string email)
         {
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email);
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(accountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(invitation);
         }

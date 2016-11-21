@@ -30,17 +30,17 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.Email))
-                validationResult.AddError(nameof(item.Email), "No Email supplied");
+                validationResult.AddError(nameof(item.Email), "Enter email address");
             else
             {
                 if (!IsValidEmailFormat(item.Email))
                 {
-                    validationResult.AddError(nameof(item.Email), "Email is not valid format");
+                    validationResult.AddError(nameof(item.Email), "Enter a valid email address");
                 }
             }
 
             if (string.IsNullOrWhiteSpace(item.Name))
-                validationResult.AddError(nameof(item.Name), "No Name supplied");
+                validationResult.AddError(nameof(item.Name), "Enter name");
 
             if (item.RoleId == 0)
                 validationResult.AddError(nameof(item.RoleId), "No RoleId supplied");
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     var existingTeamMember = await _membershipRepository.Get(caller.AccountId, item.Email);
 
                     if (existingTeamMember != null && existingTeamMember.IsUser)
-                        validationResult.AddError("ExistingMember", "Invitee is already a Member of this team");
+                        validationResult.AddError(nameof(item.Email), $"{item.Email} is already invited");
                 }
            }
 

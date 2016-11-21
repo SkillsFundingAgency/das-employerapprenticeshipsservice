@@ -54,8 +54,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
             {
-                response.FlashMessage.RedirectButtonMessage = "Add new scheme";
-                response.FlashMessage.RedirectButtonClass = "addNewPaye";
+                response.FlashMessage.ErrorMessages.Add("addNewPaye", "Add new scheme");
                 response.FlashMessage.Headline = "PAYE scheme not added";
                 response.FlashMessage.Message = "You need to grant authority to HMRC to add a PAYE scheme.";
 

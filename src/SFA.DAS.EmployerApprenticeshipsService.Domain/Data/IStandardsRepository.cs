@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Domain.Data
     public interface IStandardsRepository
     {
         Task<Standard[]> GetAllAsync();
-        Task<Standard> GetByCodeAsync(int code);
+        Task<Standard> GetByCodeAsync(string code);
     }
 }

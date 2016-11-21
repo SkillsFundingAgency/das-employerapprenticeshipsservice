@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
 
             if (response.Status == HttpStatusCode.OK)
-                return RedirectToAction("Gateway", response.Data);
+                return RedirectToAction("GatewayInform", response.Data);
 
             TempData["companyNumberError"] = "No company found. Please try again";
             response.Status = HttpStatusCode.OK;
@@ -49,9 +49,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Gateway(SelectEmployerViewModel model)
+        public ActionResult GatewayInform(SelectEmployerViewModel model)
         {
-            
+
             EmployerAccountData data;
             if (model?.CompanyName != null)
             {
@@ -76,9 +76,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
             }
             
-
             _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
 
+            return View();
+        }
+        
+        [HttpGet]
+        public async Task<ActionResult> Gateway()
+        {
             return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme)));
         }
 
@@ -156,7 +161,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-            TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement";
+            TempData["successMessage"] = "You can now invite team members and spend your levy";
 
             return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }

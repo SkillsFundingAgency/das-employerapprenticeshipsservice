@@ -1,6 +1,6 @@
 ﻿@using System.Globalization
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.Orchestrators.TransactionLineItemViewModel
+@model SFA.DAS.EAS.Web.Models.TransactionLineItemViewModel
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -14,7 +14,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@paymentType details</h1>
-        <p class="lede">@paymentType made on @Model.LineItem.First().TransactionDate.ToGdsFormat()</p>
+        <p class="lede">@paymentType made on @Model.LineItem.First().TransactionDate.ToGdsFormat().</p>
         <table>
             <thead>
                 <tr>
@@ -30,25 +30,25 @@
                 {
                     <tr class="responsive-tr">
                         <td>
-                            @aggregationLineItem.Empref
+                            @aggregationLineItem.EmpRef
                         </td>
                         <td class="numeric">
-                            @(aggregationLineItem.Amount.ToString("C0", culture))
+                            @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
                         <td class="numeric">
-                            @($"{aggregationLineItem.EnglishFraction*100:n0}")%
+                            @($"{aggregationLineItem.EnglishFraction*100:n2}")%
                         </td>
                         <td class="numeric">
-                            @(aggregationLineItem.TopUp.ToString("C0", culture))
+                            @(aggregationLineItem.TopUp.ToString("C2", culture))
                         </td>
                         <td class="numeric">
-                            @((aggregationLineItem.LineAmount).ToString("C0", culture))
+                            @((aggregationLineItem.LineAmount).ToString("C2", culture))
                         </td>
                     </tr>
                 }
                 <tr class="total">
                     <th scope="row" colspan="4"><span class="vh">Total</span></th>
-                    <td class="numeric">@Model.TotalAmount.ToString("C0",culture)</td>
+                    <td class="numeric">@Model.TotalAmount.ToString("C2",culture)</td>
                 </tr>
             </tbody>
         </table>

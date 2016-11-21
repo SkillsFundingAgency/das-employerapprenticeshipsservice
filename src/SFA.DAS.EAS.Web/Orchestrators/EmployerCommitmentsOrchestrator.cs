@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
@@ -31,20 +32,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
+        private readonly ILogger _logger;
 
-        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService)
+        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashId)
         {
+            _logger.Debug("Getting all Commitments");
+
             var data = await _mediator.SendAsync(new GetCommitmentsQuery
             {
                 AccountHashId = hashId
@@ -118,12 +125,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Commitment = new Commitment
                 {
-                    Name = commitment.CohortRef,
+                    Reference = commitment.CohortRef,
                     EmployerAccountId = _hashingService.DecodeValue(commitment.HashedAccountId),
-                    LegalEntityCode = commitment.LegalEntityCode,
+                    LegalEntityId = commitment.LegalEntityCode,
                     LegalEntityName = commitment.LegalEntityName,
                     ProviderId = commitment.ProviderId,
-                    ProviderName = commitment.ProviderName
+                    ProviderName = commitment.ProviderName,
+                    CommitmentStatus = (commitment.SelectedRoute == "employer") ? CommitmentStatus.New : CommitmentStatus.Active
                 }
             });
 
@@ -214,9 +222,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Commitment = new Commitment
                     {
-                        Name = cohortRef,
+                        Reference = cohortRef,
                         EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                        LegalEntityCode = legalEntityCode,
+                        LegalEntityId = legalEntityCode,
                         LegalEntityName = legalEntityName,
                         ProviderId = long.Parse(providerId),
                         ProviderName = providerName
@@ -230,13 +238,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             }
 
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            if (saveOrSend != "save-no-send")
             {
-                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = commitmentId,
-                Message = message,
-                SaveOrSend = saveOrSend
-            });
+                await _mediator.SendAsync(new SubmitCommitmentCommand
+                {
+                    EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                    CommitmentId = commitmentId,
+                    Message = message,
+                    SaveOrSend = saveOrSend
+                });
+            }
 
             return _hashingService.HashValue(commitmentId);
         }
@@ -290,10 +301,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new CommitmentViewModel
             {
                 HashedId = _hashingService.HashValue(commitment.Id),
-                Name = commitment.Name,
+                Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.Status,
+                Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus,
                 Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
             };
         }
@@ -303,10 +315,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new CommitmentListItemViewModel
             {
                 HashedId = _hashingService.HashValue(commitment.Id),
-                Name = commitment.Name,
+                Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.Status
+                Status = commitment.CommitmentStatus,
+                EditStatus = commitment.EditStatus
             };
         }
 
@@ -329,10 +342,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
-                Status = apprenticeship.Status,
-                AgreementStatus = apprenticeship.AgreementStatus.ToString(),
+
                 EmployerRef = apprenticeship.EmployerRef,
-                ProviderRef = apprenticeship.ProviderRef
+                ProviderRef = apprenticeship.ProviderRef,
+
+                PaymentStatus = apprenticeship.PaymentStatus,
+                AgreementStatus = apprenticeship.AgreementStatus
             };
         }
 
@@ -380,9 +395,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
-            var id = int.Parse(trainingCode);
-
-            return (await GetTrainingProgrammes()).Where(x => x.Id == id).Single();
+            return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
         }
 
         private DateTime? GetDateTime(int? month, int? year)
@@ -400,7 +413,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
-            return standardsTask.Result.Standards.Cast<ITrainingProgramme>().Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
+            return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
         }
     }
 }

@@ -96,8 +96,8 @@ this.ScenarioSetup(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("View team members")]
         [NUnit.Framework.TestCaseAttribute("Owner", "can", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("Transactor", "cannot", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("Viewer", "cannot", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Transactor", "can", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Viewer", "can", new string[0])]
         public virtual void ViewTeamMembers(string account_Role, string view, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("View team members", exampleTags);

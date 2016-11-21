@@ -1,13 +1,14 @@
-﻿@using SFA.DAS.EAS.Web
+﻿@using SFA.DAS.Commitments.Api.Types
+@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Models
 
 @model OrchestratorResponse<CommitmentListViewModel>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         @if (Model.Data.NumberOfTasks > 0)
         {
-            <h2 class="heading-medium">Tasks</h2>
+            @*<h2 class="heading-medium">Tasks</h2>
             <p>Any commitments that need your attention are shown below:</p>
             if (Model.Data.NumberOfTasks == 1)
             {
@@ -22,7 +23,7 @@
             {
                 <a href="@Url.Action("Index", "EmployerTasks")" class="link">View tasks</a>
             }
-            <hr />
+            <hr />*@
         }
     </div>
 </div>
@@ -30,11 +31,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Review and approve apprentices</h1>
-
-
-
-            <p>You have the following requests in progress:</p>
+            <h1 class="heading-xlarge">Requests in progress</h1>
         </div>
 
         @if (Model.Data.Commitments.Count == 0)
@@ -47,9 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="emptyStateButton">
-                <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
-            </div>
+      
         }
         else
         {
@@ -75,7 +70,9 @@
                 <tr>
                     <th>Training provider</th>
                     <th>Organisation</th>
-                    <th colspan="2">Reference</th>
+                    <th>Cohort reference</th>
+                    <th colspan="2">Status</th>
+                   
                  
                 </tr>
             </thead>
@@ -92,18 +89,34 @@
                           
                         </td>
                         <td>
-                          
-                        @commitment.Name
+                            @commitment.Name
                         </td>
                         <td>
-                            <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
+                            @if (commitment.EditStatus == EditStatus.ProviderOnly)
+                            {
+                                @Html.Raw("Sent to provider")
+                            }
+                            else if (commitment.EditStatus == EditStatus.Both)
+                            {
+                                @Html.Raw("Approved")
+                            }
+                            else
+                            {
+                                @Html.Raw("Saved")
+                            }
+                        </td>
+                        <td>
+                            @if (commitment.EditStatus == EditStatus.EmployerOnly || commitment.EditStatus == EditStatus.Both)
+                            {
+                                <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
+                            }
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
+      
 
         }
 
@@ -111,7 +124,7 @@
     </div> <!-- /column-two-thirds-->
 
     <div class="column-one-third pull-right">
-       
+        <a href="@Url.Action("Inform")" class="button spacer">Add new request</a>
     </div><!-- /column-one-third -->
 
 </div>

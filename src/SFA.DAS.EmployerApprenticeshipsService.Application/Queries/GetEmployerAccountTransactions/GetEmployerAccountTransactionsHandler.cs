@@ -3,23 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
-    public class GetEmployerAccountTransactionsHandler : IAsyncRequestHandler<GetEmployerAccountTransactionsQuery, GetEmployerAccountTransactionsResponse>
+    public class GetEmployerAccountTransactionsHandler :
+        IAsyncRequestHandler<GetEmployerAccountTransactionsQuery, GetEmployerAccountTransactionsResponse>
     {
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
+        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
+        private readonly ILogger _logger;
 
-        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator)
+        public GetEmployerAccountTransactionsHandler(IDasLevyService dasLevyService, IValidator<GetEmployerAccountTransactionsQuery> validator, IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper, ILogger logger)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
+            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
+            _logger = logger;
         }
 
         public async Task<GetEmployerAccountTransactionsResponse> Handle(GetEmployerAccountTransactionsQuery message)
@@ -33,33 +40,62 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             var response = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
 
-            var balance = 0m;
-            var transactionSummary = response.OrderBy(c=>c.TransactionDate).GroupBy(c => new { c.SubmissionId}, (submission, group) => new
+            if (!response.Any())
             {
-                submission.SubmissionId,
-                Data = group.ToList()
-            }).Select(item =>
+                return GetResponse(message.HashedId, message.AccountId);
+            }
+
+            var transactionSummaries = new List<TransactionLine>();
+
+            foreach (var transaction in response)
             {
-                var amount = item.Data.Sum(c => c.Amount);
-                var transactionDate = item.Data.First().TransactionDate;
-                return new TransactionSummary
+                if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
                 {
-                    Id = item.SubmissionId.ToString(),
-                    TransactionLines = item.Data,
-                    Amount = amount,
-                    Description = amount>=0 ?"Credit":"Adjustment",
-                    TransactionDate = new DateTime(transactionDate.Year,transactionDate.Month,20),
-                    Balance = balance += amount
-            };
-            }).OrderByDescending(c=>c.TransactionDate);
+                    transaction.Description = transaction.Amount >= 0 ? "Credit" : "Adjustment";
+                }
+                else if (transaction.GetType() == typeof(PaymentTransactionLine))
+                {
+                    var paymentTransaction = (PaymentTransactionLine) transaction;
+                    
+                    try
+                    {
+                    	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
+                        Convert.ToInt32(paymentTransaction.UkPrn));
+
+                    	transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Description = "Training provider - name not recognised";
+                        _logger.Info(ex, $"Provider not found for UkPrn:{paymentTransaction.UkPrn}");
+                    }                     
+                }
+
+                transactionSummaries.Add(transaction);
+            }
             
-            var returnValue = new AggregationData
-            {
-                HashedId = message.HashedId,
-                AccountId = message.AccountId,
-                TransactionSummary = transactionSummary.ToList()
-            };
-            return new GetEmployerAccountTransactionsResponse {Data = returnValue };
+            return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
         }
+
+
+        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
+        {
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>());
+        }
+
+        private static GetEmployerAccountTransactionsResponse GetResponse(
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions)
+        {
+            return new GetEmployerAccountTransactionsResponse
+            {
+                Data = new AggregationData
+                {
+                    HashedId = hashedAccountId,
+                    AccountId = accountId,
+                    TransactionLines = transactions
+                }
+            };
+        }
+        
     }
 }

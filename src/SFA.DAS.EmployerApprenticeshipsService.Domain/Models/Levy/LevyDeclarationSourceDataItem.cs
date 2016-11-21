@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public decimal LevyDueYtd { get; set; }
         public decimal EnglishFraction { get; set; }
         public DateTime SubmissionDate { get; set; }
-        public LevyItemType LevyItemType { get; set; }
+        public TransactionItemType TransactionItemType { get; set; }
         public DateTime? PayrollDate { get; set; }
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }

@@ -1,38 +1,33 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.Commitments.Api.Types
+@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
 @model CommitmentViewModel
+    
+@{
+    var status = Model.Status == CommitmentStatus.New ? "Saved" : "Sent to provider";
+}
 
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
-        <!--<table>
-            <tbody>
-            <tr>
-                <th scope="row">Name</th>
-                <td>@Model.Name</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Legal entity</th>
-                <td>@Model.LegalEntityName</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Provider</th>
-                <td>@Model.ProviderName</td>
-                <td></td>
-            </tr>
-            <tr>
-                <th scope="row">Status</th>
-                <td>@Model.Status.GetDescription()</td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>-->
-   
 
-        <p><span class="strong">Provider:</span> @Model.ProviderName</p>
+  
+        <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
+        <p><span class="strong">Status:</span>
+          @if (Model.EditStatus == EditStatus.ProviderOnly)
+          {
+            @Html.Raw("Sent to provider")
+          }
+          else if (Model.EditStatus == EditStatus.Both)
+          {
+            @Html.Raw("Approved")
+          }
+          else
+          {
+            @Html.Raw("Saved")
+          }
+        </p>
 
         <h2 class="heading-medium">Apprentices</h2>
         @if (Model.Apprenticeships.Count == 0)
@@ -40,7 +35,7 @@
          
             <div id="addApprenticesEmptyState" class="emptyState">
                 <div class="emptyStateAlert">
-                    <div class="emptyStateCopyDetails">
+                    <div class="emptyStateCopyDetails" aria-label="Information">
                         <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
 
                     </div>
@@ -55,8 +50,8 @@
                 <tr>
 
                     <th scope="col">Apprentice</th>
-                    <th scope="col">Training</th>
-                    <th scope="col" colspan="2">Status</th>
+                    <th scope="col" colspan="2">Training course</th>
+                 
 
                 </tr>
                 </thead>
@@ -74,10 +69,6 @@
 
                         </td>
                         <td>
-                            
-                            @apprenticeship.Status.GetDescription() &nbsp; 
-                        </td>
-                        <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
                         </td>
                     </tr>
@@ -87,8 +78,8 @@
         }
       
         <div class="emptyStateButton">
-            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Finished editing">Finish editing</a>
+            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-link" aria-label="Add an apprentice">Add an apprentice</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Save and continue">Save and continue</a>
         </div>
       
     </div>

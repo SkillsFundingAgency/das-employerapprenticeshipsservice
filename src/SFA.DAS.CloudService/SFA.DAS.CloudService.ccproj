@@ -42,22 +42,23 @@
   <ItemGroup>
     <Folder Include="Profiles" />
     <Folder Include="Configuration" />
-    <Folder Include="SFA.DAS.EAS.Account.ApiContent" />
+    <Folder Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\" />
     <Folder Include="SFA.DAS.EAS.WebContent" />
     <Folder Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent" />
   </ItemGroup>
   <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="SFA.DAS.EAS.PaymentProvider.WorkerContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.WebContent\diagnostics.wadcfgx" />
     <DiagnosticsConfiguration Include="SFA.DAS.EAS.LevyDeclarationProvider.WorkerContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj">
-      <Name>SFA.DAS.EAS.Account.Api</Name>
-      <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
+    <ProjectReference Include="..\SFA.DAS.EAS.PaymentProvider.Worker\SFA.DAS.EAS.PaymentProvider.Worker.csproj">
+      <Name>SFA.DAS.EAS.PaymentProvider.Worker</Name>
+      <Project>{52069b5e-6a8d-413e-b4bd-a7c7c4fd2ccf}</Project>
       <Private>True</Private>
-      <RoleType>Web</RoleType>
-      <RoleName>SFA.DAS.EAS.Account.Api</RoleName>
+      <RoleType>Worker</RoleType>
+      <RoleName>SFA.DAS.EAS.PaymentProvider.Worker</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Name>SFA.DAS.EAS.Web</Name>
@@ -76,11 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <PublishProfile Include="Profiles\das-at-eas-cs (stage).azurePubxml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Configuration\PreDeployment.ps1">
-      <SubType>Content</SubType>
-    </Content>
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

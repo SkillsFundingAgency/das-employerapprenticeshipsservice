@@ -17,7 +17,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
       <Setting name="RedisConnection" />
-      <Setting name="LoggingRedisConnnectionString"/>
+      <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
@@ -48,28 +48,14 @@
     <Imports>
     </Imports>
   </WorkerRole>
-  <WebRole name="SFA.DAS.EAS.Account.Api" vmsize="Small">
-    <Sites>
-      <Site name="Web">
-        <Bindings>
-          <Binding name="Endpoint1" endpointName="Endpoint1" />
-        </Bindings>
-      </Site>
-    </Sites>
+  <WorkerRole name="SFA.DAS.EAS.PaymentProvider.Worker" vmsize="Small">
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString"/>
-      <Setting name="EventHubName" />
-      <Setting name="ApiTokenSecret" />
-      <Setting name="ApiIssuer" />
-      <Setting name="ApiAudiences"  />
+      <Setting name="InstrumentationKey" />
     </ConfigurationSettings>
-    <Endpoints>
-      <InputEndpoint name="Endpoint1" protocol="http" port="8080" />
-    </Endpoints>
-  </WebRole>
+  </WorkerRole>
 </ServiceDefinition>

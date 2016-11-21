@@ -472,9 +472,7 @@ table.full-width, .responsive-table.full-width {
 .header-global a:focus {
     color: #0b0c0c;
 }
-aside.sidebar {
-    font-size: 14px;
-}
+
 
 aside.sidebar li {
     margin-bottom: 5px;
@@ -485,9 +483,10 @@ aside.sidebar li {
         float: right
     }
     aside.sidebar {
-        margin-top: 60px;
+        margin-top: 70px;
         border-top: 10px solid #005ea5;
         font-size: 16px;
+        font-size: 14px;
     }
 }
 

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Domain.Data
@@ -17,6 +19,9 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds);
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
-        Task<List<TransactionLineDetail>>  GetTransactionDetail(long id);
+        Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
+        Task CreatePaymentData(Payment payment, long accountId, string periodEnd);
+        Task<Payment> GetPaymentData(Guid paymentId);
+        Task ProcessPaymentData();
     }
 }

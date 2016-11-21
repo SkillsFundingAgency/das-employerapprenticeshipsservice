@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Domain
         public decimal Amount { get; set; }
         public decimal EnglishFraction { get; set; }
         public DateTime ActivityDate { get; set; }
-        public LevyItemType LevyItemType { get; set; }
+        public TransactionItemType TransactionItemType { get; set; }
         public decimal CalculatedAmount { get; set; }
         public bool IsLastSubmission { get; set; }
         public decimal LevyDueYtd { get; set; }

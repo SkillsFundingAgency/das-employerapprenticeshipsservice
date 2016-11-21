@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return await ReadFileById<Standard[]>(fileName);
         }
 
-        public async Task<Standard> GetByCodeAsync(int code)
+        public async Task<Standard> GetByCodeAsync(string code)
         {
             var standards = await ReadFileById<Standard[]>(fileName);
 

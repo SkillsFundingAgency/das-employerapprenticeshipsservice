@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Domain
 {
@@ -7,6 +8,6 @@ namespace SFA.DAS.EAS.Domain
     {
         public long AccountId { get; set; }
         public string HashedId { get; set; }
-        public List<TransactionSummary> TransactionSummary { get; set; }
+        public ICollection<TransactionLine> TransactionLines { get; set; }
     }
 }

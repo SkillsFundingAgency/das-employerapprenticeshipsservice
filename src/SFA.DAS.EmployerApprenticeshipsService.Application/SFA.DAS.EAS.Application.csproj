@@ -50,20 +50,28 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=0.9.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.9.52\lib\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=0.9.123.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.9.123\lib\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.9.52.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.52\lib\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.9.123.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.123\lib\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.6.0.15250, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.6.0.15250\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.8.0.15818, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.8.0.15818\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.6.0.15250, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.6.0.15250\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.8.0.15818, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.8.0.15818\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.5.0.15438, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.5.0.15438\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -82,9 +90,13 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
@@ -157,6 +169,9 @@
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
+    <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommand.cs" />
+    <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandHandler.cs" />
+    <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandValidator.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
@@ -195,8 +210,10 @@
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommand.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandHandler.cs" />
     <Compile Include="Commands\ResendInvitation\ResendInvitationCommandValidator.cs" />
-    <Compile Include="Events\ProcessDeclarationsEventHandler.cs" />
-    <Compile Include="Events\ProcessDeclarationsEvent.cs" />
+    <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEvent.cs" />
+    <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
+    <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
+    <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="InvalidRequestException.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Messages\EmployerRefreshLevyQueueMessage.cs" />
@@ -207,10 +224,10 @@
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQuery.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailQueryHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailResponse.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionDetailValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionsByDateRangeQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountLevyDeclarationTransactionsByDateRangeQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountLevyDeclationTransactionsByDateRangeResponse.cs" />
+    <Compile Include="Queries\AccountTransactions\GetAccountTransactionDetail\GetAccountTransactionsByDateRangeValidator.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
@@ -244,10 +261,10 @@
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryHandler.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryRequest.cs" />
     <Compile Include="Queries\GetCommitment\GetCommitmentQueryResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailQueryValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountTransactionDetailResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountTransactionDetail\GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
@@ -330,6 +347,10 @@
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />
+    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleValidator.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />

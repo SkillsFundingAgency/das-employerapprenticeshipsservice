@@ -9,18 +9,23 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
 {
-    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetEmployerAccountTransactionDetailQuery, GetEmployerAccountTransactionDetailResponse>
+    public class GetEmployerAccountTransactionDetailHandler : IAsyncRequestHandler<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery, GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse>
     {
-        private readonly IValidator<GetEmployerAccountTransactionDetailQuery> _validator;
+        private readonly IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery> _validator;
         private readonly IDasLevyService _dasLevyService;
+        private readonly IHashingService _hashingService;
 
-        public GetEmployerAccountTransactionDetailHandler(IValidator<GetEmployerAccountTransactionDetailQuery> validator, IDasLevyService dasLevyService)
+        public GetEmployerAccountTransactionDetailHandler(
+            IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery> validator, 
+            IDasLevyService dasLevyService,
+            IHashingService hashingService)
         {
             _validator = validator;
             _dasLevyService = dasLevyService;
+            _hashingService = hashingService;
         }
 
-        public async Task<GetEmployerAccountTransactionDetailResponse> Handle(GetEmployerAccountTransactionDetailQuery message)
+        public async Task<GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse> Handle(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -34,30 +39,25 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
                 throw new UnauthorizedAccessException();
             }
 
-            var data = await _dasLevyService.GetTransactionDetailById(message.Id);
-
-
-            var transactionDetailSummary = data.GroupBy(c => new { c.SubmissionId }, (submission, group) => new
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var data = await _dasLevyService.GetTransactionsByDateRange<LevyDeclarationTransactionLine>
+                                    (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
+            
+            var transactionDetailSummaries = data.Select(item => new LevyDeclarationTransactionLine
             {
-                submission.SubmissionId,
-                Data = group.ToList()
-            }).Select(item =>
-            {
-                var amount = item.Data.Where(c=>c.TransactionType.Equals(LevyItemType.Declaration)).Sum(c => c.Amount);
-                var topUp = item.Data.Where(c => c.TransactionType.Equals(LevyItemType.TopUp)).Sum(c => c.Amount);
-                return new TransactionDetailSummary
-                {
-                    Amount = amount,
-                    Empref = item.Data.First().EmpRef,
-                    TopUp = topUp,
-                    TransactionDate = item.Data.First().TransactionDate,
-                    EnglishFraction = item.Data.First().EnglishFraction,
-                    LineAmount = amount + topUp
-                };
+                Amount = item.Amount,
+                EmpRef = item.EmpRef,
+                TopUp = item.TopUp,
+                TransactionDate = item.TransactionDate,
+                EnglishFraction = item.EnglishFraction,
+                LineAmount = item.LineAmount
             }).ToList();
-            var totalAmount = transactionDetailSummary.Sum(c => c.LineAmount);
-            return new GetEmployerAccountTransactionDetailResponse {TransactionDetail = transactionDetailSummary,Total = totalAmount };
 
+            return new GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse
+            {
+                Transactions = transactionDetailSummaries,
+                Total = transactionDetailSummaries.Sum(c => c.LineAmount)
+            };
         }
     }
 }

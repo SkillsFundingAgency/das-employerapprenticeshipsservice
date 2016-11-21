@@ -1,15 +1,22 @@
 ﻿CREATE PROCEDURE [levy].[GetTransactionLines_ByAccountId]
 	@accountId BIGINT
 AS
-SELECT [AccountId]
-      ,[SubmissionId]
-      ,[PaymentId]
+select 
+	main.*
+	,SUM(Amount) OVER(ORDER BY TransactionDate asc 
+		RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) 
+	     AS Balance
+from
+(
+	SELECT 
+	   [AccountId]
       ,[TransactionDate]
-      ,[TransactionType]
-      ,[Amount]
-	  ,SUM(Amount) OVER(ORDER BY TransactionDate asc, TransactionType asc
-		RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) 
-         AS Balance
+      ,MAX([TransactionType]) as TransactionType
+      ,Sum(Amount) as Amount
+	  ,UkPrn
   FROM [levy].[TransactionLine]
   WHERE AccountId = @accountId
-  order by TransactionDate desc, TransactionType desc
+  GROUP BY TransactionDate ,AccountId, UKPRN
+  
+) as main
+order by TransactionDate desc
