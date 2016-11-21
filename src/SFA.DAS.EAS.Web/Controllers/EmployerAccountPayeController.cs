@@ -35,6 +35,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
+            if (TempData["successMessage"] != null)
+            {
+                model.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = TempData["successMessage"].ToString(),
+                    Message = "Levy funds from this PAYE scheme will now credit your account"
+                };
+                TempData.Remove("successMessage");
+            }
+
             return View(model);
         }
 
@@ -100,7 +110,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
-            TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
+            TempData["successMessage"] = $"{model.PayeScheme} has been added";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
         }
