@@ -22,8 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateCommitmentTests
                 {
                     LegalEntityId = "001",
                     LegalEntityName = "Test Legal Entity Name",
-                    EmployerAccountId = 2,
-                    EmployerAccountName = "Test Account Name"
+                    EmployerAccountId = 2
                 }
             };
         }
