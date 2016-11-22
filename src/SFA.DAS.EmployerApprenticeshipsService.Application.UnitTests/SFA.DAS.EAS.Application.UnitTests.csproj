@@ -168,8 +168,10 @@
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetailsTests\WhenIGetEmployerTransactionDetails.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionDetailsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactionDetailsTests - Copy\WhenIGetEmployerPaymentTransactionDetails.cs" />
+    <Compile Include="Queries\FindEmployerAccountPaymentTransactionDetailsTests - Copy\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactionDetailsTests\WhenIGetEmployerLevyDeclarationTransactionDetails.cs" />
+    <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactionDetailsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />

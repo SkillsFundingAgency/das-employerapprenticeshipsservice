@@ -5,6 +5,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
     public class FindEmployerAccountPaymentTransactionsResponse
     {
+        public string ProviderName { get; set; }
         public List<PaymentTransactionLine> Transactions { get; set; }
         public decimal Total { get; set; }
     }

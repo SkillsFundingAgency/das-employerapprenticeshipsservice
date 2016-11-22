@@ -184,13 +184,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd)
+        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@PaymentId", Guid.Parse(payment.Id), DbType.Guid);
                 parameters.Add("@Ukprn", payment.Ukprn, DbType.Int64);
+                parameters.Add("@ProviderName", providerName, DbType.StringFixedLength,ParameterDirection.Input,250);
                 parameters.Add("@Uln", payment.Uln, DbType.Int64);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@ApprenticeshipId", payment.ApprenticeshipId, DbType.Int64);

@@ -781,7 +781,7 @@
     <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
-    <Content Include="Views\EmployerAccountTransactions\Detail.cshtml" />
+    <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />

@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [levy].[CreatePayment]
 	@PaymentId as uniqueidentifier,
 	@Ukprn as BIGINT,
+	@ProviderName as NVARCHAR(250),
 	@Uln as BIGINT,
 	@AccountId as BIGINT,
 	@ApprenticeshipId as BIGINT,
@@ -21,6 +22,7 @@ as
 INSERT INTO [levy].[Payment]
            ([PaymentId]
            ,[Ukprn]
+		   ,[ProviderName]
            ,[Uln]
            ,[AccountId]
            ,[ApprenticeshipId]
@@ -39,6 +41,7 @@ INSERT INTO [levy].[Payment]
      VALUES
            (@PaymentId
            ,@Ukprn
+		   ,@ProviderName
            ,@Uln
            ,@AccountId
            ,@ApprenticeshipId

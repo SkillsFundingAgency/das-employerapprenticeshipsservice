@@ -3,6 +3,7 @@
 	[Id] INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
 	[PaymentId] UNIQUEIDENTIFIER NOT NULL,
 	[Ukprn] BIGINT NOT NULL,
+	[ProviderName] NVARCHAR(MAX) NULL,
 	[Uln] BIGINT NOT NULL,
     [AccountId] BIGINT NOT NULL,
     [ApprenticeshipId] BIGINT NOT NULL,
@@ -17,5 +18,5 @@
     [FundingSource] VARCHAR(25) NOT NULL,
     [TransactionType] VARCHAR(25) NOT NULL,
     [Amount] decimal(18,5) not null default 0,
-	[PeriodEnd] VARCHAR(25) not null
+	[PeriodEnd] VARCHAR(25) not null,     
 )

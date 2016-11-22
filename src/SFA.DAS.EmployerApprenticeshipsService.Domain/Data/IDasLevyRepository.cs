@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Domain.Data
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
         Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
-        Task CreatePaymentData(Payment payment, long accountId, string periodEnd);
+        Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName);
         Task<Payment> GetPaymentData(Guid paymentId);
         Task ProcessPaymentData();
     }
