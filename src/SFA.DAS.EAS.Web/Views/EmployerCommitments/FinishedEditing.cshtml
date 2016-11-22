@@ -18,10 +18,20 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveOrSend, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })
                     </div>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
-                        @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
-                        <span id="changeTwo">Approve and send to training provider</span>
-                    </label>
+                    @if (Model.ApproveAndSend)
+                    {
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendApprove">
+                            @Html.RadioButtonFor(m => m.SaveOrSend, "send-approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendApprove" })
+                            <span id="changeTwo">Approve and send to training provider</span>
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-Approve">
+                            @Html.RadioButtonFor(m => m.SaveOrSend, "approve", new { id = Html.IdFor(m => m.SaveOrSend) + "-Approve" })
+                            <span id="changeTwo">Approve</span>
+                        </label>
+                    }
 
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SaveOrSend)-SendAmend">
                         @Html.RadioButtonFor(m => m.SaveOrSend, "send-amend", new { id = Html.IdFor(m => m.SaveOrSend) + "-SendAmend" })

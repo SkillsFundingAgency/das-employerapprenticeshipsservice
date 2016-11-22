@@ -28,6 +28,8 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
+    using System.Globalization;
+
     public sealed class EmployerCommitmentsOrchestrator
     {
         private readonly IMediator _mediator;
@@ -214,29 +216,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<string> SubmitCommitment(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, string message, string saveOrSend)
         {
-            var commitmentId = 0L;
-
-            if (string.IsNullOrWhiteSpace(hashedCommitmentId))
-            {
-                var response = await _mediator.SendAsync(new CreateCommitmentCommand
-                {
-                    Commitment = new Commitment
-                    {
-                        Reference = cohortRef,
-                        EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                        LegalEntityId = legalEntityCode,
-                        LegalEntityName = legalEntityName,
-                        ProviderId = long.Parse(providerId),
-                        ProviderName = providerName
-                    }
-                });
-
-                commitmentId = response.CommitmentId;
-            }
-            else
-            {
-                commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            }
+            long commitmentId = await CreateCommitmentIfNotExist(hashedAccountId, hashedCommitmentId, legalEntityCode, legalEntityName, providerId, providerName, cohortRef);
 
             if (saveOrSend != "save-no-send")
             {
@@ -251,8 +231,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return _hashingService.HashValue(commitmentId);
         }
-        
-	    public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+
+        private async Task<long> CreateCommitmentIfNotExist(string hashedAccountId, string hashedCommitmentId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef)
+        {
+            if (!string.IsNullOrWhiteSpace(hashedCommitmentId))
+                return _hashingService.DecodeValue(hashedCommitmentId);
+
+            var response = await _mediator.SendAsync(new CreateCommitmentCommand
+                {
+                    Commitment = new Commitment
+                    {
+                        Reference = cohortRef,
+                        EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                        LegalEntityId = legalEntityCode,
+                        LegalEntityName = legalEntityName,
+                        ProviderId = long.Parse(providerId),
+                        ProviderName = providerName
+                    }
+                });
+
+            return response.CommitmentId;
+        }
+
+        public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             await _mediator.SendAsync(new PauseApprenticeshipCommand
             {
@@ -280,6 +281,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
 
             return data?.ProvidersView?.Providers;
+        }
+
+        public async Task<FinishEditingViewModel> GetFinishEditing(string hashedAccountId, string hashedCommitmentId)
+        {
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                    {
+                        AccountId = _hashingService.DecodeValue(hashedAccountId),
+                        CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+                    });
+
+            var approvedAndSend = PendingChanges(data.Commitment.Apprenticeships);
+
+            var model = new FinishEditingViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId,
+                ApproveAndSend = approvedAndSend
+            };
+
+            return model;
+        }
+
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        {
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                Message = string.Empty,
+                SaveOrSend = saveOrSend
+            });
         }
 
         private async Task<GetProvidersQueryResponse> GetProviders()
@@ -331,6 +363,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
+                DateOfBirthDay = apprenticeship.DateOfBirth?.Day,
+                DateOfBirthMonth = apprenticeship.DateOfBirth?.Month,
+                DateOfBirthYear = apprenticeship.DateOfBirth?.Year,
+                NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
@@ -340,6 +376,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 StartYear = apprenticeship.StartDate?.Year,
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
+
+                EmployerRef = apprenticeship.EmployerRef,
+                ProviderRef = apprenticeship.ProviderRef,
+
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus
             };
@@ -358,10 +398,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
+                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                EmployerRef = viewModel.EmployerRef,
+                ProviderRef = viewModel.ProviderRef
             };
 
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingId))
@@ -371,7 +415,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 apprenticeship.TrainingCode = viewModel.TrainingId;
                 apprenticeship.TrainingName = training.Title;
             }
-
             return apprenticeship;
         }
 
@@ -388,6 +431,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return null;
         }
 
+        private DateTime? GetDateTime(int? day, int? month, int? year)
+        {
+            if (day.HasValue && month.HasValue && year.HasValue)
+            {
+                DateTime dateOfBirthOut;
+                if (DateTime.TryParseExact(
+                    $"{year.Value}-{month.Value}-{day.Value}",
+                    "yyyy-M-d",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
+                {
+                    return dateOfBirthOut;
+                }
+            }
+
+            return null;
+        }
+
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
@@ -396,6 +456,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             await Task.WhenAll(standardsTask, frameworksTask);
 
             return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
+        }
+
+
+        private static bool PendingChanges(List<Apprenticeship> apprenticeships)
+        {
+            if (apprenticeships == null || !apprenticeships.Any()) return true;
+            return apprenticeships?.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                   || m.AgreementStatus == AgreementStatus.EmployerAgreed) ?? false;
         }
     }
 }
