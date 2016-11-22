@@ -14,9 +14,21 @@ namespace SFA.DAS.EAS.Web.Models
         public string HashedAccountId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+
+        public int? DateOfBirthDay { get; set; }
+
+        public int? DateOfBirthMonth { get; set; }
+
+        public int? DateOfBirthYear { get; set; }
+
+        public string NINumber { get; set; }
+
         public string ApprenticeshipName => $"{FirstName} {LastName}";
+
         public string ULN { get; set; }
+
         public TrainingType TrainingType { get; set; }
+
         public string TrainingId { get; set; }
         public string TrainingName { get; set; }
         public string Cost { get; set; }
@@ -43,7 +55,13 @@ namespace SFA.DAS.EAS.Web.Models
         }
 
         public int? EndYear { get; set; }
+
+        public string EmployerRef { get; set; }
+
+        public string ProviderRef { get; set; }
+
         public PaymentStatus PaymentStatus { get; set; }
+
         public AgreementStatus AgreementStatus { get; set; }
     }
 }
