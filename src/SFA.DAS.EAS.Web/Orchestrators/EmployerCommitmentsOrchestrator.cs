@@ -28,6 +28,8 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
+    using System.Globalization;
+
     public sealed class EmployerCommitmentsOrchestrator
     {
         private readonly IMediator _mediator;
@@ -331,7 +333,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
-                DateOfBirth = apprenticeship.DateOfBirth?.ToShortDateString(),
+                DateOfBirthDay = apprenticeship.DateOfBirth?.Day,
+                DateOfBirthMonth = apprenticeship.DateOfBirth?.Month,
+                DateOfBirthYear = apprenticeship.DateOfBirth?.Year,
                 NINumber = apprenticeship.NINumber,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
@@ -358,21 +362,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
         {
-            DateTime? dateOfBirth2 = null;
-            DateTime dateOfBirth;
-
-            if (DateTime.TryParse(viewModel.DateOfBirth, out dateOfBirth))
-            {
-                dateOfBirth2 = dateOfBirth;
-            };
-
             var apprenticeship = new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
                 Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                DateOfBirth = dateOfBirth2,
+                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
@@ -402,6 +398,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             if (month.HasValue && year.HasValue)
                 return new DateTime(year.Value, month.Value, 1);
+
+            return null;
+        }
+
+        private DateTime? GetDateTime(int? day, int? month, int? year)
+        {
+            if (day.HasValue && month.HasValue && year.HasValue)
+            {
+                DateTime dateOfBirthOut;
+                if (DateTime.TryParseExact(
+                    $"{year.Value}-{month.Value}-{day.Value}",
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
+                {
+                    return dateOfBirthOut;
+                }
+            }
 
             return null;
         }
