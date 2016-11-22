@@ -423,7 +423,7 @@
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
     <Compile Include="Models\UserAccountsViewModel.cs" />
-    <Compile Include="Models\TransactionLineItemViewModel.cs" />
+    <Compile Include="Models\TransactionLineViewModel.cs" />
     <Compile Include="Models\TransactionLineItemViewResult.cs" />
     <Compile Include="Models\TransactionViewResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

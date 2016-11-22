@@ -162,6 +162,8 @@
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDetails\WhenIGetApprenticeshipDetails.cs" />
+    <Compile Include="Queries\GetApprenticeshipDetails\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />

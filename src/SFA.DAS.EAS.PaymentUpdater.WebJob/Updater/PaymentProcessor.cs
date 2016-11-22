@@ -81,9 +81,6 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
                 }
 
             }
-
-
         }
-
     }
 }
