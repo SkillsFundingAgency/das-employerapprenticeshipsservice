@@ -455,7 +455,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             await Task.WhenAll(standardsTask, frameworksTask);
 
-            return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>()).ToList();
+            return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
+                .OrderBy(m => m.Title)
+                .ToList();
         }
 
 

@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Application
                 Frameworks = frameworks.Select(x => new Framework
                 {
                     Id = x.Id,
-                    Title = x.Title,
+                    Title = x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title,
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
                     Level = x.Level,

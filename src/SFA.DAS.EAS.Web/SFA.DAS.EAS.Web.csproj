@@ -444,10 +444,13 @@
     <Content Include="assets\images\icon-pointer-2x.png" />
     <Content Include="assets\images\opengraph-image.png" />
     <Content Include="assets\javascripts\app.js" />
+    <Content Include="assets\javascripts\apprentice\dropdown.js" />
     <Content Include="assets\javascripts\govuk-template.js" />
     <Content Include="assets\javascripts\ie.js" />
     <Content Include="assets\javascripts\jquery-1.11.0.min.js" />
     <Content Include="assets\javascripts\respond.min.js" />
+    <Content Include="assets\javascripts\apprentice\select2.min.js" />
+    <Content Include="assets\stylesheets\select2.min.css" />
     <Content Include="assets\stylesheets\external-links\external-link-24x24.png" />
     <Content Include="assets\stylesheets\external-links\external-link-black-12x12.png" />
     <Content Include="assets\stylesheets\external-links\external-link-black-24x24.png" />
@@ -497,6 +500,7 @@
     <Content Include="dist\css\screen-ie7.css" />
     <Content Include="dist\css\screen-ie8.css" />
     <Content Include="dist\css\screen.css" />
+    <Content Include="dist\css\select2.min.css" />
     <Content Include="dist\images\apple-touch-icon-120x120.png" />
     <Content Include="dist\images\apple-touch-icon-152x152.png" />
     <Content Include="dist\images\apple-touch-icon-60x60.png" />
@@ -514,6 +518,8 @@
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />
+    <Content Include="dist\javascripts\apprentice\dropdown.js" />
+    <Content Include="dist\javascripts\apprentice\select2.min.js" />
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
