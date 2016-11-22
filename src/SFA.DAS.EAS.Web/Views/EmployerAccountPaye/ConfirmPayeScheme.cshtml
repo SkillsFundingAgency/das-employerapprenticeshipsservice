@@ -13,11 +13,11 @@
 
         @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
         {
-            <h1 class="heading-xlarge">Confirm PAYE scheme</h1>
+            <h1 class="heading-large"><span class="heading-secondary">Confirm PAYE scheme</span> @Model.Data.PayeScheme</h1>
             <form method="post">
                 @Html.AntiForgeryToken()
-
-                <p>Do you want to add the PAYE scheme @Model.Data.PayeScheme?</p>
+                
+                <p>Is this the correct PAYE scheme?</p>
 
                 <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
                 <input type="hidden" value="@Model.Data.PayeScheme" name="PayeScheme"/>
@@ -25,10 +25,16 @@
                 <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
 
                 <div class="form-group">
-                    <button type="submit" class="button" id="accept">Accept</button>
-                    <a class="button button-link" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Search Again</a>
+                    <button type="submit" class="button" id="accept">Yes, continue</button>
+                    <a class="button button-link" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">No, use different details</a>
                 </div>
             </form>
+        }
+        else if (Model.Data.EmprefNotFound)
+        {
+            <h1 class="heading-xlarge">No PAYE scheme found</h1>
+            <p>The Goverment Gateway detals you entered aren't linked to any PAYE schemes</p>
+            <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Enter different details</a></p>
         }
         else
         {
@@ -39,7 +45,7 @@
 
 
 
-       
+
     </div>
 </div>
 

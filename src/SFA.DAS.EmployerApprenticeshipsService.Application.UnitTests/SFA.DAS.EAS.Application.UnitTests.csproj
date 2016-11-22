@@ -120,9 +120,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddPayeToAccountForExistingLegalEntityTests\WhenIAddPayeToAccountForExistingLegalEntity.cs" />
-    <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIAddPayeToAnAccountWithANewLegalEntity.cs" />
-    <Compile Include="Commands\AddPayeToNewLegalEntity\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\AddPayeToAccountTests\WhenIAddPayeToAnAccount.cs" />
+    <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenValidatingTheApproveApprenticeshipCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenApprovingApprenticeship.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
@@ -163,6 +162,8 @@
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipDetails\WhenIGetApprenticeshipDetails.cs" />
+    <Compile Include="Queries\GetApprenticeshipDetails\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />

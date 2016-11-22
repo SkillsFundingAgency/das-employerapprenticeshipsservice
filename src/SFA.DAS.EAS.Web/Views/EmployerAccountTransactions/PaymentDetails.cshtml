@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@model dynamic
+@model SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Payments.PaymentTransactionLine>
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -10,7 +10,10 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to @Model.Provider for @Model.PaymentPeriod</p>
+        <p class="lede">Payment to [provider] for @Model.TransactionDate.ToString("MMMM yyyy")</p>
+
+        <p><span class="strong">Amount: </span> @(Model.Amount.ToString("C0", culture))</p>
+        <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yyyy")</p>
         <table>
             <thead>
                 <tr>
@@ -19,11 +22,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var payment in Model.Payments)
+                @foreach (var payment in Model.SubTransactions)
                 {
                     <tr class="responsive-tr">
                         <td>
-                            @payment.Course
+                            @payment.Description
                         </td>
                         <td class="numeric">
                             @(payment.Amount.ToString("C0", culture))
@@ -32,7 +35,7 @@
                 }
             <tr class="total">
                 <td></td>
-                <td class="numeric">@Model.TotalAmount.ToString("C0", culture)</td>
+                <td class="numeric">@Model.Amount.ToString("C0", culture)</td>
             </tr>
             </tbody>
         </table>

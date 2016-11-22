@@ -3,23 +3,23 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
+namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
 {
-    public class GetEmployerAccountTransactionDetailQueryValidator : IValidator<GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery>
+    public class FindEmployerAccountPaymentTransactionsQueryValidator : IValidator<FindEmployerAccountPaymentTransactionsQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetEmployerAccountTransactionDetailQueryValidator(IMembershipRepository membershipRepository)
+        public FindEmployerAccountPaymentTransactionsQueryValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery item)
+        public ValidationResult Validate(FindEmployerAccountPaymentTransactionsQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery item)
+        public async Task<ValidationResult> ValidateAsync(FindEmployerAccountPaymentTransactionsQuery item)
         {
             var result = new ValidationResult();
 

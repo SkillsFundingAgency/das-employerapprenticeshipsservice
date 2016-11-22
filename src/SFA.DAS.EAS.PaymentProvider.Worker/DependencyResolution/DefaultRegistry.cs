@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
 using StructureMap;
 using StructureMap.Graph;
-using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
@@ -44,7 +40,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
         {
             var profiles = Assembly.Load("SFA.DAS.EAS.Infrastructure").GetTypes()
                             .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile)Activator.CreateInstance(t));
+                            .Select(t => (Profile)Activator.CreateInstance(t)).ToList();
 
             var config = new MapperConfiguration(cfg =>
             {

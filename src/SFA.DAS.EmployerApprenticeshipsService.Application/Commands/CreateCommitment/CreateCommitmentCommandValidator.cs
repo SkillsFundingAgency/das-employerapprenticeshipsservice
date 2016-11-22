@@ -25,9 +25,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
             if (command.Commitment.EmployerAccountId <= 0)
                 result.AddError(nameof(command.Commitment.EmployerAccountId), $"{nameof(command.Commitment.EmployerAccountId)} has an invalid value.");
 
-            if (string.IsNullOrWhiteSpace(command.Commitment.EmployerAccountName))
-                result.AddError(nameof(command.Commitment.EmployerAccountName), $"{nameof(command.Commitment.EmployerAccountName)} must have a value.");
-
             if (string.IsNullOrWhiteSpace(command.Commitment.LegalEntityId))
                 result.AddError(nameof(command.Commitment.LegalEntityId), $"{nameof(command.Commitment.LegalEntityId)} has an invalid value.");
 

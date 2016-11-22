@@ -4,16 +4,6 @@
 	I want to be able to add new PAYE schemes attached to existing or new legal entities
 
 @mytag
-Scenario Outline: Add new PAYE scheme to existing legal entity
-	Given I am an account "<account_role>"
-	When I Add a new PAYE scheme to my existing legal entity
-	Then The PAYE scheme Is "<scheme_status>"
-Examples:
-	| account_role | scheme_status |
-	| Owner        | created       |
-	| Viewer       | not_created   |
-	| Transactor   | not_created   |
-
 Scenario Outline: Remove PAYE scheme 
 Given I am an account "<account_role>"
 When I remove a scheme
@@ -25,9 +15,9 @@ Examples:
 	| Transactor   | not_removed  |
 
 
-Scenario Outline: Add new PAYE scheme to new legal entity
+Scenario Outline: Add new PAYE scheme
 Given I am an account "<account_role>"
-	When I Add a new PAYE scheme to my new legal entity
+	When I Add a new PAYE scheme
 	Then The PAYE scheme Is "<scheme_status>"
 Examples:
 	| account_role | scheme_status |

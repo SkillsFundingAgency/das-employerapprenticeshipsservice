@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail;
+using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionDetailsTests
@@ -11,20 +11,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
     public class WhenIValidateTheRequest
     {
         private Mock<IMembershipRepository> _membershipRepository;
-        private GetEmployerAccountTransactionDetailQueryValidator _validator;
+        private FindEmployerAccountLevyDeclarationTransactionsQueryValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetEmployerAccountTransactionDetailQueryValidator(_membershipRepository.Object);
+            _validator = new FindEmployerAccountLevyDeclarationTransactionsQueryValidator(_membershipRepository.Object);
         }
 
         [Test]
         public async Task ThenTrueIsReturnedWhenAllFieldsArePopulatedAndTheMemberIsPartOfTheAccount()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
+            var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
                 {
                     ExternalUserId = "test",
                     HashedAccountId = "test",
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenFalseIsReturnedAndTheValidtionDictionaryIsPopulatedWhenFieldsArentSupplied()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery());
+            var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery
+            var actual = await _validator.ValidateAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
             {
                 ExternalUserId = "test",
                 HashedAccountId = "test",

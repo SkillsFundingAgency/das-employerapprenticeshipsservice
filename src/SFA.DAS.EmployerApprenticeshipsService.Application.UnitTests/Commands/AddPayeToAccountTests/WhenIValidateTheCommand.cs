@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Commands.AddPayeToNewLegalEntity;
+using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
 {
     public class WhenIValidateTheCommand
     {
-        private AddPayeToNewLegalEntityCommandValidator _validator;
+        private AddPayeToAccountCommandValidator _validator;
         private Mock<IMembershipRepository> _membershiprepository;
         private const string ExpectedOwnerUserId = "123ABC";
         private const string ExpectedNonOwnerUserId = "543FDC";
@@ -24,14 +24,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
 
-            _validator = new AddPayeToNewLegalEntityCommandValidator(_membershiprepository.Object);
+            _validator = new AddPayeToAccountCommandValidator(_membershiprepository.Object);
         }
 
         [Test]
         public async Task ThenTheCommandIsInvalidIfTheFieldsArentPopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new AddPayeToNewLegalEntityCommand());
+            var actual = await _validator.ValidateAsync(new AddPayeToAccountCommand());
 
             //Assert
             Assert.IsFalse(actual.IsValid());

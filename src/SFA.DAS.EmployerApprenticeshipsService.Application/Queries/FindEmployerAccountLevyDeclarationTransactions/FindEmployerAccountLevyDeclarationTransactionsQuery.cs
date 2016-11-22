@@ -1,9 +1,9 @@
 ﻿using System;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactionDetail
+namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions
 {
-    public class GetEmployerAccountLevyDeclarationTransactionsByDateRangeQuery : IAsyncRequest<GetEmployerAccountLevyDeclarationTransactionsByDateRangeResponse>
+    public class FindEmployerAccountLevyDeclarationTransactionsQuery : IAsyncRequest<FindEmployerAccountLevyDeclarationTransactionsResponse>
     {
         public string HashedAccountId { get; set; }
         public DateTime FromDate { get; set; }

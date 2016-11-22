@@ -3,6 +3,7 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -78,6 +79,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
             
             //Assert
             Assert.AreEqual(expectedEmpRef, result.Empref);
+        }
+
+        [Test]
+        public async Task ThenIfANotFoundExceptionIsThrownThePropertyIsSetOnTheResponse()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ThrowsAsync(new NotFoundException("Empref not found"));
+
+            //Act
+            var result = await _employerAccountOrchestrator.GetHmrcEmployerInformation("123", "test@test.com");
+
+            //Assert
+            Assert.IsTrue(result.EmprefNotFound);
         }
     }
 }

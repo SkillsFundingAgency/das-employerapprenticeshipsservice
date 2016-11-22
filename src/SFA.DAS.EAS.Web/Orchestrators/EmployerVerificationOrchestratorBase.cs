@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
@@ -103,6 +104,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (ConstraintException)
             {
                 response.Empref = "";
+            }
+            catch (NotFoundException)
+            {
+                response.Empref = "";
+                response.EmprefNotFound = true;
             }
             
             return response;

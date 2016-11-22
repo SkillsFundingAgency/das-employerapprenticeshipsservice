@@ -31,9 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
             var transactions = await _dasLevyRepository.GetTransactionsByDateRange(message.AccountId, message.FromDate,
                 message.ToDate);
 
-            var levyDeclarationTransactions = transactions.OfType<LevyDeclarationTransactionLine>().ToList();
-
-            return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = levyDeclarationTransactions };
+            return new GetAccountLevyDeclationTransactionsByDateRangeResponse { Transactions = transactions };
         }
     }
 }

@@ -40,11 +40,11 @@ BEGIN
 
 	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
 	BEGIN
-		EXEC [account].[UpdatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+		EXEC [account].[UpdatePaye] @employerRef,@accessToken, @refreshToken
 	END
 	ELSE
 	BEGIN
-		EXEC [account].[CreatePaye] @legalEntityId,@employerRef,@accessToken, @refreshToken
+		EXEC [account].[CreatePaye] @employerRef,@accessToken, @refreshToken
 	END
 
 	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@addedDate

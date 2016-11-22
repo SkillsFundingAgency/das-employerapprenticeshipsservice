@@ -16,15 +16,5 @@ namespace SFA.DAS.EAS.Web.Models
             HashedId = model.HashedId;
         }
 
-        public long LegalEntityId { get; set; }
-
-        public string LegalEntityCode { get; set; }
-
-        public string LegalEntityName { get; set; }
-
-        public string LegalEntityRegisteredAddress { get; set; }
-
-        public DateTime LegalEntityDateOfIncorporation { get; set; }
-
     }
 }
