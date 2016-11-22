@@ -4,10 +4,19 @@
 @using SFA.DAS.EAS.Web.Models;
 
 @model OrchestratorResponse<EmployerAgreementListViewModel>
+@{ViewBag.PageID = "page-organisations-index"; }
 @{ViewBag.Title = "Your organisations";}
+@{
+    if (TempData.ContainsKey("extraCompanyAdded"))
+    {
+        ViewBag.PageID = "page-organisations-added";
+        TempData.Remove("extraCompanyAdded");
+    }
+}
+
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your organisations </h1>
+        <h1 class="heading-xlarge">Organisations and agreements</h1>
     </div>
     <div class="column-one-third">
         <form action="@Url.Action("Add")" method="GET">
@@ -18,6 +27,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <p class="lede">Add the organisations that you want to hire apprentices through.</p>
+        <p>
+            Each organisation needs to have a signed agreement before it can spend levy funds.
+        </p>
 
         <table class="tableResponsive orgListing">
             <thead>

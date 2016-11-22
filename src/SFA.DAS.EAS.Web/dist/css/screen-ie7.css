@@ -1783,6 +1783,11 @@ aside.sidebar {
   font-size: 16px;
 }
 
+aside.sidebar h2.heading-medium {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
 aside.sidebar li {
   margin-bottom: 5px;
 }
@@ -1923,7 +1928,7 @@ legend {
 }
 
 .button-link {
-  background-color: #dee0e2;
+  background-color: #fff;
   position: relative;
   display: -moz-inline-stack;
   display: inline-block;
@@ -1935,31 +1940,37 @@ legend {
   -moz-border-radius: 0;
   border-radius: 0;
   -webkit-appearance: none;
-  -webkit-box-shadow: 0 2px 0 #b5babe;
-  -moz-box-shadow: 0 2px 0 #b5babe;
-  box-shadow: 0 2px 0 #b5babe;
-  border-bottom: 2px solid #b5babe;
+  -webkit-box-shadow: 0 2px 0 #d9d9d9;
+  -moz-box-shadow: 0 2px 0 #d9d9d9;
+  box-shadow: 0 2px 0 #d9d9d9;
+  border-bottom: 2px solid #d9d9d9;
   font-size: 1em;
   line-height: 1.25;
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   cursor: pointer;
   color: #0b0c0c;
+  text-decoration: underline;
+  color: #005ea5;
+  -webkit-box-shadow: 0 2px 0 #fff;
+  -moz-box-shadow: 0 2px 0 #fff;
+  box-shadow: 0 2px 0 #fff;
+  border-bottom: 2px solid #fff;
 }
 
 .button-link:visited {
-  background-color: #dee0e2;
+  background-color: #fff;
 }
 
 .button-link:hover, .button-link:focus {
-  background-color: #d0d3d6;
+  background-color: #f2f2f2;
 }
 
 .button-link:active {
   top: 2px;
-  -webkit-box-shadow: 0 0 0 #dee0e2;
-  -moz-box-shadow: 0 0 0 #dee0e2;
-  box-shadow: 0 0 0 #dee0e2;
+  -webkit-box-shadow: 0 0 0 #fff;
+  -moz-box-shadow: 0 0 0 #fff;
+  box-shadow: 0 0 0 #fff;
 }
 
 .button-link.disabled, .button-link[disabled="disabled"], .button-link[disabled] {
@@ -1970,15 +1981,15 @@ legend {
 
 .button-link.disabled:hover, .button-link[disabled="disabled"]:hover, .button-link[disabled]:hover {
   cursor: default;
-  background-color: #dee0e2;
+  background-color: #fff;
 }
 
 .button-link.disabled:active, .button-link[disabled="disabled"]:active, .button-link[disabled]:active {
   top: 0;
-  -webkit-box-shadow: 0 2px 0 #b5babe;
-  -moz-box-shadow: 0 2px 0 #b5babe;
-  box-shadow: 0 2px 0 #b5babe;
-  border-bottom: 2px solid #b5babe;
+  -webkit-box-shadow: 0 2px 0 #d9d9d9;
+  -moz-box-shadow: 0 2px 0 #d9d9d9;
+  box-shadow: 0 2px 0 #d9d9d9;
+  border-bottom: 2px solid #d9d9d9;
 }
 
 .button-link:link, .button-link:hover, .button-link:focus, .button-link:visited {
@@ -2014,6 +2025,19 @@ legend {
 
 .button-link[type=submit].button {
   filter: none;
+}
+
+.button-link:link {
+  color: #005ea5;
+}
+
+.button-link:visited {
+  color: #4c2c92;
+}
+
+.button-link:hover, .button-link:focus {
+  background: #fff;
+  color: #2b8cc4;
 }
 
 .form-group form {

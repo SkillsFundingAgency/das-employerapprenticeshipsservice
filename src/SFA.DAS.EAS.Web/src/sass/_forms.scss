@@ -32,7 +32,24 @@
 }
 
 .button-link {
-    @include button($grey-3);
+    @include button($white);
+    text-decoration:underline;
+    color: $govuk-blue;
+    @include box-shadow(0 2px 0 $white);
+    @include ie-lte(8) {
+        border-bottom: 2px solid $white;
+    }
+    &:link {
+        color: $link-colour;
+    }
+    &:visited {
+        color: $link-visited-colour;
+    }
+    &:hover, 
+    &:focus {
+        background: $white;
+        color: $link-hover-colour;
+    }
 }
 
 .form-group {

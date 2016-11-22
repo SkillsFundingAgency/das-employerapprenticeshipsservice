@@ -181,6 +181,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
+            TempData["payeSchemeAdded"] = "true";
             TempData["successMessage"] = $"{model.PayeScheme} has been added to your account";
 
             return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});

@@ -1,5 +1,14 @@
 ﻿@model SFA.DAS.EAS.Web.Models.SummaryViewModel
-@{ViewBag.Title = "Check details"; }
+
+@{ViewBag.PageID = "page-onboard-paye-check-details"; }
+@{ViewBag.Title = "Check Details"; }
+
+
+@if (string.IsNullOrEmpty(Model.EmployerRef))
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-in-use";
+    ViewBag.Title = "PAYE scheme already in use";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">

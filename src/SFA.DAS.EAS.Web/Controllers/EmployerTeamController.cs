@@ -61,8 +61,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            if(response.Status == HttpStatusCode.OK)
+            if (response.Status == HttpStatusCode.OK)
+            {
+                TempData["userAdded"] = "true";
                 return View("ViewTeam", response);
+            }
+                
            
             model.ErrorDictionary = response.FlashMessage.ErrorMessages; 
             var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>

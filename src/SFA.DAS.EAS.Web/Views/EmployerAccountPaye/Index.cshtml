@@ -1,7 +1,16 @@
 ﻿
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.EmployerAccountPayeListViewModel>
-@{ViewBag.Title = "PAYE Schemes";}
+@{
+    ViewBag.PageID = "page-paye-schemes-index";
+    ViewBag.Title = "PAYE Schemes";
+
+    if (TempData.ContainsKey("payeSchemeAdded"))
+    {
+        ViewBag.PageID = "page-paye-schemes-added";
+        TempData.Remove("payeSchemeAdded");
+    }
+}
 
 <div class="grid-row header-index">
     <div class="column-two-thirds">

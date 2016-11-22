@@ -5,6 +5,7 @@
 
 @{
     ViewBag.Title = Model.Data.Name;
+    ViewBag.PageID = "page-company-homepage";
 }
 
 <h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
@@ -30,7 +31,7 @@
             <div class="grid-row">
                 <div class="column-half ">
                     <h3 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.HashedId })">Your organisations</a>
+                        <a href="@Url.Action("Index", "EmployerAgreement", new { accountId = Model.Data.HashedId })">Organisations and agreements</a>
                     </h3>
                     <p>Add and manage organisations that'll hire apprentices.</p>
                 </div>

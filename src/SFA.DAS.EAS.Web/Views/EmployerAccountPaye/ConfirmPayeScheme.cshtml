@@ -1,8 +1,15 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddNewPayeScheme>
-@{ViewBag.Title = "Confirm PAYE Scheme";}    
+@{ViewBag.PageID = "page-paye-scheme-confirm";} 
+@{ViewBag.Title = "Confirm PAYE Scheme";} 
+
+@if (string.IsNullOrEmpty(Model.Data.PayeScheme))
+{
+    ViewBag.PageID = "page-paye-scheme-in-use-error"; 
+    ViewBag.Title = "PAYE scheme already in use";
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        
 
         @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
         {
