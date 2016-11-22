@@ -6,7 +6,15 @@
 @{
     ViewBag.Title = Model.Data.Name;
     ViewBag.PageID = "page-company-homepage";
+
+    if (TempData.ContainsKey("employerAccountCreated"))
+    {
+        ViewBag.PageID = "page-employer-account-created";
+        TempData.Remove("employerAccountCreated");
+    }
 }
+
+
 
 <h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
 

@@ -4,6 +4,7 @@
 @model OrchestratorResponse<TeamMember>
 
 @{
+    ViewBag.PageID = "page-team-member-change-role";
     var name = Model.Data.Name ?? Model.Data.Email;
     ViewBag.Title = name;
 }

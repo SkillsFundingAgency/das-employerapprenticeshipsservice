@@ -148,6 +148,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("Remove",result);
             }
 
+            TempData["payeSchemeDeleted"] = "true";
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
             TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
 
