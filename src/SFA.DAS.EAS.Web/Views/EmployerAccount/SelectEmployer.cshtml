@@ -1,6 +1,8 @@
-﻿@{ViewBag.Title = "Enter your Companies House number"; }
+﻿@{ViewBag.PageID = "page-onboard-companies-house"; }
+@{ViewBag.Title = "Enter your Companies House number"; }
 @if (TempData["companyNumberError"] != null)
 {
+    ViewBag.PageID = "page-onboard-companies-house-error";
     <div class="grid-row">
         <div class="column-full error-summary-wrapper">
             <div tabindex="-1" role="group" class="error-summary">

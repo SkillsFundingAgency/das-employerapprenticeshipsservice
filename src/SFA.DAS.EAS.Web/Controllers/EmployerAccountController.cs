@@ -160,6 +160,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Summary");
             }
 
+            TempData["employerAccountCreated"] = "true";
             TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
             TempData["successMessage"] = "You can now invite team members and spend your levy";
 

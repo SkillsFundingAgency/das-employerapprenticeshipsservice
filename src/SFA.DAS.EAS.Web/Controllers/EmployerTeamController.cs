@@ -61,8 +61,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _employerTeamOrchestrator.InviteTeamMember(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            if(response.Status == HttpStatusCode.OK)
+            if (response.Status == HttpStatusCode.OK)
+            {
+                TempData["userAdded"] = "true";
                 return View("ViewTeam", response);
+            }
+                
            
             model.ErrorDictionary = response.FlashMessage.ErrorMessages; 
             var errorResponse = new OrchestratorResponse<InviteTeamMemberViewModel>
@@ -130,7 +134,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return RedirectToAction("ViewTeam", new {accountId});
 
                 var response = await _employerTeamOrchestrator.Remove(userId, accountId, OwinWrapper.GetClaimValue(@"sub"));
-
+                TempData["userDeleted"] = "true";
                 return View("ViewTeam", response);
             }
             catch (InvalidRequestException e)
@@ -169,6 +173,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
+                TempData["userRoleChange"] = "true";
                 return View("ViewTeam", response);
             }
             

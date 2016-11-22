@@ -111,8 +111,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
+            TempData["payeSchemeAdded"] = "true";
             TempData["successMessage"] = $"You've added {model.PayeScheme}";
             TempData["subMessage"] = "Levy funds from this PAYE scheme will now credit your account";
+
 
             return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
         }
@@ -146,6 +148,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("Remove",result);
             }
 
+            TempData["payeSchemeDeleted"] = "true";
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
             TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
 

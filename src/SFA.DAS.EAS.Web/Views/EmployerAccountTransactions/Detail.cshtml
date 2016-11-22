@@ -1,15 +1,15 @@
 ﻿@using System.Globalization
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Levy.LevyDeclarationTransactionLine>
-
 @{
     var culture = new CultureInfo("en-GB");
     var paymentType = "Credit";
-    ViewBag.Title = paymentType + " details";
     if (Model.Amount < 0)
     {
         paymentType = "Adjustment";
     }
+    ViewBag.PageID = "page-transaction-details";
+    ViewBag.Title = paymentType + " details";
 }
 <div class="grid-row">
     <div class="column-two-thirds">

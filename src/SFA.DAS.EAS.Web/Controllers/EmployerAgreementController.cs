@@ -166,6 +166,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("ViewEntityAgreement", response);
             }
 
+            TempData["extraCompanyAdded"] = "true";
+
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";

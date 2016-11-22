@@ -5,8 +5,29 @@
 @model OrchestratorResponse<EmployerTeamMembersViewModel>
 
 @{
+    ViewBag.PageID = "page-manage-team";
     ViewBag.Title = "Manage team members";
+
+    if (TempData.ContainsKey("userAdded"))
+    {
+        ViewBag.PageID = "page-invite-team-member-sent";
+        TempData.Remove("userAdded");
+    }
+
+    if (TempData.ContainsKey("userDeleted"))
+    {
+        ViewBag.PageID = "page-team-member-deleted";
+        TempData.Remove("userDeleted");
+    }
+
+    if (TempData.ContainsKey("userRoleChange"))
+    {
+        ViewBag.PageID = "page-team-member-role-changed";
+        TempData.Remove("userRoleChange");
+    }
 }
+
+
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.SuccessMessage))
 {
