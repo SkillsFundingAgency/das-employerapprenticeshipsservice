@@ -32,9 +32,7 @@
         }
         else if (Model.Data.EmprefNotFound)
         {
-            <h1 class="heading-xlarge">No PAYE scheme found</h1>
-            <p>The Goverment Gateway detals you entered aren't linked to any PAYE schemes</p>
-            <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Enter different details</a></p>
+            @Html.Partial("_PayeNotFound", Url.Action("Getgateway", "EmployerAccountPaye", new { confirmPayeVisibility = true }))
         }
         else
         {
@@ -42,9 +40,6 @@
             <p>The PAYE scheme for the Government Gateway details you entered is already added to an account. </p>
             <p><a class="button" href="@Url.Action("Getgateway", "EmployerAccountPaye", new {confirmPayeVisibility = true})">Use different details</a></p>
         }
-
-
-
 
     </div>
 </div>
