@@ -102,12 +102,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             var email = OwinWrapper.GetClaimValue("email");
 
             var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-
+            
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             enteredData.EmployerRef = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
+            enteredData.EmpRefNotFound = empref.EmprefNotFound;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
             return RedirectToAction("Summary");
@@ -124,7 +125,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyName = enteredData.CompanyName,
                 CompanyNumber = enteredData.CompanyNumber,
                 DateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef
+                EmployerRef = enteredData.EmployerRef,
+                EmpRefNotFound = enteredData.EmpRefNotFound
             };
 
             return View(model);
