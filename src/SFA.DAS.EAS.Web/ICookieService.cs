@@ -79,6 +79,6 @@ namespace SFA.DAS.EAS.Web
         public string EmployerRef { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
-        public bool EmprefNotFound { get; set; }
+        public bool EmpRefNotFound { get; set; }
     }
 }

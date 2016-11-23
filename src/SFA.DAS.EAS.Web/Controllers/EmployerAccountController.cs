@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             enteredData.EmployerRef = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
-            enteredData.EmprefNotFound = empref.EmprefNotFound;
+            enteredData.EmpRefNotFound = empref.EmprefNotFound;
             _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
 
             return RedirectToAction("Summary");
@@ -126,7 +126,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyNumber = enteredData.CompanyNumber,
                 DateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
-                EmprefNotFound = enteredData.EmprefNotFound
+                EmpRefNotFound = enteredData.EmpRefNotFound
             };
 
             return View(model);

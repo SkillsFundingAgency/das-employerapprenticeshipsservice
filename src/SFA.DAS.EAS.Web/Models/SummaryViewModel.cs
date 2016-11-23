@@ -9,6 +9,6 @@ namespace SFA.DAS.EAS.Web.Models
         public DateTime DateOfIncorporation { get; set; }
         public string RegisteredAddress { get; set; }
         public string EmployerRef { get; set; }
-        public bool EmprefNotFound { get; set; }
+        public bool EmpRefNotFound { get; set; }
     }
 }
