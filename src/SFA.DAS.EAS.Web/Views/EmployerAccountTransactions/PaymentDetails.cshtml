@@ -9,9 +9,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to @Model.ProviderName for @Model.TransactionDate.ToString("MMMM yyyy")</p>
+        <p class="lede">Payment to @Model.ProviderName for @Model.TransactionDate.ToString("MMMM yy")</p>
         <p><span class="strong">Amount: </span> @(Model.Amount.ToString("C0", culture))</p>
-        <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yyyy")</p>
+        <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yy")</p>
         <table>
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
                             @payment.Description
                         </td>
                         <td class="numeric">
-                            @(payment.Amount.ToString("C0", culture))
+                            @(payment.LineAmount.ToString("C0", culture))
                         </td>
                     </tr>
                 }

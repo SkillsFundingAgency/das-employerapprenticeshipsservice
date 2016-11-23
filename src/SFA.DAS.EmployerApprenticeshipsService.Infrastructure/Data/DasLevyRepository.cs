@@ -172,8 +172,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@fromDate", fromDate, DbType.DateTime);
-                parameters.Add("@toDate", toDate, DbType.DateTime);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year,fromDate.Month,fromDate.Day), DbType.DateTime);
+                parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day,23,59,59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
                     sql: "[levy].[GetTransactionDetail_ByDateRange]",

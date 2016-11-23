@@ -10,6 +10,8 @@ select
     ef.Amount as EnglishFraction,
     ldt.Amount as TopUp,
     tl.EmpRef,
+	null as CourseName,
+	null as ProviderName,
     tl.TransactionDate,
     tl.Amount as LineAmount,
     tl.TransactionType
@@ -28,12 +30,13 @@ select
     null as EnglishFraction,
     null as TopUp,
     null as empref,
-    Max(tl.TransactionDate) as transactiondate,
-    Sum(tl.Amount) as LineAmount,
+	null as CourseName,
+	p.ProviderName as ProviderName,
+    (tl.TransactionDate) as transactiondate,
+    (p.Amount) as LineAmount,
     tl.TransactionType
 from levy.TransactionLine tl
-inner join levy.Payment p on p.PeriodEnd = tl.PeriodEnd
+inner join levy.Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
 where    tl.TransactionDate >= @fromDate AND 
         tl.TransactionDate <= @toDate AND 
         tl.AccountId = @accountId
-GROUP BY tl.TransactionType, p.Uln, tl.AccountId

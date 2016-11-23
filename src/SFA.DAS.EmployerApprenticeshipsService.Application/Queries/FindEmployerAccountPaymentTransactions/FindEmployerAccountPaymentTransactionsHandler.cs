@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             {
                 ProviderName = providerName,
                 Transactions = transactions.ToList(),
-                Total = transactions.Sum(c => c.Amount)
+                Total = transactions.Sum(c => c.LineAmount)
             };
         }
     }
