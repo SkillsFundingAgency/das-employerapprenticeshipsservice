@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@model SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Payments.PaymentTransactionLine>
+@model SFA.DAS.EAS.Web.Models.PaymentTransactionViewModel
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -9,8 +9,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to [provider] for @Model.TransactionDate.ToString("MMMM yyyy")</p>
-
+        <p class="lede">Payment to @Model.ProviderName for @Model.TransactionDate.ToString("MMMM yyyy")</p>
         <p><span class="strong">Amount: </span> @(Model.Amount.ToString("C0", culture))</p>
         <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yyyy")</p>
         <table>

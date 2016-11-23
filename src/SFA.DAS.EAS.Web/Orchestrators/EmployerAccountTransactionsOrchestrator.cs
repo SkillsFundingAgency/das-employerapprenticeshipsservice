@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -24,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult<LevyDeclarationTransactionLine>> FindAccountLevyDeclarationTransactions(
+        public async Task<TransactionLineViewModel<LevyDeclarationTransactionLine>> FindAccountLevyDeclarationTransactions(
             string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
@@ -34,18 +33,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ToDate = toDate,
                 ExternalUserId = externalUserId
             });
-           
-            return new TransactionLineItemViewResult<LevyDeclarationTransactionLine>
+
+            return new TransactionLineViewModel<LevyDeclarationTransactionLine>
             {
-                Model = new TransactionLineViewModel<LevyDeclarationTransactionLine>
-                {
-                    Amount = data.Total,
-                    SubTransactions = data.Transactions
-                }
+                Amount = data.Total,
+                SubTransactions = data.Transactions
             };
         }
 
-        public async Task<TransactionLineItemViewResult<PaymentTransactionLine>> FindAccountPaymentTransactions(
+        public async Task<PaymentTransactionViewModel> FindAccountPaymentTransactions(
             string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
@@ -56,13 +52,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ExternalUserId = externalUserId
             });
 
-            return new TransactionLineItemViewResult<PaymentTransactionLine>
+            return new PaymentTransactionViewModel
             {
-                Model = new TransactionLineViewModel<PaymentTransactionLine>
-                {
-                    Amount = data.Total,
-                    SubTransactions = data.Transactions
-                }
+                ProviderName = data.Transactions.First().ProviderName,
+                Amount = data.Total,
+                SubTransactions = data.Transactions
             };
         }
 
