@@ -11,35 +11,24 @@ namespace SFA.DAS.EAS.Domain
     }
 
     public static class RoleStrings {
-        public static string ToWhatTheyCanDo(Role role) { return ToWhatTheyCanDo(role.ToString()); }
-        public static string ToWhatTheyCanDo(short roleId) { return ToWhatTheyCanDo((Role)roleId); }
-        public static string ToWhatTheyCanDo(string role)
+        public static string GetRoleDescription(Role role) { return GetRoleDescription(role.ToString()); }
+        public static string GetRoleDescription(short roleId) { return GetRoleDescription((Role)roleId); }
+        public static string GetRoleDescription(string role)
         {
             switch(role)
             {
-                case "Owner": return "Everything - they're the owner";
-                case "Transactor": return "Create and stop payments and view financial information";
-                case "Viewer": return "View financial information";
+                case "Owner": return "Invite team members, sign agreements, add apprentices and view information";
+                case "Transactor": return "Add apprentices and view information";
+                case "Viewer": return "View information but can’t make changes";
                 default: throw new ArgumentException("Unexpected role: " + role);
             }
         }
-        public static string ToWhatYouCanDo(string role)
+        
+        public static string GetRoleDescriptionToLower(short roleId) { return GetRoleDescriptionToLower((Role)roleId); }
+        public static string GetRoleDescriptionToLower(Role role) { return GetRoleDescriptionToLower(role.ToString()); }
+        public static string GetRoleDescriptionToLower(string role)
         {
-            switch (role)
-            {
-                case "Owner": return "Everything - you're the owner";
-                case "Transactor": return "Create and stop payments and view financial information";
-                case "Viewer": return "View financial information";
-                default: throw new ArgumentException("Unexpected role: " + role);
-            }
-        }
-
-
-        public static string ToWhatTheyCanDoLower(short roleId) { return ToWhatTheyCanDoLower((Role)roleId); }
-        public static string ToWhatTheyCanDoLower(Role role) { return ToWhatTheyCanDoLower(role.ToString()); }
-        public static string ToWhatTheyCanDoLower(string role)
-        {
-            var str = ToWhatTheyCanDo(role);
+            var str = GetRoleDescription(role);
             return char.ToLower(str[0]) + str.Substring(1);
         }
 

@@ -22,7 +22,7 @@
             <tbody>
                 <tr>
                     <td>@Model.Data.Email</td>
-                    <td>@RoleStrings.ToWhatTheyCanDo(@Model.Data.Role)</td>
+                    <td>@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
                     @if (Model.Data.IsUser)
                     {
                         <td class="link-right">

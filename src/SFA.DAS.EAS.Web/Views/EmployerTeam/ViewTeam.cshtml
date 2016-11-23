@@ -82,7 +82,7 @@
                             <span>@teamMember.Name</span> 
                             <span class="responsive-detail mobile-hide">@teamMember.Email</span>
                         </td>
-                        <td>@RoleStrings.ToWhatTheyCanDo(teamMember.Role)</td>
+                        <td>@RoleStrings.GetRoleDescription(teamMember.Role)</td>
                         <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
                         <td class="link-right">
                             <a aria-label="View details for @teamMember.Name"

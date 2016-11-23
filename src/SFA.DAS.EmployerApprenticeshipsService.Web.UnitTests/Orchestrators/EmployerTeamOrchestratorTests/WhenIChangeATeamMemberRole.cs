@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             Assert.IsNotNull(result.FlashMessage);
             Assert.AreEqual("Team member updated", result.FlashMessage.Headline);
-            Assert.AreEqual($"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}", result.FlashMessage.Message);
+            Assert.AreEqual($"{email} can now {RoleStrings.GetRoleDescriptionToLower(role)}", result.FlashMessage.Message);
         }
 
         [Test]

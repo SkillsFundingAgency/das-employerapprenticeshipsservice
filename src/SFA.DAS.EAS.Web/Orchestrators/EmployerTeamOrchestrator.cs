@@ -389,7 +389,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         Severity = FlashMessageSeverityLevel.Success,
                         Headline = "Team member updated",
-                        Message = $"{email} can now {RoleStrings.ToWhatTheyCanDoLower(role)}"
+                        Message = $"{email} can now {RoleStrings.GetRoleDescriptionToLower(role)}"
                     };
                 }
 
