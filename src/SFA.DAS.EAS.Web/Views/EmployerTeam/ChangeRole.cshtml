@@ -32,15 +32,15 @@
                     <legend class="visually-hidden">Select a role for @name</legend>
                     <label class="block-label" for="radio1">
                         <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
-                        @(RoleStrings.ToWhatTheyCanDo(Role.Viewer)).
+                        @(RoleStrings.GetRoleDescription(Role.Viewer))
                     </label>
                     <label class="block-label" for="radio2">
                         <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
-                        @(RoleStrings.ToWhatTheyCanDo(Role.Transactor)).
+                        @(RoleStrings.GetRoleDescription(Role.Transactor))
                     </label>
                     <label class="block-label" for="radio3">
                         <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
-                        @(RoleStrings.ToWhatTheyCanDo(Role.Owner)).
+                        @(RoleStrings.GetRoleDescription(Role.Owner))
                     </label>
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                 </fieldset>
