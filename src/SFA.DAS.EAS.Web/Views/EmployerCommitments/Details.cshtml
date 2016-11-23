@@ -33,13 +33,11 @@
         @if (Model.Apprenticeships.Count == 0)
         {
          
-            <div id="addApprenticesEmptyState" class="emptyState">
-                <div class="emptyStateAlert">
-                    <div class="emptyStateCopyDetails" aria-label="Information">
+            <div id="addApprenticesEmptyState" class="panel panel-filled">
+        
                         <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
 
-                    </div>
-                </div>
+           
             </div>
           
         }
@@ -78,7 +76,7 @@
         }
       
         <div class="emptyStateButton">
-            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-link" aria-label="Add an apprentice">Add an apprentice</a>
+            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Save and continue">Save and continue</a>
         </div>
       
