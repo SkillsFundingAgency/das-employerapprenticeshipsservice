@@ -506,6 +506,10 @@ main {
   }
 }
 
+.bold {
+  font-weight: 700;
+}
+
 .heading-xlarge {
   font-family: "nta", Arial, sans-serif;
   font-weight: 700;
@@ -799,6 +803,23 @@ hr {
   margin-left: -15px;
 }
 
+.data {
+  margin-top: 0.3125em;
+  margin-bottom: 1.25em;
+}
+
+@media (min-width: 641px) {
+  .data {
+    margin-top: 0.2631578947em;
+    margin-bottom: 1.0526315789em;
+  }
+}
+
+.data-item {
+  display: block;
+  line-height: 1;
+}
+
 .button {
   background-color: #00823b;
   position: relative;
@@ -876,13 +897,6 @@ hr {
 .button:active:before {
   top: -10%;
   height: 120%;
-}
-
-.button[rel="external"]:after {
-  display: none;
-  content: none;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 @media (max-width: 640px) {
@@ -1369,6 +1383,7 @@ table td.numeric {
 
 details {
   display: block;
+  clear: both;
 }
 
 details summary {
@@ -1439,7 +1454,7 @@ details .arrow {
   margin-bottom: 0;
 }
 
-.inline .form-group .panel-border-narrow {
+.inline .panel-border-narrow {
   margin-top: 10px;
   margin-bottom: 0;
 }
@@ -1583,9 +1598,10 @@ textarea {
   font-size: 16px;
   line-height: 1.25;
   width: 100%;
-  padding: 4px;
-  background-color: #fff;
-  border: 2px solid #6f777b;
+  padding: 5px 4px 4px;
+  color: inherit;
+  background-color: transparent;
+  border: 2px solid;
 }
 
 @media (min-width: 641px) {
@@ -1599,6 +1615,12 @@ textarea {
   .form-control {
     width: 50%;
   }
+}
+
+input.form-control,
+textarea.form-control {
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 
 .form-radio {
@@ -1686,9 +1708,7 @@ textarea {
   float: none;
   clear: left;
   position: relative;
-  background: #dee0e2;
-  border: 1px solid #dee0e2;
-  padding: 18px 30px 15px 54px;
+  padding: 8px 10px 9px 50px;
   margin-bottom: 10px;
   cursor: pointer;
 }
@@ -1696,21 +1716,98 @@ textarea {
 @media (min-width: 641px) {
   .block-label {
     float: left;
+    padding-top: 7px;
+    padding-bottom: 7px;
   }
 }
 
 .block-label input {
   position: absolute;
-  top: 15px;
-  left: 15px;
   cursor: pointer;
-  margin: 0;
-  width: 29px;
-  height: 29px;
+  left: 0;
+  top: 0;
+  width: 38px;
+  height: 38px;
 }
 
-.block-label:hover {
-  border-color: #0b0c0c;
+.js-enabled .block-label input {
+  margin: 0;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+
+.js-enabled .block-label.selection-button-radio::before {
+  content: "";
+  border: 2px solid;
+  background: transparent;
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+
+.js-enabled .block-label.selection-button-radio::after {
+  content: "";
+  border: 10px solid;
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+
+.js-enabled .block-label.selection-button-checkbox::before {
+  content: "";
+  border: 2px solid;
+  background: transparent;
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.js-enabled .block-label.selection-button-checkbox::after {
+  content: "";
+  border: solid;
+  border-width: 0 0 5px 5px;
+  background: transparent;
+  width: 17px;
+  height: 7px;
+  position: absolute;
+  top: 10px;
+  left: 8px;
+  -moz-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  zoom: 1;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+
+.js-enabled .block-label.selection-button-radio.focused::before, .js-enabled .block-label.selection-button-checkbox.focused::before {
+  -webkit-box-shadow: 0 0 0 5px #ffbf47;
+  -moz-box-shadow: 0 0 0 5px #ffbf47;
+  box-shadow: 0 0 0 5px #ffbf47;
+}
+
+.js-enabled .block-label.selection-button-radio.selected::after, .js-enabled .block-label.selection-button-checkbox.selected::after {
+  zoom: 1;
+  filter: alpha(opacity=100);
+  opacity: 1;
 }
 
 .block-label:last-child, .block-label:last-of-type {
@@ -1724,21 +1821,8 @@ textarea {
 @media (min-width: 641px) {
   .inline .block-label {
     margin-bottom: 0;
-    margin-right: 10px;
+    margin-right: 30px;
   }
-}
-
-.js-enabled label.selected {
-  background: #fff;
-  border-color: #0b0c0c;
-}
-
-.js-enabled label.focused {
-  outline: 3px solid #ffbf47;
-}
-
-.js-enabled .focused input:focus {
-  outline: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -2360,13 +2444,6 @@ legend {
   height: 120%;
 }
 
-.button-link[rel="external"]:after {
-  display: none;
-  content: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-
 .button-link:link {
   color: #005ea5;
 }
@@ -2570,10 +2647,6 @@ aside {
   margin-top: 50px;
 }
 
-.govuk-box-highlight {
-  margin-top: 50px;
-}
-
 span.helpText {
   color: #6f777b;
   display: block;
@@ -2628,10 +2701,6 @@ span.helpText {
   .finishEditingBtn {
     margin-left: 0px;
     margin-top: 20px;
-  }
-  td.link-right {
-    padding-right: 0;
-    text-align: left;
   }
   /*
 	Label for the data
