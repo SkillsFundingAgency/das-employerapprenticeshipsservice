@@ -11,12 +11,27 @@
         <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
         <p><span class="strong">Status:</span> @Model.Status.GetDescription()</p>
 
-        <h2 class="heading-medium">Apprentices</h2>
+        <h2 class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</h2>
+        
+        @{
+            var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Finish Editing";
+        }
 
         <div class="emptyStateButton">
             <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Save and continue">Save and continue</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         </div>
+
+        @functions {
+
+            public string GetApprenticesCountText(IList<ApprenticeshipViewModel> apprenticeships)
+            {
+                if (apprenticeships.Count == 1)
+                    return "1 Apprentice";
+
+                return $"{apprenticeships.Count} Apprentices";
+            }
+        }
 
         @if (Model.Apprenticeships.Count == 0)
         {

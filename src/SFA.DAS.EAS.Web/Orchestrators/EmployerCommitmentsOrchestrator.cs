@@ -327,6 +327,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
                 Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0)
+                ShowApproveOnlyOption = commitment.AgreementStatus == AgreementStatus.ProviderAgreed
             };
         }
 
