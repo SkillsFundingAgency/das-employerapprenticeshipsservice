@@ -15,7 +15,7 @@
       <Setting name="ApiAudiences" value="__ApiAudiences__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="EDCEF8D64D09C1D1FEDFD534CACB55E0437CFAD3" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="68C6661219A1B03911E542F15C979203CEF2CC38" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>
