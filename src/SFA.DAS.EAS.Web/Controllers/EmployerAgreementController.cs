@@ -48,13 +48,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Agreements/Add")]
-        public ActionResult Add(string accountId)
+        public async Task<ActionResult> Add(string accountId)
         {
-            var response = new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel {AccountId = accountId},
-                Status = HttpStatusCode.OK
-            };
+            var response = await _orchestrator.GetAddLegalEntityViewModel(accountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }
