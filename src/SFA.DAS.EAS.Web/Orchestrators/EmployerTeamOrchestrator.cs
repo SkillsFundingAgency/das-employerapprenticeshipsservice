@@ -20,11 +20,11 @@ using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class EmployerTeamOrchestrator
+    public class EmployerTeamOrchestrator: UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
 
-        public EmployerTeamOrchestrator(IMediator mediator)
+        public EmployerTeamOrchestrator(IMediator mediator):base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -342,11 +342,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(
             string hashedAccountId, string email, string externalUserId)
         {
-            var userRoleResponse = await _mediator.SendAsync(new GetUserAccountRoleQuery
-            {
-                HashedAccountId = hashedAccountId,
-                ExternalUserId = externalUserId
-            });
+            var userRoleResponse = await GetUserAccountRole(hashedAccountId, externalUserId);
 
             if (!userRoleResponse.UserRole.Equals(Role.Owner))
             {
@@ -417,11 +413,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             string hashedAccountId, string externalUserId)
         {
 
-            var response = await _mediator.SendAsync(new GetUserAccountRoleQuery
-            {
-                HashedAccountId = hashedAccountId,
-                ExternalUserId = externalUserId
-            });
+            var response = await GetUserAccountRole(hashedAccountId, externalUserId);
             
             return new OrchestratorResponse<InviteTeamMemberViewModel>
             {

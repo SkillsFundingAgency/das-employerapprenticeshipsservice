@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -69,6 +71,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
             command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate)&&
             command.SignAgreement.Equals(request.SignedAgreement))));
+        }
+
+        [TestCase(Role.Owner,HttpStatusCode.OK)]
+        [TestCase(Role.Viewer,HttpStatusCode.Unauthorized)]
+        [TestCase(Role.Transactor,HttpStatusCode.Unauthorized)]
+        public async Task ThenOnlyOwnersCanSearchAndAddNewLegalEntities(Role userRole, HttpStatusCode expectedResponse)
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>())).ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
+
+            //Act
+            var actual = await _orchestrator.GetAddLegalEntityViewModel("5454654", "ADSD123");
+
+            //Assert
+            Assert.AreEqual(expectedResponse, actual.Status);
         }
     }
 }
