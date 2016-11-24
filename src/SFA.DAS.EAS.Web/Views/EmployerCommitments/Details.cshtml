@@ -56,7 +56,9 @@
                                 </span>
                             }
                         </td>
-                        <td>@apprenticeship.Cost &nbsp;</td>
+                        <td>
+                            @($"{apprenticeship.Cost:#}") &nbsp;
+                        </td>
                         <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
                         </td>
