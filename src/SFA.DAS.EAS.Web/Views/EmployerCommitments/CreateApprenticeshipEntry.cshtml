@@ -1,10 +1,11 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
-@*@section pageSpecificJS {
-    @Scripts.Render("~/bundles/jqueryvalcustom");    
-}*@
+@section pageSpecificJS {
+    @*@Scripts.Render("~/bundles/jqueryvalcustom");*@
 
+    @Scripts.Render("~/bundles/apprentice");
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -97,12 +98,13 @@
 
                 <div class="form-group">
                     <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
-                    <!-- <span class="helpText" aria-label="Search by course name">Search by course name</span> -->
-                    <select name="TrainingId" id="TrainingId" class="form-control" aria-label="Training standard">
-                        <option value=""></option>
-                        @foreach (var standard in ViewBag.ApprenticeshipProducts)
+                    <select name="TrainingId" id="TrainingId" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+                        <option value="">Please select</option>
+                        @foreach (var apprenticeshipProduct in ViewBag.ApprenticeshipProducts)
                         {
-                            <option value="@standard.Id">@standard.Title</option>
+                            <option value="@apprenticeshipProduct.Id">
+                                @apprenticeshipProduct.Title, Level @apprenticeshipProduct.Level
+                            </option>
                         }
                     </select>
 

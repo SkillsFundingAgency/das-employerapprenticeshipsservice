@@ -13,6 +13,11 @@ namespace SFA.DAS.EAS.Web
                       "~/dist/javascripts/selection-buttons.js",
                       "~/dist/javascripts/app.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/apprentice").Include(
+                      "~/dist/javascripts/apprentice/select2.min.js",
+                      "~/dist/javascripts/apprentice/dropdown.js"
+                      ));
+
             bundles.Add(new ScriptBundle("~/bundles/jqueryvalcustom").Include(
                       "~/Scripts/jquery.validate.js", "~/Scripts/jquery.validate.unobtrusive.custom.js"));
 

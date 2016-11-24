@@ -31,6 +31,10 @@
     }
 }
 
+.button-secondary {
+    @include button($grey-3);
+}
+
 .button-link {
     @include button($white);
     text-decoration:underline;
