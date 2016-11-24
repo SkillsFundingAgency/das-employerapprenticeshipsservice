@@ -184,7 +184,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName)
+        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName)
         {
             await WithConnection(async c =>
             {
@@ -211,6 +211,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@FrameworkCode", payment.FrameworkCode, DbType.Int32);
                 parameters.Add("@ProgrammeType", payment.ProgrammeType, DbType.Int32);
                 parameters.Add("@PathwayCode", payment.PathwayCode, DbType.Int32);
+                parameters.Add("@CourseName", courseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",

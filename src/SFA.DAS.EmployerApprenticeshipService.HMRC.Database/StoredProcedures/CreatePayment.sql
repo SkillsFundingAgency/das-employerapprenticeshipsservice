@@ -20,7 +20,8 @@
 	@StandardCode as BIGINT,
 	@FrameworkCode as INT,
 	@ProgrammeType as INT,
-	@PathwayCode as INT
+	@PathwayCode as INT,
+	@CourseName as NVARCHAR(250)
 as
 
 INSERT INTO [levy].[PaymentMetaData]

@@ -5,5 +5,6 @@
     [StandardCode] BIGINT NULL, 
     [FrameworkCode] INT NULL, 
     [ProgrammeType] INT NULL, 
-    [PathwayCode] INT NULL
+    [PathwayCode] INT NULL, 
+    [ApprenticeshipCourseName] NVARCHAR(MAX) NULL
 )

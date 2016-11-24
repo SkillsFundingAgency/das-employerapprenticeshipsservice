@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
 using MediatR;
 using Moq;
 using NLog;
@@ -29,10 +30,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
         private Mock<ILogger> _logger;
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
         private Provider _provider;
-
+        private Framework _framework;
+        private Standard _standard;
+        
         private const string ExpectedPaymentUrl = "http://someurl";
         private const string ExpectedPeriodEnd = "R12-13";
         private const long ExpectedAccountId = 546578946;
+        private const string StandardCourseName = "Standard Course";
+        private const string FrameworkCourseName = "Framework Course";
 
         [SetUp]
         public void Arrange()
@@ -44,6 +49,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
                 PaymentUrl = ExpectedPaymentUrl
             };
 
+            _framework = new Framework
+            {
+                Title = FrameworkCourseName,
+                FrameworkCode = 20,
+                PathwayCode = 2,
+                ProgrammeType = 3
+            };
+
+            _standard = new Standard
+            {
+                Id = "10",
+                Code = 10,
+                Title = StandardCourseName
+            };
+
             _validator = new Mock<IValidator<RefreshPaymentDataCommand>>();
             _validator.Setup(x => x.Validate(It.IsAny<RefreshPaymentDataCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
 
@@ -53,9 +73,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _paymentData = new PageOfResults<Payment> {
                 Items = new [] 
                 {
-                    new Payment {Id=Guid.NewGuid().ToString()},
-                    new Payment{Id=Guid.NewGuid().ToString()}
-                } };
+                    new Payment
+                    {
+                        Id=Guid.NewGuid().ToString(),
+                        StandardCode = _standard.Code
+                    },
+                    new Payment
+                    {
+                        Id=Guid.NewGuid().ToString(),
+                        FrameworkCode = _framework.FrameworkCode,
+                        PathwayCode = _framework.PathwayCode,
+                        ProgrammeType = _framework.ProgrammeType
+                    }
+                }};
             _paymentsApiClient = new Mock<IPaymentsEventsApiClient>();
             _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).ReturnsAsync(_paymentData);
 
@@ -74,6 +104,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
                 {
                     Providers = new List<Provider> {_provider}
                 });
+
+            _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(false))
+                .ReturnsAsync(new FrameworksView
+                {
+                    Frameworks = new EditableList<Framework>
+                    {
+                       _framework
+                    }
+                });
+
+            _apprenticeshipInfoService.Setup(x => x.GetStandardsAsync(false))
+                .ReturnsAsync(new StandardsView
+                {
+                    Standards = new EditableList<Standard>
+                    {
+                        _standard
+                    }
+                });
+
 
             _handler = new RefreshPaymentDataCommandHandler(
                 _validator.Object, 
@@ -125,7 +174,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<Payment>(),It.IsAny<long>(),It.IsAny<string>(), It.IsAny<string>()),Times.Never);
+            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<Payment>(),It.IsAny<long>(),It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),Times.Never);
         }
 
         [Test]
@@ -135,7 +184,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(),_command.AccountId,_command.PeriodEnd, It.IsAny<string>()),Times.Exactly(_paymentData.Items.Length));
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(),_command.AccountId,_command.PeriodEnd, It.IsAny<string>(), It.IsAny<string>()),Times.Exactly(_paymentData.Items.Length));
         }
 
         [Test]
@@ -184,7 +233,29 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName), Times.Exactly(_paymentData.Items.Length));
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, It.IsAny<string>()), Times.Exactly(_paymentData.Items.Length));
+        }
+
+        [Test]
+        public async Task ThenIfThereIsAPaymentForAStandardAppreticeshipTheStandardCourseNameWillBeSaved()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, StandardCourseName), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfThereIsAPaymentForAFrameworkWorkAppreticeshipTheFrameworkCourseNameWillBeSaved()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, FrameworkCourseName), Times.Once);
         }
     }
 }
