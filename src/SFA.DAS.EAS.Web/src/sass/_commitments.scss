@@ -152,6 +152,7 @@ span.helpText{
 
 //dropdown styles
 .select2-container--default{ 
+ 
     .select2-selection--single{
         border:2px solid #6f777b;
         border-radius:0;
@@ -168,7 +169,6 @@ span.helpText{
     }
 }
 
-
 //adding focus to span element using jquery in dropdown.js file 
 .form-group{
     .select2-selection--single:focus {
@@ -176,6 +176,21 @@ span.helpText{
         border:0;     
     }
 
+}
+// select box arrow/border color/spacing
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-top: 3px;
+
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 5px;
+    }
+
+.select2-container--default .select2-selection--single{
+    border: 2px solid #0b0c0c;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b{
+    border-color: #0b0c0c transparent;
 }
 
 //all mobile media query breakpoints

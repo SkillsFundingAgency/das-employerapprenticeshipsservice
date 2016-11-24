@@ -2041,13 +2041,6 @@ legend {
   height: 120%;
 }
 
-.button-secondary[rel="external"]:after {
-  display: none;
-  content: none;
-  margin-left: 0;
-  margin-right: 0;
-}
-
 .button-secondary[type="submit"], .button-secondary[type="reset"], .button-secondary[type="button"] {
   filter: chroma(color=#0b0c0c);
 }
@@ -2376,6 +2369,22 @@ span.helpText {
 .form-group .select2-selection--single:focus {
   outline: 3px solid #ffbf47;
   border: 0;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  margin-top: 3px;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  top: 5px;
+}
+
+.select2-container--default .select2-selection--single {
+  border: 2px solid #0b0c0c;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border-color: #0b0c0c transparent;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

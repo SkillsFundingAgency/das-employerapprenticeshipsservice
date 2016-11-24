@@ -16,12 +16,12 @@
         @{
             var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Finish editing";
         }
-
+        <p><hr /></p>
         <div class="emptyStateButton">
             <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         </div>
-
+        <p><hr /></p>
         @functions {
 
             public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
