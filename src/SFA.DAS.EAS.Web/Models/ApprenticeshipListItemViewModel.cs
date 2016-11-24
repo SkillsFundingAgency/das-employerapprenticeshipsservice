@@ -4,7 +4,7 @@
 
     public sealed class ApprenticeshipListItemViewModel
     {
-        public string ApprenticeshipName { get; set; }
+        public string ApprenticeName { get; set; }
 
         public string TrainingName { get; set; }
 

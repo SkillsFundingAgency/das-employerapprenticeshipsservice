@@ -376,7 +376,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new ApprenticeshipListItemViewModel
             {
                 HashedId = _hashingService.HashValue(apprenticeship.Id),
-                ApprenticeshipName = apprenticeship.TrainingName,
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
