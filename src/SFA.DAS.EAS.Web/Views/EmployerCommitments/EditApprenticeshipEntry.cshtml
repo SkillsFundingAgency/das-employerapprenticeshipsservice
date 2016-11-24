@@ -46,9 +46,9 @@
                 <span class="helpText">For example, 08 12 2001</span>
 
                 <div class="form-date">
-                    @Html.ValidationMessageFor(m => m.DateOfBirthDay, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
-                    @Html.ValidationMessageFor(m => m.DateOfBirthMonth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
-                    @Html.ValidationMessageFor(m => m.DateOfBirthYear, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthDay, "Please enter a valid day", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
                     <div class="form-group form-group-day">
                         <label for="@Html.IdFor(m => m.DateOfBirthDay)">
                             Day
@@ -115,7 +115,7 @@
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error")">
                 <fieldset>
                     <legend>
-                        <span class="form-label-bold">Projected finish date</span>
+                        <span class="form-label-bold">Projected training finish date</span>
                         <span class="helpText">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
@@ -149,7 +149,8 @@
             </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
-                @Html.LabelFor(m => m.EmployerRef, "Apprentice employer reference", new { @class = "form-label" })
+                @Html.LabelFor(m => m.EmployerRef, "Reference (optional)", new { @class = "form-label-bold" })
+                <span class="helpText">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
                 @Html.ValidationMessageFor(m => m.EmployerRef, null, new { id = "error-message-" + Html.IdFor(m => m.EmployerRef) })
                 @Html.TextBoxFor(m => m.EmployerRef, new { @class = "form-control form-control-3-4" })
             </div>

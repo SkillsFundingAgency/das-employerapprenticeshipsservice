@@ -21,14 +21,14 @@ namespace SFA.DAS.EAS.Web.Validators
 
             RuleFor(x => x.NINumber)
                 .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
-                .WithMessage("Please enter a valid national insurance number.");
+                .WithMessage("Please enter a valid national insurance number");
 
             RuleFor(x => x.DateOfBirthDay)
                 .InclusiveBetween(1, 31)
-                .WithMessage("Please enter a valid day for date of birth.");
+                .WithMessage("Please enter a valid day for date of birth");
             RuleFor(x => x.DateOfBirthMonth)
                 .InclusiveBetween(1, 12)
-                .WithMessage("Please enter a valid month for date of birth.");
+                .WithMessage("Please enter a valid month for date of birth");
             RuleFor(x => x.DateOfBirthYear)
                 .InclusiveBetween(1900, currentYear)
                 .WithMessage("Please enter a valid year for date of birth");
