@@ -23,13 +23,13 @@
     <AddressAssignments>
       <InstanceAddress roleName="SFA.DAS.EAS.Account.Api">
         <Subnets>
-          <Subnet name="__subnet__" />
+          <Subnet name="__subnet2__" />
         </Subnets>
       </InstanceAddress>
     </AddressAssignments>
     <LoadBalancers>
       <LoadBalancer name="__ilbname2__">
-        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.124.27" />
+        <FrontendIPConfiguration type="private" subnet="__subnet2__" staticVirtualNetworkIPAddress="10.78.124.27" />
       </LoadBalancer>
     </LoadBalancers>
     </NetworkConfiguration>
