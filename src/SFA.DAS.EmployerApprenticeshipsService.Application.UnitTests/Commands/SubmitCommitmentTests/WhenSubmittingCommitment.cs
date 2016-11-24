@@ -72,8 +72,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockEventsApi.Verify(x => x.CreateAgreementEvent(It.IsAny<AgreementEvent>()));
         }
 
-        [TestCase("", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
-        [TestCase("asdf", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is wrong")]
+        [TestCase("", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
+        [TestCase("save-no-send", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
+        [TestCase("asdf", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is wrong")]
         [TestCase("approve", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus EmployerAgreed if saveOrSend includes 'approved'")]
         public async Task ThenCallingPatchEmployerCommitment(string saveOrSend, AgreementStatus expectedStatus)
         {
