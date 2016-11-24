@@ -202,7 +202,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditing(FinishEditingViewModel viewModel)
+        public async Task<ActionResult> FinishedEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.SaveOrSend == "approve")
             {
-                _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveOrSend);
+                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveOrSend);
             }
 
             return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
