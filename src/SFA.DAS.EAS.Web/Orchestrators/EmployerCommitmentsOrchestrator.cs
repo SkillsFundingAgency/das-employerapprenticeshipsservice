@@ -28,6 +28,8 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
+    using System.Globalization;
+
     public sealed class EmployerCommitmentsOrchestrator
     {
         private readonly IMediator _mediator;
@@ -324,7 +326,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
-                Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
+                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0)
             };
         }
 
@@ -349,6 +351,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
+                NINumber = apprenticeship.NINumber,
+                DateOfBirthDay = apprenticeship.DateOfBirth?.Day,
+                DateOfBirthMonth = apprenticeship.DateOfBirth?.Month,
+                DateOfBirthYear = apprenticeship.DateOfBirth?.Year,
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
@@ -359,7 +365,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 EndMonth = apprenticeship.EndDate?.Month,
                 EndYear = apprenticeship.EndDate?.Year,
                 PaymentStatus = apprenticeship.PaymentStatus,
-                AgreementStatus = apprenticeship.AgreementStatus
+                AgreementStatus = apprenticeship.AgreementStatus,
+                ProviderRef = apprenticeship.ProviderRef,
+                EmployerRef = apprenticeship.EmployerRef
+            };
+        }
+
+        private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship)
+        {
+            return new ApprenticeshipListItemViewModel
+            {
+                HashedId = _hashingService.HashValue(apprenticeship.Id),
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                TrainingName = apprenticeship.TrainingName,
+                Cost = apprenticeship.Cost,
+                StartDate = apprenticeship.StartDate,
+                EndDate = apprenticeship.EndDate
             };
         }
 
@@ -376,10 +397,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
+                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
                 StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear)
+                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                ProviderRef = viewModel.ProviderRef,
+                EmployerRef = viewModel.EmployerRef
             };
 
             if (!string.IsNullOrWhiteSpace(viewModel.TrainingId))
@@ -402,6 +427,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             if (month.HasValue && year.HasValue)
                 return new DateTime(year.Value, month.Value, 1);
+
+            return null;
+        }
+
+        private DateTime? GetDateTime(int? day, int? month, int? year)
+        {
+            if (day.HasValue && month.HasValue && year.HasValue)
+            {
+                DateTime dateOfBirthOut;
+                if (DateTime.TryParseExact(
+                    $"{year.Value}-{month.Value}-{day.Value}",
+                    "yyyy-M-d",
+                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
+                {
+                    return dateOfBirthOut;
+                }
+            }
 
             return null;
         }

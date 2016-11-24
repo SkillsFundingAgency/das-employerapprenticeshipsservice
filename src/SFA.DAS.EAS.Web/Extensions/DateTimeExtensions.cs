@@ -13,5 +13,9 @@ namespace SFA.DAS.EAS.Web.Extensions
         {
             return TimeZoneInfo.ConvertTime(date, TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
         }
+        public static string ToGdsFormatWithoutDay(this DateTime date)
+        {
+            return date.ToString("MMM yyyy");
+        }
     }
 }
