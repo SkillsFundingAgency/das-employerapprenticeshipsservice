@@ -207,6 +207,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@TransactionType", payment.TransactionType, DbType.String);
                 parameters.Add("@Amount", payment.Amount, DbType.Decimal);
                 parameters.Add("@PeriodEnd", periodEnd, DbType.String);
+                parameters.Add("@StandardCode", payment.StandardCode, DbType.Int64);
+                parameters.Add("@FrameworkCode", payment.FrameworkCode, DbType.Int32);
+                parameters.Add("@ProgrammeType", payment.ProgrammeType, DbType.Int32);
+                parameters.Add("@PathwayCode", payment.PathwayCode, DbType.Int32);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",

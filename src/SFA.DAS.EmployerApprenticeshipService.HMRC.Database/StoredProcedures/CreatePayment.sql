@@ -16,13 +16,31 @@
 	@FundingSource as VARCHAR(25),
 	@TransactionType as VARCHAR(25),
 	@Amount as Decimal(18,5),
-	@PeriodEnd as Varchar(25)
+	@PeriodEnd as Varchar(25),
+	@StandardCode as BIGINT,
+	@FrameworkCode as INT,
+	@ProgrammeType as INT,
+	@PathwayCode as INT
 as
+
+INSERT INTO [levy].[PaymentMetaData]
+			(ProviderName
+			,StandardCode
+			,FrameworkCode
+			,ProgrammeType
+			,PathwayCode)
+		VALUES
+			(@ProviderName
+			,@StandardCode
+			,@FrameworkCode
+			,@ProgrammeType
+			,@PathwayCode)
+
+DECLARE @PaymentMetaDataId AS BIGINT = SCOPE_IDENTITY()
 
 INSERT INTO [levy].[Payment]
            ([PaymentId]
-           ,[Ukprn]
-		   ,[ProviderName]
+           ,[Ukprn]		   
            ,[Uln]
            ,[AccountId]
            ,[ApprenticeshipId]
@@ -37,11 +55,11 @@ INSERT INTO [levy].[Payment]
            ,[FundingSource]
            ,[TransactionType]
            ,[Amount]
-		   ,[PeriodEnd])
+		   ,[PeriodEnd]
+		   ,[PaymentMetaDataId])
      VALUES
            (@PaymentId
-           ,@Ukprn
-		   ,@ProviderName
+           ,@Ukprn		   
            ,@Uln
            ,@AccountId
            ,@ApprenticeshipId
@@ -56,7 +74,8 @@ INSERT INTO [levy].[Payment]
            ,@FundingSource
            ,@TransactionType
            ,@Amount
-		   ,@PeriodEnd)
+		   ,@PeriodEnd
+		   ,@PaymentMetaDataId)
 GO
 
 

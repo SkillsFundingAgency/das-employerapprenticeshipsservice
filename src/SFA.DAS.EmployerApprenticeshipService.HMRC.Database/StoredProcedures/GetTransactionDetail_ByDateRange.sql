@@ -31,12 +31,13 @@ select
     null as TopUp,
     null as empref,
 	null as CourseName,
-	p.ProviderName as ProviderName,
+	meta.ProviderName as ProviderName,
     (tl.TransactionDate) as transactiondate,
     (p.Amount) as LineAmount,
     tl.TransactionType
 from levy.TransactionLine tl
 inner join levy.Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
-where    tl.TransactionDate >= @fromDate AND 
+inner join levy.PaymentMetaData meta on p.PaymentMetaDataId = meta.Id
+where   tl.TransactionDate >= @fromDate AND 
         tl.TransactionDate <= @toDate AND 
         tl.AccountId = @accountId

@@ -92,6 +92,7 @@
     <Build Include="StoredProcedures\GetPaymentData_ById.sql" />
     <Build Include="StoredProcedures\ProcessPaymentDataTransactions.sql" />
     <Build Include="Tables\LevyDeclarationTopup.sql" />
+    <Build Include="Tables\PaymentMetaData.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
@@ -99,5 +100,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Script.PreDeployment1.sql" />
   </ItemGroup>
 </Project>
