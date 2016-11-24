@@ -149,6 +149,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var response = await _mediator.SendAsync(new CreateCommitmentCommand
             {
+                Message = model.Message,
                 Commitment = new Commitment
                 {
                     Reference = model.CohortRef,
@@ -222,6 +223,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
 
             return viewmodel;
+        }
+
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        {
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                Message = string.Empty,
+                SaveOrSend = saveOrSend
+            });
         }
 
         public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
@@ -326,7 +338,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
-                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0)
+                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
+                ShowApproveOnlyOption = commitment.AgreementStatus == AgreementStatus.ProviderAgreed
             };
         }
 
@@ -376,7 +389,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new ApprenticeshipListItemViewModel
             {
                 HashedId = _hashingService.HashValue(apprenticeship.Id),
-                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                ApprenticeName = apprenticeship.ApprenticeshipName,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
