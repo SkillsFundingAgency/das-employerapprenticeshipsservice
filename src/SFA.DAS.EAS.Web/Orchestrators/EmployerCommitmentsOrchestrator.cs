@@ -224,6 +224,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return viewmodel;
         }
 
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        {
+            await _mediator.SendAsync(new SubmitCommitmentCommand
+            {
+                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                Message = string.Empty,
+                SaveOrSend = saveOrSend
+            });
+        }
+
         public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             await _mediator.SendAsync(new CreateApprenticeshipCommand

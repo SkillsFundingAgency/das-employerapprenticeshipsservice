@@ -209,13 +209,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View(viewModel);
             }
 
-            // TODO: Refactor out these magic strings
-            if (viewModel.SaveOrSend == "save-no-send")
+            if (!string.IsNullOrEmpty(viewModel.SaveOrSend) && viewModel.SaveOrSend.StartsWith("send"))
             {
-                return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
+                return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend });
             }
 
-            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend });
+            if (viewModel.SaveOrSend == "approve")
+            {
+                _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveOrSend);
+            }
+
+            return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
         [HttpGet]
