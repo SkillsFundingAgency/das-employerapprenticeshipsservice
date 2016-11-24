@@ -19,7 +19,7 @@ using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class EmployerAgreementOrchestrator
+    public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly ILogger _logger;
         private readonly IMediator _mediator;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger)
+        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger): base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -281,6 +281,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 },
                 Status = HttpStatusCode.OK
             };
+        }
+
+        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string accountId, string externalUserId)
+        {
+            var userRole = await GetUserAccountRole(accountId, externalUserId);
+
+            return new OrchestratorResponse<AddLegalEntityViewModel>
+            {
+                Data = new AddLegalEntityViewModel { AccountId = accountId },
+                Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized 
+            };
+
         }
     }
 }

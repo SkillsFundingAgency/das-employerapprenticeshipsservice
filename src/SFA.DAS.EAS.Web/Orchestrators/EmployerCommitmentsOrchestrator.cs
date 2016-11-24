@@ -33,18 +33,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
         private readonly ILogger _logger;
+        private readonly ICommitmentStatusCalculator _statusCalculator;
 
-        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ILogger logger)
+        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ICommitmentStatusCalculator statusCalculator, ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (statusCalculator == null)
+                throw new ArgumentNullException(nameof(statusCalculator));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
+            _statusCalculator = statusCalculator;
             _logger = logger;
         }
 
@@ -200,6 +204,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        public async Task<FinishEditingViewModel> GetFinishEditingViewModel(string hashedAccountId, string hashedCommitmentId)
+        {
+            var response = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+            });
+
+            var viewmodel = new FinishEditingViewModel
+            {
+                HashedAccountId = hashedAccountId,
+                HashedCommitmentId = hashedCommitmentId,
+                ApproveAndSend = response.Commitment.AgreementStatus != AgreementStatus.ProviderAgreed
+            };
+
+            return viewmodel;
+        }
+
         public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             await _mediator.SendAsync(new CreateApprenticeshipCommand
@@ -301,8 +323,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.CommitmentStatus,
-                EditStatus = commitment.EditStatus,
+                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
                 Apprenticeships = commitment.Apprenticeships?.Select(x => MapFrom(x)).ToList() ?? new List<ApprenticeshipViewModel>(0)
             };
         }
@@ -315,8 +336,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = commitment.CommitmentStatus,
-                EditStatus = commitment.EditStatus
+                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.ApprenticeshipCount, commitment.AgreementStatus),
+                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly
             };
         }
 
