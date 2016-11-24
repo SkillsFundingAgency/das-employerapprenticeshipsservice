@@ -57,7 +57,7 @@
                             }
                         </td>
                         <td>
-                            @($"{apprenticeship.Cost:#}") &nbsp;
+                            @FormatCost(apprenticeship.Cost) &nbsp;
                         </td>
                         <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
@@ -86,5 +86,11 @@
 
 @functions
 {
-    
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"{cost.Value:£#}";
+    }
 }
