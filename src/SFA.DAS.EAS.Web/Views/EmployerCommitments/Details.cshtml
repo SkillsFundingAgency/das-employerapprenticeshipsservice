@@ -91,6 +91,6 @@
         if (!cost.HasValue)
             return string.Empty;
 
-        return $"{cost.Value:£#}";
+        return $"{cost.Value:£0,0}";
     }
 }
