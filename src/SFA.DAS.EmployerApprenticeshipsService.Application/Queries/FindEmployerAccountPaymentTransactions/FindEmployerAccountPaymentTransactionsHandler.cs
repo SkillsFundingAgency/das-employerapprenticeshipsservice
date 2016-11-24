@@ -42,11 +42,17 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             var transactions = await _dasLevyService.GetTransactionsByDateRange<PaymentTransactionLine>
                                     (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
-            var providerName = transactions.FirstOrDefault()?.ProviderName ?? "Unknown Provider";
+            if (!transactions.Any())
+            {
+                throw new NotFoundException("No transactions found.");
+            }
+
+            var firstTransaction = transactions.First();
 
             return new FindEmployerAccountPaymentTransactionsResponse
             {
-                ProviderName = providerName,
+                ProviderName = firstTransaction.ProviderName,
+                TransactionDate = firstTransaction.TransactionDate,
                 Transactions = transactions.ToList(),
                 Total = transactions.Sum(c => c.LineAmount)
             };

@@ -122,21 +122,34 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         }
 
         [Test]
-        public async Task ThenTheProviderNameShouldSetToUnknowProviderIfNoProviderNameCanBeFound()
+        public async Task ThenTheTransactionDateShouldBeAddedToTheResponse()
         {
             //Arrange
+            var transactionDate = DateTime.Now.AddDays(-2);
             _dasLevyService.Setup(x => x.GetTransactionsByDateRange<PaymentTransactionLine>
                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                {
-                    new PaymentTransactionLine()
+                    new PaymentTransactionLine {TransactionDate = transactionDate}
                });
 
             //Act
             var actual = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual("Unknown Provider", actual.ProviderName);
+            Assert.AreEqual(transactionDate, actual.TransactionDate);
+        }
+
+        [Test]
+        public void ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
+        {
+            //Arrange
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<PaymentTransactionLine>
+                    (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync(new List<PaymentTransactionLine>());
+
+            //Act
+            Assert.ThrowsAsync<NotFoundException>(async () => await RequestHandler.Handle(Query));
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@model SFA.DAS.EAS.Web.Models.PaymentTransactionViewModel
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PaymentTransactionViewModel>
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -9,9 +9,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to @Model.ProviderName for @Model.TransactionDate.ToString("MMMM yy")</p>
-        <p><span class="strong">Amount: </span> @(Model.Amount.ToString("C0", culture))</p>
-        <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yy")</p>
+        <p class="lede">Payment to @Model.Data.ProviderName for @Model.Data.TransactionDate.ToString("MMMM yyyy")</p>
+        <p><span class="strong">Amount: </span> @(Model.Data.Amount.ToString("C0", culture))</p>
+        <p><span class="strong">Payment Date: </span> @Model.Data.TransactionDate.ToString("dd MMMM yyyy")</p>
         <table>
             <thead>
                 <tr>
@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var payment in Model.SubTransactions)
+                @foreach (var payment in Model.Data.SubTransactions)
                 {
                     <tr class="responsive-tr">
                         <td>
@@ -33,7 +33,7 @@
                 }
             <tr class="total">
                 <td></td>
-                <td class="numeric">@Model.Amount.ToString("C0", culture)</td>
+                <td class="numeric">@Model.Data.Amount.ToString("C0", culture)</td>
             </tr>
             </tbody>
         </table>
