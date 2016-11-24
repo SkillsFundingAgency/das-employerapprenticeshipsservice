@@ -192,15 +192,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditing(string hashedAccountId, string hashedCommitmentId)
+        public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = new FinishEditingViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HashedCommitmentId = hashedCommitmentId
-            };
+            var viewmodel = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(hashedAccountId, hashedCommitmentId);
 
-            return View(model);
+            return View(viewmodel);
         }
 
         [HttpPost]
