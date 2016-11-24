@@ -7,4 +7,6 @@
         }
     };
     init();
+    // add focus to span element for accessibility while using tabs 
+    $('span.select2').attr('tabindex', 0);
 }());

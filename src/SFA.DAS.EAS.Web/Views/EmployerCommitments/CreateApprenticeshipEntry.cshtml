@@ -68,12 +68,12 @@
 
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirthDay, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthMonth, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthYear, "error")">
                     <span class="form-label-bold">Date of birth</span>
-                    <span class="helpText">For example, 08 12 2001</span>
+                    <span class="form-hint">For example, 08 12 2001</span>
 
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.DateOfBirthDay, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.DateOfBirthMonth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.DateOfBirthYear, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.DateOfBirthDay, "Please enter a valid day", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.DateOfBirthMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.DateOfBirthYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
                         <div class="form-group form-group-day">
                             <label for="@Html.IdFor(m => m.DateOfBirthDay)">
                                 Day
@@ -114,7 +114,7 @@
 
 
                     <span class="form-label-bold">Planned training start date</span>
-                    <span class="helpText">For example, 09 2017</span>
+                    <span class="form-hint">For example, 09 2017</span>
                      
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.StartMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
@@ -139,7 +139,7 @@
 
                     <legend>
                         <span class="form-label-bold">Planned training finish date</span>
-                        <span class="helpText">For example, 02 2019</span>
+                        <span class="form-hint">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
                         @Html.ValidationMessageFor(m => m.EndMonth, "Please enter a valid month", new { id = "error -message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
@@ -166,14 +166,15 @@
                     <hr/>
                     <label for="@Html.IdFor(m => m.Cost)">
                         <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
-                        <span class="helpText">For example, for £1,500 enter 1500</span>
+                        <span class="form-hint">For example, for £1,500 enter 1500</span>
                         @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                     </label>
                     <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
                 </div>
 
                 <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
-                    @Html.LabelFor(m => m.EmployerRef, "Apprentice employer reference", new { @class = "form-label" })
+                    @Html.LabelFor(m => m.EmployerRef, "Reference (optional)", new { @class = "form-label-bold" })
+                    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
                     @Html.ValidationMessageFor(m => m.EmployerRef, null, new { id = "error-message-" + Html.IdFor(m => m.EmployerRef) })
                     @Html.TextBoxFor(m => m.EmployerRef, new { @class = "form-control form-control-3-4" })
                 </div>
