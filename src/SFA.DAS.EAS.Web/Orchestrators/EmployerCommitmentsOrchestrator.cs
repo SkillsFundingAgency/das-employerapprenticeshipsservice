@@ -149,6 +149,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var response = await _mediator.SendAsync(new CreateCommitmentCommand
             {
+                Message = model.Message,
                 Commitment = new Commitment
                 {
                     Reference = model.CohortRef,
