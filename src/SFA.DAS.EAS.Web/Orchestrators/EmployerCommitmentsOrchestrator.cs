@@ -338,7 +338,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
-                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0)
+                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
                 ShowApproveOnlyOption = commitment.AgreementStatus == AgreementStatus.ProviderAgreed
             };
         }
@@ -389,7 +389,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new ApprenticeshipListItemViewModel
             {
                 HashedId = _hashingService.HashValue(apprenticeship.Id),
-                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                ApprenticeName = apprenticeship.ApprenticeshipName,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
