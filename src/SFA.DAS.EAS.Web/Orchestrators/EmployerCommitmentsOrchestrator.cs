@@ -29,6 +29,8 @@ using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     using System.Globalization;
+    using Newtonsoft.Json;
+    using Tasks.Api.Types.Templates;
 
     public sealed class EmployerCommitmentsOrchestrator
     {
@@ -176,7 +178,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        public async Task<CommitmentViewModel> Get(string hashedAccountId, string hashedCommitmentId)
+        public async Task<CommitmentViewModel> GetCommitment(string hashedAccountId, string hashedCommitmentId)
         {
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
@@ -185,6 +187,34 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
 
             return MapFrom(data.Commitment);
+        }
+
+        public async Task<CommitmentDetailsViewModel> GetCommitmentDetails(string hashedAccountId, string hashedCommitmentId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId
+            });
+
+            string message = await GetLatestMessage(hashedAccountId, commitmentId);
+
+            var viewModel = new CommitmentDetailsViewModel
+            {
+                HashedId = _hashingService.HashValue(data.Commitment.Id),
+                Name = data.Commitment.Reference,
+                LegalEntityName = data.Commitment.LegalEntityName,
+                ProviderName = data.Commitment.ProviderName,
+                Status = _statusCalculator.GetStatus(data.Commitment.CommitmentStatus, data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
+                ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
+                LatestMessage = message
+            };
+
+            return viewModel;
         }
 
         public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -315,6 +345,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return data?.ProvidersView?.Providers;
         }
 
+        private async Task<string> GetLatestMessage(string hashedAccountId, long commitmentId)
+        {
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountHashId = hashedAccountId });
+
+            var taskForCommitment = allTasks?.Tasks
+                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
+                .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
+                .OrderByDescending(x => x.CreateDate)
+                .FirstOrDefault();
+
+            var message = taskForCommitment?.Task?.Message ?? string.Empty;
+
+            return message;
+        }
+
         private async Task<GetProvidersQueryResponse> GetProviders()
         {
             return await _mediator.SendAsync(new GetProvidersQueryRequest());
@@ -336,10 +381,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedId = _hashingService.HashValue(commitment.Id),
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
-                ProviderName = commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.Apprenticeships.Count, commitment.AgreementStatus),
-                Apprenticeships = commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
-                ShowApproveOnlyOption = commitment.AgreementStatus == AgreementStatus.ProviderAgreed
+                ProviderName = commitment.ProviderName
             };
         }
 
