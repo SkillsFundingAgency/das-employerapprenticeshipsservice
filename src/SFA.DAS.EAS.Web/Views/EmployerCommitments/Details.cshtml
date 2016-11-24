@@ -31,7 +31,10 @@
                 <thead>
                 <tr>
                     <th scope="col">Apprentice</th>
-                    <th scope="col" colspan="2">Training course</th>
+                    <th scope="col">Training course</th>
+                    <th scope="col">Training dates</th>
+                    <th scope="col" colspan="2">Cost</th>
+
                 </tr>
                 </thead>
                 <tbody>
@@ -43,10 +46,17 @@
                             @apprenticeship.ApprenticeshipName &nbsp; 
                         </td>
                         <td>
-
                             @apprenticeship.TrainingName &nbsp;
-
                         </td>
+                        <td>
+                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                            {
+                                <span>
+                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                </span>
+                            }
+                        </td>
+                        <td>@apprenticeship.Cost &nbsp;</td>
                         <td>
                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
                         </td>
@@ -70,4 +80,9 @@
             <li>Add apprentices</li>
         </ol>
     </div>
+}
+
+@functions
+{
+    
 }
