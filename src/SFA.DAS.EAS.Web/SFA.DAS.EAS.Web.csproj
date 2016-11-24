@@ -840,8 +840,6 @@
     <Content Include="Views\EmployerCommitments\FinishedEditing.cshtml" />
     <Content Include="Views\EmployerCommitments\Acknowledgement.cshtml" />
     <Content Include="Views\EmployerCommitments\EditApprenticeshipEntry.cshtml" />
-    <Content Include="src\govuk_elements\.DS_Store" />
-    <Content Include="src\govuk_elements\sass\.DS_Store" />
     <Content Include="src\govuk_elements\sass\elements-page-ie6.scss" />
     <Content Include="src\govuk_elements\sass\elements-page-ie7.scss" />
     <Content Include="src\govuk_elements\sass\elements-page-ie8.scss" />
