@@ -30,7 +30,7 @@ select
     null as EnglishFraction,
     null as TopUp,
     null as empref,
-	null as CourseName,
+	meta.ApprenticeshipCourseName as CourseName,
 	meta.ProviderName as ProviderName,
     (tl.TransactionDate) as transactiondate,
     (p.Amount) as LineAmount,

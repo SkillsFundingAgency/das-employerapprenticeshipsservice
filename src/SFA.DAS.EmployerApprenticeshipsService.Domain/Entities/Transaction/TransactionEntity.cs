@@ -23,5 +23,6 @@ namespace SFA.DAS.EAS.Domain.Entities.Transaction
         public long UkPrn { get; set; }
         public string PeriodEnd { get; set; }
         public string ProviderName { get; set; }
+        public string CourseName { get; set; }
     }
 }
