@@ -6,28 +6,36 @@
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
-
+    </div>
+</div>
   
+
+<div class="grid-row">
+    <div class="column-one-half employer-details">
         <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
         <p><span class="strong">Status:</span> @Model.Status.GetDescription()</p>
+    </div>
 
-        @*Rajesh - this div has the Message in. Feel free to move it around*@
-        <div class="">
+       
+    <div class="column-one-half employer-details">
             <p class="strong">Instructions:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
-        </div>
+    </div>
+</div>
 
+<div class="grid-row">
+    <div class="column-full">
         <h2 class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</h2>
         
         @{
             var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Finish editing";
         }
-
+        <hr />
         <div class="emptyStateButton">
             <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
             <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
         </div>
-
+        <hr />
         @functions {
 
             public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
@@ -90,7 +98,6 @@
         }
       
     </div>
-
 </div>
 
 @section breadcrumb {
