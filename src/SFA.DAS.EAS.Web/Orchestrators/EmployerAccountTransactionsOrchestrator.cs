@@ -72,25 +72,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-            catch (NotFoundException)
+            catch (NotFoundException e)
             {
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
-                    Status = HttpStatusCode.NotFound
+                    Status = HttpStatusCode.NotFound,
+                    Exception = e
                 };
             }
-            catch (InvalidRequestException)
+            catch (InvalidRequestException e)
             {
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
-                    Status = HttpStatusCode.BadRequest
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
                 };
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException e)
             {
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
-                    Status = HttpStatusCode.Unauthorized
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
                 };
             }
         }

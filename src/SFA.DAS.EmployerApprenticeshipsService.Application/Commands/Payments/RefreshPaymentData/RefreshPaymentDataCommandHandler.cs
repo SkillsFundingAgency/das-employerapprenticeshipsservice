@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                     var standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
 
                     courseName = standardsView.Standards.SingleOrDefault(s =>
-                            s.Code.Equals(payment.StandardCode.Value))?.Title ?? "Unknown course";
+                            s.Code.Equals(payment.StandardCode.Value))?.Title ?? string.Empty;
                 }
                 else if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)
                 {
@@ -92,11 +92,11 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                     courseName = frameworksView.Frameworks.SingleOrDefault(f =>
                                      f.FrameworkCode.Equals(payment.FrameworkCode.Value) &&
                                      f.ProgrammeType.Equals(payment.ProgrammeType.Value) &&
-                                     f.PathwayCode.Equals(payment.PathwayCode.Value))?.Title ?? "Unknown course";
+                                     f.PathwayCode.Equals(payment.PathwayCode.Value))?.Title ?? string.Empty;
                 }
                 else
                 {
-                    courseName = "Unknown course";
+                    courseName = string.Empty;
                 }
 
                 await _dasLevyRepository.CreatePaymentData(payment,message.AccountId,message.PeriodEnd, providerName, courseName);
