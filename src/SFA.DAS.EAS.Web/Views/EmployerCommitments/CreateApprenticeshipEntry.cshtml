@@ -1,9 +1,12 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
-@section pageSpecificJS {
-    @*@Scripts.Render("~/bundles/jqueryvalcustom");*@
+@{
+    ViewBag.Title = "Add an apprentice";
+    ViewBag.PageID = "add-apprentice";
+}
 
+@section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice");
 }
 

@@ -3,6 +3,11 @@
 @model SubmitCommitmentViewModel
 
 @{
+    ViewBag.Title = "Instructions for your training provider";
+    ViewBag.PageID = "submit-cohort";
+}
+
+@{
     var targetName = string.IsNullOrWhiteSpace(Model.HashedCommitmentId) ? "SubmitNewCommitmentEntry" : "SubmitExistingCommitmentEntry";
 }
 
