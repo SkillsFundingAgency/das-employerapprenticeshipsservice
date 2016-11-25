@@ -7,8 +7,6 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="EventHubConnectionString" value="__EventHubConnectionString__" />
-      <Setting name="EventHubName" value="__EventHubName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="ApiTokenSecret" value="__ApiTokenSecret__" />
       <Setting name="ApiIssuer" value="__ApiIssuer__" />
