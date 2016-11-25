@@ -141,7 +141,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");
 
-            var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
+            if (model.RemoveScheme == 1)
+            {
+                return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
+            }
+
+            var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);     
 
             if (result.Status != HttpStatusCode.OK)
             {

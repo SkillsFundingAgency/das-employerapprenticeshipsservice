@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         public async Task ThenTheOrchestratorIsCalledIfYouConfirmToRemoveTheScheme()
         {
             //Act
-            var actual = await _controller.RemovePaye("",new RemovePayeScheme());
+            var actual = await _controller.RemovePaye("",new RemovePayeScheme { RemoveScheme = 1 });
 
             //Assert
             _employerAccountPayeOrchestrator.Verify(x=>x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>()), Times.Once);
