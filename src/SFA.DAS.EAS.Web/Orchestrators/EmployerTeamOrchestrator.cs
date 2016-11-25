@@ -414,13 +414,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
 
             var response = await GetUserAccountRole(hashedAccountId, externalUserId);
-            
+
             return new OrchestratorResponse<InviteTeamMemberViewModel>
             {
                 Data = new InviteTeamMemberViewModel
                 {
                     HashedId = hashedAccountId,
-                    Role = Role.Viewer
+                    Role = Role.None
                 },
                 Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
