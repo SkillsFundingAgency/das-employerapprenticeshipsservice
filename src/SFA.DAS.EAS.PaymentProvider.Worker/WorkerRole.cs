@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
+using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution;
 using SFA.DAS.EAS.PaymentProvider.Worker.Providers;
 using StructureMap;
@@ -25,6 +20,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
         public override void Run()
         {
+            LoggingConfig.ConfigureLogging();
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker is running");
 
             try

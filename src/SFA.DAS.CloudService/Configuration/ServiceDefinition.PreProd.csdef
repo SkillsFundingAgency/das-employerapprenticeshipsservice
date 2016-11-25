@@ -37,8 +37,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName"  />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50121" />
@@ -56,6 +56,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
       <Setting name="InstrumentationKey" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50122" />
