@@ -29,6 +29,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
         {
+            _logger.Info("Getting all account balances.");
+
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
             var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
