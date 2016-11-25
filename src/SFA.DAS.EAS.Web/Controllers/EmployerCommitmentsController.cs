@@ -183,7 +183,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId);
 
             ViewBag.HashedAccountId = hashedAccountId;
 
@@ -256,7 +256,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             // TODO: Should this be a different Orchestrator call?
-            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
@@ -306,7 +306,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Acknowledgement")]
         public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
         {
-            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
 
             return View("Acknowledgement", new AcknowledgementViewModel
             {
