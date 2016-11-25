@@ -181,7 +181,8 @@ span.helpText{
 .form-group{
     .select2-selection--single:focus {
         outline:3px solid #ffbf47; 
-        border:0;     
+      
+
     }
 
 }
@@ -189,6 +190,8 @@ span.helpText{
 .select2-container--default .select2-selection--single:focus,
 .select2-container:focus{
      outline:3px solid #ffbf47; 
+       height:37px; 
+    
 }
 
 
