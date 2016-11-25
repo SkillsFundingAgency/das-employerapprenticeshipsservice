@@ -25,5 +25,8 @@
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-acc-ilb"/>
       <InputEndpoint name="HttpIn" protocol="http" port="80" loadBalancer="das-prd-acc-ilb"/>
     </Endpoints>
+    <Certificates>
+      <Certificate name="WebSslCert" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
   </WebRole>
 </ServiceDefinition>

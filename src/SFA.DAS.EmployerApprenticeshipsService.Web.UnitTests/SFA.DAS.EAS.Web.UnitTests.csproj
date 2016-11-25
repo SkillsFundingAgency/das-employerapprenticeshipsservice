@@ -34,6 +34,14 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
@@ -64,6 +72,10 @@
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.11.0.16373, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.11.0.16373\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -144,6 +156,7 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingStatusOfCommitment.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetATeamMembersDetails.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIInviteATeamMember.cs" />

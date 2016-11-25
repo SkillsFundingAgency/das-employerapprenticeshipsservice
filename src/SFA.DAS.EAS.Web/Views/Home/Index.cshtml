@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.UserAccountsViewModel>
 
+@{ViewBag.PageID = "page-auth-homepage"; }
 @{ViewBag.Title = "Levy accounts"; }
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
@@ -47,7 +48,7 @@
                                     @account.Name
                                 </td>
                                 <td class="responsive-td">
-                                     @RoleStrings.ToWhatYouCanDo(account.RoleName)
+                                     @RoleStrings.GetRoleDescription(account.RoleName)
                                 </td>
                                 <td class="responsive-td link-right">
                                     <a aria-label="View account homepage for @account.Name"

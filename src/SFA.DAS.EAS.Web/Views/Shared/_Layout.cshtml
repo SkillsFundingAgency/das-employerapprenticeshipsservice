@@ -29,13 +29,16 @@
     <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:image" content="/dist/images/opengraph-image.png">
-
-    <!--[if gt IE 8]><!-->
-    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
-    <!--<![endif]-->
+    <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
     <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 7]><link href="@Styles.Url("~/bundles/screenie7")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 8]><link href="@Styles.Url("~/bundles/screenie8")" media="screen" rel="stylesheet" /><![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
+    <!--<![endif]-->
+
+  
+
 
     <!-- Google Tag Manager -->
     <script>
@@ -59,7 +62,7 @@
 
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
 </head>
-<body>
+<body id="@ViewBag.PageID">
 
     <!-- Google Tag Manager (noscript) -->
     <noscript>

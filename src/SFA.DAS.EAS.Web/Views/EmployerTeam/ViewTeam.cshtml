@@ -5,8 +5,29 @@
 @model OrchestratorResponse<EmployerTeamMembersViewModel>
 
 @{
+    ViewBag.PageID = "page-manage-team";
     ViewBag.Title = "Manage team members";
+
+    if (TempData.ContainsKey("userAdded"))
+    {
+        ViewBag.PageID = "page-invite-team-member-sent";
+        TempData.Remove("userAdded");
+    }
+
+    if (TempData.ContainsKey("userDeleted"))
+    {
+        ViewBag.PageID = "page-team-member-deleted";
+        TempData.Remove("userDeleted");
+    }
+
+    if (TempData.ContainsKey("userRoleChange"))
+    {
+        ViewBag.PageID = "page-team-member-role-changed";
+        TempData.Remove("userRoleChange");
+    }
 }
+
+
 
 @if (!string.IsNullOrWhiteSpace(Model.Data.SuccessMessage))
 {
@@ -61,7 +82,7 @@
                             <span>@teamMember.Name</span> 
                             <span class="responsive-detail mobile-hide">@teamMember.Email</span>
                         </td>
-                        <td>@RoleStrings.ToWhatTheyCanDo(teamMember.Role)</td>
+                        <td>@RoleStrings.GetRoleDescription(teamMember.Role)</td>
                         <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
                         <td class="link-right">
                             <a aria-label="View details for @teamMember.Name"

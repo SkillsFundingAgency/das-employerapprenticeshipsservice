@@ -1,13 +1,26 @@
 ﻿@model SFA.DAS.EAS.Web.Models.SummaryViewModel
-@{ViewBag.Title = "Check details"; }
+
+@{ViewBag.PageID = "page-onboard-paye-check-details"; }
+@{ViewBag.Title = "Check Details"; }
+
+
+@if (string.IsNullOrEmpty(Model.EmployerRef))
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-in-use";
+    ViewBag.Title = "PAYE scheme already in use";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        @if (string.IsNullOrEmpty(Model.EmployerRef))
+        @if (string.IsNullOrEmpty(Model.EmployerRef) && !Model.EmpRefNotFound)
         {
             <h1 class="heading-xlarge">PAYE scheme already in use</h1>
             <p>The PAYE scheme for the Government Gateway details you entered is already added to an account.</p>
             <p><a class="button" id="search_again" href="@Url.Action("Gateway","EmployerAccount")">Use different details</a></p>
+        }
+        else if (Model.EmpRefNotFound)
+        {
+            @Html.Partial("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
         }
         else
         {

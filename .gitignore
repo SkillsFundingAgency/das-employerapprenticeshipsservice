@@ -254,3 +254,4 @@ src/Tools/**/*.*
 **/*.orig
 src/ReleaseTemplate.sql
 *.jfm
+*.DS_Store

@@ -5,11 +5,12 @@
 @{
     var culture = new CultureInfo("en-GB");
     var paymentType = "Credit";
-    ViewBag.Title = paymentType + " details";
     if (Model.Data.Amount < 0)
     {
         paymentType = "Adjustment";
     }
+    ViewBag.PageID = "page-transaction-details";
+    ViewBag.Title = paymentType + " details";
 }
 <div class="grid-row">
     <div class="column-two-thirds">

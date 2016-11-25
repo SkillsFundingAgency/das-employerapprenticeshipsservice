@@ -9,5 +9,7 @@ namespace SFA.DAS.EAS.Web.Models
 
         [Required(ErrorMessage = "Select an option")]
         public string SaveOrSend { get; set; }
+
+        public bool ApproveAndSend { get; set; }
     }
 }

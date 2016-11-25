@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -10,27 +12,31 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
     //TODO tests need adding and validator
     public class GetAccountEmployerAgreementsQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementsRequest, GetAccountEmployerAgreementsResponse>
     {
-        private readonly IMembershipRepository _membershipRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IHashingService _hashingService;
+        private readonly IValidator<GetAccountEmployerAgreementsRequest> _validator;
 
-        public GetAccountEmployerAgreementsQueryHandler(IMembershipRepository membershipRepository, IAccountRepository accountRepository,IHashingService hashingService)
+        public GetAccountEmployerAgreementsQueryHandler(IAccountRepository accountRepository, IHashingService hashingService, IValidator<GetAccountEmployerAgreementsRequest> validator)
         {
-            _membershipRepository = membershipRepository;
             _accountRepository = accountRepository;
             _hashingService = hashingService;
+            _validator = validator;
         }
 
         public async Task<GetAccountEmployerAgreementsResponse> Handle(GetAccountEmployerAgreementsRequest message)
         {
-            var membership = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var validationResult = await _validator.ValidateAsync(message);
 
-            if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
-            if (membership.RoleId != (short)Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
-            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(membership.AccountId);
+            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(_hashingService.DecodeValue(message.HashedId));
 
             foreach (var agreement in agreements)
             {

@@ -51,49 +51,12 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
-            var config = this.GetConfiguration();
-
-
             //For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             //For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-
+            RegisterMapper();
             RegisterMediator();
         }
-
-        private EmployerApprenticeshipsServiceConfiguration GetConfiguration()
-        {
-            var environment = Environment.GetEnvironmentVariable("DASENV");
-            if (string.IsNullOrEmpty(environment))
-            {
-                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-            }
-            if (environment.Equals("LOCAL") || environment.Equals("AT") || environment.Equals("TEST"))
-            {
-                PopulateSystemDetails(environment);
-            }
-
-            var configurationRepository = GetConfigurationRepository();
-            var configurationService = new ConfigurationService(configurationRepository,
-                new ConfigurationOptions(ServiceName, environment, "1.0"));
-
-            var result = configurationService.Get<EmployerApprenticeshipsServiceConfiguration>();
-
-            return result;
-        }
-
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
+        
 
         private void RegisterMediator()
         {
@@ -118,11 +81,6 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
             For<IConfigurationProvider>().Use(config).Singleton();
             For<IMapper>().Use(mapper).Singleton();
         }
-
-        private void PopulateSystemDetails(string envName)
-        {
-            SystemDetails.EnvironmentName = envName;
-            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
+        
     }
 }

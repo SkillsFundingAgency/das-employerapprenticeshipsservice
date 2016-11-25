@@ -1,8 +1,10 @@
-﻿<div class="grid-row">
+﻿@{
+    ViewBag.PageID = "page-no-found";
+    ViewBag.Title = "Page not found";
+}
+<div class="grid-row">
     <div class="column-two-thirds">
-
         <h1 class="heading-xlarge">Page not found</h1>
-
         <p>If you entered a web address, check that it's correct. Or you can <a href="@Url.Action("Index","Home")">return to the homepage</a>.</p>
     </div>
 </div>

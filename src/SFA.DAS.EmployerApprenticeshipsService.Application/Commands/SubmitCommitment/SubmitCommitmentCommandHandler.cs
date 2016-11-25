@@ -38,16 +38,19 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (commitment.EmployerAccountId != message.EmployerAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
+            var agreementStatus = AgreementStatus.NotAgreed;
             // TODO: Refactor out these magic strings
-            var agreementStatus = (message.SaveOrSend == "send-approve") 
-                ? AgreementStatus.EmployerAgreed 
-                : AgreementStatus.NotAgreed;
+            if (message.SaveOrSend != "save-no-send")
+            {
+                agreementStatus = AgreementStatus.EmployerAgreed;
+            }
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, agreementStatus);
 
             await CreateAgreementEvent(message, commitment);
 
-            await CreateTask(message, commitment);
+            if (message.SaveOrSend != "approve")
+                await CreateTask(message, commitment);
         }
 
         private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)

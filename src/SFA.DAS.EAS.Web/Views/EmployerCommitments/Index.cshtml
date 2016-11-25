@@ -1,4 +1,8 @@
 ﻿@model String
+@{ViewBag.PageID = "page-apprentices-home";}
+@{ViewBag.Title = "Apprentices";}
+
+ 
 
 <div class="grid-row">
     <form method="POST" action="@Url.Action("SetLegalEntity")">
@@ -35,7 +39,7 @@
         <ol role="navigation">
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
-            <li>Add Apprenticeships</li>
+            <li>Apprentices</li>
         </ol>
     </div>
 }

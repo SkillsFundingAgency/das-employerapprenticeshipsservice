@@ -1,57 +1,68 @@
-﻿@using SFA.DAS.Commitments.Api.Types
-@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
-@model CommitmentViewModel
+@model CommitmentDetailsViewModel
     
-@{
-    var status = Model.Status == CommitmentStatus.New ? "Saved" : "Sent to provider";
-}
-
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Add apprentices</h1>
-
+    </div>
+</div>
   
-        <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
-        <p><span class="strong">Status:</span>
-          @if (Model.EditStatus == EditStatus.ProviderOnly)
-          {
-            @Html.Raw("Sent to provider")
-          }
-          else if (Model.EditStatus == EditStatus.Both)
-          {
-            @Html.Raw("Approved")
-          }
-          else
-          {
-            @Html.Raw("Saved")
-          }
-        </p>
 
-        <h2 class="heading-medium">Apprentices</h2>
+<div class="grid-row">
+    <div class="column-one-half employer-details">
+        <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
+        <p><span class="strong">Status:</span> @Model.Status.GetDescription()</p>
+    </div>
+
+       
+    <div class="column-one-half employer-details">
+            <p class="strong">Instructions:</p>
+            <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-full">
+        <h2 class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</h2>
+        
+        @{
+            var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Finish editing";
+        }
+        <hr />
+        <div class="emptyStateButton">
+            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+        </div>
+        <hr />
+        @functions {
+
+            public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
+            {
+                if (apprenticeships.Count == 1)
+                    return "1 Apprentice";
+
+                return $"{apprenticeships.Count} Apprentices";
+            }
+        }
+
         @if (Model.Apprenticeships.Count == 0)
         {
-         
-            <div id="addApprenticesEmptyState" class="emptyState">
-                <div class="emptyStateAlert">
-                    <div class="emptyStateCopyDetails" aria-label="Information">
-                        <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
-
-                    </div>
-                </div>
+            <div id="addApprenticesEmptyState" class="panel panel-filled">
+                <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
             </div>
-          
         }
         else
         {
+            
             <table class="tableResponsive viewCommitment">
                 <thead>
                 <tr>
-
                     <th scope="col">Apprentice</th>
-                    <th scope="col" colspan="2">Training course</th>
-                 
+                    <th scope="col">Training course</th>
+                    <th scope="col">Training dates</th>
+                    <th scope="col" colspan="2">Cost</th>
 
                 </tr>
                 </thead>
@@ -61,15 +72,24 @@
                     <tr>
                         <td>
         
-                            @apprenticeship.ApprenticeshipName &nbsp; 
+                            @apprenticeship.ApprenticeName &nbsp; 
                         </td>
                         <td>
-
                             @apprenticeship.TrainingName &nbsp;
-
                         </td>
                         <td>
-                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeshipName">Edit</a>                   
+                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                            {
+                                <span>
+                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                </span>
+                            }
+                        </td>
+                        <td>
+                            @FormatCost(apprenticeship.Cost) &nbsp;
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
                         </td>
                     </tr>
                 }
@@ -77,13 +97,7 @@
             </table>
         }
       
-        <div class="emptyStateButton">
-            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-link" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="Save and continue">Save and continue</a>
-        </div>
-      
     </div>
-
 </div>
 
 @section breadcrumb {
@@ -96,4 +110,15 @@
             <li>Add apprentices</li>
         </ol>
     </div>
+}
+
+@functions
+{
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"{cost.Value:£0,0}";
+    }
 }
