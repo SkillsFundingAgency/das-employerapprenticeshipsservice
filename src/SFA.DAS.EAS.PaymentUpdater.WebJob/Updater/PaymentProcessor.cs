@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
@@ -22,17 +23,20 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _publisher;
+        private readonly ILogger _logger;
 
 
-        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher)
+        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher, ILogger logger)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _mediator = mediator;
             _publisher = publisher;
+            _logger = logger;
         }
 
         public async Task RunUpdate()
         {
+            _logger.Info($"Calling Payments API");
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
@@ -61,6 +65,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 
             if (!periodsToProcess.Any())
             {
+                _logger.Info("No Period Ends to Process");
                 return;
             }
 
@@ -68,10 +73,13 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
             
             foreach (var periodEnd in periodsToProcess)
             {
+                _logger.Info($"Creating period end {periodEnd.Id}");
                 await _mediator.SendAsync(new CreateNewPeriodEndCommand {NewPeriodEnd = periodEnd});
                 
                 foreach (var account in response.Accounts)
                 {
+                    _logger.Info($"Createing payment queue message for accountId:{account.Id} periodEndId:{periodEnd.Id}");
+
                     await _publisher.PublishAsync(new PaymentProcessorQueueMessage
                     {
                         AccountPaymentUrl = $"{periodEnd.Links.PaymentsForPeriod}&employeraccountid={account.Id}",
