@@ -9,9 +9,9 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionDetailsTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDeclarationTransactionDetailsTests
 {
-    public class WhenIGetEmployerTransactionDetails : QueryBaseTest<FindEmployerAccountLevyDeclarationTransactionsHandler, FindEmployerAccountLevyDeclarationTransactionsQuery, FindEmployerAccountLevyDeclarationTransactionsResponse>
+    public class WhenIGetEmployerLevyDeclarationTransactionDetails : QueryBaseTest<FindEmployerAccountLevyDeclarationTransactionsHandler, FindEmployerAccountLevyDeclarationTransactionsQuery, FindEmployerAccountLevyDeclarationTransactionsResponse>
     {
         private Mock<IDasLevyService> _dasLevyService;
         private Mock<IHashingService> _hashingService;

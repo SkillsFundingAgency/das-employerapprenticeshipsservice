@@ -183,7 +183,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId);
 
             ViewBag.HashedAccountId = hashedAccountId;
 
@@ -202,20 +202,24 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Finished")]
-        public ActionResult FinishedEditing(FinishEditingViewModel viewModel)
+        public async Task<ActionResult> FinishedEditing(FinishEditingViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 return View(viewModel);
             }
 
-            // TODO: Refactor out these magic strings
-            if (viewModel.SaveOrSend == "save-no-send")
+            if (!string.IsNullOrEmpty(viewModel.SaveOrSend) && viewModel.SaveOrSend.StartsWith("send"))
             {
-                return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
+                return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend });
             }
 
-            return RedirectToAction("SubmitExistingCommitment", new { hashedAccountId = viewModel.HashedAccountId, hashedCommitmentId = viewModel.HashedCommitmentId, saveOrSend = viewModel.SaveOrSend });
+            if (viewModel.SaveOrSend == "approve")
+            {
+                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveOrSend);
+            }
+
+            return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
         [HttpGet]
@@ -252,7 +256,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
         {
             // TODO: Should this be a different Orchestrator call?
-            var commitment = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
@@ -302,7 +306,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Acknowledgement")]
         public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
         {
-            var model = await _employerCommitmentsOrchestrator.Get(hashedAccountId, hashedCommitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
 
             return View("Acknowledgement", new AcknowledgementViewModel
             {

@@ -8,6 +8,7 @@
         public int Level { get; set; }
         public int PathwayCode { get; set; }
         public string PathwayName { get; set; }
+        public int ProgrammeType { get; set; }
         public string Title { get; set; }
         public Duration Duration { get; set; }
     }

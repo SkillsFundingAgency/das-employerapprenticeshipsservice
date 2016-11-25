@@ -1,9 +1,12 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
 
-@section pageSpecificJS {
-    @*@Scripts.Render("~/bundles/jqueryvalcustom");*@
+@{
+    ViewBag.Title = "Add an apprentice";
+    ViewBag.PageID = "add-apprentice";
+}
 
+@section pageSpecificJS {
     @Scripts.Render("~/bundles/apprentice");
 }
 
@@ -102,8 +105,8 @@
                         <option value="">Please select</option>
                         @foreach (var apprenticeshipProduct in ViewBag.ApprenticeshipProducts)
                         {
-                            <option value="@apprenticeshipProduct.Id">
-                                @apprenticeshipProduct.Title, Level @apprenticeshipProduct.Level
+                            <option value="@apprenticeshipProduct.Id" @if (apprenticeshipProduct.Id == Model.TrainingId) { @Html.Raw("selected")  }>
+                                @apprenticeshipProduct.Title
                             </option>
                         }
                     </select>

@@ -1,9 +1,13 @@
-﻿@using SFA.DAS.Commitments.Api.Types
-@using SFA.DAS.EAS.Web
+﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
 @model OrchestratorResponse<CommitmentListViewModel>
+
+@{
+    ViewBag.Title = "Requests in progress";
+    ViewBag.PageID = "requests-in-progress";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -13,14 +17,11 @@
 
         @if (Model.Data.Commitments.Count == 0)
         {
-            <div id="addApprenticesEmptyState" class="emptyState">
-                <div class="emptyStateAlert">
-                    <div class="emptyStateCopy">
+          
+                    <div class="panel panel-filled">
                         <p>You currently have no requests. </p>
-
                     </div>
-                </div>
-            </div>
+           
       
         }
         else

@@ -81,9 +81,10 @@ namespace SFA.DAS.EAS.Application
                 Frameworks = frameworks.Select(x => new Framework
                 {
                     Id = x.Id,
-                    Title = x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title,
+                    Title = GetTitle(x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title, x.Level),
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
+                    ProgrammeType = x.ProgType,
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
@@ -121,8 +122,9 @@ namespace SFA.DAS.EAS.Application
                 Standards = standards.Select(x => new EAS.Domain.Standard
                 {
                     Id = x.Id,
+                    Code = long.Parse(x.Id),
                     Level = x.Level,
-                    Title = x.Title,
+                    Title = GetTitle(x.Title, x.Level),
                     Duration = new Duration
                     {
                         From = x.TypicalLength.From,
@@ -131,6 +133,11 @@ namespace SFA.DAS.EAS.Application
                     }
                 }).ToList()
             };
+        }
+
+        private static string GetTitle(string title, int level)
+        {
+            return $"{title}, Level: {level}";
         }
     }
 }

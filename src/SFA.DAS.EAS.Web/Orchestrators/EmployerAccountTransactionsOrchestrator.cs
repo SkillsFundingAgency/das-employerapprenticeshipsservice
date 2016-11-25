@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -24,8 +24,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<TransactionLineItemViewResult<LevyDeclarationTransactionLine>> FindAccountLevyDeclarationTransactions(
-            string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
+        public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
+            FindAccountLevyDeclarationTransactions(
+                string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             var data = await _mediator.SendAsync(new FindEmployerAccountLevyDeclarationTransactionsQuery
             {
@@ -34,10 +35,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ToDate = toDate,
                 ExternalUserId = externalUserId
             });
-           
-            return new TransactionLineItemViewResult<LevyDeclarationTransactionLine>
+
+            return new OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>
             {
-                Model = new TransactionLineViewModel<LevyDeclarationTransactionLine>
+                Status = HttpStatusCode.OK,
+                Data = new TransactionLineViewModel<LevyDeclarationTransactionLine>
                 {
                     Amount = data.Total,
                     SubTransactions = data.Transactions
@@ -45,25 +47,55 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<TransactionLineItemViewResult<PaymentTransactionLine>> FindAccountPaymentTransactions(
+        public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(
             string hashedId, DateTime fromDate, DateTime toDate, string externalUserId)
         {
-            var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
+            try
             {
-                HashedAccountId = hashedId,
-                FromDate = fromDate,
-                ToDate = toDate,
-                ExternalUserId = externalUserId
-            });
-
-            return new TransactionLineItemViewResult<PaymentTransactionLine>
-            {
-                Model = new TransactionLineViewModel<PaymentTransactionLine>
+                var data = await _mediator.SendAsync(new FindEmployerAccountPaymentTransactionsQuery
                 {
-                    Amount = data.Total,
-                    SubTransactions = data.Transactions
-                }
-            };
+                    HashedAccountId = hashedId,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    ExternalUserId = externalUserId
+                });
+
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new PaymentTransactionViewModel
+                    {
+                        ProviderName = data.ProviderName,
+                        TransactionDate = data.TransactionDate,
+                        Amount = data.Total,
+                        SubTransactions = data.Transactions
+                    }
+                };
+            }
+            catch (NotFoundException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.NotFound,
+                    Exception = e
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<PaymentTransactionViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e
+                };
+            }
         }
 
         public async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
@@ -101,14 +133,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     CurrentBalance = currentBalance,
                     CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
-                    Data = this.SortDataForViewModel(data.Data)
+                    Data = data.Data
                 }
             };
-        }
-        
-        private AggregationData SortDataForViewModel(AggregationData data)
-        {
-            return data;
         }
     }
 }

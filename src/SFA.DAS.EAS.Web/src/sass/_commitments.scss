@@ -141,6 +141,14 @@ span.helpText{
     width:25%;
 }
 
+.employer-details p {
+    margin-bottom: 5px;
+}
+
+.column-two-thirds .green-box{
+    margin-top:50px;
+}
+
 
 .form-date{ 
      input#StartYear, input#EndYear{width:60px;}
@@ -152,22 +160,22 @@ span.helpText{
 
 //dropdown styles
 .select2-container--default{ 
+ 
     .select2-selection--single{
-        border:2px solid #6f777b;
+        border:2px solid $black;
         border-radius:0;
         height: 37px;
     }
     .select2-dropdown{
-          border:2px solid #6f777b;
+          border:2px solid $black;
           border-radius: 0;
-          border-top:1px solid #6f777b;
+          border-top:1px solid $black;
     }
     .select2-results__option--highlighted[aria-selected] {
           background-color: #ddd;
           color: #000;
     }
 }
-
 
 //adding focus to span element using jquery in dropdown.js file 
 .form-group{
@@ -176,6 +184,31 @@ span.helpText{
         border:0;     
     }
 
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered:focus,
+.select2-container--default .select2-selection--single:focus,
+.select2-container:focus{
+     outline:3px solid #ffbf47; 
+}
+
+
+
+// select box arrow/border color/spacing
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    margin-top: 3px;
+    color:$black;
+
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 5px;
+    }
+
+.select2-container--default .select2-selection--single{
+    border: 2px solid $black;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b,
+.select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b{
+    border-color: $black transparent;
 }
 
 //all mobile media query breakpoints
