@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 validationResult.AddError(nameof(item.Name), "Enter name");
 
             if (item.RoleId == 0)
-                validationResult.AddError(nameof(item.RoleId), "No RoleId supplied");
+                validationResult.AddError(nameof(item.RoleId), "Select team member role");
 
 
             if (validationResult.IsValid())

@@ -48,11 +48,15 @@
                                @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=\"error-message-name\" " : "")
                                aria-required="true" value="@Model.Data.Name" />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RoleError) ? "error" : "")">
                         <fieldset>
                             <legend>
                                 <span class="form-label-bold">Team member access</span>
                                 <span class="form-hint">Choose the level of access this user can have.</span>
+                                @if (!string.IsNullOrEmpty(Model.Data.RoleError))
+                                {
+                                    <span class="error-message" id="RoleId">@Model.Data.RoleError</span>
+                                }
                             </legend>
                             <label class="block-label" for="radio1">
                                 <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />

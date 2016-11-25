@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Web.Models
         public Role Role { get; set; }
         public string EmailError => GetErrorMessage(nameof(Email));
         public string NameError => GetErrorMessage(nameof(Name));
+        public string RoleError => GetErrorMessage("RoleId");
     }
 }

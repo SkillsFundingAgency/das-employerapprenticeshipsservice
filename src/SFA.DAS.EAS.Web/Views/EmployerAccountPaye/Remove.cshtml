@@ -2,6 +2,24 @@
 @{ViewBag.PageID = "page-remove-paye-scheme";} 
 @{ViewBag.Title = "Remove PAYE scheme";} 
 
+@if (!Model.Data.Valid)
+{
+    <div class="grid-row">
+        <div class="column-full error-summary-wrapper">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#confirm">Please confirm you wish to remove the scheme</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Remove this scheme?</h1>
@@ -13,22 +31,25 @@
             <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
 
             <div class="form-group @(Model.Data.Valid ? "" : "error")">
-                @if (!Model.Data.Valid)
-                {
-                    <span class="error-message">@Model.Data.RemoveSchemeErrorMessage</span>   
-                }
-                <label class="block-label">
-                    <input type="radio" name="RemoveScheme" value="true"/>
-                    <span class="heading-small">Yes, remove scheme</span>
-                </label>
-                <label class="block-label">
-                    <input type="radio" name="RemoveScheme" value="false" checked="checked"/>
-                    <span class="heading-small">No, don't remove</span>
-                </label>
+
+                <fieldset class="" id="confirm">
+                    <legend class="vh">Remove this PAYE scheme</legend>
+                    @if (!Model.Data.Valid)
+                    {
+                        <span class="error-message">@Model.Data.RemoveSchemeErrorMessage</span>
+                    }
+                    <label class="block-label">
+                        <input type="radio" name="RemoveScheme" value="2" />
+                        <span class="heading-small">Yes, remove scheme</span>
+                    </label>
+                    <label class="block-label">
+                        <input type="radio" name="RemoveScheme" value="1" />
+                        <span class="heading-small">No, don't remove</span>
+                    </label>
+                </fieldset>
             </div>
             <div class="form-group">
                 <button type="submit" class="button">Continue</button>
-                <a href="@Url.Action("Index","EmployerAccountPaye")" class="button button-link">Cancel</a>
             </div>
          </form>
     </div>

@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             Assert.Contains(new KeyValuePair<string,string>("Email", "Enter email address"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedId", "No HashedId supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("Name", "Enter name"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("RoleId", "No RoleId supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("RoleId", "Select team member role"),result.ValidationDictionary );
         }
 
         [TestCase("notvalid")]
