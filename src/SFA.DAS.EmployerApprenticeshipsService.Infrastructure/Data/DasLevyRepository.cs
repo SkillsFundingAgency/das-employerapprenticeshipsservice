@@ -172,8 +172,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@fromDate", fromDate, DbType.DateTime);
-                parameters.Add("@toDate", toDate, DbType.DateTime);
+                parameters.Add("@fromDate", new DateTime(fromDate.Year,fromDate.Month,fromDate.Day), DbType.DateTime);
+                parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day,23,59,59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
                     sql: "[levy].[GetTransactionDetail_ByDateRange]",
@@ -184,13 +184,14 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
-        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd)
+        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@PaymentId", Guid.Parse(payment.Id), DbType.Guid);
                 parameters.Add("@Ukprn", payment.Ukprn, DbType.Int64);
+                parameters.Add("@ProviderName", providerName, DbType.StringFixedLength,ParameterDirection.Input,250);
                 parameters.Add("@Uln", payment.Uln, DbType.Int64);
                 parameters.Add("@AccountId", accountId, DbType.Int64);
                 parameters.Add("@ApprenticeshipId", payment.ApprenticeshipId, DbType.Int64);
@@ -206,6 +207,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@TransactionType", payment.TransactionType, DbType.String);
                 parameters.Add("@Amount", payment.Amount, DbType.Decimal);
                 parameters.Add("@PeriodEnd", periodEnd, DbType.String);
+                parameters.Add("@StandardCode", payment.StandardCode, DbType.Int64);
+                parameters.Add("@FrameworkCode", payment.FrameworkCode, DbType.Int32);
+                parameters.Add("@ProgrammeType", payment.ProgrammeType, DbType.Int32);
+                parameters.Add("@PathwayCode", payment.PathwayCode, DbType.Int32);
+                parameters.Add("@CourseName", courseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",

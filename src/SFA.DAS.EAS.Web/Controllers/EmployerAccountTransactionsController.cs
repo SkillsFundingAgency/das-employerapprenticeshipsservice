@@ -37,17 +37,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Balance/LevyDeclarationDetail")]
         public async Task<ActionResult> LevyDeclarationDetail(string accountId, DateTime fromDate, DateTime toDate)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View("Detail", transactionViewResult.Model);
+            return View("LevyDeclarationDetail", viewModel);
         }
 
         [Route("Balance/PaymentDetail")]
         public async Task<ActionResult> PaymentDetail(string accountId, DateTime fromDate, DateTime toDate)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(accountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View("PaymentDetails", transactionViewResult.Model);
+            return View("PaymentDetails", viewModel);
         }
     }
 }

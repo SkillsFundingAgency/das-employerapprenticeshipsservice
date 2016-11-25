@@ -1,10 +1,11 @@
 ﻿@using System.Globalization
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Levy.LevyDeclarationTransactionLine>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Levy.LevyDeclarationTransactionLine>>
+
 @{
     var culture = new CultureInfo("en-GB");
     var paymentType = "Credit";
-    if (Model.Amount < 0)
+    if (Model.Data.Amount < 0)
     {
         paymentType = "Adjustment";
     }
@@ -14,7 +15,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@paymentType details</h1>
-        <p class="lede">@paymentType made on @Model.SubTransactions.First().TransactionDate.ToGdsFormat().</p>
+        <p class="lede">@paymentType made on @Model.Data.SubTransactions.First().TransactionDate.ToGdsFormat().</p>
         <table>
             <thead>
                 <tr>
@@ -26,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var aggregationLineItem in Model.SubTransactions)
+                @foreach (var aggregationLineItem in Model.Data.SubTransactions)
                 {
                     <tr class="responsive-tr">
                         <td>
@@ -48,7 +49,7 @@
                 }
                 <tr class="total">
                     <th scope="row" colspan="4"><span class="vh">Total</span></th>
-                    <td class="numeric">@Model.Amount.ToString("C2",culture)</td>
+                    <td class="numeric">@Model.Data.Amount.ToString("C2",culture)</td>
                 </tr>
             </tbody>
         </table>

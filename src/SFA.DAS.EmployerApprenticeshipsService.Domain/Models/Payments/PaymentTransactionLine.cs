@@ -11,6 +11,8 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public long UkPrn { get; set; }
         public string PeriodEnd { get; set; }
         public string ProviderName { get; set; }
+        public decimal LineAmount { get; set; }
+        public string CourseName { get; set; }
 
         public ICollection<PaymentTransactionLine> SubPayments =>
             SubTransactions?.OfType<PaymentTransactionLine>().ToList() ??

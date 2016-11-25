@@ -1,5 +1,5 @@
 ﻿@using System.Globalization
-@model SFA.DAS.EAS.Web.Models.TransactionLineViewModel<SFA.DAS.EAS.Domain.Models.Payments.PaymentTransactionLine>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PaymentTransactionViewModel>
 
 @{
     var culture = new CultureInfo("en-GB");
@@ -10,10 +10,9 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to [provider] for @Model.TransactionDate.ToString("MMMM yyyy")</p>
-
-        <p><span class="strong">Amount: </span> @(Model.Amount.ToString("C0", culture))</p>
-        <p><span class="strong">Payment Date: </span> @Model.TransactionDate.ToString("dd MMMM yyyy")</p>
+        <p class="lede">Payment to @Model.Data.ProviderName for @Model.Data.TransactionDate.ToString("MMMM yyyy")</p>
+        <p><span class="strong">Amount: </span> @(Model.Data.Amount.ToString("C0", culture))</p>
+        <p><span class="strong">Payment Date: </span> @Model.Data.TransactionDate.ToString("dd MMMM yyyy")</p>
         <table>
             <thead>
                 <tr>
@@ -22,20 +21,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var payment in Model.SubTransactions)
+                @foreach (var payment in Model.Data.SubTransactions)
                 {
                     <tr class="responsive-tr">
                         <td>
-                            @payment.Description
+                            @payment.CourseName
                         </td>
                         <td class="numeric">
-                            @(payment.Amount.ToString("C0", culture))
+                            @(payment.LineAmount.ToString("C0", culture))
                         </td>
                     </tr>
                 }
             <tr class="total">
                 <td></td>
-                <td class="numeric">@Model.Amount.ToString("C0", culture)</td>
+                <td class="numeric">@Model.Data.Amount.ToString("C0", culture)</td>
             </tr>
             </tbody>
         </table>

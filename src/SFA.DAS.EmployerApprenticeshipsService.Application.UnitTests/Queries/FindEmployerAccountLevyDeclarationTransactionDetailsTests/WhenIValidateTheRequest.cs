@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EAS.Domain.Data;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionDetailsTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.FindEmployerAccountLevyDeclarationTransactionDetailsTests
 {
     public class WhenIValidateTheRequest
     {

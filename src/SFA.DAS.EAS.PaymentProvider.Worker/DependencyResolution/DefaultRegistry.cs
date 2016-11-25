@@ -4,6 +4,8 @@ using System.Reflection;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using StructureMap;
 using StructureMap.Graph;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
@@ -22,6 +24,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
             });
 
             For<IConfiguration>().Use<PaymentProviderConfiguration>();
+            For<ICache>().Use<InMemoryCache>();
 
             RegisterMapper();
 
