@@ -185,9 +185,18 @@ span.helpText{
     }
 
 }
+.select2-container--default .select2-selection--single .select2-selection__rendered:focus,
+.select2-container--default .select2-selection--single:focus,
+.select2-container:focus{
+     outline:3px solid #ffbf47; 
+}
+
+
+
 // select box arrow/border color/spacing
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     margin-top: 3px;
+    color:$black;
 
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {

@@ -2426,8 +2426,15 @@ span.helpText {
   border: 0;
 }
 
+.select2-container--default .select2-selection--single .select2-selection__rendered:focus,
+.select2-container--default .select2-selection--single:focus,
+.select2-container:focus {
+  outline: 3px solid #ffbf47;
+}
+
 .select2-container--default .select2-selection--single .select2-selection__rendered {
   margin-top: 3px;
+  color: #0b0c0c;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
