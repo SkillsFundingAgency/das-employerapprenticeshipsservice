@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution;
+﻿using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EAS.PaymentUpdater.WebJob.DependencyResolution;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob
@@ -10,6 +11,8 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob
         // AzureWebJobsDashboard and AzureWebJobsStorage
         static void Main()
         {
+            LoggingConfig.ConfigureLogging();
+
             var container = IoC.Initialize();
 
             var paymentUpdater = container.GetInstance<IPaymentProcessor>();

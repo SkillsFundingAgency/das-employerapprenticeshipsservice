@@ -13,6 +13,8 @@
       <Setting name="ApiTokenSecret" value="__ApiTokenSecret__" />
       <Setting name="ApiIssuer" value="__ApiIssuer__" />
       <Setting name="ApiAudiences" value="__ApiAudiences__" />
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="68C6661219A1B03911E542F15C979203CEF2CC38" thumbprintAlgorithm="sha1" />
@@ -32,5 +34,5 @@
         <FrontendIPConfiguration type="private" subnet="__subnet2__" staticVirtualNetworkIPAddress="10.78.124.27" />
       </LoadBalancer>
     </LoadBalancers>
-    </NetworkConfiguration>
+  </NetworkConfiguration>
 </ServiceConfiguration>

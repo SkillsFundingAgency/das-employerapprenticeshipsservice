@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Application.Messages;
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         private PaymentDataProcessor _paymentDataProcessor;
         private Mock<IPollingMessageReceiver> _messageReceiver;
         private Mock<IMediator> _mediator;
+        private Mock<ILogger> _logger;
 
         private const long ExpectedAccountId = 545648975;
         private const string ExpectedAccountPaymentUrl = "http://someurlForTestData";
@@ -43,7 +45,9 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
                         PeriodEndId = ExpectedPeriodEndId
                     }));
 
-            _paymentDataProcessor = new PaymentDataProcessor(_messageReceiver.Object, _mediator.Object);
+            _logger = new Mock<ILogger>();
+
+            _paymentDataProcessor = new PaymentDataProcessor(_messageReceiver.Object, _mediator.Object, _logger.Object);
         }
 
         [Test]
