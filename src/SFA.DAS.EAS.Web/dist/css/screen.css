@@ -2718,8 +2718,8 @@ a.links {
   display: block;
 }
 
-aside {
-  margin-top: 50px;
+#instructions-sent aside {
+  margin-top: 10px;
 }
 
 span.helpText {
