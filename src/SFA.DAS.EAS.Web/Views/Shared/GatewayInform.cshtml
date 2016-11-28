@@ -1,5 +1,8 @@
-﻿@{ViewBag.PageID = "page-onboard-gov-gateway-inform"; }
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.GatewayInformViewModel>
+
+@{ViewBag.PageID = "page-onboard-gov-gateway-inform"; }
 @{ViewBag.Title = "Check details"; }
+
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -16,7 +19,7 @@
             <p>I understand that all account users will be able to see levy funds from any PAYE schemes I add.</p>
             <p>All PAYE schemes I add are owned and operated by an organisation that'll use this account, or owned and operated by a <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external">connected organisation</a>.</p>
         </div>
-        <p><a href="@Url.Action("Gateway")" class="button">Continue</a></p>
+        <p><a href="@Model.Data.ConfirmUrl" class="button">Continue</a></p>
     </div>
 </div>
 
@@ -24,7 +27,9 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol>
-            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
         </ol>
     </div>
 }
+
+
