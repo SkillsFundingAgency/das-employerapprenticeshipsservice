@@ -84,6 +84,7 @@ namespace SFA.DAS.EAS.Application
                     Title = GetTitle(x.FrameworkName.Trim() == x.PathwayName.Trim() ? x.FrameworkName : x.Title, x.Level),
                     FrameworkCode = x.FrameworkCode,
                     FrameworkName = x.FrameworkName,
+                    ProgrammeType = x.ProgType,
                     Level = x.Level,
                     PathwayCode = x.PathwayCode,
                     PathwayName = x.PathwayName,
@@ -121,6 +122,7 @@ namespace SFA.DAS.EAS.Application
                 Standards = standards.Select(x => new EAS.Domain.Standard
                 {
                     Id = x.Id,
+                    Code = long.Parse(x.Id),
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level),
                     Duration = new Duration

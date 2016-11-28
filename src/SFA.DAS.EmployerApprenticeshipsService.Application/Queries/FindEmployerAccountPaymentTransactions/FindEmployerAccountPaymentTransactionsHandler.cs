@@ -41,18 +41,20 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetTransactionsByDateRange<PaymentTransactionLine>
                                     (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
-            
-            //var transactionDetailSummaries = data.Select(item => new PaymentTransactionLine
-            //{
-            //    Amount = item.Amount,
-            //    TransactionDate = item.TransactionDate,
-            //    Description = item.UkPrn
-            //}).ToList();
+
+            if (!transactions.Any())
+            {
+                throw new NotFoundException("No transactions found.");
+            }
+
+            var firstTransaction = transactions.First();
 
             return new FindEmployerAccountPaymentTransactionsResponse
             {
+                ProviderName = firstTransaction.ProviderName,
+                TransactionDate = firstTransaction.TransactionDate,
                 Transactions = transactions.ToList(),
-                Total = transactions.Sum(c => c.Amount)
+                Total = transactions.Sum(c => c.LineAmount)
             };
         }
     }

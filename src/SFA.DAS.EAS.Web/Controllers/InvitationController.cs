@@ -73,9 +73,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
-            //TODO incorrect message when accepting an invite
-            TempData["successHeader"] = "Invitation Accepted";
-            TempData["successCompany"] = invitationItem.AccountName;
+            
+            TempData["successHeader"] = "Invitation accepted";
+            TempData["successMessage"] = $"You can now access the {invitationItem.AccountName} account";
 
             return RedirectToAction("Index", "Home");
         }

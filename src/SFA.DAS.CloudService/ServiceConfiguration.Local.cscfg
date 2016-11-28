@@ -25,8 +25,8 @@
       <Setting name="EnvironmentName" value="LOCAL" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="LogLevel" value="Debug" />
-      <Setting name="EventHubConnectionString" value="" />
-      <Setting name="EventHubName" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="LoggingRedisKey" value="" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -40,6 +40,8 @@
       <Setting name="InstrumentationKey" value="" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="LogLevel" value="Debug" />
+      <Setting name="LoggingRedisKey" value="" />
+      <Setting name="LoggingRedisConnectionString" value="" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

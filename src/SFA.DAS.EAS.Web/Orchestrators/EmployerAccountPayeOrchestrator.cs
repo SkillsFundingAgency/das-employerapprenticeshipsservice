@@ -159,7 +159,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedId = model.HashedId,
                     UserId = model.UserId,
                     PayeRef = model.PayeRef,
-                    RemoveScheme = model.RemoveScheme
+                    RemoveScheme = model.RemoveScheme == 2
                 });
                 response.Data = model;
                 

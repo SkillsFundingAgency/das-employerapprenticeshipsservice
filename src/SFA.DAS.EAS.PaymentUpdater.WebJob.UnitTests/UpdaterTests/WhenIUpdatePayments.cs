@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
@@ -22,6 +22,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
         private Mock<IPaymentsEventsApiClient> _paymentsClient;
         private Mock<IMediator> _mediator;
         private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<ILogger> _logger;
         private const long ExpectedAccountId = 12345444;
 
 
@@ -33,8 +34,10 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { Id = "123456" } });
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = ExpectedAccountId } } });
 
+            _logger = new Mock<ILogger>();
+
             _messagePublisher = new Mock<IMessagePublisher>();
-            _paymentProcessor = new PaymentProcessor(_paymentsClient.Object, _mediator.Object, _messagePublisher.Object);
+            _paymentProcessor = new PaymentProcessor(_paymentsClient.Object, _mediator.Object, _messagePublisher.Object, _logger.Object);
         }
 
         [Test]

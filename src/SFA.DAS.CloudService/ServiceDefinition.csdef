@@ -41,8 +41,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="StorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="EventHubConnectionString" />
-      <Setting name="EventHubName" />
+      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisKey" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
@@ -57,6 +57,8 @@
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="InstrumentationKey" />
       <Setting name="LogLevel" />
+      <Setting name="LoggingRedisKey" />
+      <Setting name="LoggingRedisConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
