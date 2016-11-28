@@ -2382,7 +2382,7 @@ a.links {
   display: block;
 }
 
-#instructions-sent aside {
+#instructions-sent-end aside {
   margin-top: 10px;
 }
 
@@ -2464,6 +2464,9 @@ span.helpText {
   }
   .select2-container--default .select2-selection--single .select2-selection__rendered {
     width: 200px !important;
+  }
+  #instructions-sent-end aside {
+    margin-top: 30px;
   }
   .finishEditingBtn {
     margin-top: 0px;

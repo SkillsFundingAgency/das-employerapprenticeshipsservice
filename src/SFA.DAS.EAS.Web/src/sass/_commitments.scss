@@ -127,7 +127,7 @@ a.links{
     display:block;
 }
 
-#instructions-sent{
+#instructions-sent-end{
     aside{margin-top:10px;}
 }
 
@@ -228,6 +228,10 @@ span.helpText{
        }
 
      }
+
+     #instructions-sent-end{
+        aside{margin-top:30px;}
+    }
 
        .finishEditingBtn{
         margin-top:0px;
