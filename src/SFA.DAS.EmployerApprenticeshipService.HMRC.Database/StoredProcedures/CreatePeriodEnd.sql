@@ -2,8 +2,8 @@
 	@PeriodEndId nvarchar(20),
 	@CalendarPeriodMonth int,
 	@CalendarPeriodYear int,
-	@AccountDataValidAt datetime,
-	@CommitmentDataValidAt datetime,
+	@AccountDataValidAt datetime = null,
+	@CommitmentDataValidAt datetime = null,
 	@CompletionDateTime datetime,
 	@PaymentsForPeriod nvarchar(250)
 AS
