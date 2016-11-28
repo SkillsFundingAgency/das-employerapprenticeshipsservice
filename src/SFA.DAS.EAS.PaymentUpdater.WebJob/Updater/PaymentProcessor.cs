@@ -75,7 +75,12 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
             {
                 _logger.Info($"Creating period end {periodEnd.Id}");
                 await _mediator.SendAsync(new CreateNewPeriodEndCommand {NewPeriodEnd = periodEnd});
-                
+
+                if (periodEnd.ReferenceData?.AccountDataValidAt == null || periodEnd.ReferenceData?.CommitmentDataValidAt == null)
+                {
+                    continue;
+                }
+
                 foreach (var account in response.Accounts)
                 {
                     _logger.Info($"Createing payment queue message for accountId:{account.Id} periodEndId:{periodEnd.Id}");
