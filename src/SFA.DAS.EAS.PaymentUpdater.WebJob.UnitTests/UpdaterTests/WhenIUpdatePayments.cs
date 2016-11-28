@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -105,7 +106,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
             var expectedPeriodEnd = "1234";
             
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { Id = existingPeriodEnd } });
-            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = existingPeriodEnd }, new PeriodEnd { Id = expectedPeriodEnd,Links = new PeriodEndLinks {PaymentsForPeriod = expectedPaymentsForPeriodUrl } } });
+            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = existingPeriodEnd }, new PeriodEnd { Id = expectedPeriodEnd,Links = new PeriodEndLinks {PaymentsForPeriod = expectedPaymentsForPeriodUrl },ReferenceData = new ReferenceDataDetails {AccountDataValidAt = new DateTime(2016,01,01), CommitmentDataValidAt = new DateTime(2016, 01, 01) } } });
 
             //Act
             await _paymentProcessor.RunUpdate();
@@ -147,6 +148,54 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenWhenThereIsNoCommitmentDateValidAtOrAccountDataValidAtThenNoMessagesAreAddedToTheQueue()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = 87544 } } });
+            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = "1234", Links = new PeriodEndLinks { PaymentsForPeriod = "dd" },ReferenceData = {}} });
+
+            //Act
+            await _paymentProcessor.RunUpdate();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentProcessorQueueMessage>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenWhenThereIsNoCommitmentDateValidAtThenNoMessagesAreAddedToTheQueue()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = 87544 } } });
+            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = "1234", Links = new PeriodEndLinks { PaymentsForPeriod = "dd" }, ReferenceData = new ReferenceDataDetails {AccountDataValidAt= new DateTime(2016,01,01)} } });
+
+            //Act
+            await _paymentProcessor.RunUpdate();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentProcessorQueueMessage>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenWhenThereIsNoAccountDateValidAtThenNoMessagesAreAddedToTheQueue()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = 87544 } } });
+            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = "1234", Links = new PeriodEndLinks { PaymentsForPeriod = "dd" }, ReferenceData = new ReferenceDataDetails { CommitmentDataValidAt = new DateTime(2016, 01, 01) } } });
+
+            //Act
+            await _paymentProcessor.RunUpdate();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Once);
+            _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentProcessorQueueMessage>()), Times.Never);
         }
     }
 }
