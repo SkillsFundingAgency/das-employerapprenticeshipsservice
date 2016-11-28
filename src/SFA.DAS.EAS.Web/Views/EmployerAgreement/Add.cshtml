@@ -1,9 +1,9 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddLegalEntityViewModel>
-@{ViewBag.PageID = "page-extra-companies-house"; }
+@{ViewBag.PageID = "enter-companies-house-detail"; }
 @{ViewBag.Title = "Enter your Companies House number";}
 @if (TempData["companyNumberError"] != null)
 {
-   ViewBag.PageID = "page-extra-companies-house-error";
+   ViewBag.PageID = "error-companies-house-entry";
     <div class="grid-row">
         <div class="column-full error-summary-wrapper">
             <div tabindex="-1" role="group" class="error-summary">
