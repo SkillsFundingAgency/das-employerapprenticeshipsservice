@@ -78,7 +78,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
 
-            return View();
+            var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
+            {
+                Data = new GatewayInformViewModel
+                {
+                    BreadcrumbDescription = "Back to Your User Profile",
+                    BreadcrumbUrl = Url.Action("Index","Home"),
+                    ConfirmUrl = Url.Action("Gateway","EmployerAccount")
+                }
+            };
+            return View(gatewayInformViewModel);
         }
         
         [HttpGet]

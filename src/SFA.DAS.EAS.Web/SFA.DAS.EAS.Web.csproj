@@ -379,6 +379,7 @@
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
+    <Compile Include="Models\GatewayInformViewModel.cs" />
     <Compile Include="Models\PaymentTransactionViewModel.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
@@ -809,7 +810,6 @@
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Add.cshtml" />
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
@@ -914,8 +914,8 @@
     <Content Include="src\sass\_panels.scss" />
     <Content Include="src\sass\_commitments.scss" />
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
-    <Content Include="Views\EmployerAccount\GatewayInform.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
+    <Content Include="Views\Shared\GatewayInform.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
