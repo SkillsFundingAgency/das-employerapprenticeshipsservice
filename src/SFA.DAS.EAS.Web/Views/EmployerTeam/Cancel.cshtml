@@ -23,13 +23,10 @@
         </div>
     </div>
 </div>
-
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Viewteam", "EmployerTeam")">Manage Team Members</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId})" class="back-link">Back to Manage Team Members</a></li>
         </ol>
     </div>
 }
