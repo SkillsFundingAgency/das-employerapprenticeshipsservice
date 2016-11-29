@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
@@ -15,5 +16,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<ICollection<T>> GetTransactionsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
+
+        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef, string userId, string accountId);
     }
 }
