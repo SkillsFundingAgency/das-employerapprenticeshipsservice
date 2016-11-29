@@ -230,6 +230,10 @@
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailByEmpRefQuery.cs" />
+    <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailByEmpRefQueryHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailResposne.cs" />
+    <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQuery.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQueryValidator.cs" />
