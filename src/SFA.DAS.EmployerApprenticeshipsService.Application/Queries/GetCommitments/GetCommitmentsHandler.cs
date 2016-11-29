@@ -11,21 +11,17 @@ namespace SFA.DAS.EAS.Application.Queries.GetCommitments
         private readonly ICommitmentsApi _commitmentsApi;
         private readonly IHashingService _hashingService;
 
-        public GetCommitmentsHandler(ICommitmentsApi commitmentsApi, IHashingService hashingService)
+        public GetCommitmentsHandler(ICommitmentsApi commitmentsApi)
         {
             if(commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
-            if(hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
 
             _commitmentsApi = commitmentsApi;
-            _hashingService = hashingService;
         }
 
         public async Task<GetCommitmentsResponse> Handle(GetCommitmentsQuery message)
         {
-            var accountId = _hashingService.DecodeValue(message.AccountHashId);
-            var response = await _commitmentsApi.GetEmployerCommitments(accountId);
+            var response = await _commitmentsApi.GetEmployerCommitments(message.AccountId);
 
             return new GetCommitmentsResponse
             {
