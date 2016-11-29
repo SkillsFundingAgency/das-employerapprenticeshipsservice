@@ -93,6 +93,7 @@
     <Build Include="StoredProcedures\ProcessPaymentDataTransactions.sql" />
     <Build Include="Tables\LevyDeclarationTopup.sql" />
     <Build Include="Tables\PaymentMetaData.sql" />
+    <Build Include="StoredProcedures\GetEnglishFraction_ByEmpRef.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />
