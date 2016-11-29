@@ -244,6 +244,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure));
         }
 
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", empRef, DbType.String);
+
+                return await c.QueryAsync<DasEnglishFraction>(
+                    sql: "[levy].[GetEnglishFraction_ByEmpRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
+        }
+
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
         {
             var transactions = new List<TransactionLine>();
