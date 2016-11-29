@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -30,6 +31,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
+
+                if (accounts.Data?.Accounts?.AccountList != null && accounts.Data.Accounts.AccountList.Count == 0)
+                {
+                    return RedirectToAction("SelectEmployer", "EmployerAccount");
+                }
 
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
