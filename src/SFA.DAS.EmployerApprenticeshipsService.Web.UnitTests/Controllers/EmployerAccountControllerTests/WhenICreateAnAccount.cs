@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"))
+            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
         }
     }
 }
