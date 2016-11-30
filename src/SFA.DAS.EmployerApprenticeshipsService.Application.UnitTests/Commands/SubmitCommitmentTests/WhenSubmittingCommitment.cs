@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         [SetUp]
         public void Setup()
         {
-            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, SaveOrSend = "" };
+            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L };
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
 
@@ -59,14 +59,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         }
 
         [Test]
-        public async Task ThenATaskShouldBeCreated()
-        {
-            await _handler.Handle(_validCommand);
-
-            _mockTasksApi.Verify(x => x.CreateTask(It.IsAny<string>(), It.IsAny<Tasks.Api.Types.Task>()));
-        }
-
-        [Test]
         public async Task ThenAnEventShouldBeCreated()
         {
             await _handler.Handle(_validCommand);
@@ -74,16 +66,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockEventsApi.Verify(x => x.CreateAgreementEvent(It.IsAny<AgreementEvent>()));
         }
 
-        [TestCase("", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
-        [TestCase("save-no-send", AgreementStatus.NotAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is empty")]
-        [TestCase("asdf", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus NotAgreed if saveOrSend is wrong")]
-        [TestCase("approve", AgreementStatus.EmployerAgreed, Description = "Commitment should be patched with AgreementStatus EmployerAgreed if saveOrSend includes 'approved'")]
-        public async Task ThenCallingPatchEmployerCommitment(string saveOrSend, AgreementStatus expectedStatus)
+        [Test]
+        public async Task ShouldNotCallTasksApi()
         {
-            _validCommand.SaveOrSend = saveOrSend;
+            _validCommand.CreateTask = false;
             await _handler.Handle(_validCommand);
 
-            this._mockCommitmentApi.Verify(x => x.PatchEmployerCommitment(It.IsAny<long>(), It.IsAny<long>(), expectedStatus));
+            _mockTasksApi.Verify(m => m.CreateTask("", It.IsAny<Tasks.Api.Types.Task>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ShouldCallTasksApi()
+        {
+            _validCommand.CreateTask = true;
+            await _handler.Handle(_validCommand);
+
+            _mockTasksApi.Verify(m => m.CreateTask(It.IsAny<string>(), It.IsAny<Tasks.Api.Types.Task>()), Times.Once);
         }
     }
 }
