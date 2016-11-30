@@ -11,6 +11,8 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 {
+    using AgreementStatus = SFA.DAS.Commitments.Api.Types.AgreementStatus;
+
     public sealed class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {
         private readonly ICommitmentsApi _commitmentApi;
