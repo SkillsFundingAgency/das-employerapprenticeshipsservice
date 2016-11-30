@@ -2,6 +2,8 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
@@ -30,7 +32,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var cookieService = new Mock<ICookieService>();
 
             _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService);
-
         }
 
         [AfterFeature]

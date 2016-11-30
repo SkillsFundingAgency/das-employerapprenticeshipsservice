@@ -30,11 +30,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
         {
-            var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
+            var response = await Mediator.SendAsync(new GetAccountPayeSchemesQuery
             {
-                HashedId = hashedId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
             
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new EmployerAccountPayeListViewModel
                 {
-                    HashedId = hashedId,
+                    HashedId = hashedAccountId,
                     PayeSchemes = response.PayeSchemes
                 }
             };

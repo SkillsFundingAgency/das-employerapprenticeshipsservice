@@ -1,26 +1,62 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
 {
-    public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesRequest, GetAccountPayeSchemesResponse>
+    public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IEnglishFractionRepository _englishFractionRepository;
+        private readonly IHashingService _hashingService;
+        private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
 
-        //TODO needs validator. And tests. make sure you cant access someone elses schemes!
 
-        public GetAccountPayeSchemesQueryHandler(IAccountRepository accountRepository)
+        public GetAccountPayeSchemesQueryHandler(
+            IAccountRepository accountRepository, 
+            IEnglishFractionRepository englishFractionRepository,
+            IHashingService hashingService, 
+            IValidator<GetAccountPayeSchemesQuery> validator )
         {
             if (accountRepository == null)
                 throw new ArgumentNullException(nameof(accountRepository));
             _accountRepository = accountRepository;
+            _englishFractionRepository = englishFractionRepository;
+            _hashingService = hashingService;
+            _validator = validator;
         }
 
-        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesRequest message)
+        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesQuery message)
         {
-            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedId);
+            var validationResult = await _validator.ValidateAsync(message);
+
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+            
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            
+            var payeSchemes = await _accountRepository.GetAccountPayeSchemes(accountId);
+
+            if (!payeSchemes.Any())
+            {
+                return new GetAccountPayeSchemesResponse
+                {
+                    PayeSchemes = payeSchemes
+                };
+            }
+
+            var updateDate = await _englishFractionRepository.GetLastUpdateDate();
+
+            foreach (var scheme in payeSchemes)
+            {
+                scheme.EnglishFraction = await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.EmpRef);
+            }
 
             return new GetAccountPayeSchemesResponse
             {

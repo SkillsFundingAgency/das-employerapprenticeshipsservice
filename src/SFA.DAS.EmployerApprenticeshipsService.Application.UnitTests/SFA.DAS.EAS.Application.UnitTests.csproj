@@ -159,6 +159,8 @@
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIGetTheAgreements.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountPAYESchemes\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetAccountPAYESchemes\WhenIGetAccountPayeSchemes.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIGetAccountTransactionDetails.cs" />
     <Compile Include="Queries\GetAccountTransactionDetailTests\WhenIValidateTheRequest.cs" />

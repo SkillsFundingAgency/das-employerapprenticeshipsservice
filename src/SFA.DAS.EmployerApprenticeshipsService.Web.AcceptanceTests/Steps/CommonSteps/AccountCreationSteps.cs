@@ -3,7 +3,9 @@ using System.Linq;
 using System.Web;
 using MediatR;
 using Moq;
+using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
@@ -23,16 +25,23 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<ICookieService> _cookieService;
 
+        private string _externalUserId;
+        private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
+
         public AccountCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieService>();
-            
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
-        }
+            _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
 
-        private string _externalUserId;
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
+                .ReturnsAsync(new ValidationResult());
+
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+
+            _container.Inject(_validator.Object);
+        }
 
         [Given(@"I am an account ""(.*)""")]
         public void GivenIAmAnAccount(string accountRole)
