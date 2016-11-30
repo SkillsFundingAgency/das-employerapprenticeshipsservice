@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetCommitments
 {
     public sealed class GetCommitmentsQuery : IAsyncRequest<GetCommitmentsResponse>
     {
-        public string AccountHashId { get; set; }
+        public long AccountId { get; set; }
     }
 }
