@@ -259,6 +259,7 @@ span.helpText{
 		border-bottom: 1px solid #eee; 
 		position: relative;
 		padding-left: 50%; 
+        font-weight:bold;
 	}
 	
 	.tableResponsive td:before { 
@@ -280,24 +281,26 @@ span.helpText{
 	/*
 	Label for the data
 	*/
-	.viewCommitment td:nth-of-type(1):before { content: "Apprentice"; font-weight:bold; margin-top:5px; min-height:30px; }
-	.viewCommitment td:nth-of-type(2):before { content: "Training"; font-weight:bold; margin-top:5px; }
+	.viewCommitment td:nth-of-type(1):before { content: "Apprentice"; font-weight:normal; margin-top:5px; min-height:30px; }
+	.viewCommitment td:nth-of-type(2):before { content: "Training course"; font-weight:normal; margin-top:5px; }
+    .viewCommitment td:nth-of-type(3):before { content: "Training dates"; font-weight:normal; margin-top:5px; }
+    .viewCommitment td:nth-of-type(4):before { content: "Cost"; font-weight:normal; margin-top:5px; }
 
 	
-    .cohort td:nth-of-type(1):before { content: "Training provider"; font-weight:bold; margin-top:5px; }
-	.cohort td:nth-of-type(2):before { content: "Organisation"; font-weight:bold; margin-top:5px; }
-	.cohort td:nth-of-type(3):before { content: "Cohort reference"; font-weight:bold; margin-top:5px;}
-    .cohort td:nth-of-type(4):before { content: "Status"; font-weight:bold; margin-top:5px;}
+    .cohort td:nth-of-type(1):before { content: "Training provider"; font-weight:normal; margin-top:5px; }
+	.cohort td:nth-of-type(2):before { content: "Organisation"; font-weight:normal; margin-top:5px; }
+	.cohort td:nth-of-type(3):before { content: "Cohort reference"; font-weight:normal; margin-top:5px;}
+    .cohort td:nth-of-type(4):before { content: "Status"; font-weight:normal; margin-top:5px;}
 
-    .levyAccountsListing td:nth-of-type(1):before { content: "Account name"; font-weight:bold; margin-top:5px; }
-	.levyAccountsListing td:nth-of-type(2):before { content: "What you can do"; font-weight:bold; margin-top:5px; }
+    .levyAccountsListing td:nth-of-type(1):before { content: "Account name"; font-weight:normal; margin-top:5px; }
+	.levyAccountsListing td:nth-of-type(2):before { content: "What you can do"; font-weight:normal; margin-top:5px; }
 
-     .orgListing td:nth-of-type(1):before { content: "Name"; font-weight:bold; margin-top:5px; }
-	.orgListing td:nth-of-type(2):before { content: "Agreement status"; font-weight:bold; margin-top:5px; }
+     .orgListing td:nth-of-type(1):before { content: "Name"; font-weight:normal; margin-top:5px; }
+	.orgListing td:nth-of-type(2):before { content: "Agreement status"; font-weight:normal; margin-top:5px; }
 
-    .tasksList td:nth-of-type(1):before { content: "Created on"; font-weight:bold; margin-top:5px; }
-	.tasksList td:nth-of-type(2):before { content: "Name"; font-weight:bold; margin-top:5px; }
-    .tasksList td:nth-of-type(3):before { content: "Status"; font-weight:bold; margin-top:5px; }
+    .tasksList td:nth-of-type(1):before { content: "Created on"; font-weight:normal; margin-top:5px; }
+	.tasksList td:nth-of-type(2):before { content: "Name"; font-weight:normal; margin-top:5px; }
+    .tasksList td:nth-of-type(3):before { content: "Status"; font-weight:normal; margin-top:5px; }
 
 
 }

@@ -47,6 +47,7 @@
             </div>
 
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirthDay, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthMonth, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthYear, "error")">
+                <hr />
                 <span class="form-label-bold">Date of birth</span>
                 <span class="form-hint">For example, 08 12 2001</span>
 
@@ -76,6 +77,7 @@
             </div>
 
             <div class="form-group">
+                <hr />
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
                 <select name="TrainingId" id="TrainingId" class="form-control form-control-3-4 " aria-label="Apprenticeship training course">
                     <option value="">Please select</option>
@@ -93,6 +95,7 @@
             </div>
 
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartMonth, "error") @Html.AddClassIfPropertyInError(x => x.StartYear, "error")">
+                <hr />
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Planned training start date</span>
@@ -154,6 +157,7 @@
             </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
+                <hr />
                 @Html.LabelFor(m => m.EmployerRef, "Reference (optional)", new { @class = "form-label-bold" })
                 <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
                 @Html.ValidationMessageFor(m => m.EmployerRef, null, new { id = "error-message-" + Html.IdFor(m => m.EmployerRef) })
@@ -166,7 +170,7 @@
 
 
             <button type="submit" class="button">Save</button>
-            <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+            <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
         </form>
     </div>
 </div>

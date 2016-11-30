@@ -2827,6 +2827,7 @@ span.helpText {
     border-bottom: 1px solid #eee;
     position: relative;
     padding-left: 50%;
+    font-weight: bold;
   }
   .tableResponsive td:before {
     /* Now like a table header */
@@ -2847,68 +2848,119 @@ span.helpText {
 	*/
   .viewCommitment td:nth-of-type(1):before {
     content: "Apprentice";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
     min-height: 30px;
   }
   .viewCommitment td:nth-of-type(2):before {
-    content: "Training";
-    font-weight: bold;
+    content: "Training course";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .viewCommitment td:nth-of-type(3):before {
+    content: "Training dates";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .viewCommitment td:nth-of-type(4):before {
+    content: "Cost";
+    font-weight: normal;
     margin-top: 5px;
   }
   .cohort td:nth-of-type(1):before {
     content: "Training provider";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .cohort td:nth-of-type(2):before {
     content: "Organisation";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .cohort td:nth-of-type(3):before {
     content: "Cohort reference";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .cohort td:nth-of-type(4):before {
     content: "Status";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .levyAccountsListing td:nth-of-type(1):before {
     content: "Account name";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .levyAccountsListing td:nth-of-type(2):before {
     content: "What you can do";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .orgListing td:nth-of-type(1):before {
     content: "Name";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .orgListing td:nth-of-type(2):before {
     content: "Agreement status";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .tasksList td:nth-of-type(1):before {
     content: "Created on";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .tasksList td:nth-of-type(2):before {
     content: "Name";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
   }
   .tasksList td:nth-of-type(3):before {
     content: "Status";
-    font-weight: bold;
+    font-weight: normal;
     margin-top: 5px;
+  }
+}
+
+.hr-double {
+  border-bottom: 4px solid #bfc1c3;
+  margin-bottom: 20px;
+}
+
+.hr-top {
+  margin-bottom: 20px;
+}
+
+.hr-bottom {
+  margin-top: 22px;
+}
+
+#add-apprentice-entry hr,
+#edit-apprentice hr {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+.button.text-link {
+  background-color: transparent;
+  border: medium none;
+  box-shadow: none;
+  color: #005ea5;
+  text-decoration: underline;
+}
+
+.alert-default {
+  background-color: #eaf4f9;
+  border-color: #2b8cc4;
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  #empty-alert-top .alert-default {
+    margin-top: 50px;
+  }
+  #apprentice-details table.viewCommitment {
+    margin-top: 50px;
   }
 }

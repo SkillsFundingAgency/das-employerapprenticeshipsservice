@@ -4,36 +4,37 @@
 @{ViewBag.Title = "Apprentices";}
 
  
-
-<div class="grid-row">
-    <form method="POST" action="@Url.Action("SetLegalEntity")">
-        <div class="column-two-thirds">
+<form method="POST" action="@Url.Action("SetLegalEntity")">
+    <div class="grid-row">
+        <div class="column-full">
             <h1 class="heading-xlarge">Apprentices</h1>
-
-            <div class="grid-row">
-                <div class="column-half ">
-                    <h3 class="heading-medium"><a href="@Url.Action("Inform")">Add an apprentice</a></h3>
-                    <p class="rj-home-spacer">Add an apprentice to your account, so your training provider gets paid for their training.</p>
-
-                </div>
-                <div class="column-half">
-                    <h3 class="heading-medium">Update existing apprentices</h3>
-                    <p class="rj-home-spacer">View, pause and stop apprentices that you've already added and approved.
-</p>
-                </div>
-            </div>
-            <div class="grid-row">
-                <div class="column-half ">
-                    <h3 class="heading-medium"><a href="@Url.Action("Cohorts")">Requests in progress</a></h3>
-                    <p class="rj-home-spacer">Review, edit, approve and add more apprentices to requests you’ve already started.</p>
-                </div>
-                <div class="column-half">
-                </div>
-            </div>
+            <hr class="hr-double">
         </div>
-    </form>
-</div>
+    </div>
 
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="column-half ">
+                <h3 class="heading-medium"><a href="@Url.Action("Inform")">Add an apprentice</a></h3>
+                <p class="rj-home-spacer">Add an apprentice to your account, so your training provider gets paid for their training.</p>
+                <hr />
+            </div>
+            <div class="column-half ">
+               <h3 class="heading-medium"><a href="@Url.Action("Cohorts")">Requests in progress</a></h3>
+               <p class="rj-home-spacer">Review, edit, approve and add more apprentices to requests you’ve already started.</p>
+                <hr />
+            </div>
+
+            <div class="column-half">
+                <h3 class="heading-medium">Update existing apprentices</h3>
+                <p class="rj-home-spacer">
+                    View, pause and stop apprentices that you've already added and approved.
+                </p>
+                <hr />
+            </div>          
+        </div>
+    </div>
+</form>
 
 @section breadcrumb {
     <div class="breadcrumbs">
