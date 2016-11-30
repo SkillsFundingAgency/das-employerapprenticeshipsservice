@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyName = model.CompanyName,
                     DateOfIncorporation = model.DateOfIncorporation,
                     RegisteredAddress = model.RegisteredAddress,
-                    HideBreadcrumb = model.HideNav
+                    HideBreadcrumb = model.HideBreadcrumb
                 };
             }
             else
