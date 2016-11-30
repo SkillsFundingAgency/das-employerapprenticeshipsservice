@@ -1975,6 +1975,19 @@ table.top-border {
   margin-top: -6px;
 }
 
+.govuk-box-highlight {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.govuk-box-highlight a {
+  color: #fff;
+}
+
+.govuk-box-highlight a:link, .govuk-box-highlight a:visited, .govuk-box-highlight a:hover, .govuk-box-highlight a:active {
+  color: #fff;
+}
+
 legend {
   margin-bottom: 10px;
 }

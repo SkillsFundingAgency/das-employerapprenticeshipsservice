@@ -23,7 +23,7 @@
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
                 {
-                    <p>@viewModel.FlashMessage.SubMessage</p>
+                    <p>@Html.Raw(viewModel.FlashMessage.SubMessage)</p>
                 }
                 @if (viewModel.FlashMessage.ErrorMessages.Any())
                 {
