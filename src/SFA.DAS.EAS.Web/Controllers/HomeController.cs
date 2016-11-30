@@ -60,6 +60,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View("ServiceLandingPage", model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("RegisterUser"); //No I have not used the service before
+                case 2: return RedirectToAction("SignIn"); // Yes I have used the service
+                default: return RedirectToAction("Index"); //No option entered
+            }
+        }
         
         [HttpGet]
         public ActionResult RegisterUser()

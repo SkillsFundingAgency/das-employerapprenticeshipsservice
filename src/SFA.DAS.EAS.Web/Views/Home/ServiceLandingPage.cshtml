@@ -4,43 +4,26 @@
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">
-            Manage your apprenticeships
+            Have you used this service before?
         </h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">       
-        <p class="lede">You can use this service to access and spend your levy on apprenticeships in England.</p>
-        <h2 class="heading-medium">Getting started</h2>
-        <p>You will need:</p>
-        <ul class="list list-bullet">
-            <li>the Government Gateway login details and PAYE scheme numbers used for your payroll</li>
-            <li>authority to allow HMRC to access your Government Gateway account</li>
-            <li>your Companies House number - <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">find my Companies House number</a></li>
-        </ul>
-        <form>
-        <div class="form-group radios-inline">
-            <h3 class="heading-medium">Do you have everything you need?</h3>
-            <fieldset>
-                <legend class="visuallyhidden">Do you have everything you need?</legend>
-                <label for="everything-yes" class="block-label">
-                    <input type="radio" name="everything-you-need" id="everything-yes" value="yes" />
-                    Yes, I have everything
-                </label>
-                <label for="everything-no" class="block-label" data-target="have-not-got-everything">
-                    <input type="radio" name="everything-you-need" id="everything-no" value="no" />
-                    No, I don't
-                </label>
-                <div class="error js-hidden" aria-hidden="true" id="have-not-got-everything">
-                    <p class="error-message">You need your Companies House number and your Government Gateway login details to create an account.</p>
-                </div>
-            </fieldset>
-        </div>
+        
+        <form method="POST" action="@Url.Action("Index", "Home")" >
+            @Html.AntiForgeryToken()
+            <div class="form-group ">
+                <fieldset>
+                    <legend class="visuallyhidden">Yes, I've used this service before</legend>
+                    <label for="used-service-before" class="block-label">
+                        <input type="radio" name="choice" id="used-service-before" value="2" />
+                        Yes, I have everything
+                    </label>
+                    <label for="not-used-service-before" class="block-label" data-target="have-not-got-everything">
+                        <input type="radio" name="choice" id="not-used-service-before" value="1" />
+                        No, this is my first time
+                    </label>
+                </fieldset>
+                <button class="button" type="submit" id="submit-button">Continue</button>
+            </div>
         </form>
-        <p><a class="button button-start" id="create_account" href="@Url.Action("RegisterUser", "Home")">Start</a> </p>
-        <h2 class="heading-medium">Sign in</h2>
-        <p>If you already have an account, you just need your email address and password to sign in.</p>
-        <p><a class="button" id="sign_in" href="@Url.Action("SignIn", "Home")">Sign in</a></p>
     </div>
 </div>
 
