@@ -101,3 +101,65 @@
         }
     }
 }
+
+.header-inner {
+    @extend main;
+    margin-bottom: 0;
+    font-size: 14px;
+    @include media(tablet) {
+        font-size: 19px;
+    }
+}
+
+nav {
+    ul {
+        list-style: none;
+        margin: 0;
+        li {
+            a {
+
+            }
+        }
+    }
+}
+
+.header-user {
+    background: $grey-4;
+    border-top: 10px solid $grey-1;
+    border-bottom: 1px solid $grey-2;
+}
+
+.header-organisation {
+    border-bottom: 1px solid $grey-2;
+    font-size: 14px;
+    ul {
+        @extend %contain-floats;
+        margin: 0 -15px;
+        li {
+            float: left;
+            a {
+                padding: 12px 15px 10px;
+                display: block;
+                position: relative;
+                &.selected {
+                    text-decoration: none;
+                    color: $black;
+                    &:after {
+                        background: $govuk-blue;
+                        bottom: -1px;
+                        content: "";
+                        display: block;
+                        height: 5px;
+                        left: 15px;
+                        position: absolute;
+                        right: 15px;
+                        z-index: 1;
+                    }
+                }
+                &:focus {
+                    outline: 0;
+                }
+            }
+        }
+    }
+}

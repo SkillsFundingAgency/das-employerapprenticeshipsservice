@@ -1,4 +1,4 @@
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -25,19 +25,19 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -64,13 +64,13 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -310,7 +310,7 @@ legend {
   }
 }
 
-main {
+main, .header-inner {
   font-family: "nta", Arial, sans-serif;
   font-weight: 400;
   text-transform: none;
@@ -320,7 +320,7 @@ main {
 }
 
 @media (min-width: 641px) {
-  main {
+  main, .header-inner {
     font-size: 19px;
     line-height: 1.3157894737;
   }
@@ -2168,20 +2168,20 @@ dl.inline dd {
   color: #6f777b;
 }
 
-main {
+main, .header-inner {
   max-width: 960px;
   margin: 0 15px;
   margin-bottom: 30px;
 }
 
 @media (min-width: 641px) {
-  main {
+  main, .header-inner {
     margin: 0 30px 30px;
   }
 }
 
 @media (min-width: 1020px) {
-  main {
+  main, .header-inner {
     margin: 0 auto 50px;
   }
 }
@@ -2343,6 +2343,68 @@ table.top-border {
 
 .govuk-box-highlight a:link, .govuk-box-highlight a:visited, .govuk-box-highlight a:hover, .govuk-box-highlight a:active {
   color: #fff;
+}
+
+.header-inner {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+@media (min-width: 641px) {
+  .header-inner {
+    font-size: 19px;
+  }
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+}
+
+.header-user {
+  background: #f8f8f8;
+  border-top: 10px solid #6f777b;
+  border-bottom: 1px solid #bfc1c3;
+}
+
+.header-organisation {
+  border-bottom: 1px solid #bfc1c3;
+  font-size: 14px;
+}
+
+.header-organisation ul {
+  margin: 0 -15px;
+}
+
+.header-organisation ul li {
+  float: left;
+}
+
+.header-organisation ul li a {
+  padding: 12px 15px 10px;
+  display: block;
+  position: relative;
+}
+
+.header-organisation ul li a.selected {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+.header-organisation ul li a.selected:after {
+  background: #005ea5;
+  bottom: -1px;
+  content: "";
+  display: block;
+  height: 5px;
+  left: 15px;
+  position: absolute;
+  right: 15px;
+  z-index: 1;
+}
+
+.header-organisation ul li a:focus {
+  outline: 0;
 }
 
 legend {
@@ -2617,7 +2679,7 @@ b, strong {
   font-weight: 600;
 }
 
-main .column-one-third .spacer {
+main .column-one-third .spacer, .header-inner .column-one-third .spacer {
   margin-top: 60px;
   float: right;
 }

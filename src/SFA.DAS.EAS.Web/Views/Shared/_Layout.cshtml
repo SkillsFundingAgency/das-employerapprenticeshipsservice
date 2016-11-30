@@ -99,34 +99,51 @@
             </div>
         </div>
     </header>
-
-
-    <div id="global-header-bar"></div>
-    <main role="main">
-        <div class="service-info">
+    <div class="header-user">
+        <div class="header-inner">
             <div class="phase-banner-beta">
                 <p>
                     <strong class="phase-tag">BETA</strong>
                     <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
                 </p>
             </div>
+            <div class="">
+                <nav id="user-nav">
+                    <ul>
+                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
+                            <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
+                        }
+                        else
+                        {
+                            if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                            {
+                                <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
+                            }
+                        }
+                    </ul>
+                </nav>
+                <h2 class="heading-medium" id="levy-account-name">Levy account name</h2>
+            </div>
         </div>
-        <div class="user-menu @(HttpContext.Current.User.Identity.IsAuthenticated ? "logged-in" : string.Empty)">
-            <ul id="service-info-list" role="navigation">
-                @if (HttpContext.Current.User.Identity.IsAuthenticated)
-            {
-                    <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                    <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
-                }
-                else
-                {
-                    if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
-                    {
-                        <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
-                    }
-                }
+    </div>
+@if (HttpContext.Current.User.Identity.IsAuthenticated)
+{
+    <div class="header-organisation">
+        <nav class="header-inner">
+            <ul role="navigation" aria-labelledby="levy-account-name" id="global-nav-links">
+                <li><a href="/" class="@(ViewBag.Section == "home" ? "selected" : "")" >Home</a></li>
+                <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")">Finance</a></li>
+                <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(ViewBag.Section == "apprentices" ? "selected" : "")">Apprentices</a></li>
+                <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")">Manage your team</a></li>
+                <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")">Organisations and agreements</a></li>
+                <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")">PAYE schemes</a></li>
             </ul>
-        </div>
+        </nav>
+    </div>
+}
+    <main role="main">
 
         @RenderSection("breadcrumb", required: false)
 
