@@ -15,17 +15,18 @@
             <p>I understand that all account users will be able to see levy funds from any PAYE schemes I add.</p>
             <p>All PAYE schemes I add are owned and operated by an organisation that'll use this account, or owned and operated by a <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external">connected organisation</a>.</p>
         </div>
-        <p><a href="@Model.Data.ConfirmUrl" class="button">Agree and continue</a></p>
+        <p><a href="@Model.Data.ConfirmUrl" id="agree_and_continue" class="button">Agree and continue</a></p>
     </div>
 </div>
+@if (!Model.Data.HideBreadcrumb)
+{
 
+    @section breadcrumb {
+        <div class="breadcrumbs">
+            <ol>
+                <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
+            </ol>
+        </div>
+    }
 
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol>
-            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
-        </ol>
-    </div>
 }
-
-
