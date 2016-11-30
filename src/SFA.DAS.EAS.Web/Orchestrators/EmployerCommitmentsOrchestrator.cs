@@ -371,7 +371,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-            _logger.Info($"Pausing Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
+            _logger.Info($"Resume Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
 
             await _mediator.SendAsync(new ResumeApprenticeshipCommand
             {
