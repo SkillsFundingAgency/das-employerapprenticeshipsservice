@@ -49,16 +49,13 @@
                     </label>
                 </div>
 
-                <div style="margin-top:20px;">
+                <div>
                     <input type="submit" class="button" id="paymentPlan" value="Continue">
-                    <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+                    <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
                 @Html.HiddenFor(x => x.HashedCommitmentId)
             </fieldset>
         </form>
      
-    </div>
-
-    <div class="column-one-third">
     </div>
 </div>
