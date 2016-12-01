@@ -2277,7 +2277,8 @@ tr.total td {
   display: none;
 }
 
-b, strong {
+b,
+strong {
   font-weight: 600;
 }
 
@@ -2485,7 +2486,12 @@ span.helpText {
     margin-top: 0px;
   }
   /* Force table to not be like tables anymore */
-  table.tableResponsive, .tableResponsive thead, .tableResponsive tbody, .tableResponsive th, .tableResponsive td, .tableResponsive tr {
+  table.tableResponsive,
+  .tableResponsive thead,
+  .tableResponsive tbody,
+  .tableResponsive th,
+  .tableResponsive td,
+  .tableResponsive tr {
     display: block;
   }
   /* Hide table headers (but not display: none;, for accessibility) */
