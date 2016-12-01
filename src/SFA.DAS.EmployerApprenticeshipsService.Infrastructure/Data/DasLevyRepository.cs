@@ -136,6 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
+        //TODO refactor not to use PeriodEnd type here
         public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
         {
             await WithConnection(async c =>
@@ -184,6 +185,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
+        //TODO refactor not to use Payment type here
         public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName)
         {
             await WithConnection(async c =>
