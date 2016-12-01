@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                
             };
 
-            return View("ServiceLandingPage", model);
+            return View("Index", model);
         }
 
         [HttpPost]
@@ -83,14 +83,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         public ActionResult WhatYoullNeed(int? choice)
         {
-            switch (choice ?? 0)
-            {
-                case 1:
-                case 2: return RedirectToAction("RegisterUser"); // Yes I do/ No I don't have everything I need
-                default:
-                    TempData["Error"] = "You must select an option to continue.";
-                    return RedirectToAction("WhatYoullNeed"); //No option entered
-            }
+            return RedirectToAction("RegisterUser");
         }
 
         [HttpGet]

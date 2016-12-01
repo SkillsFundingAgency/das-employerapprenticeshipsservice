@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual("ServiceLandingPage", actualViewResult.ViewName);
+            Assert.AreEqual("Index", actualViewResult.ViewName);
         }
         
     }

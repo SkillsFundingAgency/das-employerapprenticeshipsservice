@@ -1,111 +1,53 @@
-﻿@using SFA.DAS.EAS.Domain
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.UserAccountsViewModel>
+﻿@{ViewBag.PageID = "page-service-homepage"; }
+@{ ViewBag.Title = "Homepage"; }
 
-@{ViewBag.PageID = "page-auth-homepage"; }
-@{ViewBag.Title = "Levy accounts"; }
+@{ var errorMessage = TempData["Error"] as string; }
 
-@if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
+@if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <div class="grid-row">
         <div class="column-full">
             <div class="panel panel-error  ">
-                @Model.Data.ErrorMessage
+                @errorMessage
             </div>
         </div>
     </div>
 }
+
 <div class="grid-row">
-
     <div class="column-two-thirds">
-        <section>
-            <h1 class="heading-xlarge" id="Levy-accounts">Levy accounts</h1>
-            @if (Model.Data.Accounts.AccountList.Count == 0)
-            {
-                <p>With levy accounts you can:</p>
-                <ul class="list list-bullet" aria-labelledby="Levy-accounts">
-                    <li>view financial information</li>
-                    <li>create or amend apprenticeships</li>
-                    <li>spend money</li>
-                </ul>
-                <p>At the moment, you don't have access to any levy accounts. You need to be invited to an account or add a new one.</p>
-            }
-            else
-            {
-                <p>Select an account or add a new one.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">Account name</th>
-                            <th scope="col">What you can do</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var account in Model.Data.Accounts.AccountList)
-                        {
-                            <tr>
-                                <td class="responsive-td">
-                                    @account.Name
-                                </td>
-                                <td class="responsive-td">
-                                     @RoleStrings.GetRoleDescription(account.RoleName)
-                                </td>
-                                <td class="responsive-td link-right">
-                                    <a aria-label="View account homepage for @account.Name"
-                                           title="View account homepage for @account.Name"
-                                           href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">
-                                    Open<span class="vh"> @account.Name account homepage</span>
-                                   </a>
-                                </td>
-                            </tr>
-
-                        }
-
-                    </tbody>
-                </table>
-            }
-            <p>
-                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
-            </p>
-        </section>
+        <h1 class="heading-xlarge">
+            Have you used this service before?
+        </h1>
         
-            @if (Model.Data.Invitations > 0)
-            {
-                <section>
-                    <h2 class="heading-medium">Invitations</h2>
-                    <p>
-                        You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
-                    </p>
-                    <p>
-                        <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
-                    </p>
-                </section>
-            }
-
-      
-    </div>  
-
-    <div class="column-one-third pull-right">
-        <aside class="sidebar">
-            <h2 class="heading-medium" id="Manage-Account">Manage your account</h2>
-            <ul aria-labelledby="Manage-Account">
-                <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
-                <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
-            </ul>
-        </aside>
+        <form method="POST" action="@Url.Action("Index", "Home")" >
+            @Html.AntiForgeryToken()
+            <div class="form-group ">
+                <fieldset>
+                    <legend class="visuallyhidden">Have you used this service before?</legend>
+                    <label for="used-service-before" class="block-label">
+                        <input type="radio" name="choice" id="used-service-before" value="2" />
+                        Yes, I've used this service before
+                    </label>
+                    <label for="not-used-service-before" class="block-label" data-target="have-not-got-everything">
+                        <input type="radio" name="choice" id="not-used-service-before" value="1" />
+                        No, this is my first time
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button class="button" type="submit" id="submit-button">Continue</button>
+            </div>
+        </form>
     </div>
-
 </div>
 
-@if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))
-{
-    <script type="text/javascript">
+@section pageSpecificJS {
+<script>
 
-        dataLayer.push({
-            'event': 'VirtualPageview',
-            'virtualPageURL': '@TempData["virtualPageUrl"]',
-            'virtualPageTitle': '@TempData["virtualPageTitle"]'
-        });
+    $(function () {
+        sfa.homePage.init();
+    });
 
-    </script>
+</script>
 }

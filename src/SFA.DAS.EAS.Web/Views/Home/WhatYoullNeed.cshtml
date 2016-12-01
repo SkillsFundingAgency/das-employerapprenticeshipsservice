@@ -1,19 +1,6 @@
 ﻿@{ViewBag.PageID = "page-everything-I-need"; }
 @{ ViewBag.Title = "Do you have everything you need?"; }
 
-@{ var errorMessage = TempData["Error"] as string; }
-
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <div class="grid-row">
-        <div class="column-full">
-            <div class="panel panel-error  ">
-                @errorMessage
-            </div>
-        </div>
-    </div>
-}
-
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
