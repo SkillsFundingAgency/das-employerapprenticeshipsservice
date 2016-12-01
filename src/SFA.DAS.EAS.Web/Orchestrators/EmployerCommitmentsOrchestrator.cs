@@ -284,16 +284,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Approving Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
 
-            var agreementStatus = saveStatus != SaveStatus.Save
-                                  ? AgreementStatus.EmployerAgreed
-                                  : AgreementStatus.NotAgreed;
+            var lastAction = saveStatus == SaveStatus.AmendAndSend 
+                ? LastAction.Amend
+                : LastAction.Approve;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = accountId,
                 CommitmentId = commitmentId,
                 Message = string.Empty,
-                AgreementStatus = agreementStatus,
+                LastAction = lastAction,
                 CreateTask = saveStatus != SaveStatus.Approve
             });
         }
@@ -345,22 +345,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentModel model)
         {
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-            _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
-
-            var agreementStatus = model.SaveStatus != SaveStatus.Save
-                                  ? AgreementStatus.EmployerAgreed
-                                  : AgreementStatus.NotAgreed;
-
             if (model.SaveStatus != SaveStatus.Save)
             {
+                var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+                var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
+                _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
+
+                var agreementStatus = model.SaveStatus != SaveStatus.Save
+                                      ? AgreementStatus.EmployerAgreed
+                                  : AgreementStatus.NotAgreed;
+
+                var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
+                    ? LastAction.Amend
+                    : LastAction.Approve;
+
                 await _mediator.SendAsync(new SubmitCommitmentCommand
                 {
                     EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
                     CommitmentId = commitmentId,
                     Message = model.Message,
-                    AgreementStatus = agreementStatus,
+                    LastAction = lastAction,
                     CreateTask = model.SaveStatus != SaveStatus.Approve
                 });
             }
