@@ -145,7 +145,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var response = await
                     Mediator.SendAsync(new GetEmployerAccountHashedQuery()
                     {
-                        HashedId = model.HashedId,
+                        HashedId = model.AccountHashedId,
                         UserId = model.UserId
                     });
 
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
-                    HashedId = model.HashedId,
+                    HashedId = model.AccountHashedId,
                     UserId = model.UserId,
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme == 2

@@ -258,7 +258,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
-                        HashedId = "123",
+                        AccountHashedId = "123",
                         Email = "bojack.horseman@horsingaround.com",
                         Name = "Bocjack Horseman",
                         Role = Role.Owner

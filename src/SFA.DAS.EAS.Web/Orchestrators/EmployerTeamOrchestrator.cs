@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
                     ExternalUserId = externalUserId,
-                    HashedId = model.HashedId,
+                    HashedId = model.AccountHashedId,
                     Name = model.Name,
                     Email = model.Email,
                     RoleId = model.Role
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            var response = await GetTeamMembers(model.HashedId, externalUserId);
+            var response = await GetTeamMembers(model.AccountHashedId, externalUserId);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -419,7 +419,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new InviteTeamMemberViewModel
                 {
-                    HashedId = hashedAccountId,
+                    AccountHashedId = hashedAccountId,
                     Role = Role.None
                 },
                 Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized

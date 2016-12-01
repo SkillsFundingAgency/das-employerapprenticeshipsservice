@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             var hashedId = "ABV465";
             var userRef = "abv345";
             var payeRef = "123/abc";
-            var model = new RemovePayeScheme {HashedId = hashedId,PayeRef = payeRef,UserId = userRef};
+            var model = new RemovePayeScheme { AccountHashedId = hashedId,PayeRef = payeRef,UserId = userRef};
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);

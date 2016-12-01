@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.HashedId, response.Data.AccountHashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(_request.HashedId, response.Data.HashedId);
+            Assert.AreEqual(_request.HashedId, response.Data.AccountHashedId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.IsEmpty(response.Data.TransactionLines);
         }

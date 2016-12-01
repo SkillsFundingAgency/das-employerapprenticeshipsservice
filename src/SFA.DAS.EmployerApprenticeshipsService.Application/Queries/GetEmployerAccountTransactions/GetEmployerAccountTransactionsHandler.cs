@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 Data = new AggregationData
                 {
-                    HashedId = hashedAccountId,
+                    AccountHashedId = hashedAccountId,
                     AccountId = accountId,
                     TransactionLines = transactions
                 }

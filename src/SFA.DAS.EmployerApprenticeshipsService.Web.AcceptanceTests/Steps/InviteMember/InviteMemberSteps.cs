@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
-                HashedId = _hashedAccountId,
+                AccountHashedId = _hashedAccountId,
                 Email = email,
                 Name = name,
                 Role = Role.Transactor
