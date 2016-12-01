@@ -9,7 +9,6 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
@@ -38,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 else
                 {
                     accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
-                    accounts.Data.FlashMessage = new FlashMessageViewModel()
+                    accounts.Data.FlashMessage = new FlashMessageViewModel
                     {
                         Headline = (string)TempData["successMessage"]
                     };
@@ -67,12 +66,33 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction("RegisterUser"); //No I have not used the service before
+                case 1: return RedirectToAction("WhatYoullNeed"); //No I have not used the service before
                 case 2: return RedirectToAction("SignIn"); // Yes I have used the service
-                default: return RedirectToAction("Index"); //No option entered
+                default:
+                    TempData["Error"] = "You must select an option to continue.";
+                    return RedirectToAction("Index"); //No option entered
             }
         }
-        
+
+        [HttpGet]
+        public ActionResult WhatYoullNeed()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult WhatYoullNeed(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1:
+                case 2: return RedirectToAction("RegisterUser"); // Yes I do/ No I don't have everything I need
+                default:
+                    TempData["Error"] = "You must select an option to continue.";
+                    return RedirectToAction("WhatYoullNeed"); //No option entered
+            }
+        }
+
         [HttpGet]
         public ActionResult RegisterUser()
         {
@@ -124,14 +144,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult SignOut()
         {
             return OwinWrapper.SignOutUser();
-
         }
 
         [HttpGet]
         public ActionResult Privacy()
         {
-
             return View();
         }
+
+        
     }
 }

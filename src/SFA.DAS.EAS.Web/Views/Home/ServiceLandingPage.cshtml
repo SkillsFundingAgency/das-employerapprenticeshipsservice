@@ -1,8 +1,21 @@
 ﻿@{ViewBag.PageID = "page-service-homepage"; }
 @{ ViewBag.Title = "Homepage"; }
 
+@{ var errorMessage = TempData["Error"] as string; }
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <div class="grid-row">
+        <div class="column-full">
+            <div class="panel panel-error  ">
+                @errorMessage
+            </div>
+        </div>
+    </div>
+}
+
 <div class="grid-row">
-    <div class="column-full">
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">
             Have you used this service before?
         </h1>
@@ -11,16 +24,18 @@
             @Html.AntiForgeryToken()
             <div class="form-group ">
                 <fieldset>
-                    <legend class="visuallyhidden">Yes, I've used this service before</legend>
+                    <legend class="visuallyhidden">Have you used this service before?</legend>
                     <label for="used-service-before" class="block-label">
                         <input type="radio" name="choice" id="used-service-before" value="2" />
-                        Yes, I have everything
+                        Yes, I've used this service before
                     </label>
                     <label for="not-used-service-before" class="block-label" data-target="have-not-got-everything">
                         <input type="radio" name="choice" id="not-used-service-before" value="1" />
                         No, this is my first time
                     </label>
                 </fieldset>
+            </div>
+            <div class="form-group">
                 <button class="button" type="submit" id="submit-button">Continue</button>
             </div>
         </form>
