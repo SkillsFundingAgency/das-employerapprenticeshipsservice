@@ -18,25 +18,7 @@
             <h1 class="heading-xlarge">Add training provider details</h1>
 
             @Html.AntiForgeryToken()
-     
-            <p>You will need to know:</p>
-
-               <ul class="list-bullet">
-                   <li>who your apprentices will be employed by, if your organisation has more than one legal entity</li>
-                   <li>the UK Provider Reference Number (UKPRN) of your training provider</li>
-               </ul>              
-
-            <details>
-                <summary><span class="summary">What is a UKPRN?</span></summary>
-                <div class="panel panel-border-narrow">
-                    <p>
-                        A UK Provider Reference Number (UKPRN) is unique number that identifies an individual training provider.  Your training provider will be able to tell you their UKKPRN.
-                    </p>
-                </div>
-            </details>
-
-            <p>Once you start, you can choose to add details of each apprentice or allow your training provider to add details for you.</p>
-
+            
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ProviderId, "error")">
                 @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
@@ -46,6 +28,15 @@
            
                 @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
             </div>
+
+            <details>
+                <summary><span class="summary">What is a UK Provider Reference Number?</span></summary>
+                <div class="panel panel-border-narrow">
+                    <p>
+                        A UK Provider Reference Number (UKPRN) is a unique, 8-digit number that identifies a training provider. Your training provider can tell you their UKPRN.
+                    </p>
+                </div>
+            </details>
 
 
             <button type="submit" class="button">Continue</button>
