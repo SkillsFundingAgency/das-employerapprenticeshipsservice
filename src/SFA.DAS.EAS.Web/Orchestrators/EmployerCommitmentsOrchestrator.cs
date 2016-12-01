@@ -223,7 +223,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = data.Commitment.Reference,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 ProviderName = data.Commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(data.Commitment.CommitmentStatus, data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
@@ -351,10 +351,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
                 _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
 
-                var agreementStatus = model.SaveStatus != SaveStatus.Save
-                                      ? AgreementStatus.EmployerAgreed
-                                  : AgreementStatus.NotAgreed;
-
                 var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
                     ? LastAction.Amend
                     : LastAction.Approve;
@@ -458,7 +454,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.ApprenticeshipCount, commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
                 ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly
             };
         }

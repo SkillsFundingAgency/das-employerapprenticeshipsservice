@@ -10,7 +10,6 @@ using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 {
-    using AgreementStatus = SFA.DAS.Commitments.Api.Types.AgreementStatus;
 
     [TestFixture]
     public class WhenSubmittingCommitment
