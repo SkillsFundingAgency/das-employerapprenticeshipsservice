@@ -177,6 +177,8 @@
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
+    <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIGetEnglishFractions.cs" />
+    <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEnglishFractionsUpdateRequired\WhenGettingIfEnglishFractionsUpdateIsRequired.cs" />
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIGetEnglishFractionDetail.cs" />
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIValidateTheQuery.cs" />
