@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetMember
 
         public async Task<GetMemberResponse> Handle(GetMemberRequest message)
         {
-            var member = await _accountTeamRepository.GetMember(message.HashedId, message.Email);
+            var member = await _accountTeamRepository.GetMember(message.HashedAccountId, message.Email);
 
             member.HashedInvitationId = _hashingService.HashValue(member.Id);
 

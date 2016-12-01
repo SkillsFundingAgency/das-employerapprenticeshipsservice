@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                 throw new UnauthorizedAccessException();
             }
 
-            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(_hashingService.DecodeValue(message.HashedId));
+            var agreements = await _accountRepository.GetEmployerAgreementsLinkedToAccount(_hashingService.DecodeValue(message.HashedAccountId));
 
             foreach (var agreement in agreements)
             {

@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Domain.Data
     public interface IEmployerAccountRepository
     {
         Task<Account> GetAccountById(long id);
-        Task<Account> GetAccountByHashedId(string hashedId);
+        Task<Account> GetAccountByHashedId(string hashedAccountId);
         Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<List<Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);

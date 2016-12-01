@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var request = new GetLatestEmployerAgreementTemplateRequest
                 {
-                    HashedId = hashedId,
+                    HashedAccountId = hashedId,
                     UserId = externalUserId
                 };
 
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
-                    HashedId = hashedId,
+                    HashedAccountId = hashedId,
                     ExternalUserId = externalUserId
                 });
 
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Data = new EmployerAgreementListViewModel
                     {
-                        HashedId = hashedId,
+                        HashedAccountId = hashedId,
                         EmployerAgreements = response.EmployerAgreements
                     }
                 };
@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
                     HashedAgreementId = agreementid,
-                    HashedId = hashedId,
+                    HashedAccountId = hashedId,
                     ExternalUserId = externalUserId,
                     SignedDate = signedDate
                 });
@@ -179,12 +179,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(string hashedId,
+        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(string hashedLegalEntityId,
             string companyNumber, string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                HashedId = hashedId,
+                HashedLegalEntityId = hashedLegalEntityId,
                 UserId = userIdClaim
             });
 
@@ -219,7 +219,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new FindOrganisationViewModel
                 {
-                    HashedId = hashedId,
+                    HashedLegalEntityId = hashedLegalEntityId,
                     CompanyNumber = response.CompanyNumber,
                     CompanyName = response.CompanyName,
                     DateOfIncorporation = response.DateOfIncorporation,
@@ -235,7 +235,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest
                 {
-                    HashedId = request.HashedId,
+                    HashedAccountId = request.HashedAccountId,
                     UserId = request.ExternalUserId
                 });
 
@@ -260,7 +260,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
-                HashedId = request.HashedId,
+                HashedAccountId = request.HashedAccountId,
                 LegalEntity = new LegalEntity
                 {
                     Name = request.Name,
@@ -283,13 +283,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string HashedAccountId, string externalUserId)
         {
-            var userRole = await GetUserAccountRole(accountId, externalUserId);
+            var userRole = await GetUserAccountRole(HashedAccountId, externalUserId);
 
             return new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { AccountId = accountId },
+                Data = new AddLegalEntityViewModel { HashedAccountId = HashedAccountId },
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized 
             };
 

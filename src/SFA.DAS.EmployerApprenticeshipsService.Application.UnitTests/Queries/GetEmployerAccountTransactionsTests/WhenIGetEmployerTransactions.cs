@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             {
                 AccountId = 1,
                 ExternalUserId = "3EFR",
-                HashedId = "RTF34"
+                HashedAccountId = "RTF34"
             };
 
             _dasLevyService = new Mock<IDasLevyService>();
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(_request.HashedId, response.Data.AccountHashedId);
+            Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.AreEqual(1, response.Data.TransactionLines.Count);
         }
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var response = await RequestHandler.Handle(_request);
 
             //Assert
-            Assert.AreEqual(_request.HashedId, response.Data.AccountHashedId);
+            Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
             Assert.AreEqual(_request.AccountId, response.Data.AccountId);
             Assert.IsEmpty(response.Data.TransactionLines);
         }

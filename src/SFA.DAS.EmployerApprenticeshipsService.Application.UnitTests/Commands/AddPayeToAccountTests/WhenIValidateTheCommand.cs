@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
             await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x=>x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x=>x.GetCaller(command.HashedAccountId, command.ExternalUserId), Times.Once);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId), Times.Once);
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User not connected to account"), actual.ValidationDictionary);
         }
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId), Times.Once);
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User is not an owner"), actual.ValidationDictionary);
         }
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
             var actual = await _validator.ValidateAsync(command);
 
             //Assert
-            _membershiprepository.Verify(x => x.GetCaller(command.HashedId, command.ExternalUserId), Times.Once);
+            _membershiprepository.Verify(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId), Times.Once);
             Assert.IsTrue(actual.IsValid());
         }
     }

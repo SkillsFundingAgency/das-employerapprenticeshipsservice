@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
-                    HashedId = accountId,
+                    HashedAccountId = accountId,
                     UserId = externalUserId
                 });
 
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     await
                         _mediator.SendAsync(new GetAccountTeamMembersQuery
                         {
-                            HashedId = hashedId,
+                            HashedAccountId = hashedId,
                             ExternalUserId = userId
                         });
 
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new EmployerTeamMembersViewModel
                     {
-                        HashedId = hashedId,
+                        HashedAccountId = hashedId,
                         TeamMembers = response.TeamMembers
                     }
                 };
@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
                     ExternalUserId = externalUserId,
-                    HashedId = model.AccountHashedId,
+                    HashedAccountId = model.HashedAccountId,
                     Name = model.Name,
                     Email = model.Email,
                     RoleId = model.Role
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            var response = await GetTeamMembers(model.AccountHashedId, externalUserId);
+            var response = await GetTeamMembers(model.HashedAccountId, externalUserId);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -153,13 +153,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<InvitationViewModel>> Review(
-            string accountId, string email)
+            string hashedAccountId, string email)
         {
             var response = new OrchestratorResponse<InvitationViewModel>();
 
             var queryResponse = await _mediator.SendAsync(new GetMemberRequest
             {
-                HashedId = accountId,
+                HashedAccountId = hashedAccountId,
                 Email = email
             });
 
@@ -184,9 +184,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(
-            string email, string hashedId, string externalUserId)
+            string email, string hashedAccountId, string externalUserId)
         {
-            var response = await GetTeamMembers(hashedId, externalUserId);
+            var response = await GetTeamMembers(hashedAccountId, externalUserId);
 
             if (response.Status != HttpStatusCode.OK)
                 return response;
@@ -196,11 +196,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new DeleteInvitationCommand
                 {
                     Email = email,
-                    HashedId = hashedId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
-                response = await GetTeamMembers(hashedId, externalUserId);
+                response = await GetTeamMembers(hashedAccountId, externalUserId);
 
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel()
@@ -291,7 +291,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     await _mediator.SendAsync(new RemoveTeamMemberCommand
                     {
                         UserId = userId,
-                        HashedId = accountId,
+                        HashedAccountId = accountId,
                         ExternalUserId = externalUserId
                     });
 
@@ -354,7 +354,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
-                HashedId = hashedAccountId,
+                HashedAccountId = hashedAccountId,
                 Email = email
             });
 
@@ -371,7 +371,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 await _mediator.SendAsync(new ChangeTeamMemberRoleCommand
                 {
-                    HashedId = hashedId,
+                    HashedAccountId = hashedId,
                     Email = email,
                     RoleId = role,
                     ExternalUserId = externalUserId
@@ -419,7 +419,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new InviteTeamMemberViewModel
                 {
-                    AccountHashedId = hashedAccountId,
+                    HashedAccountId = hashedAccountId,
                     Role = Role.None
                 },
                 Status = response.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized

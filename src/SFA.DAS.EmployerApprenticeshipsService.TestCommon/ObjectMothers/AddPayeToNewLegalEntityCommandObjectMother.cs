@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
         {
             var command = new AddPayeToAccountCommand
             {
-                HashedId = hashedId,
+                HashedAccountId = hashedId,
                 ExternalUserId = string.IsNullOrEmpty(externalUserId) ? Guid.NewGuid().ToString() : externalUserId,
                 Empref = "123/ABC",
                 RefreshToken = "123GGFFDD",

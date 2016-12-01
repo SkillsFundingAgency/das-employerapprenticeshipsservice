@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var accountId = _hashingService.DecodeValue(message.HashedId);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await _accountRepository.AddPayeToAccount(
                     new Paye

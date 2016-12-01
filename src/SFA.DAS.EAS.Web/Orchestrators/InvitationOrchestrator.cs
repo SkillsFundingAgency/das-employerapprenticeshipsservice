@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
-                    HashedId = model.AccountHashedId,
+                    HashedAccountId = model.HashedAccountId,
                     ExternalUserId = externalUserId,
                     Name = model.Name,
                     Email = model.Email,

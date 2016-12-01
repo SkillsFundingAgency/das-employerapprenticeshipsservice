@@ -96,16 +96,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<MembershipView> GetCaller(string hashedId, string externalUserId)
+        public async Task<MembershipView> GetCaller(string hashedAccountId, string externalUserId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@hashedId", hashedId, DbType.String);
+                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.HashedId = @hashedId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             if (!response.Any())
             {
-                return GetResponse(message.HashedId, message.AccountId);
+                return GetResponse(message.HashedAccountId, message.AccountId);
             }
 
             var transactionSummaries = new List<TransactionLine>();
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 transactionSummaries.Add(transaction);
             }
             
-            return GetResponse(message.HashedId, message.AccountId, transactionSummaries);
+            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries);
         }
 
 
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 Data = new AggregationData
                 {
-                    AccountHashedId = hashedAccountId,
+                    HashedAccountId = hashedAccountId,
                     AccountId = accountId,
                     TransactionLines = transactions
                 }

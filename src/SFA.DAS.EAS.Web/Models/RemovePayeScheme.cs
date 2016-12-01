@@ -3,7 +3,7 @@
     public class RemovePayeScheme :ViewModelBase
     {
         public string UserId { get; set; }
-        public string AccountHashedId { get; set; }
+        public string HashedAccountId { get; set; }
         public string PayeRef { get; set; }
         public string AccountName { get; set; }
         public int RemoveScheme { get; set; }
