@@ -51,13 +51,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
         }
 
-        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef, string userId, string accountId)
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
         {
             var result = await _mediator.SendAsync(new GetEnglishFractionDetailByEmpRefQuery
                     {
-                        EmpRef = empRef,
-                        AccountId = accountId,
-                        UserId = userId
+                        EmpRef = empRef
                     });
 
             return result.FractionDetail;

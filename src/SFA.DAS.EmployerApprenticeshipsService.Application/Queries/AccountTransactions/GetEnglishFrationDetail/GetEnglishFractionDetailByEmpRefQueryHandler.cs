@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
@@ -27,11 +23,6 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationD
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
-            }
-
-            if (validationResult.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
             }
 
             var fractionDetail = await _dasLevyRepository.GetEnglishFractionHistory(message.EmpRef);

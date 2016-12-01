@@ -17,6 +17,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId)
             where T : TransactionLine;
 
-        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef, string userId, string accountId);
+        Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef);
     }
 }

@@ -63,20 +63,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
             //Assert
             Assert.AreEqual(1,actual.FractionDetail.Count());
         }
-
-        [Test]
-        public void ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedExceptionIsThrown()
-        {
-            //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEnglishFractionDetailByEmpRefQuery>())).ReturnsAsync(new ValidationResult
-            {
-                IsUnauthorized = true,
-                ValidationDictionary = new Dictionary<string, string>()
-            });
-
-            //Act
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async ()=> await RequestHandler.Handle(Query));
-
-        }
+        
     }
 }

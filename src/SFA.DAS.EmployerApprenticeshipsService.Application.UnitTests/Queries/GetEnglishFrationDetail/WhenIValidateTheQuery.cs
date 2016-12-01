@@ -14,26 +14,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
     public class WhenIValidateTheQuery
     {
         private GetEnglishFractionDetailValidator _validator;
-        private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
         public void Arrange()
         {
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView());
-
-            _validator = new GetEnglishFractionDetailValidator(_membershipRepository.Object);
+            
+            _validator = new GetEnglishFractionDetailValidator();
         }
 
         [Test]
-        public async Task ThenWhenAllFieldsAreSuppliedTheMessageIsValid()
+        public void ThenWhenAllFieldsAreSuppliedTheMessageIsValid()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEnglishFractionDetailByEmpRefQuery
+            var actual = _validator.Validate(new GetEnglishFractionDetailByEmpRefQuery
             {
-                EmpRef="123ABC",
-                AccountId = "12345",
-                UserId = "asdasd"
+                EmpRef="123ABC"
             });
 
             //Assert
@@ -41,37 +36,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFrationDetail
         }
 
         [Test]
-        public async Task ThenFalseIsReturnedWhenTheFieldsArePopulated()
+        public void ThenFalseIsReturnedWhenTheFieldsArePopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetEnglishFractionDetailByEmpRefQuery ());
+            var actual = _validator.Validate(new GetEnglishFractionDetailByEmpRefQuery ());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("EmpRef","EmpRef has not been supplied"),actual.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("AccountId","AccountId has not been supplied"),actual.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"),actual.ValidationDictionary );
         }
 
-        [Test]
-        public async Task ThenTheUnauthorizedFlagIsSetWhenTheyAreNotPartOfTheAccount()
-        {
-            //Arrange
-            var expectedUserId = "123fds";
-            var expectedAccountId = "456TGH";
-            _membershipRepository.Setup(x => x.GetCaller(expectedAccountId, expectedUserId)).ReturnsAsync(null);
-
-            //Act
-            var actual = await _validator.ValidateAsync(new GetEnglishFractionDetailByEmpRefQuery
-            {
-                EmpRef = "123ABC",
-                AccountId = expectedAccountId,
-                UserId = expectedUserId
-            });
-
-            //Assert
-            _membershipRepository.Verify(x=>x.GetCaller(expectedAccountId,expectedUserId));
-            Assert.IsTrue(actual.IsUnauthorized);
-        }
+        
     }
 }
