@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var response = await _mediator.SendAsync(new GetEmployerAgreementRequest
                 {
                     HashedAgreementId = agreementid,
-                    HashedId = hashedId,
+                    HashedAccountId = hashedId,
                     ExternalUserId = externalUserId
                 });
 

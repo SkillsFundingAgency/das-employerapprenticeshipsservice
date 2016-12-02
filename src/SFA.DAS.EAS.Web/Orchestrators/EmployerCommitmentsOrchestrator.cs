@@ -450,7 +450,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new CommitmentListItemViewModel
             {
-                HashedId = _hashingService.HashValue(commitment.Id),
+                HashedCommitmentId = _hashingService.HashValue(commitment.Id),
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
@@ -491,7 +491,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new ApprenticeshipListItemViewModel
             {
-                HashedId = _hashingService.HashValue(apprenticeship.Id),
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 ApprenticeName = apprenticeship.ApprenticeshipName,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,

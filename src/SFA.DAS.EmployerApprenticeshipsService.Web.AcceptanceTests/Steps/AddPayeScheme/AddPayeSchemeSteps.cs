@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void ThenICanViewAllOfMyPAYESchemes()
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         [When(@"I Add a new PAYE scheme")]
         public void WhenIAddANewPAYEScheme()
         {
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             _newLegalEntity = true;
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void ThenThePAYESchemeIs(string schemeStatus)
         {
          
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             //Get the PAYE schemes
