@@ -28,9 +28,35 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult SelectEmployer()
         {
+
+            var cookieData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+            var hideBreadcrumb = false;
+            if (cookieData != null)
+            {
+                hideBreadcrumb = cookieData.HideBreadcrumb;
+            }
+            if (hideBreadcrumb == false)
+            {
+                hideBreadcrumb = TempData.ContainsKey("HideBreadcrumb") && (bool) TempData["HideBreadcrumb"];
+
+                if (hideBreadcrumb)
+                {
+                    TempData["HideBreadcrumb"] = true;
+                }
+            }
+
+
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            return View();
+            var model = new OrchestratorResponse<SelectEmployerModel>
+            {
+                Data = new SelectEmployerModel
+                {
+                    HideBreadcrumb = hideBreadcrumb
+                }
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -44,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             TempData["companyNumberError"] = "No company found. Please try again";
             response.Status = HttpStatusCode.OK;
-
+            
             return View(response);
         }
 
@@ -60,7 +86,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyNumber = model.CompanyNumber,
                     CompanyName = model.CompanyName,
                     DateOfIncorporation = model.DateOfIncorporation,
-                    RegisteredAddress = model.RegisteredAddress
+                    RegisteredAddress = model.RegisteredAddress,
+                    HideBreadcrumb = model.HideBreadcrumb
                 };
             }
             else
@@ -72,11 +99,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyNumber = existingData.CompanyNumber,
                     CompanyName = existingData.CompanyName,
                     DateOfIncorporation = existingData.DateOfIncorporation,
-                    RegisteredAddress = existingData.RegisteredAddress
+                    RegisteredAddress = existingData.RegisteredAddress,
+                    HideBreadcrumb = existingData.HideBreadcrumb
                 };
             }
             
             _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
+            var flashMessageViewModel = new FlashMessageViewModel();
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                flashMessageViewModel = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
             {
@@ -84,9 +117,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
                     BreadcrumbUrl = Url.Action("Index","Home"),
-                    ConfirmUrl = Url.Action("Gateway","EmployerAccount")
-                }
+                    ConfirmUrl = Url.Action("Gateway","EmployerAccount"),
+                    HideBreadcrumb = data.HideBreadcrumb
+                },
+                FlashMessage = flashMessageViewModel
             };
+
             return View(gatewayInformViewModel);
         }
         
@@ -105,7 +141,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(response.FlashMessage);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("GatewayInform");
             }
 
             var email = OwinWrapper.GetClaimValue("email");
@@ -135,7 +171,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyNumber = enteredData.CompanyNumber,
                 DateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
-                EmpRefNotFound = enteredData.EmpRefNotFound
+                EmpRefNotFound = enteredData.EmpRefNotFound,
+                HideBreadcrumb = enteredData.HideBreadcrumb
             };
 
             return View(model);
@@ -171,9 +208,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Summary");
             }
 
+            if (TempData.ContainsKey("HideBreadcrumb"))
+            {
+                TempData.Remove("HideBreadcrumb");
+            }
+
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = $"Account created for { enteredData.CompanyName}";
-            TempData["successMessage"] = "You can now invite team members and spend your levy";
+            TempData["successHeader"] = "Levy account created";
+            TempData["successMessage"] = $"You need to <a href=\"{ Url.Action("Index", "EmployerAgreement", new { accountId = response.Data.EmployerAgreement.HashedId }) }\">sign the SFA agreement</a> before you can start spending your levy";
 
             return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
         }

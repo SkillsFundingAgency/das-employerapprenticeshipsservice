@@ -87,3 +87,17 @@
         margin-top: -6px;
     }
 }
+
+.govuk-box-highlight {
+    padding-left: 10px;
+    padding-right: 10px;
+    a {
+        color: $white;
+        &:link,
+        &:visited,
+        &:hover,
+        &:active {
+            color: $white;
+        }
+    }
+}

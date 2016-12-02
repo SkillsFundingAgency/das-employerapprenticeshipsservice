@@ -412,6 +412,7 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
+    <Compile Include="Models\Types\SaveStatus.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
@@ -794,7 +795,6 @@
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
-    <Content Include="Views\EmployerAccount\Gateway.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />

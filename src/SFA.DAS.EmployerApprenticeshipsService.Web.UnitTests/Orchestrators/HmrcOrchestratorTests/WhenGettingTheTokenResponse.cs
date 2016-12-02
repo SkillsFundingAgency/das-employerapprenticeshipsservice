@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
             Assert.AreEqual("Account not added", actual.FlashMessage.Headline);
             Assert.AreEqual("error-summary", actual.FlashMessage.SeverityCssClass);
             Assert.AreEqual(FlashMessageSeverityLevel.Error, actual.FlashMessage.Severity);
-            Assert.Contains(new KeyValuePair<string,string>("add_new_account", "Add new account"), actual.FlashMessage.ErrorMessages);
+            Assert.Contains(new KeyValuePair<string,string>("agree_and_continue", "Agree and continue"), actual.FlashMessage.ErrorMessages);
             
         }
     }

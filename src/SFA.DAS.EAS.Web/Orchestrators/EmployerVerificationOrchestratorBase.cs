@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Severity = FlashMessageSeverityLevel.Error,
                             Headline = "Account not added",
                             Message = "You need to grant authority to HMRC to add an account.",
-                            ErrorMessages = new Dictionary<string, string> { { "add_new_account", "Add new account" } }
+                            ErrorMessages = new Dictionary<string, string> { { "agree_and_continue", "Agree and continue" } }
                         }
                         
                     };
@@ -140,7 +140,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CompanyNumber = response.CompanyNumber,
                     CompanyName = response.CompanyName,
                     DateOfIncorporation = response.DateOfIncorporation,
-                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    HideBreadcrumb = model.HideBreadcrumb
                 }
 
             };
