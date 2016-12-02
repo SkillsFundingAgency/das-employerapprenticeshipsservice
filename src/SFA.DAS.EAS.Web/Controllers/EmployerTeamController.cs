@@ -11,7 +11,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{accountId}")]
+    [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
@@ -25,11 +25,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string HashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
 
-            var response = await _employerTeamOrchestrator.GetAccount(HashedAccountId, userIdClaim);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, userIdClaim);
 
             return View(response);
       
@@ -37,18 +37,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams")]
-        public async Task<ActionResult> ViewTeam(string HashedAccountId)
+        public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
-            var response = await _employerTeamOrchestrator.GetTeamMembers(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }
 
         [HttpGet]
         [Route("Teams/Invite")]
-        public async Task<ActionResult> Invite(string HashedAccountId)
+        public async Task<ActionResult> Invite(string hashedAccountId)
         {
-            var response = await _employerTeamOrchestrator.GetNewInvitation(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.GetNewInvitation(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams/{invitationId}/Cancel")]
-        public async Task<ActionResult> Cancel(string email, string invitationId, string HashedAccountId)
+        public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
 
@@ -90,12 +90,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/{invitationId}/Cancel")]
-        public async Task<ActionResult> Cancel(string invitationId, string email, string HashedAccountId, int cancel)
+        public async Task<ActionResult> Cancel(string invitationId, string email, string hashedAccountId, int cancel)
         {
             if (cancel != 1)
-                return RedirectToAction("ViewTeam", new { HashedAccountId });
+                return RedirectToAction("ViewTeam", new { HashedAccountId = hashedAccountId });
 
-            var response =  await _employerTeamOrchestrator.Cancel(email, HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response =  await _employerTeamOrchestrator.Cancel(email, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("ViewTeam", response);
         }
@@ -103,18 +103,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/Resend")]
-        public async Task<ActionResult> Resend(string HashedAccountId, string email)
+        public async Task<ActionResult> Resend(string hashedAccountId, string email)
         {
-            var response = await _employerTeamOrchestrator.Resend(email, HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.Resend(email, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             
             return View("ViewTeam", response);
         }
 
         [HttpGet]
         [Route("Teams/{email}/Remove/")]
-        public async Task<ActionResult> Remove(string HashedAccountId, string email)
+        public async Task<ActionResult> Remove(string hashedAccountId, string email)
         {
-            var response = await _employerTeamOrchestrator.Review(HashedAccountId, email);
+            var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
 
             return View(response);
         }
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/{email}/Remove")]
-        public async Task<ActionResult> Remove(long userId, string HashedAccountId, string email, int remove)
+        public async Task<ActionResult> Remove(long userId, string hashedAccountId, string email, int remove)
         {
             Exception exception;
             HttpStatusCode httpStatusCode;
@@ -130,9 +130,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             try
             {
                 if (remove != 1)
-                    return RedirectToAction("ViewTeam", new { HashedAccountId });
+                    return RedirectToAction("ViewTeam", new { HashedAccountId = hashedAccountId });
 
-                var response = await _employerTeamOrchestrator.Remove(userId, HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                var response = await _employerTeamOrchestrator.Remove(userId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                 TempData["userDeleted"] = "true";
                 return View("ViewTeam", response);
             }
@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 exception = e;
             }
 
-            var errorResponse = await _employerTeamOrchestrator.Review(HashedAccountId, email);
+            var errorResponse = await _employerTeamOrchestrator.Review(hashedAccountId, email);
             errorResponse.Status = httpStatusCode;
             errorResponse.Exception = exception;
 
@@ -156,9 +156,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams/{email}/ChangeRole/")]
-        public async Task<ActionResult> ChangeRole(string HashedAccountId, string email)
+        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email)
         {
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(HashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
+            var teamMember = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(teamMember);
         }
@@ -166,9 +166,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Teams/{email}/ChangeRole")]
-        public async Task<ActionResult> ChangeRole(string HashedAccountId, string email, short role)
+        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, short role)
         {
-            var response = await _employerTeamOrchestrator.ChangeRole(HashedAccountId, email, role, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(@"sub"));
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -176,7 +176,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("ViewTeam", response);
             }
             
-            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(HashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
+            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             //We have to override flash message as the change role view has different model to view team view
             teamMemberResponse.FlashMessage = response.FlashMessage;
@@ -187,9 +187,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Teams/{email}/Review/")]
-        public async Task<ActionResult> Review(string HashedAccountId, string email)
+        public async Task<ActionResult> Review(string hashedAccountId, string email)
         {
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(HashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
+            var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(invitation);
         }

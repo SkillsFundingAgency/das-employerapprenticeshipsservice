@@ -26,7 +26,7 @@
                     @if (Model.Data.IsUser)
                     {
                         <td class="link-right">
-                            <a href="@Url.Action("ChangeRole", new { AccountId = Model.Data.HashedAccountId, Email = Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                            <a href="@Url.Action("ChangeRole", new {Model.Data.HashedAccountId, Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
                         </td>
                     }
                     else
@@ -45,7 +45,7 @@
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                     <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
                 </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {HashedAccountId = Model.Data.HashedAccountId,email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a> 
+                <a href="@Url.Action("Cancel", "EmployerTeam",new {Model.Data.HashedAccountId,email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a> 
                 
             </div>
         }
@@ -63,7 +63,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedAccountId})" class="back-link">Back to Manage Team Members</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {@Model.Data.HashedAccountId})" class="back-link">Back to Manage Team Members</a></li>
         </ol>
     </div>
 }

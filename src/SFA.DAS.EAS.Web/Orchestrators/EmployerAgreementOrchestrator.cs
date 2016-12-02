@@ -283,13 +283,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string HashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
         {
-            var userRole = await GetUserAccountRole(HashedAccountId, externalUserId);
+            var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
 
             return new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { HashedAccountId = HashedAccountId },
+                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized 
             };
 

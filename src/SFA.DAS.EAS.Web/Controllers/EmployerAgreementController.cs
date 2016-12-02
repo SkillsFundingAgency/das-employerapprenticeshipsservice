@@ -29,9 +29,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Agreements")]
-        public async Task<ActionResult> Index(string HashedAccountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> Index(string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var model = await _orchestrator.Get(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             if (TempData.ContainsKey("agreementSigned"))
             {
@@ -48,18 +48,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Agreements/Add")]
-        public async Task<ActionResult> Add(string HashedAccountId)
+        public async Task<ActionResult> Add(string hashedAccountId)
         {
-            var response = await _orchestrator.GetAddLegalEntityViewModel(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
         }
 
 		[HttpGet]
 		[Route("Agreements/{agreementid}/View")]
-        public async Task<ActionResult> View(string agreementid, string HashedAccountId, FlashMessageViewModel flashMessage)
+        public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementid, HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
 
             return View(agreement);
@@ -68,17 +68,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [Route("Agreements/{agreementid}/Sign")]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(string agreementid, string HashedAccountId, string understood, string legalEntityName)
+		public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
-                var response = await _orchestrator.SignAgreement(agreementid, HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
+                var response = await _orchestrator.SignAgreement(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
 
                 if (response.Status == HttpStatusCode.OK)
                 {
                     TempData["agreementSigned"] = legalEntityName;
 
-                    return RedirectToAction("Index", new { HashedAccountId });
+                    return RedirectToAction("Index", new { hashedAccountId });
                 }
 
                 return View("DeadView", response);
@@ -86,15 +86,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             TempData["notunderstood"] = true;
            
-            return RedirectToAction("View", new { agreementId = agreementid, HashedAccountId });
+            return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
         }
         
         [HttpPost]
 		[ValidateAntiForgeryToken]
         [Route("Agreements/Add")]
-        public async Task<ActionResult> FindLegalEntity(string HashedAccountId, string entityReferenceNumber)
+        public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
         {
-            var response = await _orchestrator.FindLegalEntity(HashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { HashedAccountId = HashedAccountId },
+                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
                 Status = HttpStatusCode.OK,
             };
 
@@ -123,10 +123,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
 		[ValidateAntiForgeryToken]
         [Route("Agreements/ViewAgreement")]
-        public async Task<ActionResult> ViewEntityAgreement(string HashedAccountId, string name, string code, string address, 
+        public async Task<ActionResult> ViewEntityAgreement(string hashedAccountId, string name, string code, string address, 
             DateTime incorporated)
         {
-            var response = await _orchestrator.Create(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
+            var response = await _orchestrator.Create(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
 
             return View(response);
         }
@@ -135,12 +135,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 		[ValidateAntiForgeryToken]
         [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
-            string HashedAccountId, string name, string code, string address, DateTime incorporated, 
+            string hashedAccountId, string name, string code, string address, DateTime incorporated, 
             bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
-                HashedAccountId = HashedAccountId,
+                HashedAccountId = hashedAccountId,
                 Name = name,
                 Code = code,
                 Address = address,
@@ -175,7 +175,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
             }
 
-            return RedirectToAction("Index", new { HashedAccountId });
+            return RedirectToAction("Index", new { hashedAccountId });
         }
     }
 }

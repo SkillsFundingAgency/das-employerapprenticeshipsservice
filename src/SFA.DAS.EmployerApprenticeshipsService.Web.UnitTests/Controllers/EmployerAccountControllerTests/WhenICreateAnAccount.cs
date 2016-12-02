@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(HashedAccountId, result.RouteValues["accountId"]);
+            Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
         }
 
         [Test]

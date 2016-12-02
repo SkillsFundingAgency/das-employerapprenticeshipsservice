@@ -21,31 +21,31 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [Route("Balance")]
-        public async Task<ActionResult> Index(string HashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Account == null)
             {
                 return RedirectToAction("Index", "AccessDenied");
             }
 
-            transactionViewResult.Model.Data.HashedAccountId = HashedAccountId;
+            transactionViewResult.Model.Data.HashedAccountId = hashedAccountId;
             return View(transactionViewResult.Model);
         }
 
         [Route("Balance/LevyDeclarationDetail")]
-        public async Task<ActionResult> LevyDeclarationDetail(string HashedAccountId, DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(HashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("LevyDeclarationDetail", viewModel);
         }
 
         [Route("Balance/PaymentDetail")]
-        public async Task<ActionResult> PaymentDetail(string HashedAccountId, DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> PaymentDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(HashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var viewModel = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
             return View("PaymentDetails", viewModel);
         }
