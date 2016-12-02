@@ -58,32 +58,26 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View();
         }
 
+
         [HttpGet]
-        [Route("Schemes/Add")]
-        public async Task<ActionResult> Add(string accountId, bool? validationFailed)
+        [Route("Schemes/GatewayInform")]
+        public async Task<ActionResult> GatewayInform(string accountId)
         {
-            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(accountId, OwinWrapper.GetClaimValue("email"), Url.Action("Index", "EmployerAccountPaye", new { accountId }));
-
-            if (validationFailed.HasValue && validationFailed.Value)
-            {
-                response.Data.ValidationFailed = true;
-            }
-
+            var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
+                accountId, 
+                OwinWrapper.GetClaimValue("email"), 
+                Url.Action("Index", "EmployerAccountPaye", new { accountId }),
+                Url.Action("Index", "EmployerAccountPaye", new { accountId }),
+                Url.Action("GetGateway", "EmployerAccountPaye", new { accountId }));
+            
             return View(response);
         }
-
+        
         [HttpGet]
         [Route("Schemes/Gateway")]
-        public async Task<ActionResult> GetGateway(string accountId, bool confirmPayeVisibility)
+        public async Task<ActionResult> GetGateway(string accountId)
         {
-            if (confirmPayeVisibility)
-            {
-                return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
-            }
-            else
-            {
-                return Redirect(Url.Action("Add", new { accountId,validationFailed=true }));
-            }
+            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
         }
 
         [HttpGet]

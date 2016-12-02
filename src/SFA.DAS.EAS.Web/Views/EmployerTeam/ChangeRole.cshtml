@@ -7,29 +7,48 @@
     ViewBag.PageID = "page-team-member-change-role";
     var name = Model.Data.Name ?? Model.Data.Email;
     ViewBag.Title = name;
+    var errorMessage = String.Empty;
+
 }
+
+@if (!ViewContext.ViewData.ModelState.IsValid)
+{
+    foreach (var state in ViewContext.ViewData.ModelState.Values)
+    {
+        foreach (var error in state.Errors)
+        {
+            errorMessage = error.ErrorMessage;
+        }
+    }
+
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+        <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+            Errors to fix
+        </h1>
+        <ul class="error-summary-list">
+            <li><a href="#change-role-selection">@errorMessage</a></li>
+        </ul>
+    </div>
+
+}
+
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@name</h1>
         <p class="lede">Choose what you allow this team member to do.</p>
-        @if (!ViewContext.ViewData.ModelState.IsValid)
-        {
-            foreach (var state in ViewContext.ViewData.ModelState.Values)
-            {
-                foreach (var error in state.Errors)
-                {
-                    <div class="error" style="margin-bottom: 10px;" id="invalidMessage">
-                        <p class="error-message">@error.ErrorMessage</p>
-                    </div>
-                }
-            }
-        }
+       
         <form method="POST" action="@Url.Action("ChangeRole")">
             @Html.AntiForgeryToken()
-            <div class="form-group">
+            <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "error" : "")">
                 <fieldset>
-                    <legend class="visually-hidden">Select a role for @name</legend>
+                    <legend id="change-role-selection">
+                        <span class="vh">Select a role for @name</span>
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="error-message">@errorMessage</span>
+                        }
+                    </legend>
                     <label class="block-label" for="radio1">
                         <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
                         @(RoleStrings.GetRoleDescription(Role.Viewer))
@@ -53,11 +72,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = @Model.Data.HashedId})">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId })">Manage Team Members</a></li>
-            <li><a href="@Url.Action("Review", "EmployerTeam", new {accountId = @Model.Data.HashedId, email = @Model.Data.Email })">@name</a></li>
-            <li>Change Role</li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId})" class="back-link">Back to Manage Team Members</a></li>
         </ol>
     </div>
 }

@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public async Task<OrchestratorResponse<BeginNewPayeScheme>> CheckUserIsOwner(string hashedId, string email, string redirectUrl)
+        public async Task<OrchestratorResponse<GatewayInformViewModel>> CheckUserIsOwner(string hashedId, string email, string redirectUrl, string breadcrumbUrl, string confirmUrl)
         {
             HttpStatusCode status = HttpStatusCode.OK;
 
@@ -107,9 +107,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             }
 
-            return new OrchestratorResponse<BeginNewPayeScheme>
+            return new OrchestratorResponse<GatewayInformViewModel>
             {
-                Data = new BeginNewPayeScheme { HashedId = hashedId} ,//TODO
+                Data = new GatewayInformViewModel
+                {
+                    BreadcrumbUrl = breadcrumbUrl,
+                    ConfirmUrl = confirmUrl,
+                    BreadcrumbDescription = "Back to PAYE schemes"
+                },
                 Status = status,
                 FlashMessage = new FlashMessageViewModel
                 {

@@ -30,9 +30,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<TaskListViewModel> GetTasks(string accountHashId, string userId)
         {
+            var accountId = _hashingService.DecodeValue(accountHashId);
+
             var response = await _mediator.SendAsync(new GetTasksQueryRequest
             {
-                AccountHashId = accountHashId
+                AccountId = accountId
             });
 
             return new TaskListViewModel
