@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return RequestStatus.SentForReview;
 
             if (lastAction == LastAction.Approve)
-                return RequestStatus.None;
+                return RequestStatus.WithProviderForApproval;
 
             return RequestStatus.None;
         }

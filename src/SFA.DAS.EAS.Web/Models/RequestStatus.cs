@@ -18,10 +18,14 @@ namespace SFA.DAS.EAS.Web.Models
         [Description("Ready for review")]
         ReadyForReview,
 
+        [Description("With Provider for approval")]
+        WithProviderForApproval,
+
         [Description("Ready for approval")]
         ReadyForApproval,
 
         [Description("Approved")]
-        Approved
+        Approved,
+
     }
 }

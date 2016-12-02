@@ -46,5 +46,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 
             status.Should().Be(expectedResult);
         }
+
+        [TestCase(RequestStatus.WithProviderForApproval, AgreementStatus.EmployerAgreed, EditStatus.ProviderOnly, 2, LastAction.Approve, TestName = "Employer approves")]
+        [TestCase(RequestStatus.Approved, AgreementStatus.BothAgreed, EditStatus.Both, 2, LastAction.Approve, TestName = "Provider approves")]
+        public void Scenario3(RequestStatus expectedResult, AgreementStatus agreementStatus, EditStatus editStatus, int numberOfApprenticeships, LastAction lastAction)
+        {
+            // Scenario 3
+            var status = _calculator.GetStatus(editStatus, numberOfApprenticeships, lastAction, agreementStatus);
+
+            status.Should().Be(expectedResult);
+        }
     }
 } 
