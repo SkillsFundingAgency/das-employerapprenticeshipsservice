@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private RequestStatus GetEmployerOnlyStatus(LastAction lastAction, bool hasApprenticeships, AgreementStatus? overallAgreementStatus)
         {
-            if (!hasApprenticeships && lastAction == LastAction.None)
+            if (!hasApprenticeships || lastAction == LastAction.None)
                 return RequestStatus.NewRequest;
 
             if (lastAction >= LastAction.Amend && overallAgreementStatus == AgreementStatus.NotAgreed)
