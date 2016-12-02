@@ -57,12 +57,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                
             };
 
-            return View("Index", model);
+            return View("UsedServiceBefore", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int? choice)
+        public ActionResult UsedServiceBefore(int? choice)
         {
             switch (choice ?? 0)
             {
@@ -70,14 +70,25 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case 2: return RedirectToAction("SignIn"); // Yes I have used the service
                 default:
                     TempData["Error"] = "You must select an option to continue.";
-                    return RedirectToAction("Index"); //No option entered
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true
+                    };
+
+                    return View(model); //No option entered
             }
         }
 
         [HttpGet]
         public ActionResult WhatYoullNeed()
         {
-            return View();
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
         }
 
         [HttpPost]
