@@ -2032,7 +2032,8 @@ nav ul {
 }
 
 .js-enabled #user-nav > ul > li > a {
-  border: 1px solid red;
+  border: 1px solid #f8f8f8;
+  z-index: 2;
 }
 
 .js-enabled #user-nav li.has-sub-menu {
@@ -2047,6 +2048,7 @@ nav ul {
   color: blue;
   background: #f8f8f8;
   border-color: #bfc1c3;
+  border-bottom-color: #f8f8f8;
 }
 
 .js-enabled #user-nav li.has-sub-menu ul {
@@ -2056,6 +2058,7 @@ nav ul {
   right: 0;
   z-index: 1;
   border: 1px solid #bfc1c3;
+  margin-top: -1px;
   padding: 0 10px;
 }
 
