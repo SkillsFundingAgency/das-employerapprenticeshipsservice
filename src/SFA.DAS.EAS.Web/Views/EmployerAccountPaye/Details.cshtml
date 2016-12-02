@@ -4,29 +4,27 @@
 @{ViewBag.Title = "View PAYE scheme";}
 
 <div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View PAYE Scheme</h1>
-
-
-        <p class="lede">@Model.Data.FirstOrDefault().EmpRef</p>
+    <div class="column-half">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">PAYE scheme </span>
+        @Model.Data.FirstOrDefault().EmpRef</h1>
+        <h2 class="heading-medium">Historic english percentages</h2>
         <table>
             <thead>
-            <tr>
-                <th scope="col">Date Calculated</th>
-                <th class="numeric" scope="col">English Percentage</th>
-
-            </tr>
+                <tr>
+                    <th scope="col">Date calculated</th>
+                    <th class="numeric" scope="col">English %</th>
+                </tr>
             </thead>
             <tbody>
             @foreach (var fraction in Model.Data)
             {
                 <tr>
-
                     <td>
                         <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
                     </td>
                     <td class="numeric">
-                        <span>@fraction.Amount</span>
+                        <span>@fraction.Amount%</span>
                     </td>
                 </tr>
 

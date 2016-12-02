@@ -45,17 +45,18 @@
                     @foreach (var scheme in Model.Data.PayeSchemes)
                     {
                         <tr>
-                            <td>@scheme.EmpRef</td>
+                            <td>@scheme.EmpRef</td>       
                             
-                            <td class="link-right">
-                                <a aria-label="Remove PAYE scheme @scheme.EmpRef"
-                                   title="Remove PAYE scheme @scheme.EmpRef"
-                                   href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove <span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
+                            <td class="link-action">
                                 <a aria-label="Remove PAYE scheme @scheme.EmpRef"
                                    title="Remove PAYE scheme @scheme.EmpRef"
                                    href="@Url.Action("Details", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Details<span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
                             </td>
-                          
+                            <td class="link-right">
+                                <a aria-label="Remove PAYE scheme @scheme.EmpRef"
+                                   title="Remove PAYE scheme @scheme.EmpRef"
+                                   href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove<span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
+                            </td>
                         </tr>
                     }
                 </tbody>
