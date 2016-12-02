@@ -20,13 +20,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
         public override Mock<IValidator<GetEmployerEnglishFractionQuery>> RequestValidator { get; set; }
 
         private const string ExpectedEmpRef = "123/ABC";
+        private const decimal ExpectedFraction = 0.94m;
+
         [SetUp]
         public void Arrange()
         {
             SetUp();
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetEnglishFractionHistory(ExpectedEmpRef)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction()});
+            _dasLevyService.Setup(x => x.GetEnglishFractionHistory(ExpectedEmpRef)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction {Amount=ExpectedFraction} });
 
             Query = new GetEmployerEnglishFractionQuery {EmpRef = ExpectedEmpRef};
 
@@ -72,6 +74,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
+        }
+
+        [Test]
+        public async Task ThenTheFractionIsMadeToAPercentage()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerEnglishFractionQuery>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var dasEnglishFraction = actual.Fractions.FirstOrDefault();
+            Assert.IsNotNull(dasEnglishFraction);
+            Assert.AreEqual(ExpectedFraction*100, dasEnglishFraction.Amount);
         }
     }
 }

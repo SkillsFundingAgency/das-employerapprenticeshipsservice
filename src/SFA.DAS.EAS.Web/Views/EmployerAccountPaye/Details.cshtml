@@ -1,7 +1,48 @@
-﻿@{ViewBag.Title = "View PAYE scheme";}  
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.Levy.DasEnglishFraction>>
+
+
+@{ViewBag.Title = "View PAYE scheme";}
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">View PAYE Scheme</h1>
+
+
+        <p class="lede">@Model.Data.FirstOrDefault().EmpRef</p>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Date Calculated</th>
+                <th class="numeric" scope="col">English Percentage</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var fraction in Model.Data)
+            {
+                <tr>
+
+                    <td>
+                        <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
+                    </td>
+                    <td class="numeric">
+                        <span>@fraction.Amount</span>
+                    </td>
+                </tr>
+
+            }
+            </tbody>
+        </table>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
+            <li>PAYE scheme @Model.Data.FirstOrDefault().EmpRef </li>
+        </ol>
+    </div>
+}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
@@ -31,7 +32,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
                 throw new UnauthorizedAccessException();
             }
 
-            var result = await _dasLevyService.GetEnglishFractionHistory(message.EmpRef);
+            var result = (await _dasLevyService.GetEnglishFractionHistory(message.EmpRef)).ToList();
+
+            foreach (var fraction in result)
+            {
+                fraction.Amount *= 100;
+            }
 
             return new GetEmployerEnglishFractionResponse {Fractions = result};
         }

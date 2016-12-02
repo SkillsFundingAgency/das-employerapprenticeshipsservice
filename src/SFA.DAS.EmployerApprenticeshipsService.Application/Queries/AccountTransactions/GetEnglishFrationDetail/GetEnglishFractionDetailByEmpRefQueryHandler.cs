@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationD
 
         public async Task<GetEnglishFractionDetailResposne> Handle(GetEnglishFractionDetailByEmpRefQuery message)
         {
-            var validationResult = await _validator.ValidateAsync(message);
+            var validationResult = _validator.Validate(message);
 
             if (!validationResult.IsValid())
             {
