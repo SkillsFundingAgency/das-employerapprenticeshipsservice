@@ -7,8 +7,16 @@
 {
     <div class="grid-row">
         <div class="column-full">
-            <div class="panel panel-error  ">
-                @errorMessage
+            <div class="validation-summary-errors error-summary" role="group" data-valmsg-summary="true">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li>
+                        <a href="#select-option" data-focuses="error-message-">@errorMessage</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -22,9 +30,15 @@
 
         <form method="POST" action="@Url.Action("UsedServiceBefore", "Home")">
             @Html.AntiForgeryToken()
-            <div class="form-group ">
+            <div class="form-group  @(!string.IsNullOrEmpty(errorMessage) ? "error" : "")">
                 <fieldset>
-                    <legend class="visuallyhidden">Have you used this service before?</legend>
+                    <legend>
+                        <span class="visuallyhidden">Have you used this service before?</span>
+                        @if (!string.IsNullOrWhiteSpace(errorMessage))
+                        {
+                            <span class="error-message" id="select-option">@errorMessage</span>
+                        }
+                    </legend>
                     <label for="used-service-before" class="block-label">
                         <input type="radio" name="choice" id="used-service-before" value="2" />
                         Yes, I've used this service before
