@@ -1,18 +1,20 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.Levy.DasEnglishFraction>>
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.Levy.DasEnglishFraction>>
 
 
 @{ViewBag.Title = "View PAYE scheme";}
 
 <div class="grid-row">
-    <div class="column-half">
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">
             <span class="heading-secondary">PAYE scheme </span>
-        @Model.Data.FirstOrDefault().EmpRef</h1>
+            @Model.Data.FirstOrDefault().EmpRef
+        </h1>
         <h2 class="heading-medium">Historic english percentages</h2>
         <table>
             <thead>
                 <tr>
-                    <th scope="col">Date calculated</th>
+                    <th scope="col">Date</th>
                     <th class="numeric" scope="col">English %</th>
                 </tr>
             </thead>
@@ -31,6 +33,11 @@
             }
             </tbody>
         </table>
+    </div>
+    <div class="column-one-third">
+        <a aria-label="Remove PAYE scheme @Model.Data.FirstOrDefault().EmpRef"
+               title="Remove PAYE scheme @Model.Data.FirstOrDefault().EmpRef"
+               href="@Url.Action("Remove", new {empRef = Model.Data.FirstOrDefault().EmpRef.FormatPayeForUrl()})" class="button action-add">Remove scheme</a>
     </div>
 </div>
 
