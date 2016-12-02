@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<List<SFA.DAS.EAS.Domain.Models.Levy.DasEnglishFraction>>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PayeSchemeDetail>
 
 
 @{ViewBag.Title = "View PAYE scheme";}
@@ -8,7 +8,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
             <span class="heading-secondary">PAYE scheme </span>
-            @Model.Data.FirstOrDefault().EmpRef
+            @Model.Data.EmpRef
         </h1>
         <h2 class="heading-medium">Scheme history</h2>
         <table>
@@ -19,7 +19,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var fraction in Model.Data)
+            @foreach (var fraction in Model.Data.Fractions)
             {
                 <tr>
                     <td>
@@ -35,9 +35,9 @@
         </table>
     </div>
     <div class="column-one-third">
-        <a aria-label="Remove PAYE scheme @Model.Data.FirstOrDefault().EmpRef"
-               title="Remove PAYE scheme @Model.Data.FirstOrDefault().EmpRef"
-               href="@Url.Action("Remove", new {empRef = Model.Data.FirstOrDefault().EmpRef.FormatPayeForUrl()})" class="button action-add">Remove scheme</a>
+        <a aria-label="Remove PAYE scheme @Model.Data.EmpRef"
+               title="Remove PAYE scheme @Model.Data.EmpRef"
+               href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="button action-add">Remove scheme</a>
     </div>
 </div>
 
@@ -47,7 +47,7 @@
             <li><a href="/">Your User Profile</a></li>
             <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
             <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
-            <li>PAYE scheme @Model.Data.FirstOrDefault().EmpRef </li>
+            <li>PAYE scheme @Model.Data.EmpRef </li>
         </ol>
     </div>
 }

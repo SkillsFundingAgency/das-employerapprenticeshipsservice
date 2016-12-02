@@ -60,6 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             //Assert
             Assert.IsNotNull(actual);
             Assert.IsNotEmpty(actual.Fractions);
+            Assert.AreEqual(ExpectedEmpRef,actual.EmpRef);
         }
 
         [Test]

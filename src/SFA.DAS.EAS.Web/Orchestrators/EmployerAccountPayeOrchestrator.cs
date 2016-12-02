@@ -185,9 +185,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<List<DasEnglishFraction>>>  GetPayeDetails(string empRef, string accountId, string userId)
+        public async Task<OrchestratorResponse<PayeSchemeDetail>>  GetPayeDetails(string empRef, string accountId, string userId)
         {
-            var response = new OrchestratorResponse<List<DasEnglishFraction>>();
+            var response = new OrchestratorResponse<PayeSchemeDetail>();
             try
             {
                 var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
@@ -196,7 +196,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     EmpRef = empRef,
                     UserId = userId
                 });
-                response.Data = result.Fractions.ToList();
+                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef};
                 return response;
             }
             catch (UnauthorizedAccessException )

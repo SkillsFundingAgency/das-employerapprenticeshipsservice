@@ -380,6 +380,7 @@
     <Compile Include="Models\ConfirmProviderView.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
+    <Compile Include="Models\PayeSchemeDetail.cs" />
     <Compile Include="Models\PaymentTransactionViewModel.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />

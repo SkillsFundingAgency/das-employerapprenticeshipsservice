@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
                 fraction.Amount *= 100;
             }
 
-            return new GetEmployerEnglishFractionResponse {Fractions = result};
+            return new GetEmployerEnglishFractionResponse {Fractions = result, EmpRef = message.EmpRef};
         }
     }
 }
