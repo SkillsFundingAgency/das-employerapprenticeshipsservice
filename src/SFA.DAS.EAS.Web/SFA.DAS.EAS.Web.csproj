@@ -743,7 +743,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
@@ -772,7 +771,7 @@
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
-    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
@@ -870,6 +869,8 @@
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="src\sass\_custom.scss" />
+    <Content Include="Views\Home\WhatYoullNeed.cshtml" />
+    <Content Include="Views\Home\UsedServiceBefore.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

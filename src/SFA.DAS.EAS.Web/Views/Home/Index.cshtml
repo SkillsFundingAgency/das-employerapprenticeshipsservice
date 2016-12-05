@@ -1,9 +1,7 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.UserAccountsViewModel>
-
 @{ViewBag.PageID = "page-auth-homepage"; }
 @{ViewBag.Title = "Levy accounts"; }
-
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
     <div class="grid-row">
@@ -15,7 +13,6 @@
     </div>
 }
 <div class="grid-row">
-
     <div class="column-two-thirds">
         <section>
             <h1 class="heading-xlarge" id="Levy-accounts">Levy accounts</h1>
@@ -48,7 +45,7 @@
                                     @account.Name
                                 </td>
                                 <td class="responsive-td">
-                                     @RoleStrings.GetRoleDescription(account.RoleName)
+                                    @RoleStrings.GetRoleDescription(account.RoleName)
                                 </td>
                                 <td class="responsive-td link-right">
                                     <a aria-label="View account homepage for @account.Name"
@@ -58,9 +55,7 @@
                                    </a>
                                 </td>
                             </tr>
-
                         }
-
                     </tbody>
                 </table>
             }
@@ -68,23 +63,21 @@
                 <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
             </p>
         </section>
-        
-            @if (Model.Data.Invitations > 0)
+
+        @if (Model.Data.Invitations > 0)
             {
-                <section>
-                    <h2 class="heading-medium">Invitations</h2>
-                    <p>
-                        You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
-                    </p>
-                    <p>
-                        <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
-                    </p>
-                </section>
-            }
+            <section>
+                <h2 class="heading-medium">Invitations</h2>
+                <p>
+                    You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
+                </p>
+                <p>
+                    <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
+                </p>
+            </section>
+        }
 
-      
-    </div>  
-
+    </div>
     <div class="column-one-third pull-right">
         <aside class="sidebar">
             <h2 class="heading-medium" id="Manage-Account">Manage your account</h2>
@@ -94,9 +87,7 @@
             </ul>
         </aside>
     </div>
-
 </div>
-
 @if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))
 {
     <script type="text/javascript">
