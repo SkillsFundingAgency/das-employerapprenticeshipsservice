@@ -12,7 +12,8 @@
         <p>To access your funds you will need:</p>
         <ul class="list-bullet">
             <li>the Government Gateway login details and PAYE scheme numbers used for your payroll</li>
-            <li>authority to allow HMRC to access your Government Gateway account</li>
+            <li>authority to allow the Skills Funding Agency to access your Government Gateway account</li>
+            <li>your Companies House number - <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">find my Companies House number</a></li>
         </ul>        
         <form method="POST" action="@Url.Action("WhatYoullNeed", "Home")" >
             @Html.AntiForgeryToken()
@@ -27,11 +28,11 @@
                     </legend>
                     <label for="have-everything" class="block-label">
                         <input type="radio" name="choice" id="have-everything" value="2" />
-                        Yes, I have Government Gateway details
+                        Yes, I have everything I need
                     </label>
                     <label for="do-not-have-everything" class="block-label">
                         <input type="radio" name="choice" id="do-not-have-everything" value="1"/>
-                        No, I don't have Government Gateway details
+                        No, I don't have everything I need
                     </label>
                     
                 </fieldset>
