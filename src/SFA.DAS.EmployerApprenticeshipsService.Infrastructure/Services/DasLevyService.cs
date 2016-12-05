@@ -6,8 +6,10 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -47,6 +49,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             });
 
             return result?.Transactions?.OfType<T>().ToList() ?? new List<T>();
+        }
+
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
+        {
+            var result = await _mediator.SendAsync(new GetEnglishFractionDetailByEmpRefQuery
+                    {
+                        EmpRef = empRef
+                    });
+
+            return result.FractionDetail;
         }
     }
 }

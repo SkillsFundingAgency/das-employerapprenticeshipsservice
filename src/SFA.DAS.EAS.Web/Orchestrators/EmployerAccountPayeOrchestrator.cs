@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -11,10 +12,12 @@ using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -179,6 +182,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.Data.ErrorDictionary = ex.ErrorMessages;
             }
 
+            return response;
+        }
+
+        public async Task<OrchestratorResponse<PayeSchemeDetail>>  GetPayeDetails(string empRef, string accountId, string userId)
+        {
+            var response = new OrchestratorResponse<PayeSchemeDetail>();
+            try
+            {
+                var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
+                {
+                    AccountId = accountId,
+                    EmpRef = empRef,
+                    UserId = userId
+                });
+                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef};
+                return response;
+            }
+            catch (UnauthorizedAccessException )
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+            }
+            
             return response;
         }
     }

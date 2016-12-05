@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.Text);
             });
 
-            return result.SingleOrDefault();
+            return result.FirstOrDefault();
         }
 
         public async Task<IEnumerable<DasEnglishFraction>> GetAllEmployerFractions(string employerReference)
