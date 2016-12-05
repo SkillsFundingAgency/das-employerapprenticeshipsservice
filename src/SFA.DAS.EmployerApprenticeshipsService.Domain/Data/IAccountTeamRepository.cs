@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IAccountTeamRepository
     {
-        Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedId, string externalUserId);
-        Task<TeamMember> GetMember(string hashedId, string email);
+        Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedAccountId, string externalUserId);
+        Task<TeamMember> GetMember(string hashedAccountId, string email);
     }
 }

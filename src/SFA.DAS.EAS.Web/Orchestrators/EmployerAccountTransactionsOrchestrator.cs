@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
-                HashedId = hashedId,
+                HashedAccountId = hashedId,
                 UserId = externalUserId
             });
             if (employerAccountResult.Account == null)
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return new TransactionViewResult();
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedId = hashedId});
+            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedAccountId = hashedId});
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;

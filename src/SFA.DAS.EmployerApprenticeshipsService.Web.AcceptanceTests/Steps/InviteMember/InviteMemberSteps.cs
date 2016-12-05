@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         public void ThenIViewTeamMembers(string canView)
         {
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
-            var hashedId = (string)ScenarioContext.Current["HashedId"];
+            var hashedId = (string)ScenarioContext.Current["HashedAccountId"];
             var orcehstrator = _container.GetInstance<EmployerTeamOrchestrator>();
             var teamMembers = orcehstrator.GetTeamMembers(hashedId, userId).Result;
             
@@ -96,7 +96,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
             var orchestrator = _container.GetInstance<InvitationOrchestrator>();
             orchestrator.CreateInvitation(new InviteTeamMemberViewModel
             {
-                HashedId = _hashedAccountId,
+                HashedAccountId = _hashedAccountId,
                 Email = email,
                 Name = name,
                 Role = Role.Transactor

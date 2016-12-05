@@ -9,6 +9,6 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         public string Empref { get; set; }
         public string RefreshToken { get; set; }
         public string AccessToken { get; set; }
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             
             return new CreateAccountCommandResponse
             {
-                HashedId = hashedAccountId
+                HashedAccountId = hashedAccountId
             };
         }
     }

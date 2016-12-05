@@ -28,11 +28,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedId, string externalUserId)
         {
-            var response = await Mediator.SendAsync(new GetAccountPayeSchemesQuery
+            var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
             {
-                HashedAccountId = hashedAccountId,
+                HashedAccountId = hashedId,
                 ExternalUserId = externalUserId
             });
             
@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Data = new AddNewPayeScheme
                     {
-                        HashedId = hashedId
+                        HashedAccountId = hashedId
                     },
                     Status = response.Status,
                     
@@ -76,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                Data = new AddNewPayeScheme
             {
                  
-                HashedId = hashedId,
+                HashedAccountId = hashedId,
                 PayeScheme = hmrcResponse.Empref,
                 EmprefNotFound = hmrcResponse.EmprefNotFound,
                 AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
             var response = await Mediator.SendAsync(new GetMemberRequest
             {
-                HashedId = hashedId,
+                HashedAccountId = hashedId,
                 Email = email
             });
 
@@ -125,25 +125,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
         {
-            
             await Mediator.SendAsync(new AddPayeToAccountCommand
             {
-                HashedId = model.HashedId,
+                HashedAccountId = model.HashedAccountId,
                 AccessToken = model.AccessToken,
                 RefreshToken = model.RefreshToken,
                 Empref = model.PayeScheme,
                 ExternalUserId = userId,
             });
-            
-            
         }
 
         public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
         {
             var response = await
-                    Mediator.SendAsync(new GetEmployerAccountHashedQuery()
+                    Mediator.SendAsync(new GetEmployerAccountHashedQuery
                     {
-                        HashedId = model.HashedId,
+                        HashedAccountId = model.HashedAccountId,
                         UserId = model.UserId
                     });
 
@@ -159,7 +156,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
                 {
-                    HashedId = model.HashedId,
+                    HashedAccountId = model.HashedAccountId,
                     UserId = model.UserId,
                     PayeRef = model.PayeRef,
                     RemoveScheme = model.RemoveScheme == 2

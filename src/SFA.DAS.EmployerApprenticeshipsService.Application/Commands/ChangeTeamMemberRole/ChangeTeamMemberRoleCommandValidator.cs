@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.Email))

@@ -215,9 +215,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             TempData["employerAccountCreated"] = "true";
             TempData["successHeader"] = "Levy account created";
-            TempData["successMessage"] = $"You need to <a href=\"{ Url.Action("Index", "EmployerAgreement", new { accountId = response.Data.EmployerAgreement.HashedId }) }\">sign the SFA agreement</a> before you can start spending your levy";
+            TempData["successMessage"] = $"You need to <a href=\"{ Url.Action("Index", "EmployerAgreement", new { response.Data.EmployerAgreement.HashedAccountId }) }\">sign the SFA agreement</a> before you can start spending your levy";
 
-            return RedirectToAction("Index", "EmployerTeam", new { accountId = response.Data.EmployerAgreement.HashedId });
+            return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         private string GetUserId()

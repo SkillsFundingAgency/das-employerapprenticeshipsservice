@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             ScenarioContext.Current["AccountId"] = account.Id;
-            ScenarioContext.Current["HashedId"] = account.HashedId;
+            ScenarioContext.Current["HashedAccountId"] = account.HashedId;
         }
     }
 }

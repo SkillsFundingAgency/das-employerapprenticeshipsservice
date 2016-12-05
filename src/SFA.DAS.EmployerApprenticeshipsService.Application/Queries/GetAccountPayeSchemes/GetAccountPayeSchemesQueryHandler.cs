@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
             
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             
-            var payeSchemes = await _accountRepository.GetAccountPayeSchemes(accountId);
+            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedAccountId);
 
             if (!payeSchemes.Any())
             {

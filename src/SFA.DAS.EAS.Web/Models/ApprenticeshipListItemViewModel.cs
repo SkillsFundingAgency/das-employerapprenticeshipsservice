@@ -14,6 +14,6 @@
 
         public decimal? Cost { get; set; }
 
-        public string HashedId { get; set; }
+        public string HashedApprenticeshipId { get; set; }
     }
 }

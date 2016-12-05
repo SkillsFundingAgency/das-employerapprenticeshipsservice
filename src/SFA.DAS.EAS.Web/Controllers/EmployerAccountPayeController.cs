@@ -11,7 +11,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{accountId}")]
+    [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountPayeController : BaseController
     {
       
@@ -31,9 +31,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Schemes")]
-        public async Task<ActionResult> Index(string accountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             if (TempData["successMessage"] != null)
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Schemes/{empRef}/Detail")]
-        public async Task<ActionResult> Details(string accountId, string empRef)
+        public ActionResult Details(string hashedAccountId, string empRef)
         {
             empRef = empRef.FormatPayeFromUrl();
 
@@ -63,36 +63,36 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Schemes/GatewayInform")]
-        public async Task<ActionResult> GatewayInform(string accountId)
+        public async Task<ActionResult> GatewayInform(string hashedAccountId)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
-                accountId, 
+                hashedAccountId, 
                 OwinWrapper.GetClaimValue("email"), 
-                Url.Action("Index", "EmployerAccountPaye", new { accountId }),
-                Url.Action("Index", "EmployerAccountPaye", new { accountId }),
-                Url.Action("GetGateway", "EmployerAccountPaye", new { accountId }));
+                Url.Action("Index", "EmployerAccountPaye", new { hashedAccountId }),
+                Url.Action("Index", "EmployerAccountPaye", new { hashedAccountId }),
+                Url.Action("GetGateway", "EmployerAccountPaye", new { hashedAccountId }));
             
             return View(response);
         }
         
         [HttpGet]
         [Route("Schemes/Gateway")]
-        public async Task<ActionResult> GetGateway(string accountId)
+        public async Task<ActionResult> GetGateway(string hashedAccountId)
         {
-            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme)));
+            return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { hashedAccountId }, Request.Url.Scheme)));
         }
 
         [HttpGet]
         [Route("Schemes/ConfirmPayeScheme")]
-        public async Task<ActionResult> ConfirmPayeScheme(string accountId)
+        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId)
         {
 
-            var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(accountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { accountId }, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+            var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(hashedAccountId, Request.Params["code"], Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { hashedAccountId }, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
             if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
             {
                 gatewayResponseModel.Status = HttpStatusCode.OK;
 
-                var model = await _employerAccountPayeOrchestrator.Get(accountId, OwinWrapper.GetClaimValue(@"sub"));
+                var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                 model.FlashMessage = gatewayResponseModel.FlashMessage;
 
                 return View("Index", model);
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/ConfirmPayeScheme")]
-        public async Task<ActionResult> ConfirmPayeScheme(string accountId, AddNewPayeScheme model)
+        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeScheme model)
         {
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
@@ -112,17 +112,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             TempData["subMessage"] = "Levy funds from this PAYE scheme will now credit your account";
 
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
+            return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId });
         }
 
         
         [HttpGet]
         [Route("Schemes/{empRef}/Remove")]
-        public async Task<ActionResult> Remove(string accountId, string empRef)
+        public async Task<ActionResult> Remove(string hashedAccountId, string empRef)
         {
             var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeScheme
             {
-                HashedId = accountId,
+                HashedAccountId = hashedAccountId,
                 PayeRef = empRef.FormatPayeFromUrl(),
                 UserId = OwinWrapper.GetClaimValue("sub")
             });
@@ -133,13 +133,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/RemovePaye")]
-        public async Task<ActionResult> RemovePaye(string accountId, RemovePayeScheme model)
+        public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeScheme model)
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");
 
             if (model.RemoveScheme == 1)
             {
-                return RedirectToAction("Index", "EmployerAccountPaye", new { accountId = model.HashedId });
+                return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId });
             }
 
             var result = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);     
@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             TempData["successMessage"] = $"You've removed {model.PayeRef}";
             TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
 
-            return RedirectToAction("Index", "EmployerAccountPaye", new {accountId = model.HashedId});
+            return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId});
         }
     }
 }

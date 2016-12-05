@@ -26,8 +26,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.HashedId))
-                validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
+            if (string.IsNullOrEmpty(item.HashedAccountId))
+                validationResult.AddError(nameof(item.HashedAccountId), "No HashedAccountId supplied");
 
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError(nameof(item.Email), "Enter email address");
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
 
             if (validationResult.IsValid())
             {
-                var caller = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
+                var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
                 if (caller == null)
                 {

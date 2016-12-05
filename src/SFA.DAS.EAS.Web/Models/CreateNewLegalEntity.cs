@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Web.Models
 {
     public class CreateNewLegalEntity
     {
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public string Address { get; set; }
