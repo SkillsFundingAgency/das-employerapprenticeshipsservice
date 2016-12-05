@@ -53,9 +53,18 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
 
             var updateDate = await _englishFractionRepository.GetLastUpdateDate();
 
+            if (updateDate == DateTime.MinValue)
+            {
+                return new GetAccountPayeSchemesResponse
+                {
+                    PayeSchemes = payeSchemes
+                };
+            }
+
             foreach (var scheme in payeSchemes)
             {
-                scheme.EnglishFraction = await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.EmpRef);
+                scheme.EnglishFraction =
+                    await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.EmpRef);
             }
 
             return new GetAccountPayeSchemesResponse
