@@ -14,29 +14,31 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Instructions for your training provider</h1>
-      
-            @*<p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know which apprentices you'd like them to add.
-</p>*@
-    
-        <p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know what you'd like them to do next.</p>
+
+        @*<p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know which apprentices you'd like them to add.
+    </p>*@
+
+        <p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know what you'd like them to do next.
+        </p>
         <form method="POST" action="@Url.Action(targetName)">
             @Html.AntiForgeryToken()
-         
+
             <div class="form-error-group form-group">
                 <label class="form-label strong" for="Message">Instructions (optional)</label>
                 @*<p class="form-hint">For example, please add the 12 admin level 2 apprentices and 13 engineering level 3 apprentices</p>*@
                 <textarea class="form-control form-control-3-4" id="Message" name="Message"
                           cols="40" rows="10"
                           aria-required="true"></textarea>
-                </div>
-                 @Html.HiddenFor(x => x.HashedCommitmentId)
-                 @Html.HiddenFor(x => x.LegalEntityCode)
-                 @Html.HiddenFor(x => x.LegalEntityName)
-                 @Html.HiddenFor(x => x.ProviderId)
-                 @Html.HiddenFor(x => x.ProviderName)
-                 @Html.HiddenFor(x => x.CohortRef)
-                 @Html.HiddenFor(x => x.SaveOrSend)
-                <button type="submit" class="button">Send</button>
-            </form>
-        </div>
+            </div>
+            @Html.HiddenFor(x => x.HashedCommitmentId)
+            @Html.HiddenFor(x => x.LegalEntityCode)
+            @Html.HiddenFor(x => x.LegalEntityName)
+            @Html.HiddenFor(x => x.ProviderId)
+            @Html.HiddenFor(x => x.ProviderName)
+            @Html.HiddenFor(x => x.CohortRef)
+            @Html.HiddenFor(x => x.SaveStatus)
+            <button type="submit" class="button">Send</button>
+        </form>
+    </div>
+</div>
 

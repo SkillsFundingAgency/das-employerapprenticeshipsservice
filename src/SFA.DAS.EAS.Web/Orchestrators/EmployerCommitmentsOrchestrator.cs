@@ -30,6 +30,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     using System.Globalization;
     using Newtonsoft.Json;
+
+    using SFA.DAS.EAS.Web.Models.Types;
+
     using Tasks.Api.Types.Templates;
 
     public sealed class EmployerCommitmentsOrchestrator
@@ -220,7 +223,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = data.Commitment.Reference,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 ProviderName = data.Commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(data.Commitment.CommitmentStatus, data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
@@ -275,18 +278,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return viewmodel;
         }
 
-        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Approving Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            var lastAction = saveStatus == SaveStatus.AmendAndSend 
+                ? LastAction.Amend
+                : LastAction.Approve;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = accountId,
                 CommitmentId = commitmentId,
                 Message = string.Empty,
-                SaveOrSend = saveOrSend
+                LastAction = lastAction,
+                CreateTask = saveStatus != SaveStatus.Approve
             });
         }
 
@@ -337,18 +345,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentModel model)
         {
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-            _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveOrSend}");
-
-            if (model.SaveOrSend != "save-no-send")
+            if (model.SaveStatus != SaveStatus.Save)
             {
+                var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+                var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
+                _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
+
+                var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
+                    ? LastAction.Amend
+                    : LastAction.Approve;
+
                 await _mediator.SendAsync(new SubmitCommitmentCommand
                 {
                     EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
                     CommitmentId = commitmentId,
                     Message = model.Message,
-                    SaveOrSend = model.SaveOrSend
+                    LastAction = lastAction,
+                    CreateTask = model.SaveStatus != SaveStatus.Approve
                 });
             }
         }
@@ -441,7 +454,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.ApprenticeshipCount, commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
                 ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly
             };
         }

@@ -94,5 +94,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(HashedId, result.RouteValues["accountId"]);
         }
+
+        [Test]
+        public async Task ThenTheBreadCrumbValueIsRemovedFromTempDataIfItExists()
+        {
+            //Arrange
+            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true } };
+
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
+        }
     }
 }

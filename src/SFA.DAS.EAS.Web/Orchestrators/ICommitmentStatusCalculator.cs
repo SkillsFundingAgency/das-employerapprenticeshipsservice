@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public interface ICommitmentStatusCalculator
     {
-        RequestStatus GetStatus(CommitmentStatus commitmentStatus, EditStatus editStatus, int apprenticeshipCount, AgreementStatus? overallAgreementStatus);
+        RequestStatus GetStatus(EditStatus editStatus, int apprenticeshipCount, LastAction lastAction, AgreementStatus? overallAgreementStatus);
     }
 }
