@@ -56,6 +56,21 @@
     }
 }
 
+.link-button {
+    padding: 0;
+    color: $link-colour;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: inherit;
+    cursor: pointer;
+    &:hover, 
+    &:focus {
+        background: $white;
+        color: $link-hover-colour;
+    }
+}
+
 .form-group {
     form {
         display: inline-block;

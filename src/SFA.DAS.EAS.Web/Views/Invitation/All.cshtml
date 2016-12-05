@@ -13,14 +13,7 @@
         }
         else
         {
-            if (Model.Invitations.Count == 1)
-            {
-                <p class="lede">You have @Model.Invitations.Count invitation to a levy account.</p>
-            }
-            else
-            {
-                <p class="lede">You have @Model.Invitations.Count invitations to levy accounts.</p>
-            }
+            
             <form method="post" action="~/Invitation/Accept">
                 @Html.AntiForgeryToken()
                 <table>
@@ -54,7 +47,7 @@
                                 <td class="link-right">
                                     <div>
                                         <input type="hidden" name="Invitations[@index].Id" value="@invitation.Id" />
-                                        <button type="submit" id="invitationId" value="@invitation.Id" name="invitation" class="button">Accept</button>
+                                        <button type="submit" id="invitationId" value="@invitation.Id" name="invitation" class="link-button">Accept <span class="vh">invitation to @invitation.AccountName</span></button>
                                     </div>
                                  
                                 </td>

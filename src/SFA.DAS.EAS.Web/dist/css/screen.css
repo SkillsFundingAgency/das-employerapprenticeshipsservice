@@ -2545,6 +2545,21 @@ legend {
   color: #2b8cc4;
 }
 
+.link-button {
+  padding: 0;
+  color: #005ea5;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.link-button:hover, .link-button:focus {
+  background: #fff;
+  color: #2b8cc4;
+}
+
 .form-group form {
   display: inline-block;
 }
