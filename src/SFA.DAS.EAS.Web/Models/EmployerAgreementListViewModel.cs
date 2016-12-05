@@ -7,6 +7,6 @@ namespace SFA.DAS.EAS.Web.Models
     {
         public long AccountId { get; set; }
         public List<EmployerAgreementView> EmployerAgreements { get; set; }
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

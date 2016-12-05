@@ -33,15 +33,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Account> GetAccountByHashedId(string hashedId)
+        public async Task<Account> GetAccountByHashedId(string hashedAccountId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@HashedId", hashedId, DbType.String);
+                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
 
                 return await c.QueryAsync<Account>(
-                    sql: "select a.* from [account].[Account] a where a.HashedId = @HashedId;",
+                    sql: "select a.* from [account].[Account] a where a.HashedId = @HashedAccountId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

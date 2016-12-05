@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
     public class CreateLegalEntityCommand : IAsyncRequest<CreateLegalEntityCommandResponse>
     {
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
         
         public LegalEntity LegalEntity { get; set; }
 

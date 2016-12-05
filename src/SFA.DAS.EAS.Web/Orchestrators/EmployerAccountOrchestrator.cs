@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            HashedId = result.HashedId
+                            HashedAccountId = result.HashedAccountId
                         }
                     },
                     Status = HttpStatusCode.OK

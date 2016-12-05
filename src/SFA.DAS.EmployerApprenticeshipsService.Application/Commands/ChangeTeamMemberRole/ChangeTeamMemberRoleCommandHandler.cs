@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });

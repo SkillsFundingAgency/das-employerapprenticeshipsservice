@@ -2,7 +2,7 @@
 {
     public class MembershipView
     {
-        public string HashedId { get; set; }
+        public string HashedAccountId { get; set; }
         public long AccountId { get; set; }
         public string AccountName { get; set; }
         public long UserId { get; set; }

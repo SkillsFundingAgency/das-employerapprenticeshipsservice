@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Email", "No Id supplied");
 
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))

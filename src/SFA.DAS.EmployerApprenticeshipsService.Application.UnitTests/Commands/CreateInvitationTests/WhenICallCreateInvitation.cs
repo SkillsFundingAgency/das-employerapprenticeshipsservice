@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object);
             _command = new CreateInvitationCommand
             {
-                HashedId = ExpectedHashedId,
+                HashedAccountId = ExpectedHashedId,
                 Email = ExpectedCallerEmail,
                 Name = "Test User",
                 RoleId = Role.Owner,
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         {
             var userId = 1;
             
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Owner,
                 UserId = userId,

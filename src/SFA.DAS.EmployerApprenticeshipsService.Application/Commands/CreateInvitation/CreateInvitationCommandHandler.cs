@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             if(validationResult.IsUnauthorized)
                 throw new UnauthorizedAccessException();
 
-            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
             
             ////Verify the email is not used by an existing invitation for the account
             var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);

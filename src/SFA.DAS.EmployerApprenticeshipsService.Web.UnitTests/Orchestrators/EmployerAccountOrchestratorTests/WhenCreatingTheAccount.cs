@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
-                         HashedId = "ABS10"
+                         HashedAccountId = "ABS10"
                      });
         }
 
@@ -68,14 +68,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                 .ReturnsAsync(new CreateAccountCommandResponse()
                 {
-                    HashedId = hashedId
+                    HashedAccountId = hashedId
                 });
 
             //Act
             var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
 
             //Assert
-            Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedId);
+            Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
 
         }
         

@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
             if (validationResult.IsValid())
             {
-                var member = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
+                var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
                 if (member == null)
                 {
@@ -52,9 +52,9 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             {
                 validationResult.AddError(nameof(item.AccessToken), "AccessToken has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                validationResult.AddError(nameof(item.HashedId), "HashedId has not been supplied");
+                validationResult.AddError(nameof(item.HashedAccountId), "HashedId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.Empref))
             {
