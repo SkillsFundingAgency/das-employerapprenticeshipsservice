@@ -27,6 +27,9 @@ namespace SFA.DAS.EAS.Web.Validators
                 .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
                 .WithMessage("Please enter a valid national insurance number");
 
+            RuleFor(x => x.FirstName).NotEmpty().WithMessage("Please enter first name");
+            RuleFor(x => x.LastName).NotEmpty().WithMessage("Please enter last name");
+
             RuleFor(x => x.DateOfBirthDay)
                 .InclusiveBetween(1, 31)
                 .WithMessage("Please enter a valid day for date of birth");
