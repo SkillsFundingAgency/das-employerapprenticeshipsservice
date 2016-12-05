@@ -2375,7 +2375,7 @@ nav ul {
 }
 
 #user-nav > ul > li {
-  border-bottom: 1px solid red;
+  border-top: 1px solid #bfc1c3;
 }
 
 @media (min-width: 641px) {
@@ -2416,12 +2416,19 @@ nav ul {
   .header-organisation ul li {
     float: left;
     width: 50%;
+    font-size: 16px;
   }
 }
 
 @media (min-width: 769px) {
   .header-organisation ul li {
     width: auto;
+  }
+}
+
+@media (min-width: 1000px) {
+  .header-organisation ul li {
+    font-size: 19px;
   }
 }
 
@@ -2442,16 +2449,35 @@ nav ul {
   bottom: -1px;
   content: "";
   display: block;
-  height: 5px;
-  left: 15px;
+  left: 0;
+  top: 0;
+  width: 5px;
   position: absolute;
-  right: 15px;
   z-index: 1;
 }
 
+@media (min-width: 641px) {
+  .header-organisation ul li a.selected:after {
+    left: 15px;
+    right: 15px;
+    height: 5px;
+    top: auto;
+    width: auto;
+  }
+}
+
+.header-organisation ul li a:focus {
+  outline: 0;
+}
+
 .js-enabled #user-nav > ul > li > a {
-  border: 1px solid #f8f8f8;
   z-index: 2;
+}
+
+@media (min-width: 641px) {
+  .js-enabled #user-nav > ul > li > a {
+    border: 1px solid #f8f8f8;
+  }
 }
 
 .js-enabled #user-nav li.has-sub-menu {
@@ -2459,14 +2485,35 @@ nav ul {
 }
 
 .js-enabled #user-nav li.has-sub-menu > a {
-  color: red;
+  position: relative;
+  padding-left: 25px;
+}
+
+.js-enabled #user-nav li.has-sub-menu > a:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: block;
+  border-width: 4px 7px;
+  border-color: transparent;
+  border-left-color: #0b0c0c;
+  border-style: solid;
+  left: 10px;
+  top: 50%;
+  margin-top: -4px;
 }
 
 .js-enabled #user-nav li.has-sub-menu.open > a {
-  color: blue;
   background: #f8f8f8;
   border-color: #bfc1c3;
   border-bottom-color: #f8f8f8;
+}
+
+.js-enabled #user-nav li.has-sub-menu.open > a:before {
+  border-left-color: transparent;
+  border-top-color: #0b0c0c;
+  border-width: 7px 4px;
 }
 
 @media (min-width: 769px) {
