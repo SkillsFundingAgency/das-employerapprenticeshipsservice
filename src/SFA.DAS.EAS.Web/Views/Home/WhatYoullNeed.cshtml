@@ -1,5 +1,5 @@
-﻿@{ViewBag.PageID = "page-everything-I-need"; }
-@{ ViewBag.Title = "Do you have everything you need?"; }
+﻿@{ViewBag.PageID = "page-what-youll-need"; }
+@{ViewBag.Title = "What you'll need"; }
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -11,8 +11,7 @@
         <ul class="list-bullet">
             <li>the Government Gateway login details and PAYE scheme numbers used for your payroll</li>
             <li>authority to allow HMRC to access your Government Gateway account</li>
-        </ul>
-        
+        </ul>        
         <form method="POST" action="@Url.Action("WhatYoullNeed", "Home")" >
             @Html.AntiForgeryToken()
             <div class="form-group ">
@@ -22,7 +21,7 @@
                         <input type="radio" name="choice" id="have-everything" value="2" />
                         Yes, I have Government Gateway details
                     </label>
-                    <label for="do-not-have-everything" class="block-label" data-target="have-not-got-everything">
+                    <label for="do-not-have-everything" class="block-label">
                         <input type="radio" name="choice" id="do-not-have-everything" value="1" />
                         No, I don't have Government Gateway details
                     </label>
@@ -34,13 +33,3 @@
         </form>
     </div>
 </div>
-
-@section pageSpecificJS {
-<script>
-
-    $(function () {
-        sfa.homePage.init();
-    });
-
-</script>
-}

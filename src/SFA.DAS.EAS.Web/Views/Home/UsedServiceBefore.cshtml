@@ -1,5 +1,5 @@
 ﻿@{ViewBag.PageID = "page-used-service-before"; }
-@{ ViewBag.Title = "Have you used this service before?"; }
+@{ViewBag.Title = "Have you used this service before?"; }
 
 @{ var errorMessage = TempData["Error"] as string; }
 
@@ -7,14 +7,14 @@
 {
     <div class="grid-row">
         <div class="column-full">
-            <div class="validation-summary-errors error-summary" role="group" data-valmsg-summary="true">
+            <div class="validation-summary-errors error-summary" role="group">
                 <h1 id="error-summary" class="heading-medium error-summary-heading">
                     Errors to fix
                 </h1>
                 <p>Check the following details:</p>
                 <ul class="error-summary-list">
                     <li>
-                        <a href="#select-option" data-focuses="error-message-">@errorMessage</a>
+                        <a href="#select-option">@errorMessage</a>
                     </li>
                 </ul>
             </div>
@@ -27,7 +27,6 @@
         <h1 class="heading-xlarge">
             Have you used this service before?
         </h1>
-
         <form method="POST" action="@Url.Action("UsedServiceBefore", "Home")">
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(errorMessage) ? "error" : "")">
@@ -43,7 +42,7 @@
                         <input type="radio" name="choice" id="used-service-before" value="2" />
                         Yes, I've used this service before
                     </label>
-                    <label for="not-used-service-before" class="block-label" data-target="have-not-got-everything">
+                    <label for="not-used-service-before" class="block-label">
                         <input type="radio" name="choice" id="not-used-service-before" value="1" />
                         No, this is my first time
                     </label>
@@ -55,13 +54,3 @@
         </form>
     </div>
 </div>
-
-@section pageSpecificJS {
-    <script>
-
-    $(function () {
-        sfa.homePage.init();
-    });
-
-    </script>
-}
