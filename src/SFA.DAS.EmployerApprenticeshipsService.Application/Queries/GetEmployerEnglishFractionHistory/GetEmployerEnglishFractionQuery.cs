@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
     {
         public string EmpRef { get; set; }
         public string UserId { get; set; }
-        public string AccountId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

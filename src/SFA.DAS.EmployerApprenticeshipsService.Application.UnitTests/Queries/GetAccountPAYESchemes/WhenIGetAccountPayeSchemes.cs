@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
             _englishFractionsRepository = new Mock<IEnglishFractionRepository>();
             _hashingService = new Mock<IHashingService>();
 
-            _accountRepository.Setup(x => x.GetAccountPayeSchemes(It.IsAny<long>())).ReturnsAsync(new List<PayeView>
+            _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(It.IsAny<long>())).ReturnsAsync(new List<PayeView>
             {
                 _payeView
             });
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
             await RequestHandler.Handle(Query);
 
             //Assert
-            _accountRepository.Verify(x => x.GetAccountPayeSchemes(AccountId), Times.Once);
+            _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
             _englishFractionsRepository.Verify(x => x.GetLastUpdateDate(), Times.Once);
             _englishFractionsRepository.Verify(x => x.GetEmployerFraction(UpdateDate, _payeView.PayeRef), Times.Once);
         }
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
         public async Task ThenIfNotSchemesCanBeFoundNoEnglishFractionsAreCollected()
         {
             //Arrabge
-            _accountRepository.Setup(x => x.GetAccountPayeSchemes(It.IsAny<long>()))
+            _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(It.IsAny<long>()))
                               .ReturnsAsync(new List<PayeView>());
 
             //Act

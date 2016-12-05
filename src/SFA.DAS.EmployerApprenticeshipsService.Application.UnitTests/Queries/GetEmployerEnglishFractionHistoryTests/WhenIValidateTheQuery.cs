@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
@@ -35,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             var actual = await _validator.ValidateAsync(new GetEmployerEnglishFractionQuery()
             {
                 EmpRef = "123ABC",
-                AccountId = "12345",
+                HashedAccountId = "12345",
                 UserId = "asdasd"
             });
 
@@ -54,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("EmpRef", "EmpRef has not been supplied"),
                 actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("AccountId", "AccountId has not been supplied"),
+            Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"),
                 actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"),
                 actual.ValidationDictionary);
@@ -72,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             var actual = await _validator.ValidateAsync(new GetEmployerEnglishFractionQuery
             {
                 EmpRef = "123ABC",
-                AccountId = expectedAccountId,
+                HashedAccountId = expectedAccountId,
                 UserId = expectedUserId
             });
 
