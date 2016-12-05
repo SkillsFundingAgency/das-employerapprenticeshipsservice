@@ -388,7 +388,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/Apprenticeships/{hashedId}/Edit")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{HashedApprenticeshipId}/Edit")]
         public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             try

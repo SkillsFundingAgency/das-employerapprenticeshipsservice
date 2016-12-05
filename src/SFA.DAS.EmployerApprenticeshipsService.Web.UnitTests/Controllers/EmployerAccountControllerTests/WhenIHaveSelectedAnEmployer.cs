@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
-        private const string HashedId = "ABC123";
+        private const string hashedAccountId = "ABC123";
 
         [SetUp]
         public void Arrange()
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        HashedId = HashedId
+                        HashedAccountId = hashedAccountId
                     }
                 },
                 Status = HttpStatusCode.OK

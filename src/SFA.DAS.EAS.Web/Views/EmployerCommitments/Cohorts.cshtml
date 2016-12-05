@@ -72,7 +72,7 @@
                             <td>
                                 @if (commitment.ShowViewLink)
                                 {
-                                    <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedId })" aria-label="View @commitment.ProviderName">View</a>
+                                    <a href="@Url.Action("Details", new { hashedCommitmentId = commitment.HashedCommitmentId })" aria-label="View @commitment.ProviderName">View</a>
                                 }
                             </td>
                         </tr>

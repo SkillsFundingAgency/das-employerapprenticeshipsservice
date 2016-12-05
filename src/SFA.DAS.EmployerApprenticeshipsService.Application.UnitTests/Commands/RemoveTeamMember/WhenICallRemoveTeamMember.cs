@@ -53,12 +53,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var cmd = new RemoveTeamMemberCommand
             {
                 UserId = membership.UserId,
-                HashedId = "123a",
+                HashedAccountId = "123a",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
             _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
-            _membershipRepository.Setup(x => x.GetCaller(cmd.HashedId, cmd.ExternalUserId)).ReturnsAsync(ownerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(cmd.HashedAccountId, cmd.ExternalUserId)).ReturnsAsync(ownerMembership);
 
             await _handler.Handle(cmd);
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var command = new RemoveTeamMemberCommand
             {
                 UserId = membership.UserId,
-                HashedId = "as123",
+                HashedAccountId = "as123",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var command = new RemoveTeamMemberCommand
             {
                 UserId = membership.UserId,
-                HashedId = "",
+                HashedAccountId = "",
                 ExternalUserId = ownerUser.UserRef
             };
 
@@ -165,7 +165,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
             var command = new RemoveTeamMemberCommand
             {
                 UserId = membership.UserId,
-                HashedId = "",
+                HashedAccountId = "",
                 ExternalUserId = ownerUser.UserRef
             };
 

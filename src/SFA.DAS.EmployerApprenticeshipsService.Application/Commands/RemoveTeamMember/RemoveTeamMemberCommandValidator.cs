@@ -12,8 +12,8 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveTeamMember
             if (item.UserId == 0)
                 validationResult.AddError(nameof(item.UserId), "No UserId supplied");
 
-            if (string.IsNullOrEmpty(item.HashedId))
-                validationResult.AddError(nameof(item.HashedId), "No HashedId supplied");
+            if (string.IsNullOrEmpty(item.HashedAccountId))
+                validationResult.AddError(nameof(item.HashedAccountId), "No HashedAccountId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError(nameof(item.ExternalUserId), "No ExternalUserId supplied");

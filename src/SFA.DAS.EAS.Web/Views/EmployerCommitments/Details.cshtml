@@ -85,11 +85,11 @@
                 </thead>
                 <tbody>
                     @foreach (var apprenticeship in Model.Apprenticeships)
-                {
+                    {
                         <tr>
                             <td>
-
-                                @apprenticeship.ApprenticeName &nbsp;
+        
+                                @apprenticeship.ApprenticeName &nbsp; 
                             </td>
                             <td>
                                 @apprenticeship.TrainingName &nbsp;
@@ -106,7 +106,7 @@
                                 @FormatCost(apprenticeship.Cost) &nbsp;
                             </td>
                             <td>
-                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
+                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
                             </td>
                         </tr>
                     }

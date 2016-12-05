@@ -2,6 +2,6 @@
 {
     public class CreateAccountCommandResponse
     {
-        public string HashedId{ get; set; }
+        public string HashedAccountId{ get; set; }
     }
 }

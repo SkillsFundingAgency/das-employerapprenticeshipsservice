@@ -26,9 +26,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 result.AddError(nameof(item.AccountId),"AccountId has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                result.AddError(nameof(item.HashedId), "HashedId has not been supplied");
+                result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {

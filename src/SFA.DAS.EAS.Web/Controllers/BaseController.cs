@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
             {
                 //Get the account id
-                var accountId = Request.Params["AccountId"];
+                var accountId = Request.Params["HashedAccountId"];
                 if (accountId != null)
                 {
                     ViewBag.AccountId = accountId;

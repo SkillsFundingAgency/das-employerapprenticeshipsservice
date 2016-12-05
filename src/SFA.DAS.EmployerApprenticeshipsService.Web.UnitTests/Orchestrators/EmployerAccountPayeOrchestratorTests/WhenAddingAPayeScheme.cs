@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                HashedId = ExpectedHashedId,
+                HashedAccountId = ExpectedHashedId,
                 PayeScheme = ExpectedEmpref
             };
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountCommand>(c=>c.HashedId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) )),Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountCommand>(c=>c.HashedAccountId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) )),Times.Once);
         }
         
 

@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             {
                 Email = "so'me@email.com",
                 ExternalUserId = "123",
-                HashedId = "123dfg",
+                HashedAccountId = "123dfg",
                 Name = "Test",
                 RoleId = Domain.Role.Owner
             };
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("Email", "Enter email address"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("HashedId", "No HashedId supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "No HashedAccountId supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("Name", "Enter name"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("RoleId", "Select team member role"),result.ValidationDictionary );
         }
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             {
                 Email = email,
                 ExternalUserId = "123",
-                HashedId = "123dfg",
+                HashedAccountId = "123dfg",
                 Name = "Test",
                 RoleId = Role.Owner
             });
