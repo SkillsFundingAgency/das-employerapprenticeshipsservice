@@ -38,12 +38,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
             _payeView = new PayeView
             {
                 AccountId = AccountId,
-                EmpRef = "123/ABC"
+                PayeRef = "123/ABC"
             };
 
             _englishFraction = new DasEnglishFraction
             {
-                EmpRef = _payeView.EmpRef,
+                EmpRef = _payeView.PayeRef,
                 DateCalculated = UpdateDate,
                 Amount = 0.5m
             };
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
             //Assert
             _accountRepository.Verify(x => x.GetAccountPayeSchemes(AccountId), Times.Once);
             _englishFractionsRepository.Verify(x => x.GetLastUpdateDate(), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetEmployerFraction(UpdateDate, _payeView.EmpRef), Times.Once);
+            _englishFractionsRepository.Verify(x => x.GetEmployerFraction(UpdateDate, _payeView.PayeRef), Times.Once);
         }
 
         [Test]

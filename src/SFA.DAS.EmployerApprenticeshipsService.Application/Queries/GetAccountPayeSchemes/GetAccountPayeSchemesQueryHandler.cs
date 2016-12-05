@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
             foreach (var scheme in payeSchemes)
             {
                 scheme.EnglishFraction =
-                    await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.EmpRef);
+                    await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.PayeRef);
             }
 
             return new GetAccountPayeSchemesResponse
