@@ -119,18 +119,6 @@
     </div>
 </div>
 
-@*@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", new {accountId = ViewBag.HashedAccountId})">Apprenticeships Home</a></li>
-            <li><a href="@Url.Action("Cohorts", new {accountId = ViewBag.HashedAccountId})">Review and approve apprentices</a></li>
-            <li>Add apprentices</li>
-        </ol>
-    </div>
-}*@
-
 @functions
 {
     public string FormatCost(decimal? cost)
@@ -140,4 +128,13 @@
 
         return $"{cost.Value:£0,0}";
     }
+}
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
 }
