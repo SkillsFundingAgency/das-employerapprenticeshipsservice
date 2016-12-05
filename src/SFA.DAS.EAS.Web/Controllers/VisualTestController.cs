@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var employerTeamMembersViewModel = new EmployerTeamMembersViewModel()
             {
-                HashedId = "1234567890",
+                HashedAccountId = "1234567890",
                 SuccessMessage = "It successfully applied the cream",
                 TeamMembers = new List<TeamMember>
                 {
@@ -258,7 +258,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {"~/Views/EmployerTeam/Cancel.cshtml", invitationView},
                 {"~/Views/EmployerTeam/ChangeRole.cshtml", teamMember},
                 {"~/Views/EmployerTeam/Invite.cshtml", new InviteTeamMemberViewModel() {
-                        HashedId = "123",
+                        HashedAccountId = "123",
                         Email = "bojack.horseman@horsingaround.com",
                         Name = "Bocjack Horseman",
                         Role = Role.Owner

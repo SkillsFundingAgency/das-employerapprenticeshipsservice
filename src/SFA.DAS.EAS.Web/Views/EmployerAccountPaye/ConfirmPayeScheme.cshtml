@@ -19,7 +19,7 @@
                 
                 <p>Is this the correct PAYE scheme?</p>
 
-                <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
+                <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedId"/>
                 <input type="hidden" value="@Model.Data.PayeScheme" name="PayeScheme"/>
                 <input type="hidden" value="@Model.Data.RefreshToken" name="RefreshToken"/>
                 <input type="hidden" value="@Model.Data.AccessToken" name="AccessToken"/>
@@ -47,7 +47,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { accountId = Model.Data.HashedId })" class="back-link">Back to PAYE schemes</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a></li>
         </ol>
     </div>
 }

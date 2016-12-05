@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
                 throw new UnauthorizedAccessException();
             }
 
-            var employerAccount = await _employerAccountRepository.GetAccountByHashedId(message.HashedId);
+            var employerAccount = await _employerAccountRepository.GetAccountByHashedId(message.HashedAccountId);
 
             return new GetEmployerAccountResponse
             {

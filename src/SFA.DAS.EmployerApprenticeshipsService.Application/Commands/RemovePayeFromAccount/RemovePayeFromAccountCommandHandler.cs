@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
                 throw new UnauthorizedAccessException();
             }
 
-            await _accountRepository.RemovePayeFromAccount(_hashingService.DecodeValue(message.HashedId), message.PayeRef);
+            await _accountRepository.RemovePayeFromAccount(_hashingService.DecodeValue(message.HashedAccountId), message.PayeRef);
 
         }
     }

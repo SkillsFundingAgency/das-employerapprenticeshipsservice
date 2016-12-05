@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (commitment.EmployerAccountId != message.EmployerAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
-            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, message.AgreementStatus);
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, message.LastAction);
 
             await CreateAgreementEvent(message, commitment);
 

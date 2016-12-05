@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _hashingService.Setup(x => x.DecodeValue(hashedId)).Returns(accountId);
 
             //Act
-            await _handler.Handle(new RemovePayeFromAccountCommand { HashedId = hashedId, PayeRef = payeRef, UserId = userId});
+            await _handler.Handle(new RemovePayeFromAccountCommand { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userId});
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);

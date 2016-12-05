@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+
+using NUnit.Framework;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
 
@@ -12,7 +14,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [Test]
         public void ULNMustBeNumericAnd10DigitsInLength()
         {
-            var viewModel = new ApprenticeshipViewModel { ULN = "1001234567" };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", ULN = "1001234567" };
 
             var result = _validator.Validate(viewModel);
 
@@ -24,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [TestCase(" ")]
         public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
         {
-            var viewModel = new ApprenticeshipViewModel {  ULN = uln };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", ULN = uln };
 
             var result = _validator.Validate(viewModel);
 
@@ -33,7 +35,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
 
         public void ULNThatStartsWithAZeroIsInvalid()
         {
-            var viewModel = new ApprenticeshipViewModel { ULN = "0123456789" };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", ULN = "0123456789" };
 
             var result = _validator.Validate(viewModel);
 
@@ -44,7 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [TestCase("1")]
         public void CostIsWholeNumberGreaterThanZeroIsValid(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", Cost = cost };
 
             var result = _validator.Validate(viewModel);
 
@@ -58,7 +60,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [TestCase("123.000")]
         public void CostNotNumericOrIsNotAWholeNumber(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", Cost = cost };
 
             var result = _validator.Validate(viewModel);
 
@@ -73,10 +75,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [TestCase("-0.001")]
         public void CostThatIsZeroOrNegativeNumberIsInvalid(string cost)
         {
-            var viewModel = new ApprenticeshipViewModel { Cost = cost };
+            var viewModel = new ApprenticeshipViewModel { FirstName = "FirstName", LastName = "LastName", Cost = cost };
 
             var result = _validator.Validate(viewModel);
 
+            Assert.That(result.IsValid, Is.False);
+        }
+
+        [Test]
+        public void FirstAndLastNameIsEmpty()
+        {
+            var viewModel = new ApprenticeshipViewModel { FirstName = "", LastName = "" };
+
+            var result = _validator.Validate(viewModel);
+
+            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Please enter first name")), Is.True);
+            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Please enter last name")), Is.True);
             Assert.That(result.IsValid, Is.False);
         }
     }

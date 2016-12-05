@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var membership = await _membershipRepository.GetCaller(message.HashedId, message.UserId);
+            var membership = await _membershipRepository.GetCaller(message.HashedLegalEntityId, message.UserId);
 
             if (membership == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });

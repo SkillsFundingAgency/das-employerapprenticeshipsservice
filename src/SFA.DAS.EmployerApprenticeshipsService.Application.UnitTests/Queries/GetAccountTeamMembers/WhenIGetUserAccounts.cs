@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
             _teamMembers = new List<TeamMember> { _teamMember };
             _accountTeamMembersRepository.Setup(repository => repository.GetAccountTeamMembersForUserId("1", _teamMember.UserRef)).ReturnsAsync(new List<TeamMember>( _teamMembers));
             RequestHandler = new GetAccountTeamMembersHandler(RequestValidator.Object,_accountTeamMembersRepository.Object);
-            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", HashedId = "1"};
+            Query = new GetAccountTeamMembersQuery {ExternalUserId = "kaka-kakah", HashedAccountId = "1"};
         }
         
         [Test]

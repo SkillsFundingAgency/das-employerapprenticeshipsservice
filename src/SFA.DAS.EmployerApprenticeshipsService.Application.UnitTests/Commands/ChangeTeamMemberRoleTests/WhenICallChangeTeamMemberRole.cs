@@ -28,13 +28,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(command.HashedId, command.ExternalUserId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(command));
 
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString()
@@ -134,7 +134,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             var command = new ChangeTeamMemberRoleCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Email = "test.user@test.local",
                 RoleId = 1,
                 ExternalUserId = Guid.NewGuid().ToString(),
@@ -155,7 +155,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ChangeTeamMemberRoleTests
                 Role = (Role)command.RoleId
             };
             
-            _membershipRepository.Setup(x => x.GetCaller(command.HashedId, command.ExternalUserId)).ReturnsAsync(callerMembership);
+            _membershipRepository.Setup(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
             _membershipRepository.Setup(x => x.Get(callerMembership.AccountId, command.Email)).ReturnsAsync(userMembership);
 
             await _handler.Handle(command);

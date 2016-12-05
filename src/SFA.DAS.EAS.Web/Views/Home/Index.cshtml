@@ -1,5 +1,4 @@
-﻿﻿@using SFA.DAS.EAS.Domain
-@using SFA.DAS.EAS.Domain
+﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.UserAccountsViewModel>
 @{ViewBag.PageID = "page-auth-homepage"; }
 @{ViewBag.Title = "Levy accounts"; }
@@ -50,13 +49,12 @@
                                 </td>
                                 <td class="responsive-td link-right">
                                     <a aria-label="View account homepage for @account.Name"
-                                       title="View account homepage for @account.Name"
-                                       href="@Url.Action("Index", "EmployerTeam", new {accountId = account.HashedId})">
-                                        Open<span class="vh"> @account.Name account homepage</span>
-                                    </a>
+                                           title="View account homepage for @account.Name"
+                                           href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
+                                    Open<span class="vh"> @account.Name account homepage</span>
+                                   </a>
                                 </td>
                             </tr>
-
                         }
                     </tbody>
                 </table>
