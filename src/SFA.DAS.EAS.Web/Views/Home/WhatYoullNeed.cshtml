@@ -1,6 +1,8 @@
 ﻿@{ViewBag.PageID = "page-what-youll-need"; }
 @{ViewBag.Title = "What you'll need"; }
 
+@{ var errorMessage = TempData["Error"] as string; }
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
@@ -14,17 +16,24 @@
         </ul>        
         <form method="POST" action="@Url.Action("WhatYoullNeed", "Home")" >
             @Html.AntiForgeryToken()
-            <div class="form-group ">
+            <div class="form-group" id="what-you-need-form">
                 <fieldset>
-                    <legend class="form-label-bold">Do you have everything you need?</legend>
+                    <legend class="form-label-bold">
+                        <span>Do you have everything you need?</span>
+                        <span class="error-message js-hidden" aria-hidden="true" id="have-not-got-everything">
+                            You need your Companies House number and your Government Gateway login details to create an account
+                        </span>
+                        
+                    </legend>
                     <label for="have-everything" class="block-label">
                         <input type="radio" name="choice" id="have-everything" value="2" />
                         Yes, I have Government Gateway details
                     </label>
                     <label for="do-not-have-everything" class="block-label">
-                        <input type="radio" name="choice" id="do-not-have-everything" value="1" />
+                        <input type="radio" name="choice" id="do-not-have-everything" value="1"/>
                         No, I don't have Government Gateway details
                     </label>
+                    
                 </fieldset>
             </div>
             <div class="form-group">
@@ -39,4 +48,15 @@
             <li><a href="/" class="back-link">Back</a></li>
         </ol>
     </div>
+}
+
+@section pageSpecificJS {
+    <script type="text/javascript">
+        
+
+
+        $(function () {
+            sfa.homePage.init();
+        });
+    </script>
 }
