@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
             _command = new SignEmployerAgreementCommand
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 HashedAgreementId = "2",
                 ExternalUserId = Guid.NewGuid().ToString(),
                 SignedDate = DateTime.Now
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                 LastName = "Bloggs"
             };
 
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId))
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                 .ReturnsAsync(_owner);
         }
 
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         [Test]
         public void ThenNonMemberOfAccountThrowsExcption()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId))
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                 .ReturnsAsync(null);
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         [Test]
         public void ThenNonOwnerOfAccountThrowsExcption()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId))
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                 .ReturnsAsync(new MembershipView
                 {
                     RoleId = (short)Role.Viewer

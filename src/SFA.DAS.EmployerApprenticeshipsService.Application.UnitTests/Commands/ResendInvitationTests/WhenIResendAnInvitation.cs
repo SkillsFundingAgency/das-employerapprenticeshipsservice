@@ -42,11 +42,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                 AccountId = ExpectedAccountId,
                 UserId = 2,
                 RoleId = (int)Role.Owner,
-                HashedId = ExpectedHashedId
+                HashedAccountId = ExpectedHashedId
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(owner.HashedId, _command.ExternalUserId)).ReturnsAsync(owner);
+            _membershipRepository.Setup(x => x.GetCaller(owner.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(owner);
             _invitationRepository = new Mock<IInvitationRepository>();
             _mediator = new Mock<IMediator>();
             _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem> {new EmailTemplateConfigurationItem {Key = "123456", TemplateType= EmailTemplateType.Invitation,TemplateName = "Invitation"} } };

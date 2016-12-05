@@ -2,6 +2,6 @@
 {
     public class AddLegalEntityViewModel
     {
-        public string AccountId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

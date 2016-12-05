@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
 
         public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesRequest message)
         {
-            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedId);
+            var payeSchemes = await _accountRepository.GetPayeSchemesByHashedId(message.HashedAccountId);
 
             return new GetAccountPayeSchemesResponse
             {

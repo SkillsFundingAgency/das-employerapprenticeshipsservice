@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var owner = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             if (owner == null || (Role)owner.RoleId != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not an Owner on this Account" } });

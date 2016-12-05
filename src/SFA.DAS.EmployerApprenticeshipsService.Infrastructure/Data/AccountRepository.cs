@@ -142,15 +142,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         }
 
 
-        public async Task<List<PayeView>> GetPayeSchemesByHashedId(string hashedId)
+        public async Task<List<PayeView>> GetPayeSchemesByHashedId(string hashedAccountId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@hashedId", hashedId, DbType.String);
+                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
 
                 return await c.QueryAsync<PayeView>(
-                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE HashedId = @hashedId;",
+                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE HashedId = @hashedAccountId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

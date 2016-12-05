@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
         {
-            var owner = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             var agreementView = await _accountRepository.CreateLegalEntity(
                 owner.AccountId, 
