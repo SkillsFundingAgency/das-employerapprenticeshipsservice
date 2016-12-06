@@ -20,10 +20,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<DateTime> GetLastUpdateDate()
         {
             var result = await WithConnection(async c => await c.QueryAsync<DateTime>(
-                sql: "SELECT Top(1) DateCalculated FROM [levy].[EnglishFraction] ORDER BY DateCalculated DESC;",
+                sql: "SELECT Top(1) DateCalculated FROM [levy].[EnglishFractionCalculationDate] ORDER BY DateCalculated DESC;",
                 commandType: CommandType.Text));
 
             return result.FirstOrDefault();
+        }
+
+        public async Task SetLastUpdateDate(DateTime dateUpdated)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@dateCalculated", dateUpdated, DbType.Date);
+
+                return await c.ExecuteAsync(
+                    sql: "INSERT INTO [levy].[EnglishFractionCalculationDate] (DateCalculated) VALUES (@dateCalculated);",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<DasEnglishFraction> GetEmployerFraction(DateTime dateCalculated, string employerReference)
