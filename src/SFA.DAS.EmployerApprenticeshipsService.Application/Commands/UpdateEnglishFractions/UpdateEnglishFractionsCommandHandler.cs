@@ -73,7 +73,6 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
                 await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
             }
             
-            await _englishFractionRepository.SetLastUpdateDate(message.DateCalculated);
         }
     }
 
@@ -87,7 +86,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 
         public int GetHashCode(DasEnglishFraction obj)
         {
-            return 0;
+            return obj.DateCalculated.GetHashCode() ^ obj.EmpRef.GetHashCode();
         }
     }
 }

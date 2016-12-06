@@ -240,30 +240,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()), Times.Never);
         }
 
-        [Test]
-        public async Task ThenTheLastUpdatedDateIsSetOnTheRepository()
-        {
-            //Arrange
-            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
-                .ReturnsAsync(_existingFractions);
-            _hmrcService.Setup(x => x.GetEnglishFractions(It.IsAny<string>(), _employerReference))
-                .ReturnsAsync(new EnglishFractionDeclarations
-                {
-                    Empref = _employerReference,
-                    FractionCalculations = _fractionCalculations
-                });
-
-            //Act
-            await _handler.Handle(new UpdateEnglishFractionsCommand
-            {
-                EmployerReference = _employerReference,
-                DateCalculated = _dateCalculated,
-            });
-
-            //Assert
-            _englishFractionRepository.Verify(x => x.SetLastUpdateDate(_dateCalculated), Times.Once);
-        }
-
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)
         {
             var fractiondateString = fraction.DateCalculated.ToShortDateString();
