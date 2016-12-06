@@ -48,9 +48,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            var model = new OrchestratorResponse<SelectEmployerModel>
+            var model = new OrchestratorResponse<SelectEmployerViewModel>
             {
-                Data = new SelectEmployerModel
+                Data = new SelectEmployerViewModel
                 {
                     HideBreadcrumb = hideBreadcrumb
                 }
