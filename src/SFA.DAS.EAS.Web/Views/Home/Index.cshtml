@@ -1,12 +1,12 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.UserAccountsViewModel>
 @{ViewBag.PageID = "page-auth-homepage"; }
-@{ViewBag.Title = "Levy accounts"; }
+@{ViewBag.Title = "Your accounts"; }
 @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
 {
     <div class="grid-row">
         <div class="column-full">
-            <div class="panel panel-error  ">
+            <div class="panel panel-error">
                 @Model.Data.ErrorMessage
             </div>
         </div>
@@ -15,7 +15,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <section>
-            <h1 class="heading-xlarge" id="Levy-accounts">Levy accounts</h1>
+            <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
             {
                 <p>With levy accounts you can:</p>
@@ -80,7 +80,7 @@
     </div>
     <div class="column-one-third pull-right">
         <aside class="sidebar">
-            <h2 class="heading-medium" id="Manage-Account">Manage your account</h2>
+            <h2 class="heading-medium" id="Manage-Account">Your settings</h2>
             <ul aria-labelledby="Manage-Account">
                 <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
                 <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
