@@ -7,6 +7,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.ViewModels;
@@ -78,6 +79,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             //Assert
             Assert.IsNull(actual);
             _logger.Verify(x=>x.Info(It.IsAny<InvalidRequestException>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenICheckToSeeWhatAccountsIHaveAccessTo()
+        {
+            //Arrange
+            var expectedUserId = "123FVD";
+
+            //Act
+            await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.UserId.Equals(expectedUserId))), Times.Once);
         }
     }
 }
