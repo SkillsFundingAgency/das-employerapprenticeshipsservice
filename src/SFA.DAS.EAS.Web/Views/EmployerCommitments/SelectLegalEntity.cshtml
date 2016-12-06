@@ -16,26 +16,17 @@
 
 <div class="grid-row">
     <form method="POST" action="@Url.Action("SetLegalEntity")">
-      
         <div class="column-two-thirds">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-            <h1 class="heading-xlarge">Choose organisation
-</h1>
-
-         
-          
+            <h1 class="heading-xlarge">Choose organisation</h1>
             @Html.AntiForgeryToken()
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
-
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
                 <fieldset>
-
-                 
-
-                    <p>Choose the organisation your apprentices will be employed through:</p>
-
-                    <div>
+                    <legend>
+                        <span class="form-label-bold">Choose the organisation your apprentices will be employed through:</span>
                         @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option")
-                    </div>
+                    </legend>
+  
                     @foreach (LegalEntity entity in ViewBag.LegalEntities)
                     {
                         <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)-@entity.Code">
@@ -47,7 +38,14 @@
             </div>
             @Html.HiddenFor(x => x.CohortRef)
             <button type="submit" class="button">Continue</button>
-
         </div>
     </form>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

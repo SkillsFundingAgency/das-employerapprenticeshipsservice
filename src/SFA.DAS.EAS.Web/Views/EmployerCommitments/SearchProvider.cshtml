@@ -18,16 +18,25 @@
             <h1 class="heading-xlarge">Add training provider details</h1>
 
             @Html.AntiForgeryToken()
-
+            
             <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ProviderId, "error")">
                 @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
              
                     @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-" + Html.IdFor(m => m.ProviderId) })
 
-          
+           
                 @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
             </div>
+
+            <details>
+                <summary><span class="summary">What is a UK Provider Reference Number?</span></summary>
+                <div class="panel panel-border-narrow" role="note" aria-label="UKPRN help">
+                    <p>
+                        A UK Provider Reference Number (UKPRN) is a unique, 8-digit number that identifies a training provider. Your training provider can tell you their UKPRN.
+                    </p>
+                </div>
+            </details>
 
 
             <button type="submit" class="button">Continue</button>
@@ -39,3 +48,12 @@
         </div>
     </div>
 </form>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

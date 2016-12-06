@@ -15,9 +15,6 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Instructions for your training provider</h1>
 
-        @*<p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know which apprentices you'd like them to add.
-    </p>*@
-
         <p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know what you'd like them to do next.
         </p>
         <form method="POST" action="@Url.Action(targetName)">
@@ -42,3 +39,11 @@
     </div>
 </div>
 
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}
