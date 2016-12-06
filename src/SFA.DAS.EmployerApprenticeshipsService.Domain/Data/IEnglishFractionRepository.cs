@@ -12,5 +12,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<IEnumerable<DasEnglishFraction>> GetAllEmployerFractions(string employerReference);
         Task CreateEmployerFraction(DasEnglishFraction fractions, string employerReference);
         Task SetLastUpdateDate(DateTime dateUpdated);
+        Task<DasEnglishFraction> GetCurrentFractionForScheme(string employerReference);
     }
 }

@@ -57,6 +57,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.FirstOrDefault();
         }
 
+        public async Task<DasEnglishFraction> GetCurrentFractionForScheme(string employerReference)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", employerReference, DbType.String);
+
+                return await c.QueryAsync<DasEnglishFraction>(
+                    sql: "SELECT top 1 * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef Order by DateCalculated desc;",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
+
+            return result.FirstOrDefault();
+        }
+
         public async Task<IEnumerable<DasEnglishFraction>> GetAllEmployerFractions(string employerReference)
         {
             var result = await WithConnection(async c =>

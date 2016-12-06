@@ -38,6 +38,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
             
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             
@@ -50,21 +55,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes
                     PayeSchemes = payeSchemes
                 };
             }
-
-            var updateDate = await _englishFractionRepository.GetLastUpdateDate();
-
-            if (updateDate == DateTime.MinValue)
-            {
-                return new GetAccountPayeSchemesResponse
-                {
-                    PayeSchemes = payeSchemes
-                };
-            }
-
+            
             foreach (var scheme in payeSchemes)
             {
-                scheme.EnglishFraction =
-                    await _englishFractionRepository.GetEmployerFraction(updateDate, scheme.PayeRef);
+                scheme.EnglishFraction = await _englishFractionRepository.GetCurrentFractionForScheme(scheme.PayeRef);
             }
 
             return new GetAccountPayeSchemesResponse

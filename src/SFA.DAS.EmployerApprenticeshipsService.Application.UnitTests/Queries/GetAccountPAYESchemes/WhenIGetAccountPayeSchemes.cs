@@ -63,9 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
                 _payeView
             });
 
-            _englishFractionsRepository.Setup(x => x.GetLastUpdateDate())
-                                       .ReturnsAsync(UpdateDate);
-            _englishFractionsRepository.Setup(x => x.GetEmployerFraction(It.IsAny<DateTime>(), It.IsAny<string>()))
+            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForScheme(It.IsAny<string>()))
                                        .ReturnsAsync(_englishFraction);
 
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
@@ -86,8 +84,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetLastUpdateDate(), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetEmployerFraction(UpdateDate, _payeView.PayeRef), Times.Once);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(_payeView.PayeRef), Times.Once);
+        }
+
+        [Test]
+        public void ThenAnUnauthorizedAccessExceptionIsThrownIfTheValidationReturnsNotAuthorized()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
+                .ReturnsAsync(new ValidationResult
+                {
+                    IsUnauthorized = true,
+                    ValidationDictionary = new Dictionary<string, string>()
+                });
+
+            //Act Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
+
         }
 
         [Test]
@@ -114,8 +127,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountPAYESchemes
 
             //Assert
             Assert.IsEmpty(result.PayeSchemes);
-            _englishFractionsRepository.Verify(x => x.GetLastUpdateDate(), Times.Never);
-            _englishFractionsRepository.Verify(x => x.GetEmployerFraction(It.IsAny<DateTime>(), It.IsAny<string>()), Times.Never);
+            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForScheme(It.IsAny<string>()), Times.Never);
         }
+        
     }
 }
