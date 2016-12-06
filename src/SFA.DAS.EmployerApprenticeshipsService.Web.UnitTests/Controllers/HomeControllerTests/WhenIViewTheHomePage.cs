@@ -70,12 +70,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public void ThenTheIndexDoesNotHaveTheAuthorizeAttribute()
         {
-            var attributes = typeof(HomeController).GetMethod("Index").GetCustomAttributes(true).ToList();
+            var methods = typeof(HomeController).GetMethods().Where(m => m.Name.Equals("Index")).ToList();
 
-            foreach (var attribute in attributes)
+            foreach (var method in methods)
             {
-                var actual = attribute as AuthorizeAttribute;
-                Assert.IsNull(actual);
+                var attributes = method.GetCustomAttributes(true).ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var actual = attribute as AuthorizeAttribute;
+                    Assert.IsNull(actual);
+                }
             }
         }
 
@@ -92,7 +97,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual("ServiceLandingPage", actualViewResult.ViewName);
+            Assert.AreEqual("UsedServiceBefore", actualViewResult.ViewName);
         }
 
         [Test]

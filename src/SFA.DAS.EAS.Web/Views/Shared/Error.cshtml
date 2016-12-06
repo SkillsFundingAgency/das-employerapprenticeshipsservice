@@ -1,8 +1,11 @@
-﻿<div class="grid-row">
+﻿@{
+    ViewBag.PageID = "page-error";
+    ViewBag.Title = "Error";
+}
+
+<div class="grid-row">
     <div class="column-two-thirds">
-
         <h1 class="heading-xlarge">There's been an error</h1>
-
         <p>Sorry, there seems to be an error with this page. Please refresh your browser or <a href="@Url.Action("Index","Home")">go back to the homepage</a>.</p>
     </div>
 </div>

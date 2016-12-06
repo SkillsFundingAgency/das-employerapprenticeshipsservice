@@ -17,7 +17,7 @@
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-            <h1 class="heading-xlarge">Finish editing</h1>
+            <h1 class="heading-xlarge">Choose an option</h1>
             <fieldset>
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
@@ -50,17 +50,14 @@
                     </label>
                 </div>
 
-                <div style="margin-top:20px;">
+                <div>
                     <input type="submit" class="button" id="paymentPlan" value="Continue">
-                    <a class="links" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+                    <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
                 @Html.HiddenFor(x => x.HashedCommitmentId)
             </fieldset>
         </form>
      
-    </div>
-
-    <div class="column-one-third">
     </div>
 </div>
 
@@ -71,3 +68,12 @@
          return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
      }
  }
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

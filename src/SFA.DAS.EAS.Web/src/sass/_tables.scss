@@ -14,10 +14,9 @@ td.link-action {
 }
 
 table th, table td {
-    font-size: 14px;
     vertical-align: top;
     @include media(tablet) {
-        font-size: 16px;
+
     }
 }
 
