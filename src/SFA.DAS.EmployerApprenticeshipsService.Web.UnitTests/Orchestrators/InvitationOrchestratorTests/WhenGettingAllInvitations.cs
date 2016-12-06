@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.ViewModels;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -26,6 +27,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
         {
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserInvitationsRequest>())).ReturnsAsync(new GetUserInvitationsResponse {Invitations = new List<InvitationView> {new InvitationView()} });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>())).ReturnsAsync(new GetUserAccountsQueryResponse
+                {
+                    Accounts = new Accounts {AccountList = new List<Account>()}
+                });
 
             _logger = new Mock<ILogger>();
 
