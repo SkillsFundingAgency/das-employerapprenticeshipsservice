@@ -72,6 +72,8 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
             {
                 await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
             }
+            
+            await _englishFractionRepository.SetLastUpdateDate(message.DateCalculated);
         }
     }
 

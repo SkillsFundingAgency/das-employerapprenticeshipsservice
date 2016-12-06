@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 {
@@ -6,5 +7,6 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
     {
         public string EmployerReference { get; set; }
         public string AuthToken { get; set; }
+        public DateTime DateCalculated { get; set; }
     }
 }
