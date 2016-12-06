@@ -20,7 +20,7 @@
 
             <h1 class="heading-xlarge">Start adding apprentices</h1>
             <p class="lede">You can start adding details of your apprentices or ask your training provider to add them for you.</p>
-            <p>If you ask your training provider to add them, you can still check and agree the details before any payments are made.</p>
+            <p>If you ask your training provider to add them, you need to check and agree the details before any payments are made.</p>
             <fieldset role="radiogroup" aria-required="true">
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SelectedRoute, "error")">
@@ -29,11 +29,11 @@
                    
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Employer">
                         @Html.RadioButtonFor(m => m.SelectedRoute, "employer", new { id = Html.IdFor(m => m.SelectedRoute) + "-Employer" })
-                        I'll add apprentices
+                        I will add apprentices
                     </label>
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Provider">
                         @Html.RadioButtonFor(m => m.SelectedRoute, "provider", new { id = Html.IdFor(m => m.SelectedRoute) + "-Provider" })
-                        I'd like my provider to add apprentices
+                        I would like my provider to add apprentices
                     </label>
                 </div>
             </fieldset>

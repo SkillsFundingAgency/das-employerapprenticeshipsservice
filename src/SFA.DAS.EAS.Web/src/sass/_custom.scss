@@ -1,6 +1,6 @@
 ﻿// custom to overwrite the GDS defaults
 .hr-double {
-    border-bottom: 4px solid #bfc1c3;
+    border-bottom: 4px solid $grey-2;
     margin-bottom: 20px;
 }
 .hr-top {
@@ -21,7 +21,7 @@
     background-color: transparent;
     border: medium none;
     box-shadow: none;
-    color: #005ea5;
+    color: $link-colour;
     text-decoration: underline;
 }
 .alert-default {
