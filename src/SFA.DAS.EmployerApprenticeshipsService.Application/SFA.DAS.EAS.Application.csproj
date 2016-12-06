@@ -152,6 +152,9 @@
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandValidator.cs" />
+    <Compile Include="Commands\CreateEnglishFractionCalculationDate\CreateEnglishFractionCalculationDateCommand.cs" />
+    <Compile Include="Commands\CreateEnglishFractionCalculationDate\CreateEnglishFractionCalculationDateCommandHandler.cs" />
+    <Compile Include="Commands\CreateEnglishFractionCalculationDate\CreateEnglishFractionCalculationDateCommandValidator.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommand.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandHandler.cs" />
     <Compile Include="Commands\CreateInvitation\CreateInvitationCommandValidator.cs" />

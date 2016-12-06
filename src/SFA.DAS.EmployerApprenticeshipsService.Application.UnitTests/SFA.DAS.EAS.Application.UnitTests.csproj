@@ -130,6 +130,7 @@
     <Compile Include="Commands\CreateAccountCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreementTemplateTests\WhenICreateAnEmployerAgreementTemplate.cs" />
+    <Compile Include="Commands\CreateEnglishFractionCalculationDateCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenIValidateCreateInvitation.cs" />
     <Compile Include="Commands\CreateNewPeriodEndTests\WhenICreateANewPeriodEnd.cs" />
