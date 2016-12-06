@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            var actualModel = actualViewResult.Model as OrchestratorResponse<SelectEmployerModel>;
+            var actualModel = actualViewResult.Model as OrchestratorResponse<SelectEmployerViewModel>;
             Assert.IsNotNull(actualModel);
             Assert.IsTrue(actualModel.Data.HideBreadcrumb);
         }
