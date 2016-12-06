@@ -214,8 +214,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = "Levy account created";
-            TempData["successMessage"] = $"You need to <a href=\"{ Url.Action("Index", "EmployerAgreement", new { response.Data.EmployerAgreement.HashedAccountId }) }\">sign the SFA agreement</a> before you can start spending your levy";
+            TempData["successHeader"] = $"{enteredData.CompanyName} has been added";
+            TempData["successMessage"] = "This account can now spend levy funds.";
 
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
