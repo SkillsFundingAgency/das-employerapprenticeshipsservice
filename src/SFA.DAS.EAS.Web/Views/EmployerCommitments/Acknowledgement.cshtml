@@ -2,19 +2,21 @@
 
 @{
     ViewBag.Title = "Instructions sent";
-    ViewBag.PageID = "instructions-sent";
+    ViewBag.PageID = "instructions-sent-end";
 }
 
-
 <div class="grid-row">
-    <div class="column-two-thirds">
-
-
+    <div class="column-full">
         <div class="govuk-box-highlight green-box">
             <h1 class="heading-xlarge" id="changeHeadline">
                 Instructions sent
             </h1>
         </div>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
 
         <table class="instructionSent">
             <tbody>
@@ -51,7 +53,7 @@
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">Your training provider will review your request and contact you as soon as possible - either with questions or to ask you to review the details they've added.</p>
 
-        <a class="button" href="@Url.Action("Index")">Continue</a>
+        @*<a class="button" href="@Url.Action("Index")">Continue</a>*@
     </div>
 
     <div class="column-one-third">
@@ -66,3 +68,12 @@
         </aside>
     </div>
 </div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Apprentices home" class="back-link">Apprentices home</a></li>
+        </ol>
+    </div>
+}

@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId);
+            var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
 
             await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, PaymentStatus.Paused);
         }

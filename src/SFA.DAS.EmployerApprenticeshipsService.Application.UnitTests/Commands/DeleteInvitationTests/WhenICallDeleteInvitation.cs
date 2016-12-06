@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
             _command = new DeleteInvitationCommand
             {
                 Email = _invitation.Email,
-                HashedId = "1",
+                HashedAccountId = "1",
                 ExternalUserId = "EXT_USER"
             };
         }
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
         public void ThrowExceptionWhenCallerIsNotAccountOwner()
         {
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _command.Email)).ReturnsAsync(_invitation);
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
                 RoleId = (int)Role.Viewer
             });

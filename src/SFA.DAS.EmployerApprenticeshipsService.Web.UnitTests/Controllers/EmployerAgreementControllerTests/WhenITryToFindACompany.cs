@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             //Arrange
             var viewModel = new FindOrganisationViewModel
             {
-                HashedId = "1",
+                HashedLegalEntityId = "1",
                 CompanyName = "Test Corp",
                 CompanyNumber = "0123456",
                 DateOfIncorporation = DateTime.Now,
@@ -55,12 +55,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(username);
 
             //Act
-            var result = await _controller.FindLegalEntity(viewModel.HashedId, viewModel.CompanyNumber) as ViewResult;
+            var result = await _controller.FindLegalEntity(viewModel.HashedLegalEntityId, viewModel.CompanyNumber) as ViewResult;
             
             //Assert
             Assert.IsNotNull(result);
 
-            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.HashedId, viewModel.CompanyNumber, username), Times.Once);
+            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.HashedLegalEntityId, viewModel.CompanyNumber, username), Times.Once);
 
             var model = result.Model as OrchestratorResponse<FindOrganisationViewModel>;
             Assert.IsNotNull(model?.Data);

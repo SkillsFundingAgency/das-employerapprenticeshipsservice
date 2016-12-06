@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedId, message.ExternalUserId);
+            var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedAccountId, message.ExternalUserId);
             return new GetAccountTeamMembersResponse {TeamMembers = accounts};
             
         }

@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
@@ -68,12 +70,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public void ThenTheIndexDoesNotHaveTheAuthorizeAttribute()
         {
-            var attributes = typeof(HomeController).GetMethod("Index").GetCustomAttributes(true).ToList();
+            var methods = typeof(HomeController).GetMethods().Where(m => m.Name.Equals("Index")).ToList();
 
-            foreach (var attribute in attributes)
+            foreach (var method in methods)
             {
-                var actual = attribute as AuthorizeAttribute;
-                Assert.IsNull(actual);
+                var attributes = method.GetCustomAttributes(true).ToList();
+
+                foreach (var attribute in attributes)
+                {
+                    var actual = attribute as AuthorizeAttribute;
+                    Assert.IsNull(actual);
+                }
             }
         }
 
@@ -90,7 +97,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual("ServiceLandingPage", actualViewResult.ViewName);
+            Assert.AreEqual("UsedServiceBefore", actualViewResult.ViewName);
+        }
+
+        [Test]
+        public async Task ThenIfThereAreNoAccountsTheUserIsRedirectedToTheAddEmployerAccountJourney()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel {Accounts = new Accounts {AccountList = new List<Account>()} } });
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
+            var redirectActual = actual as RedirectToRouteResult;
+            Assert.IsNotNull(redirectActual);
+            Assert.AreEqual("SelectEmployer", redirectActual.RouteValues["action"]);
+            Assert.AreEqual("EmployerAccount", redirectActual.RouteValues["controller"]);
         }
         
     }

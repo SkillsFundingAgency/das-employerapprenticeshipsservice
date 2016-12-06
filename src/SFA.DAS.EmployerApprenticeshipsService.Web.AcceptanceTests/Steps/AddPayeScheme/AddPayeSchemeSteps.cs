@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
@@ -63,7 +62,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void ThenICanViewAllOfMyPAYESchemes()
         {
             var accountId = (long)ScenarioContext.Current["AccountId"];
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
@@ -76,7 +75,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         [When(@"I Add a new PAYE scheme")]
         public void WhenIAddANewPAYEScheme()
         {
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             _newLegalEntity = true;
@@ -84,7 +83,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
 
             var confirmNewPayeScheme = new ConfirmNewPayeScheme
             {
-                HashedId = hashedId,
+                HashedAccountId = hashedId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
@@ -104,7 +103,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void ThenThePAYESchemeIs(string schemeStatus)
         {
          
-            var hashedId = ScenarioContext.Current["HashedId"].ToString();
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["ExternalUserId"].ToString();
 
             //Get the PAYE schemes

@@ -19,7 +19,7 @@
             <input type="hidden" id="submit" name="submit" value="Sign" />
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+                <a class="button button-link" href="@Url.Action("Add", new {AccountId = @Model.Data.HashedLegalEntityId})">No, search again</a>
             </span>
         </form> 
     </div>

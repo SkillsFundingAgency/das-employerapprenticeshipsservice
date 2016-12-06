@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
         public async Task<GetEmployerAgreementResponse> Handle(GetEmployerAgreementRequest message)
         {
-            var caller = await _membershipRepository.GetCaller(message.HashedId, message.ExternalUserId);
+            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });

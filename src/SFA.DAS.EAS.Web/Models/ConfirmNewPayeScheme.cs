@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.Models
             AccessToken = model.AccessToken;
             RefreshToken = model.RefreshToken;
             PayeScheme = model.PayeScheme;
-            HashedId = model.HashedId;
+            HashedAccountId = model.HashedAccountId;
         }
 
     }

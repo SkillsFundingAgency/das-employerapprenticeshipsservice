@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -9,7 +10,6 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
@@ -31,6 +31,12 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
+                if (accounts.Data.Accounts?.AccountList != null && accounts.Data.Accounts.AccountList.Count == 0)
+                {
+                    TempData["HideBreadcrumb"] = true;
+                    return RedirectToAction("SelectEmployer", "EmployerAccount");
+                }
+
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
                     accounts.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
@@ -38,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 else
                 {
                     accounts.Data.ErrorMessage = (string)TempData["errorMessage"];
-                    accounts.Data.FlashMessage = new FlashMessageViewModel()
+                    accounts.Data.FlashMessage = new FlashMessageViewModel
                     {
                         Headline = (string)TempData["successMessage"]
                     };
@@ -58,9 +64,46 @@ namespace SFA.DAS.EAS.Web.Controllers
                
             };
 
-            return View("ServiceLandingPage", model);
+            return View("UsedServiceBefore", model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UsedServiceBefore(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction("WhatYoullNeed"); //No I have not used the service before
+                case 2: return RedirectToAction("SignIn"); // Yes I have used the service
+                default:
+                    TempData["Error"] = "You must select an option to continue.";
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true
+                    };
+
+                    return View(model); //No option entered
+            }
+        }
+
+        [HttpGet]
+        public ActionResult WhatYoullNeed()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult WhatYoullNeed(int? choice)
+        {
+            return RedirectToAction("RegisterUser");
+        }
+
         [HttpGet]
         public ActionResult RegisterUser()
         {
@@ -112,14 +155,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult SignOut()
         {
             return OwinWrapper.SignOutUser();
-
         }
 
         [HttpGet]
         public ActionResult Privacy()
         {
-
             return View();
         }
+
+        
     }
 }

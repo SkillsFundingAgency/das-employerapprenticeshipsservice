@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetMemberRequest>(r => 
-                        r.HashedId.Equals(HashedAccountId) &&
+                        r.HashedAccountId.Equals(HashedAccountId) &&
                         r.Email.Equals(TeamMemberEmail))), Times.Once);
 
             Assert.AreEqual(_teamMemberResponse.TeamMember, result.Data);

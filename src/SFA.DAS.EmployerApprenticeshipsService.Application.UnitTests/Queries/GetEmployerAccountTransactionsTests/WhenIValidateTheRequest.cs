@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
@@ -29,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenItIsValidIfAllFieldsArePopUlated()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedId = "AD1" });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedAccountId = "AD1" });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -42,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _membershipRepository.Setup(x => x.GetCaller(1, "123")).ReturnsAsync(null);
 
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedId = "AD1" });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountTransactionsQuery { AccountId = 1, ExternalUserId = "123", HashedAccountId = "AD1" });
 
             //Assert
             Assert.IsTrue(result.IsUnauthorized);
@@ -57,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("HashedId", "HashedId has not been supplied"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("ExternalUserId", "ExternalUserId has not been supplied"),result.ValidationDictionary);
         }
     }

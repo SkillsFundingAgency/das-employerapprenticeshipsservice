@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             //Assert
             Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
-            Assert.AreEqual(ExpectedHashString, actual.HashedId);
+            Assert.AreEqual(ExpectedHashString, actual.HashedAccountId);
         }
 
         [Test]

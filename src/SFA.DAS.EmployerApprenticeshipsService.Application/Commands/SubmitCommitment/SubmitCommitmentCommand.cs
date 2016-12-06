@@ -12,6 +12,6 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         public bool CreateTask { get; set; }
 
-        public AgreementStatus AgreementStatus { get; set; }
+        public LastAction LastAction { get; set; }
     }
 }

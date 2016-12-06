@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
             if (string.IsNullOrEmpty(item.HashedAgreementId))
                 validationResult.AddError("AgreementId", "No AgreementId supplied");
 
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
                 validationResult.AddError("HashedId", "No HashedId supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))

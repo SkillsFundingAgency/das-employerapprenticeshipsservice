@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
-        private const string HashedId = "ABC123";
+        private const string HashedAccountId = "ABC123";
 
         [SetUp]
         public void Arrange()
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        HashedId = HashedId
+                        HashedAccountId = HashedAccountId
                     }
                 },
                 Status = HttpStatusCode.OK
@@ -92,7 +92,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(HashedId, result.RouteValues["accountId"]);
+            Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
+        }
+
+        [Test]
+        public async Task ThenTheBreadCrumbValueIsRemovedFromTempDataIfItExists()
+        {
+            //Arrange
+            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true } };
+
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
         }
     }
 }
