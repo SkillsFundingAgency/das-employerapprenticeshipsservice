@@ -20,12 +20,13 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <h1 class="heading-xlarge">Choose organisation</h1>
             @Html.AntiForgeryToken()
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
-
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LegalEntityCode, "error")">
                 <fieldset>
-                    <legend class="vh">Choose the organisation your apprentices will be employed through:</legend>
-                    <p class="lede">Choose the organisation your apprentices will be employed through:</p>
-                    @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option")
+                    <legend>
+                        <span class="form-label-bold">Choose the organisation your apprentices will be employed through:</span>
+                        @Html.ValidationMessageFor(m => m.LegalEntityCode, "Please choose an option")
+                    </legend>
+  
                     @foreach (LegalEntity entity in ViewBag.LegalEntities)
                     {
                         <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.LegalEntityCode)-@entity.Code">
