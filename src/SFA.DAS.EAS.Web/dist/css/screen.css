@@ -2346,6 +2346,10 @@ table.top-border {
   color: #fff;
 }
 
+#page-onboard-companies-house .govuk-box-highlight {
+  display: none;
+}
+
 legend {
   margin-bottom: 10px;
 }
