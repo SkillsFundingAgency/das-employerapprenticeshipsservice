@@ -2232,7 +2232,8 @@ table.top-border {
   margin-bottom: 30px;
 }
 
-.page-dashboard h3.heading-medium {
+.page-dashboard h3.heading-medium,
+.page-dashboard h2.heading-medium {
   margin-top: 0;
 }
 
