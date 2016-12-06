@@ -15,6 +15,19 @@
             <h2 class="heading-small">Current balance</h2>
             <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
         </div>
+    </div>
+    <div class="column-one-third">
+        <section>
+            <div class="panel panel-filled">
+                <h2 class="heading-medium">Help us improve this section</h2>
+                <p>Take a 3 minute survey about viewing levy transactions so that we can improve the service.</p>
+                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about viewing levy transactions</span></a></p>
+            </div>
+        </section>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
         @if (Model.Data.TransactionLines.Count == 0)
         {
             <p class="panel panel-info">
@@ -51,7 +64,7 @@
                             <td class="numeric">@(aggregationLine.Balance.ToString("C2", culture))</td>
                             <td class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
-                                     aggregationLine.TransactionType == TransactionItemType.TopUp)
+                         aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
                                     <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
@@ -62,22 +75,13 @@
                                     <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
                                     </a>
-                                    }
+                                }
                             </td>
                         </tr>
-                    }
+                                    }
                 </tbody>
             </table>
-            }
-    </div>
-    <div class="column-one-third">
-        <section>
-            <div class="panel panel-filled">
-                <h2 class="heading-medium">Help us improve this section</h2>
-                <p>Take a 3 minute survey about viewing levy transactions so that we can improve the service.</p>
-                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about viewing levy transactions</span></a></p>
-            </div>
-        </section>
+                                    }
     </div>
 </div>
 @section breadcrumb {

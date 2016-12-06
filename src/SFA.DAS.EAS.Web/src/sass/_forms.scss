@@ -42,6 +42,7 @@
 }
 
 .button-link {
+    @extend .button;
     @include button($white);
     text-decoration:underline;
     color: $govuk-blue;

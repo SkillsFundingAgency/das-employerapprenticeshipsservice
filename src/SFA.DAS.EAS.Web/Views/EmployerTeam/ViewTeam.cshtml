@@ -33,7 +33,7 @@
 {
     <div class="grid-row">
         <div class="column-full">
-            <div class="panel panel-info  ">
+            <div class="panel panel-info">
                 @Model.Data.SuccessMessage
             </div>
         </div>
@@ -63,8 +63,7 @@
 @if (Model.Data.TeamMembers.Count > 0)
 {
     <div class="grid-row">
-        <div class="column-two-thirds">
-
+        <div class="column-full">
             <table>
                 <thead>
                     <tr>
@@ -75,41 +74,47 @@
                     </tr>
                 </thead>
                 <tbody>
-                @foreach (var teamMember in Model.Data.TeamMembers)
+                    @foreach (var teamMember in Model.Data.TeamMembers)
                 {
-                    <tr>
-                        <td>
-                            <span>@teamMember.Name</span> 
-                            <span class="responsive-detail mobile-hide">@teamMember.Email</span>
-                        </td>
-                        <td>@RoleStrings.GetRoleDescription(teamMember.Role)</td>
-                        <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
-                        <td class="link-right">
-                            <a aria-label="View details for @teamMember.Name"
-   title="View details for @teamMember.Name"
-   href="@Url.Action("Review", new { email = teamMember.Email })">View <span class="vh"> details for @teamMember.Name</span></a>
-                        </td>
-                    </tr>
-                }
+                        <tr>
+                            <td>
+                                <span>@teamMember.Name</span>
+                                <span class="responsive-detail mobile-hide">@teamMember.Email</span>
+                            </td>
+                            <td>@RoleStrings.GetRoleDescription(teamMember.Role)</td>
+                            <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
+                            <td class="link-right">
+                                <a aria-label="View details for @teamMember.Name"
+                                   title="View details for @teamMember.Name"
+                                   href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
-            <section>
-                <div class="panel panel-filled">
-                    <h2 class="heading-medium">Help us improve this section</h2>
-                    <p>Take a 3 minute survey about managing team members so that we can improve the service.</p>
-                    <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing team members</span></a></p>
-                </div>
-            </section>
+           
         </div>
     </div>
 }
 
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")" >Employer Account Homepage</a></li>
-            <li>Manage Team Members</li>
-        </ol>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <section>
+            <div class="panel panel-filled">
+                <h2 class="heading-medium">Help us improve this section</h2>
+                <p>Take a 3 minute survey about managing team members so that we can improve the service.</p>
+                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing team members</span></a></p>
+            </div>
+        </section>
     </div>
-}
+</div>
+
+        @section breadcrumb {
+            <div class="breadcrumbs">
+                <ol role="navigation">
+                    <li><a href="/">Your User Profile</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+                    <li>Manage Team Members</li>
+                </ol>
+            </div>
+        }

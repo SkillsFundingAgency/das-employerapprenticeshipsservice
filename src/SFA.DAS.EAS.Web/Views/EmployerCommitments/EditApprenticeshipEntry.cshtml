@@ -52,9 +52,9 @@
                 <span class="form-hint">For example, 08 12 2001</span>
 
                 <div class="form-date">
-                    @Html.ValidationMessageFor(m => m.DateOfBirthDay, "Please enter a valid day", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
-                    @Html.ValidationMessageFor(m => m.DateOfBirthMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
-                    @Html.ValidationMessageFor(m => m.DateOfBirthYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthDay, "Enter a valid day", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthDay), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthMonth, "Enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirthYear, "Enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.DateOfBirthYear), @class = "error-message" })
                     <div class="form-group form-group-day">
                         <label for="@Html.IdFor(m => m.DateOfBirthDay)">
                             Day
@@ -102,8 +102,8 @@
                         <span class="form-hint">For example, 09 2017</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.StartMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.StartYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.StartYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.StartMonth, "Enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.StartMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.StartYear, "Enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.StartYear), @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.StartMonth)">
                                 <span class="form-label-bold">Month</span>
@@ -127,8 +127,8 @@
                         <span class="form-hint">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.EndMonth, "Please enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
-                        @Html.ValidationMessageFor(m => m.EndYear, "Please enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndMonth, "Enter a valid month", new { id = "error-message-" + Html.IdFor(m => m.EndMonth), @class = "error-message" })
+                        @Html.ValidationMessageFor(m => m.EndYear, "Enter a valid year", new { id = "error-message-" + Html.IdFor(m => m.EndYear), @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.EndMonth)">
                                 <span class="form-label-bold">Month</span>
@@ -151,7 +151,7 @@
                 <label for="@Html.IdFor(m => m.Cost)">
                     <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
                     <span class="form-hint">For example, for £1,500 enter 1500</span>
-                    @Html.ValidationMessageFor(m => m.Cost, null, new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+                    @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                 </label>
                 <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
             </div>

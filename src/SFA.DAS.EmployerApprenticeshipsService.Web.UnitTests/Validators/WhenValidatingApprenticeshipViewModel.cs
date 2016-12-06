@@ -89,8 +89,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
 
             var result = _validator.Validate(viewModel);
 
-            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Please enter first name")), Is.True);
-            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Please enter last name")), Is.True);
+            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Enter a first name")), Is.True);
+            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Enter a last name")), Is.True);
             Assert.That(result.IsValid, Is.False);
         }
     }
