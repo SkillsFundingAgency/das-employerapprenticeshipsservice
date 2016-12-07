@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
         public async Task ThenTrueIsReturnedWhenAllTheFieldsArePopulated()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedId = ExpectedHashedId });
+            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedAccountId = ExpectedHashedId });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -43,14 +43,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("ExternalUserId", "ExternalUserId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("HashedId", "AccountId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]
         public async Task ThenIfTheRequestIsValidTheUserIsCheckedToSeeIfTheyAreConnectedToTheAccount()
         {
             //Act
-            await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedId = ExpectedHashedId });
+            await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedAccountId = ExpectedHashedId });
 
             //Arrange
             _membershipRepository.Verify(x=>x.GetCaller(ExpectedHashedId,ExpectedExternalUserId));
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedId = ExpectedHashedId });
+            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId, HashedAccountId = ExpectedHashedId });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);

@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new Account());
 
             RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object);
-            Query = new GetEmployerAccountHashedQuery {HashedId = ExpectedHashedId, UserId = ExpectedUserId};
+            Query = new GetEmployerAccountHashedQuery {HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId};
 
         }
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             //Act
             await RequestHandler.Handle(new GetEmployerAccountHashedQuery
             {
-                HashedId = ExpectedHashedId,
+                HashedAccountId = ExpectedHashedId,
                 UserId = ExpectedUserId
             });
 
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             //Act
             var result = await RequestHandler.Handle(new GetEmployerAccountHashedQuery
             {
-                HashedId = ExpectedHashedId,
+                HashedAccountId = ExpectedHashedId,
                 UserId = ExpectedUserId
             });
 

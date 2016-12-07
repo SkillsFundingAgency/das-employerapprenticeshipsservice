@@ -7,8 +7,8 @@ sfa.homePage = {
     },
     startButton: function () {
         var that = this;
-        $('#create_account').on('click touchstart', function (e) {
-            var isYesClicked = $('#everything-yes').prop('checked'),
+        $('#submit-button').on('click touchstart', function (e) {
+            var isYesClicked = $('#have-everything').prop('checked'),
                 errorShown = $('body').data('shownError') || false;
             if (!isYesClicked && !errorShown) {
                 e.preventDefault();
@@ -17,7 +17,8 @@ sfa.homePage = {
         });
     }, 
     showError: function() {
-        $('#have-not-got-everything').removeClass("js-hidden").attr("aria-hidden");
+        $('.error-message').removeClass("js-hidden").attr("aria-hidden");
+        $('#what-you-need-form').addClass("error");
         $('body').data('shownError', true);
     },
     toggleRadios: function () {

@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Assign
             var request = new CreateNewLegalEntity
             {
-                HashedId = "1",
+                HashedAccountId = "1",
                 Name = "Test Corp",
                 Code = "SD665734",
                 Address = "1, Test Street",

@@ -72,7 +72,7 @@
                             </label>
                         </fieldset>
                     </div>
-                    <input type="hidden" id="HashedId" name="HashedId" value="@Model.Data.HashedId" />
+                    <input type="hidden" id="HashedId" name="HashedId" value="@Model.Data.HashedAccountId" />
                     <button type="submit" class="button" id="send_invitation">Send invitation</button>
                 </form>
             </div>
@@ -81,7 +81,7 @@
         @section breadcrumb {
             <div class="breadcrumbs">
                 <ol role="navigation">
-                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam", new {accountId = @Model.Data.HashedId})" class="back-link">Back to Manage Team Members</a></li>
+                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to Manage Team Members</a></li>
                 </ol>
             </div>
         }

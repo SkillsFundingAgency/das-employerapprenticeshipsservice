@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeship
 
         public async Task<GetApprenticeshipQueryResponse> Handle(GetApprenticeshipQueryRequest message)
         {
-            var apprenticeship = await _commitmentsApi.GetEmployerApprenticeship(message.AccountId, message.CommitmentId, message.ApprenticeshipId);
+            var apprenticeship = await _commitmentsApi.GetEmployerApprenticeship(message.AccountId, message.ApprenticeshipId);
 
             return new GetApprenticeshipQueryResponse
             {

@@ -28,7 +28,7 @@
         <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
             @Html.AntiForgeryToken()    
             <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef"/>
-            <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
+            <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedId"/>
 
             <div class="form-group @(Model.Data.Valid ? "" : "error")">
 

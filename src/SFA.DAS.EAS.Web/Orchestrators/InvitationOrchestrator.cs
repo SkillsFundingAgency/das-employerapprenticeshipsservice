@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
+using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.ViewModels;
@@ -51,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 await _mediator.SendAsync(new CreateInvitationCommand
                 {
-                    HashedId = model.HashedId,
+                    HashedAccountId = model.HashedAccountId,
                     ExternalUserId = externalUserId,
                     Name = model.Name,
                     Email = model.Email,
@@ -74,7 +75,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                return new UserInvitationsViewModel {Invitations = response.Invitations };
+                var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
+                {
+                    UserId = externalUserId
+                });
+
+                return new UserInvitationsViewModel {
+                    Invitations = response.Invitations,
+                    ShowBreadCrumbs = getUserAccountsQueryResponse.Accounts.AccountList.Count!=0 };
             }
             catch (InvalidRequestException ex)
             {

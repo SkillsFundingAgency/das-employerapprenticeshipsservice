@@ -31,16 +31,22 @@
 <div class="grid-row">
     <div class="column-full">
         <h2 class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</h2>
-        
+
         @{
             var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Save and continue";
         }
-        <hr />
-        <div class="emptyStateButton">
-            <a href="@Url.Action("CreateApprenticeshipEntry")" class="button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-            <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="emptyStateButton">
+                    <hr class="hr-top">
+                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+                    <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
+                    <hr class="hr-bottom">
+                </div>
+            </div>
         </div>
-        <hr />
+
         @functions {
 
             public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
@@ -54,68 +60,64 @@
 
         @if (Model.Apprenticeships.Count == 0)
         {
-            <div id="addApprenticesEmptyState" class="panel panel-filled">
-                <p>        You haven't added any apprentices yet. Use the options on this page to add apprentices or finish editing.</p>
+
+            <div class="grid-row" id="empty-alert-top">
+                <div class="column-full">
+                    <div class="panel panel-border-wide alert-default">
+                        <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                    </div>
+                </div>
             </div>
         }
         else
         {
-            
+        <div class="grid-row">
+            <div class="column-full">
             <table class="tableResponsive viewCommitment">
                 <thead>
-                <tr>
-                    <th scope="col">Apprentice</th>
-                    <th scope="col">Training course</th>
-                    <th scope="col">Training dates</th>
-                    <th scope="col" colspan="2">Cost</th>
+                    <tr>
+                        <th scope="col">Apprentice</th>
+                        <th scope="col">Training course</th>
+                        <th scope="col">Training dates</th>
+                        <th scope="col" colspan="2">Cost</th>
 
-                </tr>
+                    </tr>
                 </thead>
                 <tbody>
-                @foreach (var apprenticeship in Model.Apprenticeships)
-                {
-                    <tr>
-                        <td>
+                    @foreach (var apprenticeship in Model.Apprenticeships)
+                    {
+                        <tr>
+                            <td>
         
-                            @apprenticeship.ApprenticeName &nbsp; 
-                        </td>
-                        <td>
-                            @apprenticeship.TrainingName &nbsp;
-                        </td>
-                        <td>
-                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
-                            {
-                                <span>
-                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
-                                </span>
-                            }
-                        </td>
-                        <td>
-                            @FormatCost(apprenticeship.Cost) &nbsp;
-                        </td>
-                        <td>
-                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
-                        </td>
-                    </tr>
-                }
+                                @apprenticeship.ApprenticeName &nbsp; 
+                            </td>
+                            <td>
+                                @apprenticeship.TrainingName &nbsp;
+                            </td>
+                            <td>
+                                @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                {
+                                    <span>
+                                        @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                @FormatCost(apprenticeship.Cost) &nbsp;
+                            </td>
+                            <td>
+                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+        </div>
+    </div>
         }
       
     </div>
 </div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", new {accountId = ViewBag.HashedAccountId})">Apprenticeships Home</a></li>
-            <li><a href="@Url.Action("Cohorts", new {accountId = ViewBag.HashedAccountId})">Review and approve apprentices</a></li>
-            <li>Add apprentices</li>
-        </ol>
-    </div>
-}
 
 @functions
 {
@@ -126,4 +128,13 @@
 
         return $"{cost.Value:£0,0}";
     }
+}
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+        </ol>
+    </div>
 }

@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
 
             foreach (var invitation in invitations)
             {
-                invitation.HashedId = _hashingService.HashValue(invitation.Id);
+                invitation.HashedAccountId = _hashingService.HashValue(invitation.Id);
             }
 
             return new GetUserInvitationsResponse

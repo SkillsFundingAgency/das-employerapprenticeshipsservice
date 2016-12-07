@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
                 {
-                    HashedId = "12345",
+                    HashedAccountId = "12345",
                     PayeRef = "123RFD",
                     UserId = "123edds",
                     RemoveScheme = true
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.IsNotEmpty(result.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedId", "HashedId has not been supplied"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("PayeRef","PayeRef has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("RemoveScheme", "Please confirm you wish to remove the scheme"), result.ValidationDictionary);
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
             {
-                HashedId = "12345",
+                HashedAccountId = "12345",
                 PayeRef = "123RFD",
                 UserId = "123edds",
                 RemoveScheme = true
@@ -82,7 +82,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             //Act
             var result = await _validator.ValidateAsync(new RemovePayeFromAccountCommand
             {
-                HashedId = "12345",
+                HashedAccountId = "12345",
                 PayeRef = "123RFD",
                 UserId = "123edds",
                 RemoveScheme = true

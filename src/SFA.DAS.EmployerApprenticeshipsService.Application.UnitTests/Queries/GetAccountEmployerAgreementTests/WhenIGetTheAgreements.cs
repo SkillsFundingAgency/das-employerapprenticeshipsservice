@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(c => c.DecodeValue(ExpectedHashedId)).Returns(ExpectedAccountId);
 
-            Query = new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId,HashedId = ExpectedHashedId};
+            Query = new GetAccountEmployerAgreementsRequest { ExternalUserId = ExpectedExternalUserId,HashedAccountId = ExpectedHashedId};
 
             RequestHandler = new GetAccountEmployerAgreementsQueryHandler(_accountRepository.Object, _hashingService.Object, RequestValidator.Object);
         }

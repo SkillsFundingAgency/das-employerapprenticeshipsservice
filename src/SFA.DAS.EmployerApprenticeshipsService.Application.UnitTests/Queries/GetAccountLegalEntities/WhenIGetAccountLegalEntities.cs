@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
             RequestHandler = new GetAccountLegalEntitiesQueryHandler(_membershipRepository.Object, _employerAgreementRepository.Object, RequestValidator.Object);
             Query = new GetAccountLegalEntitiesRequest
             {
-                HashedId = ExpectedHashedId,
+                HashedLegalEntityId = ExpectedHashedId,
                 UserId = _expectedUserId
             };
 

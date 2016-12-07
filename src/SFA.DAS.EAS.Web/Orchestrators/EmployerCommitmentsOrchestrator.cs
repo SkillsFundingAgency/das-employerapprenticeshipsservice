@@ -30,6 +30,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     using System.Globalization;
     using Newtonsoft.Json;
+
+    using SFA.DAS.EAS.Web.Models.Types;
+
     using Tasks.Api.Types.Templates;
 
     public sealed class EmployerCommitmentsOrchestrator
@@ -89,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                HashedId = hashedAccountId,
+                HashedLegalEntityId = hashedAccountId,
                 UserId = externalUserId,
                 SignedOnly = false //TODO: This should be true when signed agreements is being used
             });
@@ -220,7 +223,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = data.Commitment.Reference,
                 LegalEntityName = data.Commitment.LegalEntityName,
                 ProviderName = data.Commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(data.Commitment.CommitmentStatus, data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
@@ -275,18 +278,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return viewmodel;
         }
 
-        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, string saveOrSend)
+        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Approving Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            var lastAction = saveStatus == SaveStatus.AmendAndSend 
+                ? LastAction.Amend
+                : LastAction.Approve;
 
             await _mediator.SendAsync(new SubmitCommitmentCommand
             {
                 EmployerAccountId = accountId,
                 CommitmentId = commitmentId,
                 Message = string.Empty,
-                SaveOrSend = saveOrSend
+                LastAction = lastAction,
+                CreateTask = saveStatus != SaveStatus.Approve
             });
         }
 
@@ -337,18 +345,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task SubmitCommitment(SubmitCommitmentModel model)
         {
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-            _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveOrSend}");
-
-            if (model.SaveOrSend != "save-no-send")
+            if (model.SaveStatus != SaveStatus.Save)
             {
+                var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+                var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
+                _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
+
+                var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
+                    ? LastAction.Amend
+                    : LastAction.Approve;
+
                 await _mediator.SendAsync(new SubmitCommitmentCommand
                 {
                     EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
                     CommitmentId = commitmentId,
                     Message = model.Message,
-                    SaveOrSend = model.SaveOrSend
+                    LastAction = lastAction,
+                    CreateTask = model.SaveStatus != SaveStatus.Approve
                 });
             }
         }
@@ -417,7 +430,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
-                HashedId = hashedAccountId,
+                HashedLegalEntityId = hashedAccountId,
                 UserId = externalUserId
             });
         }
@@ -437,11 +450,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new CommitmentListItemViewModel
             {
-                HashedId = _hashingService.HashValue(commitment.Id),
+                HashedCommitmentId = _hashingService.HashValue(commitment.Id),
                 Name = commitment.Reference,
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(commitment.CommitmentStatus, commitment.EditStatus, commitment.ApprenticeshipCount, commitment.AgreementStatus),
+                Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
                 ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly
             };
         }
@@ -450,7 +463,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new ApprenticeshipViewModel
             {
-                HashedId = _hashingService.HashValue(apprenticeship.Id),
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
@@ -478,7 +491,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new ApprenticeshipListItemViewModel
             {
-                HashedId = _hashingService.HashValue(apprenticeship.Id),
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 ApprenticeName = apprenticeship.ApprenticeshipName,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
@@ -497,7 +510,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var apprenticeship = new Apprenticeship
             {
                 CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
-                Id = string.IsNullOrWhiteSpace(viewModel.HashedId) ? 0L : _hashingService.DecodeValue(viewModel.HashedId),
+                Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),

@@ -27,9 +27,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
             {
                 validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
             }
-            if (string.IsNullOrEmpty(item.HashedId))
+            if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                validationResult.AddError(nameof(item.HashedId),"AccountId has not been supplied");
+                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
 
             if (!validationResult.IsValid())
@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
                 return validationResult;
             }
 
-            var membership = await _membershipRepository.GetCaller(item.HashedId, item.ExternalUserId);
+            var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
             if (membership == null)
             {
