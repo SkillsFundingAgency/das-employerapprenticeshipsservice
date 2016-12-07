@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.Owin;
@@ -53,7 +54,7 @@ namespace SFA.DAS.EAS.Web
                 app.UseCookieAuthentication(new CookieAuthenticationOptions
                 {
                     AuthenticationType = "Cookies",
-                    ExpireTimeSpan = new TimeSpan(0,10,0),
+                    ExpireTimeSpan = new TimeSpan(0, 10, 0),
                     SlidingExpiration = true
                 });
 
@@ -63,40 +64,55 @@ namespace SFA.DAS.EAS.Web
                     AuthenticationMode = AuthenticationMode.Passive
                 });
 
-                var constants = new Constants(config.Identity.BaseAddress);
+                var constants = new Constants(config.Identity);
                 app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
                 {
-                    ClientId = config.Identity.ClientId, 
-                    ClientSecret = config.Identity.ClientSecret, 
-                    Scopes = "openid",
-                    BaseUrl = constants.BaseAddress,
+                    ClientId = config.Identity.ClientId,
+                    ClientSecret = config.Identity.ClientSecret,
+                    Scopes = "openid profile",
+                    BaseUrl = constants.Configuration.BaseAddress,
                     TokenEndpoint = constants.TokenEndpoint(),
                     UserInfoEndpoint = constants.UserInfoEndpoint(),
                     AuthorizeEndpoint = constants.AuthorizeEndpoint(),
+                    TokenValidationMethod = TokenValidationMethod.SigningKey,
+                    TokenSigningCertificateLoader = () =>
+                    {
+
+                        var certificatePath = $@"{AppDomain.CurrentDomain.BaseDirectory}App_Data\Certificates\DasIDPCert.pfx";
+                        
+                        return new X509Certificate2(certificatePath, "idsrv3test");
+                    },
                     AuthenticatedCallback = identity =>
                     {
-                        PostAuthentiationAction(identity, authenticationOrchestrator, logger);
+                        PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
                     }
                 });
             }
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger, Constants constants)
         {
             logger.Info("PostAuthenticationAction called");
-            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == @"sub")?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == @"email")?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
-            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email,  firstName,  lastName);
+            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
+            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
+            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
+            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email, firstName, lastName);
 
-            Task.Run(async ()  =>
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
+            identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
+
+
+            Task.Run(async () =>
             {
+
+
                 await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
             }).Wait();
-           
+
             //HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
-            
+
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()
@@ -138,22 +154,31 @@ namespace SFA.DAS.EAS.Web
 
     public class Constants
     {
+        private readonly string _baseUrl;
+        public IdentityServerConfiguration Configuration { get; set; }
 
-        public Constants(string baseAddress)
+        public Constants(IdentityServerConfiguration configuration)
         {
-            this.BaseAddress = baseAddress;
+            this.Configuration = configuration;
+            _baseUrl = configuration.ClaimsBaseUrl;
         }
-        public string BaseAddress { get; set; }
 
-        public string AuthorizeEndpoint() => BaseAddress + "/Login/dialog/appl/oidc/wflow/authorize";
-        public string LogoutEndpoint() => BaseAddress + "/connect/endsession";
-        public string TokenEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/token";
-        public string UserInfoEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/userinfo";
-        public string IdentityTokenValidationEndpoint() =>  BaseAddress + "/connect/identitytokenvalidation";
-        public string TokenRevocationEndpoint() => BaseAddress + "/connect/revocation";
+        public string AuthorizeEndpoint() => $"{Configuration.BaseAddress}{Configuration.AuthorizeEndPoint}";
+        public string LogoutEndpoint() => $"{Configuration.BaseAddress}{Configuration.LogoutEndpoint}";
+        public string TokenEndpoint() => $"{Configuration.BaseAddress}{Configuration.TokenEndpoint}";
+        public string UserInfoEndpoint() => $"{Configuration.BaseAddress}{Configuration.UserInfoEndpoint}";
 
-        public string ChangePasswordLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changepwdpg";
+        public string ChangePasswordLink() => Configuration.BaseAddress + "/account/changepassword";
 
-        public string ChangeEmailLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changeemailpg";
+        public string ChangeEmailLink() => Configuration.BaseAddress + "/account/changeemail";
+
+        
+
+        public string Id () => _baseUrl + "id";
+        public string Email() => _baseUrl + "email_address";
+        public string GivenName() => _baseUrl + "given_name";
+        public string FamilyName() => _baseUrl + "family_name";
+        public string DisplayName() => _baseUrl + "display_name";
+        public string RequiresVerification() => _baseUrl + "requires_verification";
     }
 }

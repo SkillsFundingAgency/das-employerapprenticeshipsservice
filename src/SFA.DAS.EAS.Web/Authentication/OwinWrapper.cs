@@ -42,18 +42,18 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public ActionResult SignOutUser()
         {
-            if (_configuration.Identity.UseFake)
-            {
-                var authenticationManager = _owinContext.Authentication;
-                authenticationManager.SignOut("Cookies");
-                return new RedirectResult("/");
-            }
-            else
-            {
-                var authenticationManager = _owinContext.Authentication;
-                authenticationManager.SignOut("Cookies");
-                return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/oidc/wflow/logout?redirecturl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
-            }
+            _owinContext.Authentication.SignOut();
+            //var authenticationManager = _owinContext.Authentication;
+            //authenticationManager.SignOut("Cookies");
+            return new RedirectResult("/");
+            //if (_configuration.Identity.UseFake)
+            //{
+            //    return new RedirectResult("/");
+            //}
+            //else
+            //{
+            //    return new RedirectResult($"{_configuration.Identity.BaseAddress}/connect/endsession?redirecturl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
+            //}
         }
 
         public string GetClaimValue(string claimKey)
