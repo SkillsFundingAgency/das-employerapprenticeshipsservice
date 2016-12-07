@@ -262,8 +262,58 @@ nav {
                 }
             }
         } 
+    }
+}
+
+.js-enabled { 
+    .header-organisation  {
+        ul {
+            position: relative;
+            li { 
+                float: left;
+                @include media(tablet) {
+                    width: auto;
+                }
+                @include media(desktop) {
+                    
+                }
+                @include media(1000px) {
+                   
+                }
+                &.menu-link {
+
+                }
+            }
         }
     }
+}
+
+
+
+li.menu-link {
+    ul {
+        display: none;
+    }
+    &.sub-menu-open ul {
+        display:block;
+        margin: 0;
+        
+        li {
+            display: block;
+            float:none;
+            a {
+                display: block;
+            }
+        }
+    }
+
+}
+
+.header-organisation ul li.menu-link > a {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 
 #page-onboard-companies-house {
     .govuk-box-highlight {

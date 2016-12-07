@@ -2533,6 +2533,44 @@ nav ul {
   }
 }
 
+.js-enabled .header-organisation ul {
+  position: relative;
+}
+
+.js-enabled .header-organisation ul li {
+  float: left;
+}
+
+@media (min-width: 641px) {
+  .js-enabled .header-organisation ul li {
+    width: auto;
+  }
+}
+
+li.menu-link ul {
+  display: none;
+}
+
+li.menu-link.sub-menu-open ul {
+  display: block;
+  margin: 0;
+}
+
+li.menu-link.sub-menu-open ul li {
+  display: block;
+  float: none;
+}
+
+li.menu-link.sub-menu-open ul li a {
+  display: block;
+}
+
+.header-organisation ul li.menu-link > a {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 #page-onboard-companies-house .govuk-box-highlight {
   display: none;
 }
