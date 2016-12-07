@@ -22,12 +22,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
         private Mock<ILogger> _logger;
         private List<DasEnglishFraction> _existingFractions;
         private string _employerReference;
+        private DateTime _dateCalculated;
         private List<FractionCalculation> _fractionCalculations;
 
         [SetUp]
         public void Arrange()
         {
             _employerReference = "123/AB456";
+            _dateCalculated = new DateTime(2016, 10, 30);
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
             _hmrcService = new Mock<IHmrcService>();
             _logger = new Mock<ILogger>();
@@ -117,7 +119,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _hmrcService.Verify(x => x.GetEnglishFractions(It.IsAny<string>(), _employerReference), Times.Once);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
-                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[2])), 
+                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[2])),
                 _employerReference), Times.Once);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
@@ -197,6 +199,47 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                _employerReference), Times.Once);
         }
 
+        [Test]
+        public async Task ThenIWontAddDuplicateValuesToTheRepository()
+        {
+            //Arrange
+            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
+                .ReturnsAsync(_existingFractions);
+            _hmrcService.Setup(x => x.GetEnglishFractions(It.IsAny<string>(), _employerReference))
+                .ReturnsAsync(new EnglishFractionDeclarations
+                {
+                    Empref = _employerReference,
+                    FractionCalculations = new List<FractionCalculation>
+            {
+                new FractionCalculation
+                {
+                    CalculatedAt = DateTime.Now.AddDays(-20).ToShortDateString(),
+                    Fractions = new List<Fraction>
+                    {
+                        new Fraction {Region = "England", Value = "0.45"}
+                    }
+                },
+                new FractionCalculation
+                {
+                    CalculatedAt = DateTime.Now.AddDays(-10).ToShortDateString(),
+                    Fractions = new List<Fraction>
+                    {
+                        new Fraction {Region = "England", Value = "0.5"}
+                    }
+                }}
+                });
+
+
+            //Act
+            await _handler.Handle(new UpdateEnglishFractionsCommand
+            {
+                EmployerReference = _employerReference
+            });
+
+            //Assert
+            _englishFractionRepository.Verify(x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()), Times.Never);
+        }
+
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)
         {
             var fractiondateString = fraction.DateCalculated.ToShortDateString();
@@ -204,8 +247,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 
             var fractionCalculationAmount = fractionCalculation.Fractions.First().Value;
 
-           return fractiondateString.Equals(fractionCalculation.CalculatedAt) &&
-                   fractionAmountString.Equals(fractionCalculationAmount);
+            return fractiondateString.Equals(fractionCalculation.CalculatedAt) &&
+                    fractionAmountString.Equals(fractionCalculationAmount);
         }
     }
 }

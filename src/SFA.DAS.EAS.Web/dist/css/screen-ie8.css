@@ -2201,6 +2201,12 @@ table {
 td.link-right {
   text-align: right;
   padding-right: 0;
+  width: 10%;
+}
+
+td.link-action {
+  text-align: right;
+  width: 10%;
 }
 
 table th, table td {

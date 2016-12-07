@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
             var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
-            _hashedAccountId = account.HashedId;
+            _hashedAccountId = account?.HashedId;
         }
         
     }

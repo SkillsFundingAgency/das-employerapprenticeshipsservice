@@ -136,6 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
+        //TODO refactor not to use PeriodEnd type here
         public async Task CreateNewPeriodEnd(PeriodEnd periodEnd)
         {
             await WithConnection(async c =>
@@ -184,6 +185,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return MapTransactions(result);
         }
 
+        //TODO refactor not to use Payment type here
         public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName)
         {
             await WithConnection(async c =>
@@ -242,6 +244,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 sql: "[levy].[ProcessPaymentDataTransactions]",
                 param: null,
                 commandType: CommandType.StoredProcedure));
+        }
+
+        public async Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", empRef, DbType.String);
+
+                return await c.QueryAsync<DasEnglishFraction>(
+                    sql: "[levy].[GetEnglishFraction_ByEmpRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result;
         }
 
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)

@@ -24,7 +24,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired
 
             return new GetEnglishFractionUpdateRequiredResponse
             {
-                UpdateRequired = hmrcLatestUpdateDate > levyLatestUpdateDate
+                UpdateRequired = hmrcLatestUpdateDate > levyLatestUpdateDate,
+                DateCalculated = hmrcLatestUpdateDate
             };
         }
     }

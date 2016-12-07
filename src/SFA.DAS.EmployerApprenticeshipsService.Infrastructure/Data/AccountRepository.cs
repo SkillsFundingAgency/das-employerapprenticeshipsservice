@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<List<PayeView>> GetPayeSchemes(long accountId)
+        public async Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId)
         {
             var result = await WithConnection(async c =>
             {
@@ -133,26 +133,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<PayeView>(
-                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE AccountId = @accountId;",
+                    sql: "[account].[GetPayeSchemes_ByAccountId]",
                     param: parameters,
-                    commandType: CommandType.Text);
-            });
-
-            return result.ToList();
-        }
-
-
-        public async Task<List<PayeView>> GetPayeSchemesByHashedId(string hashedAccountId)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-
-                return await c.QueryAsync<PayeView>(
-                    sql: "SELECT * FROM [account].[GetAccountPayeSchemes] WHERE HashedId = @hashedAccountId;",
-                    param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
             });
 
             return result.ToList();
