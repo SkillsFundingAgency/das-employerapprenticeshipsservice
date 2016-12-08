@@ -19,9 +19,9 @@ namespace SFA.DAS.EAS.Account.Api.Client
             // So we can mock for testing
         }
 
-        private async Task<AuthenticationResult> GetAuthenticationResult(string clientId, string appKey, string resourceId)
+        private async Task<AuthenticationResult> GetAuthenticationResult(string clientId, string appKey, string resourceId, string tenant)
         {
-            var authority = "https://login.microsoftonline.com/citizenazuresfabisgov.onmicrosoft.com";
+            var authority = string.Format("https://login.microsoftonline.com/{0}",tenant);
             var clientCredential = new ClientCredential(clientId, appKey);
             var context = new AuthenticationContext(authority, true);
             var result = await context.AcquireTokenAsync(resourceId, clientCredential);
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
 
         public virtual async Task<string> GetAsync(string url)
         {
-            var authenticationResult = await GetAuthenticationResult( _configuration.ClientId,_configuration.ClientSecret, _configuration.IdentifierUri);
+            var authenticationResult = await GetAuthenticationResult( _configuration.ClientId,_configuration.ClientSecret, _configuration.IdentifierUri, _configuration.Tenant);
 
             using (var client = new HttpClient())
             {

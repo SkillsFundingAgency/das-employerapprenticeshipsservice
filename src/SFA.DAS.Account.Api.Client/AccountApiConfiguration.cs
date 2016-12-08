@@ -20,5 +20,11 @@
         /// The location of the resource that you are trying to access in Azure AD
         /// </summary>
         public string IdentifierUri { get; set; }
+
+        /// <summary>
+        /// The tenant part of the authority url
+        /// </summary>
+        /// <example>xxxx.omicrosoft.com</example>
+        public string Tenant { get; set; }
     }
 }
