@@ -51,11 +51,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Schemes/{empRef}/Detail")]
-        public ActionResult Details(string hashedAccountId, string empRef)
+        public async Task<ActionResult> Details(string hashedAccountId, string empRef)
         {
             empRef = empRef.FormatPayeFromUrl();
 
-            return View();
+            var response = await _employerAccountPayeOrchestrator.GetPayeDetails(empRef, hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+            
+            return View(response);
         }
 
 

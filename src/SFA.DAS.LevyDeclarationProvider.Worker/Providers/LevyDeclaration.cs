@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EAS.Application.Messages;
@@ -104,6 +105,14 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                         employerDataList.Add(employerData);
                     }
+                }
+
+                if (updateEnglishFractionsRequired.UpdateRequired)
+                {
+                    await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
+                    {
+                        DateCalculated = updateEnglishFractionsRequired.DateCalculated
+                    });
                 }
 
                 await _mediator.SendAsync(new RefreshEmployerLevyDataCommand

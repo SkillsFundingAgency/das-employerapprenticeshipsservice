@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
+                c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MockMessagePolicy(messagePublisher));
                 c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService));

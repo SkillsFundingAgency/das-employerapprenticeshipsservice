@@ -23,7 +23,8 @@
     }
 }
 
-.phase-banner-beta {
+
+.phase-banner {
     position: relative;
     margin-bottom: -1px;
     margin-left: -15px;
@@ -36,10 +37,8 @@
         padding-left: 0;
         padding-right: 0;
     }
-	.phase-tag {
-		background: $beta-colour
-	}
 }
+
 
 #global-header-bar {
     background: $grey-1;

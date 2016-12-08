@@ -72,6 +72,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
             {
                 await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
             }
+            
         }
     }
 
@@ -80,13 +81,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
         public bool Equals(DasEnglishFraction source, DasEnglishFraction target)
         {
             return source.EmpRef.Equals(target.EmpRef) &&
-                   source.DateCalculated.Equals(target.DateCalculated) &&
-                   source.Amount.Equals(target.Amount);
+                   source.DateCalculated.Equals(target.DateCalculated);
         }
 
         public int GetHashCode(DasEnglishFraction obj)
         {
-            return 0;
+            return obj.DateCalculated.GetHashCode() ^ obj.EmpRef.GetHashCode();
         }
     }
 }
