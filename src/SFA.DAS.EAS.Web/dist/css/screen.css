@@ -2410,7 +2410,7 @@ nav ul {
 }
 
 .header-organisation {
-  border-bottom: 1px solid #bfc1c3;
+  border-bottom: 1px solid #6f777b;
   font-size: 14px;
 }
 
@@ -2550,6 +2550,26 @@ nav ul {
   .js-enabled .header-organisation ul li {
     width: auto;
   }
+}
+
+.js-enabled .header-organisation ul li a.selected:after {
+  left: 15px;
+  right: 15px;
+  height: 5px;
+  top: auto;
+  width: auto;
+}
+
+.js-enabled .header-organisation ul li.menu-link ul li {
+  border-top: 1px solid red;
+}
+
+.js-enabled .header-organisation ul li.menu-link ul li a.selected:after {
+  left: 0;
+  right: auto;
+  height: auto;
+  width: 5px;
+  top: 0;
 }
 
 li.menu-link ul {

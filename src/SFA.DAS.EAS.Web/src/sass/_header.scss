@@ -82,6 +82,9 @@
     }
 }
 
+
+// Navigation
+
 .header-inner {
     @extend main;
     margin-bottom: 0;
@@ -154,7 +157,7 @@ nav {
 }
 
 .header-organisation {
-    border-bottom: 1px solid $grey-2;
+    border-bottom: 1px solid $grey-1;
     font-size: 14px;
     ul {
         @extend %contain-floats;
@@ -279,8 +282,30 @@ nav {
                 @include media(1000px) {
                    
                 }
+                a.selected {
+                    &:after {
+                        left: 15px;
+                        right: 15px;
+                        height: 5px;
+                        top: auto;
+                        width: auto;
+                    }
+                }
                 &.menu-link {
-
+                    ul {
+                        li {
+                            border-top: 1px solid red;
+                             a.selected {
+                                &:after {
+                                    left: 0;
+                                    right: auto;
+                                    height: auto;
+                                    width: 5px;
+                                    top: 0;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

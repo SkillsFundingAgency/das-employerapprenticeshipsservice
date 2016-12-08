@@ -1,9 +1,3 @@
-/*
- * stackable.js
- * Author: Emiliano Prandi
- * http://emiprandi.github.io/stackable
- * MIT License
- */
 
 (function ($) {
     'use strict';
@@ -30,7 +24,7 @@
         this.e.children('li').each(function () {
             to[t] = {
                 html: $(this)[0].outerHTML,
-                width: $(this).outerWidth(true) - 8,
+                width: $(this).outerWidth(true),
                 submenu: false,
                 visible: true
             };
@@ -56,7 +50,7 @@
 
     STACKable.prototype.magic = function () {
         this.resetStack();
-        this.containerWidth = this.e.parent().width() - 30;
+        this.containerWidth = this.e.parent().width()-15;
 
         var match = 0, tc = 0;
 
