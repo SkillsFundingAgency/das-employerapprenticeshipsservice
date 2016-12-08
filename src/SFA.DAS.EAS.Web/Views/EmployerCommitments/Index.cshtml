@@ -1,7 +1,10 @@
 ﻿@model String
 
-@{ViewBag.PageID = "apprentices-home-page";}
-@{ViewBag.Title = "Apprentices";}
+@{
+    ViewBag.PageID = "apprentices-home-page";
+    ViewBag.Title = "Apprentices";
+    ViewBag.Section = "apprentices";
+}
 
  
 <form method="POST" action="@Url.Action("SetLegalEntity")">
