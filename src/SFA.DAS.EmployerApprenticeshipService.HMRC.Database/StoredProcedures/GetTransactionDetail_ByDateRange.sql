@@ -7,7 +7,7 @@ AS
 select 
     tl.AccountId,
     tl.LevyDeclared as Amount,
-    ef.Amount as EnglishFraction,
+    t.Amount as EnglishFraction,
     ldt.Amount as TopUp,
     tl.EmpRef,
 	null as CourseName,
@@ -17,7 +17,14 @@ select
     tl.TransactionType
 from levy.TransactionLine tl
 inner join levy.LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
-left join levy.EnglishFraction ef on ef.EmpRef = tl.EmpRef and ef.DateCalculated <= tl.TransactionDate
+OUTER APPLY
+(
+	SELECT TOP 1 Amount
+	FROM [levy].[EnglishFraction] ef
+	WHERE ef.EmpRef = tl.empRef 
+		AND ef.[DateCalculated] <= tl.TransactionDate
+	ORDER BY [DateCalculated] DESC
+) t
 where    tl.TransactionDate >= @fromDate AND 
         tl.TransactionDate <= @toDate AND 
         tl.AccountId = @accountId

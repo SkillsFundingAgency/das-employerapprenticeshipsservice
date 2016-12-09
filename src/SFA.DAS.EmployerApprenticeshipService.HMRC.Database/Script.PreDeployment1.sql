@@ -9,3 +9,15 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
+
+
+IF EXISTS(select 1 from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'EnglishFraction' and COLUMN_NAME = 'Amount' and NUMERIC_SCALE = 4)
+BEGIN
+	ALTER TABLE [levy].[EnglishFraction] 
+	ALTER COLUMN AMOUNT DECIMAL(18,5) NULL
+END
+IF EXISTS(select 1  from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'EnglishFraction' and COLUMN_NAME='EmpRef' AND DATA_TYPE = 'nchar')
+BEGIN
+	ALTER TABLE [levy].[EnglishFraction] 
+	ALTER COLUMN EmpRef NVARCHAR(50) NULL
+END

@@ -1417,6 +1417,8 @@ textarea.form-control {
   padding: 8px 10px 9px 50px;
   margin-bottom: 10px;
   cursor: pointer;
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
   float: left;
   padding-top: 7px;
   padding-bottom: 7px;
@@ -1663,13 +1665,13 @@ input[type=number] {
   color: #0b0c0c;
 }
 
-.phase-banner-alpha {
+.phase-banner {
   padding: 10px 0 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid #bfc1c3;
 }
 
-.phase-banner-alpha p {
+.phase-banner p {
   display: table;
   margin: 0;
   color: #000;
@@ -1682,7 +1684,7 @@ input[type=number] {
   line-height: 1.25;
 }
 
-.phase-banner-alpha .phase-tag {
+.phase-banner .phase-tag {
   display: -moz-inline-stack;
   display: inline-block;
   margin: 0 8px 0 0;
@@ -1698,20 +1700,22 @@ input[type=number] {
   letter-spacing: 1px;
   text-decoration: none;
   color: #fff;
-  background-color: #d53880;
+  background-color: #005ea5;
 }
 
-.phase-banner-alpha span {
+.phase-banner span {
   display: table-cell;
   vertical-align: baseline;
 }
 
+.phase-banner-alpha,
 .phase-banner-beta {
   padding: 10px 0 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid #bfc1c3;
 }
 
+.phase-banner-alpha p,
 .phase-banner-beta p {
   display: table;
   margin: 0;
@@ -1725,6 +1729,7 @@ input[type=number] {
   line-height: 1.25;
 }
 
+.phase-banner-alpha .phase-tag,
 .phase-banner-beta .phase-tag {
   display: -moz-inline-stack;
   display: inline-block;
@@ -1741,9 +1746,10 @@ input[type=number] {
   letter-spacing: 1px;
   text-decoration: none;
   color: #fff;
-  background-color: #f47738;
+  background-color: #005ea5;
 }
 
+.phase-banner-alpha span,
 .phase-banner-beta span {
   display: table-cell;
   vertical-align: baseline;
@@ -1873,10 +1879,6 @@ table.top-border {
   text-decoration: none;
 }
 
-.phase-banner-alpha .phase-tag {
-  background: #f47738;
-}
-
 #global-header-bar {
   background: #6f777b;
 }
@@ -1944,6 +1946,10 @@ table.top-border {
 
 .govuk-box-highlight a:link, .govuk-box-highlight a:visited, .govuk-box-highlight a:hover, .govuk-box-highlight a:active {
   color: #fff;
+}
+
+#page-onboard-companies-house .govuk-box-highlight {
+  display: none;
 }
 
 legend {
@@ -2197,6 +2203,12 @@ table {
 td.link-right {
   text-align: right;
   padding-right: 0;
+  width: 10%;
+}
+
+td.link-action {
+  text-align: right;
+  width: 10%;
 }
 
 table th, table td {
@@ -2567,5 +2579,46 @@ span.helpText {
     content: "Status";
     font-weight: normal;
     margin-top: 5px;
+  }
+}
+
+.hr-double {
+  border-bottom: 4px solid #bfc1c3;
+  margin-bottom: 20px;
+}
+
+.hr-top {
+  margin-bottom: 20px;
+}
+
+.hr-bottom {
+  margin-top: 22px;
+}
+
+#add-apprentice-entry hr,
+#edit-apprentice hr {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+.button.text-link, .text-link.button-link {
+  background-color: transparent;
+  border: medium none;
+  box-shadow: none;
+  color: #005ea5;
+  text-decoration: underline;
+}
+
+.alert-default {
+  background-color: #eaf4f9;
+  border-color: #2b8cc4;
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  #empty-alert-top .alert-default {
+    margin-top: 50px;
+  }
+  #apprentice-details table.viewCommitment {
+    margin-top: 50px;
   }
 }

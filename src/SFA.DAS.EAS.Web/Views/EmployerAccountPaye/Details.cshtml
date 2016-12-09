@@ -1,7 +1,53 @@
-﻿@{ViewBag.Title = "View PAYE scheme";}  
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PayeSchemeDetail>
+
+
+@{ViewBag.Title = "View PAYE scheme";}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">View PAYE Scheme</h1>
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">PAYE scheme </span>
+            @Model.Data.EmpRef
+        </h1>
+        <h2 class="heading-medium">Scheme history</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th class="numeric" scope="col">English %</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var fraction in Model.Data.Fractions)
+            {
+                <tr>
+                    <td>
+                        <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
+                    </td>
+                    <td class="numeric">
+                        <span>@fraction.Amount.ToString("P3")</span>
+                    </td>
+                </tr>
+
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="column-one-third">
+        <a aria-label="Remove PAYE scheme @Model.Data.EmpRef"
+               title="Remove PAYE scheme @Model.Data.EmpRef"
+               href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="button action-add">Remove scheme</a>
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
+            <li>PAYE scheme @Model.Data.EmpRef </li>
+        </ol>
+    </div>
+}

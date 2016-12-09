@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,13 +7,12 @@ using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -30,11 +28,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedId, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
         {
-            var response = await Mediator.SendAsync(new GetAccountPayeSchemesRequest
+            var response = await Mediator.SendAsync(new GetAccountPayeSchemesQuery
             {
-                HashedAccountId = hashedId,
+                HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
             });
             
@@ -42,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new EmployerAccountPayeListViewModel
                 {
-                    HashedId = hashedId,
+                    HashedId = hashedAccountId,
                     PayeSchemes = response.PayeSchemes
                 }
             };
@@ -176,6 +174,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.Data.ErrorDictionary = ex.ErrorMessages;
             }
 
+            return response;
+        }
+
+        public async Task<OrchestratorResponse<PayeSchemeDetail>>  GetPayeDetails(string empRef, string hashedAccountId, string userId)
+        {
+            var response = new OrchestratorResponse<PayeSchemeDetail>();
+            try
+            {
+                var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    EmpRef = empRef,
+                    UserId = userId
+                });
+                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef};
+                return response;
+            }
+            catch (UnauthorizedAccessException )
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+            }
+            
             return response;
         }
     }

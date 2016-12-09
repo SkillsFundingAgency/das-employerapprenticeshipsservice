@@ -23,12 +23,6 @@
     }
 }
 
-.phase-banner-alpha {
-	.phase-tag {
-		background: $beta-colour
-	}
-}
-
 #global-header-bar {
     background: $grey-1;
 }
@@ -99,5 +93,11 @@
         &:active {
             color: $white;
         }
+    }
+}
+
+#page-onboard-companies-house {
+    .govuk-box-highlight {
+        display: none;
     }
 }

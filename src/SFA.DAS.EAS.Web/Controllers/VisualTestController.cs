@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 AccountId = 1234567890,
                 LegalEntityName = "My account",
-                EmpRef = "empref-39520"
+                PayeRef = "empref-39520"
             };
 
             var employerAccountPayeListViewModel = new EmployerAccountPayeListViewModel()

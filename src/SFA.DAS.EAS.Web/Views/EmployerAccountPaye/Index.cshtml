@@ -20,7 +20,7 @@
 <div class="grid-row header-index">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">PAYE Schemes</h1>
-        <p class="lede">Add PAYE schemes to allow levy funds to be added to your account.</p>
+        <p class="lede">Levy funds will credit your account from any PAYE schemes you add.</p>
     </div>
     <div class="column-one-third pull-right">
         <form action="@Url.Action("GatewayInform")" method="GET">
@@ -36,22 +36,23 @@
             <table>
                 <thead>
                     <tr>
-                        <th scope="col">Scheme ID</th>
+                        <th scope="col">Added PAYE schemes</th>
+                        <th scope="col">English %</th>
                         <th> </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var scheme in Model.Data.PayeSchemes)
                     {
+                        var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
-                            <td>@scheme.EmpRef</td>
-                            
+                            <td>@scheme.PayeRef</td>
+                            <td>@englishFractionPercentage.ToString("P3")</td>
                             <td class="link-right">
-                                    <a aria-label="Remove PAYE scheme @scheme.EmpRef"
-                                        title="Remove PAYE scheme @scheme.EmpRef"
-                                        href="@Url.Action("Remove", new {empRef = scheme.EmpRef.FormatPayeForUrl()})">Remove <span class="vh"> PAYE scheme @scheme.EmpRef</span></a>
+                                <a aria-label="Details for PAYE scheme @scheme.PayeRef"
+                                   title="Details for PAYE scheme @scheme.PayeRef"
+                                   href="@Url.Action("Details", new {empRef = scheme.PayeRef.FormatPayeForUrl()})">Details<span class="vh"> for PAYE scheme @scheme.PayeRef</span></a>
                             </td>
-                          
                         </tr>
                     }
                 </tbody>

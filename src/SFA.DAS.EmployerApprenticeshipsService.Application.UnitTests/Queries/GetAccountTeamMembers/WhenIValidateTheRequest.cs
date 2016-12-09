@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
         }
 
         [Test]
-        public async Task ThenTheRequestIsValidIfTheUSerIsAnOwnerOfTheAccount()
+        public async Task ThenTheRequestIsValidIfTheUserIsAnOwnerOfTheAccount()
         {
             //Arrange
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
