@@ -217,6 +217,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
 
             string message = await GetLatestMessage(accountId, commitmentId);
+            var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
             var viewModel = new CommitmentDetailsViewModel
             {
@@ -225,7 +226,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = data.Commitment.LegalEntityName,
                 ProviderName = data.Commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
-                Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
+                HasApprenticeships = apprenticships.Count > 0,
+                IncompleteApprenticeships = apprenticships.Where(x => !x.CanBeApproved ).ToList(),
+                CompleteApprenticeships = apprenticships.Where(x => x.CanBeApproved).ToList(),
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
             };
@@ -527,7 +530,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
-                EndDate = apprenticeship.EndDate
+                EndDate = apprenticeship.EndDate,
+                CanBeApproved = apprenticeship.CanBeApproved
             };
         }
 
