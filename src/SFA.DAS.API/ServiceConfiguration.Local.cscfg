@@ -8,11 +8,10 @@
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="StorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="LogLevel" value="Debug" />
-      <Setting name="ApiTokenSecret" value="These are not the secrets you are looking for" />
-      <Setting name="ApiIssuer" value="http://localhost:51693" />
-      <Setting name="ApiAudiences" value="http://example" />
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="LoggingRedisConnectionString" value="" />
+      <Setting name="ida_Audience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
+      <Setting name="ida_Tenant" value="citizenazuresfabisgov.onmicrosoft.com" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />

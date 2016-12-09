@@ -76,20 +76,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
         }
-
-        [Test]
-        public async Task ThenTheFractionIsMadeToAPercentage()
-        {
-            //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerEnglishFractionQuery>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
-
-            //Act
-            var actual = await RequestHandler.Handle(Query);
-
-            //Assert
-            var dasEnglishFraction = actual.Fractions.FirstOrDefault();
-            Assert.IsNotNull(dasEnglishFraction);
-            Assert.AreEqual(ExpectedFraction*100, dasEnglishFraction.Amount);
-        }
+        
     }
 }
