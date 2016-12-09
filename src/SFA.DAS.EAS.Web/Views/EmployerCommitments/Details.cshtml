@@ -88,11 +88,10 @@
                     {
                         <tr>
                             <td>
-        
-                                @apprenticeship.ApprenticeName &nbsp; 
+                                @GetValueOrDefault(apprenticeship.ApprenticeName)
                             </td>
                             <td>
-                                @apprenticeship.TrainingName &nbsp;
+                                @GetValueOrDefault(apprenticeship.TrainingName)
                             </td>
                             <td>
                                 @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
@@ -101,9 +100,13 @@
                                         @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
                                     </span>
                                 }
+                                else
+                                {
+                                    <span>&ndash;</span>
+                                }
                             </td>
                             <td>
-                                @FormatCost(apprenticeship.Cost) &nbsp;
+                                @GetValueOrDefault(FormatCost(apprenticeship.Cost))
                             </td>
                             <td>
                                 <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
@@ -130,6 +133,16 @@
     }
 }
 
+@helper GetValueOrDefault(string property){
+    if (!string.IsNullOrEmpty(property))
+    {
+        <span>@property &nbsp;</span>
+    }
+    else
+    {
+        <span>@Html.Raw("&ndash;")</span>
+    }
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
