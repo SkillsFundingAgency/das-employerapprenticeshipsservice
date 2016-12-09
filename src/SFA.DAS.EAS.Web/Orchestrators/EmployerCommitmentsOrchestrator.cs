@@ -192,7 +192,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Approving Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
+            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
@@ -272,7 +272,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId,
-                ApproveAndSend = response.Commitment.AgreementStatus != AgreementStatus.ProviderAgreed
+                NotReadyForApproval = !response.Commitment.CanBeApproved,
+                ApprovalState = GetApprovalState(response.Commitment),
+                Message = GetInvalidStateForApprovalMessage(response.Commitment)
             };
 
             return viewmodel;
@@ -405,6 +407,32 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return data?.ProvidersView?.Providers;
         }
+
+        private static ApprovalState GetApprovalState(Commitment commitment)
+        {
+            if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
+
+            var approvalState = commitment.Apprenticeships.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                || m.AgreementStatus == AgreementStatus.EmployerAgreed) ? ApprovalState.ApproveAndSend : ApprovalState.ApproveOnly;
+ 
+            return approvalState;
+         }
+ 
+         private static string GetInvalidStateForApprovalMessage(Commitment commitment)
+         {
+             if (commitment.CanBeApproved)
+                 return string.Empty;
+ 
+             if (commitment.Apprenticeships.Count == 0)
+                 return "There needs to be at least 1 apprentice in a cohort";
+ 
+             var invalidCount = commitment.Apprenticeships.Count(x => x.CanBeApproved == false);
+ 
+             return invalidCount == 1
+                 ? "There is 1 apprentice that has incomplete details"
+                 : $"There are {invalidCount} apprentices that have incomplete details";
+         }
+ 
 
         private async Task<string> GetLatestMessage(long accountId, long commitmentId)
         {
