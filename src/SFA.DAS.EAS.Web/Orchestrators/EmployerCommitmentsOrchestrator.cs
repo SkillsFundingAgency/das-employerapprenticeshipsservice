@@ -24,6 +24,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -249,10 +250,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             apprenticeship.HashedAccountId = hashedAccountId;
 
+            var approvalValidator = new ApprenticeshipViewModelApproveValidator();
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                ApprovalValidation = approvalValidator.Validate(apprenticeship)
             };
         }
 
