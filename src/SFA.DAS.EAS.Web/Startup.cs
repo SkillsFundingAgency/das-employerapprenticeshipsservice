@@ -168,9 +168,9 @@ namespace SFA.DAS.EAS.Web
         public string TokenEndpoint() => $"{Configuration.BaseAddress}{Configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{Configuration.BaseAddress}{Configuration.UserInfoEndpoint}";
 
-        public string ChangePasswordLink() => Configuration.BaseAddress + "/account/changepassword";
+        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + "/account/changepassword";
 
-        public string ChangeEmailLink() => Configuration.BaseAddress + "/account/changeemail";
+        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity","") + "/account/changeemail";
 
         
 
