@@ -160,6 +160,7 @@
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingStatusOfCommitment.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetATeamMembersDetails.cs" />
+    <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetMyTeamMembers.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIInviteATeamMember.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIRemoveATeamMember.cs" />
     <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenCallingHmrcService.cs" />
