@@ -436,6 +436,7 @@
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Compile Include="WebRole.cs" />
