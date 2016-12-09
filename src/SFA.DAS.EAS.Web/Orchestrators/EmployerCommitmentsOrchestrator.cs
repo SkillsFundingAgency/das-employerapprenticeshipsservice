@@ -192,7 +192,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Approving Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
+            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
