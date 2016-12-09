@@ -47,6 +47,7 @@ sfa.navigation = {
     init: function () {
         this.setupMenus(this.elems.userNav);
         this.setupEvents(this.elems.userNav);
+        this.linkSettings();
     },
     setupMenus: function (menu) {
         menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
@@ -58,6 +59,13 @@ sfa.navigation = {
             that.toggleMenu($that, $that.next('ul'));
             e.preventDefault();
         });
+        $(document).on("keydown", this, function (e) {
+            var keycode = ((typeof e.keyCode != 'undefined' && e.keyCode) ? e.keyCode : e.which);
+            if (keycode === 27) {
+                that.closeAllOpenMenus();
+            };
+        });
+
     },
     toggleMenu: function (link, subMenu) {
         var $li = link.parent();
@@ -72,6 +80,28 @@ sfa.navigation = {
     },
     closeAllOpenMenus: function () {
         this.elems.userNav.find('li.has-sub-menu.open').removeClass('open').find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+    },
+    linkSettings: function () {
+        var $settingsLink = $('a#link-settings'),
+            that = this;
+        this.toggleUserMenu();
+        $settingsLink.attr("aria-hidden", "false");
+        $settingsLink.on('click touchstart', function (e) {
+            var target = $(this).attr('href');
+            $(this).toggleClass('open');
+            that.toggleUserMenu();
+            e.preventDefault();
+        });
+    },
+    toggleUserMenu: function () {
+        var $userNavParent = this.elems.userNav.parent();
+        if ($userNavParent.hasClass("close")) {
+            //open it
+            $userNavParent.removeClass("close").attr("aria-hidden", "false");
+        } else {
+            // close it 
+            $userNavParent.addClass("close").attr("aria-hidden", "true");
+        }
     }
 }
 

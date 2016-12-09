@@ -1972,7 +1972,7 @@ nav ul {
 }
 
 #user-nav > ul > li {
-  border-top: 1px solid #bfc1c3;
+  float: left;
   border: none;
   float: left;
 }
@@ -1982,17 +1982,22 @@ nav ul {
   text-decoration: none;
 }
 
+#user-nav > ul > li ul {
+  float: left;
+}
+
 #user-nav a {
   padding: 12px 15px 10px;
   display: block;
+  float: left;
 }
 
 #user-nav a:focus {
   outline: 0;
 }
 
-#user-nav ul li ul li {
-  border-top: 1px solid #bfc1c3;
+.account-information {
+  text-align: right;
 }
 
 .header-organisation {
@@ -2045,6 +2050,23 @@ nav ul {
   outline: 0;
 }
 
+.js-enabled #user-nav {
+  text-align: left;
+}
+
+.js-enabled #user-nav li, .js-enabled #user-nav a, .js-enabled #user-nav li ul {
+  float: none;
+}
+
+.js-enabled #user-nav > ul > li {
+  float: left;
+}
+
+.js-enabled #user-nav.close {
+  display: none;
+  display: block;
+}
+
 .js-enabled #user-nav > ul > li > a {
   border: 1px solid #f8f8f8;
   z-index: 2;
@@ -2081,9 +2103,9 @@ nav ul {
 }
 
 .js-enabled #user-nav li.has-sub-menu.open > a:before {
-  border-left-color: transparent;
-  border-top-color: #0b0c0c;
   border-width: 7px 4px;
+  border-top-color: #0b0c0c;
+  border-left-color: transparent;
 }
 
 .js-enabled #user-nav li.has-sub-menu ul {
@@ -2118,11 +2140,16 @@ nav ul {
   width: auto;
 }
 
-.js-enabled .header-organisation ul li.menu-link ul li {
-  border-top: 1px solid red;
+.js-enabled .header-organisation ul li.menu-link.sub-menu-open {
+  clear: left;
+  width: 100%;
 }
 
-.js-enabled .header-organisation ul li.menu-link ul li a.selected:after {
+.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li {
+  border-top: 1px solid #dee0e2;
+}
+
+.js-enabled .header-organisation ul li.menu-link.sub-menu-open ul li a.selected:after {
   left: 0;
   right: auto;
   height: auto;
@@ -2150,11 +2177,73 @@ li.menu-link.sub-menu-open ul li a {
 
 .header-organisation ul li.menu-link > a {
   position: absolute;
+  padding-left: 25px;
   right: 0;
   top: 0;
 }
 
+.header-organisation ul li.menu-link > a:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: block;
+  border-width: 4px 7px;
+  border-color: transparent;
+  border-left-color: #0b0c0c;
+  border-style: solid;
+  left: 10px;
+  top: 50%;
+  margin-top: -4px;
+}
+
+.header-organisation ul li.menu-link.sub-menu-open > a:before {
+  border-width: 7px 4px;
+  border-top-color: #0b0c0c;
+  border-left-color: transparent;
+}
+
 #page-onboard-companies-house .govuk-box-highlight {
+  display: none;
+}
+
+a#link-settings {
+  display: none;
+  position: relative;
+  padding: 8px 15px 6px 25px;
+  margin: 5px -15px 5px 5px;
+  clear: both;
+  color: #0b0c0c;
+  text-decoration: none;
+}
+
+a#link-settings:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: block;
+  border-width: 4px 7px;
+  border-color: transparent;
+  border-left-color: #0b0c0c;
+  border-style: solid;
+  left: 10px;
+  top: 50%;
+  margin-top: -4px;
+}
+
+a#link-settings.open:before {
+  border-width: 7px 4px;
+  border-top-color: #0b0c0c;
+  border-left-color: transparent;
+}
+
+a#link-settings:focus {
+  outline: 0;
+}
+
+.js-enabled a#link-settings {
+  display: inline-block;
   display: none;
 }
 

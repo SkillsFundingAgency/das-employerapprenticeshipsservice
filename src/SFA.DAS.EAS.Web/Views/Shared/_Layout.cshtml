@@ -84,13 +84,11 @@
     <header role="banner" id="global-header" class="">
         <div class="header-wrapper">
             <div class="header-global">
-
                 <div class="header-global__title">
                     <a title="Skills Funding Agency" href="/">
                         Apprenticeships
                     </a>
                 </div>
-
             </div>
         </div>
     </header>
@@ -103,8 +101,10 @@
                     <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
                 </p>
             </div>
+
             @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
             <div class="account-information" role="navigation">
+                <a href="#user-nav" id="link-settings" aria-hidden="true" aria-label="Access your settings">Settings</a>
                 <nav id="user-nav">
                     <ul role="menubar">
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
@@ -131,21 +131,24 @@
             }
         </div>
     </div>
-@if (HttpContext.Current.User.Identity.IsAuthenticated)
-{
-    <div class="header-organisation" role="navigation">
-        <nav class="header-inner">
-            <ul role="menubar" aria-labelledby="levy-account-name" id="global-nav-links">
-                <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")"  role="menuitem">Home</a></li>
-                <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
-                <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(ViewBag.Section == "apprentices" ? "selected" : "")" role="menuitem">Apprentices</a></li>
-                <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Manage your team</a></li>
-                <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Organisations</a></li>
-                <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>
-            </ul>
-        </nav>
-    </div>
-}
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+        {
+        <div class="header-organisation" role="navigation">
+            <nav class="header-inner">
+                <ul role="menubar" aria-labelledby="levy-account-name" id="global-nav-links">
+                    <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")"  role="menuitem">Home</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(ViewBag.Section == "apprentices" ? "selected" : "")" role="menuitem">Apprentices</a></li>
+                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Manage your team</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Organisations</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>
+                </ul>
+            </nav>
+        </div>
+        }
+    }
     <main role="main" id="content">
 
         @RenderSection("breadcrumb", required: false)
