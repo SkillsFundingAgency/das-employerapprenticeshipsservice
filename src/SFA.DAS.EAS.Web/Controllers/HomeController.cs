@@ -52,8 +52,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 
 
                 var c = new Constants(_configuration.Identity);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?sfaredirecturl={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
-                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?sfaredirecturl={Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?returnurl={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?returnurl={Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
                 
                 return View(accounts);
             }

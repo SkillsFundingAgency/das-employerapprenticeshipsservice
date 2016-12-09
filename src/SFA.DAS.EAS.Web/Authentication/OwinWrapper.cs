@@ -42,18 +42,10 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public ActionResult SignOutUser()
         {
-            _owinContext.Authentication.SignOut();
-            //var authenticationManager = _owinContext.Authentication;
-            //authenticationManager.SignOut("Cookies");
-            return new RedirectResult("/");
-            //if (_configuration.Identity.UseFake)
-            //{
-            //    return new RedirectResult("/");
-            //}
-            //else
-            //{
-            //    return new RedirectResult($"{_configuration.Identity.BaseAddress}/connect/endsession?redirecturl={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");
-            //}
+            var authenticationManager = _owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token").Value;
+            authenticationManager.SignOut("Cookies");
+            return new RedirectResult($"{_configuration.Identity.BaseAddress}/connect/endsession?id_token_hint={idToken}&post_logout_redirect_uri={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}");   
         }
 
         public string GetClaimValue(string claimKey)
