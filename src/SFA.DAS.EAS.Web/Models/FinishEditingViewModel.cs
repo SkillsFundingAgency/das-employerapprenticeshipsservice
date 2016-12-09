@@ -14,6 +14,18 @@ namespace SFA.DAS.EAS.Web.Models
 
         public SaveStatus SaveStatus { get; set; }
 
-        public bool ApproveAndSend { get; set; }
+        public string Message { get; set; }
+
+        public ApprovalState ApprovalState { get; internal set; }
+
+        public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
+
+        public bool NotReadyForApproval { get; internal set; }
+    }
+
+    public enum ApprovalState
+    {
+        ApproveAndSend = 0,
+        ApproveOnly = 1
     }
 }
