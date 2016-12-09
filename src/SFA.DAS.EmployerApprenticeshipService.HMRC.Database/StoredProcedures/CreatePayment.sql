@@ -21,7 +21,9 @@
 	@FrameworkCode as INT,
 	@ProgrammeType as INT,
 	@PathwayCode as INT,
-	@CourseName as NVARCHAR(250)
+	@CourseName as NVARCHAR(250),
+	@ApprenticeName as NVARCHAR(MAX),
+	@ApprenticeNINumber as VARCHAR(10)
 as
 
 INSERT INTO [levy].[PaymentMetaData]
@@ -30,14 +32,18 @@ INSERT INTO [levy].[PaymentMetaData]
 			,FrameworkCode
 			,ProgrammeType
 			,PathwayCode
-			,ApprenticeshipCourseName)
+			,ApprenticeshipCourseName
+			,ApprenticeName
+			,ApprenticeNINumber)
 		VALUES
 			(@ProviderName
 			,@StandardCode
 			,@FrameworkCode
 			,@ProgrammeType
 			,@PathwayCode
-			,@CourseName)
+			,@CourseName
+			,@ApprenticeName,
+			@ApprenticeNINumber)
 
 DECLARE @PaymentMetaDataId AS BIGINT = SCOPE_IDENTITY()
 

@@ -6,5 +6,7 @@
     [FrameworkCode] INT NULL, 
     [ProgrammeType] INT NULL, 
     [PathwayCode] INT NULL, 
-    [ApprenticeshipCourseName] NVARCHAR(MAX) NULL
+    [ApprenticeshipCourseName] NVARCHAR(MAX) NULL, 
+    [ApprenticeName] NVARCHAR(MAX) NULL, 
+    [ApprenticeNINumber] VARCHAR(10) NULL
 )

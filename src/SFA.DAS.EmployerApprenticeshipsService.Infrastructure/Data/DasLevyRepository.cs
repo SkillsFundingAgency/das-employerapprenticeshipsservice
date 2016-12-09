@@ -215,6 +215,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@ProgrammeType", details.ProgrammeType, DbType.Int32);
                 parameters.Add("@PathwayCode", details.PathwayCode, DbType.Int32);
                 parameters.Add("@CourseName", details.CourseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
+                parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
+                parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",
