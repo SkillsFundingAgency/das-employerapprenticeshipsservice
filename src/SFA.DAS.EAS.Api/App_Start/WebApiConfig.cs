@@ -14,13 +14,6 @@ namespace SFA.DAS.EAS.Api
     {
         public static void Register(HttpConfiguration config)
         {
-
-            var apiKeySecret = CloudConfigurationManager.GetSetting("ApiTokenSecret");
-            var apiIssuer = CloudConfigurationManager.GetSetting("ApiIssuer");
-            var apiAudiences = CloudConfigurationManager.GetSetting("ApiAudiences").Split(' ');
-
-            config.MessageHandlers.Add(new ApiKeyHandler("Authorization", apiKeySecret, apiIssuer, apiAudiences));
-
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
             config.MapHttpAttributeRoutes();

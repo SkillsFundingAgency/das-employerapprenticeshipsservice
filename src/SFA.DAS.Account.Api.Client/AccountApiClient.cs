@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
         public AccountApiClient(AccountApiConfiguration configuration)
         {
             _configuration = configuration;
-            _httpClient = new SecureHttpClient(configuration.ClientToken);
+            _httpClient = new SecureHttpClient(configuration);
         }
         internal AccountApiClient(AccountApiConfiguration configuration, SecureHttpClient httpClient)
         {

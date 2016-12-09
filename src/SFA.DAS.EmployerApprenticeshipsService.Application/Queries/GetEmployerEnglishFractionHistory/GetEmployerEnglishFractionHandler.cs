@@ -33,12 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
             }
 
             var result = (await _dasLevyService.GetEnglishFractionHistory(message.EmpRef)).ToList();
-
-            foreach (var fraction in result)
-            {
-                fraction.Amount *= 100;
-            }
-
+            
             return new GetEmployerEnglishFractionResponse {Fractions = result, EmpRef = message.EmpRef};
         }
     }

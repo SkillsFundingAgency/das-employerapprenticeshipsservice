@@ -17,9 +17,8 @@
       <Setting name="LogLevel" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
-      <Setting name="ApiTokenSecret" />
-      <Setting name="ApiIssuer" />
-      <Setting name="ApiAudiences"  />
+      <Setting name="ida_Audience" />
+      <Setting name="ida_Tenant" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-acc-ilb"/>
