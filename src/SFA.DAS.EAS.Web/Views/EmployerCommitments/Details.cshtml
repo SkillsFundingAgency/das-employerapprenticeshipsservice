@@ -108,7 +108,7 @@
                                             }
                                         </td>
                                         <td>
-                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost));
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
                                         </td>
                                         <td>
                                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Add details</a>                   
