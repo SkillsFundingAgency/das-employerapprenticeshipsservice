@@ -18,12 +18,14 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <h1 class="heading-xlarge">Choose an option</h1>
-            @* TODO: Rajesh - move this content*@
+           
             @if (Model.NotReadyForApproval)
             {
-                <div>
+
+                <p class="lede">
                     @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
-                </div>
+                </p>
+
             }
             <fieldset>
                 <legend class="visuallyhidden">Things to do next</legend>
