@@ -10,11 +10,14 @@ namespace SFA.DAS.EAS.Web.Models
     public sealed class FinishEditingViewModel
     {
         public string HashedAccountId { get; set; }
+
         public string HashedCommitmentId { get; set; }
 
-        public SaveStatus SaveStatus { get; set; }
+        public bool HasApprenticeships { get; set; }
 
-        public string Message { get; set; }
+        public int InvalidApprenticeshipCount { get; set; }
+
+        public SaveStatus SaveStatus { get; set; }
 
         public ApprovalState ApprovalState { get; internal set; }
 
