@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     payment.ProviderName = provider.ProviderName;
 
-                    var apprenticeship = await GetApprenticeship(provider.Id, payment.ApprenticeshipId);
+                    var apprenticeship = await GetApprenticeship(provider.Ukprn, payment.ApprenticeshipId);
 
                     if (apprenticeship != null)
                     {
@@ -84,15 +84,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return payments;
         }
 
-        private async Task<Apprenticeship> GetApprenticeship(int providerId, long apprenticeshipId)
+        private async Task<Apprenticeship> GetApprenticeship(int providerUkPrn, long apprenticeshipId)
         {
             try
             {
-                return await _commitmentsApiClient.GetProviderApprenticeship(providerId, apprenticeshipId);
+                return await _commitmentsApiClient.GetProviderApprenticeship(providerUkPrn, apprenticeshipId);
             }
-            catch (WebException e)
+            catch (Exception e)
             {
-                _logger.Error(e, $"Unable to get Apprenticeship with provider ID {providerId} and " +
+                _logger.Warn(e, $"Unable to get Apprenticeship with provider ID {providerUkPrn} and " +
                                  $"apprenticeship ID {apprenticeshipId} from commitments API.");
             }
 
@@ -131,9 +131,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     var providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
                     return providerView?.Providers?.FirstOrDefault();
                 }
-                catch (WebException e)
+                catch (Exception e)
                 {
-                    _logger.Error(e, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API.");
+                    _logger.Warn(e, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API.");
                 }
 
                 return null;
@@ -149,9 +149,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 return standardsView.Standards.SingleOrDefault(s =>
                                              s.Code.Equals(standardCode))?.Title ?? string.Empty;
             }
-            catch (WebException e)
+            catch (Exception e)
             {
-                _logger.Error(e, "Could not get standards from apprenticeship API.");
+                _logger.Warn(e, "Could not get standards from apprenticeship API.");
             }
 
             return null;
@@ -168,9 +168,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                                      f.ProgrammeType.Equals(programType) &&
                                      f.PathwayCode.Equals(pathwayCode))?.Title ?? string.Empty;
             }
-            catch (WebException e)
+            catch (Exception e)
             {
-                _logger.Error(e, "Could not get frameworks from apprenticeship API.");
+                _logger.Warn(e, "Could not get frameworks from apprenticeship API.");
             }
 
             return null;

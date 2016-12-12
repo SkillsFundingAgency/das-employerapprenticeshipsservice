@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -44,17 +45,17 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
             bool result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been started");
-
+           
             _container = new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
+                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.AddRegistry<DefaultRegistry>();
             });
-
             return result;
         }
 

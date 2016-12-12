@@ -9,6 +9,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
         public PaymentMappings()
         {
             CreateMap<Payment, PaymentEntry>();
+            CreateMap<Payment, PaymentDetails>();
         }
     }
 }

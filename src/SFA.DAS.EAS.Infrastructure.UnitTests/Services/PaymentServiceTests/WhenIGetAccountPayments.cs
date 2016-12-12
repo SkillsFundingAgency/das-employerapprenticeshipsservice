@@ -62,6 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         {
             _logger = new Mock<ILogger>();
             _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()));
+            _logger.Setup(x => x.Warn(It.IsAny<Exception>(), It.IsAny<string>()));
         }
 
         private void SetupMapperMock()
@@ -88,7 +89,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _commitmentsApiClient.Verify(x => x.GetProviderApprenticeship(_provider.Id, _apprenticeship.Id), Times.Once);
+            _commitmentsApiClient.Verify(x => x.GetProviderApprenticeship(_provider.Ukprn, _apprenticeship.Id), Times.Once);
         }
 
         [Test]
@@ -196,7 +197,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
-        public async Task ThenShouldLogErrorIfCommitmentsApiCallFails()
+        public async Task ThenShouldLogWarningIfCommitmentsApiCallFails()
         {
             //Arrange
             _commitmentsApiClient.Setup(x => x.GetProviderApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
@@ -206,8 +207,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), 
-                $"Unable to get Apprenticeship with provider ID {_provider.Id} and " + 
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), 
+                $"Unable to get Apprenticeship with provider ID {_provider.Ukprn} and " + 
                 $"apprenticeship ID {_standardPayment.ApprenticeshipId} from commitments API."), Times.Once);
         }
 
@@ -227,7 +228,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
-        public async Task ThenShouldLogErrorIfApprenticeshipsApiCallFailsWhenGettingProviderDetails()
+        public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingProviderDetails()
         {
             //Arrange
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
@@ -237,12 +238,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), 
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), 
                 $"Unable to get provider details with UKPRN {_provider.Ukprn} from apprenticeship API."), Times.Once);
         }
 
         [Test]
-        public async Task ThenShouldLogErrorIfApprenticeshipsApiCallFailsWhenGettingStandards()
+        public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingStandards()
         {
             //Arrange
             _apprenticeshipInfoService.Setup(x => x.GetStandardsAsync(It.IsAny<bool>()))
@@ -252,11 +253,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), "Could not get standards from apprenticeship API."), Times.Once);
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get standards from apprenticeship API."), Times.Once);
         }
 
         [Test]
-        public async Task ThenShouldLogErrorIfApprenticeshipsApiCallFailsWhenGettingFrameworks()
+        public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingFrameworks()
         {
             //Arrange
             _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Payment>()))
@@ -268,7 +269,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _logger.Verify(x => x.Error(It.IsAny<Exception>(), "Could not get frameworks from apprenticeship API."), Times.Once);
+            _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get frameworks from apprenticeship API."), Times.Once);
         }
 
         private void SetupTestModels()

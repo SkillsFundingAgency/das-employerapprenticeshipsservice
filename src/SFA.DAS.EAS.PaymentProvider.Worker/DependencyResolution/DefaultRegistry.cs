@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -24,6 +25,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.DependencyResolution
             });
 
             For<IConfiguration>().Use<PaymentProviderConfiguration>();
+            For<ICommitmentsApi>().Use<CommitmentsApi>();
             For<ICache>().Use<InMemoryCache>();
 
             RegisterMapper();
