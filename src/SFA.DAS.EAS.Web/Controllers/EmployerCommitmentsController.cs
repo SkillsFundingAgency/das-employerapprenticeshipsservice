@@ -6,10 +6,10 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.Models.Types;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    using SFA.DAS.EAS.Web.Models.Types;
 
     [Authorize]
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
@@ -183,6 +183,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
@@ -194,6 +195,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Finished")]
         public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
@@ -256,11 +258,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             // TODO: Should this be a different Orchestrator call?
-            var commitment = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
+            var commitment = await _employerCommitmentsOrchestrator.GetCommitmentCheckState(hashedAccountId, hashedCommitmentId);
 
             var model = new SubmitCommitmentViewModel
             {
