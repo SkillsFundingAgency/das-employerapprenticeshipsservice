@@ -3349,6 +3349,30 @@ span.helpText {
   border-color: #2b8cc4;
 }
 
+.incompleted .row-bg {
+  background: #f8f8f8;
+  border-bottom: 2px solid #d53880;
+  border-top: 2px solid #d53880;
+}
+
+.missingForApproval {
+  border-left: 5px solid #d53880;
+  padding-left: 15px;
+}
+
+.missingForApproval .form-label-bold {
+  color: #d53880;
+}
+
+.cant-approve .panel {
+  border-color: #d53880;
+  color: #d53880;
+}
+
+.cant-approve .panel p {
+  font-weight: bold;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #empty-alert-top .alert-default {
     margin-top: 50px;

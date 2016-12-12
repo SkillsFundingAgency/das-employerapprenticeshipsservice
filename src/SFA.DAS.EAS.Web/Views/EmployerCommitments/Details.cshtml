@@ -72,8 +72,8 @@
             if (Model.IncompleteApprenticeships.Count > 0)
             {
                 <div class="grid-row">
-                    <div class="column-full">
-                        <p class="heading-large">Incomplete list</p>
+                    <div class="column-full incompleted">
+                        <p class="heading-large">Incomplete details</p>
                         <p class="heading-medium">@GetApprenticesCountText(Model.IncompleteApprenticeships)</p>
                         <table class="tableResponsive viewCommitment">
                             <thead>
@@ -88,7 +88,7 @@
                             <tbody>
                                 @foreach (var apprenticeship in Model.IncompleteApprenticeships)
                                 {
-                                    <tr>
+                                    <tr class="row-bg">
                                         <td>
                                             @GetValueOrDefault(apprenticeship.ApprenticeName)
                                         </td>
@@ -125,7 +125,7 @@
             {
                 <div class="grid-row">
                     <div class="column-full">
-                        <p class="heading-large">Complete list</p>
+                        <p class="heading-large">Complete details</p>
                         <p class="heading-medium">@GetApprenticesCountText(Model.CompleteApprenticeships)</p>
                         <table class="tableResponsive viewCommitment">
                             <thead>
