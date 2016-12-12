@@ -57,6 +57,11 @@
     .panel{
 	    border-color:$alpha-colour;
 	    color:$alpha-colour;
+        
+        p{
+            font-weight:bold;
+        }
+
         }
 }
 

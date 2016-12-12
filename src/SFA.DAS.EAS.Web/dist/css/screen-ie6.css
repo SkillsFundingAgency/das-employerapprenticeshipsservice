@@ -2984,6 +2984,10 @@ span.helpText {
   color: #d53880;
 }
 
+.cant-approve .panel p {
+  font-weight: bold;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #empty-alert-top .alert-default {
     margin-top: 50px;
