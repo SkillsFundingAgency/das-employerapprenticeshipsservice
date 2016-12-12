@@ -4,9 +4,11 @@
 @using SFA.DAS.EAS.Web.Models;
 
 @model OrchestratorResponse<EmployerAgreementListViewModel>
-@{ViewBag.PageID = "organisations-agreements-home"; }
-@{ViewBag.Title = "Organisations";}
 @{
+    ViewBag.PageID = "organisations-agreements-home"; 
+    ViewBag.Title = "Organisations";
+    ViewBag.Section = "organisations";
+
     if (TempData.ContainsKey("extraCompanyAdded"))
     {
         ViewBag.PageID = "page-organisations-added";
