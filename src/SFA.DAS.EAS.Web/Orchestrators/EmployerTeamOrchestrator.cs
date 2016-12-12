@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(
-            string hashedId, string userId)
+            string hashedId, string userId, string userAdded="")
         {
             try
             {
@@ -71,6 +71,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             ExternalUserId = userId
                         });
 
+                var flashMessage = new FlashMessageViewModel();
+
+                if (!string.IsNullOrWhiteSpace(userAdded))
+                {
+                    flashMessage = new FlashMessageViewModel
+                    {
+                        Severity = FlashMessageSeverityLevel.Success,
+                        Headline = "Invitation sent",
+                        Message = $"You've sent an invitation to <strong>{userAdded}</strong>"
+                    };
+                }
+
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -78,7 +90,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         HashedAccountId = hashedId,
                         TeamMembers = response.TeamMembers
-                    }
+                    },
+                    FlashMessage = flashMessage
                 };
             }
             catch (InvalidRequestException ex)
@@ -137,19 +150,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            var response = await GetTeamMembers(model.HashedAccountId, externalUserId);
+            
 
-            if (response.Status == HttpStatusCode.OK)
-            {
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Severity = FlashMessageSeverityLevel.Success,
-                    Headline = "Invitation sent",
-                    Message = $"You've sent an invitation to <strong>{model.Email}</strong>"
-                };
-            }
-
-            return response;
+            return new OrchestratorResponse<EmployerTeamMembersViewModel>();
         }
 
         public async Task<OrchestratorResponse<InvitationViewModel>> Review(

@@ -233,7 +233,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
-
+            ViewBag.ApprovalWarningState = model.ApprovalValidation;
             return View("EditApprenticeshipEntry", model.Apprenticeship);
         }
 

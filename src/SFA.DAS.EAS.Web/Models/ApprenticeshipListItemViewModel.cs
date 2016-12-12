@@ -15,5 +15,7 @@
         public decimal? Cost { get; set; }
 
         public string HashedApprenticeshipId { get; set; }
+
+        public bool CanBeApproved { get; set; }
     }
 }

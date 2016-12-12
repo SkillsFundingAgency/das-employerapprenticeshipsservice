@@ -15,6 +15,8 @@ namespace SFA.DAS.EAS.Web.Models
         public RequestStatus Status { get; set; }
         public bool ShowApproveOnlyOption { get; set; }
         public string LatestMessage { get; set; }
-        public IList<ApprenticeshipListItemViewModel> Apprenticeships { get; set; }
+        public bool HasApprenticeships { get; set; }
+        public IList<ApprenticeshipListItemViewModel> IncompleteApprenticeships { get; set; }
+        public IList<ApprenticeshipListItemViewModel> CompleteApprenticeships { get; set; }
     }
 }
