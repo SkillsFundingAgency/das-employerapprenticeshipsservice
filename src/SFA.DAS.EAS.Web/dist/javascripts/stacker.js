@@ -113,7 +113,7 @@
 
     /* PLUGIN
      * =============================== */
-    $.fn.collapseNav = function (options) {
+    $.fn.collapsableNav = function (options) {
         var defaults = { stackerLabel: '+' },
             ko = false;
         this.each(function () { if (this.tagName != 'UL') ko = true; });
