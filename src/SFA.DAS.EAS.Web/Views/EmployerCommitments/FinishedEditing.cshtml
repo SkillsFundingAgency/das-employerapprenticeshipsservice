@@ -22,7 +22,7 @@
             @if (Model.NotReadyForApproval)
             {
                 <div>
-                    @Model.Message
+                    @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
                 </div>
             }
             <fieldset>
@@ -70,27 +70,39 @@
 
 @functions
 {
-        public string RadioButtonId(SaveStatus status)
-        {
-            return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
-        }
+    public string RadioButtonId(SaveStatus status)
+    {
+        return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
+    }
 
-        public Dictionary<string, object> GetRadioButtonAttributes(SaveStatus status, bool disabled)
-        {
-            var htmlAttributes = new Dictionary<string, object>
+    public Dictionary<string, object> GetRadioButtonAttributes(SaveStatus status, bool disabled)
+    {
+        var htmlAttributes = new Dictionary<string, object>
             {
                 { "id", RadioButtonId(status) }
             };
- 
-            if (disabled)
-                htmlAttributes.Add("disabled", "disabled");
- 
-            return htmlAttributes;
-        }
- }
+
+        if (disabled)
+            htmlAttributes.Add("disabled", "disabled");
+
+        return htmlAttributes;
+    }
+
+    public string GetInvalidStateForApprovalMessage(bool hasApprenticeships, int invalidApprentieshipCount)
+    {
+        if (!hasApprenticeships)
+            return "You need to add details for at least one apprentice - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        return invalidApprentieshipCount == 1
+        ? "You have 1 apprentice with incomplete details - " + emptyLink
+        : $"You have {invalidApprentieshipCount} apprentices with incomplete details - " + emptyLink;
+    }
+}
 
 
-@section breadcrumb {
+    @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>

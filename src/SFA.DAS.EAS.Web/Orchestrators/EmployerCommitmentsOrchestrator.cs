@@ -280,7 +280,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedCommitmentId = hashedCommitmentId,
                 NotReadyForApproval = !response.Commitment.CanBeApproved,
                 ApprovalState = GetApprovalState(response.Commitment),
-                Message = GetInvalidStateForApprovalMessage(response.Commitment)
+                HasApprenticeships = response.Commitment.Apprenticeships.Any(),
+                InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
             };
 
             return viewmodel;
@@ -424,22 +425,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return approvalState;
          }
  
-         private static string GetInvalidStateForApprovalMessage(Commitment commitment)
-         {
-             if (commitment.CanBeApproved)
-                 return string.Empty;
- 
-             if (commitment.Apprenticeships.Count == 0)
-                 return "There needs to be at least 1 apprentice in a cohort";
- 
-             var invalidCount = commitment.Apprenticeships.Count(x => x.CanBeApproved == false);
- 
-             return invalidCount == 1
-                 ? "There is 1 apprentice that has incomplete details"
-                 : $"There are {invalidCount} apprentices that have incomplete details";
-         }
- 
-
         private async Task<string> GetLatestMessage(long accountId, long commitmentId)
         {
             var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountId = accountId });
