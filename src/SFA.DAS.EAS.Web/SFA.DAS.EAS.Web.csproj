@@ -492,6 +492,7 @@
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
     <Content Include="dist\javascripts\respond.min.js" />
     <Content Include="dist\javascripts\selection-buttons.js" />
+    <Content Include="dist\javascripts\stacker.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
