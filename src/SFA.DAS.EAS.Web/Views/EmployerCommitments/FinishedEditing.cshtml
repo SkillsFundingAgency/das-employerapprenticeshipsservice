@@ -31,19 +31,22 @@
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) + "-SendAmend" })
                     </div>
-                    @if (Model.IsApproveAndSend)
+                    @if (!Model.NotReadyForApproval)
                     {
+                        if (Model.IsApproveAndSend)
+                        {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
                             @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
                             <span id="changeTwo">Approve and send to training provider</span>
                         </label>
-                    }
-                    else
-                    {
+                        }
+                        else
+                        {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Approve)">
                             @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.NotReadyForApproval))
                             <span id="changeTwo">Approve</span>
                         </label>
+                        }
                     }
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.AmendAndSend)">
@@ -52,7 +55,7 @@
                     </label>
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Save)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
+                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.Save, false))
                         <span id="changeThree">Save but don't send to training provider</span>
                     </label>
                 </div>
@@ -91,13 +94,13 @@
     public string GetInvalidStateForApprovalMessage(bool hasApprenticeships, int invalidApprentieshipCount)
     {
         if (!hasApprenticeships)
-            return "You need to add details for at least one apprentice - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+            return "You need to add details for at least one apprentice before you can approve this cohort - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
 
         var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
 
         return invalidApprentieshipCount == 1
-        ? "You have 1 apprentice with incomplete details - " + emptyLink
-        : $"You have {invalidApprentieshipCount} apprentices with incomplete details - " + emptyLink;
+        ? "You have 1 apprentice with incomplete details. All apprentice details must be complete before you can approve this cohort - " + emptyLink
+        : $"You have {invalidApprentieshipCount} apprentices with incomplete details. All apprentice details must be complete before you can approve this cohort - " + emptyLink;
     }
 }
 
