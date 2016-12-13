@@ -164,8 +164,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
-    <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="Features\AddPayeScheme.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -4,11 +4,12 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using StructureMap;
 using StructureMap.Graph;
 
-namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
+namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
     public class DefaultRegistry : Registry
     {

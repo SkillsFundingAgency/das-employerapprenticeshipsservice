@@ -5,7 +5,7 @@ using Moq;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
