@@ -57,29 +57,26 @@ sfa.navigation = {
         menu.find('li.has-sub-menu > a').on('click', function (e) {
             var $that = $(this);
             that.toggleMenu($that, $that.next('ul'));
+            e.stopPropagation();
             e.preventDefault();
         });
-        $(document).on("keydown", this, function (e) {
-            var keycode = ((typeof e.keyCode != 'undefined' && e.keyCode) ? e.keyCode : e.which);
-            if (keycode === 27) {
-                that.closeAllOpenMenus();
-            };
-        });
-
     },
     toggleMenu: function (link, subMenu) {
         var $li = link.parent();
         if ($li.hasClass("open")) {
+            // Close menu
             $li.removeClass("open");
             subMenu.addClass("js-hidden").attr("aria-hidden", "true");
         } else {
-            this.closeAllOpenMenus();
+            // Open menu
+            this.closeAllOpenMenus();         
             $li.addClass("open");
             subMenu.removeClass("js-hidden").attr("aria-hidden", "false");
         }
     },
     closeAllOpenMenus: function () {
         this.elems.userNav.find('li.has-sub-menu.open').removeClass('open').find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+        this.elems.levyNav.find('li.open').removeClass('open').addClass("js-hidden").attr("aria-hidden", "true");
     },
     linkSettings: function () {
         var $settingsLink = $('a#link-settings'),

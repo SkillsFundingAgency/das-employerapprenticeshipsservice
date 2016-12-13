@@ -101,6 +101,7 @@
             if ($(this).parent().hasClass('sub-menu-open')) {
                 $(te.selector).children(menuSelector).removeClass('sub-menu-open');
             } else {
+                sfa.navigation.closeAllOpenMenus();
                 $(te.selector).children(menuSelector).removeClass('sub-menu-open');
                 $(this).parent().toggleClass('sub-menu-open');
             }
@@ -108,6 +109,11 @@
         });
         $(document).on('click.stackable.closure', function () {
             $(te.selector).children(menuSelector).removeClass('sub-menu-open');
+            sfa.navigation.closeAllOpenMenus();
+        });
+        $(document).on("keydown", this, function (e) {
+            $(te.selector).children(menuSelector).removeClass('sub-menu-open');
+            sfa.navigation.closeAllOpenMenus();
         });
     };
 
