@@ -1902,6 +1902,11 @@ table.top-border {
   margin-top: 0;
 }
 
+#global-header .header-wrapper {
+  padding: 0;
+  padding: 5px 0;
+}
+
 .header-global {
   margin: 0 auto;
   max-width: 960px;
