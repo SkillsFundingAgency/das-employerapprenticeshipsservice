@@ -30,24 +30,12 @@
 }
 
 //validation styles
-
-
-.incompleted{
-
-    .row-bg{
-        background: $highlight-colour;
-	    border-bottom: 2px solid $alpha-colour;
-        border-top: 2px solid $alpha-colour;
-    }
-
-}
-
 .missingForApproval{
-    	border-left: 5px solid $alpha-colour;
+    	border-left: 5px solid $error-colour;
 	    padding-left:15px;
 
     .form-label-bold{
-	    color:$alpha-colour;
+	    color:$error-colour;
     }
 
 }
@@ -55,11 +43,12 @@
 .cant-approve{ 
     
     .panel{
-	    border-color:$alpha-colour;
-	    color:$alpha-colour;
+	    border-color:$error-colour;
+	    color:$error-colour;
         
         p{
             font-weight:bold;
+            font-size:19px;
         }
 
         }
