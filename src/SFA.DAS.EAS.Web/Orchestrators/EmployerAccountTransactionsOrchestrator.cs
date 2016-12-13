@@ -61,12 +61,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
                 
-                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseStartDate});
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate});
 
                 var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
                 {
                     ApprenticeCourseName = x.Key.CourseName,
-                    StartDate = x.Key.CourseStartDate,
+                    CourseLevel = x.Key.CourseLevel,
+                    CourseStartDate = x.Key.CourseStartDate,
                     Payments = x.ToList()
                 }).ToList();
               

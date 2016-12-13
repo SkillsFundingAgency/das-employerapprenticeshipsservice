@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public decimal LineAmount { get; set; }
         public string CourseName { get; set; }
         public int? CourseLevel { get; set; }
-        public DateTime CourseStartDate { get; set; }   
+        public DateTime? CourseStartDate { get; set; }   
         public string ApprenticeName { get; set; }
         public string ApprenticeNINumber { get; set; }
        

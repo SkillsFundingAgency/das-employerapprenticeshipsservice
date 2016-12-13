@@ -10,59 +10,86 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to @Model.Data.ProviderName for @Model.Data.TransactionDate.ToString("MMMM yyyy")</p>
-        <p><span class="strong">Amount: </span> @(Model.Data.Amount.ToString("C0", culture))</p>
-        <p><span class="strong">Payment Date: </span> @Model.Data.TransactionDate.ToString("dd MMMM yyyy")</p>
 
-        @foreach (var group in Model.Data.CoursePaymentGroups)
-        {
-            <h2 class="heading-medium">@group.ApprenticeCourseName</h2>
-            
-             if (group.CourseLevel != null)
-             {
-                 <p>Level: @group.CourseLevel</p>
-             }
+        <p>The following shows details of the payment from your account.</p>
 
-            <p>Start date: @group.StartDate.ToString("d")</p>
+        <h2 class="heading-medium">Payment</h2>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">National insurance number</th>
-                        <th scope="col">Payment</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="responsive-tr">
+                    <td>Payment to</td>
+                    <td>@Model.Data.ProviderName</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>This payment</td>
+                    <td>@(Model.Data.Amount.ToString("C0", culture))</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>Date of payment</td>
+                    <td>@Model.Data.TransactionDate.ToString("dd MMMM yyyy")</td>
+                </tr>
+            </tbody>
+        </table>
 
-                    @foreach (var payment in group.Payments)
-                    {
-                        <tr class="responsive-tr">
-                            @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) &&
-                         string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
-                            {
-                                <td colspan="2">Appentice details unavailable</td>
-                            }
-                            else
-                            {
-                                <td>
-                                    @string.IsNullOrWhiteSpace(payment.ApprenticeName) ? 
-                                            "Name unavailable" : payment.ApprenticeName;
-                                </td>
-                                <td>
-                                    @string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ?
-                                            "Number unavailable" : payment.ApprenticeNINumber;
-                                </td>
-                            }
-                           
-                            <td class="numeric">
-                                @(payment.LineAmount.ToString("C0", culture))
-                            </td>
+            @foreach (var group in Model.Data.CoursePaymentGroups)
+            {
+                <h2 class="heading-medium">@group.ApprenticeCourseName</h2>
+
+                if (group.CourseLevel != null)
+                {
+                    <p>Level: @group.CourseLevel</p>
+                }
+
+                var startDate = group.CourseStartDate?.ToString("d") ?? "Unavailable";
+
+                <p>Start date: @startDate</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">National insurance number</th>
+                            <th scope="col">Payment</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        }
+                    </thead>
+                    <tbody>
+
+                        @foreach (var payment in group.Payments)
+                        {
+                            <tr class="responsive-tr">
+                                @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) &&
+            string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
+                                {
+                                    <td colspan="2">Appentice details unavailable</td>
+                                }
+                                else
+                                {
+                                    var apprenticeName = string.IsNullOrWhiteSpace(payment.ApprenticeName) ? "Name unavailable" : payment.ApprenticeName;
+                                    var apprenticeNiNumber = string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ? "Number unavailable" : payment.ApprenticeNINumber;
+
+                                    <td>
+                                        @apprenticeName
+                                    </td>
+                                    <td>
+                                        @apprenticeNiNumber
+                                    </td>
+                                }
+
+                                <td class="numeric">
+                                    @(payment.LineAmount.ToString("C0", culture))
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
     </div>
 </div>
 @section breadcrumb {

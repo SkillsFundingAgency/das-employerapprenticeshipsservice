@@ -61,6 +61,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     {
                         payment.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
                         payment.ApprenticeNINumber = apprenticeship.NINumber;
+                        payment.CourseStartDate = apprenticeship.StartDate;
                     }
                 }
 
@@ -69,6 +70,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     var standard = await GetStandard(payment.StandardCode.Value);
 
                     payment.CourseName = standard?.Title;
+                    payment.CourseLevel = standard?.Level;
                 }
                 else if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)
                 {

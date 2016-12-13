@@ -216,7 +216,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@CourseName", details.CourseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
                 parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
                 parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);
-                parameters.Add("@FrameworkLevel", details.CourseLevel, DbType.Int32);
+                parameters.Add("@ApprenticeshipCourseLevel", details.CourseLevel, DbType.Int32);
+                parameters.Add("@ApprenticeshipCourseStartDate", details.CourseStartDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",
