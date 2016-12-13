@@ -183,7 +183,6 @@
     <Compile Include="Steps\AddPayeScheme\AddPayeSchemeSteps.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
     <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
-    <Compile Include="Steps\CommonSteps\UserCreationSteps.cs" />
     <Compile Include="Steps\InviteMember\InviteMemberSteps.cs" />
   </ItemGroup>
   <ItemGroup>
