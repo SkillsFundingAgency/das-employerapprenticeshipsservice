@@ -2246,6 +2246,16 @@ table.top-border {
   margin-top: 0;
 }
 
+#global-header .header-wrapper {
+  padding: 0;
+}
+
+@media (min-width: 641px) {
+  #global-header .header-wrapper {
+    padding: 5px 0;
+  }
+}
+
 .header-global {
   margin: 0 auto;
   max-width: 960px;
