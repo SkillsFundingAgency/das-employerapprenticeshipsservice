@@ -12,6 +12,9 @@ select
     tl.EmpRef,
 	null as CourseName,
 	null as ProviderName,
+	null as CourseLevel,
+	null as ApprenticeName,
+	null as ApprenticeNINumber,
     tl.TransactionDate,
     tl.Amount as LineAmount,
     tl.TransactionType
@@ -39,6 +42,9 @@ select
     null as empref,
 	meta.ApprenticeshipCourseName as CourseName,
 	meta.ProviderName as ProviderName,
+	meta.ApprenticeName, 
+	meta.ApprenticeNINumber,
+	meta.FrameworkLevel as CourseLevel,
     (tl.TransactionDate) as transactiondate,
     (p.Amount) as LineAmount,
     tl.TransactionType

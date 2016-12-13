@@ -369,6 +369,7 @@
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\AddLegalEntityViewModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipPaymentGroup.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BeginNewPayeScheme.cs" />
     <Compile Include="Models\AddNewPayeScheme.cs" />

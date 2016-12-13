@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -59,6 +60,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ToDate = toDate,
                     ExternalUserId = externalUserId
                 });
+                
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseStartDate});
+
+                var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
+                {
+                    ApprenticeCourseName = x.Key.CourseName,
+                    StartDate = x.Key.CourseStartDate,
+                    Payments = x.ToList()
+                }).ToList();
+              
 
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
@@ -68,7 +79,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderName = data.ProviderName,
                         TransactionDate = data.TransactionDate,
                         Amount = data.Total,
-                        SubTransactions = data.Transactions
+                        SubTransactions = data.Transactions,
+                        CoursePaymentGroups = coursePaymentGroups
                     }
                 };
             }

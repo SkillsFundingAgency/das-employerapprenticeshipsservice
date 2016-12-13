@@ -66,14 +66,19 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 if (payment.StandardCode.HasValue)
                 {
-                    payment.CourseName = await GetStandardCourseName(payment.StandardCode.Value);
+                    var standard = await GetStandard(payment.StandardCode.Value);
+
+                    payment.CourseName = standard?.Title;
                 }
                 else if (payment.FrameworkCode.HasValue && payment.ProgrammeType.HasValue && payment.PathwayCode.HasValue)
                 {
-                    payment.CourseName = await GetFrameworkCourseName(
+                    var framework = await GetFramework(
                         payment.FrameworkCode.Value,
                         payment.ProgrammeType.Value,
                         payment.PathwayCode.Value);
+
+                    payment.CourseName = framework?.Title;
+                    payment.CourseLevel = framework?.Level;
                 }
                 else
                 {
@@ -140,14 +145,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             });
         }
 
-        private async Task<string> GetStandardCourseName(long standardCode)
+        private async Task<Standard> GetStandard(long standardCode)
         {
             try
             {
                 var standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
 
                 return standardsView.Standards.SingleOrDefault(s =>
-                                             s.Code.Equals(standardCode))?.Title ?? string.Empty;
+                                             s.Code.Equals(standardCode));
             }
             catch (Exception e)
             {
@@ -157,7 +162,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return null;
         }
 
-        private async Task<string> GetFrameworkCourseName(int frameworkCode, int programType, int pathwayCode)
+        private async Task<Framework> GetFramework(int frameworkCode, int programType, int pathwayCode)
         {
             try
             {
@@ -166,7 +171,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 return frameworksView.Frameworks.SingleOrDefault(f =>
                                      f.FrameworkCode.Equals(frameworkCode) &&
                                      f.ProgrammeType.Equals(programType) &&
-                                     f.PathwayCode.Equals(pathwayCode))?.Title ?? string.Empty;
+                                     f.PathwayCode.Equals(pathwayCode));
             }
             catch (Exception e)
             {

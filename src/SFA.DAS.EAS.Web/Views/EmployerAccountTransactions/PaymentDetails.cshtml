@@ -13,31 +13,56 @@
         <p class="lede">Payment to @Model.Data.ProviderName for @Model.Data.TransactionDate.ToString("MMMM yyyy")</p>
         <p><span class="strong">Amount: </span> @(Model.Data.Amount.ToString("C0", culture))</p>
         <p><span class="strong">Payment Date: </span> @Model.Data.TransactionDate.ToString("dd MMMM yyyy")</p>
-        <table>
-            <thead>
-                <tr>
-                    <th scope="col">Course</th>
-                    <th class="numeric" scope="col">Paid out</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var payment in Model.Data.SubTransactions)
-                {
-                    <tr class="responsive-tr">
-                        <td>
-                            @payment.CourseName
-                        </td>
-                        <td class="numeric">
-                            @(payment.LineAmount.ToString("C0", culture))
-                        </td>
+
+        @foreach (var group in Model.Data.CoursePaymentGroups)
+        {
+            <h2 class="heading-medium">@group.ApprenticeCourseName</h2>
+            
+             if (group.CourseLevel != null)
+             {
+                 <p>Level: @group.CourseLevel</p>
+             }
+
+            <p>Start date: @group.StartDate.ToString("d")</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">National insurance number</th>
+                        <th scope="col">Payment</th>
                     </tr>
-                }
-            <tr class="total">
-                <td></td>
-                <td class="numeric">@Model.Data.Amount.ToString("C0", culture)</td>
-            </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+
+                    @foreach (var payment in group.Payments)
+                    {
+                        <tr class="responsive-tr">
+                            @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) &&
+                         string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
+                            {
+                                <td colspan="2">Appentice details unavailable</td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @string.IsNullOrWhiteSpace(payment.ApprenticeName) ? 
+                                            "Name unavailable" : payment.ApprenticeName;
+                                </td>
+                                <td>
+                                    @string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ?
+                                            "Number unavailable" : payment.ApprenticeNINumber;
+                                </td>
+                            }
+                           
+                            <td class="numeric">
+                                @(payment.LineAmount.ToString("C0", culture))
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     </div>
 </div>
 @section breadcrumb {

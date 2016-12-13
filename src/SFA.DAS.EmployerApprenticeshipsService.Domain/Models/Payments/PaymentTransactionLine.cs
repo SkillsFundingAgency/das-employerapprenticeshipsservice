@@ -13,6 +13,11 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public string ProviderName { get; set; }
         public decimal LineAmount { get; set; }
         public string CourseName { get; set; }
+        public int? CourseLevel { get; set; }
+        public DateTime CourseStartDate { get; set; }   
+        public string ApprenticeName { get; set; }
+        public string ApprenticeNINumber { get; set; }
+       
 
         public ICollection<PaymentTransactionLine> SubPayments =>
             SubTransactions?.OfType<PaymentTransactionLine>().ToList() ??

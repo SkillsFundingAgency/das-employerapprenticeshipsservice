@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public string CourseName { get; set; }
         public string ApprenticeName { get; set; }
         public string ApprenticeNINumber { get; set; }
+        public int? CourseLevel { get; set; }
     }
 }

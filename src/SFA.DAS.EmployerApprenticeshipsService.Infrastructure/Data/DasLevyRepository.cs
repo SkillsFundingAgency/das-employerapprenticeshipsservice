@@ -185,8 +185,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return MapTransactions(result);
         }
-
-        //TODO refactor not to use Payment type here
+        
         public async Task CreatePaymentData(PaymentDetails details)
         {
             await WithConnection(async c =>
@@ -217,6 +216,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@CourseName", details.CourseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
                 parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
                 parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);
+                parameters.Add("@FrameworkLevel", details.CourseLevel, DbType.Int32);
 
                 return await c.ExecuteAsync(
                     sql: "[levy].[CreatePayment]",

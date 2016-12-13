@@ -23,13 +23,15 @@
 	@PathwayCode as INT,
 	@CourseName as NVARCHAR(250),
 	@ApprenticeName as NVARCHAR(MAX),
-	@ApprenticeNINumber as VARCHAR(10)
+	@ApprenticeNINumber as VARCHAR(10),
+	@FrameworkLevel as INT
 as
 
 INSERT INTO [levy].[PaymentMetaData]
 			(ProviderName
 			,StandardCode
 			,FrameworkCode
+			,FrameworkLevel
 			,ProgrammeType
 			,PathwayCode
 			,ApprenticeshipCourseName
@@ -39,6 +41,7 @@ INSERT INTO [levy].[PaymentMetaData]
 			(@ProviderName
 			,@StandardCode
 			,@FrameworkCode
+			,@FrameworkLevel
 			,@ProgrammeType
 			,@PathwayCode
 			,@CourseName
