@@ -12,6 +12,7 @@ AS
 	DELETE FROM [levy].[TransactionLine]
 	DELETE FROM [levy].[Payment]
 	DELETE FROM [levy].[PeriodEnd]
+	DELETE FROM [levy].[PaymentMetaData]
 	DELETE FROM [levy].[LevyDeclarationTopup]
 	DELETE FROM [levy].[EnglishFractionCalculationDate]
 RETURN 0

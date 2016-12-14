@@ -81,13 +81,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction"});
             table1.AddRow(new string[] {
-                        "123/ABC",
+                        "223/ABC",
                         "1000",
                         "16-17",
                         "11",
                         "1"});
             table1.AddRow(new string[] {
-                        "123/ABC",
+                        "223/ABC",
                         "1100",
                         "16-17",
                         "12",
@@ -159,13 +159,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction"});
             table3.AddRow(new string[] {
-                        "123/ABC",
+                        "323/ABC",
                         "1000",
                         "16-17",
                         "12",
                         "1"});
             table3.AddRow(new string[] {
-                        "123/ABC",
+                        "323/ABC",
                         "100",
                         "17-18",
                         "01",
@@ -195,13 +195,13 @@ this.ScenarioSetup(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction"});
             table4.AddRow(new string[] {
-                        "123/ABC",
+                        "423/ABC",
                         "1000",
                         "17-18",
                         "01",
                         "1"});
             table4.AddRow(new string[] {
-                        "123/ABC",
+                        "423/ABC",
                         "1100",
                         "17-18",
                         "02",
@@ -221,7 +221,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 37
  testRunner.And("I have the following payments", ((string)(null)), table5, "And ");
 #line 41
- testRunner.Then("the balance should be 1000 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the balance should be 1110 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

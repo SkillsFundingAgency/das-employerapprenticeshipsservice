@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.Messaging;
+using SFA.DAS.Payments.Events.Api.Types;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -51,7 +52,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
             //For each row in the table insert into the levy_Declarations table
-            var random = new Random();
+            var lineCount = 1;
 
             var emprefDictionary = new Dictionary<string,decimal>();
 
@@ -64,9 +65,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     PayrollMonth = Convert.ToInt16(tableRow["Payroll_Month"]),
                     LevyAllowanceForFullYear = 15000,
                     Date = DateTime.Now,
-                    Id = random.Next(10000000).ToString()
+                    Id = lineCount.ToString()
                 };
-
+                lineCount++;
                 if (!emprefDictionary.ContainsKey(tableRow["Paye_scheme"]))
                 {
                     emprefDictionary.Add(tableRow["Paye_scheme"],Convert.ToDecimal(tableRow["English_Fraction"]));
@@ -96,7 +97,44 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         [When(@"I have the following payments")]
         public void WhenIHaveTheFollowingPayments(Table table)
         {
-            ScenarioContext.Current.Pending();
+            var accountId = (long) ScenarioContext.Current["AccountId"];
+            var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
+
+            foreach (var tableRow in table.Rows)
+            {
+                dasLevyRepository.CreatePaymentData(new Payment
+                {
+                    Id= Guid.NewGuid().ToString(),
+                    Amount = Convert.ToDecimal(tableRow["Payment_Amount"]),
+                    TransactionType = TransactionType.Learning,
+                    ProgrammeType = tableRow["Payment_Type"].ToLower().Equals("levy") ? 1 : 2,
+                    DeliveryPeriod = new CalendarPeriod { Month=1,Year=2016},
+                    CollectionPeriod = new NamedCalendarPeriod { Id= "1617-R12" ,Month=1,Year=2016},
+                    FundingSource = tableRow["Payment_Type"].ToLower().Equals("levy") ? FundingSource.Levy : FundingSource.CoInvestedEmployer,
+                    EvidenceSubmittedOn = DateTime.Now,
+                    EmployerAccountVersion = "123",
+                    ApprenticeshipId = 1,
+                    ApprenticeshipVersion = "123",
+                    EmployerAccountId = accountId.ToString(),
+                    Ukprn = 1,
+                    Uln = 1,
+                    FrameworkCode = 1,
+                    PathwayCode = 1,
+                    StandardCode = 1
+                }, accountId, "1617-R12", "Provider 1", "Course 1").Wait();
+            }
+
+            dasLevyRepository.CreateNewPeriodEnd(new PeriodEnd
+            {
+                CalendarPeriod = new CalendarPeriod {Month = 1, Year = 2016},
+                CompletionDateTime = DateTime.Now,
+                Id = "1617-R12",
+                ReferenceData = new ReferenceDataDetails { AccountDataValidAt = DateTime.Now,CommitmentDataValidAt = DateTime.Now},
+                Links = new PeriodEndLinks { PaymentsForPeriod = ""}
+            }).Wait();
+
+
+            dasLevyRepository.ProcessPaymentData().Wait();
         }
 
 
