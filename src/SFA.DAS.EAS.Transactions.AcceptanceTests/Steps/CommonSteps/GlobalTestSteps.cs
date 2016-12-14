@@ -28,6 +28,9 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
 
             var cleanDownDb = _container.GetInstance<ICleanDatabase>();
             cleanDownDb.Execute().Wait();
+
+            var cleanDownTransactionDb = _container.GetInstance<ICleanTransactionsDatabase>();
+            cleanDownTransactionDb.Execute().Wait();
         }
     }
 }
