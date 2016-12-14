@@ -102,7 +102,10 @@ sfa.navigation = {
     }
 }
 
+
 sfa.navigation.init();
 $('ul#global-nav-links').collapsableNav();
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
+var showHide = new sfa.ShowHideContent;
+showHide.init();
