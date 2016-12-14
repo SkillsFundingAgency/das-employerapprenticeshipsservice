@@ -34,6 +34,18 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.OData, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.7.0\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -60,6 +72,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Spatial, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.7.0\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,7 +99,9 @@
     <Compile Include="Steps\TransactionSteps\TransactionSteps.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Features\TransactionLine.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TransactionLine.feature.cs</LastGenOutput>
@@ -94,6 +112,14 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Web\SFA.DAS.EAS.Web.csproj">
       <Project>{65DB60B1-80F0-432C-926E-7A6DD02A5645}</Project>
       <Name>SFA.DAS.EAS.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
+      <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
+      <Name>SFA.DAS.EAS.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
