@@ -10,8 +10,8 @@
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
-      <Setting name="ida_Audience" value="__ida_Audience__" />
-      <Setting name="ida_Tenant" value="__ida_Tenant__" />
+      <Setting name="idaAudience" value="__idaAudience__" />
+      <Setting name="idaTenant" value="__idaTenant__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />

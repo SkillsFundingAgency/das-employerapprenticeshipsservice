@@ -188,7 +188,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     EmpRef = empRef,
                     UserId = userId
                 });
-                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef};
+                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef, EmpRefAdded = result.EmpRefAddedDate};
                 return response;
             }
             catch (UnauthorizedAccessException )

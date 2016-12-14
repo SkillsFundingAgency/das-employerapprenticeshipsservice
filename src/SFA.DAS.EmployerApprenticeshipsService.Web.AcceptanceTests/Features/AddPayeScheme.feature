@@ -7,7 +7,7 @@
 Scenario Outline: Remove PAYE scheme 
 Given I am an account "<account_role>"
 When I remove a scheme
-Then Scheme is "status"
+Then Scheme is "<scheme_status>"
 Examples:
 | account_role | scheme_status |
 	| Owner        | removed       |

@@ -10,8 +10,8 @@
       <Setting name="LogLevel" value="Debug" />
       <Setting name="LoggingRedisKey" value="" />
       <Setting name="LoggingRedisConnectionString" value="" />
-      <Setting name="ida_Audience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
-      <Setting name="ida_Tenant" value="citizenazuresfabisgov.onmicrosoft.com" />
+      <Setting name="idaAudience" value="https://citizenazuresfabisgov.onmicrosoft.com/eas-api" />
+      <Setting name="idaTenant" value="citizenazuresfabisgov.onmicrosoft.com" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="5CAEC03A02C9191059F0C18F4983F7F5A3EA7808" thumbprintAlgorithm="sha1" />
