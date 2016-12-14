@@ -8,11 +8,10 @@
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
-      <Setting name="ApiTokenSecret" value="__ApiTokenSecret__" />
-      <Setting name="ApiIssuer" value="__ApiIssuer__" />
-      <Setting name="ApiAudiences" value="__ApiAudiences__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="idaAudience" value="__idaAudience__" />
+      <Setting name="idaTenant" value="__idaTenant__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />

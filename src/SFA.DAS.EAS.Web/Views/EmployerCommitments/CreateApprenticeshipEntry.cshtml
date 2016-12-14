@@ -82,19 +82,19 @@
                             <label for="@Html.IdFor(m => m.DateOfBirthDay)">
                                 Day
                             </label>
-                            @Html.TextBoxFor(m => m.DateOfBirthDay, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthDay) })
+                            @Html.TextBoxFor(m => m.DateOfBirthDay, new { @class = "form-control", type = "number", aria_labelledby = "error-message-" + Html.IdFor(m => m.DateOfBirthDay) })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.DateOfBirthMonth)">
                                 Month
                             </label>
-                            @Html.TextBoxFor(m => m.DateOfBirthMonth, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth) })
+                            @Html.TextBoxFor(m => m.DateOfBirthMonth, new { @class = "form-control", type = "number", aria_labelledby = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth) })
                         </div>
                         <div class="form-group form-group-year">
                             <label for="@Html.IdFor(m => m.DateOfBirthYear)">
                                 Year
                             </label>
-                            @Html.TextBoxFor(m => m.DateOfBirthYear, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthYear) })
+                            @Html.TextBoxFor(m => m.DateOfBirthYear, new { @class = "form-control", type = "number", aria_labelledby = "error-message-" + Html.IdFor(m => m.DateOfBirthYear) })
                         </div>
                     </div>
                 </div>
@@ -128,13 +128,13 @@
                             <label for="@Html.IdFor(m => m.StartMonth)">
                                 Month
                             </label>
-                            @Html.TextBoxFor(m => m.StartMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartMonth) })
+                            @Html.TextBoxFor(m => m.StartMonth, new { @class = "form-control", type = "text", aria_labelledby = "error-message-" + Html.IdFor(m => m.StartMonth) })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.StartYear)">
                                 Year
                             </label>
-                            @Html.TextBoxFor(m => m.StartYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartYear) })
+                            @Html.TextBoxFor(m => m.StartYear, new { @class = "form-control", type = "text", aria_labelledby = "error-message-" + Html.IdFor(m => m.StartYear) })
                         </div>
                     </div>
 
@@ -153,13 +153,13 @@
                             <label for="@Html.IdFor(m => m.EndMonth)">
                                 Month
                             </label>
-                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
+                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_labelledby = "error-message-" + Html.IdFor(m => m.EndMonth) })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.EndYear)">
                                 Year
                             </label>
-                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
+                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_labelledby = "error-message-" + Html.IdFor(m => m.EndYear) })
                         </div>
                     </div>
 
@@ -174,7 +174,7 @@
                         <span class="form-hint">For example, for £1,500 enter 1500</span>
                         @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                     </label>
-                    <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
+                    <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "error-message-" + Html.IdFor(m => m.Cost) })
                 </div>
 
                 <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
@@ -201,7 +201,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
         </ol>
     </div>
 }

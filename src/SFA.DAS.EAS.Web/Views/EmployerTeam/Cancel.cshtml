@@ -6,6 +6,7 @@
 @{
     ViewBag.PageID = "page-team-member-cancel-invite";
     ViewBag.Title = "Cancel invitation";
+    ViewBag.Section = "team";
 }
 
 <div class="grid-row">
@@ -26,7 +27,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to Manage Team Members</a></li>
+            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to Your Team</a></li>
         </ol>
     </div>
 }

@@ -30,8 +30,6 @@
 
 <div class="grid-row">
     <div class="column-full">
-        <h2 class="heading-medium">@GetApprenticesCountText(Model.Apprenticeships)</h2>
-
         @{
             var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Save and continue";
         }
@@ -58,7 +56,7 @@
             }
         }
 
-        @if (Model.Apprenticeships.Count == 0)
+        @if (!Model.HasApprenticeships)
         {
 
             <div class="grid-row" id="empty-alert-top">
@@ -71,51 +69,111 @@
         }
         else
         {
-        <div class="grid-row">
-            <div class="column-full">
-            <table class="tableResponsive viewCommitment">
-                <thead>
-                    <tr>
-                        <th scope="col">Apprentice</th>
-                        <th scope="col">Training course</th>
-                        <th scope="col">Training dates</th>
-                        <th scope="col" colspan="2">Cost</th>
+            if (Model.IncompleteApprenticeships.Count > 0)
+            {
+                <div class="grid-row">
+                    <div class="column-full incompleted">
+                        <p class="heading-large">Incomplete details</p>
+                        <p class="heading-medium">@GetApprenticesCountText(Model.IncompleteApprenticeships)</p>
+                        <table class="tableResponsive viewCommitment">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Apprentice</th>
+                                    <th scope="col">Training course</th>
+                                    <th scope="col">Training dates</th>
+                                    <th scope="col" colspan="2">Cost</th>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var apprenticeship in Model.Apprenticeships)
-                    {
-                        <tr>
-                            <td>
-        
-                                @apprenticeship.ApprenticeName &nbsp; 
-                            </td>
-                            <td>
-                                @apprenticeship.TrainingName &nbsp;
-                            </td>
-                            <td>
-                                @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var apprenticeship in Model.IncompleteApprenticeships)
                                 {
-                                    <span>
-                                        @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
-                                    </span>
+                                    <tr class="row-bg">
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.ApprenticeName)
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.TrainingName)
+                                        </td>
+                                        <td>
+                                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                            {
+                                                <span>
+                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>&ndash;</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Add details</a>                   
+                                        </td>
+                                    </tr>
                                 }
-                            </td>
-                            <td>
-                                @FormatCost(apprenticeship.Cost) &nbsp;
-                            </td>
-                            <td>
-                                <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>                   
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+            if (Model.CompleteApprenticeships.Count > 0)
+            {
+                <div class="grid-row">
+                    <div class="column-full">
+                        <p class="heading-large">Complete details</p>
+                        <p class="heading-medium">@GetApprenticesCountText(Model.CompleteApprenticeships)</p>
+                        <table class="tableResponsive viewCommitment">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Apprentice</th>
+                                    <th scope="col">Training course</th>
+                                    <th scope="col">Training dates</th>
+                                    <th scope="col" colspan="2">Cost</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var apprenticeship in Model.CompleteApprenticeships)
+                                {
+                                    <tr>
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.ApprenticeName)
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.TrainingName)
+                                        </td>
+                                        <td>
+                                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                            {
+                                                <span>
+                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span>&ndash;</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
         }
-      
+
     </div>
 </div>
 
@@ -130,11 +188,21 @@
     }
 }
 
+@helper GetValueOrDefault(string property){
+    if (!string.IsNullOrEmpty(property))
+    {
+        <span>@property &nbsp;</span>
+    }
+    else
+    {
+        <span>@Html.Raw("&ndash;")</span>
+    }
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back" class="back-link">Back</a></li>
+            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
         </ol>
     </div>
 }

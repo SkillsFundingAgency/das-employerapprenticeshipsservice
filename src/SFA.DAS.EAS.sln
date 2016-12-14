@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Build.fsx = Build.fsx
 		RunBuild.bat = RunBuild.bat
+		VSTSConfig.ps1 = VSTSConfig.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{331690B3-1DA8-408E-B6A7-A3237310E6AB}"

@@ -7,6 +7,7 @@
 @{
     ViewBag.PageID = "page-manage-team";
     ViewBag.Title = "Manage team members";
+    ViewBag.Section = "team";
 
     if (TempData.ContainsKey("userAdded"))
     {
@@ -41,7 +42,7 @@
 }
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Manage team members</h1>
+        <h1 class="heading-xlarge">Your team</h1>
         @if (Model.Data.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
@@ -114,7 +115,7 @@
                 <ol role="navigation">
                     <li><a href="/">Your User Profile</a></li>
                     <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-                    <li>Manage Team Members</li>
+                    <li>Your Team</li>
                 </ol>
             </div>
         }

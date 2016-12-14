@@ -39,7 +39,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Teams")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
-            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var userAddedEmail = TempData.ContainsKey("userAdded") ? TempData["userAdded"].ToString() : string.Empty;
+            
+            var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), userAddedEmail);
 
             return View(response);
         }
@@ -62,8 +64,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                TempData["userAdded"] = "true";
-                return View("ViewTeam", response);
+                TempData["userAdded"] = model.Email;
+                return RedirectToAction("ViewTeam");
             }
                 
            
