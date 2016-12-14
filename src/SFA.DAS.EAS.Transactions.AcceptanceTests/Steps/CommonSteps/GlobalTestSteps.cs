@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         private static Container _container;
         private static Mock<ICookieService> _cookieService;
 
-        [AfterTestRun()]
+        [AfterScenario()]
         public static void Arrange()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
