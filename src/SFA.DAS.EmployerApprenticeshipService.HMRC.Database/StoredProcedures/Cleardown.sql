@@ -1,8 +1,14 @@
 ﻿CREATE PROCEDURE [levy].[Cleardown]
+	@INCLUDETOPUPTABLE TINYINT = 0
 AS
 	DELETE FROM [levy].[EnglishFraction]
 	DELETE FROM [levy].[LevyDeclaration]
-	DELETE FROM [levy].[TopUpPercentage]
+	
+	IF @INCLUDETOPUPTABLE = 0
+	BEGIN
+		DELETE FROM [levy].[TopUpPercentage]
+	END
+
 	DELETE FROM [levy].[TransactionLine]
 	DELETE FROM [levy].[Payment]
 	DELETE FROM [levy].[PeriodEnd]
