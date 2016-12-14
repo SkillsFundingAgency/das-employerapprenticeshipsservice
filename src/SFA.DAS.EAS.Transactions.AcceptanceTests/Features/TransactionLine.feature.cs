@@ -137,7 +137,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 16
  testRunner.When("I have the following submissions", ((string)(null)), table2, "When ");
 #line 21
- testRunner.Then("the balance should be 2410 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the balance should be 2310 on the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

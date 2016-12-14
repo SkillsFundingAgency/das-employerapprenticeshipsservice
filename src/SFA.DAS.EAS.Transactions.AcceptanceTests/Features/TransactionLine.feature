@@ -18,7 +18,7 @@ Scenario: Transaction History levy declarations with multiple schemes
 		| 123/ABC     | 1000       | 16-17        | 11            | 1                |
 		| 456/ABC     | 1000       | 16-17        | 11            | 1                |
 		| 123/ABC     | 1100       | 16-17        | 12            | 1                |
-	Then the balance should be 2410 on the screen
+	Then the balance should be 2310 on the screen
 
 Scenario: Transaction History levy declarations over Payroll_year
 	Given I have an account
