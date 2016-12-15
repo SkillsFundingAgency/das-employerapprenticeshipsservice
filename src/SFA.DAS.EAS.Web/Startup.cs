@@ -172,7 +172,7 @@ namespace SFA.DAS.EAS.Web
 
         public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity","") + "/account/changeemail";
 
-        
+        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + "/account/register";
 
         public string Id () => _baseUrl + "id";
         public string Email() => _baseUrl + "email_address";

@@ -109,8 +109,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistration");
+            var c = new Constants(_configuration.Identity);
+            return new RedirectResult($"{c.RegisterLink()}?returnurl={schema}://{authority}/Home/HandleNewRegistration");
         }
 
         [Authorize]
