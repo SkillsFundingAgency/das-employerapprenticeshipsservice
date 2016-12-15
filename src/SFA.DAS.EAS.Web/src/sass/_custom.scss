@@ -29,6 +29,34 @@
     border-color: #2b8cc4;
 }
 
+//validation styles
+.missingForApproval{
+    	border-left: 5px solid $error-colour;
+	    padding-left:15px;
+
+    .form-label-bold{
+	    color:$error-colour;
+    }
+
+}
+
+.cant-approve{ 
+    
+    .panel{
+	    border-color:$error-colour;
+	    color:$error-colour;
+        
+        p{
+            font-weight:bold;
+            font-size:19px;
+        }
+
+        }
+}
+
+
+
+
 
 //mobile first approach needed later - using mixins
 @media only screen and (max-device-width: 640px),

@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+
+using FluentValidation.Results;
+
 using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web.Models
@@ -7,6 +10,8 @@ namespace SFA.DAS.EAS.Web.Models
     {
         public ApprenticeshipViewModel Apprenticeship { get; set; }
         public List<ITrainingProgramme> ApprenticeshipProgrammes { get; set; }
+
+        public ValidationResult ApprovalValidation { get; set; }
     }
     
 

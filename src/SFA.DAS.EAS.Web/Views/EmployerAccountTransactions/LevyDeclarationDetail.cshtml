@@ -11,6 +11,7 @@
     }
     ViewBag.PageID = "page-transaction-details";
     ViewBag.Title = paymentType + " details";
+    ViewBag.Section = "finance";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -19,37 +20,37 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col">PAYE scheme</th>
-                    <th class="numeric" scope="col">Levy declared</th>
-                    <th class="numeric" scope="col">English %</th>
-                    <th class="numeric" scope="col">Top up</th>
-                    <th class="numeric" scope="col">Paid in</th>
+                    <th id="th-ps" scope="col">PAYE scheme</th>
+                    <th id="th-ld" class="numeric" scope="col">Levy declared</th>
+                    <th id="th-ef" class="numeric" scope="col">English %</th>
+                    <th id="th-tu" class="numeric" scope="col">Top up</th>
+                    <th id="th-pi" class="numeric" scope="col">Paid in</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var aggregationLineItem in Model.Data.SubTransactions)
                 {
                     <tr class="responsive-tr">
-                        <td>
+                        <td headers="th-ps">
                             @aggregationLineItem.EmpRef
                         </td>
-                        <td class="numeric">
+                        <td headers="th-ld" class="numeric">
                             @(aggregationLineItem.Amount.ToString("C2", culture))
                         </td>
-                        <td class="numeric">
+                        <td headers="th-ef" class="numeric">
                             @($"{aggregationLineItem.EnglishFraction*100:n2}")%
                         </td>
-                        <td class="numeric">
+                        <td headers="th-tu" class="numeric">
                             @(aggregationLineItem.TopUp.ToString("C2", culture))
                         </td>
-                        <td class="numeric">
+                        <td headers="th-pi" class="numeric">
                             @((aggregationLineItem.LineAmount).ToString("C2", culture))
                         </td>
                     </tr>
                 }
                 <tr class="total">
-                    <th scope="row" colspan="4"><span class="vh">Total</span></th>
-                    <td class="numeric">@Model.Data.Amount.ToString("C2",culture)</td>
+                    <th scope="row" colspan="4" id="th-total"><span class="vh">Total</span></th>
+                    <td class="numeric" headers="th-total">@Model.Data.Amount.ToString("C2",culture)</td>
                 </tr>
             </tbody>
         </table>

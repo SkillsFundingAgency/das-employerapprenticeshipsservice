@@ -26,7 +26,7 @@
                     @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-" + Html.IdFor(m => m.ProviderId) })
 
            
-                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
+                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_labelledby = "ProviderId" })
             </div>
 
             <details>

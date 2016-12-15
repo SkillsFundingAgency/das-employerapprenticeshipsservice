@@ -46,9 +46,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
-            Assert.IsNotNull(result.FlashMessage);
-            Assert.AreEqual("Invitation sent", result.FlashMessage.Headline);
-            Assert.AreEqual($"You've sent an invitation to <strong>{request.Email}</strong>", result.FlashMessage.Message);
+            
         }
 
         [Test]
@@ -96,28 +94,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             Assert.AreEqual(HttpStatusCode.Unauthorized, result.Status);
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()), Times.Never);
         }
-
-        [Test]
-        public async Task ThenIShouldGetBackABadRequestIfOneIsRaiseForViewingTeamMembers()
-        {
-            //Arrange
-            var request = new InviteTeamMemberViewModel
-            {
-                Email = "test@test.com"
-            };
-          
-            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(Unit.Value);
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
-                     .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
-
-            //Act
-            var result = await _orchestrator.InviteTeamMember(request, "37648");
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
-        }
-
+        
         
         [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
         [TestCase(Role.Transactor, HttpStatusCode.Unauthorized)]
@@ -140,5 +117,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             //Assert
             Assert.AreEqual(status, result.Status);
         }
+        
     }
 }
