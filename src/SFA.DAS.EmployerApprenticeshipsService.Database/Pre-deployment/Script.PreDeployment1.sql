@@ -24,3 +24,15 @@ BEGIN
 	alter table account.paye drop column legalentityid
 END
 GO
+
+IF EXISTS(select 1  from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'User' and COLUMN_NAME='Email' and CHARACTER_MAXIMUM_LENGTH = 50)
+BEGIN
+	ALTER TABLE [account].[User]
+	ALTER COLUMN Email NVARCHAR(255) NOT NULL
+END
+
+IF EXISTS(select 1  from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'Invitation' and COLUMN_NAME='Email' and CHARACTER_MAXIMUM_LENGTH = 100)
+BEGIN
+	ALTER TABLE [account].[Invitation]
+	ALTER COLUMN Email NVARCHAR(255) NOT NULL
+END
