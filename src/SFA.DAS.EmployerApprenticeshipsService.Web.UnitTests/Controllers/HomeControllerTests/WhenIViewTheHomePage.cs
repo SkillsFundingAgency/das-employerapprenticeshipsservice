@@ -39,6 +39,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 Identity = new IdentityServerConfiguration
                 {
                     BaseAddress = "http://test",
+                    ChangePasswordLink = "123",
+                    ChangeEmailLink = "123",
                     ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration {ClaimsBaseUrl = "http://claims.test/"}
                 }
             };
