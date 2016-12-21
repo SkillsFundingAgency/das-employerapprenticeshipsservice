@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 Identity = new IdentityServerConfiguration
                 {
                     BaseAddress = "http://test",
-                    ClaimsBaseUrl = "http://claims.test/"
+                    ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration {ClaimsBaseUrl = "http://claims.test/"}
                 }
             };
 

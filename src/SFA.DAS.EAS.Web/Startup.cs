@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
@@ -69,25 +70,35 @@ namespace SFA.DAS.EAS.Web
                 {
                     ClientId = config.Identity.ClientId,
                     ClientSecret = config.Identity.ClientSecret,
-                    Scopes = "openid profile",
+                    Scopes = config.Identity.Scopes,
                     BaseUrl = constants.Configuration.BaseAddress,
                     TokenEndpoint = constants.TokenEndpoint(),
                     UserInfoEndpoint = constants.UserInfoEndpoint(),
                     AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    TokenValidationMethod = TokenValidationMethod.SigningKey,
-                    TokenSigningCertificateLoader = () =>
-                    {
-
-                        var certificatePath = $@"{AppDomain.CurrentDomain.BaseDirectory}App_Data\Certificates\DasIDPCert.pfx";
-                        
-                        return new X509Certificate2(certificatePath, "idsrv3test");
-                    },
+                    TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
+                    TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
                     AuthenticatedCallback = identity =>
                     {
                         PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
                     }
                 });
+                
             }
+        }
+
+        private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
+        {
+            if (!useCertificate)
+            {
+                return null;
+            }
+
+            return () =>
+            {
+                var certificatePath = $@"{AppDomain.CurrentDomain.BaseDirectory}App_Data\Certificates\DasIDPCert.pfx";
+
+                return new X509Certificate2(certificatePath, "idsrv3test");
+            };
         }
 
         private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger, Constants constants)
@@ -156,29 +167,26 @@ namespace SFA.DAS.EAS.Web
     {
         private readonly string _baseUrl;
         public IdentityServerConfiguration Configuration { get; set; }
-
         public Constants(IdentityServerConfiguration configuration)
         {
             this.Configuration = configuration;
-            _baseUrl = configuration.ClaimsBaseUrl;
+            _baseUrl = configuration.ClaimIdentifierConfiguration.ClaimsBaseUrl;
         }
 
         public string AuthorizeEndpoint() => $"{Configuration.BaseAddress}{Configuration.AuthorizeEndPoint}";
         public string LogoutEndpoint() => $"{Configuration.BaseAddress}{Configuration.LogoutEndpoint}";
         public string TokenEndpoint() => $"{Configuration.BaseAddress}{Configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{Configuration.BaseAddress}{Configuration.UserInfoEndpoint}";
+        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.ChangePasswordLink;
+        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.ChangeEmailLink;
+        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.RegisterLink;
+        
 
-        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + "/account/changepassword";
-
-        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity","") + "/account/changeemail";
-
-        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + "/account/register";
-
-        public string Id () => _baseUrl + "id";
-        public string Email() => _baseUrl + "email_address";
-        public string GivenName() => _baseUrl + "given_name";
-        public string FamilyName() => _baseUrl + "family_name";
-        public string DisplayName() => _baseUrl + "display_name";
+        public string Id () => _baseUrl + Configuration.ClaimIdentifierConfiguration.Id;
+        public string Email() => _baseUrl + Configuration.ClaimIdentifierConfiguration.Email;
+        public string GivenName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.GivenName;
+        public string FamilyName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.FaimlyName;
+        public string DisplayName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.DisplayName;
         public string RequiresVerification() => _baseUrl + "requires_verification";
     }
 }

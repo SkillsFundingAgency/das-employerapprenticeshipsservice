@@ -45,7 +45,8 @@ namespace SFA.DAS.EAS.Web.Authentication
             var authenticationManager = _owinContext.Authentication;
             var idToken = authenticationManager.User.FindFirst("id_token").Value;
             authenticationManager.SignOut("Cookies");
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/connect/endsession?id_token_hint={idToken}&post_logout_redirect_uri={_owinContext.Request.Uri.Scheme}://{_owinContext.Request.Uri.Authority}/");   
+            var constants = new Constants(_configuration.Identity);
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken, _owinContext.Request.Uri.Scheme, _owinContext.Request.Uri.Authority));   
         }
 
         public string GetClaimValue(string claimKey)
