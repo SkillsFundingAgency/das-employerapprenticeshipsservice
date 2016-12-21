@@ -3378,6 +3378,16 @@ span.helpText {
   font-size: 19px;
 }
 
+#apprentice-details .apprentice-count-heading {
+  margin-top: 4.5em;
+}
+
+@media (min-width: 641px) {
+  #apprentice-details .apprentice-count-heading {
+    margin-top: 1.875em;
+  }
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #empty-alert-top .alert-default {
     margin-top: 50px;
