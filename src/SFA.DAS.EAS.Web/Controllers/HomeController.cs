@@ -51,9 +51,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
                 
 
-                var c = new Constants(_configuration.Identity?.BaseAddress);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}?sfaredirecturl={Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
-                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}?sfaredirecturl={Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
+                var c = new Constants(_configuration.Identity);
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}{Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}{Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
                 
                 return View(accounts);
             }
@@ -109,8 +109,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-
-            return new RedirectResult($"{_configuration.Identity.BaseAddress}/Login/dialog/appl/selfcare/wflow/register?sfaredirecturl={schema}://{authority}/Home/HandleNewRegistration");
+            var c = new Constants(_configuration.Identity);
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/Home/HandleNewRegistration");
         }
 
         [Authorize]

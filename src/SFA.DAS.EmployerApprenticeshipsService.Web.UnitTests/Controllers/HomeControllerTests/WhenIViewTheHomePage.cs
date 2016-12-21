@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<IOwinWrapper> _owinWrapper;
         private HomeController _homeController;
         private Mock<HomeOrchestrator> _homeOrchestrator;
-        private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedUserId = "123ABC";
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
@@ -34,13 +34,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             _homeOrchestrator.Setup(x => x.GetUsers()).ReturnsAsync(new SignInUserViewModel());
             _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel()});
 
-            _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
+            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            {
+                Identity = new IdentityServerConfiguration
+                {
+                    BaseAddress = "http://test",
+                    ChangePasswordLink = "123",
+                    ChangeEmailLink = "123",
+                    ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration {ClaimsBaseUrl = "http://claims.test/"}
+                }
+            };
 
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, _featureToggle.Object,
+                _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
                 _userWhiteList.Object);
         }
 

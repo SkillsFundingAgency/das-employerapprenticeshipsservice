@@ -216,8 +216,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.OidcMiddleware, Version=1.0.0.8638, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.OidcMiddleware.1.0.0.8638\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+    <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.17484, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.17484\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
@@ -529,6 +529,7 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
+    <Content Include="App_Data\Certificates\DasIDPCert.pfx" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
