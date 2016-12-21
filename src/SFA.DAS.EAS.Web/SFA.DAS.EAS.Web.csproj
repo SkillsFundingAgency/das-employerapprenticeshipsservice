@@ -415,6 +415,7 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
+    <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\SaveStatus.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="OrchestratorResponse.cs" />

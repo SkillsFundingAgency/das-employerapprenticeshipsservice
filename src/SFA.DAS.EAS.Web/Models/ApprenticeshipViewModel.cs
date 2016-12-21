@@ -1,13 +1,13 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Web.Models.Types;
 using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
     [Validator(typeof(ApprenticeshipViewModelValidator))]
-    public class ApprenticeshipViewModel
+    public sealed class ApprenticeshipViewModel
     {
         public string HashedApprenticeshipId { get; set; }
         public string HashedCommitmentId { get; set; }
@@ -15,11 +15,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public int? DateOfBirthDay { get; set; }
-
-        public int? DateOfBirthMonth { get; set; }
-
-        public int? DateOfBirthYear { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; }
 
         public string NINumber { get; set; }
 
@@ -33,28 +29,25 @@ namespace SFA.DAS.EAS.Web.Models
         public string TrainingName { get; set; }
         public string Cost { get; set; }
 
-        public int? StartMonth { get; set; }
+        public DateTimeViewModel StartDate { get; set; }
 
         public string StartMonthName
         {
             get
             {
-                return StartMonth.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(StartMonth.Value) : string.Empty;
+                return StartDate?.Month != null ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(StartDate.Month.Value) : string.Empty;
             }
         }
 
-        public int? StartYear { get; set; }
-        public int? EndMonth { get; set; }
+        public DateTimeViewModel EndDate { get; set; }
 
         public string EndMonthName
         {
             get
             {
-                return EndMonth.HasValue ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(EndMonth.Value) : string.Empty;
+                return EndDate?.Month != null ? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(EndDate.Month.Value) : string.Empty;
             }
         }
-
-        public int? EndYear { get; set; }
 
         public string EmployerRef { get; set; }
 
