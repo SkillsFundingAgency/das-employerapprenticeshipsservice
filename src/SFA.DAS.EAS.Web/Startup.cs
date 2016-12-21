@@ -177,9 +177,9 @@ namespace SFA.DAS.EAS.Web
         public string LogoutEndpoint() => $"{Configuration.BaseAddress}{Configuration.LogoutEndpoint}";
         public string TokenEndpoint() => $"{Configuration.BaseAddress}{Configuration.TokenEndpoint}";
         public string UserInfoEndpoint() => $"{Configuration.BaseAddress}{Configuration.UserInfoEndpoint}";
-        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.ChangePasswordLink;
-        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.ChangeEmailLink;
-        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + Configuration.RegisterLink;
+        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.ChangePasswordLink, Configuration.ClientId);
+        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.ChangeEmailLink, Configuration.ClientId);
+        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.RegisterLink,Configuration.ClientId);
         
 
         public string Id () => _baseUrl + Configuration.ClaimIdentifierConfiguration.Id;
