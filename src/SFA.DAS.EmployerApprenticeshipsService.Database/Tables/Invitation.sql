@@ -2,7 +2,7 @@
 	[Id] BIGINT IDENTITY(1,1) NOT NULL,
 	[AccountId] BIGINT NOT NULL,
 	[Name] [nvarchar](100) NOT NULL,
-	[Email] [nvarchar](100) NOT NULL,
+	[Email] [nvarchar](255) NOT NULL,
 	[ExpiryDate] [datetime] NOT NULL,
 	[Status] [tinyint] NOT NULL,
  [RoleId] TINYINT NOT NULL, 
