@@ -106,14 +106,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
 
         #region DateOfBirth
 
-        [TestCase(31, 2, 13, "Date of birth is not valid")]
-        //[TestCase(31, 12, 1899, "Date of birth is not valid")]
-        [TestCase(5, null, 1998, "Date of birth is not valid")]
-        [TestCase(5, 9, null, "Date of birth is not valid")]
-        [TestCase(null, 9, 1998, "Date of birth is not valid")]
-        [TestCase(5, 9, -1, "Date of birth is not valid")]
-        [TestCase(0, 0, 0, "Date of birth is not valid")]
-        [TestCase(1, 18, 1998, "Date of birth is not valid")]
+        [TestCase(31, 2, 13, "Enter a valid date of birth")]
+        //[TestCase(31, 12, 1899, "Enter a valid date of birth")]
+        [TestCase(5, null, 1998, "Enter a valid date of birth")]
+        [TestCase(5, 9, null, "Enter a valid date of birth")]
+        [TestCase(null, 9, 1998, "Enter a valid date of birth")]
+        [TestCase(5, 9, -1, "Enter a valid date of birth")]
+        [TestCase(0, 0, 0, "Enter a valid date of birth")]
+        [TestCase(1, 18, 1998, "Enter a valid date of birth")]
         public void ShouldFailValidationOnDateOfBirth(int? day, int? month, int? year, string expected)
         {
             _validModel.DateOfBirth = new DateTimeViewModel(day, month, year);
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         }
 
         [Test]
-        public void ShouldFailValidationOnDateOfBirth()
+        public void ShouldFailValidationOnDateOfBirthWithTodayAsValue()
         {
             var date = DateTime.Now;
             _validModel.DateOfBirth = new DateTimeViewModel(date.Day, date.Month, date.Year);
@@ -145,21 +145,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Date of birth must be in the past");
+            result.Errors[0].ErrorMessage.Should().Be("The date of birth must be in the past");
         }
 
         #endregion
 
         #region StartDate
 
-        [TestCase(31, 2, 2121, "Start date is not a valid date")]
-        [TestCase(5, null, 2121, "Start date is not a valid date")]
-        [TestCase(5, 9, null, "Start date is not a valid date")]
-        [TestCase(5, 9, -1, "Start date is not a valid date")]
-        [TestCase(0, 0, 0, "Start date is not a valid date")]
-        [TestCase(1, 18, 2121, "Start date is not a valid date")]
-        [TestCase(5, 9, 1998, "Learner start date must be in the future")]
-        public void ShouldFailValidationForStartDate(int? day, int? month, int? year, string expected)
+        [TestCase(31, 2, 2121, "Enter a valid start date")]
+        [TestCase(5, null, 2121, "Enter a valid start date")]
+        [TestCase(5, 9, null, "Enter a valid start date")]
+        [TestCase(5, 9, -1, "Enter a valid start date")]
+        [TestCase(0, 0, 0, "Enter a valid start date")]
+        [TestCase(1, 18, 2121, "Enter a valid start date")]
+        //[TestCase(5, 9, 1998, "Learner start date must be in the future")]
+        public void ShouldFailValidationForStartDateWith(int? day, int? month, int? year, string expected)
         {
 
             _validModel.StartDate = new DateTimeViewModel(day, month, year);
@@ -183,31 +183,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             result.IsValid.Should().BeTrue();
         }
 
-
-        [Test]
-        public void ShouldFailValidationForStartDate()
-        {
-            var date = DateTime.Now;
-            _validModel.StartDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
-
-            var result = _validator.Validate(_validModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner start date must be in the future");
-        }
-
         #endregion
 
-        #region PlanedEndDate
+        #region PlannedEndDate
 
-        [TestCase(31, 2, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, null, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, 9, null, "Planed end date is not a valid date")]
-        [TestCase(5, 9, -1, "Planed end date is not a valid date")]
-        [TestCase(0, 0, 0, "Planed end date is not a valid date")]
-        [TestCase(1, 18, 2121, "Planed end date is not a valid date")]
-        [TestCase(5, 9, 1998, "Learner planed end date must be in the future")]
-        public void ShouldFailValidationForPlanedEndDate(int? day, int? month, int? year, string expected)
+        [TestCase(31, 2, 2121, "Enter a valid training end date")]
+        [TestCase(5, null, 2121, "Enter a valid training end date")]
+        [TestCase(5, 9, null, "Enter a valid training end date")]
+        [TestCase(5, 9, -1, "Enter a valid training end date")]
+        [TestCase(0, 0, 0, "Enter a valid training end date")]
+        [TestCase(1, 18, 2121, "Enter a valid training end date")]
+        //[TestCase(5, 9, 1998, "Learner Planned end date must be in the future")]
+        public void ShouldFailValidationForPlannedEndDateWith(int? day, int? month, int? year, string expected)
         {
 
             _validModel.EndDate = new DateTimeViewModel(day, month, year);
@@ -222,25 +209,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         [TestCase(5, 9, 2100)]
         [TestCase(1, 1, 2023)]
         [TestCase(null, 9, 2067)]
-        public void ShouldNotFailValidationForPlanedEndDate(int? day, int? month, int? year)
+        public void ShouldNotFailValidationForPlannedEndDate(int? day, int? month, int? year)
         {
             _validModel.EndDate = new DateTimeViewModel(day, month, year);
 
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeTrue();
-        }
-
-        [Test]
-        public void ShouldFailValidationForPlanedEndDate()
-        {
-            var date = DateTime.Now;
-            _validModel.EndDate = new DateTimeViewModel(date.Day, date.Month, date.Year);
-
-            var result = _validator.Validate(_validModel);
-
-            result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner planed end date must be in the future");
         }
 
         [Test]
@@ -252,7 +227,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             var result = _validator.Validate(_validModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("Learner planed end date must be greater than start date");
+            result.Errors[0].ErrorMessage.Should().Be("The end date must be later than the start date");
         }
 
         [Test]

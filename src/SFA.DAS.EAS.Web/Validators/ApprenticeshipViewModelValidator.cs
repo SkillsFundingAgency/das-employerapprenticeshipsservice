@@ -24,22 +24,20 @@ namespace SFA.DAS.EAS.Web.Validators
                 .WithMessage("Enter a valid national insurance number");
 
             RuleFor(r => r.StartDate)
-               .Must(ValidateStartDate).Unless(m => m.StartDate == null).WithMessage("Start date is not a valid date")
-               .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage("Learner start date must be in the future");
+                .Must(ValidDateValue).Unless(m => m.StartDate == null).WithMessage("Enter a valid start date");
 
             RuleFor(r => r.EndDate)
-                .Must(ValidateStartDate).Unless(m => m.EndDate == null).WithMessage("Planed end date is not a valid date")
-                .Must(BeGreaterThenStartDate).WithMessage("Learner planed end date must be greater than start date")
-                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime > now)).WithMessage("Learner planed end date must be in the future");
+                .Must(ValidDateValue).Unless(m => m.EndDate == null).WithMessage("Enter a valid training end date")
+                .Must(BeGreaterThanStartDate).WithMessage("The end date must be later than the start date");
 
             RuleFor(r => r.DateOfBirth)
-                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Date of birth is not valid")
-                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("Date of birth must be in the past");
+                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
+                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
 
             RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost");
         }
 
-        private bool BeGreaterThenStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
+        private bool BeGreaterThanStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
         {
             if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;
 
@@ -61,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Validators
             return true;
         }
 
-        private bool ValidateStartDate(DateTimeViewModel date)
+        private bool ValidDateValue(DateTimeViewModel date)
         {
             if (date.DateTime == null)
             {
