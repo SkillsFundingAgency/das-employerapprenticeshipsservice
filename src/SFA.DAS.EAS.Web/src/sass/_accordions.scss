@@ -1,0 +1,21 @@
+﻿.js-enabled {
+    .accordion-tab {
+        position: relative;
+        padding-left: 25px;
+        &:before {
+            @include closed-arrow;
+        }
+        &:focus {
+            outline: 3px solid $focus-colour;
+        }
+        &.open {
+            &:before {
+                @include open-arrow;
+            }
+        }
+    }
+    .accordion-panel {
+        @extend .panel;
+    }
+
+}

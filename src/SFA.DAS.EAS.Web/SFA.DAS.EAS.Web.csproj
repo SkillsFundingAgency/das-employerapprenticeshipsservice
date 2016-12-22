@@ -879,6 +879,7 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="src\sass\_accordions.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
