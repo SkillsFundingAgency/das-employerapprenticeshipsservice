@@ -2980,11 +2980,12 @@ span.helpText {
   font-size: 19px;
 }
 
-@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
-  #empty-alert-top .alert-default {
-    margin-top: 50px;
-  }
-  #apprentice-details table.viewCommitment {
-    margin-top: 50px;
-  }
+.form-group #StartDate_Month,
+.form-group #EndDate_Month {
+  width: 40px;
+}
+
+.form-group #StartDate_Year,
+.form-group #EndDate_Year {
+  width: 60px;
 }

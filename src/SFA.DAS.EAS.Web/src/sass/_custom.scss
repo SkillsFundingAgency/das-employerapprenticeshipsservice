@@ -56,16 +56,14 @@
 
 
 
-
-
-//mobile first approach needed later - using mixins
-@media only screen and (max-device-width: 640px),
-only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) {
-    #empty-alert-top .alert-default {
-        margin-top: 50px;
+.form-group {
+    #StartDate_Month,
+    #EndDate_Month{
+        width:40px;
     }
-    #apprentice-details table.viewCommitment {
-        margin-top: 50px;
+    
+    #StartDate_Year,
+    #EndDate_Year{
+        width:60px;
     }
-} // mobile view ends
+}
