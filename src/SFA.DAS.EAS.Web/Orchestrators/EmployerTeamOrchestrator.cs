@@ -209,7 +209,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.FlashMessage = new FlashMessageViewModel()
                 {
                     Headline = "Invitation cancelled",
-                    Message = $"You've cancelled the invitation sent to <b>{email}</strong>",
+                    Message = $"You've cancelled the invitation sent to <strong>{email}</strong>",
                     Severity = FlashMessageSeverityLevel.Success
                 };
 

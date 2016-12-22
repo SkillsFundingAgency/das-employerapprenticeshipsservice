@@ -123,6 +123,7 @@
     <Compile Include="AggregationLine.cs" />
     <Compile Include="AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
+    <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmailTemplateConfigurationItem.cs" />

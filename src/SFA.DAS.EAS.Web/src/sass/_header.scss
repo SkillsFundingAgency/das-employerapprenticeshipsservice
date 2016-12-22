@@ -1,35 +1,23 @@
-#global-header .header-wrapper {
-    padding: 0;
-    @include media(tablet) {
-        padding: 5px 0;           
+@include media(tablet) {
+    #global-header.with-proposition .header-wrapper {
+        .header-global {
+            float: left;
+            width: 33.33%;
+        }
+        .header-proposition {
+            float: left;
+            width: 66.66%;
+            padding-top: 0;
+        }
     }
 }
 
-.header-global {
-    margin: 0 auto;
-    max-width: 960px;
-    overflow: hidden;
-    padding: 15px;
-}
-
-.header-global__title {
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1.1;
-    margin: 0;
-    padding: 0;
+#global-header .header-proposition #proposition-name {
     @include media(tablet) {
-        font-size: 32px;
-    }
-    a {
-        border-bottom: 1px solid #000;
-        color: #fff;
+        margin-top: 5px;
         display: inline-block;
-        padding: 2px 0;
-        text-decoration: none;
     }
 }
-
 
 .phase-banner {
     position: relative;
@@ -110,7 +98,7 @@ nav {
 
 .header-user {
     background: $grey-4;
-    border-top: 10px solid $grey-1;
+    border-top: 10px solid $govuk-blue;
     border-bottom: 1px solid $grey-2;
     h2 {
         margin: 10px 0;

@@ -9,6 +9,11 @@
     ViewBag.PageID = "page-onboard-paye-scheme-in-use";
     ViewBag.Title = "PAYE scheme already in use";
 }
+@if (Model.EmpRefNotFound)
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-not-linked-to-credentials";
+    ViewBag.Title = "PAYE scheme not linked to credentials";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">

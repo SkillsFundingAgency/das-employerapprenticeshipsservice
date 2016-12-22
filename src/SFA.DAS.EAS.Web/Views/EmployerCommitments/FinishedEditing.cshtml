@@ -22,7 +22,7 @@
             @if (Model.NotReadyForApproval)
             {
 
-                <p class="lede">
+                <p>
                     @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
                 </p>
 

@@ -27,56 +27,49 @@
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             
 
-            <div class="@cantApproveClass">
-                <div class="panel panel-border-wide">
+            <div class="panel panel-border-wide">
+
+                @if (validation != null && !validation.IsValid)
+                {
+                    <p>
+                        You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
+
+                    </p>
+                }
+                else
+                {
+
+                    <p> You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
+
+                    </p>
+                }
 
 
-
-                    @if (validation != null && !validation.IsValid)
-            {
-                        <p>
-                            You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
-
-                        </p>
-                    }
-                    else
-                    {
-
-                        <p> You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
-
-                        </p>
-                    }
-
-
-
-
-                </div>
             </div>
  
             <hr />
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error") @Html.AddClassIfPropertyIsMissingForApproval(m => m.FirstName, "missingForApproval")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
                 @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
                 @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
 
             </div>
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error") @Html.AddClassIfPropertyIsMissingForApproval(m => m.LastName, "missingForApproval")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
                 @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
                 @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
 
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error") @Html.AddClassIfPropertyIsMissingForApproval(m => m.NINumber, "missingForApproval")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error")">
                 <hr />
                 @Html.LabelFor(m => m.NINumber, "National insurance number", new { @class = "form-label form-label-bold" })
                 @Html.ValidationMessageFor(m => m.NINumber, null, new { id = "error-message-" + Html.IdFor(m => m.NINumber) })
                 @Html.TextBoxFor(m => m.NINumber, new { @class = "form-control form-control-3-4" })
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirthDay, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthMonth, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthYear, "error")
-                                                    @Html.AddClassIfPropertyIsMissingForApproval(m => m.DateOfBirthDay, "missingForApproval")  @Html.AddClassIfPropertyIsMissingForApproval(m => m.DateOfBirthMonth, "missingForApproval")  @Html.AddClassIfPropertyIsMissingForApproval(m => m.DateOfBirthYear, "missingForApproval")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirthDay, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthMonth, "error") @Html.AddClassIfPropertyInError(x => x.DateOfBirthYear, "error")">
                 <hr />
                 <span class="form-label-bold">Date of birth</span>
                 <span class="form-hint">For example, 08 12 2001</span>
@@ -89,24 +82,24 @@
                         <label for="@Html.IdFor(m => m.DateOfBirthDay)">
                             Day
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirthDay, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthDay) })
+                        @Html.TextBoxFor(m => m.DateOfBirthDay, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirthDay) })
                     </div>
                     <div class="form-group form-group-month">
                         <label for="@Html.IdFor(m => m.DateOfBirthMonth)">
                             Month
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirthMonth, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthMonth) })
+                        @Html.TextBoxFor(m => m.DateOfBirthMonth, new { @class = "form-control", type = "number", aria_labelledby =  Html.IdFor(m => m.DateOfBirthMonth) })
                     </div>
                     <div class="form-group form-group-year">
                         <label for="@Html.IdFor(m => m.DateOfBirthYear)">
                             Year
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirthYear, new { @class = "form-control", type = "number", aria_describedby = "error-message-" + Html.IdFor(m => m.DateOfBirthYear) })
+                        @Html.TextBoxFor(m => m.DateOfBirthYear, new { @class = "form-control", type = "number", aria_labelledby =  Html.IdFor(m => m.DateOfBirthYear) })
                     </div>
                 </div>
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyIsMissingForApproval(m => m.TrainingId, "missingForApproval")">
+            <div class="form-group">
                 <hr />
                 <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
                 <select name="TrainingId" id="TrainingId" class="form-control form-control-3-4 " aria-label="Apprenticeship training course">
@@ -124,8 +117,7 @@
 
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartMonth, "error") @Html.AddClassIfPropertyInError(x => x.StartYear, "error")
-                                                    @Html.AddClassIfPropertyIsMissingForApproval(m => m.StartMonth, "missingForApproval") @Html.AddClassIfPropertyIsMissingForApproval(m => m.StartYear, "missingForApproval") ">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartMonth, "error") @Html.AddClassIfPropertyInError(x => x.StartYear, "error")">
                 <hr />
                 <fieldset>
                     <legend>
@@ -139,20 +131,19 @@
                             <label for="@Html.IdFor(m => m.StartMonth)">
                                 <span class="form-label-bold">Month</span>
                             </label>
-                            @Html.TextBoxFor(m => m.StartMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartMonth) })
+                            @Html.TextBoxFor(m => m.StartMonth, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.StartMonth) })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.StartYear)">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.StartYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.StartYear) })
+                            @Html.TextBoxFor(m => m.StartYear, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.StartYear) })
                         </div>
                     </div>
                 </fieldset>
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error") 
-                                                    @Html.AddClassIfPropertyIsMissingForApproval(m => m.EndMonth, "missingForApproval") @Html.AddClassIfPropertyIsMissingForApproval(m => m.EndYear, "missingForApproval")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndMonth, "error") @Html.AddClassIfPropertyInError(x => x.EndYear, "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected training finish date</span>
@@ -165,27 +156,27 @@
                             <label for="@Html.IdFor(m => m.EndMonth)">
                                 <span class="form-label-bold">Month</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndMonth) })
+                            @Html.TextBoxFor(m => m.EndMonth, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.EndMonth) })
                         </div>
                         <div class="form-group form-group-month">
                             <label for="@Html.IdFor(m => m.EndYear)">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.EndYear) })
+                            @Html.TextBoxFor(m => m.EndYear, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.EndYear) })
                         </div>
                     </div>
                 </fieldset>
 
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error") @Html.AddClassIfPropertyIsMissingForApproval(m => m.Cost, "missingForApproval")">
+            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
                 <hr />
                 <label for="@Html.IdFor(m => m.Cost)">
                     <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
                     <span class="form-hint">For example, for £1,500 enter 1500</span>
                     @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
                 </label>
-                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_describedby = "error-message-" + Html.IdFor(m => m.Cost) })
+                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby =  Html.IdFor(m => m.Cost) })
             </div>
 
             <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">

@@ -250,8 +250,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderName = data.Commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 HasApprenticeships = apprenticships.Count > 0,
-                IncompleteApprenticeships = apprenticships.Where(x => !x.CanBeApproved ).ToList(),
-                CompleteApprenticeships = apprenticships.Where(x => x.CanBeApproved).ToList(),
+                Apprenticeships = apprenticships,
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
             };
