@@ -1898,33 +1898,20 @@ table.top-border {
   margin-top: 0;
 }
 
-#global-header .header-wrapper {
-  padding: 0;
-  padding: 5px 0;
+#global-header.with-proposition .header-wrapper .header-global {
+  float: left;
+  width: 33.33%;
 }
 
-.header-global {
-  margin: 0 auto;
-  max-width: 960px;
-  overflow: hidden;
-  padding: 15px;
+#global-header.with-proposition .header-wrapper .header-proposition {
+  float: left;
+  width: 66.66%;
+  padding-top: 0;
 }
 
-.header-global__title {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1.1;
-  margin: 0;
-  padding: 0;
-  font-size: 32px;
-}
-
-.header-global__title a {
-  border-bottom: 1px solid #000;
-  color: #fff;
+#global-header .header-proposition #proposition-name {
+  margin-top: 5px;
   display: inline-block;
-  padding: 2px 0;
-  text-decoration: none;
 }
 
 .phase-banner {
@@ -1993,7 +1980,7 @@ nav ul {
 
 .header-user {
   background: #f8f8f8;
-  border-top: 10px solid #6f777b;
+  border-top: 10px solid #005ea5;
   border-bottom: 1px solid #bfc1c3;
 }
 
