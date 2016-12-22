@@ -179,6 +179,7 @@
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
+    <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Invitation.cs" />
     <Compile Include="InvitationStatus.cs" />
@@ -187,6 +188,8 @@
     <Compile Include="LevyDeclarationView.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
+    <Compile Include="Models\ReferenceData\Charity.cs" />
+    <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
     <Compile Include="TransactionItemType.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />

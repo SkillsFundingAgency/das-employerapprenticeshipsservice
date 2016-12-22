@@ -270,6 +270,9 @@
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsHandler.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQuery.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsResponse.cs" />
