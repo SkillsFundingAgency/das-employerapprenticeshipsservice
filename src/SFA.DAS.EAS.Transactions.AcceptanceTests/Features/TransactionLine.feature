@@ -60,3 +60,12 @@ Scenario: Transaction History levy declarations late account registration in pay
 		| 424/ABC     | 200        | 16-17        | 02            | 1                |	
 	And I register on DAS in month 02
 	Then the balance should be 2420 on the screen
+
+Scenario: Transaction History levy declarations next  year registration 
+	Given I have an account
+	When I have the following submissions
+		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
+		| 323/ABC     | 1000       | 16-17        | 12            | 1                |
+		| 323/ABC     | 100        | 17-18        | 01            | 1                |
+	And I register on DAS in year 17-18 month 01
+	Then the balance should be 1100 on the screen
