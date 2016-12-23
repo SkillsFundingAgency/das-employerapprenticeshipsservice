@@ -39,3 +39,24 @@ Scenario: Transaction History levy declarations and Payments
 		| 100            | levy         |
 		| 200            | cofund       |
 	Then the balance should be 1110 on the screen
+	
+Scenario: Transaction History levy declarations late account registration in payroll year
+	Given I have an account
+	When I have the following submissions
+		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
+		| 423/ABC     | 1000       | 16-17        | 01            | 1                |
+		| 423/ABC     | 2000       | 16-17        | 02            | 1                |
+		| 423/ABC     | 3000       | 16-17        | 03            | 1                |
+	And I register on DAS in month 03
+	Then the balance should be 3300 on the screen
+
+Scenario: Transaction History levy declarations late account registration in payroll year
+	Given I have an account
+	When I have the following submissions
+		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
+		| 425/ABC     | 1000       | 16-17        | 01            | 1                |
+		| 424/ABC     | 100        | 16-17        | 01            | 1                |
+		| 425/ABC     | 2000       | 16-17        | 02            | 1                |
+		| 424/ABC     | 200        | 16-17        | 02            | 1                |	
+	And I register on DAS in month 02
+	Then the balance should be 2420 on the screen
