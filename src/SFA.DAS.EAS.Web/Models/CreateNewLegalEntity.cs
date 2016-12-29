@@ -13,6 +13,6 @@ namespace SFA.DAS.EAS.Web.Models
         public bool SignedAgreement { get; set; }
         public DateTime SignedDate { get; set; }
         public string ExternalUserId { get; set; }
-
+        public string LegalEntityStatus { get; set; }
     }
 }
