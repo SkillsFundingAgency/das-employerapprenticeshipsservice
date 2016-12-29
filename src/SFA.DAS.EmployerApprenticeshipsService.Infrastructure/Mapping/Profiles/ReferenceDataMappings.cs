@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using SFA.DAS.EAS.Domain.Models.ReferenceData;
-
+using SFA.DAS.ReferenceData.Api.Client.Dto;
 
 namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
 {
@@ -8,7 +7,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
     {
         public ReferenceDataMappings()
         {
-            CreateMap<Charity, Charity>();
+            CreateMap<Charity, Domain.Models.ReferenceData.Charity>();
         }
     }
 }
