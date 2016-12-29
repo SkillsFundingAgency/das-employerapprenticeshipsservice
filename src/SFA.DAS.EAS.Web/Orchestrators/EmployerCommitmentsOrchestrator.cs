@@ -275,7 +275,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             apprenticeship.HashedAccountId = hashedAccountId;
 
+            // TODO: Validation errors to be used in a future story.
             var approvalValidator = new ApprenticeshipViewModelApproveValidator();
+
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
@@ -512,18 +514,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 NINumber = apprenticeship.NINumber,
-                DateOfBirthDay = apprenticeship.DateOfBirth?.Day,
-                DateOfBirthMonth = apprenticeship.DateOfBirth?.Month,
-                DateOfBirthYear = apprenticeship.DateOfBirth?.Year,
+                DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartMonth = apprenticeship.StartDate?.Month,
-                StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate?.Month,
-                EndYear = apprenticeship.EndDate?.Year,
+                StartDate = new DateTimeViewModel(apprenticeship.StartDate),
+                EndDate = new DateTimeViewModel(apprenticeship.EndDate),
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
@@ -558,12 +556,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
                 ProviderRef = viewModel.ProviderRef,
                 EmployerRef = viewModel.EmployerRef
             };
@@ -584,30 +582,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
         }
 
-        private DateTime? GetDateTime(int? month, int? year)
-        {
-            if (month.HasValue && year.HasValue)
-                return new DateTime(year.Value, month.Value, 1);
-
-            return null;
-        }
-
-        private DateTime? GetDateTime(int? day, int? month, int? year)
-        {
-            if (day.HasValue && month.HasValue && year.HasValue)
-            {
-                DateTime dateOfBirthOut;
-                if (DateTime.TryParseExact(
-                    $"{year.Value}-{month.Value}-{day.Value}",
-                    "yyyy-M-d",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
-                {
-                    return dateOfBirthOut;
-                }
-            }
-
-            return null;
-        }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {

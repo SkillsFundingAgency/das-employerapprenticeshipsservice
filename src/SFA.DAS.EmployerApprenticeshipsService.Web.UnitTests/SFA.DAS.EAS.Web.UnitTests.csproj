@@ -149,6 +149,7 @@
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
+    <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
     <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
+    <Compile Include="Validators\WhenValidatingApprenticeshipViewModelForApproval.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

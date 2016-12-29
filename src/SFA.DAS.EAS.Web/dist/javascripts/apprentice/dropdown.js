@@ -15,12 +15,12 @@
 
     // retain tabbed order after selection
     $('#TrainingId').on('select2:select', function () {
-        $("#StartMonth").focus();
+        $("#StartDate_Month").focus();
     });
 
     // retain tabbed order on close without selection
     $('#TrainingId').on('select2:close', function () {
-        $("#StartMonth").focus();
+        $("#StartDate_Month").focus();
     });
 
 }());
