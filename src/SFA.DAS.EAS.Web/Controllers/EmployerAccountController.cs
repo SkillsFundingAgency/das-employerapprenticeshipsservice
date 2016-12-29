@@ -87,7 +87,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyName = model.CompanyName,
                     DateOfIncorporation = model.DateOfIncorporation,
                     RegisteredAddress = model.RegisteredAddress,
-                    HideBreadcrumb = model.HideBreadcrumb
+                    HideBreadcrumb = model.HideBreadcrumb,
+                    CompanyStatus = model.CompanyStatus
                 };
             }
             else
@@ -100,7 +101,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyName = existingData.CompanyName,
                     DateOfIncorporation = existingData.DateOfIncorporation,
                     RegisteredAddress = existingData.RegisteredAddress,
-                    HideBreadcrumb = existingData.HideBreadcrumb
+                    HideBreadcrumb = existingData.HideBreadcrumb,
+                    CompanyStatus = existingData.CompanyStatus
                 };
             }
             
@@ -172,7 +174,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 DateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                HideBreadcrumb = enteredData.HideBreadcrumb
+                HideBreadcrumb = enteredData.HideBreadcrumb,
+                CompanyStatus = enteredData.CompanyStatus
             };
 
             return View(model);
@@ -196,7 +199,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
                 AccessToken = enteredData.AccessToken,
-                RefreshToken = enteredData.RefreshToken
+                RefreshToken = enteredData.RefreshToken,
+                CompanyStatus = enteredData.CompanyStatus
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);

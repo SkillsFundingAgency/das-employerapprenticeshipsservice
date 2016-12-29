@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -48,6 +49,35 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.Status);
             _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerInformationRequest>( info => info.Id.Equals(request.EmployerRef))));
+        }
+
+        [Test]
+        public async Task ThenTheValuesWillBeCorrectlyMappedInTheResponse()
+        {
+            //Arrange
+            var request = new SelectEmployerModel { EmployerRef = "251643" };
+            var response = new GetEmployerInformationResponse
+            {
+                CompanyStatus = "active",
+                AddressLine1 = "address1",
+                AddressLine2 = "address2",
+                AddressPostcode = "ADD123",
+                CompanyName = "Company Name",
+                CompanyNumber = "ABC12345",
+                DateOfIncorporation = DateTime.MaxValue
+            };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>())).ReturnsAsync(response);
+
+            //Act
+            var actual = await _employerAccountOrchestrator.GetCompanyDetails(request);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(response.DateOfIncorporation, actual.Data.DateOfIncorporation);
+            Assert.AreEqual(response.CompanyStatus, actual.Data.CompanyStatus);
+            Assert.AreEqual($"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}", actual.Data.RegisteredAddress);
+            Assert.AreEqual(response.CompanyName, actual.Data.CompanyName);
+            Assert.AreEqual(response.CompanyNumber, actual.Data.CompanyNumber);
         }
     }
 }

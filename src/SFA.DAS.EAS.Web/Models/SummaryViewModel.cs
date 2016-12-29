@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Web.Models
         public string EmployerRef { get; set; }
         public bool EmpRefNotFound { get; set; }
         public bool HideBreadcrumb { get; set; }
+        public string CompanyStatus { get; set; }
     }
 }

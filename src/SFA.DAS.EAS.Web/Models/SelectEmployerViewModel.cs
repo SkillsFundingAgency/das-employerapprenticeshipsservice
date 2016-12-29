@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Web.Models
 
         public string RegisteredAddress { get; set; }
         public bool HideBreadcrumb { get; set; }
+        public string CompanyStatus { get; set; }
     }
 }

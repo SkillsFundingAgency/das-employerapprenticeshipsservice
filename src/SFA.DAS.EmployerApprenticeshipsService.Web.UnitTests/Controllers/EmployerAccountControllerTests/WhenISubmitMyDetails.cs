@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -15,7 +18,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
-    class WhenIHaveSelectedAnEmployer : ControllerTestBase
+    public class WhenISubmitMyDetails : ControllerTestBase
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
@@ -73,59 +76,39 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
 
         [Test]
-        public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
-        {
-            //Assign
-            var request = new SelectEmployerViewModel
-            {
-                CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
-                CompanyStatus = "active"
-            };
-
-            _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
-            _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
-
-            //Act
-            _employerAccountController.GatewayInform(request);
-
-            //Assert
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
-                It.Is<EmployerAccountData>(data => 
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
-        }
-
-        [Test]
-        public void ThenTheDataWillBeReadFromTheCookieIfIAmGoingBackThroughTheProcess()
+        public void ThenTheInformationIsReadFromTheCookie()
         {
             //Arrange
-            var request = new EmployerAccountData
+            var employerAccountData = new EmployerAccountData
             {
-                CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
-                CompanyStatus = "active"
+                CompanyStatus = "Active",
+                CompanyName = "Test Company",
+                DateOfIncorporation = DateTime.MaxValue,
+                CompanyNumber = "ABC12345",
+                RegisteredAddress = "My Address",
+                EmployerRef = "123/abc",
+                EmpRefNotFound = true,
+                HideBreadcrumb = true
             };
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(request);
+            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(employerAccountData);
+
 
             //Act
-            _employerAccountController.GatewayInform(null);
+            var actual = _employerAccountController.Summary();
 
             //Assert
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
-                It.Is<EmployerAccountData>(data =>
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
+            Assert.IsNotNull(actual);
+            var viewResult = actual as ViewResult;
+            Assert.IsNotNull(viewResult);
+            var model = viewResult.Model as SummaryViewModel;
+            Assert.IsNotNull(model);
+            Assert.AreEqual(employerAccountData.CompanyName, model.CompanyName);
+            Assert.AreEqual(employerAccountData.CompanyStatus, model.CompanyStatus);
+            Assert.AreEqual(employerAccountData.CompanyNumber, model.CompanyNumber);
+            Assert.AreEqual(employerAccountData.EmployerRef, model.EmployerRef);
+            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.EmpRefNotFound);
+            Assert.AreEqual(employerAccountData.HideBreadcrumb, model.HideBreadcrumb);
+
         }
     }
 }

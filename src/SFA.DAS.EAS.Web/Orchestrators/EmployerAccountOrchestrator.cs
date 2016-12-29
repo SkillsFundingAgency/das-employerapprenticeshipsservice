@@ -43,7 +43,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
                     EmployerRef = model.EmployerRef,
                     AccessToken = model.AccessToken,
-                    RefreshToken = model.RefreshToken
+                    RefreshToken = model.RefreshToken,  
+                    CompanyStatus = model.CompanyStatus
                 });
 
                 CookieService.Delete(context, CookieName);
