@@ -15,5 +15,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
         public string AddressLine2 { get; set; }
 
         public string AddressPostcode { get; set; }
+        public string CompanyStatus { get; set; }
     }
 }
