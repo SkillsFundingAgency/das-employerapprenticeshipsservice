@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken)
+        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus)
         {
             return await WithConnection(async c =>
             {
@@ -33,6 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
                 parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
+                parameters.Add("@companyStatus", companyStatus);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
