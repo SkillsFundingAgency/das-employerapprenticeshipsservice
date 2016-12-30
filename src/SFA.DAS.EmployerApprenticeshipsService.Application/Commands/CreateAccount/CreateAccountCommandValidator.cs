@@ -31,6 +31,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             if (string.IsNullOrWhiteSpace(item.CompanyName))
                 validationResult.AddError("CompanyName", "No CompanyName supplied");
 
+            if (string.IsNullOrWhiteSpace(item.CompanyStatus))
+                validationResult.AddError(nameof(item.CompanyStatus));
+
             if (string.IsNullOrWhiteSpace(item.EmployerRef))
                 validationResult.AddError("EmployerRef", "No EmployerRef supplied");
 
