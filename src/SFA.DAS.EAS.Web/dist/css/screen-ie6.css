@@ -2132,11 +2132,11 @@ nav ul {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 .js-enabled #user-nav li.has-sub-menu.open > a {
@@ -2147,7 +2147,7 @@ nav ul {
 
 .js-enabled #user-nav li.has-sub-menu.open > a:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -2233,16 +2233,16 @@ li.menu-link.sub-menu-open ul li a {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -2268,16 +2268,16 @@ a#link-settings:before {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 a#link-settings.open:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -2607,12 +2607,11 @@ tr.total td {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: #005ea5;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
-  border-color: red;
+  margin-top: -5px;
   left: 0;
 }
 
@@ -2622,7 +2621,7 @@ tr.total td {
 
 .js-enabled .accordion-tab.open:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: #005ea5;
   border-left-color: transparent;
 }
 
