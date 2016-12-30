@@ -33,7 +33,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetCharity
                 Name = "Test Charity"
             });
 
-            RequestHandler = new GetCharityQueryHandler(_referenceDataService.Object);
+            
+
+            RequestHandler = new GetCharityQueryHandler(_referenceDataService.Object,RequestValidator.Object);
 
             Query = new GetCharityQueryRequest
             {
