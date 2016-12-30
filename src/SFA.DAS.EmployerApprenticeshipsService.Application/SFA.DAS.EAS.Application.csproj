@@ -273,6 +273,7 @@
     <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryValidator.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsHandler.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQuery.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsResponse.cs" />
