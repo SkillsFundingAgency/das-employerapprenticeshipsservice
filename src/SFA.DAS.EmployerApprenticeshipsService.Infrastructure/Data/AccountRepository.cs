@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
                 parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
-                parameters.Add("@companyStatus", companyStatus);
+                parameters.Add("@status", companyStatus);
 
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@signedById", signedById, DbType.Int64);
                 parameters.Add("@legalEntityId", signedById, DbType.Int64);
                 parameters.Add("@employerAgreementId", signedById, DbType.Int64);
-                parameters.Add("@companyStatus", legalEntity.CompanyStatus, DbType.String);
+                parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
