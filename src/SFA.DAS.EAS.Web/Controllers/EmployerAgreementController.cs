@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
             string hashedAccountId, string name, string code, string address, DateTime incorporated, 
-            bool? userIsAuthorisedToSign, string submit)
+            bool? userIsAuthorisedToSign, string submit, string legalEntityStatus)
         {
             var request = new CreateNewLegalEntity
             {
@@ -148,7 +148,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
                 SignedDate = DateTime.Now,
-                ExternalUserId = OwinWrapper.GetClaimValue(@"sub")
+                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
+                LegalEntityStatus = legalEntityStatus
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

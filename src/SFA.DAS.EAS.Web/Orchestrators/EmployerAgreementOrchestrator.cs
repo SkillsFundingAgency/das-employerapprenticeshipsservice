@@ -223,7 +223,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CompanyNumber = response.CompanyNumber,
                     CompanyName = response.CompanyName,
                     DateOfIncorporation = response.DateOfIncorporation,
-                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}"
+                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    CompanyStatus = response.CompanyStatus
                 }
             };
         }
@@ -251,7 +252,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             LegalEntityIncorporatedDate = request.IncorporatedDate,
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
-                            TemplateText = response.Template.Text
+                            TemplateText = response.Template.Text,
+                            LegalEntityStatus = request.LegalEntityStatus
                         }
                     },
                     Status = HttpStatusCode.BadRequest
@@ -266,7 +268,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Name = request.Name,
                     Code = request.Code,
                     RegisteredAddress = request.Address,
-                    DateOfIncorporation = request.IncorporatedDate
+                    DateOfIncorporation = request.IncorporatedDate,
+                    CompanyStatus = request.LegalEntityStatus
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,

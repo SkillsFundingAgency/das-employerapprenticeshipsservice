@@ -9,7 +9,8 @@
 	@accountId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
-	@addedDate DATETIME	
+	@addedDate DATETIME	,
+	@status varchar(50)
 )
 AS
 BEGIN
@@ -25,7 +26,7 @@ BEGIN
 	
 	IF (@legalEntityId IS NULL)
 	BEGIN
-		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status);
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	

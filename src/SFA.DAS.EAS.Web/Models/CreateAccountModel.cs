@@ -12,5 +12,6 @@ namespace SFA.DAS.EAS.Web.Models
         public string EmployerRef { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public string CompanyStatus { get; set; }
     }
 }

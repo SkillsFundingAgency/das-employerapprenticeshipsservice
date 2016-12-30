@@ -137,6 +137,7 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenITryToFindACompany.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewMyNewLegalEntityAgreement.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
+    <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
@@ -157,6 +159,7 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenISearchForALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingStatusOfCommitment.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetATeamMembersDetails.cs" />
@@ -173,6 +176,7 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
     <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
+    <Compile Include="Validators\WhenValidatingApprenticeshipViewModelForApproval.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

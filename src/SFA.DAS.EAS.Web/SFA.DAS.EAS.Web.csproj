@@ -416,6 +416,7 @@
     <Compile Include="Models\TaskViewModel.cs" />
     <Compile Include="Models\TransactionViewModel.cs" />
     <Compile Include="Models\SummaryViewModel.cs" />
+    <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\SaveStatus.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -783,7 +784,6 @@
     <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
-    <Content Include="Views\EmployerCommitments\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />

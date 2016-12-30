@@ -50,7 +50,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 CompanyName = "Test Corp",
                 CompanyNumber = "1244454",
                 RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                DateOfIncorporation = DateTime.Now.AddYears(-10),
+                CompanyStatus = "active",
+                EmployerRef = "123/ABC",
+                RefreshToken = "123",
+                AccessToken = "456",
+                EmpRefNotFound = true,
+                HideBreadcrumb = true
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -68,7 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(),It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
@@ -106,6 +112,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
+        }
+
+        [Test]
+        public async Task ThenTheParamtersArePassedFromTheCookieWhenCreatingTheAccount()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
+                c =>
+                    c.CompanyStatus.Equals(_accountData.CompanyStatus) &&
+                    c.CompanyName.Equals(_accountData.CompanyName) &&
+                    c.RefreshToken.Equals(_accountData.RefreshToken) &&
+                    c.CompanyDateOfIncorporation.Equals(_accountData.DateOfIncorporation) &&
+                    c.CompanyRegisteredAddress.Equals(_accountData.RegisteredAddress) &&
+                    c.AccessToken.Equals(_accountData.AccessToken) &&
+                    c.EmployerRef.Equals(_accountData.EmployerRef) &&
+                    c.CompanyNumber.Equals(_accountData.CompanyNumber)
+                ), It.IsAny<HttpContextBase>()));
         }
     }
 }
