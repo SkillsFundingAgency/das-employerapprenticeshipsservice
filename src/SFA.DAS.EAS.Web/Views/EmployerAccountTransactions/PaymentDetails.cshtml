@@ -5,7 +5,7 @@
     var culture = new CultureInfo("en-GB");
     ViewBag.PageID = "page-payment-details";
     ViewBag.Title = "Debit details";
-    ViewBag.Section = "finance"; 
+    ViewBag.Section = "finance";
 
 }
 <div class="grid-row">
@@ -39,57 +39,73 @@
             </tbody>
         </table>
 
+@{
+    var courseCount = 0;
+}
+
             @foreach (var group in Model.Data.CoursePaymentGroups)
             {
+                courseCount++;
+
                 <h2 class="heading-medium">@group.ApprenticeCourseName</h2>
-
-                if (group.CourseLevel != null)
-                {
-                    <p>Level: @group.CourseLevel</p>
-                }
-
                 var startDate = group.CourseStartDate?.ToString("d") ?? "Unavailable";
 
-                <p>Start date: @startDate</p>
+                <dl class="inline course-details">
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">National insurance number</th>
-                            <th scope="col">Payment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    @if (group.CourseLevel != null) 
+                    {
+                    <dt>Level: </dt>
+                    <dd>@group.CourseLevel</dd>
+                    }
 
-                        @foreach (var payment in group.Payments)
-                        {
-                            <tr class="responsive-tr">
-                                @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) &&
-            string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
-                                {
-                                    <td colspan="2">Appentice details unavailable</td>
-                                }
-                                else
-                                {
-                                    var apprenticeName = string.IsNullOrWhiteSpace(payment.ApprenticeName) ? "Name unavailable" : payment.ApprenticeName;
-                                    var apprenticeNiNumber = string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ? "Number unavailable" : payment.ApprenticeNINumber;
+                    <dt>Start date: </dt>
+                    <dd>@startDate</dd>
 
-                                    <td>
-                                        @apprenticeName
-                                    </td>
-                                    <td>
-                                        @apprenticeNiNumber
-                                    </td>
-                                }
+                    <dt>Training code: </dt>
+                    <dd>12345</dd>
 
-                                <td class="numeric">
-                                    @(payment.LineAmount.ToString("C0", culture))
-                                </td>
+                </dl>
+
+                <h3 class="accordion-tab" aria-controls="learners-@courseCount" id="apprentices-heading-@courseCount">See all apprentices (@group.Payments.Count);</h3>
+                <div class="accordion-panel" id="learners-@courseCount">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">National insurance number</th>
+                                <th scope="col" class="numeric">Payment</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var payment in group.Payments)
+                            {
+                                <tr>
+                                    @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) && string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
+                                    {
+                                        <td colspan="2">Appentice details unavailable</td>
+                                    }
+                                    else
+                                    {
+                                        var apprenticeName = string.IsNullOrWhiteSpace(payment.ApprenticeName) ? "Name unavailable" : payment.ApprenticeName;
+                                        var apprenticeNiNumber = string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ? "Number unavailable" : payment.ApprenticeNINumber;
+
+                                        <td>
+                                            @apprenticeName
+                                        </td>
+                                        <td>
+                                            @apprenticeNiNumber
+                                        </td>
+                                    }
+
+                                    <td class="numeric">
+                                        @(payment.LineAmount.ToString("C0", culture))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
     </div>
 </div>
