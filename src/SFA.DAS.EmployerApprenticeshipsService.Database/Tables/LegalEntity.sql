@@ -5,5 +5,6 @@
     [Code] NVARCHAR(50) NULL, 
     [RegisteredAddress] NVARCHAR(256) NULL, 
     [DateOfIncorporation] DATETIME NULL,
-	[Status] NVARCHAR(50) NULL
+	[Status] NVARCHAR(50) NULL,
+	[Source] TINYINT NOT NULL
 )
