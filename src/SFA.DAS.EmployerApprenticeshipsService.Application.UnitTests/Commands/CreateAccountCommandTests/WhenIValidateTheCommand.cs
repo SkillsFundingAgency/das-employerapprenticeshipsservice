@@ -21,7 +21,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
                 ExternalUserId = "123ADF",
                 CompanyNumber = "ABV123",
                 CompanyName = "Test Company",
-                EmployerRef = "980/EEE"
+                EmployerRef = "980/EEE",
+                CompanyStatus = "active"
             };
 
             _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();

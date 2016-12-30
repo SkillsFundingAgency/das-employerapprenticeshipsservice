@@ -41,7 +41,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 IncorporatedDate = DateTime.Now.AddYears(-20),
                 ExternalUserId = "2",
                 SignedAgreement = true,
-                UserIsAuthorisedToSign = true
+                UserIsAuthorisedToSign = true,
+                LegalEntityStatus = "active"
             };
 
             const long legalEntityId = 5;
@@ -57,6 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                              LegalEntityName = request.Name,
                              LegalEntityCode = request.Code,
                              LegalEntityRegisteredAddress = request.Address,
+                             LegalEntityStatus = request.LegalEntityStatus,
                              Status = EmployerAgreementStatus.Pending
                          }
                      });
@@ -70,6 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             command.LegalEntity.Code.Equals(request.Code) &&
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
             command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate)&&
+            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus)&&
             command.SignAgreement.Equals(request.SignedAgreement))));
         }
 

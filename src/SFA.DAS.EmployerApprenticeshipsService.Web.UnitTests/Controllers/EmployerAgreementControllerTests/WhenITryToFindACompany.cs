@@ -42,7 +42,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                 CompanyName = "Test Corp",
                 CompanyNumber = "0123456",
                 DateOfIncorporation = DateTime.Now,
-                RegisteredAddress = "1 Test Road, Test City, TE12 3ST"
+                RegisteredAddress = "1 Test Road, Test City, TE12 3ST",
+                CompanyStatus = "active"
             };
 
             _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -64,7 +65,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
 
             var model = result.Model as OrchestratorResponse<FindOrganisationViewModel>;
             Assert.IsNotNull(model?.Data);
-            Assert.AreEqual(viewModel, model.Data);
         }
     }
 }

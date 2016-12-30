@@ -71,7 +71,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 EmployerRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
                 CompanyName = "Test Company",
                 CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
-                CompanyRegisteredAddress = "Address Line 1"
+                CompanyRegisteredAddress = "Address Line 1",
+                CompanyStatus = "active"
             },new Mock<HttpContextBase>().Object).Wait();
 
 
