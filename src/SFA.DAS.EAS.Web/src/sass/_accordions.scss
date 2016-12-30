@@ -1,9 +1,12 @@
 ﻿.js-enabled {
     .accordion-tab {
         position: relative;
-        padding-left: 25px;
+        color: $link-colour;
+        padding-left: 15px;
         &:before {
             @include closed-arrow;
+            border-color: red;
+            left: 0;
         }
         &:focus {
             outline: 3px solid $focus-colour;
@@ -15,7 +18,7 @@
         }
     }
     .accordion-panel {
-        @extend .panel;
+        
     }
 
 }

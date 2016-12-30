@@ -1803,6 +1803,10 @@ dl.inline dd {
   font-weight: bold;
 }
 
+dl.inline.course-details {
+  margin-bottom: 15px;
+}
+
 .responsive-detail {
   color: #6f777b;
 }

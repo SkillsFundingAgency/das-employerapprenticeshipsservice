@@ -1,4 +1,4 @@
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -25,19 +25,19 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -64,13 +64,13 @@
   margin: 0 -15px;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
 }
 
-.grid-row:after, #content:after, .notice:after, .panel:after, .js-enabled .accordion-panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
+.grid-row:after, #content:after, .notice:after, .panel:after, fieldset:after, .form-section:after, .form-group:after, .form-block:after, .breadcrumbs ol:after, .account-information:after, .header-organisation ul:after {
   content: "";
   display: block;
   clear: both;
@@ -1411,7 +1411,7 @@ details .arrow {
   font-style: normal;
 }
 
-.panel, .js-enabled .accordion-panel {
+.panel {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -1422,12 +1422,12 @@ details .arrow {
   margin-bottom: 0.7894736842em;
 }
 
-.panel :first-child, .js-enabled .accordion-panel :first-child {
+.panel :first-child {
   margin-top: 0;
 }
 
-.panel :only-child, .js-enabled .accordion-panel :only-child,
-.panel :last-child, .js-enabled .accordion-panel :last-child {
+.panel :only-child,
+.panel :last-child {
   margin-bottom: 0;
 }
 
@@ -2171,6 +2171,10 @@ dl.inline dt:before {
 
 dl.inline dd {
   font-weight: bold;
+}
+
+dl.inline.course-details {
+  margin-bottom: 15px;
 }
 
 .responsive-detail {
@@ -2952,18 +2956,18 @@ tr.total td {
   line-height: 1.3;
 }
 
-.panel p, .js-enabled .accordion-panel p {
+.panel p {
   font-size: 14px;
 }
 
 @media (min-width: 641px) {
-  .panel p, .js-enabled .accordion-panel p {
+  .panel p {
     font-size: 16px;
   }
 }
 
 @media (min-width: 641px) {
-  .panel .heading-medium, .js-enabled .accordion-panel .heading-medium {
+  .panel .heading-medium {
     margin-bottom: 10px;
   }
 }
@@ -2974,7 +2978,8 @@ tr.total td {
 
 .js-enabled .accordion-tab {
   position: relative;
-  padding-left: 25px;
+  color: #005ea5;
+  padding-left: 15px;
 }
 
 .js-enabled .accordion-tab:before {
@@ -2990,6 +2995,8 @@ tr.total td {
   left: 10px;
   top: 50%;
   margin-top: -4px;
+  border-color: red;
+  left: 0;
 }
 
 .js-enabled .accordion-tab:focus {
@@ -3378,12 +3385,12 @@ span.helpText {
   color: #b10e1e;
 }
 
-.cant-approve .panel, .cant-approve .js-enabled .accordion-panel, .js-enabled .cant-approve .accordion-panel {
+.cant-approve .panel {
   border-color: #b10e1e;
   color: #b10e1e;
 }
 
-.cant-approve .panel p, .cant-approve .js-enabled .accordion-panel p, .js-enabled .cant-approve .accordion-panel p {
+.cant-approve .panel p {
   font-weight: bold;
   font-size: 19px;
 }
