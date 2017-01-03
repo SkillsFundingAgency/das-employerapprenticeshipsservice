@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Domain.Configuration
 {
-    public class IdentityServerConfiguration
+    public class IdentityServerConfiguration 
     {
         public bool UseFake { get; set; }
         public string ClientId { get; set; }
@@ -17,5 +17,6 @@
         public string ChangePasswordLink { get; set; }
         public string ChangeEmailLink { get; set; }
         public string RegisterLink { get; set; }
+        public string AccountActivationUrl { get; set; }
     }
 }
