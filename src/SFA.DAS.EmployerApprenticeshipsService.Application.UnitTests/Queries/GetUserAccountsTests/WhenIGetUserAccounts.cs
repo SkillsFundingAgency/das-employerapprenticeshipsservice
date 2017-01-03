@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _account = new Account {Name = "Test", RoleId = 1};
             _accounts = new List<Account> {_account};
-            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts {AccountList = _accounts});
+            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts<Account> { AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
 
         }
