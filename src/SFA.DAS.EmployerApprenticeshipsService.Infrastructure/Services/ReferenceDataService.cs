@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
@@ -9,6 +10,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class ReferenceDataService : IReferenceDataService
     {
+        private const int DefaultPageSize = 100;
+
         private readonly IReferenceDataApiClient _client;
         private readonly IMapper _mapper;
 
@@ -25,21 +28,28 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result;
         }
 
+        public Task<PagedResponse<PublicSectorOrganisation>> SearchPublicSectorOrganisation(string searchTerm)
+        {
+            return SearchPublicSectorOrganisation(searchTerm, 1, DefaultPageSize);
+        }
 
+        public Task<PagedResponse<PublicSectorOrganisation>> SearchPublicSectorOrganisation(string searchTerm, int pageNumber)
+        {
+            return SearchPublicSectorOrganisation(searchTerm, pageNumber, DefaultPageSize);
+        }
 
-        //public async Task<PagedApiResponse<PublicSectorOrganisation>> SearchPublicSectorOrganisation(string searchTerm, int pageNumber, int pageSize)
-        //{
-        //    var dto = await _client.SearchPublicSectorOrganisation(searchTerm, pageNumber, pageSize);
+        public async Task<PagedResponse<PublicSectorOrganisation>> SearchPublicSectorOrganisation(string searchTerm, int pageNumber, int pageSize)
+        {
+            var dto = await _client.SearchPublicSectorOrganisation(searchTerm, pageNumber, pageSize);
+            
+            var orgainsations = dto.Data.Select(x => _mapper.Map<PublicSectorOrganisation>(x)).ToList();
 
-        //    var orgainsations = dto.Data.Select(x => new PublicSectorOrganisation { Name = x.Name }).ToList();
-
-        //    return new PagedApiResponse<PublicSectorOrganisation>
-        //    {
-        //        Data = orgainsations,
-        //        PageNumber = dto.PageNumber,
-        //        TotalPages = dto.TotalPages
-        //    };
-        //}
-
+            return new PagedResponse<PublicSectorOrganisation>
+            {
+                Data = orgainsations,
+                PageNumber = dto.PageNumber,
+                TotalPages = dto.TotalPages
+            };
+        }
     }
 }
