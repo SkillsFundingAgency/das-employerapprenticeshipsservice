@@ -11,7 +11,7 @@ AS
 Select 
 	acc.Name as DasAccountName,
 	acc.CreatedDate as DateRegistered,
-	le.Name as Organisationname,
+	le.Name as OrganisationName,
 	le.RegisteredAddress as OrganisationRegisteredAddress,
 	le.[Status] as OrganisationStatus,
 	t.Email as OwnerEmail,
