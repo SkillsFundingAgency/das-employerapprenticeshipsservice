@@ -35,6 +35,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
                 OrganisationStatus = "active",
                 OrganisationRegisteredAddress = "My Address",
                 OrganisationSource = "companies house",
+                OrgansiationCreatedDate = new DateTime(2000,01,10),
                 DateRegistered = new DateTime(2016,10,30)
             };
 
@@ -105,6 +106,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
             Assert.AreEqual(_accountInformation.OrganisationStatus,item.OrganisationStatus);
             Assert.AreEqual(_accountInformation.OrganisationName, item.OrganisationName);
             Assert.AreEqual(_accountInformation.OwnerEmail,item.OwnerEmail);
+            Assert.AreEqual(_accountInformation.OrgansiationCreatedDate,item.OrgansiationCreatedDate);
         }
 
         [Test]
