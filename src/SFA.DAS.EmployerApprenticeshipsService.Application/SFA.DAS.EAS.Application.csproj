@@ -365,9 +365,9 @@
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationHandler.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationQuery.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationResponse.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationHandler.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
