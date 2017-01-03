@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<Accounts> GetAccountsByUserId(string userId)
+        public async Task<Accounts<Account>> GetAccountsByUserId(string userId)
         {
             var result = await WithConnection(async c =>
             {
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
 
-            return new Accounts { AccountList = (List<Account>)result };
+            return new Accounts<Account> { AccountList = (List<Account>)result };
         }
 
         public async Task<User> Get(string email)

@@ -275,7 +275,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {"~/Views/Home/Index.cshtml", new OrchestratorResponse<UserAccountsViewModel>()
                     {
                         Data = new UserAccountsViewModel() {
-                                Accounts = new Accounts()
+                                Accounts = new Accounts<Account>()
                                 {
                                     AccountList = new List<Account>() {
                                         new Account() {Id = 123, Name= "My account", RoleId = 1 }

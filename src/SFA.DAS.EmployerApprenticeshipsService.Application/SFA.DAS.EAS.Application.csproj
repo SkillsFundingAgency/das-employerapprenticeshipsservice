@@ -288,6 +288,10 @@
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeHandler.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeQuery.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeResponse.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeValidator.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
