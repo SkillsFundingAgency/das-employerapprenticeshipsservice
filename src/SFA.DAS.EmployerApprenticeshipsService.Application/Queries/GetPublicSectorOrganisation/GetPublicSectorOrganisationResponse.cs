@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation
 {
-    public class GetPublicSectorOrgainsationResponse
+    public class GetPublicSectorOrganisationResponse
     {
         public PagedResponse<PublicSectorOrganisation> Organisaions { get; set; }
     }
