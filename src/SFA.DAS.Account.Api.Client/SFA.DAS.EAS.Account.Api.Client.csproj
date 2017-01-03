@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="AccountApiClient.cs" />
     <Compile Include="AccountApiConfiguration.cs" />
+    <Compile Include="Dtos\AccountInformationViewModel.cs" />
     <Compile Include="Dtos\AccountWithBalanceViewModel.cs" />
     <Compile Include="Dtos\PagedApiResponseViewModel.cs" />
     <Compile Include="IAccountApiClient.cs" />

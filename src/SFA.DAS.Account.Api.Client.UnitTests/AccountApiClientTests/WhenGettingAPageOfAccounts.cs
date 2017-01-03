@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var actual = await _apiClient.GetPageOfAccounts();
 
             // Assert
-
+            Assert.IsAssignableFrom<Dtos.PagedApiResponseViewModel<Dtos.AccountWithBalanceViewModel>>(actual);
         }
     }
 }
