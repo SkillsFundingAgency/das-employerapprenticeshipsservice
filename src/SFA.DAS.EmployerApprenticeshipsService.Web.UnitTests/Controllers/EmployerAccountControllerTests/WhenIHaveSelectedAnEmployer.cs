@@ -81,7 +81,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 CompanyNumber = "6576585",
                 CompanyName = "Test Corp",
                 DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street"
+                RegisteredAddress = "1, Test Street",
+                CompanyStatus = "active"
             };
 
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
@@ -94,10 +95,37 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
                 It.Is<EmployerAccountData>(data => 
                 data.CompanyNumber.Equals(request.CompanyNumber) &&
+                data.CompanyStatus.Equals(request.CompanyStatus) &&
                 data.CompanyName.Equals(request.CompanyName) &&
                 data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
                 data.RegisteredAddress.Equals(request.RegisteredAddress))));
         }
 
+        [Test]
+        public void ThenTheDataWillBeReadFromTheCookieIfIAmGoingBackThroughTheProcess()
+        {
+            //Arrange
+            var request = new EmployerAccountData
+            {
+                CompanyNumber = "6576585",
+                CompanyName = "Test Corp",
+                DateOfIncorporation = DateTime.Now.AddYears(-12),
+                RegisteredAddress = "1, Test Street",
+                CompanyStatus = "active"
+            };
+            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(request);
+
+            //Act
+            _employerAccountController.GatewayInform(null);
+
+            //Assert
+            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
+                It.Is<EmployerAccountData>(data =>
+                data.CompanyNumber.Equals(request.CompanyNumber) &&
+                data.CompanyStatus.Equals(request.CompanyStatus) &&
+                data.CompanyName.Equals(request.CompanyName) &&
+                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
+                data.RegisteredAddress.Equals(request.RegisteredAddress))));
+        }
     }
 }

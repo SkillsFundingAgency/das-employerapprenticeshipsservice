@@ -30,7 +30,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
                 DateOfIncorporation = employer.DateOfIncorporation,
                 AddressLine1 = employer.RegisteredAddress.Line1,
                 AddressLine2 = employer.RegisteredAddress.Line2,
-                AddressPostcode = employer.RegisteredAddress.PostCode
+                AddressPostcode = employer.RegisteredAddress.PostCode,
+                CompanyStatus = employer.CompanyStatus
             };
         }
     }

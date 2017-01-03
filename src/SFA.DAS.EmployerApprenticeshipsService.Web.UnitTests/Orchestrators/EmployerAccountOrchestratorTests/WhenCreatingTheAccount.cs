@@ -54,6 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                         && c.CompanyNumber.Equals(model.CompanyNumber)
                         && c.CompanyRegisteredAddress.Equals(model.CompanyRegisteredAddress)
                         && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
+                        && c.CompanyStatus.Equals(model.CompanyStatus)
                         && c.EmployerRef.Equals(model.EmployerRef)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
@@ -90,7 +91,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
                 CompanyRegisteredAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
+                RefreshToken = Guid.NewGuid().ToString(),
+                CompanyStatus = "active"
             };
         }
     }

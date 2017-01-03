@@ -20,5 +20,6 @@ namespace SFA.DAS.EAS.Domain
         public string TemplateText { get; set; }
         public string TemplateRef { get; set; }
         public string HashedAgreementId { get; set; }
+        public string LegalEntityStatus { get; set; }
     }
 }

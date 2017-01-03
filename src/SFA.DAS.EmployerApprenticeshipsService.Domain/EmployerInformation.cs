@@ -16,6 +16,9 @@ namespace SFA.DAS.EAS.Domain
 
         [JsonProperty("registered_office_address")]
         public Address RegisteredAddress { get; set; }
+
+        [JsonProperty("company_status")]
+        public string CompanyStatus { get; set; }
     }
 
     public class Address
