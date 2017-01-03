@@ -107,6 +107,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
             Assert.AreEqual(_accountInformation.OrganisationName, item.OrganisationName);
             Assert.AreEqual(_accountInformation.OwnerEmail,item.OwnerEmail);
             Assert.AreEqual(_accountInformation.OrgansiationCreatedDate,item.OrgansiationCreatedDate);
+            Assert.AreEqual(_accountInformation.DasAccoundId,item.DasAccoundId);
         }
 
         [Test]

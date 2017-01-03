@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MediatR;
@@ -63,7 +61,8 @@ namespace SFA.DAS.EAS.Api.Controllers
                     OrganisationStatus = result.OrganisationStatus,
                     OrganisationName = result.OrganisationName,
                     OwnerEmail = result.OwnerEmail,
-                    OrgansiationCreatedDate = result.OrgansiationCreatedDate
+                    OrgansiationCreatedDate = result.OrgansiationCreatedDate,
+                    DasAccoundId = result.DasAccoundId
                 }));
 
                 var returnResult = new PagedApiResponseViewModel<AccountInformationViewModel>
