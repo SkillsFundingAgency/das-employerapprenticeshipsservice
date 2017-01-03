@@ -203,6 +203,7 @@
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
+    <Compile Include="Models\ReferenceData\PagedResponse.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
     <Compile Include="TransactionItemType.cs" />
     <Compile Include="Membership.cs" />
