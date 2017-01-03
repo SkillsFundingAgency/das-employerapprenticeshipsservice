@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public override ConfigurationContext Get()
         {
-            return new ConfigurationContext {AccountActivationUrl = _configuration.Identity.AccountActivationUrl};
+            return new ConfigurationContext {AccountActivationUrl = _configuration.Identity.BaseAddress.Replace("/identity","") + _configuration.Identity.AccountActivationUrl};
         }
     }
 }
