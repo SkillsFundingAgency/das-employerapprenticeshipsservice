@@ -12,6 +12,6 @@ namespace SFA.DAS.EAS.Domain.Entities.Account
         public string OwnerEmail { get; set; }
         public string OrganisationSource { get; set; }
         public DateTime OrgansiationCreatedDate { get; set; }
-        public string DasAccoundId { get; set; }
+        public string DasAccountId { get; set; }
     }
 }

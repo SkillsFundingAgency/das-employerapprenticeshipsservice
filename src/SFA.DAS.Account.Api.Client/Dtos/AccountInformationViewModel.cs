@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.Dtos
         public string OrganisationStatus { get; set; }
         public string OrganisationName { get; set; }
         public DateTime OrgansiationCreatedDate { get; set; }
-        public string DasAccoundId { get; set; }
+        public string DasAccountId { get; set; }
         public string OwnerEmail { get; set; }
     }
 }

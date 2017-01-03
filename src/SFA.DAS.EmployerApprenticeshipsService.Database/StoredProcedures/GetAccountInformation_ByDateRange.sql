@@ -9,7 +9,7 @@ AS
 
 
 Select 
-	acc.HashedId as DasAccoundId,
+	acc.HashedId as DasAccountId,
 	acc.Name as DasAccountName,
 	acc.CreatedDate as DateRegistered,
 	le.Name as OrganisationName,
