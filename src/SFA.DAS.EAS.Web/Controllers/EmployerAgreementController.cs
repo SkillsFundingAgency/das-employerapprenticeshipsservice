@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
@@ -46,14 +47,75 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
+
         [HttpGet]
         [Route("Agreements/Add")]
-        public async Task<ActionResult> Add(string hashedAccountId)
+        public async Task<ActionResult> AddOrganisation(string hashedAccountId)
         {
             var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
             return View(response);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Agreements/Add")]
+        public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
+        {
+            var searchTerm = "";
+            switch (orgType)
+            {
+                case OrganisationType.Charities:
+                    searchTerm = charityRegNo;
+                    break;
+                case OrganisationType.CompaniesHouse:
+                    searchTerm = companiesHouseNumber;
+                    break;
+                case OrganisationType.PublicBodies:
+                    searchTerm = publicBodyName;
+                    break;
+                case OrganisationType.Other:
+                    searchTerm = String.Empty;
+                    break;
+                default:
+                    throw new NotImplementedException("Org Type Not Implemented");
+            }
+
+            var response = await _orchestrator.FindLegalEntity(hashedAccountId, orgType, searchTerm, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return View("FindLegalEntity", response);
+            }
+
+            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+            {
+                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
+                Status = HttpStatusCode.OK,
+            };
+
+            if (response.Status == HttpStatusCode.NotFound)
+            {
+                TempData["companyNumberError"] = "No company found. Please try again";
+            }
+
+            if (response.Status == HttpStatusCode.Conflict)
+            {
+                TempData["companyNumberError"] = "Enter a company that isn't already registered";
+            }
+
+            return View("AddOrganisation", errorResponse);
+
+        }
+
+
+        //[HttpGet]
+        //[Route("Agreements/Add")]
+        //public async Task<ActionResult> Add(string hashedAccountId)
+        //{
+        //    var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+        //    return View(response);
+        //}
 
 		[HttpGet]
 		[Route("Agreements/{agreementid}/View")]
@@ -89,36 +151,36 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
         }
         
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/Add")]
-        public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
-        {
-            var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
+  //      [HttpPost]
+		//[ValidateAntiForgeryToken]
+  //      [Route("Agreements/Add")]
+  //      public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
+  //      {
+  //          var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (response.Status == HttpStatusCode.OK)
-            {
-                return View("FindLegalEntity",response);
-            }
+  //          if (response.Status == HttpStatusCode.OK)
+  //          {
+  //              return View("FindLegalEntity",response);
+  //          }
 
-            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
-            };
+  //          var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+  //          {
+  //              Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
+  //              Status = HttpStatusCode.OK,
+  //          };
 
-            if (response.Status == HttpStatusCode.NotFound)
-            {
-                TempData["companyNumberError"] = "No company found. Please try again";
-            }
+  //          if (response.Status == HttpStatusCode.NotFound)
+  //          {
+  //              TempData["companyNumberError"] = "No company found. Please try again";
+  //          }
 
-            if (response.Status == HttpStatusCode.Conflict)
-            {
-                TempData["companyNumberError"] = "Enter a company that isn't already registered";
-            }
+  //          if (response.Status == HttpStatusCode.Conflict)
+  //          {
+  //              TempData["companyNumberError"] = "Enter a company that isn't already registered";
+  //          }
 
-            return View("Add", errorResponse);
-        }
+  //          return View("Add", errorResponse);
+  //      }
 
         [HttpPost]
 		[ValidateAntiForgeryToken]

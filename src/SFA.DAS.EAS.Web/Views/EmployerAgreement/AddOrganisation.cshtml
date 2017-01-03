@@ -1,0 +1,142 @@
+﻿@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddLegalEntityViewModel>
+@{ViewBag.PageID = "enter-organisation-type"; }
+@{
+    ViewBag.Title = "Add an organisation";
+    ViewBag.Section = "organisations";
+}
+
+
+<style>
+    .collapse {
+        cursor: pointer;
+        display: inline;
+    }
+
+        .collapse + input + div {
+            display: none;
+        }
+
+        .collapse + input:checked + div {
+            display: block;
+        }
+
+    .radio-wrapper {
+        display: block;
+    }
+
+    .orgtype-wrapper input {
+        float: left;
+    }
+
+    /*.selectable {
+            display: block;
+            float: none;
+            clear: left;
+            position: relative;
+            background: #dee0e2;
+            border: 1px solid #dee0e2;
+            padding: 18px 30px 15px 45px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }*/
+</style>
+
+
+
+@*@if (TempData["companyNumberError"] != null)
+{
+    ViewBag.PageID = "error-companies-house-entry";
+    <div class="grid-row">
+        <div class="column-full error-summary-wrapper">
+            <div tabindex="-1" role="group" class="error-summary">
+                <h1 id="error-summary" class="heading-medium error-summary-heading">
+                    Errors to fix
+                </h1>
+                <p>Check the following details:</p>
+                <ul class="error-summary-list">
+                    <li><a href="#error-company-number" data-focuses="error-company-number">Enter a valid Companies House number</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}*@
+
+
+
+<div class="column-two-thirds">
+
+    <h1 class="heading-xlarge">Add an organisation</h1>
+
+    <form action="@Url.Action("AddOrganisation","EmployerAgreement")" method="POST">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group orgtype-wrapper">
+
+            <label class="collapse" for="option1">Listed on Companies House</label>
+            <input id="option1" type="radio" name="orgType" value="@OrganisationType.CompaniesHouse" />
+
+            <div class="panel">
+                <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
+                <br />
+                <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber" />
+                <br /><br />
+            </div>
+
+        </div>
+
+        <div class="form-group orgtype-wrapper">
+
+            <label class="collapse" for="option2">Public sector organisation</label>
+            <input id="option2" type="radio" name="orgType" value="@OrganisationType.PublicBodies" />
+
+            <div class="panel">
+                <label class="strong" for="PublicBodyName">Enter organisation's name</label>
+                <br />
+                <input type="text" id="PublicBodyName" name="PublicBodyName" />
+                <br /><br />
+            </div>
+
+        </div>
+
+        <div class="form-group orgtype-wrapper">
+
+            <label class="collapse" for="option3">Registered charity</label>
+            <input id="option3" type="radio" name="orgType" value="@OrganisationType.Charities" />
+
+            <div class="panel">
+
+                <label class="strong" for="CharityRegNo">Enter charity number</label>
+                <br />
+                <input type="text" id="CharityRegNo" name="CharityRegNo" />
+                <br /><br />
+
+                <strong>Don't know your charity number?</strong>
+                <br />
+
+                You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_new"> search for your charity number</a>
+                <br />
+                or <a href="">enter your charity details manually</a>
+
+
+            </div>
+        </div>
+
+
+        <div class="form-group orgtype-wrapper">
+
+            <label class="collapse" for="option4">Sole trader, partnership or other</label>
+            <input id="option4" type="radio" name="orgType" value="@OrganisationType.Other" />
+
+            <div class="panel">Sole trader content...</div>
+
+
+        </div>
+
+
+        <input class="button" id="addOrganisation" type="submit" value="Continue" />
+
+
+    </form>
+</div>

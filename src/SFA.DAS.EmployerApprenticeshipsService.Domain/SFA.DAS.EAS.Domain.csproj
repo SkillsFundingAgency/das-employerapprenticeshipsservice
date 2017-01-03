@@ -203,6 +203,7 @@
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
+    <Compile Include="OrganisationType.cs" />
     <Compile Include="TransactionItemType.cs" />
     <Compile Include="Membership.cs" />
     <Compile Include="MembershipView.cs" />

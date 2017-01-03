@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
@@ -179,8 +180,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(string hashedLegalEntityId,
-            string companyNumber, string userIdClaim)
+        public virtual async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLegalEntity(string hashedLegalEntityId, OrganisationType orgType,
+            string searchTerm, string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
@@ -188,8 +189,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 UserId = userIdClaim
             });
 
+
+            //todo: if code is the same AND of the same type
             if (accountEntities.Entites.LegalEntityList.Any(
-                x => x.Code.Equals(companyNumber, StringComparison.CurrentCultureIgnoreCase)))
+                x => x.Code.Equals(searchTerm, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return new OrchestratorResponse<FindOrganisationViewModel>
                 {
@@ -198,9 +201,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
+
+            switch (orgType)
+            {
+                case OrganisationType.Charities: return await FindCharity(searchTerm);
+                default: throw new NotImplementedException("Organisation Type Not Implemented");
+            }
+
+
+
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
             {
-                Id = companyNumber
+                Id = searchTerm
             });
 
             if (response == null)
@@ -213,7 +225,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            _logger.Info($"Returning Data for {companyNumber}");
+            _logger.Info($"Returning Data for {searchTerm}");
 
             return new OrchestratorResponse<FindOrganisationViewModel>
             {
@@ -225,6 +237,59 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     DateOfIncorporation = response.DateOfIncorporation,
                     RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
                     CompanyStatus = response.CompanyStatus
+                }
+            };
+        }
+        
+        
+
+
+        private async Task<OrchestratorResponse<FindOrganisationViewModel>> FindCharity(string registrationNumber)
+        {
+            int charityRegistrationNumber;
+            if (!Int32.TryParse(registrationNumber, out charityRegistrationNumber))
+            {
+                _logger.Warn("Non-numeric registration number");
+                return new OrchestratorResponse<FindOrganisationViewModel>
+                {
+                    Data = new FindOrganisationViewModel(),
+                    Status = HttpStatusCode.NotFound
+                };
+            }
+
+            var charityResult = await _mediator.SendAsync(new GetCharityQueryRequest
+            {
+                RegistrationNumber = charityRegistrationNumber
+            });
+
+            if (charityResult == null)
+            {
+                _logger.Warn("No response from GetAccountLegalEntitiesRequest");
+                return new OrchestratorResponse<FindOrganisationViewModel>
+                {
+                    Data = new FindOrganisationViewModel(),
+                    Status = HttpStatusCode.NotFound
+                };
+            }
+
+            if (charityResult.Charity == null)
+            {
+                _logger.Warn("Charity not found");
+                return new OrchestratorResponse<FindOrganisationViewModel>
+                {
+                    Data = new FindOrganisationViewModel(),
+                    Status = HttpStatusCode.NotFound
+                };
+            }
+
+            var charity = charityResult.Charity;
+            return new OrchestratorResponse<FindOrganisationViewModel>
+            {
+                Data = new FindOrganisationViewModel
+                {
+                    CompanyNumber = charity.RegistrationNumber.ToString(),
+                    CompanyName = charity.Name,
+                    RegisteredAddress = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
                 }
             };
         }
