@@ -392,6 +392,7 @@
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
+    <Compile Include="Models\EmployerAccountViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
     <Compile Include="Models\PayeSchemeDetail.cs" />
@@ -889,6 +890,7 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

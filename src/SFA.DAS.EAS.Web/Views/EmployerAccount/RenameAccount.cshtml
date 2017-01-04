@@ -1,0 +1,22 @@
+﻿@model SFA.DAS.EAS.Web.Models.SummaryViewModel
+
+@{ViewBag.PageID = "page-change-account-name"; }
+@{ViewBag.Title = "Rename Account Name"; }
+@{ViewBag.HideNav = "true"; }
+
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Rename levy account</h1>
+    </div>
+</div>
+@if (!Model.HideBreadcrumb)
+{
+    @section breadcrumb {
+        <div class="breadcrumbs">
+            <ol>
+                <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+            </ol>
+        </div>
+    }
+}

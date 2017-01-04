@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using MediatR;
@@ -9,12 +10,15 @@ using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountOrchestrator : EmployerVerificationOrchestratorBase
     {
+        private readonly IMediator _mediator;
+        private readonly ILogger _logger;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
@@ -27,7 +31,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
-
+            _mediator = mediator;
+            _logger = logger;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model, HttpContextBase context)
@@ -122,6 +127,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual void DeleteCookieData(HttpContextBase context)
         {
             CookieService.Delete(context,CookieName);
+        }
+
+        public async Task<OrchestratorResponse<EmployerAccountViewModel>>  GetEmployerAccount(string hashedAccountId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

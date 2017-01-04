@@ -224,6 +224,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
+        [HttpGet]
+        public async Task<ActionResult> RenameAccount(string hashedAccountId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RenameAccount(string name, string hashedAccountId)
+        {
+            throw new NotImplementedException();
+        }
+
+
         private string GetUserId()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
