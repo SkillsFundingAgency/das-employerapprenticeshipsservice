@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
         public async Task ThenTheMediatorIsCalledWithTheGivenParameters()
         {
             //Arrange
-            var fromDate = "2016-01-01";
+            var fromDate = "2016-09-21";
             var toDate = "2016-10-30";
             var pageNumber = 10;
             var pageSize = 100;
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
                                     c=>c.PageNumber.Equals(pageNumber)
                                     && c.PageSize.Equals(pageSize)
                                     && c.FromDate.Equals(Convert.ToDateTime(fromDate))
-                                    && c.ToDate.Equals(Convert.ToDateTime(toDate))
+                                    && c.ToDate.Equals(Convert.ToDateTime(toDate).AddDays(1).AddSeconds(-1))
                                     )));
         }
 
