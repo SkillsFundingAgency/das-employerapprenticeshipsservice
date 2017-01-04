@@ -171,6 +171,7 @@
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\AccountBalance.cs" />
+    <Compile Include="Entities\Account\AccountInformation.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
+    <Compile Include="Models\ReferenceData\PagedResponse.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
     <Compile Include="TransactionItemType.cs" />
     <Compile Include="Membership.cs" />
