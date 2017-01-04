@@ -37,14 +37,17 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountWithBalanceViewModel>>(json);
         }
 
-        public async Task<PagedApiResponseViewModel<AccountInformationViewModel>> GetPageOfAccountInformation(string fromDate, string toDate, int pageNumber = 1, int pageSize = 1000)
+        public async Task<PagedApiResponseViewModel<AccountInformationViewModel>> GetPageOfAccountInformation(DateTime fromDate, DateTime toDate, int pageNumber = 1, int pageSize = 1000)
         {
+
+            var fromDateFormatted = new DateTime(fromDate.Date.Year,fromDate.Month,fromDate.Day).ToString("yyyy-MM-dd");
+            var toDateFormatted = new DateTime(toDate.Date.Year,toDate.Month,toDate.Day).ToString("yyyy-MM-dd");
+
             var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
                 ? _configuration.ApiBaseUrl
                 : _configuration.ApiBaseUrl + "/";
-            var url = $"{baseUrl}api/accountsinformation?fromDate={fromDate}&toDate={toDate}&page={pageNumber}&pageSize={pageSize}";
-
-
+            var url = $"{baseUrl}api/accountsinformation?fromDate={fromDateFormatted}&toDate={toDateFormatted}&page={pageNumber}&pageSize={pageSize}";
+            
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(json);
         }

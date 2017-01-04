@@ -45,8 +45,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenItShouldCallTheApiWithTheCorrectUrl()
         {
             //Arrange
-            var dateFrom = "2016-10-01";
-            var dateto = "2017-10-01";
+            var dateFrom = new DateTime(2016,10,01);
+            var dateto = new DateTime(2017, 11, 12);
             var pageNumber = 2;
             var pageSize = 100;
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             await _apiClient.GetPageOfAccountInformation(dateFrom, dateto, pageNumber, pageSize);
 
             // Assert
-            var expectedUrl = $"http://some-url/api/accountsinformation?fromDate={dateFrom}&toDate={dateto}&page={pageNumber}&pageSize={pageSize}";
+            var expectedUrl = $"http://some-url/api/accountsinformation?fromDate=2016-10-01&toDate=2017-11-12&page={pageNumber}&pageSize={pageSize}";
             _httpClient.Verify(c => c.GetAsync(expectedUrl), Times.Once);
         }
 
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenItShouldReturnAPageOfAccounts()
         {
             // Act
-            var actual = await _apiClient.GetPageOfAccountInformation("2016-10-01", "2016-11-01");
+            var actual = await _apiClient.GetPageOfAccountInformation(new DateTime(2016, 10, 01), new DateTime(2016, 11, 16));
 
             // Assert
             Assert.IsNotNull(actual);
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenItShouldDeserializeTheResponseCorrectly()
         {
             // Act
-            var actual = await _apiClient.GetPageOfAccountInformation("2016-10-01", "2016-11-01");
+            var actual = await _apiClient.GetPageOfAccountInformation(new DateTime(2016, 10, 01), new DateTime(2016, 11, 16));
 
             // Assert
             Assert.IsAssignableFrom<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(actual);

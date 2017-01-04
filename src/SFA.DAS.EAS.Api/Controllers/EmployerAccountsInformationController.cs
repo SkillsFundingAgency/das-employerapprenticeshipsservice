@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Api.Controllers
                 var results = await _mediator.SendAsync(new GetPagedEmployerAccountsByDateRangeQuery
                 {
                     FromDate = fromDateConverted,
-                    ToDate = toDateConverted,
+                    ToDate = toDateConverted.AddDays(1).AddSeconds(-1),
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 });
