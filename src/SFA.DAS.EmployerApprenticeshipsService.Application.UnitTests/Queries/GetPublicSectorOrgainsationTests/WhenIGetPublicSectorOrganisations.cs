@@ -8,16 +8,16 @@ using SFA.DAS.EAS.Domain.Models.ReferenceData;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationTests
 {
-    public  class WhenIGetPublicSectorOrgainsations : QueryBaseTest<
-        GetPublicSectorOrgainsationHandler,
-        GetPublicSectorOrgainsationQuery,
-        GetPublicSectorOrgainsationResponse>
+    public  class WhenIGetPublicSectorOrganisations : QueryBaseTest<
+        GetPublicSectorOrganisationHandler,
+        GetPublicSectorOrganisationQuery,
+        GetPublicSectorOrganisationResponse>
     {
         private Mock<IReferenceDataService> _referenceDataServiceMock;
         private PagedResponse<PublicSectorOrganisation> _organisations;
-        public override GetPublicSectorOrgainsationQuery Query { get; set; }
-        public override GetPublicSectorOrgainsationHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetPublicSectorOrgainsationQuery>> RequestValidator { get; set; }
+        public override GetPublicSectorOrganisationQuery Query { get; set; }
+        public override GetPublicSectorOrganisationHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetPublicSectorOrganisationQuery>> RequestValidator { get; set; }
 
         [SetUp]
         public void Arrange()
@@ -37,11 +37,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
                                                     It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
                                      .ReturnsAsync(_organisations);
 
-            Query = new GetPublicSectorOrgainsationQuery
+            Query = new GetPublicSectorOrganisationQuery
             {
-                SearchTerm = "test"
+                SearchTerm = "test",
+                PageNumber = 2,
+                PageSize = 223
             };
-            RequestHandler = new GetPublicSectorOrgainsationHandler(
+            RequestHandler = new GetPublicSectorOrganisationHandler(
                 RequestValidator.Object,
                 _referenceDataServiceMock.Object);
         }
@@ -53,7 +55,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
             await RequestHandler.Handle(Query);
 
             //Assert
-            _referenceDataServiceMock.Verify(x => x.SearchPublicSectorOrganisation(Query.SearchTerm), Times.Once);
+            _referenceDataServiceMock.Verify(x =>
+                x.SearchPublicSectorOrganisation(
+                    Query.SearchTerm,
+                    Query.PageNumber,
+                    Query.PageSize),
+                    Times.Once);
         }
 
         [Test]
@@ -64,42 +71,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
 
             //Assert
             Assert.AreEqual(_organisations, response.Organisaions);
-        }
-
-        [Test]
-        public async Task ThenShouldCallServiceWithPageNumberAndSizeIfProvided()
-        {
-            //Arrange
-            Query.PageNumber = 2;
-            Query.PageSize = 443;
-
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _referenceDataServiceMock.Verify(x => 
-                x.SearchPublicSectorOrganisation(
-                    Query.SearchTerm, 
-                    Query.PageNumber.Value, 
-                    Query.PageSize.Value), 
-                    Times.Once);
-        }
-
-        [Test]
-        public async Task ThenShouldCallServiceWithPageNumberIfProvided()
-        {
-            //Arrange
-            Query.PageNumber = 2;
-
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _referenceDataServiceMock.Verify(x =>
-                x.SearchPublicSectorOrganisation(
-                    Query.SearchTerm,
-                    Query.PageNumber.Value),
-                    Times.Once);
         }
     }
 }

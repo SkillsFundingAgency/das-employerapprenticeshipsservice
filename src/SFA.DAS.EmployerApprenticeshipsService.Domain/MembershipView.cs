@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain
+﻿using System;
+
+namespace SFA.DAS.EAS.Domain
 {
     public class MembershipView
     {
@@ -12,5 +14,6 @@
         public string LastName { get; set; }
         public int RoleId { get; set; }
         public string RoleName { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

@@ -4,9 +4,9 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation
 {
-    public class GetPublicSectorOrgainsationValidator : IValidator<GetPublicSectorOrgainsationQuery>
+    public class GetPublicSectorOrgainsationValidator : IValidator<GetPublicSectorOrganisationQuery>
     {
-        public ValidationResult Validate(GetPublicSectorOrgainsationQuery item)
+        public ValidationResult Validate(GetPublicSectorOrganisationQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -21,10 +21,20 @@ namespace SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation
                 validationResult.ValidationDictionary.Add("SearchTerm", "Search term has not been supplied");
             }
 
+            if (item.PageNumber < 1)
+            {
+                validationResult.ValidationDictionary.Add("PageNumber", "Page number must be greater than zero");
+            }
+
+            if (item.PageSize < 1)
+            {
+                validationResult.ValidationDictionary.Add("PageSize", "Page size must be greater than zero");
+            }
+
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetPublicSectorOrgainsationQuery item)
+        public Task<ValidationResult> ValidateAsync(GetPublicSectorOrganisationQuery item)
         {
             throw new NotImplementedException();
         }
