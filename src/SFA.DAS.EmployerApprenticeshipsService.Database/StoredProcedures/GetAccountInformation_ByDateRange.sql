@@ -16,6 +16,7 @@ Select
 	le.RegisteredAddress as OrganisationRegisteredAddress,
 	le.[Status] as OrganisationStatus,
 	le.DateOfIncorporation as OrgansiationCreatedDate,
+	le.Code as OrganisationNumber,
 	t.Email as OwnerEmail,
 	CASE le.Source 
 		when 1 then 'Companies House' 
