@@ -392,6 +392,8 @@
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
+    <Compile Include="Models\FindCharityViewModel.cs" />
+    <Compile Include="Models\FindPublicBodyViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
     <Compile Include="Models\PayeSchemeDetail.cs" />
