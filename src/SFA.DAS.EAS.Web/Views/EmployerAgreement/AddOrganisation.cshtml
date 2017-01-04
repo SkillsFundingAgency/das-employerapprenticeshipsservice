@@ -84,44 +84,41 @@
 
     <h1 class="heading-xlarge">Add an organisation</h1>
 
-    <form action="@Url.Action("AddOrganisation","EmployerAgreement")" method="POST">
+    <form action="@Url.Action("AddOrganisation", "EmployerAgreement")" method="POST">
         @Html.AntiForgeryToken()
 
-        <div class="form-group orgtype-wrapper">
-
-            <label class="collapse" for="option1">Listed on Companies House</label>
-            <input id="option1" type="radio" name="orgType" value="@OrganisationType.CompaniesHouse" />
-
-            <div class="panel">
+        <section>
+            <label for="company">
+                <span class="form-label-bold">Listed on Companies House</span>
+                <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
+            </label>
+            <input type="radio" name="organisation" id="company" value="@OrganisationType.CompaniesHouse" />
+            <div id="search-company" class="search-form panel panel-border-narrow">
                 <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
                 <br />
                 <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber" />
                 <br /><br />
             </div>
-
-        </div>
-
-        <div class="form-group orgtype-wrapper">
-
-            <label class="collapse" for="option2">Public sector organisation</label>
-            <input id="option2" type="radio" name="orgType" value="@OrganisationType.PublicBodies" />
-
-            <div class="panel">
+        </section>
+        <section>
+            <label for="publicbody">
+                <span class="form-label-bold">Public sector organisation</span>
+            </label>
+            <input type="radio" name="organisation" value="@OrganisationType.PublicBodies" id="publicbody" />
+            <div id="search-publicbody" class="search-form panel panel-border-narrow">
                 <label class="strong" for="PublicBodyName">Enter organisation's name</label>
                 <br />
                 <input type="text" id="PublicBodyName" name="PublicBodyName" />
                 <br /><br />
             </div>
+        </section>
 
-        </div>
-
-        <div class="form-group orgtype-wrapper">
-
-            <label class="collapse" for="option3">Registered charity</label>
-            <input id="option3" type="radio" name="orgType" value="@OrganisationType.Charities" />
-
-            <div class="panel">
-
+        <section>
+            <label for="charity">
+                <span class="form-label-bold">Registered charity</span>
+            </label>
+            <input type="radio" name="organisation" value="@OrganisationType.Charities" id="charity" />
+            <div id="search-charity" class="search-form panel panel-border-narrow">
                 <label class="strong" for="CharityRegNo">Enter charity number</label>
                 <br />
                 <input type="text" id="CharityRegNo" name="CharityRegNo" />
@@ -134,24 +131,29 @@
                 <br />
                 or <a href="">enter your charity details manually</a>
 
-
             </div>
-        </div>
+        </section>
 
 
-        <div class="form-group orgtype-wrapper">
+        @*<div class="form-group orgtype-wrapper">
 
             <label class="collapse" for="option4">Sole trader, partnership or other</label>
-            <input id="option4" type="radio" name="orgType" value="@OrganisationType.Other" />
+            <input id="option4" type="radio" name="orgType" value="@OrganisationType.Other"/>
 
             <div class="panel">Sole trader content...</div>
 
 
-        </div>
+        </div>*@
 
 
-        <input class="button" id="addOrganisation" type="submit" value="Continue" />
+        <input class="button" id="addOrganisation" type="submit" value="Continue"/>
 
 
     </form>
 </div>
+
+
+
+
+
+
