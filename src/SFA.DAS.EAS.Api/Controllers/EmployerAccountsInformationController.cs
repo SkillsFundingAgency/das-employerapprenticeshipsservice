@@ -62,7 +62,8 @@ namespace SFA.DAS.EAS.Api.Controllers
                     OrganisationName = result.OrganisationName,
                     OwnerEmail = result.OwnerEmail,
                     OrgansiationCreatedDate = result.OrgansiationCreatedDate,
-                    DasAccountId = result.DasAccountId
+                    DasAccountId = result.DasAccountId,
+                    OrganisationNumber = result.OrganisationNumber
                 }));
 
                 var returnResult = new PagedApiResponseViewModel<AccountInformationViewModel>

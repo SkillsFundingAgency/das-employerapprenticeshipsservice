@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Api.Models
         public DateTime OrgansiationCreatedDate { get; set; }
         public string OwnerEmail { get; set; }
         public string DasAccountId { get; set; }
+        public string OrganisationNumber { get; set; }
     }
 }

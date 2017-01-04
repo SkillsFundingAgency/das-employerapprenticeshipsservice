@@ -36,7 +36,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
                 OrganisationRegisteredAddress = "My Address",
                 OrganisationSource = "companies house",
                 OrgansiationCreatedDate = new DateTime(2000,01,10),
-                DateRegistered = new DateTime(2016,10,30)
+                DateRegistered = new DateTime(2016,10,30),
+                OrganisationNumber = "123ADFC",
+                DasAccountId = "45TFD"
             };
 
             _mediator = new Mock<IMediator>();
@@ -108,6 +110,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
             Assert.AreEqual(_accountInformation.OwnerEmail,item.OwnerEmail);
             Assert.AreEqual(_accountInformation.OrgansiationCreatedDate,item.OrgansiationCreatedDate);
             Assert.AreEqual(_accountInformation.DasAccountId,item.DasAccountId);
+            Assert.AreEqual(_accountInformation.OrganisationNumber, item.OrganisationNumber);
         }
 
         [Test]
