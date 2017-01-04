@@ -1900,12 +1900,23 @@ table.top-border {
 
 .org-type-search section {
   padding-top: 0;
+  width: 100%;
 }
 
 .org-type-search .search-form {
   display: none;
   clear: both;
   margin-left: -50px;
+}
+
+.org-type-search .search-form input[type='text'] {
+  position: static;
+  top: auto;
+  left: auto;
+  width: inherit;
+  height: inherit;
+  cursor: inherit;
+  opacity: 1;
 }
 
 .org-type-search input[type='radio'] {

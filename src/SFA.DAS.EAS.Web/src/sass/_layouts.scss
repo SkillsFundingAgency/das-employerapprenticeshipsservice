@@ -62,11 +62,21 @@ table.top-border {
     section {
         @extend .block-label;
         padding-top: 0;
+        width: 100%;
     }
     .search-form {
         display: none;
         clear: both;
         margin-left: -50px;
+        input[type='text'] {
+            position: static;
+            top: auto;
+            left: auto;
+            width: inherit;
+            height: inherit;
+            cursor: inherit;
+            opacity: 1;
+        }
     }
     input[type='radio'] {
         z-index: 1;
