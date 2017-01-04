@@ -194,8 +194,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 		[ValidateAntiForgeryToken]
         [Route("Agreements/CreateAgreement")]
         public async Task<ActionResult> CreateLegalEntity(
-            string hashedAccountId, string name, string code, string address, DateTime incorporated, 
-            bool? userIsAuthorisedToSign, string submit, string legalEntityStatus)
+            string hashedAccountId, string name, string code, string address, DateTime? incorporated, 
+            bool? userIsAuthorisedToSign, string submit, string legalEntityStatus, OrganisationType legalEntitySource)
         {
             var request = new CreateNewLegalEntity
             {
@@ -208,7 +208,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
                 SignedDate = DateTime.Now,
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
-                LegalEntityStatus = legalEntityStatus
+                LegalEntityStatus = legalEntityStatus,
+                Source = (short)legalEntitySource
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

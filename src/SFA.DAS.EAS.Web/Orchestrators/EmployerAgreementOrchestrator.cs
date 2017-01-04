@@ -248,7 +248,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CompanyName = response.CompanyName,
                     DateOfIncorporation = response.DateOfIncorporation,
                     RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
-                    CompanyStatus = response.CompanyStatus
+                    CompanyStatus = response.CompanyStatus,
+                    Source = OrganisationType.CompaniesHouse
                 }
             };
         }
@@ -280,7 +281,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new FindPublicBodyViewModel
                 {
                     Results = publicBodyResult.Organisaions,
-                    CompanyName = publicBody.Name
+                    CompanyName = publicBody.Name,
+                    Source = OrganisationType.PublicBodies
                 },
                 Status = HttpStatusCode.OK
             };
@@ -350,6 +352,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CompanyNumber = charity.RegistrationNumber.ToString(),
                     CompanyName = charity.Name,
                     RegisteredAddress = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
+                    Source = OrganisationType.Charities
                 }
             };
         }
@@ -378,7 +381,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text,
-                            LegalEntityStatus = request.LegalEntityStatus
+                            LegalEntityStatus = request.LegalEntityStatus,
+
                         }
                     },
                     Status = HttpStatusCode.BadRequest
@@ -394,7 +398,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Code = request.Code,
                     RegisteredAddress = request.Address,
                     DateOfIncorporation = request.IncorporatedDate,
-                    CompanyStatus = request.LegalEntityStatus
+                    CompanyStatus = request.LegalEntityStatus,
+                    Source = request.Source
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,

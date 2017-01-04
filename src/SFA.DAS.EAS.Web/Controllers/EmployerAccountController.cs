@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     CompanyNumber = model.CompanyNumber,
                     CompanyName = model.CompanyName,
-                    DateOfIncorporation = model.DateOfIncorporation,
+                    DateOfIncorporation = model.DateOfIncorporation.Value,
                     RegisteredAddress = model.RegisteredAddress,
                     HideBreadcrumb = model.HideBreadcrumb,
                     CompanyStatus = model.CompanyStatus

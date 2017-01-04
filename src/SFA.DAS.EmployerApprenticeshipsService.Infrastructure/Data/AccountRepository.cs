@@ -102,6 +102,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@legalEntityId", signedById, DbType.Int64);
                 parameters.Add("@employerAgreementId", signedById, DbType.Int64);
                 parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
+                parameters.Add("@source", legalEntity.Source, DbType.Int16);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
