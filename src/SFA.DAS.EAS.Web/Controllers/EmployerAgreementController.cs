@@ -101,10 +101,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                         TempData["companyError"] = "Company not found";
                         break;
                     case OrganisationType.Charities:
-                        TempData["charityError"] = "Charity not found.";
+                        TempData["charityError"] = "Charity not found";
                         break;
                     case OrganisationType.PublicBodies:
-                        TempData["publicBodyError"] = "Public sector body not found.";
+                        TempData["publicBodyError"] = "Public sector body not found";
                         break;
                     case OrganisationType.Other:
                         break;
@@ -116,19 +116,33 @@ namespace SFA.DAS.EAS.Web.Controllers
                 TempData["companyError"] = "Enter a company that isn't already registered";
             }
 
+
+            if (orgType == OrganisationType.Charities)
+            {
+                var charityResult = (FindCharityViewModel) response.Data;
+                if (charityResult.IsRemovedError)
+                {
+                    TempData["charityError"] = "Charity is removed";
+                }
+            }
+
+            if (orgType == OrganisationType.PublicBodies)
+            {
+                var pbresult = (FindPublicBodyViewModel) response.Data;
+                if (pbresult.Results.Data.Count==1)
+                {
+                    return View("FindLegalEntity", response);
+                }
+                else
+                {
+                    return View("SelectPublicBody", response);
+                }
+            }
+
             return View("AddOrganisation", errorResponse);
 
         }
 
-
-        //[HttpGet]
-        //[Route("Agreements/Add")]
-        //public async Task<ActionResult> Add(string hashedAccountId)
-        //{
-        //    var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-        //    return View(response);
-        //}
 
 		[HttpGet]
 		[Route("Agreements/{agreementid}/View")]
@@ -164,36 +178,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
         }
         
-  //      [HttpPost]
-		//[ValidateAntiForgeryToken]
-  //      [Route("Agreements/Add")]
-  //      public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
-  //      {
-  //          var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
-
-  //          if (response.Status == HttpStatusCode.OK)
-  //          {
-  //              return View("FindLegalEntity",response);
-  //          }
-
-  //          var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
-  //          {
-  //              Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-  //              Status = HttpStatusCode.OK,
-  //          };
-
-  //          if (response.Status == HttpStatusCode.NotFound)
-  //          {
-  //              TempData["companyNumberError"] = "No company found. Please try again";
-  //          }
-
-  //          if (response.Status == HttpStatusCode.Conflict)
-  //          {
-  //              TempData["companyNumberError"] = "Enter a company that isn't already registered";
-  //          }
-
-  //          return View("Add", errorResponse);
-  //      }
 
         [HttpPost]
 		[ValidateAntiForgeryToken]

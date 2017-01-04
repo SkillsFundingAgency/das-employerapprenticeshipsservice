@@ -8,6 +8,5 @@ namespace SFA.DAS.EAS.Web.Models
     public class FindCharityViewModel : FindOrganisationViewModel
     {
         public bool IsRemovedError { get; set; }
-        public bool IsNotFoundError { get; set; }
     }
 }
