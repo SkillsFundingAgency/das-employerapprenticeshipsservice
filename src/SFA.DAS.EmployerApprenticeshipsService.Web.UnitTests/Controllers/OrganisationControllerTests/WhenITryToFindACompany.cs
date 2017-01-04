@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
@@ -10,12 +10,12 @@ using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
     public class WhenITryToFindACompany
     {
-        private EmployerAgreementController _controller;
-        private Mock<EmployerAgreementOrchestrator> _orchestrator;
+        private OrganisationController _controller;
+        private Mock<OrganisationOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
@@ -23,13 +23,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
         [SetUp]
         public void Arrange()
         {
-            _orchestrator = new Mock<EmployerAgreementOrchestrator>();
+            _orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
 
-            _controller = new EmployerAgreementController(
+            _controller = new OrganisationController(
                 _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object);
         }
 

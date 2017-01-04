@@ -1,7 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -11,13 +9,12 @@ using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
     public class WhenISearchForALegalEntity
     {
-        private EmployerAgreementOrchestrator _orchestrator;
+        private Web.Orchestrators.OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
 
@@ -30,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse {Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()} });
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object);
+            _orchestrator = new Web.Orchestrators.OrganisationOrchestrator(_mediator.Object, _logger.Object);
         }
 
         [Test]

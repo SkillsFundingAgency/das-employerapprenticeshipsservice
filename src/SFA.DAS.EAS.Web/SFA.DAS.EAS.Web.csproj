@@ -365,6 +365,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
+    <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -450,6 +451,7 @@
     <Compile Include="Models\UserAccountsViewModel.cs" />
     <Compile Include="Models\TransactionLineViewModel.cs" />
     <Compile Include="Models\TransactionViewResult.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -798,7 +800,7 @@
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
+    <Content Include="Views\Organisation\FindLegalEntity.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
@@ -891,7 +893,7 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
-    <Content Include="Views\EmployerAgreement\AddOrganisation.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
