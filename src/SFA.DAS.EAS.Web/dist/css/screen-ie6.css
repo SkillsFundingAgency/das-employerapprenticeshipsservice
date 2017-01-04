@@ -2989,3 +2989,7 @@ span.helpText {
 .form-group #EndDate_Year {
   width: 60px;
 }
+
+.breadcrumbs a {
+  font-size: 16px;
+}
