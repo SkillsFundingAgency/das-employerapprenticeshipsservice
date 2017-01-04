@@ -6,8 +6,6 @@
     ViewBag.Section = "organisations";
 }
 
-
-
 @if (TempData["companyError"] != null || TempData["charityError"] != null || TempData["publicBodyError"] != null)
 {
     ViewBag.PageID = "error-organisation-entry";
@@ -43,13 +41,12 @@
 
 
 
-<div class="column-two-thirds">
+<div class="column-two-thirds org-type-search">
 
     <h1 class="heading-xlarge">Add an organisation</h1>
 
     <form action="@Url.Action("AddOrganisation", "EmployerAgreement")" method="POST">
         @Html.AntiForgeryToken()
-
         <section>
             <label for="company">
                 <span class="form-label-bold">Listed on Companies House</span>
@@ -57,10 +54,10 @@
             </label>
             <input type="radio" name="orgType" id="company" value="@OrganisationType.CompaniesHouse" />
             <div id="search-company" class="search-form panel panel-border-narrow">
-                <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
-                <br />
-                <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber" />
-                <br /><br />
+                <div class="form-group">
+                    <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
+                    <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber"" class="form-control" />
+                </div>
             </div>
         </section>
         <section>
@@ -69,31 +66,27 @@
             </label>
             <input type="radio" name="orgType" value="@OrganisationType.PublicBodies" id="publicbody" />
             <div id="search-publicbody" class="search-form panel panel-border-narrow">
-                <label class="strong" for="PublicBodyName">Enter organisation's name</label>
-                <br />
-                <input type="text" id="PublicBodyName" name="PublicBodyName" />
-                <br /><br />
+                <div class="form-group">
+                    <label class="strong" for="PublicBodyName">Enter organisation's name</label>
+                    <input type="text" id="PublicBodyName" name="PublicBodyName"" class="form-control" />
+                </div>
             </div>
         </section>
-
         <section>
             <label for="charity">
                 <span class="form-label-bold">Registered charity</span>
             </label>
             <input type="radio" name="orgType" value="@OrganisationType.Charities" id="charity" />
             <div id="search-charity" class="search-form panel panel-border-narrow">
-                <label class="strong" for="CharityRegNo">Enter charity number</label>
-                <br />
-                <input type="text" id="CharityRegNo" name="CharityRegNo" />
-                <br /><br />
-
-                <strong>Don't know your charity number?</strong>
-                <br />
-
-                You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_new"> search for your charity number</a>
-                <br />
-                or <a href="">enter your charity details manually</a>
-
+                <div class="form-group">
+                    <label class="strong" for="CharityRegNo">Enter charity number</label>
+                    <input type="text" id="CharityRegNo" name="CharityRegNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <h2 class="heading-small">Don't know your charity number?</h2>
+                    <p>You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external"> search for your charity number</a>
+                        or <a href="">enter your charity details manually</a>.</p>
+                </div>
             </div>
         </section>
 
@@ -108,11 +101,11 @@
 
         </div>*@
 
+        <div class="form-group">
+            <input class="button" id="addOrganisation" type="submit" value="Continue" />
+        </div>
 
-        <input class="button" id="addOrganisation" type="submit" value="Continue"/>
-
-
-    </form>
+</form>
 </div>
 
 
