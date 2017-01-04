@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public DateTimeViewModel DateOfBirth { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(0);
 
         public string NINumber { get; set; }
 
