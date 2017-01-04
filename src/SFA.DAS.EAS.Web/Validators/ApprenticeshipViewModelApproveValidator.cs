@@ -20,7 +20,8 @@ namespace SFA.DAS.EAS.Web.Validators
 
             RuleFor(r => r.TrainingId).NotEmpty();
 
-            RuleFor(r => r.DateOfBirth).NotNull();
+            RuleFor(r => r.DateOfBirth)
+                .Must(m => m?.DateTime != null);
 
             RuleFor(r => r.NINumber).NotEmpty();
         }
