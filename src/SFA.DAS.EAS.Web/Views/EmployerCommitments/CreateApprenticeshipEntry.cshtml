@@ -7,7 +7,7 @@
 }
 
 @section pageSpecificJS {
-    @Scripts.Render("~/bundles/apprentice");
+    @Scripts.Render("~/bundles/apprentice")
 }
 
 <div class="grid-row">
@@ -187,8 +187,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }
