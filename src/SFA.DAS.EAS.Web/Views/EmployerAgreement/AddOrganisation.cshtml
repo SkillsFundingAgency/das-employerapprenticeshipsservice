@@ -45,9 +45,9 @@
 
 
 
-@*@if (TempData["companyNumberError"] != null)
+@if (TempData["companyError"] != null || TempData["charityError"] != null || TempData["publicBodyError"] != null)
 {
-    ViewBag.PageID = "error-companies-house-entry";
+    ViewBag.PageID = "error-organisation-entry";
     <div class="grid-row">
         <div class="column-full error-summary-wrapper">
             <div tabindex="-1" role="group" class="error-summary">
@@ -56,12 +56,27 @@
                 </h1>
                 <p>Check the following details:</p>
                 <ul class="error-summary-list">
-                    <li><a href="#error-company-number" data-focuses="error-company-number">Enter a valid Companies House number</a></li>
+                    @{
+                        if (TempData["companyError"] != null)
+                        {
+                            <li><a href="#error-company-number" data-focuses="error-company-number">@TempData["companyError"]</a></li>
+                        }
+                        if (TempData["charityError"] != null)
+                        {
+                            <li><a href="#error-charity-number" data-focuses="error-charity-number">@TempData["charityError"]</a></li>
+                        }
+                        if (TempData["publicBodyError"] != null)
+                        {
+                            <li><a href="#error-publicbody-number" data-focuses="error-publicbody-number">@TempData["publicBodyError"]</a></li>
+                        }
+                    }
+
+                    
                 </ul>
             </div>
         </div>
     </div>
-}*@
+}
 
 
 

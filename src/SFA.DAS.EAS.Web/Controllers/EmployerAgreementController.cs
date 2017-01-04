@@ -95,12 +95,25 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.NotFound)
             {
-                TempData["companyNumberError"] = "No company found. Please try again";
+                switch (orgType)
+                {
+                    case OrganisationType.CompaniesHouse:
+                        TempData["companyError"] = "Company not found";
+                        break;
+                    case OrganisationType.Charities:
+                        TempData["charityError"] = "Charity not found.";
+                        break;
+                    case OrganisationType.PublicBodies:
+                        TempData["publicBodyError"] = "Public sector body not found.";
+                        break;
+                    case OrganisationType.Other:
+                        break;
+                }              
             }
 
             if (response.Status == HttpStatusCode.Conflict)
             {
-                TempData["companyNumberError"] = "Enter a company that isn't already registered";
+                TempData["companyError"] = "Enter a company that isn't already registered";
             }
 
             return View("AddOrganisation", errorResponse);

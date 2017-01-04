@@ -9,6 +9,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ReturnsAsync(expected);
             
             //Act
-            var actual = await _orchestrator.FindLegalEntity("", "", "");
+            var actual = await _orchestrator.FindLegalEntity("", OrganisationType.CompaniesHouse,  "", "");
 
             //Assert
             Assert.IsNotNull(actual);

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
                 CompanyStatus = "active"
             };
 
-            _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<string>(), It.IsAny<OrganisationType>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<FindOrganisationViewModel>
                 {
                     Data = viewModel
@@ -56,12 +57,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAgreementControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(username);
 
             //Act
-            var result = await _controller.FindLegalEntity(viewModel.HashedLegalEntityId, viewModel.CompanyNumber) as ViewResult;
-            
+            var result = await _controller.AddOrganisation(viewModel.HashedLegalEntityId, OrganisationType.CompaniesHouse, viewModel.CompanyNumber, "", username) as ViewResult;
+
             //Assert
             Assert.IsNotNull(result);
 
-            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.HashedLegalEntityId, viewModel.CompanyNumber, username), Times.Once);
+            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.HashedLegalEntityId, OrganisationType.CompaniesHouse, viewModel.CompanyNumber, username), Times.Once);
 
             var model = result.Model as OrchestratorResponse<FindOrganisationViewModel>;
             Assert.IsNotNull(model?.Data);

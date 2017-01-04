@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
@@ -202,17 +203,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
 
+            var charityResponse = await FindCharity(hashedLegalEntityId, searchTerm);
+            
+
+
+
             switch (orgType)
             {
-                case OrganisationType.Charities: return await FindCharity(searchTerm);
-                default: throw new NotImplementedException("Organisation Type Not Implemented");
+                case OrganisationType.Charities:
+                    return await FindCharity(hashedLegalEntityId, searchTerm);
+                case OrganisationType.CompaniesHouse:
+                    return await FindLimitedCompany(hashedLegalEntityId, searchTerm);
+                case OrganisationType.PublicBodies:
+                    return await FindPublicBody(hashedLegalEntityId, searchTerm);
+                default:
+                    throw new NotImplementedException("Organisation Type Not Implemented");
             }
 
 
 
+        }
+
+        private async Task<OrchestratorResponse<FindOrganisationViewModel>> FindLimitedCompany(string hashedLegalEntityId, string companiesHouseNumber)
+        {
+
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
             {
-                Id = searchTerm
+                Id = companiesHouseNumber
             });
 
             if (response == null)
@@ -225,7 +242,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            _logger.Info($"Returning Data for {searchTerm}");
+            _logger.Info($"Returning Data for {companiesHouseNumber}");
 
             return new OrchestratorResponse<FindOrganisationViewModel>
             {
@@ -240,58 +257,119 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-        
-        
 
 
-        private async Task<OrchestratorResponse<FindOrganisationViewModel>> FindCharity(string registrationNumber)
+        private async Task<OrchestratorResponse<FindOrganisationViewModel>> FindPublicBody(string hashedLegalEntityId, string searchTerm)
         {
-            int charityRegistrationNumber;
-            if (!Int32.TryParse(registrationNumber, out charityRegistrationNumber))
-            {
-                _logger.Warn("Non-numeric registration number");
-                return new OrchestratorResponse<FindOrganisationViewModel>
-                {
-                    Data = new FindOrganisationViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-            }
+            var vm = new FindPublicBodyViewModel();
+            var result = new OrchestratorResponse<FindOrganisationViewModel> { Data = vm };
+            return result;
 
-            var charityResult = await _mediator.SendAsync(new GetCharityQueryRequest
-            {
-                RegistrationNumber = charityRegistrationNumber
-            });
+            //var publicBodyResult = await _mediator.SendAsync(new GetPublicSectorOrgainsationQuery()
+            //{
+            //    SearchTerm = searchTerm
+            //});
 
-            if (charityResult == null)
-            {
-                _logger.Warn("No response from GetAccountLegalEntitiesRequest");
-                return new OrchestratorResponse<FindOrganisationViewModel>
-                {
-                    Data = new FindOrganisationViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-            }
+            //if (publicBodyResult == null)
+            //{
+            //    _logger.Warn("No response from GetPublicSectorOrgainsationQuery");
+            //    return new OrchestratorResponse<FindPublicBodyViewModel>
+            //    {
+            //        Data = new FindPublicBodyViewModel(),
+            //        Status = HttpStatusCode.NotFound
+            //    };
+            //}
 
-            if (charityResult.Charity == null)
-            {
-                _logger.Warn("Charity not found");
-                return new OrchestratorResponse<FindOrganisationViewModel>
-                {
-                    Data = new FindOrganisationViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-            }
+            //if (!publicBodyResult.Organisaions.Data.Any())
+            //{
+            //    _logger.Warn("No organisations found");
+            //    return new OrchestratorResponse<FindPublicBodyViewModel>
+            //    {
+            //        Data = new FindPublicBodyViewModel(),
+            //        Status = HttpStatusCode.NotFound
+            //    };
+            //}
 
-            var charity = charityResult.Charity;
-            return new OrchestratorResponse<FindOrganisationViewModel>
-            {
-                Data = new FindOrganisationViewModel
-                {
-                    CompanyNumber = charity.RegistrationNumber.ToString(),
-                    CompanyName = charity.Name,
-                    RegisteredAddress = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
-                }
-            };
+            //if (publicBodyResult.Organisaions.Data.Count > 1)
+            //{
+            //    return new OrchestratorResponse<FindPublicBodyViewModel>
+            //    {
+            //        Data = new FindPublicBodyViewModel
+            //        {
+            //            FoundMultiple = true
+            //        },
+            //        Status = HttpStatusCode.OK
+            //    };
+            //}
+
+            //var org = publicBodyResult.Organisaions.Data.First();
+
+            //return new OrchestratorResponse<FindPublicBodyViewModel>
+            //{
+            //    Data = new FindPublicBodyViewModel
+            //    {
+            //        CompanyName = org.Name
+            //    }
+            //};
+        }
+
+
+        private async Task<OrchestratorResponse<FindOrganisationViewModel>> FindCharity(string hashedLegalEntityId, string registrationNumber)
+        {
+            var vm = new FindCharityViewModel();
+            var result = new OrchestratorResponse<FindOrganisationViewModel> {Data = vm};
+            return result;
+
+
+            //int charityRegistrationNumber;
+            //if (!Int32.TryParse(registrationNumber, out charityRegistrationNumber))
+            //{
+            //    _logger.Warn("Non-numeric registration number");
+            //    return new OrchestratorResponse<FindOrganisationViewModel>
+            //    {
+            //        Data = new FindCharityViewModel(),
+            //        Status = HttpStatusCode.NotFound
+            //    };
+            //}
+
+            //var charityResult = await _mediator.SendAsync(new GetCharityQueryRequest
+            //{
+            //    RegistrationNumber = charityRegistrationNumber
+            //});
+
+            //if (charityResult == null)
+            //{
+            //    _logger.Warn("No response from GetAccountLegalEntitiesRequest");
+            //    return new OrchestratorResponse<FindOrganisationViewModel>
+            //    {
+            //        Data = new FindCharityViewModel(),
+            //        Status = HttpStatusCode.NotFound
+            //    };
+            //}
+
+            //if (charityResult.Charity == null)
+            //{
+            //    _logger.Warn("Charity not found");
+            //    return new OrchestratorResponse<FindOrganisationViewModel>
+            //    {
+            //        Data = new FindCharityViewModel(),
+            //        Status = HttpStatusCode.NotFound
+            //    };
+            //}
+
+
+
+            //var charity = charityResult.Charity;
+            //return new OrchestratorResponse<FindOrganisationViewModel>
+            //{
+            //    Data = new FindCharityViewModel
+            //    {
+            //        HashedLegalEntityId = hashedLegalEntityId,
+            //        CompanyNumber = charity.RegistrationNumber.ToString(),
+            //        CompanyName = charity.Name,
+            //        RegisteredAddress = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
+            //    }
+            //};
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
