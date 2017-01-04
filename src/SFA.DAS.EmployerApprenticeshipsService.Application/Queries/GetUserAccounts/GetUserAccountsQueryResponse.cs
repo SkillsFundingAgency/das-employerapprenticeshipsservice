@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
 {
     public class GetUserAccountsQueryResponse
     {
-        public Accounts Accounts { get; set; }
+        public Accounts<Account> Accounts { get; set; }
     }
 }

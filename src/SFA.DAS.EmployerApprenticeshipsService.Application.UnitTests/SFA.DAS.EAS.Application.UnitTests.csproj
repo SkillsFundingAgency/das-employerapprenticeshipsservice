@@ -191,6 +191,8 @@
     <Compile Include="Queries\GetLatestAccountAgreementTemplateTests\WhenIRequestTheLatestAgreementTemplate.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRangeTests\WhenIGetPagedEmployerAccounts.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRangeTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
@@ -203,7 +205,7 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrgainsations.cs" />
+    <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />

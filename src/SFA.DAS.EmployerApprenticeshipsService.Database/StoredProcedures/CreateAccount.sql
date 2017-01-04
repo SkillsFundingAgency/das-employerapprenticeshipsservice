@@ -19,7 +19,7 @@ BEGIN
 	DECLARE @legalEntityId BIGINT;
 	DECLARE @employerAgreementId BIGINT;
 
-	INSERT INTO [account].[Account](Name) VALUES (@employerName);
+	INSERT INTO [account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();
 
 	SELECT @legalEntityId = Id FROM [account].[LegalEntity] WHERE Code = @employerNumber;

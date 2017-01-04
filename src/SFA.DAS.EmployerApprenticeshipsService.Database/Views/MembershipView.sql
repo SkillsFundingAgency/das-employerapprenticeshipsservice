@@ -6,6 +6,7 @@ SELECT m.*,
 	u.FirstName,
 	u.LastName, 
 	a.Name AS AccountName, 
+	a.HashedId as HashedAccountId, 
 	r.Name AS RoleName
 FROM [account].[Membership] m
 	JOIN [account].[User] u

@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
         public void ThenAValidQueryShouldPassValidation()
         {
             //Arange
-            var query = new GetPublicSectorOrgainsationQuery
+            var query = new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = "test",
                 PageNumber = 1,
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
         public void ThenAQueryWithNoSearchTermShouldFailValidation()
         {
             //Arange
-            var query = new GetPublicSectorOrgainsationQuery
+            var query = new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = null,
                 PageNumber = 1,
@@ -49,6 +49,44 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPublicSectorOrgainsationT
             //Assert
             Assert.IsFalse(result.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("SearchTerm", "Search term has not been supplied"), result.ValidationDictionary);
+        }
+
+        [Test]
+        public void ThenAQueryWithNoPageSizeShouldFailValidation()
+        {
+            //Arange
+            var query = new GetPublicSectorOrganisationQuery
+            {
+                SearchTerm = "test",
+                PageNumber = 1,
+                PageSize = 0
+            };
+
+            //Act
+            var result = _validator.Validate(query);
+
+            //Assert
+            Assert.IsFalse(result.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("PageSize", "Page size must be greater than zero"), result.ValidationDictionary);
+        }
+
+        [Test]
+        public void ThenAQueryWithNoPageNumberShouldFailValidation()
+        {
+            //Arange
+            var query = new GetPublicSectorOrganisationQuery
+            {
+                SearchTerm = "test",
+                PageNumber = 0,
+                PageSize = 50
+            };
+
+            //Act
+            var result = _validator.Validate(query);
+
+            //Assert
+            Assert.IsFalse(result.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("PageNumber", "Page number must be greater than zero"), result.ValidationDictionary);
         }
 
         [Test]

@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Web.Models
 {
     public class UserAccountsViewModel
     {
-        public Accounts Accounts;
+        public Accounts<Account> Accounts;
         public int Invitations;
         public FlashMessageViewModel FlashMessage;
         public string ErrorMessage;

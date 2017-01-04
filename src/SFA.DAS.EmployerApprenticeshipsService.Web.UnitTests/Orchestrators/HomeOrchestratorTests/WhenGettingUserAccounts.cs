@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>())).ReturnsAsync(new GetUserAccountsQueryResponse {Accounts = new Accounts()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>())).ReturnsAsync(new GetUserAccountsQueryResponse {Accounts = new Accounts<Account>()});
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetNumberOfUserInvitationsQuery>())).ReturnsAsync(new GetNumberOfUserInvitationsResponse {NumberOfInvites = 2});
             
 
