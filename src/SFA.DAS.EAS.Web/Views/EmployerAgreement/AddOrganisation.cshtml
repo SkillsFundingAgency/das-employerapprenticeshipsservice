@@ -92,7 +92,7 @@
                 <span class="form-label-bold">Listed on Companies House</span>
                 <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
             </label>
-            <input type="radio" name="organisation" id="company" value="@OrganisationType.CompaniesHouse" />
+            <input type="radio" name="orgType" id="company" value="@OrganisationType.CompaniesHouse" />
             <div id="search-company" class="search-form panel panel-border-narrow">
                 <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
                 <br />
@@ -104,7 +104,7 @@
             <label for="publicbody">
                 <span class="form-label-bold">Public sector organisation</span>
             </label>
-            <input type="radio" name="organisation" value="@OrganisationType.PublicBodies" id="publicbody" />
+            <input type="radio" name="orgType" value="@OrganisationType.PublicBodies" id="publicbody" />
             <div id="search-publicbody" class="search-form panel panel-border-narrow">
                 <label class="strong" for="PublicBodyName">Enter organisation's name</label>
                 <br />
@@ -117,7 +117,7 @@
             <label for="charity">
                 <span class="form-label-bold">Registered charity</span>
             </label>
-            <input type="radio" name="organisation" value="@OrganisationType.Charities" id="charity" />
+            <input type="radio" name="orgType" value="@OrganisationType.Charities" id="charity" />
             <div id="search-charity" class="search-form panel panel-border-narrow">
                 <label class="strong" for="CharityRegNo">Enter charity number</label>
                 <br />
