@@ -7,43 +7,6 @@
 }
 
 
-<style>
-    .collapse {
-        cursor: pointer;
-        display: inline;
-    }
-
-        .collapse + input + div {
-            display: none;
-        }
-
-        .collapse + input:checked + div {
-            display: block;
-        }
-
-    .radio-wrapper {
-        display: block;
-    }
-
-    .orgtype-wrapper input {
-        float: left;
-    }
-
-    /*.selectable {
-            display: block;
-            float: none;
-            clear: left;
-            position: relative;
-            background: #dee0e2;
-            border: 1px solid #dee0e2;
-            padding: 18px 30px 15px 45px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }*/
-</style>
-
-
 
 @if (TempData["companyError"] != null || TempData["charityError"] != null || TempData["publicBodyError"] != null)
 {
