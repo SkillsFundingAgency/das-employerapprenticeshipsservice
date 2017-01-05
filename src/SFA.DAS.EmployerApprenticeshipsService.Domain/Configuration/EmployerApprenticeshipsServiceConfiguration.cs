@@ -23,4 +23,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public string BaseUrl { get; set; }
     }
+
+    
 }
