@@ -45,7 +45,8 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                         AccessToken = message.AccessToken,
                         RefreshToken = message.RefreshToken,
                         AccountId = accountId,
-                        EmpRef = message.Empref
+                        EmpRef = message.Empref,
+                        RefName = message.EmprefName
                     }
                 );
 

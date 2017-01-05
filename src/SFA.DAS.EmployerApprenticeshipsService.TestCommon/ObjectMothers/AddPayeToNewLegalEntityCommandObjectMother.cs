@@ -13,7 +13,8 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                 ExternalUserId = string.IsNullOrEmpty(externalUserId) ? Guid.NewGuid().ToString() : externalUserId,
                 Empref = "123/ABC",
                 RefreshToken = "123GGFFDD",
-                AccessToken = "123GGFFDD"
+                AccessToken = "123GGFFDD",
+                EmprefName = "Paye Scheme 1"
             };
 
             return command;
