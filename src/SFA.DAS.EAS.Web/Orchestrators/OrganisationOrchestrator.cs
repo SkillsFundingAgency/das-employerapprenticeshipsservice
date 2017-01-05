@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger)
+        public OrganisationOrchestrator(IMediator mediator, ILogger logger): base(mediator)
         {
             _mediator = mediator;
             _logger = logger;

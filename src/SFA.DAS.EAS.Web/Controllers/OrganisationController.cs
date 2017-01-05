@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [RoutePrefix("accounts/{HashedAccountId}")]
     public class OrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
