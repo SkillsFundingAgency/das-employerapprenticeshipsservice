@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -11,11 +14,11 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 
-namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
+namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 {
     class WhenICreateALegalEntity
     {
-        private EmployerAgreementOrchestrator _orchestrator;
+        private OrganisationOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
 
@@ -25,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object);
+            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object);
         }
 
         [Test]
@@ -71,18 +74,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             command.LegalEntity.Name.Equals(request.Name) &&
             command.LegalEntity.Code.Equals(request.Code) &&
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
-            command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate)&&
-            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus)&&
+            command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate) &&
+            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus) &&
             command.SignAgreement.Equals(request.SignedAgreement))));
         }
 
-        [TestCase(Role.Owner,HttpStatusCode.OK)]
-        [TestCase(Role.Viewer,HttpStatusCode.Unauthorized)]
-        [TestCase(Role.Transactor,HttpStatusCode.Unauthorized)]
+        [TestCase(Role.Owner, HttpStatusCode.OK)]
+        [TestCase(Role.Viewer, HttpStatusCode.Unauthorized)]
+        [TestCase(Role.Transactor, HttpStatusCode.Unauthorized)]
         public async Task ThenOnlyOwnersCanSearchAndAddNewLegalEntities(Role userRole, HttpStatusCode expectedResponse)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>())).ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>())).ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
             var actual = await _orchestrator.GetAddLegalEntityViewModel("5454654", "ADSD123");

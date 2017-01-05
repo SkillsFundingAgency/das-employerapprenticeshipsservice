@@ -183,65 +183,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
        
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
-            CreateNewLegalEntity request)
-        {
-            if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
-            {
-                var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest
-                {
-                    HashedAccountId = request.HashedAccountId,
-                    UserId = request.ExternalUserId
-                });
-
-                return new OrchestratorResponse<EmployerAgreementViewModel>
-                {
-                    Data = new EmployerAgreementViewModel
-                    {
-                        EmployerAgreement = new EmployerAgreementView
-                        {
-                            LegalEntityName = request.Name,
-                            LegalEntityCode = request.Code,
-                            LegalEntityRegisteredAddress = request.Address,
-                            LegalEntityIncorporatedDate = request.IncorporatedDate,
-                            Status = EmployerAgreementStatus.Pending,
-                            TemplateRef = response.Template.Ref,
-                            TemplateText = response.Template.Text,
-                            LegalEntityStatus = request.LegalEntityStatus,
-
-                        }
-                    },
-                    Status = HttpStatusCode.BadRequest
-                };
-            }
-
-            var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
-            {
-                HashedAccountId = request.HashedAccountId,
-                LegalEntity = new LegalEntity
-                {
-                    Name = request.Name,
-                    Code = request.Code,
-                    RegisteredAddress = request.Address,
-                    DateOfIncorporation = request.IncorporatedDate,
-                    CompanyStatus = request.LegalEntityStatus,
-                    Source = request.Source
-                },
-                SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
-                SignedDate = request.SignedDate,
-                ExternalUserId = request.ExternalUserId
-            });
-
-            return new OrchestratorResponse<EmployerAgreementViewModel>
-            {
-                Data = new EmployerAgreementViewModel
-                {
-                    EmployerAgreement = createLegalEntityResponse.AgreementView
-                },
-                Status = HttpStatusCode.OK
-            };
-        }
-
         public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);

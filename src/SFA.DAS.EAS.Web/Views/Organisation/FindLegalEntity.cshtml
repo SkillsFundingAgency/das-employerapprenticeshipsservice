@@ -1,17 +1,49 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.FindOrganisationViewModel>
 @{ViewBag.PageID = "page-extra-confirm-organisation"; }
 @{
-    ViewBag.Title = "Confirm organisation";
+    ViewBag.Title = "Confirm details";
     ViewBag.Section = "organisations";
 }
+
+<style>
+    .pseudo-table-row {
+        border-bottom: 1px solid #bfc1c3;
+        padding: .6315789474em 1.0526315789em .4736842105em 0;
+    }
+
+    .pseudo-table-row .left {
+        float: left;
+        width: 12em;
+    }
+
+    .pseudo-table-row .right {
+        
+    }
+</style>
+
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            <span class="heading-secondary">Confirm organisation</span>
-            @Model.Data.CompanyName
+            Confirm details
         </h1>
-        <p class="lede">Companies House number: @Model.Data.CompanyNumber</p>
-        <p class="heading-medium">Is this the correct organisation?</p>
+
+        <div class="pseudo-table-row">
+            <div class="left">Organisation name</div>
+            <div class="right">@Model.Data.CompanyName</div>
+        </div>
+
+        <div class="pseudo-table-row">
+            <div class="left">Organisation number</div>
+            <div class="right">@Model.Data.CompanyNumber</div>
+        </div>
+
+        <div class="pseudo-table-row">
+            <div class="left">Address</div>
+            <div class="right">@Model.Data.RegisteredAddress</div>
+        </div>
+
+        <p class="heading-medium">Is this correct?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.CompanyName" />
