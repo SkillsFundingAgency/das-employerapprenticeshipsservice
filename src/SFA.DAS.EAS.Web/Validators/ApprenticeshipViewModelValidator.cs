@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Validators
                 .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
                 .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
 
-            RuleFor(x => x.Cost).Matches("^$|^[1-9]{1}[0-9]*$").WithMessage("Enter the total agreed training cost");
+            RuleFor(x => x.Cost).Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").WithMessage("Enter the total agreed training cost");
         }
 
         private bool BeGreaterThanStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
