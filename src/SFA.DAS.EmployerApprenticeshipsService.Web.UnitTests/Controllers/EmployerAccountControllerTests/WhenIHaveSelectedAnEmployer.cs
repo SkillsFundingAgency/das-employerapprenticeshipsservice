@@ -76,13 +76,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
         {
             //Assign
-            var request = new CompanyDetailsViewModel
+            var request = new OrganisationDetailsViewModel
             {
-                CompanyNumber = "6576585",
+                ReferenceNumber = "6576585",
                 Name = "Test Corp",
                 DateOfInception = DateTime.Now.AddYears(-12),
                 Address = "1, Test Street",
-                CompanyStatus = "active"
+                Status = "active"
             };
 
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
@@ -94,8 +94,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
                 It.Is<EmployerAccountData>(data => 
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
+                data.CompanyNumber.Equals(request.ReferenceNumber) &&
+                data.CompanyStatus.Equals(request.Status) &&
                 data.CompanyName.Equals(request.Name) &&
                 data.DateOfIncorporation.Equals(request.DateOfInception) &&
                 data.RegisteredAddress.Equals(request.Address))));

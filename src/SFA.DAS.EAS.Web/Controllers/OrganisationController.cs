@@ -39,55 +39,49 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Agreements/Add")]
         public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
         {
-            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
-            };
+            OrchestratorResponse<OrganisationDetailsViewModel> response;
 
             switch (orgType)
             {
                 case OrganisationType.Charities:
-                    var charityResponse = await FindCharity(charityRegNo, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-                    if (charityResponse.Status == HttpStatusCode.OK)
-                    {
-                        return View("ConfirmCharityDetails", charityResponse);
-                    }
-
+                    response = await FindCharity(charityRegNo, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                     break;
                 case OrganisationType.CompaniesHouse:
-                    var companyResponse = await FindCompany(companiesHouseNumber, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-                    if (companyResponse.Status == HttpStatusCode.OK)
-                    {
-                        return View("ConfirmCompanyDetails", companyResponse);
-                    }
+                    response = await FindCompany(companiesHouseNumber, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
                     break;
                 case OrganisationType.PublicBodies:
-                    var publicSectorOrganisationSearchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-                    if (publicSectorOrganisationSearchResponse.Data.Results.Data.Count == 1)
+                    var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    
+                    if (searchResponse.Data.Results.Data.Count > 1)
                     {
-                        var model = publicSectorOrganisationSearchResponse.Data.Results.Data.First();
-
-                        return View("ConfirmPublicSectorOrganisationDetails",
-                            new OrchestratorResponse<OrganisationDetailsViewModel>()
-                            {
-                                Data = new OrganisationDetailsViewModel {Name = model.Name},
-                                Status = HttpStatusCode.OK
-                            });
+                        return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
                     }
 
-                    return View("ViewPublicSectorOrganisationSearchResults", publicSectorOrganisationSearchResponse);
-                    
+                    response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                    {
+                        Data = searchResponse.Data.Results.Data.FirstOrDefault(),
+                        Status = searchResponse.Status
+                    };
+                    break;
+
                 case OrganisationType.Other:
                     return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
                     
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
             }
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return View(string.IsNullOrEmpty(response.Data.Address) ? "AddOrganisationAddress" : "ConfirmOrganisationDetails", response);
+            }
+
+            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+            {
+                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
+                Status = HttpStatusCode.OK,
+            };
 
             return View("AddOrganisation", errorResponse);
         }
@@ -96,44 +90,48 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
 
+            switch (response.Status)
+            {
+                case HttpStatusCode.NotFound:
+                    TempData["publicBodyError"] = "No public organsiations were not found using your search term";
+                    break;
+            }
+
             return response;
         }
 
-        private async Task<OrchestratorResponse<CompanyDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
+        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.GetLimitedCompanyByRegistrationNumber(companiesHouseNumber, hashedAccountId, userIdClaim);
 
-            if (response.Status == HttpStatusCode.NotFound)
+            switch (response.Status)
             {
-                TempData["companyError"] = "Company not found";
-            }
-
-            if (response.Status == HttpStatusCode.Conflict)
-            {
-                TempData["companyError"] = "Enter a company that isn't already registered";
-                
+                case HttpStatusCode.NotFound:
+                    TempData["companyError"] = "Company not found";
+                    break;
+                case HttpStatusCode.Conflict:
+                    TempData["companyError"] = "Enter a company that isn't already registered";
+                    break;
             }
 
             return response;
         }
 
-        private async Task<OrchestratorResponse<CharityDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
+        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
 
-            if (response.Status == HttpStatusCode.NotFound)
+            switch (response.Status)
             {
-                TempData["charityError"] = "Charity not found";
+                case HttpStatusCode.NotFound:
+                    TempData["charityError"] = "Charity not found";
+                    break;
+                case HttpStatusCode.BadRequest:
+                    TempData["charityError"] = "Charity is removed";
+                    break;
             }
-
-            if (response.Data.IsRemovedError)
-            {
-                TempData["charityError"] = "Charity is removed";
-                response.Status = HttpStatusCode.BadRequest;
-            }
-
+            
             return response;
-
         }
 
         //[HttpPost]

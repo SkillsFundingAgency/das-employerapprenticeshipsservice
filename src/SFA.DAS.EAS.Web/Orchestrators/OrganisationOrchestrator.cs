@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -32,16 +33,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
         
-        public virtual async Task<OrchestratorResponse<CompanyDetailsViewModel>> GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId, string userIdClaim)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId, string userIdClaim)
         {
             var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
             if (accountEntities.Entites.LegalEntityList.Any(
                x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
             {
-                return new OrchestratorResponse<CompanyDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CompanyDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
             }
@@ -54,39 +55,39 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (response == null)
             {
                 _logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<CompanyDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CompanyDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
             }
 
             _logger.Info($"Returning Data for {companiesHouseNumber}");
 
-            return new OrchestratorResponse<CompanyDetailsViewModel>
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new CompanyDetailsViewModel
+                Data = new OrganisationDetailsViewModel
                 {
                     HashedId = hashedLegalEntityId,
-                    CompanyNumber = response.CompanyNumber,
+                    ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
                     DateOfInception = response.DateOfIncorporation,
                     Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
-                    CompanyStatus = response.CompanyStatus
+                    Status = response.CompanyStatus
                 }
             };
         }
         
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation( string searchTerm, string hashedLegalEntityId, string userIdClaim)
         {
-            var publicBodyResult = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
+            var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = searchTerm,
                 PageNumber = 1,
                 PageSize = 1000
             });
 
-            if (publicBodyResult == null || !publicBodyResult.Organisaions.Data.Any())
+            if (searchResults == null || !searchResults.Organisaions.Data.Any())
             {
                 _logger.Warn("No response from GetPublicSectorOrgainsationQuery");
                 return new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
@@ -96,26 +97,35 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
+            var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
+            {
+                Data =
+                    searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel {Name = x.Name})
+                        .ToList(),
+                PageNumber = searchResults.Organisaions.PageNumber,
+                TotalPages = searchResults.Organisaions.TotalPages
+            };
+
             return new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
             {
                 Data = new PublicSectorOrganisationSearchResultsViewModel
                 {
-                    Results = publicBodyResult.Organisaions
+                    Results = pagedResponse
                 },
                 Status = HttpStatusCode.OK
             };
         }
 
-        public virtual async Task<OrchestratorResponse<CharityDetailsViewModel>> GetCharityByRegistrationNumber(string registrationNumber, string hashedLegalEntityId, string userIdClaim)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(string registrationNumber, string hashedLegalEntityId, string userIdClaim)
         {
             var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
             if (accountEntities.Entites.LegalEntityList.Any(
                x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)))
             {
-                return new OrchestratorResponse<CharityDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CharityDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
             }
@@ -124,9 +134,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (!int.TryParse(registrationNumber, out charityRegistrationNumber))
             {
                 _logger.Warn("Non-numeric registration number");
-                return new OrchestratorResponse<CharityDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CharityDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
             }
@@ -142,9 +152,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (HttpRequestException)
             {
                 _logger.Warn("Charity not found");
-                return new OrchestratorResponse<CharityDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CharityDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
             }
@@ -152,9 +162,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (charityResult == null)
             {
                 _logger.Warn("No response from GetAccountLegalEntitiesRequest");
-                return new OrchestratorResponse<CharityDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CharityDetailsViewModel(),
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
             }
@@ -163,22 +173,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (charity.IsRemoved)
             {
-                return new OrchestratorResponse<CharityDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
-                    Data = new CharityDetailsViewModel
-                    {
-                        IsRemovedError = true
-                    },
-                    Status = HttpStatusCode.NotFound
+                    Status = HttpStatusCode.BadRequest
                 };
             }
 
-            return new OrchestratorResponse<CharityDetailsViewModel>
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new CharityDetailsViewModel
+                Data = new OrganisationDetailsViewModel
                 {
                     HashedId = hashedLegalEntityId,
-                    CharityNumber = charity.RegistrationNumber.ToString(),
+                    ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
                     Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}"
                 }
@@ -207,8 +213,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
-            CreateNewLegalEntity request)
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntity request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
             {

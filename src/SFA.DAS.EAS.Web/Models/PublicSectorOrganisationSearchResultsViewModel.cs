@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Web.Models
 {
     public class PublicSectorOrganisationSearchResultsViewModel
     {
-        public PagedResponse<PublicSectorOrganisation> Results { get; set; }
+        public PagedResponse<OrganisationDetailsViewModel> Results { get; set; }
     }
 }

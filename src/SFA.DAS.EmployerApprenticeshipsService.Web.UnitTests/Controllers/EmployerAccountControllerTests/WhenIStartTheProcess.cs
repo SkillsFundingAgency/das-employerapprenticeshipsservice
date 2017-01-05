@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             
 
             //Act
-            _employerAccountController.GatewayInform(new CompanyDetailsViewModel());
+            _employerAccountController.GatewayInform(new OrganisationDetailsViewModel());
 
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
@@ -83,10 +83,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var companyNumber = "123TEST";
             var registeredAddress = "Test Address";
             var dateOfIncorporation = new DateTime(2016, 05, 25);
-            _employerAccountController.GatewayInform(new CompanyDetailsViewModel
+            _employerAccountController.GatewayInform(new OrganisationDetailsViewModel
             {
                 Name = companyName,
-                CompanyNumber = companyNumber,
+                ReferenceNumber = companyNumber,
                 Address = registeredAddress,
                 DateOfInception = dateOfIncorporation
             });

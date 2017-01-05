@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<CompanyDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -124,24 +124,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<CompanyDetailsViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new CompanyDetailsViewModel()
+                    Data = new OrganisationDetailsViewModel()
                 };
             }
 
             Logger.Info($"Returning Data for {model.EmployerRef}");
 
-            return new OrchestratorResponse<CompanyDetailsViewModel>
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new CompanyDetailsViewModel
+                Data = new OrganisationDetailsViewModel
                 {
-                    CompanyNumber = response.CompanyNumber,
+                    ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
                     DateOfInception = response.DateOfIncorporation,
                     Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
-                    CompanyStatus = response.CompanyStatus,
+                    Status = response.CompanyStatus,
                     HideBreadcrumb = model.HideBreadcrumb
                 }
 

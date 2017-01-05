@@ -393,7 +393,6 @@
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
-    <Compile Include="Models\CharityDetailsViewModel.cs" />
     <Compile Include="Models\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
@@ -409,7 +408,6 @@
     <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
-    <Compile Include="Models\CompanyDetailsViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
     <Compile Include="Models\InvitationViewModel.cs" />
@@ -801,7 +799,6 @@
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\Organisation\ConfirmPublicSectorOrganisationDetails.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
@@ -895,10 +892,10 @@
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
-    <Content Include="Views\Organisation\ConfirmCompanyDetails.cshtml" />
-    <Content Include="Views\Organisation\ConfirmCharityDetails.cshtml" />
+    <Content Include="Views\Organisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

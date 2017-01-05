@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult GatewayInform(CompanyDetailsViewModel model)
+        public ActionResult GatewayInform(OrganisationDetailsViewModel model)
         {
 
             EmployerAccountData data;
@@ -83,12 +83,12 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 data = new EmployerAccountData
                 {
-                    CompanyNumber = model.CompanyNumber,
+                    CompanyNumber = model.ReferenceNumber,
                     CompanyName = model.Name,
                     DateOfIncorporation = model.DateOfInception ?? DateTime.MinValue,
                     RegisteredAddress = model.Address,
                     HideBreadcrumb = model.HideBreadcrumb,
-                    CompanyStatus = model.CompanyStatus
+                    CompanyStatus = model.Status
                 };
             }
             else

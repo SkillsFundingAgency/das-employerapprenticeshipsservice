@@ -52,10 +52,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(expected.CompanyStatus,actual.Data.CompanyStatus);
+            Assert.AreEqual(expected.CompanyStatus,actual.Data.Status);
             Assert.AreEqual(expected.CompanyName,actual.Data.Name);
             Assert.AreEqual(expected.DateOfIncorporation,actual.Data.DateOfInception);
-            Assert.AreEqual(expected.CompanyNumber,actual.Data.CompanyNumber);
+            Assert.AreEqual(expected.CompanyNumber,actual.Data.ReferenceNumber);
             Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressLine2}, {expected.AddressPostcode}", actual.Data.Address);
         }
     }

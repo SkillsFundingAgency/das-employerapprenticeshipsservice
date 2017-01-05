@@ -1,4 +1,4 @@
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.CharityDetailsViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
 @{ViewBag.PageID = "page-extra-confirm-charity"; }
 @{
     ViewBag.Title = "Confirm Charity";
@@ -10,12 +10,12 @@
             <span class="heading-secondary">Confirm charity</span>
             @Model.Data.Name
         </h1>
-        <p class="lede">Charity number: @Model.Data.CharityNumber</p>
+        <p class="lede">Charity number: @Model.Data.ReferenceNumber</p>
         <p class="heading-medium">Is this the correct organisation?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
-            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.CharityNumber" />
+            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
             <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception" />
             <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
