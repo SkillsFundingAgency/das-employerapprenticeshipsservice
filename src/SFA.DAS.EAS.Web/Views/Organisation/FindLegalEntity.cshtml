@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.FindOrganisationViewModel>
+﻿@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.FindOrganisationViewModel>
 @{ViewBag.PageID = "page-extra-confirm-organisation"; }
 @{
     ViewBag.Title = "Confirm details";
@@ -33,15 +34,18 @@
             <div class="right">@Model.Data.CompanyName</div>
         </div>
 
-        <div class="pseudo-table-row">
-            <div class="left">Organisation number</div>
-            <div class="right">@Model.Data.CompanyNumber</div>
-        </div>
+        @if (Model.Data.Source != OrganisationType.PublicBodies)
+        {
+            <div class="pseudo-table-row">
+                <div class="left">Organisation number</div>
+                <div class="right">@Model.Data.CompanyNumber</div>
+            </div>
 
-        <div class="pseudo-table-row">
-            <div class="left">Address</div>
-            <div class="right">@Model.Data.RegisteredAddress</div>
-        </div>
+            <div class="pseudo-table-row">
+                <div class="left">Address</div>
+                <div class="right">@Model.Data.RegisteredAddress</div>
+            </div>
+        }
 
         <p class="heading-medium">Is this correct?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">

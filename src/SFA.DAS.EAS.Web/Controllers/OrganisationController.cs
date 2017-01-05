@@ -91,6 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (response.Status == HttpStatusCode.Conflict)
             {
                 TempData["companyError"] = "Enter a company that isn't already registered";
+                return View("AddOrganisation", errorResponse);
             }
 
 
