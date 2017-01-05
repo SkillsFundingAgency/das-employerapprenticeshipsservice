@@ -6,22 +6,6 @@
     ViewBag.Section = "organisations";
 }
 
-<style>
-    .pseudo-table-row {
-        border-bottom: 1px solid #bfc1c3;
-        padding: .6315789474em 1.0526315789em .4736842105em 0;
-    }
-
-    .pseudo-table-row .left {
-        float: left;
-        width: 12em;
-    }
-
-    .pseudo-table-row .right {
-        
-    }
-</style>
-
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -29,23 +13,28 @@
             Confirm details
         </h1>
 
-        <div class="pseudo-table-row">
-            <div class="left">Organisation name</div>
-            <div class="right">@Model.Data.CompanyName</div>
-        </div>
+        <table>
+            <tbody>
+            <tr>
+                <th scope="row">Organisation name</th>
+                <td>@Model.Data.CompanyName</td>
+            </tr>
 
-        @if (Model.Data.Source != OrganisationType.PublicBodies)
-        {
-            <div class="pseudo-table-row">
-                <div class="left">Organisation number</div>
-                <div class="right">@Model.Data.CompanyNumber</div>
-            </div>
+                @if (Model.Data.Source != OrganisationType.PublicBodies)
+                {
+                    <tr>
+                        <th scope="row">Organisation number</th>
+                        <td>@Model.Data.CompanyNumber</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Address</th>
+                        <td>@Model.Data.RegisteredAddress</td>
+                    </tr>
+                }
 
-            <div class="pseudo-table-row">
-                <div class="left">Address</div>
-                <div class="right">@Model.Data.RegisteredAddress</div>
-            </div>
-        }
+            </tbody>
+        </table>
+
 
         <p class="heading-medium">Is this correct?</p>
         <form action="@Url.Action("CreateLegalEntity")" method="POST">
