@@ -14,9 +14,11 @@ namespace SFA.DAS.EAS.Web.Validators
 
             RuleFor(r => r.Cost).NotEmpty();
 
-            RuleFor(r => r.StartDate).NotNull();
+            RuleFor(r => r.StartDate)
+                .Must(m => m?.DateTime != null);
 
-            RuleFor(r => r.EndDate).NotNull();
+            RuleFor(r => r.EndDate)
+                .Must(m => m?.DateTime != null);
 
             RuleFor(r => r.TrainingId).NotEmpty();
 
