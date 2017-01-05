@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -38,54 +39,73 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Agreements/Add")]
         public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
         {
-            var searchTerm = "";
-            switch (orgType)
-            {
-                case OrganisationType.Charities:
-                    searchTerm = charityRegNo;
-                    break;
-                case OrganisationType.CompaniesHouse:
-                    searchTerm = companiesHouseNumber;
-                    break;
-                case OrganisationType.PublicBodies:
-                    searchTerm = publicBodyName;
-                    break;
-                case OrganisationType.Other:
-                    searchTerm = String.Empty;
-                    break;
-                default:
-                    throw new NotImplementedException("Org Type Not Implemented");
-            }
-
-            var response = await _orchestrator.FindLegalEntity(hashedAccountId, orgType, searchTerm, OwinWrapper.GetClaimValue(@"sub"));
-
-            if (response.Status == HttpStatusCode.OK)
-            {
-                return View("FindLegalEntity", response);
-            }
-
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
             {
                 Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
                 Status = HttpStatusCode.OK,
             };
 
+            switch (orgType)
+            {
+                case OrganisationType.Charities:
+                    var charityResponse = await FindCharity(charityRegNo, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+                    if (charityResponse.Status == HttpStatusCode.OK)
+                    {
+                        return View("ConfirmCharityDetails", charityResponse);
+                    }
+
+                    break;
+                case OrganisationType.CompaniesHouse:
+                    var companyResponse = await FindCompany(companiesHouseNumber, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+                    if (companyResponse.Status == HttpStatusCode.OK)
+                    {
+                        return View("ConfirmCompanyDetails", companyResponse);
+                    }
+
+                    break;
+                case OrganisationType.PublicBodies:
+                    var publicSectorOrganisationSearchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+                    if (publicSectorOrganisationSearchResponse.Data.Results.Data.Count == 1)
+                    {
+                        var model = publicSectorOrganisationSearchResponse.Data.Results.Data.First();
+
+                        return View("ConfirmPublicSectorOrganisationDetails",
+                            new OrchestratorResponse<OrganisationDetailsViewModel>()
+                            {
+                                Data = new OrganisationDetailsViewModel {Name = model.Name},
+                                Status = HttpStatusCode.OK
+                            });
+                    }
+
+                    return View("ViewPublicSectorOrganisationSearchResults", publicSectorOrganisationSearchResponse);
+                    
+                case OrganisationType.Other:
+                    return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
+                    
+                default:
+                    throw new NotImplementedException("Org Type Not Implemented");
+            }
+
+            return View("AddOrganisation", errorResponse);
+        }
+
+        private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
+
+            return response;
+        }
+
+        private async Task<OrchestratorResponse<CompanyDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.GetLimitedCompanyByRegistrationNumber(companiesHouseNumber, hashedAccountId, userIdClaim);
+
             if (response.Status == HttpStatusCode.NotFound)
             {
-                switch (orgType)
-                {
-                    case OrganisationType.CompaniesHouse:
-                        TempData["companyError"] = "Company not found";
-                        break;
-                    case OrganisationType.Charities:
-                        TempData["charityError"] = "Charity not found";
-                        break;
-                    case OrganisationType.PublicBodies:
-                        TempData["publicBodyError"] = "Public sector body not found";
-                        break;
-                    case OrganisationType.Other:
-                        break;
-                }
+                TempData["companyError"] = "Company not found";
             }
 
             if (response.Status == HttpStatusCode.Conflict)
@@ -94,27 +114,22 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("AddOrganisation", errorResponse);
             }
 
+            return response;
+        }
 
-            if (orgType == OrganisationType.Charities)
+        private async Task<OrchestratorResponse<CharityDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
+
+            if (response.Status == HttpStatusCode.NotFound)
             {
-                var charityResult = (FindCharityViewModel)response.Data;
-                if (charityResult.IsRemovedError)
-                {
-                    TempData["charityError"] = "Charity is removed";
-                }
+                TempData["charityError"] = "Charity not found";
             }
 
-            if (orgType == OrganisationType.PublicBodies)
+            if (response.Data.IsRemovedError)
             {
-                var pbresult = (FindPublicBodyViewModel)response.Data;
-                if (pbresult.Results.Data.Count == 1)
-                {
-                    return View("FindLegalEntity", response);
-                }
-                else
-                {
-                    return View("SelectPublicBody", response);
-                }
+                TempData["charityError"] = "Charity is removed";
+                response.Status = HttpStatusCode.BadRequest;
             }
 
             return View("AddOrganisation", errorResponse);

@@ -48,15 +48,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 .ReturnsAsync(expected);
             
             //Act
-            var actual = await _orchestrator.FindLegalEntity("", OrganisationType.CompaniesHouse,  "", "");
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber("", "", "");
 
             //Assert
             Assert.IsNotNull(actual);
             Assert.AreEqual(expected.CompanyStatus,actual.Data.CompanyStatus);
-            Assert.AreEqual(expected.CompanyName,actual.Data.CompanyName);
-            Assert.AreEqual(expected.DateOfIncorporation,actual.Data.DateOfIncorporation);
+            Assert.AreEqual(expected.CompanyName,actual.Data.Name);
+            Assert.AreEqual(expected.DateOfIncorporation,actual.Data.DateOfInception);
             Assert.AreEqual(expected.CompanyNumber,actual.Data.CompanyNumber);
-            Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressLine2}, {expected.AddressPostcode}", actual.Data.RegisteredAddress);
+            Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressLine2}, {expected.AddressPostcode}", actual.Data.Address);
         }
     }
 }

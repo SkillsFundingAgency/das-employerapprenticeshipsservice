@@ -1,0 +1,33 @@
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
+@{ViewBag.PageID = "page-extra-enter-custom-organsiation-details"; }
+@{
+    ViewBag.Title = "Enter Organisation Details";
+    ViewBag.Section = "organisations";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">Enter your organsiation details</span>
+        </h1>
+        
+        <p class="heading-medium">Please enter your organisation details below:</p>
+        <form action="@Url.Action("CreateLegalEntity")" method="POST">
+            @Html.AntiForgeryToken()
+            <input type="text" id="legalEntityName" name="name" />
+            <input type="text" id="legalEntityAddress" name="address" />
+            <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
+            <input type="hidden" id="submit" name="submit" value="Sign" />
+            <span>
+                <input class="button" type="submit" value="Yes, continue" />
+                <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+            </span>
+        </form> 
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+        </ol>
+    </div>
+}

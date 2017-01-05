@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<CompanyDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -124,23 +124,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<SelectEmployerViewModel>
+                return new OrchestratorResponse<CompanyDetailsViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new SelectEmployerViewModel()
+                    Data = new CompanyDetailsViewModel()
                 };
             }
 
             Logger.Info($"Returning Data for {model.EmployerRef}");
 
-            return new OrchestratorResponse<SelectEmployerViewModel>
+            return new OrchestratorResponse<CompanyDetailsViewModel>
             {
-                Data = new SelectEmployerViewModel
+                Data = new CompanyDetailsViewModel
                 {
                     CompanyNumber = response.CompanyNumber,
-                    CompanyName = response.CompanyName,
-                    DateOfIncorporation = response.DateOfIncorporation,
-                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    Name = response.CompanyName,
+                    DateOfInception = response.DateOfIncorporation,
+                    Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
                     CompanyStatus = response.CompanyStatus,
                     HideBreadcrumb = model.HideBreadcrumb
                 }

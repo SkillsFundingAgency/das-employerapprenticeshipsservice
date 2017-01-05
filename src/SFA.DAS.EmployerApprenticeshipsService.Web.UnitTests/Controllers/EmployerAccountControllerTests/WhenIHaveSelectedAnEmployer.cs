@@ -76,12 +76,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
         {
             //Assign
-            var request = new SelectEmployerViewModel
+            var request = new CompanyDetailsViewModel
             {
                 CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
+                Name = "Test Corp",
+                DateOfInception = DateTime.Now.AddYears(-12),
+                Address = "1, Test Street",
                 CompanyStatus = "active"
             };
 
@@ -96,9 +96,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 It.Is<EmployerAccountData>(data => 
                 data.CompanyNumber.Equals(request.CompanyNumber) &&
                 data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
+                data.CompanyName.Equals(request.Name) &&
+                data.DateOfIncorporation.Equals(request.DateOfInception) &&
+                data.RegisteredAddress.Equals(request.Address))));
         }
 
         [Test]

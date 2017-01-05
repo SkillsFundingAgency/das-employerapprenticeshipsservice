@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         public async Task ThenItCannotBeFoundAtCompaniesHouse()
         {
             //Assign
-            _orchestrator.Setup(x => x.GetCompanyDetails(It.IsAny<SelectEmployerModel>())).ReturnsAsync(new OrchestratorResponse<SelectEmployerViewModel>()
+            _orchestrator.Setup(x => x.GetCompanyDetails(It.IsAny<SelectEmployerModel>())).ReturnsAsync(new OrchestratorResponse<CompanyDetailsViewModel>
             {
                 Status = HttpStatusCode.BadRequest
             });

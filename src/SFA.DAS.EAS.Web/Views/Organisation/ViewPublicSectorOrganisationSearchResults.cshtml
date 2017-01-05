@@ -1,0 +1,21 @@
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PublicSectorOrganisationSearchResultsViewModel>
+@{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
+@{
+    ViewBag.Title = "Public Sector Orgainsation Search Results";
+    ViewBag.Section = "organisations";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Public Sector Search Results
+        </h1>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+        </ol>
+    </div>
+}

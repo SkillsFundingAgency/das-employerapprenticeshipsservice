@@ -202,12 +202,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                         EmployerRef = "emp-123",
                         RegisteredAddress = "123 Fake St."
                     }},
-                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new SelectEmployerViewModel()
+                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new CompanyDetailsViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
+                        Name = "sushiCorp Ltd.",
                         CompanyNumber = "0123456789",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        RegisteredAddress = "123 Fake St."
+                        DateOfInception = new DateTime(2016, 05, 16),
+                        Address = "123 Fake St."
                     }},
                 {"~/Views/EmployerAccountTransactions/Index.cshtml", new TransactionViewModel() {
                     CurrentBalance = 12m,

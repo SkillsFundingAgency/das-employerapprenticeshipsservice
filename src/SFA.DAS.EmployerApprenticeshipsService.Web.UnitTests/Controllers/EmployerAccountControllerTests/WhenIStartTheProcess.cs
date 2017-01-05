@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             
 
             //Act
-            _employerAccountController.GatewayInform(new SelectEmployerViewModel());
+            _employerAccountController.GatewayInform(new CompanyDetailsViewModel());
 
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
@@ -83,12 +83,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var companyNumber = "123TEST";
             var registeredAddress = "Test Address";
             var dateOfIncorporation = new DateTime(2016, 05, 25);
-            _employerAccountController.GatewayInform(new SelectEmployerViewModel
+            _employerAccountController.GatewayInform(new CompanyDetailsViewModel
             {
-                CompanyName = companyName,
+                Name = companyName,
                 CompanyNumber = companyNumber,
-                RegisteredAddress = registeredAddress,
-                DateOfIncorporation = dateOfIncorporation
+                Address = registeredAddress,
+                DateOfInception = dateOfIncorporation
             });
 
             //Assert
@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            var actualModel = actualViewResult.Model as OrchestratorResponse<SelectEmployerViewModel>;
+            var actualModel = actualViewResult.Model as OrchestratorResponse<OrganisationDetailsViewModel>;
             Assert.IsNotNull(actualModel);
             Assert.IsTrue(actualModel.Data.HideBreadcrumb);
         }

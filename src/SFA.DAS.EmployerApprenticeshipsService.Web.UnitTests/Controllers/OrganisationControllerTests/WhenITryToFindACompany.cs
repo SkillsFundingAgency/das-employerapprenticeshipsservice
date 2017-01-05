@@ -37,18 +37,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         public async Task ThenIShouldGetCompanyDetailsBackIfTheyExist()
         {
             //Arrange
-            var viewModel = new FindOrganisationViewModel
+            var viewModel = new CompanyDetailsViewModel
             {
-                HashedLegalEntityId = "1",
-                CompanyName = "Test Corp",
+                HashedId = "1",
+                Name = "Test Corp",
                 CompanyNumber = "0123456",
-                DateOfIncorporation = DateTime.Now,
-                RegisteredAddress = "1 Test Road, Test City, TE12 3ST",
+                DateOfInception = DateTime.Now,
+                Address = "1 Test Road, Test City, TE12 3ST",
                 CompanyStatus = "active"
             };
 
-            _orchestrator.Setup(x => x.FindLegalEntity(It.IsAny<string>(), It.IsAny<OrganisationType>(), It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<FindOrganisationViewModel>
+            _orchestrator.Setup(x => x.GetLimitedCompanyByRegistrationNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<CompanyDetailsViewModel>
                 {
                     Data = viewModel
                 });
@@ -57,14 +57,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(username);
 
             //Act
-            var result = await _controller.AddOrganisation(viewModel.HashedLegalEntityId, OrganisationType.CompaniesHouse, viewModel.CompanyNumber, "", username) as ViewResult;
+            var result = await _controller.AddOrganisation(viewModel.HashedId, OrganisationType.CompaniesHouse, viewModel.CompanyNumber, "", username) as ViewResult;
 
             //Assert
             Assert.IsNotNull(result);
 
-            _orchestrator.Verify(x => x.FindLegalEntity(viewModel.HashedLegalEntityId, OrganisationType.CompaniesHouse, viewModel.CompanyNumber, username), Times.Once);
+            _orchestrator.Verify(x => x.GetLimitedCompanyByRegistrationNumber(viewModel.CompanyNumber, viewModel.HashedId, username), Times.Once);
 
-            var model = result.Model as OrchestratorResponse<FindOrganisationViewModel>;
+            var model = result.Model as OrchestratorResponse<CompanyDetailsViewModel>;
             Assert.IsNotNull(model?.Data);
         }
     }

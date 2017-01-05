@@ -48,9 +48,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            var model = new OrchestratorResponse<SelectEmployerViewModel>
+            var model = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new SelectEmployerViewModel
+                Data = new OrganisationDetailsViewModel
                 {
                     HideBreadcrumb = hideBreadcrumb
                 }
@@ -75,18 +75,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult GatewayInform(SelectEmployerViewModel model)
+        public ActionResult GatewayInform(CompanyDetailsViewModel model)
         {
 
             EmployerAccountData data;
-            if (model?.CompanyName != null)
+            if (model?.Name != null)
             {
                 data = new EmployerAccountData
                 {
                     CompanyNumber = model.CompanyNumber,
-                    CompanyName = model.CompanyName,
-                    DateOfIncorporation = model.DateOfIncorporation.Value,
-                    RegisteredAddress = model.RegisteredAddress,
+                    CompanyName = model.Name,
+                    DateOfIncorporation = model.DateOfInception ?? DateTime.MinValue,
+                    RegisteredAddress = model.Address,
                     HideBreadcrumb = model.HideBreadcrumb,
                     CompanyStatus = model.CompanyStatus
                 };
