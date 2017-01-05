@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            enteredData.EmployerRefName = empref.EmployerLevyInformation.Employer.Name.EmprefAssociatedName;
+            enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
             enteredData.EmployerRef = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
