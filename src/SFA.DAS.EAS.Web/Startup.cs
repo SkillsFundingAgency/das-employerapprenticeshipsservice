@@ -20,7 +20,9 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -90,7 +92,8 @@ namespace SFA.DAS.EAS.Web
                         PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
                     }
                 });
-                
+
+                ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             }
         }
 

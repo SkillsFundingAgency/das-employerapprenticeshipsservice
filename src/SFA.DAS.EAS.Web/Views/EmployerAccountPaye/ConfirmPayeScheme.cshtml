@@ -47,8 +47,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a>
     </div>
 }

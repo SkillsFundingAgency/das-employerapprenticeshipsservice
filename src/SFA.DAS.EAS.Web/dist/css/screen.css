@@ -3358,6 +3358,16 @@ span.helpText {
   font-size: 19px;
 }
 
+#apprentice-details .apprentice-count-heading {
+  margin-top: 4.5em;
+}
+
+@media (min-width: 641px) {
+  #apprentice-details .apprentice-count-heading {
+    margin-top: 1.875em;
+  }
+}
+
 .form-group #StartDate_Month,
 .form-group #EndDate_Month {
   width: 40px;
@@ -3366,4 +3376,8 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
+}
+
+.breadcrumbs a {
+  font-size: 16px;
 }
