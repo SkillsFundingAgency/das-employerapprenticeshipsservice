@@ -144,6 +144,7 @@
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenIValidateTheRenameAccountCommand.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
