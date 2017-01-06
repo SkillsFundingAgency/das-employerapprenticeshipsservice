@@ -291,6 +291,10 @@
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeHandler.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeQuery.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeResponse.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeValidator.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
@@ -364,9 +368,9 @@
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationHandler.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationQuery.cs" />
-    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationResponse.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationHandler.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
