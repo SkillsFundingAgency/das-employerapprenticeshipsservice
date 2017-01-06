@@ -36,6 +36,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Account name</th>
+                            <th scope="col">Rename Account</th>
                             <th scope="col">What you can do</th>
                             <th scope="col"></th>
                         </tr>
@@ -46,6 +47,9 @@
                             <tr>
                                 <td class="responsive-td">
                                     @account.Name
+                                </td>
+                                <td class="responsive-td">
+                                    <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this account</a>                                    
                                 </td>
                                 <td class="responsive-td">
                                     @RoleStrings.GetRoleDescription(account.RoleName)

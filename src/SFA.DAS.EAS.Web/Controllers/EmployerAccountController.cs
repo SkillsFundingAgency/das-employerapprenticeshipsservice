@@ -225,6 +225,50 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
+        [HttpGet]
+        public async Task<ActionResult> RenameAccount(string hashedAccountId)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                var flashmessage = new FlashMessageViewModel
+                {
+                    Headline = "Account renamed",
+                    Message = "You successfully updated the account name",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
+            }
+
+            errorResponse.Data = vm;
+            errorResponse.FlashMessage = response.FlashMessage;
+            errorResponse.Status = response.Status;
+
+            return View(errorResponse);
+        }
+
+
         private string GetUserId()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
