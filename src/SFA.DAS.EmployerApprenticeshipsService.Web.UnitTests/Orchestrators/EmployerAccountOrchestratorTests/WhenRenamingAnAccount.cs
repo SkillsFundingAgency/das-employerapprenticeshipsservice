@@ -6,6 +6,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
@@ -40,6 +42,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(new GetEmployerAccountResponse {Account = _account});
 
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+                .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = Role.Owner});
+
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
 
@@ -63,7 +68,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             var response = await _orchestrator.RenameEmployerAccount(new RenameEmployerAccountViewModel
             {
                 NewName = "New Account Name"
-            });
+            }, "ABC123");
 
             //Assert
             Assert.IsInstanceOf<OrchestratorResponse<RenameEmployerAccountViewModel>>(response);

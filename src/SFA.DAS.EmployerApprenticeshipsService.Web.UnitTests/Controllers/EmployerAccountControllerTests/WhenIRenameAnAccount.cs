@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
-            _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>()))
+            _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<RenameEmployerAccountViewModel>
                 {
                     Status = HttpStatusCode.OK,
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _orchestrator.Verify(x => x.RenameEmployerAccount(It.Is<RenameEmployerAccountViewModel>(r =>
                 r.CurrentName == "Test Account"
                 && r.NewName == "New Account Name"
-            )));
+            ), It.IsAny<string>()));
         }
 
     }
