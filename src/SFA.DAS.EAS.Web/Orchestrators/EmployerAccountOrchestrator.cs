@@ -167,16 +167,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model)
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model, string userId)
         {
             var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
+
+            var userRoleResponse = await GetUserAccountRole(model.HashedId, userId);
+
+            if (!userRoleResponse.UserRole.Equals(Role.Owner))
+            {
+                return new OrchestratorResponse<RenameEmployerAccountViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
 
             try
             {
                 await _mediator.SendAsync(new RenameEmployerAccountCommand
                 {
                     HashedAccountId = model.HashedId,
-                    NewName = model.NewName.Trim()
+                    NewName = (model.NewName ?? String.Empty).Trim()
                 });
 
                 model.CurrentName = model.NewName;

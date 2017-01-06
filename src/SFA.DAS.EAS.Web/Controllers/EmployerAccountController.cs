@@ -238,7 +238,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
-            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm);
+            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -254,12 +254,16 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
-            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>
+            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+
+            if (response.Status == HttpStatusCode.BadRequest)
             {
-                Data = vm,
-                FlashMessage = response.FlashMessage,
-            };
+                vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
+            }
+
+            errorResponse.Data = vm;
+            errorResponse.FlashMessage = response.FlashMessage;
+            errorResponse.Status = response.Status;
 
             return View(errorResponse);
         }

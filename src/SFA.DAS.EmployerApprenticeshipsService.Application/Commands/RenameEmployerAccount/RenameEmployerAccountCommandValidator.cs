@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             var validationResult = new ValidationResult();
 
             if (string.IsNullOrWhiteSpace(item.NewName))
-                validationResult.AddError("NewName", "New account name cannot be blank");
+                validationResult.AddError("NewName", "Enter a name");
 
             return validationResult;
         }
