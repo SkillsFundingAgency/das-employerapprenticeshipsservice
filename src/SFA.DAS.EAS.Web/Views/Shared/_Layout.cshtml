@@ -117,6 +117,8 @@
                             <li class="has-sub-menu">
                                 <a href="/" role="menuitem">@HttpContext.Current.User.Identity.Name</a>
                                 <ul role="menu">
+                                    <li><a href="@UserLinks.ChangePasswordLink">Change your password</a></li>
+                                    <li><a href="@UserLinks.ChangeEmailLink">Change your email address</a></li>
                                     <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Log out</a></li>
                                 </ul>
                             </li>

@@ -81,15 +81,6 @@
         }
 
     </div>
-    <div class="column-one-third pull-right">
-        <aside class="sidebar">
-            <h2 class="heading-medium" id="Manage-Account">Your settings</h2>
-            <ul aria-labelledby="Manage-Account">
-                <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
-                <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
-            </ul>
-        </aside>
-    </div>
 </div>
 @if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))
 {

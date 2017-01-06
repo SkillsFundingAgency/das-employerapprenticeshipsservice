@@ -434,6 +434,7 @@
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\SaveStatus.cs" />
+    <Compile Include="Models\UserLinks.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />

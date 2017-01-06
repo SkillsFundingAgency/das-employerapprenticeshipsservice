@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -18,6 +19,7 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -68,6 +70,12 @@ namespace SFA.DAS.EAS.Web
                 });
 
                 var constants = new Constants(config.Identity);
+
+                var urlHelper = new UrlHelper();
+
+                UserLinks.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
+                UserLinks.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
+
                 app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
                 {
                     ClientId = config.Identity.ClientId,
