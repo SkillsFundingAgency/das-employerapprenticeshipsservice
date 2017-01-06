@@ -197,6 +197,7 @@
     <Compile Include="Interfaces\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
+    <Compile Include="Interfaces\ITotpService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Invitation.cs" />
     <Compile Include="InvitationStatus.cs" />
