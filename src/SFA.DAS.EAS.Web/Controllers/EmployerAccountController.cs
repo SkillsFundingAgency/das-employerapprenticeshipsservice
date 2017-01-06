@@ -241,10 +241,26 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                
+                var flashmessage = new FlashMessageViewModel
+                {
+                    Headline = "Account renamed",
+                    Message = "You successfully updated the account name",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+                return RedirectToAction("Index", "Home");
             }
 
-            return View(response);
+            vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
+            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>
+            {
+                Data = vm,
+                FlashMessage = response.FlashMessage,
+            };
+
+            return View(errorResponse);
         }
 
 

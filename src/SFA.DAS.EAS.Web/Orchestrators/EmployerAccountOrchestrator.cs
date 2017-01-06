@@ -167,43 +167,38 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(
-            RenameEmployerAccountViewModel model)
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(RenameEmployerAccountViewModel model)
         {
+            var response = new OrchestratorResponse<RenameEmployerAccountViewModel> { Data = model };
+
             try
             {
-                var result = await _mediator.SendAsync(new RenameEmployerAccountCommand
+                await _mediator.SendAsync(new RenameEmployerAccountCommand
                 {
                     HashedAccountId = model.HashedId,
-                    NewName = model.NewName
+                    NewName = model.NewName.Trim()
                 });
 
                 model.CurrentName = model.NewName;
                 model.NewName = String.Empty;
-
-                return new OrchestratorResponse<RenameEmployerAccountViewModel>
-                {
-                    Status = HttpStatusCode.OK,
-                    Data = model,
-                    FlashMessage = new FlashMessageViewModel
-                    {
-                        Headline = "Account renamed",
-                        Message = $"You've renamed your account",
-                        Severity = FlashMessageSeverityLevel.Success
-                    }
-                };
+                response.Data = model;
+                response.Status = HttpStatusCode.OK;
             }
             catch (InvalidRequestException ex)
             {
-                Logger.Info(ex, "Rename Employer Validation Error");
-                return new OrchestratorResponse<RenameEmployerAccountViewModel>
+                response.Status = HttpStatusCode.BadRequest;
+                response.Data.ErrorDictionary = ex.ErrorMessages;
+                response.Exception = ex;
+                response.FlashMessage = new FlashMessageViewModel
                 {
-                    Data = new RenameEmployerAccountViewModel(),
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = ex,
-                    FlashMessage = new FlashMessageViewModel()
-            };
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
             }
+
+            return response;
         }
     }
 }
