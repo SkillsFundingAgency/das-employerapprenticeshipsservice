@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -141,13 +142,22 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult HandleEmailChanged(bool userCancelled = false)
+        public async Task<ActionResult> HandleEmailChanged(bool userCancelled = false)
         {
             if (!userCancelled)
             {
                 TempData["successMessage"] = @"You've changed your email";
                 TempData["virtualPageUrl"] = @"/user-changed-email";
                 TempData["virtualPageTitle"] = @"User Action - Changed Email";
+
+	            await OwinWrapper.UpdateClaims();
+
+	            var userRef = OwinWrapper.GetClaimValue("sub");
+	            var email = OwinWrapper.GetClaimValue("email");
+	            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+	            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+	            await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef,email,firstName,lastName);
             }
             return RedirectToAction("Index");
         }
