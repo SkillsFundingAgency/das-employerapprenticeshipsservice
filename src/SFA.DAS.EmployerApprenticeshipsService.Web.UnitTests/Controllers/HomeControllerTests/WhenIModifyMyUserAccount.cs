@@ -73,6 +73,29 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
+        public void ThenIfTheHandleEmailChangedIsCancelledAndTheQueryParamIsSetTheTempDataValuesAreNotSet()
+        {
+            
+            //Act
+            _homeController.HandleEmailChanged(true);
+
+            //Assert
+            Assert.IsFalse(_homeController.TempData.ContainsKey("successMessage"));
+        }
+
+
+        [Test]
+        public void ThenIfTheHandlePasswordChangedIsCancelledAndTheQueryParamIsSetTheTempDataValuesAreNotSet()
+        {
+
+            //Act
+            _homeController.HandlePasswordChanged(true);
+
+            //Assert
+            Assert.IsFalse(_homeController.TempData.ContainsKey("successMessage"));
+        }
+
+        [Test]
         public void ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
         {
             //Act
