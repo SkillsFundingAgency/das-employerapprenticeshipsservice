@@ -67,6 +67,10 @@
                     <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
                 @Html.HiddenFor(x => x.HashedCommitmentId)
+
+                @Html.HiddenFor(m => m.HasApprenticeships)
+                @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
+                @Html.HiddenFor(m => m.NotReadyForApproval)
             </fieldset>
         </form>
      
