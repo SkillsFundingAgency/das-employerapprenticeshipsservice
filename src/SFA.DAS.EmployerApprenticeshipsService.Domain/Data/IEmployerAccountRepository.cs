@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<List<Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);
+        Task RenameAccount(long id, string name);
     }
 }

@@ -172,6 +172,9 @@
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommand.cs" />
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandHandler.cs" />
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandValidator.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommand.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandHandler.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandValidator.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />

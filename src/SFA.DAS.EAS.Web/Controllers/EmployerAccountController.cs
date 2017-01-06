@@ -227,14 +227,24 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            return View();
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RenameAccount(string name, string hashedAccountId)
+        public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
-            throw new NotImplementedException();
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                
+            }
+
+            return View(response);
         }
 
 

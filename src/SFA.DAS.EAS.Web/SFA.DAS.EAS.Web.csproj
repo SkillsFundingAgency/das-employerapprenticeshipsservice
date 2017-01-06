@@ -411,6 +411,7 @@
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
     <Compile Include="Models\InvitationViewModel.cs" />
     <Compile Include="Models\RemovePayeScheme.cs" />
+    <Compile Include="Models\RenameEmployerAccountViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\SelectEmployerModel.cs" />
     <Compile Include="Models\SelectEmployerViewModel.cs" />

@@ -4,9 +4,11 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
@@ -19,7 +21,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         private EmployerAccountOrchestrator _orchestrator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Account _account;
-
 
         [SetUp]
         public void Arrange()
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 Name = "Test Account"
             };
             
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountQuery>()))
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
                 .ReturnsAsync(new GetEmployerAccountResponse {Account = _account});
 
             _orchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
@@ -46,13 +47,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public async Task ThenTheCorrectAccountDetailsShouldBeReturned()
         {
             //Act
-            var response = await _orchestrator.GetEmployerAccount("123ABC");
+            var response = await _orchestrator.GetEmployerAccount("ABC123");
             
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountQuery>(q => q.AccountId.Equals(_account.HashedId))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId.Equals(_account.HashedId))));
             Assert.AreEqual(_account.HashedId, response.Data.HashedId);
             Assert.AreEqual(_account.Name, response.Data.Name);
             Assert.AreEqual(HttpStatusCode.OK, response.Status);
+        }
+
+        [Test]
+        public async Task ThenTheAccountNameShouldBeUpdated()
+        { 
+            //Act
+            var response = await _orchestrator.RenameEmployerAccount(new RenameEmployerAccountViewModel
+            {
+                NewName = "New Account Name"
+            });
+
+            //Assert
+            Assert.IsInstanceOf<OrchestratorResponse<RenameEmployerAccountViewModel>>(response);
+
+            _mediator.Verify(x =>
+                    x.SendAsync(It.Is<RenameEmployerAccountCommand>(c => c.NewName == "New Account Name")),
+                    Times.Once());
         }
     }
 }

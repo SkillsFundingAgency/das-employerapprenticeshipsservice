@@ -8,7 +8,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{927a0bea-b043-4a03-9311-f49cb60541d5}</ProjectGuid>
-    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql120DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
@@ -106,6 +106,7 @@
     <Build Include="StoredProcedures\CreateLegalEntityWithAgreement.sql" />
     <Build Include="StoredProcedures\UpdateAccount_SetAccountHashId.sql" />
     <Build Include="StoredProcedures\GetAccountHistory.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

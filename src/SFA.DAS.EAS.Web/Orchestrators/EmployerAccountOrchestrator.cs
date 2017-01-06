@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
+using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -129,9 +131,79 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             CookieService.Delete(context,CookieName);
         }
 
-        public async Task<OrchestratorResponse<EmployerAccountViewModel>>  GetEmployerAccount(string hashedAccountId)
+        public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
         {
-            throw new NotImplementedException();
+            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
+            {
+                HashedAccountId = hashedAccountId
+            });
+
+            return new OrchestratorResponse<EmployerAccountViewModel>
+            {
+                Data = new EmployerAccountViewModel
+                {
+                    HashedId = hashedAccountId,
+                    Name = response.Account.Name
+                }
+            };
+        }
+
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
+        {
+            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
+            {
+                HashedAccountId = hashedAccountId,
+                UserId = userId
+            });
+
+            return new OrchestratorResponse<RenameEmployerAccountViewModel>
+            {
+                Data = new RenameEmployerAccountViewModel
+                {
+                    HashedId = hashedAccountId,
+                    CurrentName = response.Account.Name,
+                    NewName = String.Empty
+                }
+            };
+        }
+
+        public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> RenameEmployerAccount(
+            RenameEmployerAccountViewModel model)
+        {
+            try
+            {
+                var result = await _mediator.SendAsync(new RenameEmployerAccountCommand
+                {
+                    HashedAccountId = model.HashedId,
+                    NewName = model.NewName
+                });
+
+                model.CurrentName = model.NewName;
+                model.NewName = String.Empty;
+
+                return new OrchestratorResponse<RenameEmployerAccountViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = model,
+                    FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Account renamed",
+                        Message = $"You've renamed your account",
+                        Severity = FlashMessageSeverityLevel.Success
+                    }
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                Logger.Info(ex, "Rename Employer Validation Error");
+                return new OrchestratorResponse<RenameEmployerAccountViewModel>
+                {
+                    Data = new RenameEmployerAccountViewModel(),
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = ex,
+                    FlashMessage = new FlashMessageViewModel()
+            };
+            }
         }
     }
 }
