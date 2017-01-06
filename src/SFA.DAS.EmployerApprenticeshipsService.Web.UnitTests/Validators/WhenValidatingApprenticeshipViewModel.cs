@@ -122,8 +122,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
 
             var result = _validator.Validate(_validModel);
 
-            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Enter a first name")), Is.True);
-            Assert.That(result.Errors.Any(m => m.ErrorMessage.Contains("Enter a last name")), Is.True);
+            result.Errors.Count(m => m.ErrorMessage == "First names must be entered").Should().Be(1);
+            result.Errors.Count(m => m.ErrorMessage == "Last name must be entered").Should().Be(1);
             Assert.That(result.IsValid, Is.False);
         }
 
