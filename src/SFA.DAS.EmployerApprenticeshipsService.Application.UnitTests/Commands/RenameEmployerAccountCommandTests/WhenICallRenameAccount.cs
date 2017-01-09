@@ -27,8 +27,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _repository = new Mock<IEmployerAccountRepository>();
             _validator = new Mock<IValidator<RenameEmployerAccountCommand>>();
 
-            _validator.Setup(x => x.Validate(It.IsAny<RenameEmployerAccountCommand>()))
-                .Returns(new ValidationResult());
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<RenameEmployerAccountCommand>()))
+                .ReturnsAsync(new ValidationResult());
 
             _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _validator.Object, _hashingService.Object);
         }
