@@ -18,34 +18,43 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <h1 class="heading-xlarge">Choose an option</h1>
+           
+            @if (Model.NotReadyForApproval)
+            {
+
+                <p class="lede">
+                    @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
+                </p>
+
+            }
             <fieldset>
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
                     <div>
                         @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) + "-SendAmend" })
                     </div>
-                    @if (Model.ApproveAndSend)
+                    @if (Model.IsApproveAndSend)
                     {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
-                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, new { id = RadioButtonId(SaveStatus.ApproveAndSend) })
+                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
                             <span id="changeTwo">Approve and send to training provider</span>
                         </label>
                     }
                     else
                     {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Approve)">
-                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, new { id = RadioButtonId(SaveStatus.Approve) })
+                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.NotReadyForApproval))
                             <span id="changeTwo">Approve</span>
                         </label>
                     }
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.AmendAndSend)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, new { id = RadioButtonId(SaveStatus.AmendAndSend) })
+                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
                         <span id="changeOne">Send to training provider to review or add details</span>
                     </label>
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Save)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, new { id = RadioButtonId(SaveStatus.Save) })
+                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
                         <span id="changeThree">Save but don't send to training provider</span>
                     </label>
                 </div>
@@ -63,14 +72,39 @@
 
 @functions
 {
-     public string RadioButtonId(SaveStatus status)
-     {
-         return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
-     }
- }
+    public string RadioButtonId(SaveStatus status)
+    {
+        return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
+    }
+
+    public Dictionary<string, object> GetRadioButtonAttributes(SaveStatus status, bool disabled)
+    {
+        var htmlAttributes = new Dictionary<string, object>
+            {
+                { "id", RadioButtonId(status) }
+            };
+
+        if (disabled)
+            htmlAttributes.Add("disabled", "disabled");
+
+        return htmlAttributes;
+    }
+
+    public string GetInvalidStateForApprovalMessage(bool hasApprenticeships, int invalidApprentieshipCount)
+    {
+        if (!hasApprenticeships)
+            return "You need to add details for at least one apprentice - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+
+        return invalidApprentieshipCount == 1
+        ? "You have 1 apprentice with incomplete details - " + emptyLink
+        : $"You have {invalidApprentieshipCount} apprentices with incomplete details - " + emptyLink;
+    }
+}
 
 
-@section breadcrumb {
+    @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>

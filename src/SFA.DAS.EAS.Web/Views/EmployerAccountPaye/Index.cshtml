@@ -4,6 +4,7 @@
 @{
     ViewBag.PageID = "page-paye-schemes-index";
     ViewBag.Title = "PAYE Schemes";
+    ViewBag.Section = "paye";
 
     if (TempData.ContainsKey("payeSchemeAdded"))
     {
@@ -47,7 +48,7 @@
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
                             <td>@scheme.PayeRef</td>
-                            <td>@englishFractionPercentage.ToString("P2")</td>
+                            <td>@englishFractionPercentage.ToString("P3")</td>
                             <td class="link-right">
                                 <a aria-label="Details for PAYE scheme @scheme.PayeRef"
                                    title="Details for PAYE scheme @scheme.PayeRef"

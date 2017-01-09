@@ -24,6 +24,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -192,7 +193,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Approving Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
+            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
 
             var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
             {
@@ -216,6 +217,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
 
             string message = await GetLatestMessage(accountId, commitmentId);
+            var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
             var viewModel = new CommitmentDetailsViewModel
             {
@@ -224,7 +226,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = data.Commitment.LegalEntityName,
                 ProviderName = data.Commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
-                Apprenticeships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0),
+                HasApprenticeships = apprenticships.Count > 0,
+                IncompleteApprenticeships = apprenticships.Where(x => !x.CanBeApproved ).ToList(),
+                CompleteApprenticeships = apprenticships.Where(x => x.CanBeApproved).ToList(),
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
             };
@@ -249,10 +253,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             apprenticeship.HashedAccountId = hashedAccountId;
 
+            var approvalValidator = new ApprenticeshipViewModelApproveValidator();
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                ApprovalValidation = approvalValidator.Validate(apprenticeship)
             };
         }
 
@@ -272,7 +278,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 HashedAccountId = hashedAccountId,
                 HashedCommitmentId = hashedCommitmentId,
-                ApproveAndSend = response.Commitment.AgreementStatus != AgreementStatus.ProviderAgreed
+                NotReadyForApproval = !response.Commitment.CanBeApproved,
+                ApprovalState = GetApprovalState(response.Commitment),
+                HasApprenticeships = response.Commitment.Apprenticeships.Any(),
+                InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
             };
 
             return viewmodel;
@@ -406,6 +415,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return data?.ProvidersView?.Providers;
         }
 
+        private static ApprovalState GetApprovalState(Commitment commitment)
+        {
+            if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
+
+            var approvalState = commitment.Apprenticeships.Any(m => m.AgreementStatus == AgreementStatus.NotAgreed
+                                || m.AgreementStatus == AgreementStatus.EmployerAgreed) ? ApprovalState.ApproveAndSend : ApprovalState.ApproveOnly;
+ 
+            return approvalState;
+         }
+ 
         private async Task<string> GetLatestMessage(long accountId, long commitmentId)
         {
             var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountId = accountId });
@@ -496,7 +515,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
-                EndDate = apprenticeship.EndDate
+                EndDate = apprenticeship.EndDate,
+                CanBeApproved = apprenticeship.CanBeApproved
             };
         }
 
