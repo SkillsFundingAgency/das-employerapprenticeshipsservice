@@ -25,11 +25,16 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 
         protected override async Task HandleCore(RenameEmployerAccountCommand message)
         {
-            var validationResult = _validator.Validate(message);
+            var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);

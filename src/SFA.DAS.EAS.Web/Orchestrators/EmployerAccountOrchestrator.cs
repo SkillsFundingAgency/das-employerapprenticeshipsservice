@@ -186,6 +186,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new RenameEmployerAccountCommand
                 {
                     HashedAccountId = model.HashedId,
+                    ExternalUserId = userId,
                     NewName = (model.NewName ?? String.Empty).Trim()
                 });
 
