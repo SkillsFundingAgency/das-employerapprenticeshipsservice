@@ -36,9 +36,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Account name</th>
-                            <th scope="col">Rename Account</th>
+                            <th scope="col">Rename account</th>
                             <th scope="col">What you can do</th>
-                            <th scope="col"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,7 +46,9 @@
                         {
                             <tr>
                                 <td class="responsive-td">
-                                    @account.Name
+                                    <span class="force-word-wrap">
+                                        @account.Name
+                                    </span>
                                 </td>
                                 <td class="responsive-td">
                                     <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this <span class="vh">@account.Name</span> account</a>                                    
