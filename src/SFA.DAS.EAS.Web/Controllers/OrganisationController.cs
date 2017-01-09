@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Agreements/Add")]
+        [Route("Organisation/Add")]
         public async Task<ActionResult> AddOrganisation(string hashedAccountId)
         {
             var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Agreements/Add")]
+        [Route("Organisation/Add")]
         public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
         {
             OrchestratorResponse<OrganisationDetailsViewModel> response;
@@ -74,7 +74,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                return View(string.IsNullOrEmpty(response.Data.Address) ? "AddOrganisationAddress" : "ConfirmOrganisationDetails", response);
+                //Removes empty address entries (i.e. ' , , ')
+                var address = (response.Data.Address ?? string.Empty).Replace(",", string.Empty);
+
+                return View(string.IsNullOrWhiteSpace(address) ? "AddOrganisationAddress" : "ConfirmOrganisationDetails", response);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
@@ -84,6 +87,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             return View("AddOrganisation", errorResponse);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Organisation/UpdateAddress")]
+        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
+        {
+            var response = _orchestrator.AddOrganisationAddress(request);
+
+            return View("ConfirmOrganisationDetails", response);
         }
 
         private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
@@ -133,7 +146,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             return response;
         }
-
+        
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //[Route("Agreements/CreateAgreement")]

@@ -3,9 +3,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using NLog;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
@@ -22,23 +25,27 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
         protected OrganisationOrchestrator()
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger): base(mediator)
+        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper) : base(mediator)
         {
             _mediator = mediator;
             _logger = logger;
+            _mapper = mapper;
         }
-        
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId, string userIdClaim)
+
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>>
+            GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId,
+                string userIdClaim)
         {
             var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
             if (accountEntities.Entites.LegalEntityList.Any(
-               x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
+                x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
@@ -77,8 +84,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
         }
-        
-        public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation( string searchTerm, string hashedLegalEntityId, string userIdClaim)
+
+        public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
+            FindPublicSectorOrganisation(string searchTerm, string hashedLegalEntityId, string userIdClaim)
         {
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
@@ -116,12 +124,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(string registrationNumber, string hashedLegalEntityId, string userIdClaim)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(
+            string registrationNumber, string hashedLegalEntityId, string userIdClaim)
         {
             var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
             if (accountEntities.Entites.LegalEntityList.Any(
-               x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)))
+                x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)))
             {
                 return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
@@ -186,23 +195,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedId = hashedLegalEntityId,
                     ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
-                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}"
+                    Address =
+                        $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}"
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
+            string hashedAccountId, string externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
 
             return new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
+                Data = new AddLegalEntityViewModel {HashedAccountId = hashedAccountId},
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
         }
 
-        private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId, string userIdClaim)
+        private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId,
+            string userIdClaim)
         {
             var accountEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
             {
@@ -212,8 +224,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return accountEntities;
         }
 
-
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntity request)
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
+            CreateNewLegalEntity request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
             {
@@ -271,5 +283,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        public OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
+            AddOrganisationAddressModel model)
+        {
+            try
+            {
+                var request = _mapper.Map<CreateOrganisationAddressRequest>(model);
+
+                var response = _mediator.Send(request);
+
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                {
+                    Data = new OrganisationDetailsViewModel
+                    {
+                        HashedId = model.OrganisationHashedId,
+                        Name = model.OrganisationName,
+                        Address = response.Address,
+                        DateOfInception = model.OrgainsationDateOfInception,
+                        ReferenceNumber = model.OrgainsationReferenceNumber,
+                        Type = model.OrganisationType,
+                        Status = model.OrganisationStatus,
+                    }
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
+        }
     }
 }

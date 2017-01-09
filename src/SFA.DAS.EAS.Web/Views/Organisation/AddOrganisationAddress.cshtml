@@ -1,29 +1,31 @@
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
-@{ViewBag.PageID = "page-extra-confirm-charity"; }
+@{ViewBag.PageID = "page-extra-add-orgainsation-address"; }
 @{
-    ViewBag.Title = "Confirm Charity";
+    ViewBag.Title = "Add Organisation Address";
     ViewBag.Section = "organisations";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            <span class="heading-secondary">Confirm charity</span>
-            @Model.Data.Name
+            Enter your orgainsation's address
         </h1>
-        <p class="lede">Charity number: @Model.Data.ReferenceNumber</p>
+        <p class="lede">Use your orgainsation's main address, such as your head office.</p>
         <p class="heading-medium">Is this the correct organisation?</p>
-        <form action="@Url.Action("CreateLegalEntity")" method="POST">
+        <form action="@Url.Action("UpdateOrganisationAddress")" method="POST">
             @Html.AntiForgeryToken()
-            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
-            <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
-            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
-            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception" />
-            <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
-            <input type="hidden" id="submit" name="submit" value="Sign" />
-            <span>
-                <input class="button" type="submit" value="Yes, continue" />
-                <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
-            </span>
+            <label for="addressFirstLine">Address</label>
+            <input type="text" id="addressFirstLine" name="addressFirstLine"/>
+            <input type="text" id="addressSecondLine" name="addressSecondLine" />
+            <label for="townOrCity">Town or city</label>
+            <input type="text" id="townOrCity" name="townOrCity" />
+            <label for="county">County</label>
+            <input type="text" id="county" name="county" />
+            <label for="postcode">Postcode</label>
+            <input type="text" id="postcode" name="postcode" />
+            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.Name" />
+            <input type="hidden" id="OrgainsationReferenceNumber" name="OrgainsationReferenceNumber" value="@Model.Data.ReferenceNumber" />
+            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.DateOfInception" />
+            <input class="button" type="submit" value="Continue" />
         </form> 
     </div>
 </div>
