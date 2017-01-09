@@ -175,6 +175,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyNumber = enteredData.CompanyNumber,
                 DateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
+                EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 HideBreadcrumb = enteredData.HideBreadcrumb,
                 CompanyStatus = enteredData.CompanyStatus
