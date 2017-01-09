@@ -2,6 +2,7 @@
 
 @{ViewBag.PageID = "page-change-account-name"; }
 @{ViewBag.Title = "Rename levy account"; }
+@{ViewBag.HideNav = "true"; }
 
 <form method="post">
 
@@ -16,25 +17,31 @@
             <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Data.CurrentName, "Current name", new {Id = "CurrentName-label", @class = "form-label-bold"})
-                @Html.TextBoxFor(m => m.Data.CurrentName, new {disabled = "disabled", Name = "CurrentName", @class = "form-control currentAccountName", aria_required = "true", aria_labelledby = "CurrentName-label"})
+                <dl>
+                    <dt class="form-label-bold">Current name</dt>
+                    <dd class="force-word-wrap">@Model.Data.CurrentName</dd>
+                </dl>
             </div>
-
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error" : "")">
-
-                <label id="NewName-label" for="NewName" class = "form-label-bold">New Account Name</label>
-
+                <label id="NewName-label" for="NewName" class = "form-label-bold">New account name</label>
                 @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
                 {
                     <span class="error-message" id="error-message-newname">@Model.Data.NewNameError</span>
                 }
-
-                @Html.TextBoxFor(m => m.Data.NewName, new { Id="NewName", Name = "NewName", @class = "form-control newAccountName", MaxLength=100, aria_required = "true", aria_labelledby = "NewName-label" })
+                @Html.TextBoxFor(
+                    m => m.Data.NewName,
+                    new {
+                        Id ="NewName",
+                        Name = "NewName",
+                        @class = "form-control newAccountName",
+                        MaxLength = 100,
+                        aria_required = "true",
+                        aria_describedby = !string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : ""
+                    })
             </div>
-
             <div class="form-group">
                 <button type="submit" class="button" id="accept">Save and continue</button>
-                <a class="button button-link" href="@Url.Action("Index", "Home")">Cancel</a>
+                <a class="button-link" href="@Url.Action("Index", "Home")">Cancel</a>
             </div>
 
         </div>
