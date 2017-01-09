@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface ITotpService
     {
-        string GetCode(string key, string timeValue = "");
+        string GetCode(string timeValue = "");
     }
 }
