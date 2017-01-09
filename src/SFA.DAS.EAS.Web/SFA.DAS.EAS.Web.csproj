@@ -733,6 +733,9 @@
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen.scss" />
+    <Content Include="StartUp\FindPrivateKey.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -874,6 +877,15 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="StartUp\IIS.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\IIS.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\Powershell.msi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
@@ -912,7 +924,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
