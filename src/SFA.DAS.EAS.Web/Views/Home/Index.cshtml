@@ -16,7 +16,7 @@
     </div>
 }
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <section>
             <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
@@ -49,7 +49,7 @@
                                     @account.Name
                                 </td>
                                 <td class="responsive-td">
-                                    <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this account</a>                                    
+                                    <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this <span class="vh">@account.Name</span> account</a>                                    
                                 </td>
                                 <td class="responsive-td">
                                     @RoleStrings.GetRoleDescription(account.RoleName)
