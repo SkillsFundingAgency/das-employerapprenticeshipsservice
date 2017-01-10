@@ -19,15 +19,13 @@
         <p><a href="@Model.Data.ConfirmUrl" id="agree_and_continue" class="button">Agree and continue</a></p>
     </div>
 </div>
-@if (!Model.Data.HideBreadcrumb)
-{
 
-    @section breadcrumb {
-        <div class="breadcrumbs">
-            <ol>
-                <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
-            </ol>
-        </div>
-    }
-
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
+        </ol>
+    </div>
 }
+
+
