@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
@@ -28,13 +28,10 @@ using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Web.Models.Types;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    using System.Globalization;
-    using Newtonsoft.Json;
-
-    using SFA.DAS.EAS.Web.Models.Types;
 
     using Tasks.Api.Types.Templates;
 
@@ -262,12 +259,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, accountId);
+
             _logger.Info($"Getting Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
                 AccountId = accountId,
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                CommitmentId = commitmentId,
                 ApprenticeshipId = apprenticeshipId
             });
 
@@ -338,6 +338,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, accountId);
+
             _logger.Info($"Creating Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
 
             await _mediator.SendAsync(new CreateApprenticeshipCommand
@@ -351,6 +353,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+            var commitmentId= _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+
+            await AssertCommitmentStatus(commitmentId, accountId);
+
             _logger.Info($"Updating Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             await _mediator.SendAsync(new UpdateApprenticeshipCommand
@@ -364,6 +370,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            await AssertCommitmentStatus(commitmentId, accountId);
+
             _logger.Info($"Getting skeleton apprenticeship model, Account: {accountId}, Commitment: {commitmentId}");
 
             var apprenticeship = new ApprenticeshipViewModel
@@ -593,6 +601,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
                 .OrderBy(m => m.Title)
                 .ToList();
+        }
+
+        private async Task AssertCommitmentStatus(long commitmentId, long accountId)
+        {
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId
+            });
+            AssertCommitmentStatus(commitmentData.Commitment, EditStatus.EmployerOnly);
+            AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
         }
 
         private static void AssertCommitmentStatus(

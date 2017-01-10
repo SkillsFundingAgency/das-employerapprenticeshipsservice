@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
+using Newtonsoft.Json;
+
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Models.Types;
@@ -229,6 +233,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Edit")]
         public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
@@ -240,6 +245,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("Submit")]
         public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
         {
@@ -355,6 +361,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Apprenticeships/Create")]
         public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
         {
@@ -443,5 +450,23 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return Guid.NewGuid().ToString().ToUpper();
         }
+
+        protected override void OnException(ExceptionContext filterContext)
+         {
+             if (filterContext.Exception is InvalidStateException)
+             {
+                 filterContext.ExceptionHandled = true;
+                var flashmessage = new FlashMessageViewModel
+                {
+                    Headline = "Invalid request",
+                    Message = "You have been redirected from a page that is no longer accessible",
+                    Severity = FlashMessageSeverityLevel.Info
+                };
+
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+                filterContext.Result = RedirectToAction("Index", "Home");
+ 
+             }
+         }
     }
 }
