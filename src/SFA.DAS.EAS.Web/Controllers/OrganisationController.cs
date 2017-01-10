@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AutoMapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -15,15 +16,18 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class OrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
+        private readonly IMapper _mapper;
 
         public OrganisationController(
             IOwinWrapper owinWrapper, 
             OrganisationOrchestrator orchestrator,
             IFeatureToggle featureToggle, 
-            IUserWhiteList userWhiteList) 
+            IUserWhiteList userWhiteList,
+            IMapper mapper) 
             :base(owinWrapper, featureToggle, userWhiteList)
         {
             _orchestrator = orchestrator;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -77,7 +81,19 @@ namespace SFA.DAS.EAS.Web.Controllers
                 //Removes empty address entries (i.e. ' , , ')
                 var address = (response.Data.Address ?? string.Empty).Replace(",", string.Empty);
 
-                return View(string.IsNullOrWhiteSpace(address) ? "AddOrganisationAddress" : "ConfirmOrganisationDetails", response);
+                if (string.IsNullOrWhiteSpace(address))
+                {
+                    var addressViewModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+
+                    var addressResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                    {
+                        Data = addressViewModel
+                    };
+
+                    return View("AddOrganisationAddress", addressResponse);
+                }
+
+                return View("ConfirmOrganisationDetails", response);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
@@ -95,6 +111,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                request.ErrorDictionary = response.Data.ErrorDictionary;
+
+                var errorResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                {
+                    Data = request,
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = response.Exception,
+                    FlashMessage = response.FlashMessage
+                };
+
+                return View("AddOrganisationAddress", errorResponse);
+            }
 
             return View("ConfirmOrganisationDetails", response);
         }

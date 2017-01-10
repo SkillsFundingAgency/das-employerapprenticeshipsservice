@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateOrganisationAddressTe
             var result = _validator.Validate(new CreateOrganisationAddressRequest());
 
             //Assert
-            Assert.Contains(new KeyValuePair<string, string>("AddressLine1", "Enter house number or name, building or street"), result.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AddressFirstLine", "Enter house number or name, building or street"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("TownOrCity", "Enter town or city"), result.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("Postcode", "Enter a valid postcode"), result.ValidationDictionary);
         }

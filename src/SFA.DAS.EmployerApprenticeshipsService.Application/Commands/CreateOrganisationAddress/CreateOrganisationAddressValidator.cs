@@ -22,22 +22,22 @@ namespace SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress
 
             if (string.IsNullOrEmpty(item.AddressFirstLine))
             {
-                results.ValidationDictionary.Add("AddressLine1", "Enter house number or name, building or street");
+                results.ValidationDictionary.Add(nameof(item.AddressFirstLine), "Enter house number or name, building or street");
             }
 
             if (string.IsNullOrEmpty(item.TownOrCity))
             {
-                results.ValidationDictionary.Add("TownOrCity", "Enter town or city");
+                results.ValidationDictionary.Add(nameof(item.TownOrCity), "Enter town or city");
             }
 
             if (string.IsNullOrEmpty(item.Postcode))
             {
-                results.ValidationDictionary.Add("Postcode", "Enter a valid postcode");
+                results.ValidationDictionary.Add(nameof(item.Postcode), "Enter a valid postcode");
             }
 
             if (!string.IsNullOrEmpty(item.Postcode) && !Regex.IsMatch(item.Postcode.ToUpper(), PostcodeRegExPattern))
             {
-                results.ValidationDictionary.Add("Postcode", "Enter a valid postcode");
+                results.ValidationDictionary.Add(nameof(item.Postcode), "Enter a valid postcode");
             }
 
             return results;

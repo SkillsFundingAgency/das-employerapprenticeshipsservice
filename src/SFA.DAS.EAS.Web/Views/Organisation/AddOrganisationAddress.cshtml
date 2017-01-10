@@ -1,5 +1,5 @@
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
-@{ViewBag.PageID = "page-extra-add-orgainsation-address"; }
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddOrganisationAddressModel>
+@{ViewBag.PageID = "page-extra-add-organisation-address"; }
 @{
     ViewBag.Title = "Add Organisation Address";
     ViewBag.Section = "organisations";
@@ -7,26 +7,49 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            Enter your orgainsation's address
+            Enter your organisation's address
         </h1>
-        <p class="lede">Use your orgainsation's main address, such as your head office.</p>
-        <p class="heading-medium">Is this the correct organisation?</p>
+        <p class="lede">Use your organisation's main address, such as your head office.</p>
+       
         <form action="@Url.Action("UpdateOrganisationAddress")" method="POST">
             @Html.AntiForgeryToken()
-            <label for="addressFirstLine">Address</label>
-            <input type="text" id="addressFirstLine" name="addressFirstLine"/>
-            <input type="text" id="addressSecondLine" name="addressSecondLine" />
-            <label for="townOrCity">Town or city</label>
-            <input type="text" id="townOrCity" name="townOrCity" />
-            <label for="county">County</label>
-            <input type="text" id="county" name="county" />
-            <label for="postcode">Postcode</label>
-            <input type="text" id="postcode" name="postcode" />
-            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.Name" />
-            <input type="hidden" id="OrgainsationReferenceNumber" name="OrgainsationReferenceNumber" value="@Model.Data.ReferenceNumber" />
-            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.DateOfInception" />
+
+            @if (!string.IsNullOrEmpty(Model.Data.AddressFirstLineError))
+            {
+                <span class="error-message" id="error-message-email">@Model.Data.AddressFirstLineError</span>
+            }
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.AddressFirstLineError) ? "error" : "")">
+                <label for="addressFirstLine">Address</label>
+                <input type="text" id="addressFirstLine" name="addressFirstLine" value="@Model.Data.AddressFirstLine"/>
+                <input type="text" id="addressSecondLine" name="addressSecondLine" value="@Model.Data.AddressSecondLine"/>
+            </div>
+            
+            @if (!string.IsNullOrEmpty(Model.Data.TownOrCityError))
+            {
+                <span class="error-message" id="error-message-email">@Model.Data.TownOrCityError</span>
+            }
+            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.TownOrCityError) ? "error" : "")">
+                <label for="townOrCity">Town or city</label>
+                <input type="text" id="townOrCity" name="townOrCity" value="@Model.Data.TownOrCity" />
+            </div>
+            <div class="form-group">
+                <label for="county">County</label>
+                <input type="text" id="county" name="county" value="@Model.Data.County" />
+            </div>
+            
+            @if (!string.IsNullOrEmpty(Model.Data.PostcodeError))
+            {
+                <span class="error-message" id="error-message-email">@Model.Data.PostcodeError</span>
+            }
+            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
+                <label for="postcode">Postcode</label>
+                <input type="text" id="postcode" name="postcode" value="@Model.Data.Postcode" />
+            </div>
+            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
+            <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />
+            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input class="button" type="submit" value="Continue" />
-        </form> 
+</form> 
     </div>
 </div>
 @section breadcrumb {

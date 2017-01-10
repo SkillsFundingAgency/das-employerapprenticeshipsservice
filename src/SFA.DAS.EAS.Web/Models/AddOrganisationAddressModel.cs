@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class AddOrganisationAddressModel
+    public class AddOrganisationAddressModel : ViewModelBase
     {
         public string AddressFirstLine { get; set; }
         public string AddressSecondLine { get; set; }
@@ -13,10 +13,16 @@ namespace SFA.DAS.EAS.Web.Models
 
         public string OrganisationHashedId { get; set; }
         public string OrganisationName { get; set; }
-        public string OrgainsationReferenceNumber { get; set; }
-        public DateTime? OrgainsationDateOfInception { get; set; }
+        public string OrganisationReferenceNumber { get; set; }
+        public DateTime? OrganisationDateOfInception { get; set; }
         public OrganisationType OrganisationType { get; set; }
         public string OrganisationStatus { get; set; }
+
+        public string AddressFirstLineError => GetErrorMessage(nameof(AddressFirstLine));
+        public string TownOrCityError => GetErrorMessage(nameof(TownOrCity));
+        public string PostcodeError => GetErrorMessage(nameof(Postcode));
+
        
+
     }
 }

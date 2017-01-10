@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IMapper> _mapper;
 
         [SetUp]
         public void Arrange()
@@ -27,10 +29,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
+            _mapper = new Mock<IMapper>();
 
 
             _controller = new OrganisationController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object);
+                _owinWrapper.Object, 
+                _orchestrator.Object, 
+                _featureToggle.Object, 
+                _userWhiteList.Object,
+                _mapper.Object);
         }
 
         [Test]

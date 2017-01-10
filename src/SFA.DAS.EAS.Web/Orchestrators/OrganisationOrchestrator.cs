@@ -299,10 +299,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedId = model.OrganisationHashedId,
                         Name = model.OrganisationName,
                         Address = response.Address,
-                        DateOfInception = model.OrgainsationDateOfInception,
-                        ReferenceNumber = model.OrgainsationReferenceNumber,
+                        DateOfInception = model.OrganisationDateOfInception,
+                        ReferenceNumber = model.OrganisationReferenceNumber,
                         Type = model.OrganisationType,
-                        Status = model.OrganisationStatus,
+                        Status = model.OrganisationStatus
                     }
                 };
             }
@@ -310,8 +310,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
+                    Data = new OrganisationDetailsViewModel
+                    {
+                        ErrorDictionary = e.ErrorMessages
+                    },
                     Status = HttpStatusCode.BadRequest,
-                    Exception = e
+                    Exception = e,
+                    FlashMessage = new FlashMessageViewModel
+                    {
+                        Headline = "Errors to fix",
+                        Message = "Check the following details:",
+                        ErrorMessages = e.ErrorMessages,
+                        Severity = FlashMessageSeverityLevel.Error
+                    }
                 };
             }
         }
