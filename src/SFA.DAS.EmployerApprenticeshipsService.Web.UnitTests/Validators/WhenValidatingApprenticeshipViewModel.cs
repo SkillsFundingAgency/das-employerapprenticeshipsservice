@@ -102,6 +102,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             result.IsValid.Should().BeTrue();
         }
 
+        [TestCase("1234567")]
+        public void CostMustContain6DigitsOrLess(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [TestCase("123,567")]
+        public void CostMustContain6DigitsOrLessIgnoringCommas(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeTrue();
+        }
+
         [TestCase(",111")]
         [TestCase("1,22")]
         [TestCase("1,22,222")]
