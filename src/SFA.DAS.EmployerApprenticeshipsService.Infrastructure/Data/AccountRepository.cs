@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus)
+        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName)
         {
             return await WithConnection(async c =>
             {
@@ -33,6 +33,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
                 parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
+                parameters.Add("@employerRefName", employerRefName, DbType.String);
                 parameters.Add("@status", companyStatus);
 
                 var trans = c.BeginTransaction();
@@ -74,6 +75,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accessToken", payeScheme.AccessToken, DbType.String);
                 parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
                 parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
+                parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
@@ -176,6 +178,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 return result;
             });
         }
-        
+
+
     }
 }

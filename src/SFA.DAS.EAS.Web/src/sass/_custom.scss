@@ -54,6 +54,13 @@
         }
 }
 
+#apprentice-details{
+    .apprentice-count-heading{
+        margin-top:4.5em;
+        @include media(tablet) {margin-top:1.875em;}
+    }
+
+}
 
 
 .form-group {
@@ -65,5 +72,11 @@
     #StartDate_Year,
     #EndDate_Year{
         width:60px;
+    }
+}
+
+.breadcrumbs{
+    a{
+        font-size:16px;
     }
 }

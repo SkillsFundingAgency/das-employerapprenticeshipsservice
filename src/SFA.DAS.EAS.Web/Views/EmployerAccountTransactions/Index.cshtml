@@ -12,10 +12,21 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your levy transactions</h1>
-        <div class="data">
-            <h2 class="heading-small">Current balance</h2>
-            <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
-        </div>
+        
+        @if (Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+        {
+            <div class="data">
+                <h2 class="heading-small">Current balance</h2>
+                <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
+            </div>
+        }
+        else
+        {
+            <p>
+                No levy funds will be paid into your account until May 2017.    
+            </p>
+            
+        }
     </div>
     <div class="column-one-third">
         <section>
@@ -29,11 +40,12 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Data.TransactionLines.Count == 0)
+        @if (Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
         {
             <p class="panel panel-info">
                 No transaction data exists for this account, please try again later.
             </p>
+            
         }
         else
         {

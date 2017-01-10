@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using IdentityServer3.Core.Models;
 
 namespace SFA.DAS.EAS.Web.Authentication
@@ -11,5 +12,6 @@ namespace SFA.DAS.EAS.Web.Authentication
         void SignInUser(string id, string displayName, string email);
         ActionResult SignOutUser();
         string GetClaimValue(string claimKey);
+        Task UpdateClaims();
     }
 }

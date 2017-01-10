@@ -18,10 +18,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedBaseUrl = "http://hmrcbase.gov.uk/";
         private string ExpectedClientId = "654321";
+        private string ExpectedOgdClientId = "123456789";
         private string ExpectedScope = "emp_ref";
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private string ExpectedClientSecret = "my_secret";
-        
+        private const string ExpectedTotpToken = "789654321AGFVD";
+        private Mock<ITotpService> _totpService;
+
         [SetUp]
         public void Arrange()
         {
@@ -31,6 +34,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                 {
                     BaseUrl = ExpectedBaseUrl,
                     ClientId = ExpectedClientId,
+                    OgdClientId = ExpectedOgdClientId,
                     Scope = ExpectedScope,
                     ClientSecret = ExpectedClientSecret
                 }
@@ -40,7 +44,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
 
-            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
+            _totpService = new Mock<ITotpService>();
+            _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
+
+            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object, _totpService.Object);
         }
 
         [Test]
@@ -72,6 +79,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _httpClientWrapper.Verify(x => x.SendMessage("", $"oauth/token?client_secret={ExpectedClientSecret}&client_id={ExpectedClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={code}"), Times.Once);
             Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
 
+        }
+
+        [Test]
+        public async Task ThenTheOgdSecretIsUsedToGenerateAnAccessToken()
+        {
+            //Act
+            var actual = await _hmrcService.GetOgdAuthenticationToken();
+
+            //Assert
+            _totpService.Verify(x=>x.GetCode(It.IsAny<string>()),Times.Once);
+            _httpClientWrapper.Verify(x => x.SendMessage("", $"oauth/token?client_secret={ExpectedTotpToken}&client_id={ExpectedOgdClientId}&grant_type=client_credentials&scopes=read:apprenticeship-levy"), Times.Once);
+            Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
         }
     }
 }

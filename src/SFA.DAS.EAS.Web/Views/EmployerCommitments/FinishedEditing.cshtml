@@ -67,6 +67,10 @@
                     <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
                 </div>
                 @Html.HiddenFor(x => x.HashedCommitmentId)
+
+                @Html.HiddenFor(m => m.HasApprenticeships)
+                @Html.HiddenFor(m => m.InvalidApprenticeshipCount)
+                @Html.HiddenFor(m => m.NotReadyForApproval)
             </fieldset>
         </form>
      
@@ -109,8 +113,6 @@
 
     @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+      <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

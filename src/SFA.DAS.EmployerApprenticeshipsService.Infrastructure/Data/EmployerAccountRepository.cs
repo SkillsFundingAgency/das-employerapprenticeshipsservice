@@ -111,6 +111,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
+        public async Task RenameAccount(long accountId, string name)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@accountName", name, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "[account].[UpdateAccount_SetAccountName]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+		}
+
         private async Task<IEnumerable<int>> GetNumberOfAccounts()
         {
             var countResult =

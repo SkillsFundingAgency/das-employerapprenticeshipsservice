@@ -9,13 +9,19 @@ namespace SFA.DAS.EAS.Web.Models
     [Validator(typeof(ApprenticeshipViewModelValidator))]
     public sealed class ApprenticeshipViewModel
     {
+        public ApprenticeshipViewModel()
+        {
+            StartDate = new DateTimeViewModel();
+            EndDate = new DateTimeViewModel();
+        }
+
         public string HashedApprenticeshipId { get; set; }
         public string HashedCommitmentId { get; set; }
         public string HashedAccountId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public DateTimeViewModel DateOfBirth { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(0);
 
         public string NINumber { get; set; }
 

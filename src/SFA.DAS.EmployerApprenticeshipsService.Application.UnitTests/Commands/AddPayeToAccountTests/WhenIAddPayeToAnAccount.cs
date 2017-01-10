@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IHashingService> _hashingService;
         private const long ExpectedAccountId = 54564;
+        private const string ExpectedPayeName = "Paye Scheme 1";
 
         [SetUp]
         public void Arrange()
@@ -86,7 +87,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
                 c=>c.AccessToken.Equals(command.AccessToken)  &&
                    c.RefreshToken.Equals(command.RefreshToken) &&
                    c.EmpRef.Equals(command.Empref) &&
-                   c.AccountId.Equals(ExpectedAccountId)
+                   c.AccountId.Equals(ExpectedAccountId) &&
+                   c.RefName.Equals(ExpectedPayeName)
                 );
         }
     }

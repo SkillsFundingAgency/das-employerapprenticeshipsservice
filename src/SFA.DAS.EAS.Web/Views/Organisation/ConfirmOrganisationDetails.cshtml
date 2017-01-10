@@ -1,30 +1,53 @@
+@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
-@{ViewBag.PageID = "page-extra-confirm-charity"; }
+@{ViewBag.PageID = "page-extra-confirm-organisation"; }
 @{
-    ViewBag.Title = "Confirm Charity";
+    ViewBag.Title = "Confirm details";
     ViewBag.Section = "organisations";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            <span class="heading-secondary">Confirm charity</span>
-            @Model.Data.Name
+            Confirm details
         </h1>
-        <p class="lede">Charity number: @Model.Data.ReferenceNumber</p>
-        <p class="heading-medium">Is this the correct organisation?</p>
-        <form action="@Url.Action("CreateLegalEntity")" method="POST">
+
+        <table>
+            <tr>
+                <th role="row">Organisation name</th>
+                <td class="responsive-td">@Model.Data.Name</td>
+            </tr>
+
+            @if (Model.Data.Type != OrganisationType.PublicBodies)
+            {
+                <tr>
+                    <th role="row">Organisation number</th>
+                    <td class="responsive-td">@Model.Data.ReferenceNumber</td>
+                </tr>
+                <tr>
+                    <th role="row">Address</th>
+                    <td class="responsive-td">@Model.Data.Address</td>
+                </tr>
+            }
+        </table>
+
+        <form action="@Url.Action("Confirm")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
-            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception" />
+            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception"/>
+            <input type="hidden" id="organisationType" name="organisationType" value="@Model.Data.Type" />
             <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
-            <input type="hidden" id="submit" name="submit" value="Sign" />
+            <input type="hidden" id="submit" name="submit" value="Sign"/>
+
+            <p class="heading-medium">Is this correct?</p>
+
             <span>
                 <input class="button" type="submit" value="Yes, continue" />
                 <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
             </span>
-        </form> 
+        </form>
+        
     </div>
 </div>
 @section breadcrumb {

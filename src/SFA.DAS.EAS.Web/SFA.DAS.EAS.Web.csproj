@@ -200,6 +200,10 @@
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.7.0.16714, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.7.0.16714\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -351,6 +355,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
@@ -396,6 +401,7 @@
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
     <Compile Include="Models\PublicSectorOrganisationSearchResultsViewModel.cs" />
+    <Compile Include="Models\EmployerAccountViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
     <Compile Include="Models\NavigationViewModel.cs" />
@@ -414,6 +420,7 @@
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
     <Compile Include="Models\InvitationViewModel.cs" />
     <Compile Include="Models\RemovePayeScheme.cs" />
+    <Compile Include="Models\RenameEmployerAccountViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\SelectEmployerModel.cs" />
     <Compile Include="Models\OrganisationDetailsViewModel.cs" />
@@ -433,6 +440,7 @@
     <Compile Include="Models\SummaryViewModel.cs" />
     <Compile Include="Models\Types\DateTimeViewModel.cs" />
     <Compile Include="Models\Types\SaveStatus.cs" />
+    <Compile Include="Models\UserLinks.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
@@ -898,6 +906,7 @@
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
     <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

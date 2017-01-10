@@ -173,59 +173,62 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case HttpStatusCode.BadRequest:
                     TempData["charityError"] = "Charity is removed";
                     break;
+                case HttpStatusCode.Conflict:
+                    TempData["charityError"] = "Charity is already added";
+                    break;
             }
             
             return response;
         }
-        
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Route("Agreements/CreateAgreement")]
-        //public async Task<ActionResult> CreateLegalEntity(
-        //    string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-        //    bool? userIsAuthorisedToSign, string submit, string legalEntityStatus, OrganisationType legalEntitySource)
-        //{
-        //    var request = new CreateNewLegalEntity
-        //    {
-        //        HashedAccountId = hashedAccountId,
-        //        Name = name,
-        //        Code = code,
-        //        Address = address,
-        //        IncorporatedDate = incorporated,
-        //        UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
-        //        SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-        //        SignedDate = DateTime.Now,
-        //        ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
-        //        LegalEntityStatus = legalEntityStatus,
-        //        Source = (short)legalEntitySource
-        //    };
 
-        //    var response = await _orchestrator.CreateLegalEntity(request);
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Organisation/Confirm")]
+        public async Task<ActionResult> Confirm(
+            string hashedAccountId, string name, string code, string address, DateTime? incorporated,
+            string legalEntityStatus, OrganisationType organisationType, bool? userIsAuthorisedToSign, string submit)
+        {
+            var request = new CreateNewLegalEntity
+            {
+                HashedAccountId = hashedAccountId,
+                Name = name,
+                Code = code,
+                Address = address,
+                IncorporatedDate = incorporated,
+                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
+                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
+                SignedDate = DateTime.Now,
+                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
+                LegalEntityStatus = legalEntityStatus,
+                Source = (short)organisationType
+            };
 
-        //    if (response.Status == HttpStatusCode.BadRequest)
-        //    {
-        //        response.Status = HttpStatusCode.OK;
+            var response = await _orchestrator.CreateLegalEntity(request);
 
-        //        TempData["userNotAuthorised"] = "true";
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                response.Status = HttpStatusCode.OK;
 
-        //        return View("ViewEntityAgreement", "EmployerAgreement", response);
-        //    }
+                TempData["userNotAuthorised"] = "true";
 
-        //    TempData["extraCompanyAdded"] = "true";
+                return View("ViewEntityAgreement", "EmployerAgreement", response);
+            }
 
-        //    if (request.UserIsAuthorisedToSign && request.SignedAgreement)
-        //    {
-        //        TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-        //        TempData["successMessage"] = "This account can now spend levy funds.";
-        //    }
-        //    else
-        //    {
-        //        TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-        //        TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-        //    }
+            TempData["extraCompanyAdded"] = "true";
 
-        //    return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
-        //}
+            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
+            {
+                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
+                TempData["successMessage"] = "This account can now spend levy funds.";
+            }
+            else
+            {
+                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
+                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
+            }
+
+            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
+        }
 
 
     }
