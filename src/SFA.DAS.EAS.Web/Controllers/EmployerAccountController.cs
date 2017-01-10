@@ -29,35 +29,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult SelectEmployer()
         {
-
-            var cookieData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-            var hideBreadcrumb = false;
-            if (cookieData != null)
-            {
-                hideBreadcrumb = cookieData.HideBreadcrumb;
-            }
-            if (hideBreadcrumb == false)
-            {
-                hideBreadcrumb = TempData.ContainsKey("HideBreadcrumb") && (bool) TempData["HideBreadcrumb"];
-
-                if (hideBreadcrumb)
-                {
-                    TempData["HideBreadcrumb"] = true;
-                }
-            }
-
-
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
-
-            var model = new OrchestratorResponse<SelectEmployerViewModel>
-            {
-                Data = new SelectEmployerViewModel
-                {
-                    HideBreadcrumb = hideBreadcrumb
-                }
-            };
-
-            return View(model);
+            
+            return View();
         }
 
         [HttpPost]
@@ -88,7 +62,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyName = model.CompanyName,
                     DateOfIncorporation = model.DateOfIncorporation,
                     RegisteredAddress = model.RegisteredAddress,
-                    HideBreadcrumb = model.HideBreadcrumb,
                     CompanyStatus = model.CompanyStatus
                 };
             }
@@ -102,7 +75,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     CompanyName = existingData.CompanyName,
                     DateOfIncorporation = existingData.DateOfIncorporation,
                     RegisteredAddress = existingData.RegisteredAddress,
-                    HideBreadcrumb = existingData.HideBreadcrumb,
                     CompanyStatus = existingData.CompanyStatus
                 };
             }
@@ -121,7 +93,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     BreadcrumbDescription = "Back to Your User Profile",
                     BreadcrumbUrl = Url.Action("Index","Home"),
                     ConfirmUrl = Url.Action("Gateway","EmployerAccount"),
-                    HideBreadcrumb = data.HideBreadcrumb
                 },
                 FlashMessage = flashMessageViewModel
             };
@@ -177,7 +148,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 EmployerRef = enteredData.EmployerRef,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                HideBreadcrumb = enteredData.HideBreadcrumb,
                 CompanyStatus = enteredData.CompanyStatus
             };
 
@@ -215,12 +185,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
                 return RedirectToAction("Summary");
             }
-
-            if (TempData.ContainsKey("HideBreadcrumb"))
-            {
-                TempData.Remove("HideBreadcrumb");
-            }
-
+            
             TempData["employerAccountCreated"] = "true";
             TempData["successHeader"] = $"{enteredData.CompanyName} has been added";
             TempData["successMessage"] = "This account can now spend levy funds.";

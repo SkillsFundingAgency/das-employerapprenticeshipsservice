@@ -56,8 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 EmployerRef = "123/ABC",
                 RefreshToken = "123",
                 AccessToken = "456",
-                EmpRefNotFound = true,
-                HideBreadcrumb = true
+                EmpRefNotFound = true
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -101,20 +100,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
         }
-
-        [Test]
-        public async Task ThenTheBreadCrumbValueIsRemovedFromTempDataIfItExists()
-        {
-            //Arrange
-            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true } };
-
-            //Act
-            await _employerAccountController.CreateAccount();
-
-            //Assert
-            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
-        }
-
+        
         [Test]
         public async Task ThenTheParamtersArePassedFromTheCookieWhenCreatingTheAccount()
         {
