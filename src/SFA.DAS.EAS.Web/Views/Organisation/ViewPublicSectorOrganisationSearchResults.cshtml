@@ -23,18 +23,26 @@
 
         @{
             <p>@Model.Data.Results.Data.Count results found.</p>
-        
+
             foreach (var result in Model.Data.Results.Data)
             {
-                <a href="@Url.Action("UpdateOrganisationAddress", new
-                         {
-                             OrganisationName = result.Name,
-                             OrganisationType = OrganisationType.PublicBodies,
-                             Status = "active"
-                         })">
-                    @result.Name
-                </a>
-                <br />
+                if (!result.AddedToAccount)
+                {
+                    <div>
+                        <a href="@Url.Action("UpdateOrganisationAddress", new
+                                 {
+                                     OrganisationName = result.Name,
+                                     OrganisationType = OrganisationType.PublicBodies,
+                                     Status = "active"
+                                 })">
+                            @result.Name
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <div>@result.Name (Already added)</div>
+                }
             }
         }
         

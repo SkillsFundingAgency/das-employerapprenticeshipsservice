@@ -89,6 +89,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
             FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
+            var accountEntities = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
+            
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = searchTerm,
@@ -116,7 +118,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
             {
                 Data =
-                    searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel {Name = x.Name})
+                    searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
+                        {
+                            Name = x.Name,
+                            AddedToAccount = accountEntities.Entites.LegalEntityList.Any(e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
+                        })
                         .ToList(),
                 PageNumber = searchResults.Organisaions.PageNumber,
                 TotalPages = searchResults.Organisaions.TotalPages

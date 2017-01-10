@@ -12,5 +12,6 @@ namespace SFA.DAS.EAS.Web.Models
         public DateTime? DateOfInception { get; set; }
         public string ReferenceNumber { get; set; }
         public string Status { get; set; }
+        public bool AddedToAccount { get; set; }
     }
 }
