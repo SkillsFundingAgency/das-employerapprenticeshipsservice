@@ -2077,7 +2077,7 @@ nav ul {
   top: 0;
   width: 5px;
   position: absolute;
-  z-index: 1;
+  z-index: 0;
   left: 15px;
   right: 15px;
   height: 5px;
