@@ -71,7 +71,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">What they can do</th>
                         <th scope="col">Status</th>
-                        <th></th>
+                        <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,7 +86,6 @@
                             <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
                             <td class="link-right">
                                 <a aria-label="View details for @teamMember.Name"
-                                   title="View details for @teamMember.Name"
                                    href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
                             </td>
                         </tr>
