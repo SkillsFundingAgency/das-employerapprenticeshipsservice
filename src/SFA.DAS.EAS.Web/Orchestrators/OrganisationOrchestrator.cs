@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -86,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
-            FindPublicSectorOrganisation(string searchTerm, string hashedLegalEntityId, string userIdClaim)
+            FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
@@ -100,7 +101,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 _logger.Warn("No response from GetPublicSectorOrgainsationQuery");
                 return new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
                 {
-                    Data = new PublicSectorOrganisationSearchResultsViewModel(),
+                    Data = new PublicSectorOrganisationSearchResultsViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        Results = new PagedResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = new List<OrganisationDetailsViewModel>()
+                        }
+                    },
                     Status = HttpStatusCode.OK
                 };
             }
@@ -118,6 +126,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new PublicSectorOrganisationSearchResultsViewModel
                 {
+                    HashedAccountId = hashedAccountId,
                     Results = pagedResponse
                 },
                 Status = HttpStatusCode.OK

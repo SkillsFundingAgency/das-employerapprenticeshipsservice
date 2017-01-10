@@ -1,3 +1,4 @@
+@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PublicSectorOrganisationSearchResultsViewModel>
 @{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
 @{
@@ -9,6 +10,37 @@
         <h1 class="heading-xlarge">
             Public Sector Search Results
         </h1>
+        
+        <form action="@Url.Action("AddOrganisation")" method="POST">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
+            <input type="hidden" id="orgType" name="orgType" value="@OrganisationType.PublicBodies" />
+            <div class="form-group">
+                <input type="text" id="publicBodyName" name="publicBodyName" placeholder="Search term"/>
+                <input type="submit" value="Search" />
+            </div>
+        </form>
+
+        @{
+            <p>@Model.Data.Results.Data.Count results found.</p>
+        
+            foreach (var result in Model.Data.Results.Data)
+            {
+                <a href="@Url.Action("UpdateOrganisationAddress", new
+                         {
+                             OrganisationName = result.Name,
+                             OrganisationType = OrganisationType.PublicBodies,
+                             Status = "active"
+                         })">
+                    @result.Name
+                </a>
+                <br />
+            }
+        }
+        
+        <h3 class="heading-small">Can't find your organisation?</h3>
+        <p>You can <a href="#">add it manually here</a>.</p>
+
     </div>
 </div>
 

@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case OrganisationType.PublicBodies:
                     var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                     
-                    if (searchResponse.Data.Results.Data.Count > 1)
+                    if (searchResponse.Data.Results.Data.Count != 1)
                     {
                         return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
                     }
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (response.Status == HttpStatusCode.OK)
             {
                 //Removes empty address entries (i.e. ' , , ')
-                var address = (response.Data.Address ?? string.Empty).Replace(",", string.Empty);
+                var address = (response.Data?.Address ?? string.Empty).Replace(",", string.Empty);
 
                 if (string.IsNullOrWhiteSpace(address))
                 {
@@ -103,6 +103,19 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             return View("AddOrganisation", errorResponse);
+        }
+
+        [HttpGet]
+        [Route("Organisation/UpdateAddress")]
+        public ActionResult AddOrganisationAddress(AddOrganisationAddressModel request)
+        {
+            var response = new OrchestratorResponse<AddOrganisationAddressModel>
+            {
+                Data = request,
+                Status = HttpStatusCode.OK
+            };
+
+            return View("AddOrganisationAddress", response);
         }
 
         [HttpPost]
