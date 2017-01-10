@@ -80,7 +80,6 @@ namespace SFA.DAS.EAS.Web
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public bool EmpRefNotFound { get; set; }
-        public bool HideBreadcrumb { get; set; }
         public string CompanyStatus { get; set; }
         public string EmployerRefName { get; set; }
     }
