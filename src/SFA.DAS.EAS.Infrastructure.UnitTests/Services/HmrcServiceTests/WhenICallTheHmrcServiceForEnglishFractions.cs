@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedClientSecret = "my_secret";
         private const string ExpectedTotpToken = "789654321AGFVD";
         private const string ExpectedAuthToken = "GFRT567";
+        private const string ExpectedOgdClientId = "123AOK564";
 
         private HmrcService _hmrcService;
         private Mock<ILogger> _logger;
@@ -36,13 +37,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     BaseUrl = ExpectedBaseUrl,
                     ClientId = ExpectedClientId,
                     Scope = ExpectedScope,
-                    ClientSecret = ExpectedClientSecret
+                    ClientSecret = ExpectedClientSecret,
+                    OgdClientId = ExpectedOgdClientId
                 }
             };
 
             _logger = new Mock<ILogger>();
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.SendMessage("", $"oauth/token?client_secret={ExpectedTotpToken}&client_id={ExpectedClientId}&grant_type=client_credentials&scopes=read:apprenticeship-levy")).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse { AccessToken = ExpectedAuthToken }));
+            _httpClientWrapper.Setup(x => x.SendMessage("", $"oauth/token?client_secret={ExpectedTotpToken}&client_id={ExpectedOgdClientId}&grant_type=client_credentials&scopes=read:apprenticeship-levy")).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse { AccessToken = ExpectedAuthToken }));
 
             _totpService = new Mock<ITotpService>();
             _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
