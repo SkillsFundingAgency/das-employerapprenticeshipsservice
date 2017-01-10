@@ -466,6 +466,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
@@ -904,9 +905,9 @@
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
-    <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
     <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
+    <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

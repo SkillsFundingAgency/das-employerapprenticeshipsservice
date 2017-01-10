@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,6 +19,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -283,6 +285,38 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 },
                 Status = HttpStatusCode.OK
             };
+        }
+
+        public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = request
+            };
+
+            var validator = new OrganisationDetailsViewModelValidator();
+            var validationResult = await validator.ValidateAsync(request);
+
+            if (!validationResult.IsValid)
+            {
+                response.Data.ErrorDictionary = new Dictionary<string, string>();
+                foreach (var validationError in validationResult.Errors)
+                {
+                    response.Data.ErrorDictionary.Add(validationError.PropertyName, validationError.ErrorMessage);
+                }
+
+                response.Status = HttpStatusCode.BadRequest;
+
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    Severity = FlashMessageSeverityLevel.Error,
+                    ErrorMessages = response.Data.ErrorDictionary
+                };
+            }
+
+            return response;
         }
 
         public OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(

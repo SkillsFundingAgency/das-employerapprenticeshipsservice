@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -66,7 +67,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
+                    return RedirectToAction("AddCustomOrganisationDetails");
+                    //return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
                     
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -150,6 +152,31 @@ namespace SFA.DAS.EAS.Web.Controllers
             return response;
         }
 
+        [HttpGet]
+        public async Task<ActionResult> AddCustomOrganisationDetails()
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel()
+            };
+
+            return View(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId, OrganisationDetailsViewModel model)
+        {
+            var response = await _orchestrator.ValidateLegalEntityName(model);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return View("AddOrganisationAddress", response);
+            }
+
+            return View(response);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Confirm")]
@@ -198,6 +225,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
+
 
 
     }
