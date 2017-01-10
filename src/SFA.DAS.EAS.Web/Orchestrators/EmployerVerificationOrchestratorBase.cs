@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.Models;
@@ -146,6 +147,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
 
             };
+        }
+
+        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+        {
+            return await Mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
         }
     }
 }

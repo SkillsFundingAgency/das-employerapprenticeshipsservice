@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<Accounts<AccountInformation>> GetAccountsByDateRange(DateTime fromDate, DateTime toDate, int pageNumber, int pageSize);
         Task<List<Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);
+        Task RenameAccount(long id, string name);
     }
 }

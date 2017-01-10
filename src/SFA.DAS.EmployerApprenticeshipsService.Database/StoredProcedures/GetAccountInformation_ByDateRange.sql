@@ -23,11 +23,14 @@ Select
 		when 2 then 'Charities' 
 		when 3 then 'Public Bodies' 
 		else 'Other' end 
-	as OrganisationSource
+	as OrganisationSource,
+	py.Name as PayeSchemeName
 from account.account acc
 inner join account.AccountEmployerAgreement aea on aea.AccountId = acc.Id
 inner join account.EmployerAgreement ea on ea.Id = aea.EmployerAgreementId
 inner join account.LegalEntity le on le.Id = ea.LegalEntityId
+inner join account.AccountHistory ach on ach.AccountId = acc.Id
+inner join account.Paye py on py.Ref = ach.PayeRef
 OUTER APPLY
 (
 	SELECT TOP 1 u.email
@@ -36,6 +39,7 @@ OUTER APPLY
 	where m.RoleId = 1 and m.AccountId = acc.Id
 	ORDER BY m.CreatedDate desc
 ) t
-WHERE acc.CreatedDate BETWEEN @fromDate and @toDate
+WHERE ach.RemovedDate is null
+and acc.CreatedDate BETWEEN @fromDate and @toDate
 Order by acc.id
 OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY

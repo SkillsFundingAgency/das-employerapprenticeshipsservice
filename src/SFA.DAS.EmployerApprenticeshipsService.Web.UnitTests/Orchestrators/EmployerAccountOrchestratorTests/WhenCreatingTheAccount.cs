@@ -58,6 +58,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                         && c.EmployerRef.Equals(model.EmployerRef)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
+                        && c.EmployerRefName.Equals(model.EmployerRefName)
                     )));
         }
 
@@ -92,7 +93,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 CompanyRegisteredAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyStatus = "active"
+                CompanyStatus = "active",
+                EmployerRefName = "Scheme 1"
             };
         }
     }

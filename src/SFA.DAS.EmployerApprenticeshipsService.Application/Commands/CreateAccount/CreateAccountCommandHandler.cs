@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var emprefs = message.EmployerRef.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken,message.CompanyStatus);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken,message.CompanyStatus,message.EmployerRefName);
 
             var hashedAccountId = _hashingService.HashValue(accountId);
             await _accountRepository.SetHashedId(hashedAccountId, accountId);

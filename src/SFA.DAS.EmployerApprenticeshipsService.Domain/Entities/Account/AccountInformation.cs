@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Domain.Entities.Account
         public string OrganisationNumber { get; set; }
         public DateTime OrgansiationCreatedDate { get; set; }
         public string DasAccountId { get; set; }
+        public string PayeSchemeName { get; set; }
     }
 }

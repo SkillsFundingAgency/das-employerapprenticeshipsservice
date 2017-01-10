@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _configuration = configuration;
         }
 
-        
+
         public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue("sub");
@@ -49,19 +50,19 @@ namespace SFA.DAS.EAS.Web.Controllers
                         Headline = (string)TempData["successMessage"]
                     };
                 }
-                
+
 
                 var c = new Constants(_configuration.Identity);
-                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}{Url?.Encode( Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
-                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}{Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}"; 
-                
+                ViewBag.ChangePasswordLink = $"{c.ChangePasswordLink()}{Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandlePasswordChanged")}";
+                ViewBag.ChangeEmailLink = $"{c.ChangeEmailLink()}{Url?.Encode(Request?.Url?.AbsoluteUri + "Home/HandleEmailChanged")}";
+
                 return View(accounts);
             }
 
             var model = new
             {
                 HideHeaderSignInLink = true
-               
+
             };
 
             return View("UsedServiceBefore", model);
@@ -126,23 +127,38 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult HandlePasswordChanged()
+        public ActionResult HandlePasswordChanged(bool userCancelled = false)
         {
-            TempData["successMessage"] = @"You've changed your password";
-            TempData["virtualPageUrl"] = @"/user-changed-password";
-            TempData["virtualPageTitle"] = @"User Action - Changed Password";
+            if (!userCancelled)
+            {
+                TempData["successMessage"] = @"You've changed your password";
+                TempData["virtualPageUrl"] = @"/user-changed-password";
+                TempData["virtualPageTitle"] = @"User Action - Changed Password";
+            }
+            
 
             return RedirectToAction("Index");
         }
 
         [Authorize]
         [HttpGet]
-        public ActionResult HandleEmailChanged()
+        public async Task<ActionResult> HandleEmailChanged(bool userCancelled = false)
         {
-            TempData["successMessage"] = @"You've changed your email";
-            TempData["virtualPageUrl"] = @"/user-changed-email";
-            TempData["virtualPageTitle"] = @"User Action - Changed Email";
+            if (!userCancelled)
+            {
+                TempData["successMessage"] = @"You've changed your email";
+                TempData["virtualPageUrl"] = @"/user-changed-email";
+                TempData["virtualPageTitle"] = @"User Action - Changed Email";
 
+	            await OwinWrapper.UpdateClaims();
+
+	            var userRef = OwinWrapper.GetClaimValue("sub");
+	            var email = OwinWrapper.GetClaimValue("email");
+	            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+	            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+	            await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef,email,firstName,lastName);
+            }
             return RedirectToAction("Index");
         }
 
@@ -151,7 +167,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectToAction("Index");
         }
-        
+
         public ActionResult SignOut()
         {
             return OwinWrapper.SignOutUser();
@@ -163,6 +179,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View();
         }
 
-        
+
     }
 }

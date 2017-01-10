@@ -16,7 +16,7 @@
     </div>
 }
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <section>
             <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
             @if (Model.Data.Accounts.AccountList.Count == 0)
@@ -36,8 +36,9 @@
                     <thead>
                         <tr>
                             <th scope="col">Account name</th>
+                            <th scope="col">Rename account</th>
                             <th scope="col">What you can do</th>
-                            <th scope="col"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,7 +46,12 @@
                         {
                             <tr>
                                 <td class="responsive-td">
-                                    @account.Name
+                                    <span class="force-word-wrap">
+                                        @account.Name
+                                    </span>
+                                </td>
+                                <td class="responsive-td">
+                                    <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this <span class="vh">@account.Name</span> account</a>                                    
                                 </td>
                                 <td class="responsive-td">
                                     @RoleStrings.GetRoleDescription(account.RoleName)
@@ -80,15 +86,6 @@
             </section>
         }
 
-    </div>
-    <div class="column-one-third pull-right">
-        <aside class="sidebar">
-            <h2 class="heading-medium" id="Manage-Account">Your settings</h2>
-            <ul aria-labelledby="Manage-Account">
-                <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
-                <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
-            </ul>
-        </aside>
     </div>
 </div>
 @if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))

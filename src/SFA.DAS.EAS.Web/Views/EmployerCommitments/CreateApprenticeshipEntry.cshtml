@@ -7,7 +7,7 @@
 }
 
 @section pageSpecificJS {
-    @Scripts.Render("~/bundles/apprentice");
+    @Scripts.Render("~/bundles/apprentice")
 }
 
 <div class="grid-row">
@@ -76,8 +76,7 @@
                                 Year
                             </label>
 
-                            @Html.TextBoxFor(m => m.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Year) })
-
+                            <input aria-labelledby="@Html.IdFor(m => m.DateOfBirth.Year)" class="form-control" id="@Html.IdFor(m => m.DateOfBirth.Year)" name="DateOfBirth.Year" type="number" value="@Model.DateOfBirth.Year">
                         </div>
                     </div>
                 </div>
@@ -118,9 +117,7 @@
                             <label for="@Html.IdFor(m => m.StartDate.Year)">
                                 Year
                             </label>
-
-                            @Html.TextBoxFor(m => m.StartDate.Year, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.StartDate.Year) })
-
+                            <input aria-labelledby="StartDate" class="form-control" id="@Html.IdFor(m => m.StartDate.Year)" name="@Html.NameFor(m => m.StartDate.Year)" type="number" value="@Model.StartDate.Year">
                         </div>
                     </div>
 
@@ -147,8 +144,7 @@
                                 Year
                             </label>
 
-                            @Html.TextBoxFor(m => m.EndDate.Year, new { @class = "form-control", type = "text", aria_labelledby = Html.IdFor(m => m.EndDate.Year) })
-
+                            <input aria-labelledby="EndDate" class="form-control" id="@Html.IdFor(m => m.EndDate.Year)" name="@Html.NameFor(m => m.EndDate.Year)" type="number" value="@Model.EndDate.Year">
                         </div>
                     </div>
 
@@ -191,8 +187,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

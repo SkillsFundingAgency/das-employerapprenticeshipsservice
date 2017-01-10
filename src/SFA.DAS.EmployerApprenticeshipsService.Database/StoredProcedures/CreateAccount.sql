@@ -10,7 +10,8 @@
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
 	@addedDate DATETIME	,
-	@status varchar(50)
+	@status varchar(50),
+	@employerRefName varchar(500) null
 )
 AS
 BEGIN
@@ -41,11 +42,11 @@ BEGIN
 
 	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
 	BEGIN
-		EXEC [account].[UpdatePaye] @employerRef,@accessToken, @refreshToken
+		EXEC [account].[UpdatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
 	END
 	ELSE
 	BEGIN
-		EXEC [account].[CreatePaye] @employerRef,@accessToken, @refreshToken
+		EXEC [account].[CreatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
 	END
 
 	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@addedDate

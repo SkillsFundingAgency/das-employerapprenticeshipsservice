@@ -82,6 +82,10 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.2.0.0.6450\lib\net45\SFA.DAS.Messaging.dll</HintPath>
       <Private>True</Private>
@@ -137,6 +141,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIRenameAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
@@ -156,6 +161,7 @@
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
+    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenRenamingAnAccount.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
