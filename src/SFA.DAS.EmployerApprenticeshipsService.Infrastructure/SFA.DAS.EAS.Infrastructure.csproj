@@ -126,6 +126,10 @@
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.18704\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Simonbu11.Otp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\simonbu11.otp.1.2.0\lib\net45\Simonbu11.Otp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="StackExchange.Redis, Version=1.1.608.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.1.608\lib\net45\StackExchange.Redis.dll</HintPath>
       <Private>True</Private>
@@ -196,6 +200,7 @@
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
+    <Compile Include="Services\TotpService.cs" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>

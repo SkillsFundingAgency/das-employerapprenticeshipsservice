@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Api.Models
         public string OwnerEmail { get; set; }
         public string DasAccountId { get; set; }
         public string OrganisationNumber { get; set; }
+        public string PayeSchemeName { get; set; }
     }
 }

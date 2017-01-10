@@ -11,8 +11,9 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode);
         Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef);
         Task<string> DiscoverEmpref(string authToken);
-        Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef);
-        Task<EnglishFractionDeclarations> GetEnglishFractions(string authToken, string empRef);
+        Task<LevyDeclarations> GetLevyDeclarations(string empRef);
+        Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef);
         Task<DateTime> GetLastEnglishFractionUpdate();
+        Task<HmrcTokenResponse> GetOgdAuthenticationToken();
     }
 }

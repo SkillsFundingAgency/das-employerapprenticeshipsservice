@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
         protected override async Task HandleCore(UpdateEnglishFractionsCommand message)
         {
             var fractionCalculations =
-                await _hmrcService.GetEnglishFractions(message.AuthToken, message.EmployerReference);
+                await _hmrcService.GetEnglishFractions(message.EmployerReference);
 
             var hmrcFractions = fractionCalculations.FractionCalculations.SelectMany(calculations =>
             {

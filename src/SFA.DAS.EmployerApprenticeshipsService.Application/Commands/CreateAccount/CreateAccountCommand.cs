@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public string CompanyStatus { get; set; }
+        public string EmployerRefName { get; set; }
     }
 }

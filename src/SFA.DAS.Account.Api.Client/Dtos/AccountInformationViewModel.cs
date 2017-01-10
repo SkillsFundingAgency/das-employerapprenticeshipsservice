@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Account.Api.Client.Dtos
         public DateTime OrgansiationCreatedDate { get; set; }
         public string DasAccountId { get; set; }
         public string OwnerEmail { get; set; }
+        public string PayeSchemeName { get; set; }
     }
 }

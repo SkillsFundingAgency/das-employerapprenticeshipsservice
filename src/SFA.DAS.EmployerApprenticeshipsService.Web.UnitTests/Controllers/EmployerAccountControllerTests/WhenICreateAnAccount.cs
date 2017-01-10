@@ -48,6 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _accountData = new EmployerAccountData
             {
                 CompanyName = "Test Corp",
+                EmployerRefName = "Scheme 1",
                 CompanyNumber = "1244454",
                 RegisteredAddress = "1, Test Street",
                 DateOfIncorporation = DateTime.Now.AddYears(-10),
@@ -130,6 +131,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     c.CompanyRegisteredAddress.Equals(_accountData.RegisteredAddress) &&
                     c.AccessToken.Equals(_accountData.AccessToken) &&
                     c.EmployerRef.Equals(_accountData.EmployerRef) &&
+                    c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
                     c.CompanyNumber.Equals(_accountData.CompanyNumber)
                 ), It.IsAny<HttpContextBase>()));
         }

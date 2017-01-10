@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IAccountRepository
     {
-        Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus);
+        Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName);
         
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
         Task RemovePayeFromAccount(long accountId, string payeRef);

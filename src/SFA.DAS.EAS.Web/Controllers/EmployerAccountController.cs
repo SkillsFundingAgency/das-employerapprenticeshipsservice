@@ -153,6 +153,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
+            enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
             enteredData.EmployerRef = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
@@ -174,6 +175,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 CompanyNumber = enteredData.CompanyNumber,
                 DateOfIncorporation = enteredData.DateOfIncorporation,
                 EmployerRef = enteredData.EmployerRef,
+                EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 HideBreadcrumb = enteredData.HideBreadcrumb,
                 CompanyStatus = enteredData.CompanyStatus
@@ -201,7 +203,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 EmployerRef = enteredData.EmployerRef,
                 AccessToken = enteredData.AccessToken,
                 RefreshToken = enteredData.RefreshToken,
-                CompanyStatus = enteredData.CompanyStatus
+                CompanyStatus = enteredData.CompanyStatus,
+                EmployerRefName = enteredData.EmployerRefName
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
 namespace SFA.DAS.EAS.Web.Models
 {
@@ -11,5 +12,6 @@ namespace SFA.DAS.EAS.Web.Models
         public string RefreshToken { get; set; }
         public string HashedAccountId { get; set; }
         public bool EmprefNotFound { get; set; }
+        public string PayeName { get; set; }
     }
 }
