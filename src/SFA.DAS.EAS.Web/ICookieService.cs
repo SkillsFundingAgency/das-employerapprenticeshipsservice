@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Web;
+using System.Web.Security;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -16,9 +17,7 @@ namespace SFA.DAS.EAS.Web
     {
         public void Create(HttpContextBase context, string name, string content, int expireDays)
         {
-
-            var plainTextBytes = Encoding.UTF8.GetBytes(content);
-            var encodedContent = Convert.ToBase64String(plainTextBytes);
+            var encodedContent = Convert.ToBase64String(MachineKey.Protect(Encoding.UTF8.GetBytes(content)));
 
             var userCookie = new HttpCookie(name, encodedContent)
             {
@@ -34,8 +33,7 @@ namespace SFA.DAS.EAS.Web
         {
             var cookie = context.Request.Cookies[name];
 
-            var plainTextBytes = Encoding.UTF8.GetBytes(content);
-            var encodedContent = Convert.ToBase64String(plainTextBytes);
+            var encodedContent = Convert.ToBase64String(MachineKey.Protect(Encoding.UTF8.GetBytes(content)));
 
             if (cookie != null)
             {
@@ -63,8 +61,8 @@ namespace SFA.DAS.EAS.Web
             if (context.Request.Cookies[name] == null)
                 return null;
 
-            var base64EncodedBytes = System.Convert.FromBase64String(context.Request.Cookies[name].Value);
-            return Encoding.UTF8.GetString(base64EncodedBytes);
+            var base64EncodedBytes = Convert.FromBase64String(context.Request.Cookies[name].Value);
+            return Encoding.UTF8.GetString(MachineKey.Unprotect(base64EncodedBytes));
         }
     }
 
@@ -80,7 +78,6 @@ namespace SFA.DAS.EAS.Web
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public bool EmpRefNotFound { get; set; }
-        public bool HideBreadcrumb { get; set; }
         public string CompanyStatus { get; set; }
         public string EmployerRefName { get; set; }
     }

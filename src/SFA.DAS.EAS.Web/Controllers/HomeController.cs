@@ -32,12 +32,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
-                if (accounts.Data.Accounts?.AccountList != null && accounts.Data.Accounts.AccountList.Count == 0)
-                {
-                    TempData["HideBreadcrumb"] = true;
-                    return RedirectToAction("SelectEmployer", "EmployerAccount");
-                }
-
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
                     accounts.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());

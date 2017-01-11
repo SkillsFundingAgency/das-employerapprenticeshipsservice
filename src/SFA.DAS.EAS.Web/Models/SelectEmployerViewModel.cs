@@ -9,7 +9,6 @@ namespace SFA.DAS.EAS.Web.Models
         public DateTime DateOfIncorporation { get; set; }
 
         public string RegisteredAddress { get; set; }
-        public bool HideBreadcrumb { get; set; }
         public string CompanyStatus { get; set; }
     }
 }

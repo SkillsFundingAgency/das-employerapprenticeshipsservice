@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
@@ -107,25 +105,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
             Assert.AreEqual("UsedServiceBefore", actualViewResult.ViewName);
-        }
-
-        [Test]
-        public async Task ThenIfThereAreNoAccountsTheUserIsRedirectedToTheAddEmployerAccountJourney()
-        {
-            //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel {Accounts = new Accounts<Account> { AccountList = new List<Account>()} } });
-
-            //Act
-            var actual = await _homeController.Index();
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
-            var redirectActual = actual as RedirectToRouteResult;
-            Assert.IsNotNull(redirectActual);
-            Assert.AreEqual("SelectEmployer", redirectActual.RouteValues["action"]);
-            Assert.AreEqual("EmployerAccount", redirectActual.RouteValues["controller"]);
         }
         
     }
