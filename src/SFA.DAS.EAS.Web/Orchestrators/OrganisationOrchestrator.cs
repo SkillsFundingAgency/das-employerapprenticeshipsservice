@@ -316,7 +316,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -392,7 +392,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public OrchestratorResponse<AddOrganisationAddressModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
+        public virtual OrchestratorResponse<AddOrganisationAddressModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var result = new OrchestratorResponse<AddOrganisationAddressModel>
             {
