@@ -44,16 +44,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             GetLimitedCompanyByRegistrationNumber(string companiesHouseNumber, string hashedLegalEntityId,
                 string userIdClaim)
         {
-            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
-
-            if (accountEntities.Entites.LegalEntityList.Any(
-                x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
+            if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+
+                if (accountEntities.Entites.LegalEntityList.Any(
+                    x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
                 {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.Conflict
-                };
+                    return new OrchestratorResponse<OrganisationDetailsViewModel>
+                    {
+                        Data = new OrganisationDetailsViewModel(),
+                        Status = HttpStatusCode.Conflict
+                    };
+                }
             }
 
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
@@ -90,8 +93,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
             FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
-            var accountEntities = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
-            
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = searchTerm,
@@ -119,10 +120,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                AddedToAccount =
-                    accountEntities.Entites.LegalEntityList.Any(
-                        e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
+                //AddedToAccount =
+                //    accountEntities.Entites.LegalEntityList.Any(
+                //        e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
             }).ToList();
+
+            if (!string.IsNullOrEmpty(hashedAccountId))
+            {
+                var accountEntities = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
+
+                foreach (var viewModel in organisations)
+                {
+                    viewModel.AddedToAccount = accountEntities.Entites.LegalEntityList.Any(
+                        e => e.Name.Equals(viewModel.Name, StringComparison.CurrentCultureIgnoreCase));
+                }
+            }
+                
 
             var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
             {
@@ -145,17 +158,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(
             string registrationNumber, string hashedLegalEntityId, string userIdClaim)
         {
-            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
-
-            if (accountEntities.Entites.LegalEntityList.Any(
-                x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)
-                && x.Source == (short)OrganisationType.Charities))
+            if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+
+                if (accountEntities.Entites.LegalEntityList.Any(
+                    x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)
+                         && x.Source == (short) OrganisationType.Charities))
                 {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.Conflict
-                };
+                    return new OrchestratorResponse<OrganisationDetailsViewModel>
+                    {
+                        Data = new OrganisationDetailsViewModel(),
+                        Status = HttpStatusCode.Conflict
+                    };
+                }
             }
 
             int charityRegistrationNumber;
@@ -232,6 +248,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
         }
+
+        //private async Task MarkExistingAccountOrganisation(ICollection<OrganisationDetailsViewModel> orgnaisations, string hashedAccountId, string userIdClaim)
+        //{
+        //    var accountOrganisations = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
+
+        //    List<string> referenceValues = accountOrganisations.Entites.LegalEntityList.Select(x => x.Name).ToList();
+
+
+        //    var NameSet = new HashSet<string>(referenceValues);
+
+
+        //}
 
         private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId,
             string userIdClaim)
