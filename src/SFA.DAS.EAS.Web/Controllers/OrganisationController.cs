@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddCustomOrganisationDetails");
+                    return RedirectToAction("AddCustomOrganisationDetails", "Organisation", new { hashedAccountId });
                     //return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
                     
                 default:
@@ -153,19 +153,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> AddCustomOrganisationDetails()
+        [Route("Organisation/Add/Other")]
+        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new OrganisationDetailsViewModel()
+                Data = new OrganisationDetailsViewModel
+                {
+                    HashedId = hashedAccountId
+                }
             };
 
             return View(response);
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId, OrganisationDetailsViewModel model)
+        [Route("Organisation/Add/Other")]
+        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
         {
+            model.Type = OrganisationType.Other;
             var response = await _orchestrator.ValidateLegalEntityName(model);
 
             if (response.Status == HttpStatusCode.OK)

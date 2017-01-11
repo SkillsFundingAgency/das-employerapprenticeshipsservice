@@ -19,7 +19,7 @@
 
                 @Html.AntiForgeryToken()
 
-                <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
+                <input type="hidden" value="@Model.Data.HashedId" name="HashedId"/>
 
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NameError) ? "error" : "")">
                     <label id="NewName-label" for="Name" class="form-label-bold">Name</label>
