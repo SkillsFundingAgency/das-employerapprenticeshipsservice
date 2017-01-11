@@ -47,10 +47,10 @@ sfa.navigation = {
     init: function () {
         this.setupMenus(this.elems.userNav);
         this.setupEvents(this.elems.userNav);
-        this.linkSettings();
+        //this.linkSettings();
     },
     setupMenus: function (menu) {
-        menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+       menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
     },
     setupEvents: function (menu) {
         var that = this;
