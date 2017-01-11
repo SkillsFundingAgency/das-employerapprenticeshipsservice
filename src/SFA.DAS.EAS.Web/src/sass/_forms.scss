@@ -101,7 +101,7 @@
             padding: 0 0 0 10px;
             display: block;
             height: 50px;
-            border-color: #bfc1c3;
+            border-color: $grey-2;
             border-right: none;
             line-height: 48px;
         }
@@ -132,7 +132,7 @@
             background-color: $govuk-blue;
             background-image: url(/dist/images/icon-search.png);
             background-repeat: no-repeat;
-            background-position: -12.5% 50%;
+            background-position: 12px 13px;
         }
     }
 }

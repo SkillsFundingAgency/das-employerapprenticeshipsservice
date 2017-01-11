@@ -2581,7 +2581,7 @@ legend {
   background-color: #005ea5;
   background-image: url(/dist/images/icon-search.png);
   background-repeat: no-repeat;
-  background-position: -12.5% 50%;
+  background-position: 12px 13px;
 }
 
 .search-results li {
