@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddCustomOrganisationDetails", "Organisation", new { hashedAccountId });
+                    return RedirectToAction("AddOtherOrganisationDetails", "Organisation", new { hashedAccountId });
                     
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -196,43 +196,26 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId)
+        public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
         {
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = hashedAccountId
-                }
-            };
-
+            var response = _orchestrator.GetAddOtherOrganisationViewModel(hashedAccountId);
             return View(response);
         }
 
         [HttpPost]
         [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
+        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
 
             if (response.Status == HttpStatusCode.OK)
             {
-                var addressModel = new OrchestratorResponse<AddOrganisationAddressModel>
-                {
-                    Data = new AddOrganisationAddressModel
-                    {
-                        OrganisationType = OrganisationType.Other,
-                        OrganisationHashedId = model.HashedId,
-                        OrganisationName = model.Name
-                    }
-                };
-
-                return View("AddOrganisationAddress", addressModel);
+                var addressResponse = _orchestrator.CreateAddOrganisationAddressViewModelFromOrganisationDetails(model);
+                return View("AddOrganisationAddress", addressResponse);
             }
 
             return View(response);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

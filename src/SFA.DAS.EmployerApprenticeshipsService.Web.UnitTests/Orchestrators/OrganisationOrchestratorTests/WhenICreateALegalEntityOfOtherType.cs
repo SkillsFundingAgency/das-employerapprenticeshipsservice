@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
@@ -51,6 +46,25 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             var result = await _orchestrator.ValidateLegalEntityName(request);
 
             Assert.IsTrue(result.Data.Valid);
+        }
+
+        [Test]
+        public void ThenTheAddOrganisationAddressViewModelPropertiesAreCorrectlyPopulated()
+        {
+            //Arrange
+            var model = new OrganisationDetailsViewModel
+            {
+                Name = "Test Organisation",
+                HashedId = "ABCD123"
+            };
+
+            //Act
+            var result = _orchestrator.CreateAddOrganisationAddressViewModelFromOrganisationDetails(model);
+
+            //Assert
+            Assert.AreEqual(OrganisationType.Other, result.Data.OrganisationType);
+            Assert.AreEqual("Test Organisation", result.Data.OrganisationName);
+            Assert.AreEqual("ABCD123", result.Data.OrganisationHashedId);
         }
     }
 }

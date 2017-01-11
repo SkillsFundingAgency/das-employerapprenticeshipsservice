@@ -303,6 +303,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
+        public OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
+                {
+                    HashedId = hashedAccountId
+                }
+            };
+
+            return response;
+        }
+
         public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
@@ -377,6 +390,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
+        }
+
+        public OrchestratorResponse<AddOrganisationAddressModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
+        {
+            var result = new OrchestratorResponse<AddOrganisationAddressModel>
+            {
+                Data = new AddOrganisationAddressModel
+                {
+                    OrganisationType = OrganisationType.Other,
+                    OrganisationHashedId = model.HashedId,
+                    OrganisationName = model.Name
+                }
+            };
+            return result;
         }
     }
 }
