@@ -907,7 +907,7 @@
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
+    <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
