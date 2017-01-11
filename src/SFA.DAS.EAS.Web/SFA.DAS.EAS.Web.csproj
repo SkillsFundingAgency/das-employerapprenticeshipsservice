@@ -510,6 +510,8 @@
     <Content Include="dist\images\icon-pointer-black.png" />
     <Content Include="dist\images\icon-pointer-indexed.png" />
     <Content Include="dist\images\icon-pointer.png" />
+    <Content Include="dist\images\icon-search-2x.png" />
+    <Content Include="dist\images\icon-search.png" />
     <Content Include="dist\images\opengraph-image.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
