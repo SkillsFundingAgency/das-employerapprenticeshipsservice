@@ -115,15 +115,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
+            var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
+            {
+                Name = x.Name,
+                AddedToAccount =
+                    accountEntities.Entites.LegalEntityList.Any(
+                        e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
+            }).ToList();
+
             var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
             {
-                Data =
-                    searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
-                        {
-                            Name = x.Name,
-                            AddedToAccount = accountEntities.Entites.LegalEntityList.Any(e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
-                        })
-                        .ToList(),
+                Data = organisations,
                 PageNumber = searchResults.Organisaions.PageNumber,
                 TotalPages = searchResults.Organisaions.TotalPages
             };

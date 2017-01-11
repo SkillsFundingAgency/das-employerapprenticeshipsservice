@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 case OrganisationType.PublicBodies:
                     var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                     
-                    if (searchResponse.Data.Results.Data.Count != 1)
+                    if (searchResponse.Data.Results.Data.Count != 1 || searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
                     {
                         return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
                     }
