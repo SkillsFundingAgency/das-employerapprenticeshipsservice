@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using AutoMapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -70,7 +71,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
+                    return RedirectToAction("AddCustomOrganisationDetails", "Organisation", new { hashedAccountId });
+                    //return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
                     
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -194,6 +196,37 @@ namespace SFA.DAS.EAS.Web.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("Organisation/Add/Other")]
+        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId)
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
+                {
+                    HashedId = hashedAccountId
+                }
+            };
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [Route("Organisation/Add/Other")]
+        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
+        {
+            model.Type = OrganisationType.Other;
+            var response = await _orchestrator.ValidateLegalEntityName(model);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                return View("AddOrganisationAddress", response);
+            }
+
+            return View(response);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Confirm")]
@@ -242,6 +275,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
+
 
 
     }
