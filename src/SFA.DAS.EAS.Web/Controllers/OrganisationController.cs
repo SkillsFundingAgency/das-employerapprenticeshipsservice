@@ -41,9 +41,28 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Add")]
-        public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
+        public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType? orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
         {
             OrchestratorResponse<OrganisationDetailsViewModel> response;
+
+            if (!orgType.HasValue)
+            {
+                var orgTypeErrorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+                {
+                    Data = new AddLegalEntityViewModel()
+                };
+                orgTypeErrorResponse.Data.ErrorDictionary["orgType"] = "Select a type of organisation";
+                orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
+                orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Error,
+                    ErrorMessages = orgTypeErrorResponse.Data.ErrorDictionary,
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:"
+                    
+                };
+                return View(orgTypeErrorResponse);
+            }
 
             switch (orgType)
             {
