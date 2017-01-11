@@ -63,8 +63,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             var username = "user";
             _owinWrapper.Setup(x => x.GetClaimValue(It.IsAny<string>())).Returns(username);
 
+            var addModel = new AddLegalEntityViewModel
+            {
+                HashedAccountId = viewModel.HashedId,
+                OrganisationType = OrganisationType.CompaniesHouse,
+                CompaniesHouseNumber = viewModel.ReferenceNumber
+            };
+
             //Act
-            var result = await _controller.AddOrganisation(viewModel.HashedId, OrganisationType.CompaniesHouse, viewModel.ReferenceNumber, "", username) as ViewResult;
+            var result = await _controller.AddOrganisation(addModel) as ViewResult;
 
             //Assert
             Assert.IsNotNull(result);
