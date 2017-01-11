@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using AutoMapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -72,7 +71,6 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 case OrganisationType.Other:
                     return RedirectToAction("AddCustomOrganisationDetails", "Organisation", new { hashedAccountId });
-                    //return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
                     
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -215,12 +213,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Organisation/Add/Other")]
         public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
         {
-            model.Type = OrganisationType.Other;
             var response = await _orchestrator.ValidateLegalEntityName(model);
 
             if (response.Status == HttpStatusCode.OK)
             {
-                return View("AddOrganisationAddress", response);
+                var addressModel = new OrchestratorResponse<AddOrganisationAddressModel>
+                {
+                    Data = new AddOrganisationAddressModel
+                    {
+                        OrganisationType = OrganisationType.Other,
+                        OrganisationHashedId = model.HashedId,
+                        OrganisationName = model.Name
+                    }
+                };
+
+                return View("AddOrganisationAddress", addressModel);
             }
 
             return View(response);
