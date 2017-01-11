@@ -49,11 +49,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (accountEntities.Entites.LegalEntityList.Any(
                 x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
             {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
+                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
+                return errorResponse;
             }
 
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
@@ -64,11 +66,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (response == null)
             {
                 _logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.NotFound
+                    Status = HttpStatusCode.Conflict
                 };
+                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company not found";
+                return errorResponse;
             }
 
             _logger.Info($"Returning Data for {companiesHouseNumber}");
@@ -151,22 +155,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)
                 && x.Source == (short)OrganisationType.Charities))
             {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
+                conflictResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
+                return conflictResponse;
             }
 
             int charityRegistrationNumber;
             if (!int.TryParse(registrationNumber, out charityRegistrationNumber))
             {
                 _logger.Warn("Non-numeric registration number");
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Enter a charity number";
+                return notFoundResponse;
             }
 
             GetCharityQueryResponse charityResult;
@@ -180,31 +188,38 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             catch (HttpRequestException)
             {
                 _logger.Warn("Charity not found");
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity not found";
+                return notFoundResponse;
             }
 
             if (charityResult == null)
             {
                 _logger.Warn("No response from GetAccountLegalEntitiesRequest");
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.NotFound
                 };
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity not found";
+                return notFoundResponse;
             }
 
             var charity = charityResult.Charity;
 
             if (charity.IsRemoved)
             {
-                return new OrchestratorResponse<OrganisationDetailsViewModel>
+                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
+                    Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.BadRequest
                 };
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity removed";
+                return notFoundResponse;
             }
 
             return new OrchestratorResponse<OrganisationDetailsViewModel>

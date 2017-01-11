@@ -58,9 +58,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         public async Task ThenIMustSelectAType()
         {
             //Arrange
+            var model = new AddLegalEntityViewModel();
 
             //Act
-            var result = await _controller.AddOrganisation("ABC123", null, "", "", "");
+            var result = await _controller.AddOrganisation(model);
 
             //Assert
             var viewResult = result as ViewResult;
