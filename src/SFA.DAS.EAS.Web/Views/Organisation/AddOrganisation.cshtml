@@ -47,58 +47,62 @@
 
     <form action="@Url.Action("AddOrganisation", "Organisation")" method="POST">
         @Html.AntiForgeryToken()
-        <section>
-            <label for="company">
-                <span class="form-label-bold">Listed on Companies House</span>
-                <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
-            </label>
-            <input type="radio" name="orgType" id="company" value="@OrganisationType.CompaniesHouse" />
-            <div id="search-company" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
-                    <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber"" class="form-control" />
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="publicbody">
-                <span class="form-label-bold">Public sector organisation</span>
-            </label>
-            <input type="radio" name="orgType" value="@OrganisationType.PublicBodies" id="publicbody" />
-            <div id="search-publicbody" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="PublicBodyName">Enter organisation's name</label>
-                    <input type="text" id="PublicBodyName" name="PublicBodyName"" class="form-control" />
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="charity">
-                <span class="form-label-bold">Registered charity</span>
-            </label>
-            <input type="radio" name="orgType" value="@OrganisationType.Charities" id="charity" />
-            <div id="search-charity" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="CharityRegNo">Enter charity number</label>
-                    <input type="text" id="CharityRegNo" name="CharityRegNo" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <h2 class="heading-small">Don't know your charity number?</h2>
-                    <p>You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external"> search for your charity number</a>
-                        or <a href="">enter your charity details manually</a>.</p>
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="other">
-                <span class="form-label-bold">Sole trader, partnership or other</span>
-            </label>
-            <input type="radio" name="orgType" value="@OrganisationType.Other" id="other" />
-            @*<div id="search-other" class="search-form panel panel-border-narrow">
-                
-            </div>*@
-        </section>
 
+            <h2 class="vh" id="select-title">Select your organisation type</h2>
+            <section>
+                <label for="company">
+                    <span class="form-label-bold">Listed on Companies House</span>
+                    <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
+                </label>
+                <input type="radio" name="orgType" id="company" value="@OrganisationType.CompaniesHouse" aria-labelledby="select-title" />
+                <div id="search-company" class="search-form panel panel-border-narrow">
+                    <div class="form-group">
+                        <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
+                        <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber" class="form-control" />
+                    </div>
+                </div>
+            </section>
+            <section>
+                <label for="publicbody">
+                    <span class="form-label-bold">Public sector organisation</span>
+                </label>
+                <input type="radio" name="orgType" value="@OrganisationType.PublicBodies" id="publicbody" aria-labelledby="select-title" />
+                <div id="search-publicbody" class="search-form panel panel-border-narrow">
+                    <div class="form-group">
+                        <label class="strong" for="PublicBodyName">Enter organisation's name</label>
+                        <input type="text" id="PublicBodyName" name="PublicBodyName" class="form-control" />
+                    </div>
+                </div>
+            </section>
+            <section>
+                <label for="charity">
+                    <span class="form-label-bold">Registered charity</span>
+                </label>
+                <input type="radio" name="orgType" value="@OrganisationType.Charities" id="charity" aria-labelledby="select-title" />
+                <div id="search-charity" class="search-form panel panel-border-narrow">
+                    <div class="form-group">
+                        <label class="strong" for="CharityRegNo">Enter charity number</label>
+                        <input type="text" id="CharityRegNo" name="CharityRegNo" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <h2 class="heading-small">Don't know your charity number?</h2>
+                        <p>
+                            You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external"> search for your charity number</a>
+                            or <a href="">enter your charity details manually</a>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <label for="other">
+                    <span class="form-label-bold">Sole trader, partnership or other</span>
+                </label>
+                <input type="radio" name="orgType" value="@OrganisationType.Other" id="other" aria-labelledby="select-title" />
+                @*<div id="search-other" class="search-form panel panel-border-narrow">
+
+                </div>*@
+            </section>
+   
         @*<div class="form-group orgtype-wrapper">
 
             <label class="collapse" for="option4">Sole trader, partnership or other</label>
