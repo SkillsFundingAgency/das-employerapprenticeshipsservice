@@ -36,31 +36,26 @@
                     <thead>
                         <tr>
                             <th scope="col">Account name</th>
-                            <th scope="col">Rename account</th>
                             <th scope="col">What you can do</th>
-                            <th></th>
+                            <th scope="col"><span class="vh">Action</span></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var account in Model.Data.Accounts.AccountList)
                         {
                             <tr>
-                                <td class="responsive-td">
+                                <td>
                                     <span class="force-word-wrap">
                                         @account.Name
                                     </span>
                                 </td>
-                                <td class="responsive-td">
-                                    <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this <span class="vh">@account.Name</span> account</a>                                    
-                                </td>
-                                <td class="responsive-td">
+                                <td>
                                     @RoleStrings.GetRoleDescription(account.RoleName)
                                 </td>
-                                <td class="responsive-td link-right">
+                                <td class="link-right">
                                     <a aria-label="View account homepage for @account.Name"
-                                           title="View account homepage for @account.Name"
                                            href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
-                                    Open<span class="vh"> @account.Name account homepage</span>
+                                    Open <span class="vh"> @account.Name account homepage</span>
                                    </a>
                                 </td>
                             </tr>
