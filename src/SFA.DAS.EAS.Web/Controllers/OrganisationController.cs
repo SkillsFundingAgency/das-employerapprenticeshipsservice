@@ -174,14 +174,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
-
-            switch (response.Status)
-            {
-                case HttpStatusCode.NotFound:
-                    TempData["publicBodyError"] = "No public organsiations were not found using your search term";
-                    break;
-            }
-
             return response;
         }
 
@@ -194,20 +186,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
-
-            switch (response.Status)
-            {
-                case HttpStatusCode.NotFound:
-                    TempData["charityError"] = "Charity not found";
-                    break;
-                case HttpStatusCode.BadRequest:
-                    TempData["charityError"] = "Charity is removed";
-                    break;
-                case HttpStatusCode.Conflict:
-                    TempData["charityError"] = "Charity is already added";
-                    break;
-            }
-            
             return response;
         }
 
