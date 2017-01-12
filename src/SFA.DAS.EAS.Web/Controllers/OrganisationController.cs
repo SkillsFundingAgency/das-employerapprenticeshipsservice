@@ -75,17 +75,31 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
                 case OrganisationType.PublicBodies:
                     var searchResponse = await FindPublicSectorOrganisation(model.PublicBodyName, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                    
-                    if (searchResponse.Data.Results.Data.Count != 1 || searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+
+                    if (searchResponse.Status == HttpStatusCode.OK)
                     {
-                        return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        if (searchResponse.Data.Results.Data.Count != 1 ||
+                            searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                        {
+                            return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        }
+
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = searchResponse.Data.Results.Data.FirstOrDefault(),
+                            Status = searchResponse.Status
+                        };
+                    }
+                    else
+                    {
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = new OrganisationDetailsViewModel(),
+                            Status = searchResponse.Status
+                        };
+                        response.Data.ErrorDictionary = searchResponse.Data.ErrorDictionary;
                     }
 
-                    response = new OrchestratorResponse<OrganisationDetailsViewModel>
-                    {
-                        Data = searchResponse.Data.Results.Data.FirstOrDefault(),
-                        Status = searchResponse.Status
-                    };
                     break;
 
                 case OrganisationType.Other:

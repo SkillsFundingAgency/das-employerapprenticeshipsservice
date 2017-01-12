@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class PublicSectorOrganisationSearchResultsViewModel
+    public class PublicSectorOrganisationSearchResultsViewModel: ViewModelBase
     {
         public string HashedAccountId { get; set; }
         public PagedResponse<OrganisationDetailsViewModel> Results { get; set; }

@@ -98,6 +98,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
             FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
+            if (String.IsNullOrWhiteSpace(searchTerm))
+            {
+                var notFoundResponse = new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
+                {
+                    Data = new PublicSectorOrganisationSearchResultsViewModel(),
+                    Status = HttpStatusCode.BadRequest
+                };
+                notFoundResponse.Data.ErrorDictionary["PublicBodyName"] = "Enter organisation's name";
+                return notFoundResponse;
+            }
+
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = searchTerm,
