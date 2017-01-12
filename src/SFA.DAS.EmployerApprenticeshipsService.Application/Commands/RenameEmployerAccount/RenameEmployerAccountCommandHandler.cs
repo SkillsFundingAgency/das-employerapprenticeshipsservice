@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await _accountRepository.RenameAccount(accountId, message.NewName);
-            await _mediator.SendAsync(new CreateAccountEventCommand
+            await _mediator.PublishAsync(new CreateAccountEventCommand
             {
                 HashedAccountId = message.HashedAccountId,
                 Event = "AccountRenamed"

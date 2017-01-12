@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             //Assert
             _repository.Verify(x=> x.RenameAccount(It.Is<long>(l=> l == AccountId), It.Is<string>(s => s== newAccountName)));
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == HashedAccountId && e.Event == "AccountRenamed")));
+            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == HashedAccountId && e.Event == "AccountRenamed")));
         }
 
     }

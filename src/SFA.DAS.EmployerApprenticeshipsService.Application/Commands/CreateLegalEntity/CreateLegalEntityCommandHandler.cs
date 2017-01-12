@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 message.SignedDate,
                 owner.UserId);
 
-            await _mediator.SendAsync(new CreateAccountEventCommand { HashedAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
+            await _mediator.PublishAsync(new CreateAccountEventCommand { HashedAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
             
             return new CreateLegalEntityCommandResponse
             {

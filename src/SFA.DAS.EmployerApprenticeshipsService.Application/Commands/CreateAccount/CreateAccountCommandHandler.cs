@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 AccountId = accountId
             });
 
-            await _mediator.SendAsync(new CreateAccountEventCommand { HashedAccountId = hashedAccountId, Event = "AccountCreated" });
+            await _mediator.PublishAsync(new CreateAccountEventCommand { HashedAccountId = hashedAccountId, Event = "AccountCreated" });
             
             return new CreateAccountCommandResponse
             {

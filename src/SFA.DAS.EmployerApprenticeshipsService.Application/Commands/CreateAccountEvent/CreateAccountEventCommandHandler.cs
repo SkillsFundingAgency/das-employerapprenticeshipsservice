@@ -7,7 +7,7 @@ using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccountEvent
 {
-    public class CreateAccountEventCommandHandler : AsyncRequestHandler<CreateAccountEventCommand>
+    public class CreateAccountEventCommandHandler : IAsyncNotificationHandler<CreateAccountEventCommand>
     {
         private readonly IEventsApi _eventsApi;
         private readonly ILogger _logger;
@@ -18,11 +18,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccountEvent
             _logger = logger;
         }
 
-        protected override async Task HandleCore(CreateAccountEventCommand message)
+        public async Task Handle(CreateAccountEventCommand notification)
         {
             try
             {
-                await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = message.HashedAccountId, Event = message.Event });
+                await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = notification.HashedAccountId, Event = notification.Event });
             }
             catch (Exception ex)
             {

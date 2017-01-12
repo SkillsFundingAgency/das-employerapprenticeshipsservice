@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             //Assert
             Assert.AreSame(agreementView, result.AgreementView);
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == command.HashedAccountId && e.Event == "LegalEntityCreated")), Times.Once);
+            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == command.HashedAccountId && e.Event == "LegalEntityCreated")), Times.Once);
         }
 
     }
