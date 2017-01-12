@@ -3099,3 +3099,7 @@ span.helpText {
 .breadcrumbs a {
   font-size: 16px;
 }
+
+.tableResponsive td {
+  font-size: 16px;
+}
