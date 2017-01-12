@@ -204,6 +204,10 @@
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommandHandler.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
