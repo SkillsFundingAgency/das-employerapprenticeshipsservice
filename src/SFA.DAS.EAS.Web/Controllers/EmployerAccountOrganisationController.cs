@@ -38,41 +38,74 @@ namespace SFA.DAS.EAS.Web.Controllers
                 new OrchestratorResponse<AddLegalEntityViewModel> {Data = new AddLegalEntityViewModel()});
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Add")]
-        public async Task<ActionResult> AddOrganisation(OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
+        public async Task<ActionResult> AddOrganisation(AddLegalEntityViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var orgTypeErrorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+                {
+                    Data = model
+                };
+
+                orgTypeErrorResponse.Data.AddErrorsFromModelState(ModelState);
+
+                orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
+                orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Error,
+                    ErrorMessages = orgTypeErrorResponse.Data.ErrorDictionary,
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:"
+                };
+                return View(orgTypeErrorResponse);
+            }
+
             OrchestratorResponse<OrganisationDetailsViewModel> response;
 
-            string hashedAccountId = string.Empty;
-
-            switch (orgType)
+            switch (model.OrganisationType)
             {
                 case OrganisationType.Charities:
-                    response = await FindCharity(charityRegNo, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    response = await FindCharity(model.CharityRegistrationNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                     break;
                 case OrganisationType.CompaniesHouse:
-                    response = await FindCompany(companiesHouseNumber, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    response = await FindCompany(model.CompaniesHouseNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
                     break;
                 case OrganisationType.PublicBodies:
-                    var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    var searchResponse = await FindPublicSectorOrganisation(model.PublicBodyName, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-                    if (searchResponse.Data.Results.Data.Count != 1 || searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                    if (searchResponse.Status == HttpStatusCode.OK)
                     {
-                        return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        if (searchResponse.Data.Results.Data.Count != 1 ||
+                            searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                        {
+                            return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        }
+
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = searchResponse.Data.Results.Data.FirstOrDefault(),
+                            Status = searchResponse.Status
+                        };
+                    }
+                    else
+                    {
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = new OrganisationDetailsViewModel(),
+                            Status = searchResponse.Status
+                        };
+                        response.Data.ErrorDictionary = searchResponse.Data.ErrorDictionary;
                     }
 
-                    response = new OrchestratorResponse<OrganisationDetailsViewModel>
-                    {
-                        Data = searchResponse.Data.Results.Data.FirstOrDefault(),
-                        Status = searchResponse.Status
-                    };
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddCustomOrganisationDetails");
+                    return RedirectToAction("AddOtherOrganisationDetails", "Organisation", new { model.HashedAccountId });
 
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -95,13 +128,22 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return View("AddOrganisationAddress", addressResponse);
                 }
 
-                return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
+                return View("ConfirmOrganisationDetails", response);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
+                Data = model,
+                Status = HttpStatusCode.OK
+            };
+            errorResponse.Data.ErrorDictionary = response.Data.ErrorDictionary;
+
+            errorResponse.FlashMessage = new FlashMessageViewModel
+            {
+                Severity = FlashMessageSeverityLevel.Error,
+                ErrorMessages = errorResponse.Data.ErrorDictionary,
+                Headline = "Errors to fix",
+                Message = "Check the following details:"
             };
 
             return View("AddOrganisation", errorResponse);
@@ -159,7 +201,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
+        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
             
