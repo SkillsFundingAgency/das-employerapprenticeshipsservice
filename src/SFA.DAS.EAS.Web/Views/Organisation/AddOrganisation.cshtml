@@ -10,6 +10,8 @@
 
     <h1 class="heading-xlarge">Add an organisation</h1>
 
+    <h2 id="radio-legend" class="heading-medium">Select your organisation type</h2>
+
     <form action="@Url.Action("AddOrganisation", "Organisation")" method="POST">
         @Html.AntiForgeryToken()
         <section>
@@ -17,7 +19,7 @@
                 <span class="form-label-bold">Listed on Companies House</span>
                 <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
             </label>
-            <input type="radio" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ? "checked='checked'" : "") />
+            <input type="radio" aria-labelledby="radio-legend" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ? "checked='checked'" : "") />
             <div id="search-company" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError) ? "error" : "")">
                     <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
@@ -45,7 +47,7 @@
             <label for="publicbody">
                 <span class="form-label-bold">Public sector organisation</span>
             </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.PublicBodies" id="publicbody" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.PublicBodies) ? "checked='checked'" : "") />
+            <input type="radio" aria-labelledby="radio-legend" name="organisationType" value="@OrganisationType.PublicBodies" id="publicbody" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.PublicBodies) ? "checked='checked'" : "") />
             <div id="search-publicbody" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.PublicBodyNameError) ? "error" : "")">
                     <label class="strong" for="PublicBodyName">Enter organisation's name</label>
@@ -61,7 +63,7 @@
             <label for="charity">
                 <span class="form-label-bold">Registered charity</span>
             </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.Charities" id="charity" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.Charities) ? "checked='checked'" : "") />
+            <input type="radio" aria-labelledby="radio-legend" name="organisationType" value="@OrganisationType.Charities" id="charity" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.Charities) ? "checked='checked'" : "") />
             <div id="search-charity" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CharityRegistrationNumberError) ? "error" : "")">
                     <label class="strong" for="CharityRegistrationNumber">Enter charity number</label>
@@ -90,7 +92,7 @@
             <label for="other">
                 <span class="form-label-bold">Other</span>
             </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.Other" id="other" />
+            <input type="radio" aria-labelledby="radio-legend" name="organisationType" value="@OrganisationType.Other" id="other" />
         </section>
 
         <div class="form-group">

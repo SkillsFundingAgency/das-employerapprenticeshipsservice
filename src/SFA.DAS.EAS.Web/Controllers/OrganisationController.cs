@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {
                     Data = new AddLegalEntityViewModel()
                 };
-                orgTypeErrorResponse.Data.ErrorDictionary["orgType"] = "Select a type of organisation";
+                orgTypeErrorResponse.Data.ErrorDictionary["radio-legend"] = "Select a type of organisation";
                 orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
                 orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
                 {
