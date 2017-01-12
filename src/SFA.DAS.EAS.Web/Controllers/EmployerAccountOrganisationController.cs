@@ -170,7 +170,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             model.Type = OrganisationType.Other;
            // model.ReferenceNumber = Guid.NewGuid().ToString();
-            model.DateOfInception = DateTime.Now;
+            //model.DateOfInception = DateTime.Now;
             model.Status = "active";
 
             var addressModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);

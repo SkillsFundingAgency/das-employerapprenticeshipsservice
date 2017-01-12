@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Name = x.Name,
                 //ReferenceNumber = Guid.NewGuid().ToString(),
-                DateOfInception = DateTime.Now,
+               // DateOfInception = DateTime.Now,
                 Status = "active"
             }).ToList();
 
@@ -262,7 +262,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Type = OrganisationType.Charities,
                     Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
                     Status = "active",
-                    DateOfInception = DateTime.Now
+                    //DateOfInception = DateTime.Now
                 }
             };
         }

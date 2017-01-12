@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public string OrganisationRegisteredAddress { get; set; }
-        public DateTime OrganisationDateOfInception { get; set; }
+        public DateTime? OrganisationDateOfInception { get; set; }
 
         public string PayeReference { get; set; }
         public string AccessToken { get; set; }
