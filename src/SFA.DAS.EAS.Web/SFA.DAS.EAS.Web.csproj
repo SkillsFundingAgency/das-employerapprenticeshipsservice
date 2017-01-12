@@ -910,8 +910,7 @@
     <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
     <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
-    <Content Include="Views\Organisation\AddCustomOrganisationDetails.cshtml" />
-    <Content Include="Views\EmployerAccountOrganisation\AddCustomOrganisationDetails.cshtml" />
+    <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
