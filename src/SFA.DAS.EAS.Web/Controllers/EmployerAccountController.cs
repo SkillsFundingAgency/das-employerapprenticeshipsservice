@@ -194,6 +194,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("accounts/{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -203,6 +204,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("accounts/{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -219,7 +221,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "EmployerTeam");
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
