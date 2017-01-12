@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [account].[AcceptInvitation]
 (
-	@email NVARCHAR(100),
+	@email NVARCHAR(255),
 	@accountId BIGINT,
 	@roleId TINYINT
 )

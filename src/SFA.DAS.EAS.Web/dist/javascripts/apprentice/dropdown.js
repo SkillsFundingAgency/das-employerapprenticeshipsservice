@@ -13,11 +13,14 @@
         $(this).siblings('select').select2('open');
     });
 
-    // add focus to span element for accessibility while using tabs 
-    // $('span.select2').attr('tabindex', 0), 
-    // keydown: function(e) { // spacebar press to behave like click
-    //     var code = e.which;
-    //     if ((code === 13) || (code === 32)) {
-    //         $(this).click();
-    //    }
+    // retain tabbed order after selection
+    $('#TrainingId').on('select2:select', function () {
+        $("#StartDate_Month").focus();
+    });
+
+    // retain tabbed order on close without selection
+    $('#TrainingId').on('select2:close', function () {
+        $("#StartDate_Month").focus();
+    });
+
 }());

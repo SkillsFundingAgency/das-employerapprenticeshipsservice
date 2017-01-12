@@ -16,58 +16,72 @@
     </div>
 }
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
         <section>
-            <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
+            
             @if (Model.Data.Accounts.AccountList.Count == 0)
             {
-                <p>With levy accounts you can:</p>
+                <h1 class="heading-xlarge" id="Levy-accounts">Set up your account</h1>
+                <p>To access levy funds you need to set up an account.</p>
+                <p>To do this you'll need:</p>
                 <ul class="list list-bullet" aria-labelledby="Levy-accounts">
-                    <li>view financial information</li>
-                    <li>create or amend apprenticeships</li>
-                    <li>spend money</li>
+                    <li>the Government Gateway login details for your PAYE schemes</li>
+                    <li>your organisation's Companies House number or Charity number (only if your organisation has one)</li>
                 </ul>
-                <p>At the moment, you don't have access to any levy accounts. You need to be invited to an account or add a new one.</p>
+                <p>
+                    <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
+                </p>
+                <p>Search for your <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">Companies House number</a> or your <a href="https://www.gov.uk/find-charity-information" rel="external" target="_blank"> Charity number</a></p>
+                <h2 class="heading-medium">If your organisation already has a levy account</h2>
+                <p>If someone in your organisation has already created a levy account, you'll need to ask them to invite you to the account.</p>
             }
             else
             {
+                <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
                 <p>Select an account or add a new one.</p>
                 <table>
                     <thead>
-                        <tr>
-                            <th scope="col">Account name</th>
-                            <th scope="col">What you can do</th>
-                            <th scope="col"></th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Account name</th>
+                        <th scope="col">Rename account</th>
+                        <th scope="col">What you can do</th>
+                        <th></th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var account in Model.Data.Accounts.AccountList)
-                        {
-                            <tr>
-                                <td class="responsive-td">
-                                    @account.Name
-                                </td>
-                                <td class="responsive-td">
-                                    @RoleStrings.GetRoleDescription(account.RoleName)
-                                </td>
-                                <td class="responsive-td link-right">
-                                    <a aria-label="View account homepage for @account.Name"
-                                           title="View account homepage for @account.Name"
-                                           href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
+                    @foreach (var account in Model.Data.Accounts.AccountList)
+                    {
+                        <tr>
+                            <td class="responsive-td">
+                                <span class="force-word-wrap">
+                                        @account.Name
+                                    </span>
+                            </td>
+                            <td class="responsive-td">
+                                <a href="@Url.Action("RenameAccount", "EmployerAccount", new {HashedAccountId = account.HashedId})">Rename this <span class="vh">@account.Name</span> account</a>
+                            </td>
+                            <td class="responsive-td">
+                                @RoleStrings.GetRoleDescription(account.RoleName)
+                            </td>
+                            <td class="responsive-td link-right">
+                                <a aria-label="View account homepage for @account.Name"
+                                   title="View account homepage for @account.Name"
+                                   href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
                                     Open<span class="vh"> @account.Name account homepage</span>
-                                   </a>
-                                </td>
-                            </tr>
-                        }
+                                </a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
+                <p>
+                    <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
+                </p>
             }
-            <p>
-                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
-            </p>
+            
         </section>
 
-        @if (Model.Data.Invitations > 0)
+        @if (Model.Data.Accounts.AccountList.Count != 0 && Model.Data.Invitations > 0)
             {
             <section>
                 <h2 class="heading-medium">Invitations</h2>
@@ -80,15 +94,6 @@
             </section>
         }
 
-    </div>
-    <div class="column-one-third pull-right">
-        <aside class="sidebar">
-            <h2 class="heading-medium" id="Manage-Account">Your settings</h2>
-            <ul aria-labelledby="Manage-Account">
-                <li><a href="@ViewBag.ChangeEmailLink" aria-label="Change your email address">Change your email address</a></li>
-                <li><a href="@ViewBag.ChangePasswordLink" aria-label="Change your password">Change your password</a></li>
-            </ul>
-        </aside>
     </div>
 </div>
 @if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))

@@ -42,7 +42,7 @@
 }
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Manage team members</h1>
+        <h1 class="heading-xlarge">Your team</h1>
         @if (Model.Data.TeamMembers.Count == 0)
         {
             <p>TODO : EMPTY STATE</p>
@@ -71,7 +71,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">What they can do</th>
                         <th scope="col">Status</th>
-                        <th></th>
+                        <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,7 +86,6 @@
                             <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
                             <td class="link-right">
                                 <a aria-label="View details for @teamMember.Name"
-                                   title="View details for @teamMember.Name"
                                    href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
                             </td>
                         </tr>
@@ -115,7 +114,7 @@
                 <ol role="navigation">
                     <li><a href="/">Your User Profile</a></li>
                     <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-                    <li>Manage Team Members</li>
+                    <li>Your Team</li>
                 </ol>
             </div>
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
@@ -23,6 +24,7 @@ using SFA.DAS.EAS.Application.Queries.GetTasks;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
@@ -189,6 +191,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
+        public async Task<CommitmentViewModel> GetCommitmentCheckState(string hashedAccountId, string hashedCommitmentId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = _hashingService.DecodeValue(hashedAccountId),
+                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+            });
+
+            AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
+            return MapFrom(data.Commitment);
+        }
+
         public async Task<CommitmentViewModel> GetCommitment(string hashedAccountId, string hashedCommitmentId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -216,6 +236,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 CommitmentId = commitmentId
             });
 
+            AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
+            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
             string message = await GetLatestMessage(accountId, commitmentId);
             var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
@@ -227,8 +250,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderName = data.Commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(data.Commitment.EditStatus, data.Commitment.Apprenticeships.Count, data.Commitment.LastAction, data.Commitment.AgreementStatus),
                 HasApprenticeships = apprenticships.Count > 0,
-                IncompleteApprenticeships = apprenticships.Where(x => !x.CanBeApproved ).ToList(),
-                CompleteApprenticeships = apprenticships.Where(x => x.CanBeApproved).ToList(),
+                Apprenticeships = apprenticships,
                 ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                 LatestMessage = message
             };
@@ -253,7 +275,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             apprenticeship.HashedAccountId = hashedAccountId;
 
+            // TODO: Validation errors to be used in a future story.
             var approvalValidator = new ApprenticeshipViewModelApproveValidator();
+
             return new ExtendedApprenticeshipViewModel
             {
                 Apprenticeship = apprenticeship,
@@ -273,6 +297,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AccountId = accountId,
                 CommitmentId = commitmentId
             });
+
+            AssertCommitmentStatus(response.Commitment, EditStatus.EmployerOnly);
+            AssertCommitmentStatus(response.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
             var viewmodel = new FinishEditingViewModel
             {
@@ -487,18 +514,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 NINumber = apprenticeship.NINumber,
-                DateOfBirthDay = apprenticeship.DateOfBirth?.Day,
-                DateOfBirthMonth = apprenticeship.DateOfBirth?.Month,
-                DateOfBirthYear = apprenticeship.DateOfBirth?.Year,
+                DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
                 TrainingId = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartMonth = apprenticeship.StartDate?.Month,
-                StartYear = apprenticeship.StartDate?.Year,
-                EndMonth = apprenticeship.EndDate?.Month,
-                EndYear = apprenticeship.EndDate?.Year,
+                StartDate = new DateTimeViewModel(apprenticeship.StartDate),
+                EndDate = new DateTimeViewModel(apprenticeship.EndDate),
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
@@ -533,12 +556,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
-                DateOfBirth = GetDateTime(viewModel.DateOfBirthDay, viewModel.DateOfBirthMonth, viewModel.DateOfBirthYear),
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
                 Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = GetDateTime(viewModel.StartMonth, viewModel.StartYear),
-                EndDate = GetDateTime(viewModel.EndMonth, viewModel.EndYear),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
                 ProviderRef = viewModel.ProviderRef,
                 EmployerRef = viewModel.EmployerRef
             };
@@ -559,30 +582,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
         }
 
-        private DateTime? GetDateTime(int? month, int? year)
-        {
-            if (month.HasValue && year.HasValue)
-                return new DateTime(year.Value, month.Value, 1);
-
-            return null;
-        }
-
-        private DateTime? GetDateTime(int? day, int? month, int? year)
-        {
-            if (day.HasValue && month.HasValue && year.HasValue)
-            {
-                DateTime dateOfBirthOut;
-                if (DateTime.TryParseExact(
-                    $"{year.Value}-{month.Value}-{day.Value}",
-                    "yyyy-M-d",
-                    CultureInfo.InvariantCulture, DateTimeStyles.None, out dateOfBirthOut))
-                {
-                    return dateOfBirthOut;
-                }
-            }
-
-            return null;
-        }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
@@ -594,6 +593,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
                 .OrderBy(m => m.Title)
                 .ToList();
+        }
+
+        private static void AssertCommitmentStatus(
+            Commitment commitment,
+            params AgreementStatus[] allowedAgreementStatuses)
+        {
+            if (commitment == null)
+                throw new InvalidStateException("Null commitment");
+
+            if (!allowedAgreementStatuses.Contains(commitment.AgreementStatus))
+                throw new InvalidStateException($"Invalid commitment state (agreement status is {commitment.AgreementStatus}, expected {string.Join(",", allowedAgreementStatuses)})");
+        }
+
+        private static void AssertCommitmentStatus(Commitment commitment, params EditStatus[] allowedEditStatuses)
+        {
+            if (commitment == null)
+                throw new InvalidStateException("Null commitment");
+
+            if (!allowedEditStatuses.Contains(commitment.EditStatus))
+                throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
     }
 }

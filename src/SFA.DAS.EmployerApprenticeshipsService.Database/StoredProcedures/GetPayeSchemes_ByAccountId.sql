@@ -8,5 +8,4 @@ AS
 	inner join 
 		[account].[AccountHistory] ah on ah.PayeRef = p.Ref
 	WHERE
-		ah.AccountId = @accountId
-
+		ah.AccountId = @accountId and ah.RemovedDate is null

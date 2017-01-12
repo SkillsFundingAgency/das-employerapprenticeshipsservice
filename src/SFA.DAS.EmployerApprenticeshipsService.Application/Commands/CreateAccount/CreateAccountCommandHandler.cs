@@ -46,9 +46,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             if (user == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "User", "User does not exist" } });
 
-            var emprefs = message.EmployerRef.Split(',');
+            var emprefs = message.PayeReference.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.CompanyNumber, message.CompanyName, message.CompanyRegisteredAddress, message.CompanyDateOfIncorporation, emprefs[0], message.AccessToken, message.RefreshToken);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName);
 
             var hashedAccountId = _hashingService.HashValue(accountId);
             await _accountRepository.SetHashedId(hashedAccountId, accountId);

@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
+using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Application.Queries.GetUsers;
@@ -8,7 +10,7 @@ using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class HomeOrchestrator : IOrchestrator
+    public class HomeOrchestrator
     {
         private readonly IMediator _mediator;
 
@@ -58,6 +60,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Invitations = getUserInvitationsResponse.NumberOfInvites
                 }
             };
+        }
+
+        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        {
+            await _mediator.SendAsync(new UpsertRegisteredUserCommand
+            {
+                EmailAddress = email,
+                UserRef = userRef,
+                LastName = lastName,
+                FirstName = firstName
+            });
         }
     }
 }

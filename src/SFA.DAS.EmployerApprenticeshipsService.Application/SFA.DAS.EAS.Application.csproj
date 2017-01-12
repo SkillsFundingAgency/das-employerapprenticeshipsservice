@@ -172,6 +172,9 @@
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommand.cs" />
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandHandler.cs" />
     <Compile Include="Commands\Payments\RefreshPaymentData\RefreshPaymentDataCommandValidator.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommand.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandHandler.cs" />
+    <Compile Include="Commands\RenameEmployerAccount\RenameEmployerAccountCommandValidator.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommand.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\ResumeApprenticeship\ResumeApprenticeshipCommandValidator.cs" />
@@ -201,6 +204,10 @@
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandValidator.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\UpdateEnglishFractionsCommandHandler.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
+    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
@@ -270,6 +277,10 @@
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsResponse.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
+    <Compile Include="Queries\GetCharity\GetCharityQueryValidator.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsHandler.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsQuery.cs" />
     <Compile Include="Queries\GetCommitments\GetCommitmentsResponse.cs" />
@@ -284,6 +295,10 @@
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeHandler.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeQuery.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeResponse.cs" />
+    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeValidator.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
@@ -357,6 +372,10 @@
     <Compile Include="Queries\GetProvider\GetProviderQueryHandler.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryRequest.cs" />
     <Compile Include="Queries\GetProvider\GetProviderQueryResponse.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationHandler.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
+    <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,19 +49,42 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Accounts> GetAccounts(string toDate, int pageNumber, int pageSize)
+        public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
         {
             var parameters = new DynamicParameters();
             parameters.Add("@toDate", toDate);
             var offset = pageSize * (pageNumber - 1);
 
-            var countResult = await WithConnection(async c=> await c.QueryAsync<int>(sql: $"select count(*) from [account].[Account] a;"));
+            var countResult = await GetNumberOfAccounts();
 
             var result = await WithConnection(async c => await c.QueryAsync<Account>(
                 sql:    $"select a.* from [account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;", 
                 commandType: CommandType.Text));
 
-            return new Accounts() {AccountsCount = countResult.First(), AccountList = result.ToList()};
+            return new Accounts<Account> {AccountsCount = countResult.First(), AccountList = result.ToList()};
+        }
+
+        public async Task<Accounts<AccountInformation>> GetAccountsByDateRange(DateTime fromDate, DateTime toDate, int pageNumber, int pageSize)
+        {
+            var countResult = await GetNumberOfAccounts();
+            var offset = pageSize * (pageNumber - 1);
+
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@fromDate", fromDate, DbType.DateTime);
+                parameters.Add("@toDate", toDate, DbType.DateTime);
+                parameters.Add("@offset",offset,DbType.Int32);
+                parameters.Add("@pageSize", pageSize, DbType.Int32);
+
+                return await c.QueryAsync<AccountInformation>(
+                    sql: "[account].[GetAccountInformation_ByDateRange]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+                );
+
+            return new Accounts<AccountInformation> {AccountsCount = countResult.First(), AccountList = result.ToList()};
         }
 
         public async Task<List<Account>> GetAllAccounts()
@@ -85,6 +109,28 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
 
             return result.ToList();
+        }
+
+        public async Task RenameAccount(long accountId, string name)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@accountName", name, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "[account].[UpdateAccount_SetAccountName]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+		}
+
+        private async Task<IEnumerable<int>> GetNumberOfAccounts()
+        {
+            var countResult =
+                await WithConnection(async c => await c.QueryAsync<int>(sql: $"select count(*) from [account].[Account] a;"));
+            return countResult;
         }
     }
 }

@@ -49,14 +49,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
                         c => c.AccessToken.Equals(model.AccessToken)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.CompanyName.Equals(model.CompanyName)
-                        && c.CompanyNumber.Equals(model.CompanyNumber)
-                        && c.CompanyRegisteredAddress.Equals(model.CompanyRegisteredAddress)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.EmployerRef.Equals(model.EmployerRef)
+                        && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
+                        && c.OrganisationName.Equals(model.OrganisationName)
+                        && c.OrganisationReferenceNumber.Equals(model.OrganisationReferenceNumber)
+                        && c.OrganisationAddress.Equals(model.OrganisationAddress)
+                        && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
+                        && c.OrganisationStatus.Equals(model.OrganisationStatus)
+                        && c.PayeReference.Equals(model.PayeReference)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
+                        && c.EmployerRefName.Equals(model.EmployerRefName)
                     )));
         }
 
@@ -83,14 +85,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         {
             return new CreateAccountModel
             {
-                CompanyName = "test",
+                OrganisationName = "test",
                 UserId = Guid.NewGuid().ToString(),
-                EmployerRef = "123ADFC",
-                CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
-                CompanyRegisteredAddress = "My Address",
+                PayeReference = "123ADFC",
+                OrganisationReferenceNumber = "12345",
+                OrganisationDateOfInception = new DateTime(2016, 10, 30),
+                OrganisationAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
-                RefreshToken = Guid.NewGuid().ToString()
+                RefreshToken = Guid.NewGuid().ToString(),
+                OrganisationStatus = "active",
+                EmployerRefName = "Scheme 1"
             };
         }
     }

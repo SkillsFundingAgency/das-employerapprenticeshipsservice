@@ -87,7 +87,7 @@ testRunner.Given(string.Format("I am an account \"{0}\"", account_Role), ((strin
 #line 9
 testRunner.When("I remove a scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 10
-testRunner.Then("Scheme is \"status\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+testRunner.Then(string.Format("Scheme is \"{0}\"", scheme_Status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -58,8 +58,8 @@ SET IDENTITY_INSERT  [account].[Role] OFF
 SET IDENTITY_INSERT  [account].[Account] ON
 IF (NOT EXISTS(SELECT * FROM [account].[Account] WHERE Id = 1))
 BEGIN 
-    INSERT INTO [account].[Account](Id, Name, HashedId) 
-    VALUES(1, 'ACME LTD', 'KAKAKAKA') 
+    INSERT INTO [account].[Account](Id, Name, HashedId, CreatedDate) 
+    VALUES(1, 'ACME LTD', 'KAKAKAKA', GETDATE()) 
 END 
 ELSE 
 BEGIN 
@@ -87,19 +87,6 @@ BEGIN
     WHERE Id = 1
 END 
 
-IF (NOT EXISTS(SELECT * FROM [account].[User] WHERE Id = 2
-	AND PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37'
-    AND Email = 'ian.russell@test.local'))
-BEGIN 
-    INSERT INTO [account].[User](Id, PireanKey, Email, FirstName, LastName) 
-    VALUES(2,'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37','ian.russell@test.local', 'Ian', 'Russell') 
-END 
-ELSE 
-BEGIN 
-    UPDATE [account].[User] 
-    SET PireanKey = 'A0BBC02B-39A0-4DEC-8018-1A3A98A18A37', Email = 'ian.russell@test.local', FirstName = 'Ian', LastName = 'Russell'
-    WHERE Id = 2
-END 
 
 SET IDENTITY_INSERT  [account].[User] OFF
 

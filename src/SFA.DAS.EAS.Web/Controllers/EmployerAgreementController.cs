@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
@@ -46,15 +47,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [Route("Agreements/Add")]
-        public async Task<ActionResult> Add(string hashedAccountId)
-        {
-            var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(response);
-        }
-
+     
 		[HttpGet]
 		[Route("Agreements/{agreementid}/View")]
         public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
@@ -89,36 +83,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
         }
         
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/Add")]
-        public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
-        {
-            var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
-
-            if (response.Status == HttpStatusCode.OK)
-            {
-                return View("FindLegalEntity",response);
-            }
-
-            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
-            };
-
-            if (response.Status == HttpStatusCode.NotFound)
-            {
-                TempData["companyNumberError"] = "No company found. Please try again";
-            }
-
-            if (response.Status == HttpStatusCode.Conflict)
-            {
-                TempData["companyNumberError"] = "Enter a company that isn't already registered";
-            }
-
-            return View("Add", errorResponse);
-        }
 
         [HttpPost]
 		[ValidateAntiForgeryToken]
@@ -131,51 +95,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(response);
         }
 
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/CreateAgreement")]
-        public async Task<ActionResult> CreateLegalEntity(
-            string hashedAccountId, string name, string code, string address, DateTime incorporated, 
-            bool? userIsAuthorisedToSign, string submit)
-        {
-            var request = new CreateNewLegalEntity
-            {
-                HashedAccountId = hashedAccountId,
-                Name = name,
-                Code = code,
-                Address = address,
-                IncorporatedDate = incorporated,
-                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
-                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-                SignedDate = DateTime.Now,
-                ExternalUserId = OwinWrapper.GetClaimValue(@"sub")
-            };
-
-            var response = await _orchestrator.CreateLegalEntity(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                response.Status = HttpStatusCode.OK; 
-
-                TempData["userNotAuthorised"] = "true";
-
-                return View("ViewEntityAgreement", response);
-            }
-
-            TempData["extraCompanyAdded"] = "true";
-
-            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds.";
-            }
-            else
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-            }
-
-            return RedirectToAction("Index", new { hashedAccountId });
-        }
+        
     }
 }

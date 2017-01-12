@@ -47,10 +47,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                OrganisationName = "Test Corp",
+                EmployerRefName = "Scheme 1",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10),
+                OrganisationStatus = "active",
+                PayeReference = "123/ABC",
+                RefreshToken = "123",
+                AccessToken = "456",
+                EmpRefNotFound = true
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -68,7 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(),It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
@@ -94,18 +100,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
         }
-
+        
         [Test]
-        public async Task ThenTheBreadCrumbValueIsRemovedFromTempDataIfItExists()
+        public async Task ThenTheParamtersArePassedFromTheCookieWhenCreatingTheAccount()
         {
-            //Arrange
-            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true } };
-
             //Act
             await _employerAccountController.CreateAccount();
 
             //Assert
-            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
+            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
+                c =>
+                    c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
+                    c.OrganisationName.Equals(_accountData.OrganisationName) &&
+                    c.RefreshToken.Equals(_accountData.RefreshToken) &&
+                    c.OrganisationDateOfInception.Equals(_accountData.OrganisationDateOfInception) &&
+                    c.OrganisationAddress.Equals(_accountData.OrganisationRegisteredAddress) &&
+                    c.AccessToken.Equals(_accountData.AccessToken) &&
+                    c.PayeReference.Equals(_accountData.PayeReference) &&
+                    c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
+                    c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
+                ), It.IsAny<HttpContextBase>()));
         }
     }
 }

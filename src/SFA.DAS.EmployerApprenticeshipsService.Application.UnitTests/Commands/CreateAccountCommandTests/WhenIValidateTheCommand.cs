@@ -11,21 +11,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
     {
         private CreateAccountCommandValidator _createCommandValidator;
         private Mock<IEmployerSchemesRepository> _employerSchemesRepository;
-        public CreateAccountCommand CreateAccountCommand;
+        private CreateAccountCommand _createAccountCommand;
 
         [SetUp]
         public void Arrange()
         {
-            CreateAccountCommand = new CreateAccountCommand
+            _createAccountCommand = new CreateAccountCommand
             {
+                OrganisationType = OrganisationType.CompaniesHouse,
                 ExternalUserId = "123ADF",
-                CompanyNumber = "ABV123",
-                CompanyName = "Test Company",
-                EmployerRef = "980/EEE"
+                OrganisationReferenceNumber = "ABV123",
+                OrganisationName = "Test Company",
+                PayeReference = "980/EEE",
+                OrganisationStatus = "active"
             };
 
             _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();
-            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(CreateAccountCommand.EmployerRef)).ReturnsAsync(null);
+            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(null);
             _createCommandValidator = new CreateAccountCommandValidator(_employerSchemesRepository.Object);
 
         }
@@ -34,7 +36,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenAllFieldsAreValidatedToSeeIfTheyHaveBeenPopulated()
         {
             //Act
-            var actual = await _createCommandValidator.ValidateAsync(CreateAccountCommand);
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -54,23 +56,79 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheEmployerRefIsCheckedToSeeIfItHasAlreadyBeenRegistered()
         {
             //Act
-            await _createCommandValidator.ValidateAsync(CreateAccountCommand);
+            await _createCommandValidator.ValidateAsync(_createAccountCommand);
 
             //Assert
-            _employerSchemesRepository.Verify(x=>x.GetSchemeByRef(CreateAccountCommand.EmployerRef), Times.Once);
+            _employerSchemesRepository.Verify(x=>x.GetSchemeByRef(_createAccountCommand.PayeReference), Times.Once);
         }
 
         [Test]
         public async Task ThenFalseIsReturnedIftheSchemeIsAlreadtInUse()
         {
             //Arrange
-            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(CreateAccountCommand.EmployerRef)).ReturnsAsync(new Scheme());
+            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(new Scheme());
 
             //Act
-            var result = await _createCommandValidator.ValidateAsync(CreateAccountCommand);
+            var result = await _createCommandValidator.ValidateAsync(_createAccountCommand);
 
             //Assert
             Assert.IsFalse(result.IsValid());
+        }
+
+        [Test]
+        public async Task ThenShouldPassValidationIfIsAPublicOrganisationAndHasNoOrganisationReferenceNumber()
+        {
+            //Arrange
+            _createAccountCommand.OrganisationType = OrganisationType.PublicBodies;
+            _createAccountCommand.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
+
+            //Assert
+            Assert.IsTrue(actual.IsValid());
+        }
+
+        [Test]
+        public async Task ThenShouldPassValidationIfIsAOtherOrganisationAndHasNoOrganisationReferenceNumber()
+        {
+            //Arrange
+            _createAccountCommand.OrganisationType = OrganisationType.Other;
+            _createAccountCommand.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
+
+            //Assert
+            Assert.IsTrue(actual.IsValid());
+        }
+
+        [Test]
+        public async Task ThenShouldFailValidationIfIsACompanyAndHasNoOrganisationReferenceNumber()
+        {
+            //Arrange
+            _createAccountCommand.OrganisationType = OrganisationType.CompaniesHouse;
+            _createAccountCommand.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+        }
+
+        [Test]
+        public async Task ThenShouldFailValidationIfIsACharityAndHasNoOrganisationReferenceNumber()
+        {
+            //Arrange
+            _createAccountCommand.OrganisationType = OrganisationType.Charities;
+            _createAccountCommand.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
         }
     }
 }

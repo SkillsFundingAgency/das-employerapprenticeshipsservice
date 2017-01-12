@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -121,9 +122,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userId", userId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
+                parameters.Add("@createdDate",DateTime.UtcNow, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [account].[Membership] ([AccountId], [UserId], [RoleId]) VALUES(@accountId, @userId, @roleId); ",
+                    sql: "INSERT INTO [account].[Membership] ([AccountId], [UserId], [RoleId], [CreatedDate]) VALUES(@accountId, @userId, @roleId, @createdDate); ",
                     param: parameters,
                     commandType: CommandType.Text);
             });

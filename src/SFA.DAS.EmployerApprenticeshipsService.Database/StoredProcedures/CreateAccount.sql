@@ -9,7 +9,9 @@
 	@accountId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
-	@addedDate DATETIME	
+	@addedDate DATETIME	,
+	@status varchar(50),
+	@employerRefName varchar(500) null
 )
 AS
 BEGIN
@@ -18,14 +20,14 @@ BEGIN
 	DECLARE @legalEntityId BIGINT;
 	DECLARE @employerAgreementId BIGINT;
 
-	INSERT INTO [account].[Account](Name) VALUES (@employerName);
+	INSERT INTO [account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();
 
 	SELECT @legalEntityId = Id FROM [account].[LegalEntity] WHERE Code = @employerNumber;
 	
 	IF (@legalEntityId IS NULL)
 	BEGIN
-		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+		INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status);
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	
@@ -40,11 +42,11 @@ BEGIN
 
 	IF EXISTS(select 1 from [account].[Paye] where ref = @employerRef)
 	BEGIN
-		EXEC [account].[UpdatePaye] @employerRef,@accessToken, @refreshToken
+		EXEC [account].[UpdatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
 	END
 	ELSE
 	BEGIN
-		EXEC [account].[CreatePaye] @employerRef,@accessToken, @refreshToken
+		EXEC [account].[CreatePaye] @employerRef,@accessToken, @refreshToken,@employerRefName
 	END
 
 	EXEC [account].[CreateAccountHistory] @accountId, @employerRef,@addedDate

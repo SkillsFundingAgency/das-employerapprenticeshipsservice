@@ -47,39 +47,45 @@ sfa.navigation = {
     init: function () {
         this.setupMenus(this.elems.userNav);
         this.setupEvents(this.elems.userNav);
-        this.linkSettings();
+        //this.linkSettings();
     },
     setupMenus: function (menu) {
-        menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+       menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
     },
     setupEvents: function (menu) {
         var that = this;
         menu.find('li.has-sub-menu > a').on('click', function (e) {
             var $that = $(this);
             that.toggleMenu($that, $that.next('ul'));
+            e.stopPropagation();
             e.preventDefault();
         });
-        $(document).on("keydown", this, function (e) {
-            var keycode = ((typeof e.keyCode != 'undefined' && e.keyCode) ? e.keyCode : e.which);
-            if (keycode === 27) {
-                that.closeAllOpenMenus();
-            };
+        // Focusout event on the links in the dropdown menu
+        menu.find('li.has-sub-menu > ul > li > a').on('focusout', function (e) {
+            // If its the last link in the drop down menu, then close
+            var $that = $(this);
+            if ($(this).parent().is(':last-child')) {
+                that.toggleMenu($that, $that.next('ul'));
+            }
         });
 
     },
     toggleMenu: function (link, subMenu) {
         var $li = link.parent();
         if ($li.hasClass("open")) {
+            // Close menu
             $li.removeClass("open");
             subMenu.addClass("js-hidden").attr("aria-hidden", "true");
         } else {
-            this.closeAllOpenMenus();
+            // Open menu
+            this.closeAllOpenMenus();         
             $li.addClass("open");
-            subMenu.removeClass("js-hidden").attr("aria-hidden", "false");
+            subMenu.removeClass("js-hidden").attr("aria-hidden", "false").find('a').eq(0).focus();
         }
     },
     closeAllOpenMenus: function () {
         this.elems.userNav.find('li.has-sub-menu.open').removeClass('open').find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+        this.elems.levyNav.find('li.open').removeClass('open').addClass("js-hidden").attr("aria-hidden", "true");
     },
     linkSettings: function () {
         var $settingsLink = $('a#link-settings'),
@@ -108,4 +114,5 @@ sfa.navigation = {
 sfa.navigation.init();
 $('ul#global-nav-links').collapsableNav();
 
-var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
+var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
+var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });

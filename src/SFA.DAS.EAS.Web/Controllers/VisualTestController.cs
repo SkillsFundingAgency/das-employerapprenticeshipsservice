@@ -196,18 +196,18 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
-                        CompanyNumber = "1234567890",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        EmployerRef = "emp-123",
+                        OrganisationName = "sushiCorp Ltd.",
+                        OrganisationReferenceNumber = "1234567890",
+                        OrganisationDateOfInception = new DateTime(2016, 05, 16),
+                        PayeReference = "emp-123",
                         RegisteredAddress = "123 Fake St."
                     }},
-                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new SelectEmployerViewModel()
+                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new OrganisationDetailsViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
-                        CompanyNumber = "0123456789",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        RegisteredAddress = "123 Fake St."
+                        Name = "sushiCorp Ltd.",
+                        ReferenceNumber = "0123456789",
+                        DateOfInception = new DateTime(2016, 05, 16),
+                        Address = "123 Fake St."
                     }},
                 {"~/Views/EmployerAccountTransactions/Index.cshtml", new TransactionViewModel() {
                     CurrentBalance = 12m,
@@ -275,7 +275,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {"~/Views/Home/Index.cshtml", new OrchestratorResponse<UserAccountsViewModel>()
                     {
                         Data = new UserAccountsViewModel() {
-                                Accounts = new Accounts()
+                                Accounts = new Accounts<Account>()
                                 {
                                     AccountList = new List<Account>() {
                                         new Account() {Id = 123, Name= "My account", RoleId = 1 }

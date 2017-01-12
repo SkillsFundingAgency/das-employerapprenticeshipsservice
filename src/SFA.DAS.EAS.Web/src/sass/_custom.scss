@@ -30,24 +30,12 @@
 }
 
 //validation styles
-
-
-.incompleted{
-
-    .row-bg{
-        background: $highlight-colour;
-	    border-bottom: 2px solid $alpha-colour;
-        border-top: 2px solid $alpha-colour;
-    }
-
-}
-
 .missingForApproval{
-    	border-left: 5px solid $alpha-colour;
+    	border-left: 5px solid $error-colour;
 	    padding-left:15px;
 
     .form-label-bold{
-	    color:$alpha-colour;
+	    color:$error-colour;
     }
 
 }
@@ -55,28 +43,40 @@
 .cant-approve{ 
     
     .panel{
-	    border-color:$alpha-colour;
-	    color:$alpha-colour;
+	    border-color:$error-colour;
+	    color:$error-colour;
         
         p{
             font-weight:bold;
+            font-size:19px;
         }
 
         }
 }
 
-
-
-
-
-//mobile first approach needed later - using mixins
-@media only screen and (max-device-width: 640px),
-only screen and (max-device-width: 667px),
-only screen and (max-width: 480px) {
-    #empty-alert-top .alert-default {
-        margin-top: 50px;
+#apprentice-details{
+    .apprentice-count-heading{
+        margin-top:4.5em;
+        @include media(tablet) {margin-top:1.875em;}
     }
-    #apprentice-details table.viewCommitment {
-        margin-top: 50px;
+
+}
+
+
+.form-group {
+    #StartDate_Month,
+    #EndDate_Month{
+        width:40px;
     }
-} // mobile view ends
+    
+    #StartDate_Year,
+    #EndDate_Year{
+        width:60px;
+    }
+}
+
+.breadcrumbs{
+    a{
+        font-size:16px;
+    }
+}

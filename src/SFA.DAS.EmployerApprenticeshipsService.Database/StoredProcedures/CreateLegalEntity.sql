@@ -3,9 +3,12 @@
 	@employerName NVARCHAR(100), 
 	@employerRegisteredAddress NVARCHAR(256),
 	@employerDateOfIncorporation DATETIME,
+	@status varchar(50),
+	@source TINYINT,
 	@legalEntityId BIGINT OUTPUT
 AS
 BEGIN
-	INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation);
+	INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source]) 
+	VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source);	
 	SELECT @legalEntityId = SCOPE_IDENTITY();
 END

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Build.fsx = Build.fsx
 		RunBuild.bat = RunBuild.bat
+		VSTSConfig.ps1 = VSTSConfig.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{331690B3-1DA8-408E-B6A7-A3237310E6AB}"
@@ -71,6 +72,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PaymentProvider.Worker.UnitTests", "SFA.DAS.EAS.PaymentProvider.Worker.UnitTests\SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.csproj", "{4FB1B694-7D97-4735-9978-81E827B8DBD4}"
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\SFA.DAS.API.ccproj", "{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api.UnitTests", "SFA.DAS.EAS.Account.Api.UnitTests\SFA.DAS.EAS.Account.Api.UnitTests.csproj", "{58339964-2584-4CB1-B6B6-BAF28AA20FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -187,6 +190,10 @@ Global
 		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,5 +211,6 @@ Global
 		{604152AB-9AB4-4A97-9A09-131F6C040CFD} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{4FB1B694-7D97-4735-9978-81E827B8DBD4} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{58339964-2584-4CB1-B6B6-BAF28AA20FE8} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 	EndGlobalSection
 EndGlobal

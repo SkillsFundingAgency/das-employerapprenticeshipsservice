@@ -26,7 +26,7 @@
                     @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-" + Html.IdFor(m => m.ProviderId) })
 
            
-                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
+                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_labelledby = "ProviderId" })
             </div>
 
             <details>
@@ -52,8 +52,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

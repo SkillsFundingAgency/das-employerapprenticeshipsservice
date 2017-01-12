@@ -1,0 +1,60 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.RenameEmployerAccountViewModel>
+
+@{ViewBag.PageID = "page-change-account-name"; }
+@{ViewBag.Title = "Rename levy account"; }
+@{ViewBag.HideNav = "true"; }
+
+<form method="post">
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <h1 class="heading-xlarge">Rename levy account</h1>
+            
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" value="@Model.Data.HashedId" name="HashedId" />
+            <input type="hidden" value="@Model.Data.CurrentName" name="CurrentName" />
+
+            <div class="form-group">
+                <dl>
+                    <dt class="form-label-bold">Current name</dt>
+                    <dd class="force-word-wrap">@Model.Data.CurrentName</dd>
+                </dl>
+            </div>
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NewNameError) ? "error" : "")">
+                <label id="NewName-label" for="NewName" class = "form-label-bold">New account name</label>
+                @if (!string.IsNullOrEmpty(Model.Data.NewNameError))
+                {
+                    <span class="error-message" id="error-message-newname">@Model.Data.NewNameError</span>
+                }
+                @Html.TextBoxFor(
+                    m => m.Data.NewName,
+                    new {
+                        Id ="NewName",
+                        Name = "NewName",
+                        @class = "form-control newAccountName",
+                        MaxLength = 100,
+                        aria_required = "true",
+                        aria_describedby = !string.IsNullOrEmpty(Model.Data.NewNameError) ? "error-message-newname" : ""
+                    })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button" id="accept">Save and continue</button>
+                <a class="button-link" href="@Url.Action("Index", "Home")">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="/" class="back-link">Back to Your User Profile</a></li>
+        </ol>
+    </div>
+}
+    

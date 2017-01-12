@@ -14,7 +14,10 @@
 
         @if (!string.IsNullOrEmpty(Model.Data.PayeScheme))
         {
-            <h1 class="heading-large"><span class="heading-secondary">Confirm PAYE scheme</span> @Model.Data.PayeScheme</h1>
+            <h1 class="heading-large"><span class="heading-secondary">Confirm PAYE scheme</span> @Model.Data.PayeScheme
+                <br/>@Model.Data.PayeName
+        </h1>
+        
             <form method="post">
                 @Html.AntiForgeryToken()
                 
@@ -47,8 +50,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerAccountPaye", new { HashedAccountId = Model.Data.HashedAccountId })" class="back-link">Back to PAYE schemes</a>
     </div>
 }

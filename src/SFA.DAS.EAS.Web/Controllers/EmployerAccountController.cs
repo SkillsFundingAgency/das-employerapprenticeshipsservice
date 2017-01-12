@@ -7,10 +7,11 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [Authorize]
+    [AuthoriseActiveUser]
     public class EmployerAccountController : BaseController
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -28,66 +29,29 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult SelectEmployer()
         {
-
-            var cookieData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-            var hideBreadcrumb = false;
-            if (cookieData != null)
-            {
-                hideBreadcrumb = cookieData.HideBreadcrumb;
-            }
-            if (hideBreadcrumb == false)
-            {
-                hideBreadcrumb = TempData.ContainsKey("HideBreadcrumb") && (bool) TempData["HideBreadcrumb"];
-
-                if (hideBreadcrumb)
-                {
-                    TempData["HideBreadcrumb"] = true;
-                }
-            }
-
-
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            var model = new OrchestratorResponse<SelectEmployerViewModel>
-            {
-                Data = new SelectEmployerViewModel
-                {
-                    HideBreadcrumb = hideBreadcrumb
-                }
-            };
+            return RedirectToAction("AddOrganisation", "EmployerAccountOrganisation");
 
-            return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SelectEmployer(SelectEmployerModel model)
-        {
-            var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
-
-            if (response.Status == HttpStatusCode.OK)
-                return RedirectToAction("GatewayInform", response.Data);
-
-            TempData["companyNumberError"] = "No company found. Please try again";
-            response.Status = HttpStatusCode.OK;
-            
-            return View(response);
-        }
+      
 
         [HttpGet]
-        public ActionResult GatewayInform(SelectEmployerViewModel model)
+        public ActionResult GatewayInform(OrganisationDetailsViewModel model)
         {
 
             EmployerAccountData data;
-            if (model?.CompanyName != null)
+            if (model?.Name != null)
             {
                 data = new EmployerAccountData
                 {
-                    CompanyNumber = model.CompanyNumber,
-                    CompanyName = model.CompanyName,
-                    DateOfIncorporation = model.DateOfIncorporation,
-                    RegisteredAddress = model.RegisteredAddress,
-                    HideBreadcrumb = model.HideBreadcrumb
+                    OrganisationType = model.Type,
+                    OrganisationReferenceNumber = model.ReferenceNumber,
+                    OrganisationName = model.Name,
+                    OrganisationDateOfInception = model.DateOfInception,
+                    OrganisationRegisteredAddress = model.Address,
+                    OrganisationStatus = model.Status ?? "active"
                 };
             }
             else
@@ -96,11 +60,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 data = new EmployerAccountData
                 {
-                    CompanyNumber = existingData.CompanyNumber,
-                    CompanyName = existingData.CompanyName,
-                    DateOfIncorporation = existingData.DateOfIncorporation,
-                    RegisteredAddress = existingData.RegisteredAddress,
-                    HideBreadcrumb = existingData.HideBreadcrumb
+                    OrganisationType = existingData.OrganisationType,
+                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
+                    OrganisationName = existingData.OrganisationName,
+                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
+                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
+                    OrganisationStatus = existingData.OrganisationStatus
                 };
             }
             
@@ -118,7 +83,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     BreadcrumbDescription = "Back to Your User Profile",
                     BreadcrumbUrl = Url.Action("Index","Home"),
                     ConfirmUrl = Url.Action("Gateway","EmployerAccount"),
-                    HideBreadcrumb = data.HideBreadcrumb
                 },
                 FlashMessage = flashMessageViewModel
             };
@@ -150,7 +114,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
-            enteredData.EmployerRef = empref.Empref;
+            enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
+            enteredData.PayeReference = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
             enteredData.EmpRefNotFound = empref.EmprefNotFound;
@@ -167,12 +132,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = new SummaryViewModel
             {
-                CompanyName = enteredData.CompanyName,
-                CompanyNumber = enteredData.CompanyNumber,
-                DateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef,
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationName = enteredData.OrganisationName,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
+                EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                HideBreadcrumb = enteredData.HideBreadcrumb
+                OrganisationStatus = enteredData.OrganisationStatus
             };
 
             return View(model);
@@ -190,13 +157,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
-                CompanyNumber = enteredData.CompanyNumber,
-                CompanyName = enteredData.CompanyName,
-                CompanyRegisteredAddress = enteredData.RegisteredAddress,
-                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef,
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationName = enteredData.OrganisationName,
+                OrganisationAddress = enteredData.OrganisationRegisteredAddress,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
                 AccessToken = enteredData.AccessToken,
-                RefreshToken = enteredData.RefreshToken
+                RefreshToken = enteredData.RefreshToken,
+                OrganisationStatus = enteredData.OrganisationStatus,
+                EmployerRefName = enteredData.EmployerRefName
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
@@ -207,18 +177,59 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
                 return RedirectToAction("Summary");
             }
-
-            if (TempData.ContainsKey("HideBreadcrumb"))
-            {
-                TempData.Remove("HideBreadcrumb");
-            }
-
+            
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = $"{enteredData.CompanyName} has been added";
+            TempData["successHeader"] = $"{enteredData.OrganisationName} has been added";
             TempData["successMessage"] = "This account can now spend levy funds.";
 
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
+
+        [HttpGet]
+        [Route("accounts/{HashedAccountId}/rename")]
+        public async Task<ActionResult> RenameAccount(string hashedAccountId)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("accounts/{HashedAccountId}/rename")]
+        public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
+            var response = await _employerAccountOrchestrator.RenameEmployerAccount(vm, userIdClaim);
+
+            if (response.Status == HttpStatusCode.OK)
+            {
+                var flashmessage = new FlashMessageViewModel
+                {
+                    Headline = "Account renamed",
+                    Message = "You successfully updated the account name",
+                    Severity = FlashMessageSeverityLevel.Success
+                };
+
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+                return RedirectToAction("Index", "EmployerTeam");
+            }
+
+            var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                vm.ErrorDictionary = response.FlashMessage.ErrorMessages;
+            }
+
+            errorResponse.Data = vm;
+            errorResponse.FlashMessage = response.FlashMessage;
+            errorResponse.Status = response.Status;
+
+            return View(errorResponse);
+        }
+
 
         private string GetUserId()
         {

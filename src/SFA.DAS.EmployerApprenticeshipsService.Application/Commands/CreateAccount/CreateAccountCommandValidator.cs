@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -25,21 +26,25 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError("UserId", "No UserId supplied");
 
-            if (string.IsNullOrWhiteSpace(item.CompanyNumber))
-                validationResult.AddError("CompanyNumber", "No CompanyNumber supplied");
+            if ((item.OrganisationType == OrganisationType.CompaniesHouse || item.OrganisationType == OrganisationType.Charities) &&
+                string.IsNullOrWhiteSpace(item.OrganisationReferenceNumber))
+                validationResult.AddError(nameof(item.OrganisationReferenceNumber), "No organisation reference number supplied");
 
-            if (string.IsNullOrWhiteSpace(item.CompanyName))
-                validationResult.AddError("CompanyName", "No CompanyName supplied");
+            if (string.IsNullOrWhiteSpace(item.OrganisationName))
+                validationResult.AddError(nameof(item.OrganisationName), "No organisation name supplied");
 
-            if (string.IsNullOrWhiteSpace(item.EmployerRef))
-                validationResult.AddError("EmployerRef", "No EmployerRef supplied");
+            if (string.IsNullOrWhiteSpace(item.OrganisationStatus))
+                validationResult.AddError(nameof(item.OrganisationStatus));
+
+            if (string.IsNullOrWhiteSpace(item.PayeReference))
+                validationResult.AddError(nameof(item.EmployerRefName), "No employer reference name supplied");
 
             if (validationResult.IsValid())
             {
-                var result = await _employerSchemesRepository.GetSchemeByRef(item.EmployerRef);
+                var result = await _employerSchemesRepository.GetSchemeByRef(item.PayeReference);
                 if (result != null)
                 {
-                    validationResult.AddError(nameof(item.EmployerRef),"Scheme already in use");
+                    validationResult.AddError(nameof(item.PayeReference),"Scheme already in use");
                 }
             }
 

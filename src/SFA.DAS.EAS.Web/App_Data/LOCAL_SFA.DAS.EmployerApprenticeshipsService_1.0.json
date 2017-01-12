@@ -1,25 +1,53 @@
 ﻿{
-  "Employer": {
-    "DatabaseConnectionString": "Server=.;Database=SFA.DAS.EmployerApprenticeshipsService.Database;Integrated Security=True;Trusted_Connection=True;Connection Timeout=30;"
-  },
-  "CompaniesHouse": { "ApiKey": "" },
-  "ServiceBusConnectionString": "",
-  "Identity": {
-    "ClientId": "000123",
-    "ClientSecret": "7wKJNYFaKKg4FxUdi8_R75GGYsiWezvAbcdN1uSumE4",
-    "BaseAddress": "https://ppidentity.apprenticeships.sfa.bis.gov.uk"
-  },
-  "DashboardUrl": "localhost",
-  "Hmrc": {
-    "BaseUrl": "",
-    "ClientId": "",
-    "Scope": "",
-    "ClientSecret": ""
-  },
-  "EmailTemplates": [
-    {
-      "TemplateKey": "Invitation",
-      "Key": "3edf7c6e-0f1d-4d4f-a092-f2f73cce1bf0"
+	"Identity" : {
+		"UseFake" : "false",
+		"ClientId" : "ClientId",
+		"ClientSecret" : "ClientSecret",
+		"BaseAddress" : "",
+		"AuthorizeEndPoint" : "/connect/authorize",
+		"LogoutEndpoint" : "/connect/endsession?id_token_hint={0}&post_logout_redirect_uri={1}://{2}/",
+		"TokenEndpoint" : "/connect/token",
+		"UserInfoEndpoint" : "/connect/userinfo",
+		"UseCertificate" : true,
+		"Scopes" : "openid profile",
+		"ChangePassword" : "/account/changepassword?returnurl=",
+		"ChangeEmail" : "/account/changeemail?returnurl=",
+		"Register" : "/account/register?returnurl=",
+    "ClaimIdentifierConfiguration": {
+      "ClaimsBaseUrl": "http://das/employer/identity/claims/",
+      "Id": "id",
+      "GivenName": "given_name",
+      "FaimlyName": "family_name",
+      "Email": "email_address",
+      "DisplayName": "display_name"
     }
-  ]
+	},
+	"DatabaseConnectionString" : "Server=.;Database=SFA.DAS.EmployerApprenticeshipsService.Account;Integrated Security = true;Trusted_Connection=True;Pooling=False;Connect Timeout=30;MultipleActiveResultSets=True",
+	"CompaniesHouse" : {
+		"ApiKey" : ""
+	},
+	"ServiceBusConnectionString" : "",
+	"DashboardUrl" : "at-eas.apprenticeships.sfa.bis.gov.uk",
+	"Hmrc" : {
+		"BaseUrl" : "",
+		"ClientId" : "",
+		"Scope" : "",
+		"ClientSecret" : ""
+	},
+	"CommitmentsApi" : {
+		"ClientToken" : "",
+		"BaseUrl" : ""
+	},
+	"TasksApi" : {
+		"ClientToken" : "",
+		"BaseUrl" : ""
+	},
+	"EmailTemplates" : [{
+			"TemplateType" : "Invitation",
+			"Key" : ""
+		}
+	],
+	"ApprenticeshipInfoService" : {
+		"BaseUrl" : ""
+	}
 }
