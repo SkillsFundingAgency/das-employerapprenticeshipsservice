@@ -43,15 +43,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Organisation/Add")]
         public async Task<ActionResult> AddOrganisation(AddLegalEntityViewModel model)
         {
-            OrchestratorResponse<OrganisationDetailsViewModel> response;
-
-            if (!model.OrganisationType.HasValue)
+            if (!ModelState.IsValid)
             {
                 var orgTypeErrorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
                 {
-                    Data = new AddLegalEntityViewModel()
+                    Data = model
                 };
-                orgTypeErrorResponse.Data.ErrorDictionary["radio-legend"] = "Select a type of organisation";
+
+                foreach (var modelError in ModelState.Keys)
+                {
+                    if (ModelState[modelError].Errors.Any())
+                    {
+                        orgTypeErrorResponse.Data.ErrorDictionary[modelError] =
+                            ModelState[modelError].Errors[0].ErrorMessage;
+                    }
+                }
                 orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
                 orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
                 {
@@ -59,10 +65,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                     ErrorMessages = orgTypeErrorResponse.Data.ErrorDictionary,
                     Headline = "Errors to fix",
                     Message = "Check the following details:"
-                    
                 };
                 return View(orgTypeErrorResponse);
             }
+
+
+            OrchestratorResponse<OrganisationDetailsViewModel> response;
 
             switch (model.OrganisationType)
             {
