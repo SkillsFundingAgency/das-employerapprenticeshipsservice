@@ -50,10 +50,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                OrganisationName = "Test Corp",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10)
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -81,12 +81,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Arrange
             var employerAccountData = new EmployerAccountData
             {
-                CompanyStatus = "Active",
-                CompanyName = "Test Company",
-                DateOfIncorporation = DateTime.MaxValue,
-                CompanyNumber = "ABC12345",
-                RegisteredAddress = "My Address",
-                EmployerRef = "123/abc",
+                OrganisationStatus = "Active",
+                OrganisationName = "Test Company",
+                OrganisationDateOfInception = DateTime.MaxValue,
+                OrganisationReferenceNumber = "ABC12345",
+                OrganisationRegisteredAddress = "My Address",
+                PayeReference = "123/abc",
                 EmpRefNotFound = true,
                 HideBreadcrumb = true
             };
@@ -102,10 +102,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(viewResult);
             var model = viewResult.Model as SummaryViewModel;
             Assert.IsNotNull(model);
-            Assert.AreEqual(employerAccountData.CompanyName, model.CompanyName);
-            Assert.AreEqual(employerAccountData.CompanyStatus, model.CompanyStatus);
-            Assert.AreEqual(employerAccountData.CompanyNumber, model.CompanyNumber);
-            Assert.AreEqual(employerAccountData.EmployerRef, model.EmployerRef);
+            Assert.AreEqual(employerAccountData.OrganisationName, model.OrganisationName);
+            Assert.AreEqual(employerAccountData.OrganisationStatus, model.OrganisationStatus);
+            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.OrganisationReferenceNumber);
+            Assert.AreEqual(employerAccountData.PayeReference, model.PayeReference);
             Assert.AreEqual(employerAccountData.EmpRefNotFound, model.EmpRefNotFound);
             Assert.AreEqual(employerAccountData.HideBreadcrumb, model.HideBreadcrumb);
 

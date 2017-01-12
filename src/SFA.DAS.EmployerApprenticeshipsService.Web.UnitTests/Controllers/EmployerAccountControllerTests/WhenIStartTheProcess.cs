@@ -53,10 +53,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             var registeredAddress = "Test Address";
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(new EmployerAccountData
             {
-                CompanyName = companyName,
-                CompanyNumber = companyNumber,
-                DateOfIncorporation = dateOfIncorporation,
-                RegisteredAddress = registeredAddress,
+                OrganisationName = companyName,
+                OrganisationReferenceNumber = companyNumber,
+                OrganisationDateOfInception = dateOfIncorporation,
+                OrganisationRegisteredAddress = registeredAddress,
                 HideBreadcrumb = true
             });
             
@@ -66,10 +66,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
-                c =>  ((EmployerAccountData)c).CompanyName.Equals(companyName) 
-                && ((EmployerAccountData)c).CompanyNumber.Equals(companyNumber) 
-                && ((EmployerAccountData)c).DateOfIncorporation.Equals(dateOfIncorporation) 
-                && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
+                c =>  ((EmployerAccountData)c).OrganisationName.Equals(companyName) 
+                && ((EmployerAccountData)c).OrganisationReferenceNumber.Equals(companyNumber) 
+                && ((EmployerAccountData)c).OrganisationDateOfInception.Equals(dateOfIncorporation) 
+                && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
                 && ((EmployerAccountData)c).HideBreadcrumb
                 )));
 
@@ -94,10 +94,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x=>x.GetCookieData(It.IsAny<HttpContextBase>()), Times.Never);
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
-                c => ((EmployerAccountData)c).CompanyName.Equals(companyName)
-                && ((EmployerAccountData)c).CompanyNumber.Equals(companyNumber)
-                && ((EmployerAccountData)c).DateOfIncorporation.Equals(dateOfIncorporation)
-                && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
+                c => ((EmployerAccountData)c).OrganisationName.Equals(companyName)
+                && ((EmployerAccountData)c).OrganisationReferenceNumber.Equals(companyNumber)
+                && ((EmployerAccountData)c).OrganisationDateOfInception.Equals(dateOfIncorporation)
+                && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
                 )));
         }
         

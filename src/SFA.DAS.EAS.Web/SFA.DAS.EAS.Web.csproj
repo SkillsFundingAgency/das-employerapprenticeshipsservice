@@ -781,7 +781,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />

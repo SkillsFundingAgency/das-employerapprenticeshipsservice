@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Web;
+using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -70,18 +71,18 @@ namespace SFA.DAS.EAS.Web
 
     public class EmployerAccountData
     {
-        public string CompanyNumber { get; set; }
-        public string CompanyName { get; set; }
-        public DateTime DateOfIncorporation { get; set; }
+        public OrganisationType OrganisationType { get; set; }
+        public string OrganisationName { get; set; }
+        public string OrganisationReferenceNumber { get; set; }
+        public string OrganisationRegisteredAddress { get; set; }
+        public DateTime OrganisationDateOfInception { get; set; }
 
-        public string RegisteredAddress { get; set; }
-
-        public string EmployerRef { get; set; }
+        public string PayeReference { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
         public bool EmpRefNotFound { get; set; }
         public bool HideBreadcrumb { get; set; }
-        public string CompanyStatus { get; set; }
+        public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
     }
 }

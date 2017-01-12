@@ -85,6 +85,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new OrganisationDetailsViewModel
                 {
                     HashedId = hashedLegalEntityId,
+                    Type = OrganisationType.CompaniesHouse,
                     ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
                     DateOfInception = response.DateOfIncorporation,
@@ -124,7 +125,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                ReferenceNumber = Guid.NewGuid().ToString(),
+                //ReferenceNumber = Guid.NewGuid().ToString(),
                 DateOfInception = DateTime.Now,
                 Status = "active"
             }).ToList();
