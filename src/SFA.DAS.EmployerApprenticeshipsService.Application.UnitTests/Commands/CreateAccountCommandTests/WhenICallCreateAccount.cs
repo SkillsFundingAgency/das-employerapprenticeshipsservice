@@ -5,6 +5,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
@@ -142,10 +143,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _userRepository.Setup(x => x.GetByUserRef(cmd.ExternalUserId)).ReturnsAsync(user);
             _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName)).ReturnsAsync(accountId);
 
+            var expectedHashedAccountId = "DJRR4359";
+            _hashingService.Setup(x => x.HashValue(accountId)).Returns(expectedHashedAccountId);
+
             await _handler.Handle(cmd);
 
             _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
+            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == expectedHashedAccountId && e.Event == "AccountCreated")), Times.Once);
         }
 
     }
