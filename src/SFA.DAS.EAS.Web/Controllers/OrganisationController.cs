@@ -50,14 +50,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Data = model
                 };
 
-                foreach (var modelError in ModelState.Keys)
-                {
-                    if (ModelState[modelError].Errors.Any())
-                    {
-                        orgTypeErrorResponse.Data.ErrorDictionary[modelError] =
-                            ModelState[modelError].Errors[0].ErrorMessage;
-                    }
-                }
+                orgTypeErrorResponse.Data.AddErrorsFromModelState(ModelState);
+
                 orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
                 orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
                 {
@@ -68,7 +62,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 };
                 return View(orgTypeErrorResponse);
             }
-
 
             OrchestratorResponse<OrganisationDetailsViewModel> response;
 

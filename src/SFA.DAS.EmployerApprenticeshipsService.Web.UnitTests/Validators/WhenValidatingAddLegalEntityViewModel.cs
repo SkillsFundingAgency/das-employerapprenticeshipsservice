@@ -58,5 +58,33 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             Assert.IsNotNull(result.Errors.SingleOrDefault(x => x.PropertyName == searchTermPropertyName));
         }
 
+        [Test]
+        public async Task ThenCharityRegistrationNumberMustBeNumeric()
+        {
+            //Arrange
+            var invalidModel = new AddLegalEntityViewModel
+            {
+                OrganisationType = OrganisationType.Charities,
+                CharityRegistrationNumber = "SOMESTRING"
+            };
+
+            var validModel = new AddLegalEntityViewModel
+            {
+                OrganisationType = OrganisationType.Charities,
+                CharityRegistrationNumber = "12345"
+            };
+
+            //Act
+            var invalidResult = await _validator.ValidateAsync(invalidModel);
+            var validResult = await _validator.ValidateAsync(validModel);
+
+            //Assert
+            Assert.IsFalse(invalidResult.IsValid);
+            Assert.AreEqual(1, invalidResult.Errors.Count);
+            Assert.IsNotNull(invalidResult.Errors.SingleOrDefault(x => x.PropertyName == "CharityRegistrationNumber"));
+
+            Assert.IsTrue(validResult.IsValid);
+
+        }
     }
 }

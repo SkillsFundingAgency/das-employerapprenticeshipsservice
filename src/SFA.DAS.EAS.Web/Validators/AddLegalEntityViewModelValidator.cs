@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using FluentValidation;
 using SFA.DAS.EAS.Domain;
@@ -29,6 +30,11 @@ namespace SFA.DAS.EAS.Web.Validators
                 .When(x => x.OrganisationType == OrganisationType.Charities)
                 .WithMessage("Enter charity registration number");
 
+            RuleFor(r => r.CharityRegistrationNumber)
+                .Must(x=> Regex.IsMatch(x.Trim(), "^[0-9]*$"))               
+                .When(x => x.OrganisationType == OrganisationType.Charities)
+                .When(x=> !String.IsNullOrWhiteSpace(x.CharityRegistrationNumber))
+                .WithMessage("Enter a valid charity registration number");
         }
     }
 }

@@ -98,17 +98,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
             FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-            {
-                var notFoundResponse = new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
-                {
-                    Data = new PublicSectorOrganisationSearchResultsViewModel(),
-                    Status = HttpStatusCode.BadRequest
-                };
-                notFoundResponse.Data.ErrorDictionary["PublicBodyName"] = "Enter organisation's name";
-                return notFoundResponse;
-            }
-
             var searchResults = await _mediator.SendAsync(new GetPublicSectorOrganisationQuery
             {
                 SearchTerm = searchTerm,
@@ -193,18 +182,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 	            }
 			}
 
-
             int charityRegistrationNumber;
-            if (!int.TryParse(registrationNumber, out charityRegistrationNumber))
+            if (!int.TryParse(registrationNumber.Trim(), out charityRegistrationNumber))
             {
-                _logger.Warn("Non-numeric registration number");
-                var notFoundResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.NotFound
-                };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Enter a charity number";
-                return notFoundResponse;
+                _logger.Error("Non-numeric registration number");
             }
 
             GetCharityQueryResponse charityResult;
