@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Messages;
@@ -8,6 +7,8 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
@@ -23,8 +24,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
+        private readonly IEventsApi _eventsApi;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService)
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IEventsApi eventsApi)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -32,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
+            _eventsApi = eventsApi;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -66,6 +69,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 AccountId = accountId
             });
+
+            await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = hashedAccountId, Event = "AccountCreated" });
             
             return new CreateAccountCommandResponse
             {

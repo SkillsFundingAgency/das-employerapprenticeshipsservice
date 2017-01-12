@@ -10,6 +10,8 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
@@ -23,6 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMediator> _mediator;
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IEventsApi> _eventsApi;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
@@ -45,7 +48,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedHashString);
 
-            _handler = new CreateAccountCommandHandler(_accountRepository.Object, _userRepository.Object, _messagePublisher.Object, _mediator.Object, _validator.Object, _hashingService.Object);
+            _eventsApi = new Mock<IEventsApi>();
+
+            _handler = new CreateAccountCommandHandler(_accountRepository.Object, _userRepository.Object, _messagePublisher.Object, _mediator.Object, _validator.Object, _hashingService.Object, _eventsApi.Object);
         }
 
         [Test]
@@ -142,10 +147,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _userRepository.Setup(x => x.GetByUserRef(cmd.ExternalUserId)).ReturnsAsync(user);
             _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken,cmd.CompanyStatus,cmd.EmployerRefName)).ReturnsAsync(accountId);
 
+            var expectedHashedAccountId = "DJRR4359";
+            _hashingService.Setup(x => x.HashValue(accountId)).Returns(expectedHashedAccountId);
+
             await _handler.Handle(cmd);
 
             _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken,cmd.CompanyStatus,cmd.EmployerRefName));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
+            _eventsApi.Verify(x => x.CreateAccountEvent(It.Is<AccountEvent>(e => e.EmployerAccountId == expectedHashedAccountId && e.Event == "AccountCreated")), Times.Once);
         }
 
     }

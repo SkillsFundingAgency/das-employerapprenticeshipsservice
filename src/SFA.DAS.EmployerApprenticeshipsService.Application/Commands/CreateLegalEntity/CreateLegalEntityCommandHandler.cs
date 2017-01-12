@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
@@ -8,11 +10,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly IEventsApi _eventsApi;
 
-        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository)
+        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IEventsApi eventsApi)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
+            _eventsApi = eventsApi;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -25,6 +29,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 message.SignAgreement, 
                 message.SignedDate,
                 owner.UserId);
+
+            await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
             
             return new CreateLegalEntityCommandResponse
             {

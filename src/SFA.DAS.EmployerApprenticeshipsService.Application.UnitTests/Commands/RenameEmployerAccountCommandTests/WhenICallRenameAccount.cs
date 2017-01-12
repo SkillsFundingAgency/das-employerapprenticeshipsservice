@@ -5,6 +5,8 @@ using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Events.Api.Client;
+using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountCommandTests
 {
@@ -13,6 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
         private Mock<IEmployerAccountRepository> _repository;
         private Mock<IValidator<RenameEmployerAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IEventsApi> _eventsApi;
         private const long AccountId = 12343322;
         private const string HashedAccountId = "123ADF23";
         private RenameEmployerAccountCommandHandler _commandHandler;
@@ -30,7 +33,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RenameEmployerAccountCommand>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _validator.Object, _hashingService.Object);
+            _eventsApi = new Mock<IEventsApi>();
+
+            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _validator.Object, _hashingService.Object, _eventsApi.Object);
         }
 
         [Test]
@@ -49,6 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             //Assert
             _repository.Verify(x=> x.RenameAccount(It.Is<long>(l=> l == AccountId), It.Is<string>(s => s== newAccountName)));
+            _eventsApi.Verify(x => x.CreateAccountEvent(It.Is<AccountEvent>(e => e.EmployerAccountId == HashedAccountId && e.Event == "AccountRenamed")));
         }
 
     }
