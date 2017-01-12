@@ -173,6 +173,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Help()
+        {
+            return View();
+        }
+
+
 
     }
 }
