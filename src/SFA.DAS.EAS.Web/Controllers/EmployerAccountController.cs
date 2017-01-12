@@ -74,10 +74,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationType = model.Type,
                     OrganisationReferenceNumber = model.ReferenceNumber,
                     OrganisationName = model.Name,
-                    OrganisationDateOfInception = model.DateOfInception ?? DateTime.MinValue,
+                    OrganisationDateOfInception = model.DateOfInception,
                     OrganisationRegisteredAddress = model.Address,
                     HideBreadcrumb = model.HideBreadcrumb,
-                    OrganisationStatus = model.Status
+                    OrganisationStatus = model.Status ?? "active"
                 };
             }
             else

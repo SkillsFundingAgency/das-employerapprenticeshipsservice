@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         {
             _accountRepository = new Mock<IAccountRepository>();
             _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
 
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByUserRef(It.IsAny<string>())).ReturnsAsync(new User());
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>()), Times.Once);
+            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime?>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>()), Times.Once);
             _accountRepository.Verify(x => x.AddPayeToAccount(It.Is<Paye>(c => c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals("456/123") && c.AccessToken.Equals("123rd") && c.RefreshToken.Equals("45YT"))), Times.Once);
         }
 

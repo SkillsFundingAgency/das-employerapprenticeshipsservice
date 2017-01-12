@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public string OrganisationAddress { get; set; }
-        public DateTime OrganisationDateOfInception { get; set; }
+        public DateTime? OrganisationDateOfInception { get; set; }
         public string PayeReference { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

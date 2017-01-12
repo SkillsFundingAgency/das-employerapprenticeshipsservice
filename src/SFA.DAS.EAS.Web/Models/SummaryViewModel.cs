@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Web.Models
         public OrganisationType OrganisationType { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
-        public DateTime OrganisationDateOfInception { get; set; }
+        public DateTime? OrganisationDateOfInception { get; set; }
         public string RegisteredAddress { get; set; }
         public string PayeReference { get; set; }
         public bool EmpRefNotFound { get; set; }
