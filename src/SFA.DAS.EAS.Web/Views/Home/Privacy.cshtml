@@ -1,6 +1,8 @@
 ﻿@*@model SFA.DAS.EAS.Web.Models.PrivacyViewModel*@
 @{ViewBag.PageID = "page-privacy"; }
 @{ViewBag.Title = "Privacy and cookies"; }
+@{ViewBag.HideNav = "true"; }
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <header class="page-header">
@@ -11,11 +13,21 @@
             </div>
         </header>
 
-        <div class="summary">
-            <p>The Skills Funding Agency (SFA) puts small files (known as ‘cookies’) onto your computer to collect information about how you browse our sites.</p>
-        </div>
+        <h2 class="heading-large">Privacy</h2>
 
+        <p>Any information you provide when using this service will be handled according to the <a href="https://www.gov.uk/government/publications/sfa-privacy-notice" target="_blank" rel="external">Skills Funding Agency personal information charter</a>.</p>
+
+        <h3 class="heading-medium">How long we hold your data</h3>
+
+        <p>We'll delete your account and remove your personal details if:</p>
+        <ul class="list list-bullet">
+            <li>you haven't signed in for 12 months</li>
+            <li>you haven't activated your account within 30 days of registering</li>
+        </ul>
+        <h2 class="heading-large">Cookies</h2>
+        <p>The Skills Funding Agency (SFA) puts small files (known as ‘cookies’) onto your computer to collect information about how you browse our sites.</p>
         <p>Cookies are used to: </p>
+
 
         <ul class="list list-bullet">
             <li>measure how you use our websites so they can be updated and improved based on your needs</li>
