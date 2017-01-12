@@ -87,10 +87,12 @@ $Parms = "My LocalMachine -t ""$thumb"" -a "
 $Prms = $Parms.Split(" ")
 & "$Command" $Prms
 )
-
-icacls $cmdoutput /grant "Users":R
-
->> ".\log.txt" 
+	
+$acl = Get-Acl $cmdOutput
+$permission = "USERS","FullControl","Allow"
+$accessRule = new-object System.Security.AccessControl.FileSystemAccessRule $permission
+$acl.SetAccessRule($accessRule)
+$acl | Set-Acl $cmdOutput
 
 }  
 else  
