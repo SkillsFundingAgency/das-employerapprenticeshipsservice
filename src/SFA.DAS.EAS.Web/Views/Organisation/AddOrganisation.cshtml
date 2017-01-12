@@ -12,13 +12,15 @@
 
     <form action="@Url.Action("AddOrganisation", "Organisation")" method="POST">
         @Html.AntiForgeryToken()
-        <section>
-            <label for="company">
-                <span class="form-label-bold">Listed on Companies House</span>
-                <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
-            </label>
-            <input type="radio" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ?  "checked='checked'" : "") />
-            <div id="search-company" class="search-form panel panel-border-narrow">
+
+            <h2 class="vh" id="select-title">Select your organisation type</h2>
+            <section>
+                <label for="company">
+                    <span class="form-label-bold">Listed on Companies House</span>
+                    <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
+                </label>
+            <input type="radio" name="organisationType" id="company" aria-labelledby="select-title" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ?  "checked='checked'" : "") />
+                <div id="search-company" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError) ? "error" : "")">
                     <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
                     @if (!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError))
@@ -39,13 +41,13 @@
                         <a href="@Url.Action("AddOtherOrganisationDetails")">Enter your company details manually</a>.
                     </div>
                 }
-            </div>
-        </section>
-        <section>
-            <label for="publicbody">
-                <span class="form-label-bold">Public sector organisation</span>
-            </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.PublicBodies" id="publicbody" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.PublicBodies) ?  "checked='checked'" : "")/>
+                </div>
+            </section>
+            <section>
+                <label for="publicbody">
+                    <span class="form-label-bold">Public sector organisation</span>
+                </label>
+            <input type="radio" name="organisationType" aria-labelledby="select-title" value="@OrganisationType.PublicBodies" id="publicbody" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.PublicBodies) ?  "checked='checked'" : "")/>
             <div id="search-publicbody" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.PublicBodyNameError) ? "error" : "")">
                     <label class="strong" for="PublicBodyName">Enter organisation's name</label>
@@ -61,7 +63,7 @@
             <label for="charity">
                 <span class="form-label-bold">Registered charity</span>
             </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.Charities" id="charity" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.Charities) ?  "checked='checked'" : "") />
+            <input type="radio" name="organisationType" aria-labelledby="select-title" value="@OrganisationType.Charities" id="charity" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.Charities) ?  "checked='checked'" : "") />
                 <div id="search-charity" class="search-form panel panel-border-narrow">
                     <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CharityRegistrationNumberError) ? "error" : "")">
                         <label class="strong" for="CharityRegistrationNumber">Enter charity number</label>
@@ -71,28 +73,25 @@
                         }
                         <input type="text" id="CharityRegistrationNumber" name="CharityRegistrationNumber" class="form-control" />
                     </div>
-                    <p>
-                        <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external">Search for your Charity number</a>.
-                    </p>
-                    @if (!String.IsNullOrEmpty(@Model.Data.CharityRegistrationNumberError))
-                    {
-                        <div class="strong">
-                            Don't have a Charity number?
-                        </div>
-                        <div>
-                            <a href="@Url.Action("AddOtherOrganisationDetails")">Enter your charity details manually</a>.
-                        </div>
+                    <div class="form-group">
+                        <h2 class="heading-small">Don't know your charity number?</h2>
+                        <p>
+                            You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external"> search for your charity number</a>
+                            or <a href="@Url.Action("AddOtherOrganisationDetails")">Enter your charity details manually</a>.
+                        </p>
+                </div>
                     }
 
                 </div>
-        </section>
-        <section>
-            <label for="other">
-                <span class="form-label-bold">Other</span>
-            </label>
-            <input type="radio" name="organisationType" value="@OrganisationType.Other" id="other"/>
-        </section>
-
+            </section>
+            <section>
+                <label for="other">
+                    <span class="form-label-bold">Sole trader, partnership or other</span>
+                </label>
+                <input type="radio" name="orgType" value="@OrganisationType.Other" id="other" aria-labelledby="select-title" />
+                
+            </section>
+   
         <div class="form-group">
             <input class="button" id="addOrganisation" type="submit" value="Continue" />
         </div>
