@@ -12,21 +12,23 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your levy transactions</h1>
-        
-        @if (Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+
+        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.TransactionLines.Count == 0)
+        {
+            <p>
+                No levy funds will be paid into your account until May 2017.
+            </p>
+        }
+        else
         {
             <div class="data">
                 <h2 class="heading-small">Current balance</h2>
                 <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
             </div>
         }
-        else
-        {
-            <p>
-                No levy funds will be paid into your account until May 2017.    
-            </p>
+        
             
-        }
+        
     </div>
     <div class="column-one-third">
         <section>
@@ -47,7 +49,7 @@
             </p>
             
         }
-        else
+        else if(Model.Data.TransactionLines.Count != 0)
         {
             <table>
                 <thead>
@@ -56,7 +58,7 @@
                         <th scope="col" class="mobile-hide-cell">Description</th>
                         <th scope="col" class="numeric">Amount</th>
                         <th scope="col" class="numeric">Balance</th>
-                        <th></th>
+                        <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
                 <tbody>

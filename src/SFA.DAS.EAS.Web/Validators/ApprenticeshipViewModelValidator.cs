@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Validators
             RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number");
 
             RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("First names must be entered")
+                .NotEmpty().WithMessage("First name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");
 
             RuleFor(x => x.LastName)

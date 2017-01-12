@@ -87,8 +87,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 OrganisationReferenceNumber = "ABC12345",
                 OrganisationRegisteredAddress = "My Address",
                 PayeReference = "123/abc",
-                EmpRefNotFound = true,
-                HideBreadcrumb = true
+                EmpRefNotFound = true
             };
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(employerAccountData);
 
@@ -107,7 +106,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.OrganisationReferenceNumber);
             Assert.AreEqual(employerAccountData.PayeReference, model.PayeReference);
             Assert.AreEqual(employerAccountData.EmpRefNotFound, model.EmpRefNotFound);
-            Assert.AreEqual(employerAccountData.HideBreadcrumb, model.HideBreadcrumb);
 
         }
     }

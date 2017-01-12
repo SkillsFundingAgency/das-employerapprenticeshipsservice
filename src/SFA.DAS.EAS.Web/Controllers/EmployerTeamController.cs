@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -31,8 +32,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, userIdClaim);
 
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                response.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
+
             return View(response);
-      
         }
 
         [HttpGet]

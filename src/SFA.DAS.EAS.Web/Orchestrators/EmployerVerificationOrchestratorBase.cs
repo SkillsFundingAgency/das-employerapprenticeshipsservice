@@ -142,7 +142,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     DateOfInception = response.DateOfIncorporation,
                     Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
                     Status = response.CompanyStatus,
-                    HideBreadcrumb = model.HideBreadcrumb
                 }
 
             };
