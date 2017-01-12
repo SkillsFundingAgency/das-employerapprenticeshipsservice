@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -14,14 +15,14 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly IValidator<RenameEmployerAccountCommand> _validator;
         private readonly IHashingService _hashingService;
-        private readonly IEventsApi _eventsApi;
+        private readonly IMediator _mediator;
 
-        public RenameEmployerAccountCommandHandler(IEmployerAccountRepository accountRepository, IValidator<RenameEmployerAccountCommand> validator, IHashingService hashingService, IEventsApi eventsApi)
+        public RenameEmployerAccountCommandHandler(IEmployerAccountRepository accountRepository, IValidator<RenameEmployerAccountCommand> validator, IHashingService hashingService, IMediator mediator)
         {
             _accountRepository = accountRepository;
             _validator = validator;
             _hashingService = hashingService;
-            _eventsApi = eventsApi;
+            _mediator = mediator;
         }
 
         protected override async Task HandleCore(RenameEmployerAccountCommand message)
@@ -41,9 +42,9 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await _accountRepository.RenameAccount(accountId, message.NewName);
-            await _eventsApi.CreateAccountEvent(new AccountEvent
+            await _mediator.SendAsync(new CreateAccountEventCommand
             {
-                EmployerAccountId = message.HashedAccountId,
+                HashedAccountId = message.HashedAccountId,
                 Event = "AccountRenamed"
             });
         }

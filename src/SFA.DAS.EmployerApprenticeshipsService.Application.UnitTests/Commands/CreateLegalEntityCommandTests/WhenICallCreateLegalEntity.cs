@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
@@ -15,7 +17,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
     {
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<IEventsApi> _eventsApi;
+        private Mock<IMediator> _mediator;
         private CreateLegalEntityCommandHandler _commandHandler;
 
         [SetUp]
@@ -23,9 +25,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         {
             _accountRepository = new Mock<IAccountRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
-            _eventsApi = new Mock<IEventsApi>();
+            _mediator = new Mock<IMediator>();
 
-            _commandHandler = new CreateLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _eventsApi.Object);
+            _commandHandler = new CreateLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _mediator.Object);
         }
 
         [Test]
@@ -51,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             //Assert
             Assert.AreSame(agreementView, result.AgreementView);
-            _eventsApi.Verify(x => x.CreateAccountEvent(It.Is<AccountEvent>(e => e.EmployerAccountId == command.HashedAccountId && e.Event == "LegalEntityCreated")), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == command.HashedAccountId && e.Event == "LegalEntityCreated")), Times.Once);
         }
 
     }

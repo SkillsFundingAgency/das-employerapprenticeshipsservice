@@ -126,6 +126,7 @@
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenApprovingApprenticeship.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenICallCreateAccount.cs" />
+    <Compile Include="Commands\CreateAccountEventCommandTests\WhenICreateAnAccountEvent.cs" />
     <Compile Include="Commands\CreateApprenticeshipTests\WhenValidatingCreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />

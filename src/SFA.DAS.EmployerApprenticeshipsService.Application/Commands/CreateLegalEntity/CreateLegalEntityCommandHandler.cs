@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
@@ -10,13 +9,13 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
-        private readonly IEventsApi _eventsApi;
+        private readonly IMediator _mediator;
 
-        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IEventsApi eventsApi)
+        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IMediator mediator)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
-            _eventsApi = eventsApi;
+            _mediator = mediator;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 message.SignedDate,
                 owner.UserId);
 
-            await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
+            await _mediator.SendAsync(new CreateAccountEventCommand { HashedAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
             
             return new CreateLegalEntityCommandResponse
             {

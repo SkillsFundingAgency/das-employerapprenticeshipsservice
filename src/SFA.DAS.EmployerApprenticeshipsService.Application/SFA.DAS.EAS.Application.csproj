@@ -136,6 +136,8 @@
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
+    <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommand.cs" />
+    <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommandResponse.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />

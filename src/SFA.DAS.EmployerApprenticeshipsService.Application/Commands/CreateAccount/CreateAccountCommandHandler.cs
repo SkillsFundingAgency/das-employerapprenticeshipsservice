@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
@@ -24,9 +25,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
-        private readonly IEventsApi _eventsApi;
-
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IEventsApi eventsApi)
+        
+        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -34,7 +34,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
-            _eventsApi = eventsApi;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -70,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 AccountId = accountId
             });
 
-            await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = hashedAccountId, Event = "AccountCreated" });
+            await _mediator.SendAsync(new CreateAccountEventCommand { HashedAccountId = hashedAccountId, Event = "AccountCreated" });
             
             return new CreateAccountCommandResponse
             {
