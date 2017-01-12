@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         {
             _accountRepository = new Mock<IAccountRepository>();
             _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
 
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByUserRef(It.IsAny<string>())).ReturnsAsync(new User());
@@ -52,13 +52,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenIfThereAreMoreThanOneEmprefPassedThenTheyAreAddedToTheAccount()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT",CompanyStatus = "active"};
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT",OrganisationStatus = "active"};
 
             //Act
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>()), Times.Once);
+            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime?>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>()), Times.Once);
             _accountRepository.Verify(x => x.AddPayeToAccount(It.Is<Paye>(c => c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals("456/123") && c.AccessToken.Equals("123rd") && c.RefreshToken.Equals("45YT"))), Times.Once);
         }
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheIdHashingServiceIsCalledAfterTheAccountIsCreated()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheAccountIsUpdatedWithTheHashedId()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenTheHashedIdIsReturnedInTheResponse()
         {
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { EmployerRef = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT" };
 
             //Act
             var actual = await _handler.Handle(createAccountCommand);
@@ -128,23 +128,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             var cmd = new CreateAccountCommand
             {
                 ExternalUserId = Guid.NewGuid().ToString(),
-                CompanyNumber = "QWERTY",
-                CompanyName = "Qwerty Corp",
-                CompanyRegisteredAddress = "Innovation Centre, Coventry, CV1 2TT",
-                CompanyDateOfIncorporation = DateTime.Today.AddDays(-1000),
-                EmployerRef = "120/QWERTY",
+                OrganisationReferenceNumber = "QWERTY",
+                OrganisationName = "Qwerty Corp",
+                OrganisationAddress = "Innovation Centre, Coventry, CV1 2TT",
+                OrganisationDateOfInception = DateTime.Today.AddDays(-1000),
+                PayeReference = "120/QWERTY",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyStatus = "active",
+                OrganisationStatus = "active",
                 EmployerRefName = "Paye Scheme 1"
             };
 
             _userRepository.Setup(x => x.GetByUserRef(cmd.ExternalUserId)).ReturnsAsync(user);
-            _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken,cmd.CompanyStatus,cmd.EmployerRefName)).ReturnsAsync(accountId);
+            _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName)).ReturnsAsync(accountId);
 
             await _handler.Handle(cmd);
 
-            _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.CompanyNumber, cmd.CompanyName, cmd.CompanyRegisteredAddress, cmd.CompanyDateOfIncorporation, cmd.EmployerRef, cmd.AccessToken, cmd.RefreshToken,cmd.CompanyStatus,cmd.EmployerRefName));
+            _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
         }
 

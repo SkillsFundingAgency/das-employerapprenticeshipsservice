@@ -8,6 +8,7 @@
 	@signedDate DATETIME,
 	@signedById BIGINT,
 	@status VARCHAR(50),
+	@source TINYINT,
 	@legalEntityId BIGINT OUTPUT,
 	@employerAgreementId BIGINT OUTPUT
 AS
@@ -16,7 +17,7 @@ BEGIN
 	DECLARE @lastName NVARCHAR(MAX)
 	DECLARE @signedByName NVARCHAR(100)	
 
-	EXEC [account].[CreateLegalEntity] @companyNumber,@companyName,@companyAddress,@companyDateOfIncorporation, @status,@legalEntityId OUTPUT	
+	EXEC [account].[CreateLegalEntity] @companyNumber,@companyName,@companyAddress,@companyDateOfIncorporation, @status, @source, @legalEntityId OUTPUT	
 
 	EXEC [account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
 

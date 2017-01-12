@@ -1,0 +1,24 @@
+﻿@{ViewBag.PageID = "page-help"; }
+@{ViewBag.Title = "Apprenticeship service help"; }
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            @ViewBag.Title
+        </h1>
+        <p>Contact the apprenticeships service helpdesk on:</p>
+        <ul class="list list-bullet">
+            <li>08000 150 600</li>
+            <li><a href="mailto:helpdesk@manage-apprenticeships.service.gov.uk">helpdesk@manage-apprenticeships.service.gov.uk</a></li>
+        </ul>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="/">Your User Profile</a></li>
+            <li>@ViewBag.Title</li>
+        </ol>
+    </div>
+}

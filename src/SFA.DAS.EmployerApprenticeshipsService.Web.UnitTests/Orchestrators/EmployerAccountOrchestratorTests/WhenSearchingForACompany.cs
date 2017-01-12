@@ -73,11 +73,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.AreEqual(response.DateOfIncorporation, actual.Data.DateOfIncorporation);
-            Assert.AreEqual(response.CompanyStatus, actual.Data.CompanyStatus);
-            Assert.AreEqual($"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}", actual.Data.RegisteredAddress);
-            Assert.AreEqual(response.CompanyName, actual.Data.CompanyName);
-            Assert.AreEqual(response.CompanyNumber, actual.Data.CompanyNumber);
+            Assert.AreEqual(response.DateOfIncorporation, actual.Data.DateOfInception);
+            Assert.AreEqual(response.CompanyStatus, actual.Data.Status);
+            Assert.AreEqual($"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}", actual.Data.Address);
+            Assert.AreEqual(response.CompanyName, actual.Data.Name);
+            Assert.AreEqual(response.CompanyNumber, actual.Data.ReferenceNumber);
         }
     }
 }

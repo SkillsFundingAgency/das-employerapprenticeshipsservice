@@ -21,7 +21,7 @@
         <h1 class="heading-xlarge">Organisations</h1>
     </div>
     <div class="column-one-third">
-        <form action="@Url.Action("Add")" method="GET">
+        <form action="@Url.Action("AddOrganisation", "Organisation")" method="GET">
             <input class="button action-add" id="addNewPaye" type="submit" value="Add new organisation">
         </form>
     </div>
@@ -56,8 +56,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
             <li>Organisations</li>
         </ol>
     </div>

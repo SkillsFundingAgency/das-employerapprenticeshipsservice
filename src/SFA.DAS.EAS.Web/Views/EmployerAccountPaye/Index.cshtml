@@ -3,7 +3,7 @@
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.EmployerAccountPayeListViewModel>
 @{
     ViewBag.PageID = "page-paye-schemes-index";
-    ViewBag.Title = "PAYE Schemes";
+    ViewBag.Title = "PAYE schemes";
     ViewBag.Section = "paye";
 
     if (TempData.ContainsKey("payeSchemeAdded"))
@@ -20,7 +20,7 @@
 
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">PAYE Schemes</h1>
+        <h1 class="heading-xlarge">PAYE schemes</h1>
         <p class="lede">Levy funds will credit your account from any PAYE schemes you add.</p>
     </div>
     <div class="column-one-third pull-right">
@@ -72,9 +72,8 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li>PAYE Schemes</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li>PAYE schemes</li>
         </ol>
     </div>
 }

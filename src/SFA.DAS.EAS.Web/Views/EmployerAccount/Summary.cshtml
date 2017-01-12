@@ -1,10 +1,11 @@
-﻿@model SFA.DAS.EAS.Web.Models.SummaryViewModel
+﻿@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.Models.SummaryViewModel
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
 @{ViewBag.Title = "Check Details"; }
 @{ViewBag.HideNav = "true"; }
 
-@if (string.IsNullOrEmpty(Model.EmployerRef))
+@if (string.IsNullOrEmpty(Model.PayeReference))
 {
     ViewBag.PageID = "page-onboard-paye-scheme-in-use";
     ViewBag.Title = "PAYE scheme already in use";
@@ -17,7 +18,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        @if (string.IsNullOrEmpty(Model.EmployerRef) && !Model.EmpRefNotFound)
+        @if (string.IsNullOrEmpty(Model.PayeReference) && !Model.EmpRefNotFound)
         {
             <h1 class="heading-xlarge">PAYE scheme already in use</h1>
             <p>The PAYE scheme for the Government Gateway details you entered is already added to an account.</p>
@@ -38,9 +39,20 @@
                     <td>
                         <dl class="inline">
                             <dt>Name:</dt>
-                            <dd>@Model.CompanyName</dd>
-                            <dt>Companies House number:</dt>
-                            <dd>@Model.CompanyNumber</dd>
+                            <dd>@Model.OrganisationName</dd>
+                            
+                           @if (Model.OrganisationType == OrganisationType.CompaniesHouse || Model.OrganisationType == OrganisationType.Charities)
+                           {
+                               if (Model.OrganisationType == OrganisationType.CompaniesHouse)
+                               {
+                                   <dt>Companies House number:</dt>
+                               }
+                               else
+                               {
+                                    <dt>Charity number:</dt>
+                               }
+                               <dd>@Model.OrganisationReferenceNumber</dd>
+                           }
                         </dl>
                     </td>
                 </tr>
@@ -50,7 +62,7 @@
                     </th>
                     <td>
                         <dl class="inline">
-                            <dt>@Model.EmployerRef</dt>
+                            <dt>@Model.PayeReference</dt>
                             @if (!string.IsNullOrEmpty(Model.EmployerRefName))
                             {
                                 <dt>@Model.EmployerRefName</dt>
@@ -73,6 +85,6 @@
 
     @section breadcrumb {
         <div class="breadcrumbs">
-            <a href="/" class="back-link">Back to Your User Profile</a>
+            <a href="/" class="back-link">Back to your levy accounts</a>
         </div>
     }

@@ -109,20 +109,25 @@
 
             @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
             <div class="account-information" role="navigation">
-                <a href="#user-nav" id="link-settings" aria-hidden="true" aria-label="Access your settings">Settings</a>
                 <nav id="user-nav">
                     <ul role="menubar">
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
                             <li class="has-sub-menu">
-                                <a href="/" role="menuitem">@HttpContext.Current.User.Identity.Name</a>
+                                <a href="/" role="menuitem">Settings</a>
                                 <ul role="menu">
+                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                    {
+                                    <li><a href="@Url.Action("Index", "Home")" role="menuitem">Switch levy account</a></li>
+                                    <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename levy account</a></li>
+                                    }
                                     <li><a href="@UserLinks.ChangePasswordLink">Change your password</a></li>
                                     <li><a href="@UserLinks.ChangeEmailLink">Change your email address</a></li>
-                                    <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Log out</a></li>
+                                    
                                 </ul>
                             </li>
-                            <li><a href="@Url.Action("Index", "Home")" role="menuitem">Change levy account</a></li>
+                            <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Log out</a></li>
+                            
                         }
                         else
                         {
@@ -133,7 +138,6 @@
                         }
                     </ul>
                 </nav>
-               
             </div>
             }
         </div>
@@ -172,7 +176,7 @@
             <div class="footer-meta">
                 <div class="footer-meta-inner">
                     <ul class="platform-help-links">
-                        <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
+                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                         <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
                         <li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>

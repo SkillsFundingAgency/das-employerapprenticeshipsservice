@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public abstract class EmployerVerificationOrchestratorBase
     {
-
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
@@ -115,7 +114,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -125,24 +124,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<SelectEmployerViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new SelectEmployerViewModel()
+                    Data = new OrganisationDetailsViewModel()
                 };
             }
 
             Logger.Info($"Returning Data for {model.EmployerRef}");
 
-            return new OrchestratorResponse<SelectEmployerViewModel>
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new SelectEmployerViewModel
+                Data = new OrganisationDetailsViewModel
                 {
-                    CompanyNumber = response.CompanyNumber,
-                    CompanyName = response.CompanyName,
-                    DateOfIncorporation = response.DateOfIncorporation,
-                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
-                    CompanyStatus = response.CompanyStatus
+                    ReferenceNumber = response.CompanyNumber,
+                    Name = response.CompanyName,
+                    DateOfInception = response.DateOfIncorporation,
+                    Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    Status = response.CompanyStatus,
                 }
 
             };

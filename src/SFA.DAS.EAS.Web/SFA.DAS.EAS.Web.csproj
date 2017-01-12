@@ -232,8 +232,8 @@
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.18704, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.18704\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.18735, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.18735\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
@@ -359,6 +359,7 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerAccountOrganisationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
@@ -370,6 +371,8 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
+    <Compile Include="Controllers\OrganisationController.cs" />
+    <Compile Include="Controllers\OrganisationControllerBase.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -385,8 +388,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ICookieService.cs" />
+    <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Models\AcknowledgementViewModel.cs" />
     <Compile Include="Models\AddLegalEntityViewModel.cs" />
+    <Compile Include="Models\AddOrganisationAddressModel.cs" />
     <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
     <Compile Include="Models\ApprenticeshipViewModel.cs" />
     <Compile Include="Models\BeginNewPayeScheme.cs" />
@@ -397,9 +402,11 @@
     <Compile Include="Models\CommitmentViewModel.cs" />
     <Compile Include="Models\ConfirmNewPayeScheme.cs" />
     <Compile Include="Models\ConfirmProviderView.cs" />
+    <Compile Include="Models\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="Models\EmployerAccountViewModel.cs" />
     <Compile Include="Models\FinishEditingViewModel.cs" />
     <Compile Include="Models\GatewayInformViewModel.cs" />
+    <Compile Include="Models\NavigationViewModel.cs" />
     <Compile Include="Models\PayeSchemeDetail.cs" />
     <Compile Include="Models\PaymentTransactionViewModel.cs" />
     <Compile Include="Models\PrivacyViewModel.cs" />
@@ -411,7 +418,6 @@
     <Compile Include="Models\EmployerAgreementViewModel.cs" />
     <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
     <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
-    <Compile Include="Models\FindOrganisationViewModel.cs" />
     <Compile Include="Models\GatewayModel.cs" />
     <Compile Include="Models\InviteTeamMemberViewModel.cs" />
     <Compile Include="Models\InvitationViewModel.cs" />
@@ -419,7 +425,7 @@
     <Compile Include="Models\RenameEmployerAccountViewModel.cs" />
     <Compile Include="Models\RequestStatus.cs" />
     <Compile Include="Models\SelectEmployerModel.cs" />
-    <Compile Include="Models\SelectEmployerViewModel.cs" />
+    <Compile Include="Models\OrganisationDetailsViewModel.cs" />
     <Compile Include="Models\SignInUserModel.cs" />
     <Compile Include="Models\SignInUserViewModel.cs" />
     <Compile Include="Models\FlashMessageViewModel.cs" />
@@ -456,11 +462,14 @@
     <Compile Include="Models\UserAccountsViewModel.cs" />
     <Compile Include="Models\TransactionLineViewModel.cs" />
     <Compile Include="Models\TransactionViewResult.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
@@ -504,6 +513,8 @@
     <Content Include="dist\images\icon-pointer-black.png" />
     <Content Include="dist\images\icon-pointer-indexed.png" />
     <Content Include="dist\images\icon-pointer.png" />
+    <Content Include="dist\images\icon-search-2x.png" />
+    <Content Include="dist\images\icon-search.png" />
     <Content Include="dist\images\opengraph-image.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
@@ -770,7 +781,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
@@ -804,7 +814,6 @@
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\EmployerTasks\Index.cshtml" />
@@ -897,7 +906,18 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisation.cshtml" />
+    <Content Include="Views\Organisation\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
+    <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
