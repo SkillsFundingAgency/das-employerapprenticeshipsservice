@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using AutoMapper;
 using MediatR;
+using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
@@ -28,16 +30,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly ICookieService _cookieService;
+        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         protected OrganisationOrchestrator()
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper) : base(mediator)
+        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieService cookieService) : base(mediator)
         {
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
+            _cookieService = cookieService;
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>>
@@ -428,6 +433,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }
             };
             return result;
+        }
+
+        public virtual EmployerAccountData GetCookieData(HttpContextBase context)
+        {
+            var cookie = (string)_cookieService.Get(context, CookieName);
+
+            if (string.IsNullOrEmpty(cookie))
+                return null;
+
+            return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
+        }
+
+        public virtual void CreateCookieData(HttpContextBase context, object data)
+        {
+            var json = JsonConvert.SerializeObject(data);
+            _cookieService.Create(context, CookieName, json, 365);
         }
     }
 }

@@ -134,7 +134,37 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return View("AddOrganisationAddress", addressResponse);
                 }
 
-                return View("ConfirmOrganisationDetails", response);
+                EmployerAccountData data;
+                if (response.Data?.Name!= null)
+                {
+                    data = new EmployerAccountData
+                    {
+                        OrganisationType = response.Data.Type,
+                        OrganisationReferenceNumber = response.Data.ReferenceNumber,
+                        OrganisationName = response.Data.Name,
+                        OrganisationDateOfInception = response.Data.DateOfInception,
+                        OrganisationRegisteredAddress = response.Data.Address,
+                        OrganisationStatus = response.Data.Status ?? "active"
+                    };
+                }
+                else
+                {
+                    var existingData = _orchestrator.GetCookieData(HttpContext);
+
+                    data = new EmployerAccountData
+                    {
+                        OrganisationType = existingData.OrganisationType,
+                        OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
+                        OrganisationName = existingData.OrganisationName,
+                        OrganisationDateOfInception = existingData.OrganisationDateOfInception,
+                        OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
+                        OrganisationStatus = existingData.OrganisationStatus
+                    };
+                }
+
+                _orchestrator.CreateCookieData(HttpContext, data);
+
+                return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
