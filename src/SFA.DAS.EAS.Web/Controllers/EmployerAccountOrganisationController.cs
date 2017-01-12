@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using AutoMapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -13,16 +12,16 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [RoutePrefix("accounts/{HashedAccountId}")]
-    public class OrganisationController : BaseController
+    [RoutePrefix("accounts")]
+    public class EmployerAccountOrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
 
-        public OrganisationController(
-            IOwinWrapper owinWrapper, 
+        public EmployerAccountOrganisationController(
+            IOwinWrapper owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IFeatureToggle featureToggle, 
+            IFeatureToggle featureToggle,
             IUserWhiteList userWhiteList,
             IMapper mapper) 
             :base(owinWrapper, featureToggle, userWhiteList)
@@ -33,18 +32,20 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Organisation/Add")]
-        public async Task<ActionResult> AddOrganisation(string hashedAccountId)
+        public ActionResult AddOrganisation()
         {
-            var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-            return View(response);
+            return View("AddOrganisation",
+                new OrchestratorResponse<AddLegalEntityViewModel> {Data = new AddLegalEntityViewModel()});
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Add")]
-        public async Task<ActionResult> AddOrganisation(string hashedAccountId, OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
+        public async Task<ActionResult> AddOrganisation(OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
         {
             OrchestratorResponse<OrganisationDetailsViewModel> response;
+
+            string hashedAccountId = string.Empty;
 
             switch (orgType)
             {
@@ -57,7 +58,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
                 case OrganisationType.PublicBodies:
                     var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                    
+
                     if (searchResponse.Data.Results.Data.Count != 1 || searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
                     {
                         return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
@@ -71,9 +72,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddCustomOrganisationDetails", "Organisation", new { hashedAccountId });
-                    //return View("AddCustomOrganisationDetails", new OrchestratorResponse<OrganisationDetailsViewModel>());
-                    
+                    return RedirectToAction("AddCustomOrganisationDetails");
+
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
             }
@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return View("AddOrganisationAddress", addressResponse);
                 }
 
-                return View("ConfirmOrganisationDetails", response);
+                return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
@@ -142,7 +142,41 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("AddOrganisationAddress", errorResponse);
             }
 
-            return View("ConfirmOrganisationDetails", response);
+            return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
+        }
+        
+        [HttpGet]
+        [Route("Organisation/Add/Other")]
+        public ActionResult AddCustomOrganisationDetails()
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel()
+            };
+
+            return View("AddCustomOrganisationDetails", response);
+        }
+
+        [HttpPost]
+        [Route("Organisation/Add/Other")]
+        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
+        {
+            var response = await _orchestrator.ValidateLegalEntityName(model);
+            
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                return View("AddCustomOrganisationDetails", response);
+            }
+
+            model.Type = OrganisationType.Other;
+            model.ReferenceNumber = Guid.NewGuid().ToString();
+            model.DateOfInception = DateTime.Now;
+            model.Status = "active";
+
+            var addressModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+
+
+            return RedirectToAction("AddOrganisationAddress", addressModel);
         }
 
         private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
@@ -192,91 +226,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     TempData["charityError"] = "Charity is already added";
                     break;
             }
-            
+
             return response;
         }
-
-        [HttpGet]
-        [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(string hashedAccountId)
-        {
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HashedId = hashedAccountId
-                }
-            };
-
-            return View(response);
-        }
-
-        [HttpPost]
-        [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
-        {
-            model.Type = OrganisationType.Other;
-            var response = await _orchestrator.ValidateLegalEntityName(model);
-
-            //if (response.Status == HttpStatusCode.OK)
-            //{
-            //    return View("AddOrganisationAddress", response);
-            //}
-
-            return View(response);
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("Organisation/Confirm")]
-        public async Task<ActionResult> Confirm(
-            string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, bool? userIsAuthorisedToSign, string submit)
-        {
-            var request = new CreateNewLegalEntity
-            {
-                HashedAccountId = hashedAccountId,
-                Name = name,
-                Code = code,
-                Address = address,
-                IncorporatedDate = incorporated,
-                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
-                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-                SignedDate = DateTime.Now,
-                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
-                LegalEntityStatus = legalEntityStatus,
-                Source = (short)organisationType
-            };
-
-            var response = await _orchestrator.CreateLegalEntity(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                response.Status = HttpStatusCode.OK;
-
-                TempData["userNotAuthorised"] = "true";
-
-                return View("ViewEntityAgreement", "EmployerAgreement", response);
-            }
-
-            TempData["extraCompanyAdded"] = "true";
-
-            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds.";
-            }
-            else
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-            }
-
-            return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
-        }
-
-
-
     }
 }

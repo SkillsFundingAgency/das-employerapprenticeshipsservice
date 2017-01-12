@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Web.Models
     {
         public string HashedId { get; set; }
         public OrganisationType Type { get; set; }
+
         [AllowHtml]
         public string Name { get; set; }
         public string Address { get; set; }

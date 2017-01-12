@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 
 
             //Act
-            var actual = await _orchestrator.FindPublicSectorOrganisation(string.Empty, string.Empty, string.Empty);
+            var actual = await _orchestrator.FindPublicSectorOrganisation(string.Empty, "362546752", string.Empty);
             
             //Assert
             Assert.IsNotNull(actual?.Data?.Results?.Data);

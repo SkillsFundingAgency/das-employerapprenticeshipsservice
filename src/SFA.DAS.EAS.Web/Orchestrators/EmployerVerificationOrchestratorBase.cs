@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public abstract class EmployerVerificationOrchestratorBase
     {
-
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;

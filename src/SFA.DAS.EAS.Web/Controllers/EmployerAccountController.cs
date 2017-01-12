@@ -49,32 +49,19 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
-            var model = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel
-                {
-                    HideBreadcrumb = hideBreadcrumb
-                }
-            };
+            return RedirectToAction("AddOrganisation", "EmployerAccountOrganisation");
 
-            return View(model);
+            //var model = new OrchestratorResponse<OrganisationDetailsViewModel>
+            //{
+            //    Data = new OrganisationDetailsViewModel
+            //    {
+            //        HideBreadcrumb = hideBreadcrumb
+            //    }
+            //};
+
+            //return View(model);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SelectEmployer(SelectEmployerModel model)
-        {
-            var response = await _employerAccountOrchestrator.GetCompanyDetails(model);
-
-            if (response.Status == HttpStatusCode.OK)
-                return RedirectToAction("GatewayInform", response.Data);
-
-            TempData["companyNumberError"] = "No company found. Please try again";
-            response.Status = HttpStatusCode.OK;
-            
-            return View(response);
-        }
-
+        
         [HttpGet]
         public ActionResult GatewayInform(OrganisationDetailsViewModel model)
         {

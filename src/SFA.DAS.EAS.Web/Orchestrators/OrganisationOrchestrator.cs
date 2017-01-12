@@ -120,9 +120,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                //AddedToAccount =
-                //    accountEntities.Entites.LegalEntityList.Any(
-                //        e => e.Name.Equals(x.Name, StringComparison.CurrentCultureIgnoreCase))
+                ReferenceNumber = Guid.NewGuid().ToString(),
+                DateOfInception = DateTime.Now,
+                Status = "active"
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -231,8 +231,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
-                    Address =
-                        $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}"
+                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
+                    Status = "active",
+                    DateOfInception = DateTime.Now
                 }
             };
         }
