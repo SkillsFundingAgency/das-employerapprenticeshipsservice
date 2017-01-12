@@ -196,10 +196,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
-                        CompanyNumber = "1234567890",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        EmployerRef = "emp-123",
+                        OrganisationName = "sushiCorp Ltd.",
+                        OrganisationReferenceNumber = "1234567890",
+                        OrganisationDateOfInception = new DateTime(2016, 05, 16),
+                        PayeReference = "emp-123",
                         RegisteredAddress = "123 Fake St."
                     }},
                 {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new OrganisationDetailsViewModel()

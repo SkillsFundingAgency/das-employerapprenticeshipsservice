@@ -71,12 +71,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 data = new EmployerAccountData
                 {
-                    CompanyNumber = model.ReferenceNumber,
-                    CompanyName = model.Name,
-                    DateOfIncorporation = model.DateOfInception ?? DateTime.MinValue,
-                    RegisteredAddress = model.Address,
+                    OrganisationType = model.Type,
+                    OrganisationReferenceNumber = model.ReferenceNumber,
+                    OrganisationName = model.Name,
+                    OrganisationDateOfInception = model.DateOfInception ?? DateTime.MinValue,
+                    OrganisationRegisteredAddress = model.Address,
                     HideBreadcrumb = model.HideBreadcrumb,
-                    CompanyStatus = model.Status
+                    OrganisationStatus = model.Status
                 };
             }
             else
@@ -85,12 +86,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 data = new EmployerAccountData
                 {
-                    CompanyNumber = existingData.CompanyNumber,
-                    CompanyName = existingData.CompanyName,
-                    DateOfIncorporation = existingData.DateOfIncorporation,
-                    RegisteredAddress = existingData.RegisteredAddress,
+                    OrganisationType = existingData.OrganisationType,
+                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
+                    OrganisationName = existingData.OrganisationName,
+                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
+                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
                     HideBreadcrumb = existingData.HideBreadcrumb,
-                    CompanyStatus = existingData.CompanyStatus
+                    OrganisationStatus = existingData.OrganisationStatus
                 };
             }
             
@@ -141,7 +143,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
 
             enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
-            enteredData.EmployerRef = empref.Empref;
+            enteredData.PayeReference = empref.Empref;
             enteredData.AccessToken = response.Data.AccessToken;
             enteredData.RefreshToken = response.Data.RefreshToken;
             enteredData.EmpRefNotFound = empref.EmprefNotFound;
@@ -158,14 +160,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = new SummaryViewModel
             {
-                CompanyName = enteredData.CompanyName,
-                CompanyNumber = enteredData.CompanyNumber,
-                DateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef,
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationName = enteredData.OrganisationName,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 HideBreadcrumb = enteredData.HideBreadcrumb,
-                CompanyStatus = enteredData.CompanyStatus
+                OrganisationStatus = enteredData.OrganisationStatus
             };
 
             return View(model);
@@ -183,14 +186,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
-                CompanyNumber = enteredData.CompanyNumber,
-                CompanyName = enteredData.CompanyName,
-                CompanyRegisteredAddress = enteredData.RegisteredAddress,
-                CompanyDateOfIncorporation = enteredData.DateOfIncorporation,
-                EmployerRef = enteredData.EmployerRef,
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationName = enteredData.OrganisationName,
+                OrganisationAddress = enteredData.OrganisationRegisteredAddress,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
                 AccessToken = enteredData.AccessToken,
                 RefreshToken = enteredData.RefreshToken,
-                CompanyStatus = enteredData.CompanyStatus,
+                OrganisationStatus = enteredData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerRefName
             };
 
@@ -209,7 +213,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = $"{enteredData.CompanyName} has been added";
+            TempData["successHeader"] = $"{enteredData.OrganisationName} has been added";
             TempData["successMessage"] = "This account can now spend levy funds.";
 
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });

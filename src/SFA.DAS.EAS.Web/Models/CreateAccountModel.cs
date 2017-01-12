@@ -1,18 +1,20 @@
 ﻿using System;
+using SFA.DAS.EAS.Domain;
 
 namespace SFA.DAS.EAS.Web.Models
 {
     public class CreateAccountModel
     {
         public string UserId { get; set; }
-        public string CompanyNumber { get; set; }
-        public string CompanyName { get; set; }
-        public string CompanyRegisteredAddress { get; set; }
-        public DateTime CompanyDateOfIncorporation { get; set; }
-        public string EmployerRef { get; set; }
+        public OrganisationType OrganisationType { get; set; }
+        public string OrganisationName { get; set; }
+        public string OrganisationReferenceNumber { get; set; }
+        public string OrganisationAddress { get; set; }
+        public DateTime OrganisationDateOfInception { get; set; }
+        public string PayeReference { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
-        public string CompanyStatus { get; set; }
+        public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
     }
 }

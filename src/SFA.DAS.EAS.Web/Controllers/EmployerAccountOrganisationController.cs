@@ -169,7 +169,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             model.Type = OrganisationType.Other;
-            model.ReferenceNumber = Guid.NewGuid().ToString();
+           // model.ReferenceNumber = Guid.NewGuid().ToString();
             model.DateOfInception = DateTime.Now;
             model.Status = "active";
 

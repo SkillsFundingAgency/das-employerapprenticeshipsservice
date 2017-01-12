@@ -47,10 +47,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                OrganisationName = "Test Corp",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10)
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -94,11 +94,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
                 It.Is<EmployerAccountData>(data => 
-                data.CompanyNumber.Equals(request.ReferenceNumber) &&
-                data.CompanyStatus.Equals(request.Status) &&
-                data.CompanyName.Equals(request.Name) &&
-                data.DateOfIncorporation.Equals(request.DateOfInception) &&
-                data.RegisteredAddress.Equals(request.Address))));
+                data.OrganisationReferenceNumber.Equals(request.ReferenceNumber) &&
+                data.OrganisationStatus.Equals(request.Status) &&
+                data.OrganisationName.Equals(request.Name) &&
+                data.OrganisationDateOfInception.Equals(request.DateOfInception) &&
+                data.OrganisationRegisteredAddress.Equals(request.Address))));
         }
 
         [Test]
@@ -107,11 +107,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Arrange
             var request = new EmployerAccountData
             {
-                CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
-                CompanyStatus = "active"
+                OrganisationReferenceNumber = "6576585",
+                OrganisationName = "Test Corp",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-12),
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationStatus = "active"
             };
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(request);
 
@@ -121,11 +121,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
                 It.Is<EmployerAccountData>(data =>
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
+                data.OrganisationReferenceNumber.Equals(request.OrganisationReferenceNumber) &&
+                data.OrganisationStatus.Equals(request.OrganisationStatus) &&
+                data.OrganisationName.Equals(request.OrganisationName) &&
+                data.OrganisationDateOfInception.Equals(request.OrganisationDateOfInception) &&
+                data.OrganisationRegisteredAddress.Equals(request.OrganisationRegisteredAddress))));
         }
     }
 }

@@ -47,13 +47,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
+                OrganisationName = "Test Corp",
                 EmployerRefName = "Scheme 1",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10),
-                CompanyStatus = "active",
-                EmployerRef = "123/ABC",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10),
+                OrganisationStatus = "active",
+                PayeReference = "123/ABC",
                 RefreshToken = "123",
                 AccessToken = "456",
                 EmpRefNotFound = true,
@@ -124,15 +124,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
                 c =>
-                    c.CompanyStatus.Equals(_accountData.CompanyStatus) &&
-                    c.CompanyName.Equals(_accountData.CompanyName) &&
+                    c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
+                    c.OrganisationName.Equals(_accountData.OrganisationName) &&
                     c.RefreshToken.Equals(_accountData.RefreshToken) &&
-                    c.CompanyDateOfIncorporation.Equals(_accountData.DateOfIncorporation) &&
-                    c.CompanyRegisteredAddress.Equals(_accountData.RegisteredAddress) &&
+                    c.OrganisationDateOfInception.Equals(_accountData.OrganisationDateOfInception) &&
+                    c.OrganisationAddress.Equals(_accountData.OrganisationRegisteredAddress) &&
                     c.AccessToken.Equals(_accountData.AccessToken) &&
-                    c.EmployerRef.Equals(_accountData.EmployerRef) &&
+                    c.PayeReference.Equals(_accountData.PayeReference) &&
                     c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
-                    c.CompanyNumber.Equals(_accountData.CompanyNumber)
+                    c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
         }
     }
