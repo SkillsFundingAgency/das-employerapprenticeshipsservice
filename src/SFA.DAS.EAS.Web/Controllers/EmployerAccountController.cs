@@ -139,7 +139,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 PayeReference = enteredData.PayeReference,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                CompanyStatus = enteredData.CompanyStatus
+                OrganisationStatus = enteredData.OrganisationStatus
             };
 
             return View(model);
