@@ -105,7 +105,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddOtherOrganisationDetails", "Organisation", new { model.HashedAccountId });
+
+                    response = new OrchestratorResponse<OrganisationDetailsViewModel>()
+                    {
+                        Data = new OrganisationDetailsViewModel()
+                    };
+
+                    return View("AddOtherOrganisationDetails", response);
 
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
