@@ -67,12 +67,12 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 UserId = user.UserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyDateOfIncorporation = new DateTime(2016, 01, 01),
-                EmployerRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
-                CompanyName = "Test Company",
-                CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
-                CompanyRegisteredAddress = "Address Line 1",
-                CompanyStatus = "active"
+                OrganisationDateOfInception = new DateTime(2016, 01, 01),
+                PayeReference = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
+                OrganisationName = "Test Company",
+                OrganisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
+                OrganisationAddress = "Address Line 1",
+                OrganisationStatus = "active"
             },new Mock<HttpContextBase>().Object).Wait();
 
 

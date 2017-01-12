@@ -1,0 +1,69 @@
+@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PublicSectorOrganisationSearchResultsViewModel>
+@{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
+@{
+    ViewBag.Title = "Public Sector Orgainsation Search Results";
+    ViewBag.Section = "organisations";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Public sector search results
+        </h1>
+        
+        <form action="@Url.Action("AddOrganisation")" method="POST">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
+            <input type="hidden" id="orgType" name="orgType" value="@OrganisationType.PublicBodies" />
+            <div class="search-field">
+                <fieldset class="search-input">
+                    <label for="publicBodyName">
+                        <span class="form-label-bold">Search results</span>
+                    </label>
+                    <input type="text" name="publicBodyName" id="publicBodyName" class="form-control">
+                </fieldset>
+                <fieldset class="search-submit">
+                    <button type="submit" class="button">Search</button>
+                </fieldset>
+            </div>
+        </form>
+
+        @{
+            <p>@Model.Data.Results.Data.Count results found.</p>
+            <ol class="search-results">
+                @foreach (var result in Model.Data.Results.Data)
+                {
+                    if (!result.AddedToAccount)
+                    {
+                        <li>
+                            <a href="@Url.Action("UpdateOrganisationAddress", new
+                                         {
+                                             OrganisationName = result.Name,
+                                             OrganisationType = OrganisationType.PublicBodies,
+                                             Status = "active"
+                                         })">
+                                @result.Name
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>@result.Name (Already added)</li>
+                    }
+                }
+            </ol>
+        }
+        
+        <h3 class="heading-small">Can't find your organisation?</h3>
+        <p>You can <a href="@Url.Action("AddOtherOrganisationDetails")">add it manually here</a>.</p>
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+        </ol>
+    </div>
+}
