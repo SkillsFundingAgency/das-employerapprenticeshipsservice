@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 OrganisationReferenceNumber = companyNumber,
                 OrganisationDateOfInception = dateOfIncorporation,
                 OrganisationRegisteredAddress = registeredAddress,
-                HideBreadcrumb = true
+                
             });
             
 
@@ -70,7 +70,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 && ((EmployerAccountData)c).OrganisationReferenceNumber.Equals(companyNumber) 
                 && ((EmployerAccountData)c).OrganisationDateOfInception.Equals(dateOfIncorporation) 
                 && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
-                && ((EmployerAccountData)c).HideBreadcrumb
                 )));
 
         }
@@ -128,24 +127,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.DeleteCookieData(It.IsAny<HttpContextBase>()), Times.Once);
         }
-
-        //TODO: Sort this test out now the workflow has changed (come back to fix this once the workflow changes have been completed
-        //[Test]
-        //public void ThenTheTempDataIsReadToSeeIfTheBreadcrumbShouldBeHidden()
-        //{
-        //    //Arrange
-        //    _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true}};
-
-        //    //Act
-        //    var actual = _employerAccountController.SelectEmployer();
-
-        //    //Assert
-        //    Assert.IsNotNull(actual);
-        //    var actualViewResult = actual as ViewResult;
-        //    Assert.IsNotNull(actualViewResult);
-        //    var actualModel = actualViewResult.Model as OrchestratorResponse<OrganisationDetailsViewModel>;
-        //    Assert.IsNotNull(actualModel);
-        //    Assert.IsTrue(actualModel.Data.HideBreadcrumb);
-        //}
+        
     }
 }

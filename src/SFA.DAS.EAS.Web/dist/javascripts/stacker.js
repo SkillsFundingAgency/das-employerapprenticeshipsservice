@@ -112,8 +112,10 @@
             sfa.navigation.closeAllOpenMenus();
         });
         $(document).on("keydown", this, function (e) {
-            $(te.selector).children(menuSelector).removeClass('sub-menu-open');
-            sfa.navigation.closeAllOpenMenus();
+            if (e.keyCode !== 9) {
+                $(te.selector).children(menuSelector).removeClass('sub-menu-open');
+                sfa.navigation.closeAllOpenMenus();
+            }
         });
     };
 

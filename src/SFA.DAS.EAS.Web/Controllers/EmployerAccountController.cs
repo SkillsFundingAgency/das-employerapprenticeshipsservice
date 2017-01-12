@@ -29,39 +29,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult SelectEmployer()
         {
-
-            var cookieData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-            var hideBreadcrumb = false;
-            if (cookieData != null)
-            {
-                hideBreadcrumb = cookieData.HideBreadcrumb;
-            }
-            if (hideBreadcrumb == false)
-            {
-                hideBreadcrumb = TempData.ContainsKey("HideBreadcrumb") && (bool) TempData["HideBreadcrumb"];
-
-                if (hideBreadcrumb)
-                {
-                    TempData["HideBreadcrumb"] = true;
-                }
-            }
-
-
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
 
             return RedirectToAction("AddOrganisation", "EmployerAccountOrganisation");
 
-            //var model = new OrchestratorResponse<OrganisationDetailsViewModel>
-            //{
-            //    Data = new OrganisationDetailsViewModel
-            //    {
-            //        HideBreadcrumb = hideBreadcrumb
-            //    }
-            //};
-
-            //return View(model);
         }
-        
+
+      
+
         [HttpGet]
         public ActionResult GatewayInform(OrganisationDetailsViewModel model)
         {
@@ -76,7 +51,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationName = model.Name,
                     OrganisationDateOfInception = model.DateOfInception,
                     OrganisationRegisteredAddress = model.Address,
-                    HideBreadcrumb = model.HideBreadcrumb,
                     OrganisationStatus = model.Status ?? "active"
                 };
             }
@@ -91,7 +65,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationName = existingData.OrganisationName,
                     OrganisationDateOfInception = existingData.OrganisationDateOfInception,
                     OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
-                    HideBreadcrumb = existingData.HideBreadcrumb,
                     OrganisationStatus = existingData.OrganisationStatus
                 };
             }
@@ -110,7 +83,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     BreadcrumbDescription = "Back to Your User Profile",
                     BreadcrumbUrl = Url.Action("Index","Home"),
                     ConfirmUrl = Url.Action("Gateway","EmployerAccount"),
-                    HideBreadcrumb = data.HideBreadcrumb
                 },
                 FlashMessage = flashMessageViewModel
             };
@@ -167,7 +139,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 PayeReference = enteredData.PayeReference,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                HideBreadcrumb = enteredData.HideBreadcrumb,
                 OrganisationStatus = enteredData.OrganisationStatus
             };
 
@@ -206,12 +177,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
                 return RedirectToAction("Summary");
             }
-
-            if (TempData.ContainsKey("HideBreadcrumb"))
-            {
-                TempData.Remove("HideBreadcrumb");
-            }
-
+            
             TempData["employerAccountCreated"] = "true";
             TempData["successHeader"] = $"{enteredData.OrganisationName} has been added";
             TempData["successMessage"] = "This account can now spend levy funds.";
@@ -220,6 +186,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("accounts/{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -229,6 +196,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("accounts/{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -245,7 +213,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "EmployerTeam");
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
