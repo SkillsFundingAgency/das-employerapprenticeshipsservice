@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationDateOfInception = model.DateOfInception,
                     OrganisationRegisteredAddress = model.Address,
                     HideBreadcrumb = model.HideBreadcrumb,
-                    OrganisationStatus = model.Status
+                    OrganisationStatus = model.Status ?? "active"
                 };
             }
             else

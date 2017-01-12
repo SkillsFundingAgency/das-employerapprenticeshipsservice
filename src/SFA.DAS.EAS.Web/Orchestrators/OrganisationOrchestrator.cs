@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>>
             FindPublicSectorOrganisation(string searchTerm, string hashedAccountId, string userIdClaim)
         {
-            if (String.IsNullOrWhiteSpace(searchTerm))
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 var notFoundResponse = new OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>
                 {
@@ -136,8 +136,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                //ReferenceNumber = Guid.NewGuid().ToString(),
-               // DateOfInception = DateTime.Now,
                 Status = "active"
             }).ToList();
 
@@ -150,6 +148,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     viewModel.AddedToAccount = accountEntities.Entites.LegalEntityList.Any(
                         e => e.Name.Equals(viewModel.Name, StringComparison.CurrentCultureIgnoreCase));
                 }
+
+                
             }
                 
 
@@ -261,9 +261,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
                     Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
-                    Status = "active",
-                    //DateOfInception = DateTime.Now
-                }
+                    Status = "active"}
             };
         }
 
@@ -278,19 +276,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
         }
-
-        //private async Task MarkExistingAccountOrganisation(ICollection<OrganisationDetailsViewModel> orgnaisations, string hashedAccountId, string userIdClaim)
-        //{
-        //    var accountOrganisations = await GetAccountLegalEntities(hashedAccountId, userIdClaim);
-
-        //    List<string> referenceValues = accountOrganisations.Entites.LegalEntityList.Select(x => x.Name).ToList();
-
-
-        //    var NameSet = new HashSet<string>(referenceValues);
-
-
-        //}
-
+        
         private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId,
             string userIdClaim)
         {
@@ -326,8 +312,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text,
-                            LegalEntityStatus = request.LegalEntityStatus,
-
+                            LegalEntityStatus = request.LegalEntityStatus
                         }
                     },
                     Status = HttpStatusCode.BadRequest
