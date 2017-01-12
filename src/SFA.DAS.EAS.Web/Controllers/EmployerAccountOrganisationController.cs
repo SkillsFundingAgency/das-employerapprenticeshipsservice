@@ -38,41 +38,80 @@ namespace SFA.DAS.EAS.Web.Controllers
                 new OrchestratorResponse<AddLegalEntityViewModel> {Data = new AddLegalEntityViewModel()});
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Add")]
-        public async Task<ActionResult> AddOrganisation(OrganisationType orgType, string companiesHouseNumber, string publicBodyName, string charityRegNo)
+        public async Task<ActionResult> AddOrganisation(AddLegalEntityViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                var orgTypeErrorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
+                {
+                    Data = model
+                };
+
+                orgTypeErrorResponse.Data.AddErrorsFromModelState(ModelState);
+
+                orgTypeErrorResponse.Status = HttpStatusCode.BadRequest;
+                orgTypeErrorResponse.FlashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Error,
+                    ErrorMessages = orgTypeErrorResponse.Data.ErrorDictionary,
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:"
+                };
+                return View(orgTypeErrorResponse);
+            }
+
             OrchestratorResponse<OrganisationDetailsViewModel> response;
 
-            string hashedAccountId = string.Empty;
-
-            switch (orgType)
+            switch (model.OrganisationType)
             {
                 case OrganisationType.Charities:
-                    response = await FindCharity(charityRegNo, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    response = await FindCharity(model.CharityRegistrationNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
                     break;
                 case OrganisationType.CompaniesHouse:
-                    response = await FindCompany(companiesHouseNumber, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    response = await FindCompany(model.CompaniesHouseNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
                     break;
                 case OrganisationType.PublicBodies:
-                    var searchResponse = await FindPublicSectorOrganisation(publicBodyName, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                    var searchResponse = await FindPublicSectorOrganisation(model.PublicBodyName, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-                    if (searchResponse.Data.Results.Data.Count != 1 || searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                    if (searchResponse.Status == HttpStatusCode.OK)
                     {
-                        return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        if (searchResponse.Data.Results.Data.Count != 1 ||
+                            searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                        {
+                            return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                        }
+
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = searchResponse.Data.Results.Data.FirstOrDefault(),
+                            Status = searchResponse.Status
+                        };
+                    }
+                    else
+                    {
+                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                        {
+                            Data = new OrganisationDetailsViewModel(),
+                            Status = searchResponse.Status
+                        };
+                        response.Data.ErrorDictionary = searchResponse.Data.ErrorDictionary;
                     }
 
-                    response = new OrchestratorResponse<OrganisationDetailsViewModel>
-                    {
-                        Data = searchResponse.Data.Results.Data.FirstOrDefault(),
-                        Status = searchResponse.Status
-                    };
                     break;
 
                 case OrganisationType.Other:
-                    return RedirectToAction("AddCustomOrganisationDetails");
+
+                    response = new OrchestratorResponse<OrganisationDetailsViewModel>()
+                    {
+                        Data = new OrganisationDetailsViewModel()
+                    };
+
+                    return View("AddOtherOrganisationDetails", response);
 
                 default:
                     throw new NotImplementedException("Org Type Not Implemented");
@@ -95,13 +134,24 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return View("AddOrganisationAddress", addressResponse);
                 }
 
+                CreateOrganisationCookieData(response);
+
                 return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
             }
 
             var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
             {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
+                Data = model,
+                Status = HttpStatusCode.OK
+            };
+            errorResponse.Data.ErrorDictionary = response.Data.ErrorDictionary;
+
+            errorResponse.FlashMessage = new FlashMessageViewModel
+            {
+                Severity = FlashMessageSeverityLevel.Error,
+                ErrorMessages = errorResponse.Data.ErrorDictionary,
+                Headline = "Errors to fix",
+                Message = "Check the following details:"
             };
 
             return View("AddOrganisation", errorResponse);
@@ -141,10 +191,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 return View("AddOrganisationAddress", errorResponse);
             }
+            CreateOrganisationCookieData(response);
 
             return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
         }
-        
+
         [HttpGet]
         [Route("Organisation/Add/Other")]
         public ActionResult AddCustomOrganisationDetails()
@@ -154,18 +205,18 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = new OrganisationDetailsViewModel()
             };
 
-            return View("AddCustomOrganisationDetails", response);
+            return View("AddOtherOrganisationDetails", response);
         }
 
         [HttpPost]
         [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddCustomOrganisationDetails(OrganisationDetailsViewModel model)
+        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
             
             if (response.Status == HttpStatusCode.BadRequest)
             {
-                return View("AddCustomOrganisationDetails", response);
+                return View("AddOtherOrganisationDetails", response);
             }
 
             model.Type = OrganisationType.Other;
@@ -226,6 +277,39 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return response;
+        }
+
+        private void CreateOrganisationCookieData(OrchestratorResponse<OrganisationDetailsViewModel> response)
+        {
+            EmployerAccountData data;
+            if (response.Data?.Name != null)
+            {
+                data = new EmployerAccountData
+                {
+                    OrganisationType = response.Data.Type,
+                    OrganisationReferenceNumber = response.Data.ReferenceNumber,
+                    OrganisationName = response.Data.Name,
+                    OrganisationDateOfInception = response.Data.DateOfInception,
+                    OrganisationRegisteredAddress = response.Data.Address,
+                    OrganisationStatus = response.Data.Status ?? "active"
+                };
+            }
+            else
+            {
+                var existingData = _orchestrator.GetCookieData(HttpContext);
+
+                data = new EmployerAccountData
+                {
+                    OrganisationType = existingData.OrganisationType,
+                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
+                    OrganisationName = existingData.OrganisationName,
+                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
+                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
+                    OrganisationStatus = existingData.OrganisationStatus
+                };
+            }
+
+            _orchestrator.CreateCookieData(HttpContext, data);
         }
     }
 }

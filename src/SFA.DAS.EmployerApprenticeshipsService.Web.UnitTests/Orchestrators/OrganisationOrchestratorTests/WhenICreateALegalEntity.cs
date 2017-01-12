@@ -23,6 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<IMapper> _mapper;
+        private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
@@ -30,8 +31,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
             _mapper = new Mock<IMapper>();
+            _cookieService = new Mock<ICookieService>();
 
-            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object);
+            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
         }
 
         [Test]

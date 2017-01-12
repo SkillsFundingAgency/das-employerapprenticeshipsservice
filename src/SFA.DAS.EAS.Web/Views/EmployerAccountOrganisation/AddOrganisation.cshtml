@@ -52,7 +52,7 @@
                 <span class="form-label-bold">Listed on Companies House</span>
                 <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
             </label>
-            <input type="radio" name="orgType" id="company" value="@OrganisationType.CompaniesHouse" />
+            <input type="radio" name="OrganisationType" id="company" value="@OrganisationType.CompaniesHouse" />
             <div id="search-company" class="search-form panel panel-border-narrow">
                 <div class="form-group">
                     <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
@@ -64,7 +64,7 @@
             <label for="publicbody">
                 <span class="form-label-bold">Public sector organisation</span>
             </label>
-            <input type="radio" name="orgType" value="@OrganisationType.PublicBodies" id="publicbody" />
+            <input type="radio" name="OrganisationType" value="@OrganisationType.PublicBodies" id="publicbody" />
             <div id="search-publicbody" class="search-form panel panel-border-narrow">
                 <div class="form-group">
                     <label class="strong" for="PublicBodyName">Enter organisation's name</label>
@@ -76,7 +76,7 @@
             <label for="charity">
                 <span class="form-label-bold">Registered charity</span>
             </label>
-            <input type="radio" name="orgType" value="@OrganisationType.Charities" id="charity" />
+            <input type="radio" name="OrganisationType" value="@OrganisationType.Charities" id="charity" />
             <div id="search-charity" class="search-form panel panel-border-narrow">
                 <div class="form-group">
                     <label class="strong" for="CharityRegNo">Enter charity number</label>
@@ -93,22 +93,8 @@
             <label for="other">
                 <span class="form-label-bold">Sole trader, partnership or other</span>
             </label>
-            <input type="radio" name="orgType" value="@OrganisationType.Other" id="other" />
-            @*<div id="search-other" class="search-form panel panel-border-narrow">
-                
-            </div>*@
+            <input type="radio" name="OrganisationType" value="@OrganisationType.Other" id="other" />
         </section>
-
-        @*<div class="form-group orgtype-wrapper">
-
-            <label class="collapse" for="option4">Sole trader, partnership or other</label>
-            <input id="option4" type="radio" name="orgType" value="@OrganisationType.Other"/>
-
-            <div class="panel">Sole trader content...</div>
-
-
-        </div>*@
-
         <div class="form-group">
             <input class="button" id="addOrganisation" type="submit" value="Continue" />
         </div>

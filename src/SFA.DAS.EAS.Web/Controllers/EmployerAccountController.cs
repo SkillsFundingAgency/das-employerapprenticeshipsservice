@@ -35,41 +35,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         }
 
-      
-
         [HttpGet]
-        public ActionResult GatewayInform(OrganisationDetailsViewModel model)
+        public ActionResult GatewayInform()
         {
-
-            EmployerAccountData data;
-            if (model?.Name != null)
-            {
-                data = new EmployerAccountData
-                {
-                    OrganisationType = model.Type,
-                    OrganisationReferenceNumber = model.ReferenceNumber,
-                    OrganisationName = model.Name,
-                    OrganisationDateOfInception = model.DateOfInception,
-                    OrganisationRegisteredAddress = model.Address,
-                    OrganisationStatus = model.Status ?? "active"
-                };
-            }
-            else
-            {
-                var existingData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-
-                data = new EmployerAccountData
-                {
-                    OrganisationType = existingData.OrganisationType,
-                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
-                    OrganisationName = existingData.OrganisationName,
-                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
-                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
-                    OrganisationStatus = existingData.OrganisationStatus
-                };
-            }
-            
-            _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
             var flashMessageViewModel = new FlashMessageViewModel();
             if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
             {
