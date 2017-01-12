@@ -154,7 +154,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = new OrganisationDetailsViewModel()
             };
 
-            return View("AddCustomOrganisationDetails", response);
+            return View("AddOtherOrganisationDetails", response);
         }
 
         [HttpPost]
@@ -165,7 +165,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             if (response.Status == HttpStatusCode.BadRequest)
             {
-                return View("AddCustomOrganisationDetails", response);
+                return View("AddOtherOrganisationDetails", response);
             }
 
             model.Type = OrganisationType.Other;
