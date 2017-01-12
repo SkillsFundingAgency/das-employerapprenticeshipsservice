@@ -10,6 +10,8 @@
     this.focusedClass = 'focused';
     this.radioClass = 'selection-button-radio';
     this.checkboxClass = 'selection-button-checkbox';
+    this.parentElem = 'label';
+
     if (opts !== undefined) {
       $.each(opts, function (optionName, optionObj) {
         this[optionName] = optionObj;
@@ -34,9 +36,8 @@
   SelectionButtons.prototype.setInitialState = function ($elms) {
     $elms.each(function (idx, elm) {
       var $elm = $(elm);
-
       var labelClass = $elm.attr('type') === 'radio' ? this.radioClass : this.checkboxClass;
-      $elm.parent('label').addClass(labelClass);
+      $elm.parent(this.parentElem).addClass(labelClass);
       if ($elm.is(':checked')) {
         this.markSelected($elm);
       }
@@ -44,9 +45,9 @@
   };
   SelectionButtons.prototype.markFocused = function ($elm, state) {
     if (state === 'focused') {
-      $elm.parent('label').addClass(this.focusedClass);
+        $elm.parent(this.parentElem).addClass(this.focusedClass);
     } else {
-      $elm.parent('label').removeClass(this.focusedClass);
+        $elm.parent(this.parentElem).removeClass(this.focusedClass);
     }
   };
   SelectionButtons.prototype.markSelected = function ($elm) {
@@ -54,15 +55,15 @@
 
     if ($elm.attr('type') === 'radio') {
       radioName = $elm.attr('name');
-      $($elm[0].form).find('input[name="' + radioName + '"]')
-        .parent('label')
+      $('input[name="' + radioName + '"]')
+        .parent(this.parentElem)
         .removeClass(this.selectedClass);
-      $elm.parent('label').addClass(this.selectedClass);
+      $elm.parent(this.parentElem).addClass(this.selectedClass);
     } else { // checkbox
       if ($elm.is(':checked')) {
-        $elm.parent('label').addClass(this.selectedClass);
+          $elm.parent(this.parentElem).addClass(this.selectedClass);
       } else {
-        $elm.parent('label').removeClass(this.selectedClass);
+          $elm.parent(this.parentElem).removeClass(this.selectedClass);
       }
     }
   };

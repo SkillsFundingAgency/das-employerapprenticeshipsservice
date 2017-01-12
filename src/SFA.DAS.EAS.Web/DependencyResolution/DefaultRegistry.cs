@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
@@ -39,6 +40,7 @@ using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
 using StructureMap.Graph;
+using StructureMap.TypeRules;
 using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
@@ -84,13 +86,23 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
 
         private void RegisterMapper()
         {
-            var profiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile) Activator.CreateInstance(t));
-           
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
+
+            var mappingProfiles = new List<Profile>();
+
+            foreach (var assembly in assemblies)
+            {
+                var profiles = Assembly.Load(assembly.FullName).GetTypes()
+                                       .Where(t => typeof(Profile).IsAssignableFrom(t))
+                                       .Where(t => t.IsConcrete() && t.HasConstructors())
+                                       .Select(t => (Profile)Activator.CreateInstance(t));
+
+                mappingProfiles.AddRange(profiles);
+            }
+            
             var config  = new MapperConfiguration(cfg =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                mappingProfiles.ForEach(cfg.AddProfile);
             });
 
             var mapper = config.CreateMapper();
