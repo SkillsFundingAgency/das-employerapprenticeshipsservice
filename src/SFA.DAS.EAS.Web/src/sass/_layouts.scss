@@ -63,6 +63,9 @@ table.top-border {
         @extend .block-label;
         padding-top: 0;
         width: 100%;
+        &.last {
+            margin-bottom: 20px;
+        }
     }
     .search-form {
         display: none;

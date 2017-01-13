@@ -1907,6 +1907,10 @@ table.top-border {
   width: 100%;
 }
 
+.org-type-search section.last {
+  margin-bottom: 20px;
+}
+
 .org-type-search .search-form {
   display: none;
   clear: both;
@@ -2356,7 +2360,6 @@ legend {
 }
 
 .error-summary-wrapper .error-summary {
-  margin-top: 0;
   margin-bottom: 0;
 }
 
