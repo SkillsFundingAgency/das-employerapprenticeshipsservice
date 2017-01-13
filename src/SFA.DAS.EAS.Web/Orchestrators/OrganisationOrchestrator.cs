@@ -276,7 +276,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return accountEntities;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
             CreateNewLegalEntity request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
