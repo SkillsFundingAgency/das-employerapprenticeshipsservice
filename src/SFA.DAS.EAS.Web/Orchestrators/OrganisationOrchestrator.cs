@@ -119,6 +119,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new PublicSectorOrganisationSearchResultsViewModel
                     {
                         HashedAccountId = hashedAccountId,
+                        SearchTerm = searchTerm,
                         Results = new PagedResponse<OrganisationDetailsViewModel>
                         {
                             Data = new List<OrganisationDetailsViewModel>()
