@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             
             var p = sqlCommand.Parameters.Add("@accountIds", SqlDbType.Structured);
             p.Direction = ParameterDirection.Input;
-            p.TypeName = "[levy].[AccountIds]";
+            p.TypeName = "[employer_transactions].[AccountIds]";
             p.Value = accountList;
         }
     }

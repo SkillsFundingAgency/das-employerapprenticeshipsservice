@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
-                    sql: "SELECT LevyDueYtd, SubmissionId AS Id, SubmissionDate AS [Date] FROM [levy].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
+                    sql: "SELECT LevyDueYtd, SubmissionId AS Id, SubmissionDate AS [Date] FROM [employer_transactions].[LevyDeclaration] WHERE empRef = @EmpRef and SubmissionId = @Id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
                 
                 return await c.ExecuteAsync(
-                    sql: "[levy].[CreateDeclaration]",
+                    sql: "[employer_transactions].[CreateDeclaration]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<LevyDeclarationView>(
-                    sql: "[levy].[GetLevyDeclarations_ByAccountId]",
+                    sql: "[employer_transactions].[GetLevyDeclarations_ByAccountId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasDeclaration>(
-                    sql: "[levy].[GetLastLevyDeclarations_ByEmpRef]",
+                    sql: "[employer_transactions].[GetLastLevyDeclarations_ByEmpRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task ProcessDeclarations()
         {
             await WithConnection(async c => await c.ExecuteAsync(
-                sql: "[levy].[ProcessDeclarationsTransactions]",
+                sql: "[employer_transactions].[ProcessDeclarationsTransactions]",
                 param: null,
                 commandType: CommandType.StoredProcedure));
         }
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<TransactionEntity>(
-                    sql: "[levy].[GetTransactionLines_ByAccountId]",
+                    sql: "[employer_transactions].[GetTransactionLines_ByAccountId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new AccountIdUserTableParam(accountIds);
                 
                 return await c.QueryAsync<AccountBalance>(
-                 "[levy].[GetAccountBalance_ByAccountIds]",
+                 "[employer_transactions].[GetAccountBalance_ByAccountIds]",
                  parameters,
                  commandType: CommandType.StoredProcedure);
             });
@@ -151,7 +151,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@PaymentsForPeriod", periodEnd.Links.PaymentsForPeriod, DbType.String);
                 
                 return await c.ExecuteAsync(
-                    sql: "[levy].[CreatePeriodEnd]",
+                    sql: "[employer_transactions].[CreatePeriodEnd]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -160,7 +160,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<PeriodEnd> GetLatestPeriodEnd()
         {
             var result = await WithConnection(async c => await c.QueryAsync<PeriodEnd>(
-                "[levy].[GetLatestPeriodEnd]",
+                "[employer_transactions].[GetLatestPeriodEnd]",
                 null,
                 commandType: CommandType.StoredProcedure));
             
@@ -177,7 +177,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@toDate", new DateTime(toDate.Year, toDate.Month, toDate.Day,23,59,59), DbType.DateTime);
 
                 return await c.QueryAsync<TransactionEntity>(
-                    sql: "[levy].[GetTransactionDetail_ByDateRange]",
+                    sql: "[employer_transactions].[GetTransactionDetail_ByDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -216,7 +216,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@CourseName", courseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
 
                 return await c.ExecuteAsync(
-                    sql: "[levy].[CreatePayment]",
+                    sql: "[employer_transactions].[CreatePayment]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -230,7 +230,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@paymentId", paymentId, DbType.Guid);
 
                 return await c.QueryAsync<Payment>(
-                    sql: "[levy].[GetPaymentData_ById]",
+                    sql: "[employer_transactions].[GetPaymentData_ById]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -241,7 +241,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task ProcessPaymentData()
         {
             await WithConnection(async c => await c.ExecuteAsync(
-                sql: "[levy].[ProcessPaymentDataTransactions]",
+                sql: "[employer_transactions].[ProcessPaymentDataTransactions]",
                 param: null,
                 commandType: CommandType.StoredProcedure));
         }
@@ -254,7 +254,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", empRef, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "[levy].[GetEnglishFraction_ByEmpRef]",
+                    sql: "[employer_transactions].[GetEnglishFraction_ByEmpRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
