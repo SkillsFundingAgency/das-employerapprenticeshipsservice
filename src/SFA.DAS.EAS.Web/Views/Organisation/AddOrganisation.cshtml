@@ -1,13 +1,12 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddLegalEntityViewModel>
-@{ViewBag.PageID = "enter-organisation-type"; }
 @{
     ViewBag.Title = "Add an organisation";
     ViewBag.Section = "organisations";
+    ViewBag.PageID = "enter-organisation-type";
 }
 
 <div class="column-two-thirds org-type-search">
-
     <h1 class="heading-xlarge">Add an organisation</h1>
 
     <h2 id="OrganisationType" class="heading-medium">Select your organisation type</h2>
@@ -90,7 +89,7 @@
 
             </div>
         </section>
-        <section>
+        <section class="last">
             <label for="other">
                 <span class="form-label-bold">Other</span>
             </label>

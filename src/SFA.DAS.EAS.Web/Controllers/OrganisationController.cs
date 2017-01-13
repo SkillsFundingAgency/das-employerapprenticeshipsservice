@@ -266,7 +266,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds.";
             }
             else
             {

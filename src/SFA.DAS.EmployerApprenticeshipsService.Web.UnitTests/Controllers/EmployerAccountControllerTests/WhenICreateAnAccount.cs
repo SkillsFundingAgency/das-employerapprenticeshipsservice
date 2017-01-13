@@ -121,5 +121,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
         }
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToTempData()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("successHeader"));
+
+        }
     }
 }
