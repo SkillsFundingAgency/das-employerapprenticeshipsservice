@@ -14,7 +14,7 @@
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
-            <input type="hidden" id="orgType" name="orgType" value="@OrganisationType.PublicBodies" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
             <div class="form-group">
                 <input type="text" id="publicBodyName" name="publicBodyName" placeholder="Search term"/>
                 <input type="submit" value="Search" />
