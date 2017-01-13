@@ -929,9 +929,8 @@
     <Content Include="StartUp\Powershell.msi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
-     <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
