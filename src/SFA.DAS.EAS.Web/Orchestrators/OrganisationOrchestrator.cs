@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             _logger.Info($"Returning Data for {companiesHouseNumber}");
-
+            
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
                 Data = new OrganisationDetailsViewModel
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Type = OrganisationType.CompaniesHouse,
                     ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
-                    DateOfInception = response.DateOfIncorporation,
+                    DateOfInception = response.DateOfIncorporation.Equals(DateTime.MinValue) ? (DateTime?)null : response.DateOfIncorporation,
                     Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
                     Status = response.CompanyStatus
                 }
