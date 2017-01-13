@@ -246,9 +246,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
-                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}, {charity.PostCode}",
-                    Status = "active"}
-                };
+                    Address = charity.FormattedAddress,
+                    Status = "active"
+                }
+            };
         }
 
         public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
