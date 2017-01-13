@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 SearchTerm = searchTerm,
                 PageNumber = 1,
-                PageSize = 1000
+                PageSize = 200
             });
 
             if (searchResults == null || !searchResults.Organisaions.Data.Any())
