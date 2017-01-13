@@ -150,6 +150,7 @@
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisation.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACharity.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACompany.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddOrganisationPage.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />

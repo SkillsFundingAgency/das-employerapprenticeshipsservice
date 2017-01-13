@@ -31,13 +31,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userWhiteList = new Mock<IUserWhiteList>();
             _mapper = new Mock<IMapper>();
 
-            _orchestrator.Setup(x => x.GetCharityByRegistrationNumber(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetCharityByRegistrationNumber(It.Is<string>(c => c == "12345"), It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.OK
                 });
 
+            _orchestrator.Setup(x => x.GetCharityByRegistrationNumber(It.Is<string>(c => c == "666"), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<OrganisationDetailsViewModel>
+                {
+                    Data = new OrganisationDetailsViewModel(),
+                    Status = HttpStatusCode.NotFound
+                });
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,
@@ -81,7 +87,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("AddOrganisationAddress", result.ViewName);
-
         }
+
+        [Test]
+        public async Task ThenIShouldBeUnableToProceedIfTheCharityDoesNotExist()
+        {
+            //Arrange
+            var model = new AddLegalEntityViewModel
+            {
+                OrganisationType = OrganisationType.Charities,
+                CharityRegistrationNumber = "666"
+            };
+
+            //Act
+            var result = await _controller.AddOrganisation(model) as ViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("AddOrganisation", result.ViewName);
+        }
+
+
     }
 }
