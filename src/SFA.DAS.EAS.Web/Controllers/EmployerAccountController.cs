@@ -147,9 +147,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = $"{enteredData.OrganisationName} has been added";
-            TempData["successMessage"] = "This account can now spend levy funds.";
-
+            TempData["successHeader"] = "Account Created";
+            
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 

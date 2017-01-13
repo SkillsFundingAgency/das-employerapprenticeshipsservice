@@ -22,6 +22,11 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">PAYE schemes</h1>
         <p class="lede">Levy funds will credit your account from any PAYE schemes you add.</p>
+        
+        @if (DateTime.Today < new DateTime(2017, 05, 20))
+        {
+            <p>No funds will credit your account until May 2017.</p>
+        }
     </div>
     <div class="column-one-third pull-right">
         <form action="@Url.Action("GatewayInform")" method="GET">
