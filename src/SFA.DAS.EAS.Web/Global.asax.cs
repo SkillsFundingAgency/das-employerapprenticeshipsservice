@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -32,6 +33,12 @@ namespace SFA.DAS.EAS.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             FluentValidationModelValidatorProvider.Configure();
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            application?.Context?.Response.Headers.Remove("Server");
         }
 
         protected void Application_Error(object sender, EventArgs e)

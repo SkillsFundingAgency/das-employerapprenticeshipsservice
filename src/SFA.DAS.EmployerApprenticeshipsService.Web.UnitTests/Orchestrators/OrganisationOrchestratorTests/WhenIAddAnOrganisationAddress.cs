@@ -23,6 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private CreateOrganisationAddressRequest _request;
         private AddOrganisationAddressModel _model;
         private string _address;
+        private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
@@ -51,7 +52,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>()))
                      .Returns(new CreateOrganisationAddressResponse {Address = _address});
 
-            _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object);
+            _cookieService = new Mock<ICookieService>();
+            
+
+             _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
         }
 
         [Test]

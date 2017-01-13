@@ -124,8 +124,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
         
 
-        public async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
+        public virtual async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
         {
+            //TODO change to return the OrchestratorResposne as this can have a unauthorized resposne
             await Mediator.SendAsync(new AddPayeToAccountCommand
             {
                 HashedAccountId = model.HashedAccountId,

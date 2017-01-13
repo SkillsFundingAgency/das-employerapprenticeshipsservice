@@ -1,16 +1,15 @@
 ﻿@using SFA.DAS.EAS.Domain
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddLegalEntityViewModel>
-@{ViewBag.PageID = "enter-organisation-type"; }
 @{
     ViewBag.Title = "Add an organisation";
     ViewBag.Section = "organisations";
+    ViewBag.PageID = "enter-organisation-type";
 }
 
 <div class="column-two-thirds org-type-search">
-
     <h1 class="heading-xlarge">Add an organisation</h1>
 
-    <h2 id="radio-legend" class="heading-medium">Select your organisation type</h2>
+    <h2 id="OrganisationType" class="heading-medium">Select your organisation type</h2>
 
     <form action="@Url.Action("AddOrganisation", "Organisation")" method="POST">
         @Html.AntiForgeryToken()
@@ -19,7 +18,7 @@
                 <span class="form-label-bold">Listed on Companies House</span>
                 <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
             </label>
-            <input type="radio" aria-labelledby="radio-legend" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ? "checked='checked'" : "") />
+            <input type="radio" aria-labelledby="OrganisationType" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ? "checked='checked'" : "") />
             <div id="search-company" class="search-form panel panel-border-narrow">
                 <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError) ? "error" : "")">
                     <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
@@ -90,7 +89,7 @@
 
             </div>
         </section>
-        <section>
+        <section class="last">
             <label for="other">
                 <span class="form-label-bold">Other</span>
             </label>

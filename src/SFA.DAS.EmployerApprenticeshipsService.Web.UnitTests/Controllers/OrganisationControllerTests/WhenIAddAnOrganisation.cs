@@ -54,20 +54,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _mapper.Object);
         }
 
-        [Test]
-        public async Task ThenIMustSelectAType()
-        {
-            //Arrange
-            var model = new AddLegalEntityViewModel();
+        //[Test]
+        //public async Task ThenIMustSelectAType()
+        //{
+        //    //Arrange
+        //    var model = new AddLegalEntityViewModel();
 
-            //Act
-            var result = await _controller.AddOrganisation(model);
+        //    //Act
+        //    var result = await _controller.AddOrganisation(model);
 
-            //Assert
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            Assert.AreEqual("", viewResult.ViewName);
-        }
+        //    //Assert
+        //    var viewResult = result as ViewResult;
+        //    Assert.IsNotNull(viewResult);
+        //    Assert.AreEqual("", viewResult.ViewName);
+        //}
 
     }
 }

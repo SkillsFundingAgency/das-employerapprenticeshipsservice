@@ -35,41 +35,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         }
 
-      
-
         [HttpGet]
-        public ActionResult GatewayInform(OrganisationDetailsViewModel model)
+        public ActionResult GatewayInform()
         {
-
-            EmployerAccountData data;
-            if (model?.Name != null)
-            {
-                data = new EmployerAccountData
-                {
-                    OrganisationType = model.Type,
-                    OrganisationReferenceNumber = model.ReferenceNumber,
-                    OrganisationName = model.Name,
-                    OrganisationDateOfInception = model.DateOfInception,
-                    OrganisationRegisteredAddress = model.Address,
-                    OrganisationStatus = model.Status ?? "active"
-                };
-            }
-            else
-            {
-                var existingData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-
-                data = new EmployerAccountData
-                {
-                    OrganisationType = existingData.OrganisationType,
-                    OrganisationReferenceNumber = existingData.OrganisationReferenceNumber,
-                    OrganisationName = existingData.OrganisationName,
-                    OrganisationDateOfInception = existingData.OrganisationDateOfInception,
-                    OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
-                    OrganisationStatus = existingData.OrganisationStatus
-                };
-            }
-            
-            _employerAccountOrchestrator.CreateCookieData(HttpContext, data);
             var flashMessageViewModel = new FlashMessageViewModel();
             if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
             {
@@ -134,6 +102,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 OrganisationType = enteredData.OrganisationType,
                 OrganisationName = enteredData.OrganisationName,
+                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
                 OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
                 PayeReference = enteredData.PayeReference,
@@ -179,9 +148,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             
             TempData["employerAccountCreated"] = "true";
-            TempData["successHeader"] = $"{enteredData.OrganisationName} has been added";
-            TempData["successMessage"] = "This account can now spend levy funds.";
-
+            TempData["successHeader"] = "Account Created";
+            
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
