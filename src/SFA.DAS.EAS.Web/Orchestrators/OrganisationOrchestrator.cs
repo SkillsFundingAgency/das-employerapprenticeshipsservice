@@ -160,6 +160,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new PublicSectorOrganisationSearchResultsViewModel
                 {
                     HashedAccountId = hashedAccountId,
+                    SearchTerm = searchTerm,
                     Results = pagedResponse
                 },
                 Status = HttpStatusCode.OK
