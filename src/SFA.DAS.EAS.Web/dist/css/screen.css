@@ -2290,6 +2290,11 @@ table.top-border {
 
 .org-type-search .panel {
   margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.org-type-search .form-group {
+  margin-bottom: 10px;
 }
 
 @media (min-width: 641px) {
