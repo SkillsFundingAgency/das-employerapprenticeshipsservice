@@ -228,8 +228,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.17484, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.17484\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+    <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.18229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.18735, Culture=neutral, processorArchitecture=MSIL">
