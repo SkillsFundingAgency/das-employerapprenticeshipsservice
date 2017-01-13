@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Domain.Models.ReferenceData
         public string Address3 { get; set; }
         public string Address4 { get; set; }
         public string Address5 { get; set; }
+        public string PostCode { get; set; }
         public DateTime RegistrationDate { get; set; }
         public bool IsRemoved { get; set; }
     }

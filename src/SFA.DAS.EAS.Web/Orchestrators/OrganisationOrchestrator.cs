@@ -174,7 +174,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
 	            if (accountEntities.Entites.LegalEntityList.Any(
-	                x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)
+	                x =>(!String.IsNullOrWhiteSpace(x.Code) && x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
 	                && x.Source == (short)OrganisationType.Charities))
 	            {
 	                var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
@@ -246,9 +246,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
-                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
+                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}, {charity.PostCode}",
                     Status = "active"}
-            };
+                };
         }
 
         public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
