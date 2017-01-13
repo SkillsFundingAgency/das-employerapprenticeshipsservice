@@ -31,10 +31,16 @@ namespace SFA.DAS.EAS.Web.Validators
                 .WithMessage("Enter charity registration number");
 
             RuleFor(r => r.CharityRegistrationNumber)
-                .Must(x=> Regex.IsMatch(x.Trim(), "^[0-9]*$"))               
+                .Must(CanParseInt32)
                 .When(x => x.OrganisationType == OrganisationType.Charities)
-                .When(x=> !String.IsNullOrWhiteSpace(x.CharityRegistrationNumber))
+                .When(x => !String.IsNullOrWhiteSpace(x.CharityRegistrationNumber))
                 .WithMessage("Enter a valid charity registration number");
+        }
+
+        private static bool CanParseInt32(string value)
+        {
+            var output = 0;
+            return int.TryParse(value, out output);
         }
     }
 }
