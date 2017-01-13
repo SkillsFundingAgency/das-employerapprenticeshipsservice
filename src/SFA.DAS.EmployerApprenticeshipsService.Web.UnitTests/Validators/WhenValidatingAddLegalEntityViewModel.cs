@@ -86,5 +86,24 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             Assert.IsTrue(validResult.IsValid);
 
         }
+
+        [Test]
+        public async Task ThenCharityRegistrationNumberMustBeAnInt32()
+        {
+            //Arrange
+            var invalidModel = new AddLegalEntityViewModel
+            {
+                OrganisationType = OrganisationType.Charities,
+                CharityRegistrationNumber = "99999999999"
+            };
+
+            //Act
+            var invalidResult = await _validator.ValidateAsync(invalidModel);
+
+            //Assert
+            Assert.IsFalse(invalidResult.IsValid);
+            Assert.AreEqual(1, invalidResult.Errors.Count);
+            Assert.IsNotNull(invalidResult.Errors.SingleOrDefault(x => x.PropertyName == "CharityRegistrationNumber"));  
+        }
     }
 }
