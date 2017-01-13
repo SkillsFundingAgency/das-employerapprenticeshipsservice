@@ -53,9 +53,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
 	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-	            if (accountEntities.Entites.LegalEntityList.Any(
-                    x => (!String.IsNullOrWhiteSpace(x.Code) && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase));
-
+	            if (accountEntities.Entites.LegalEntityList.Any(x =>
+                    (!String.IsNullOrWhiteSpace(x.Code)
+                    && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
                 {
 	                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
 	                {
