@@ -102,6 +102,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 OrganisationType = enteredData.OrganisationType,
                 OrganisationName = enteredData.OrganisationName,
+                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
                 OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
                 PayeReference = enteredData.PayeReference,

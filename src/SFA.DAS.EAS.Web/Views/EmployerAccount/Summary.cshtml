@@ -41,7 +41,10 @@
                             <dt>Name:</dt>
                             <dd>@Model.OrganisationName</dd>
                             
-                           @if (Model.OrganisationType == OrganisationType.CompaniesHouse || Model.OrganisationType == OrganisationType.Charities)
+                            <dt>Address:</dt>
+                            <dd>@Model.RegisteredAddress</dd>
+                            
+                            @if (Model.OrganisationType == OrganisationType.CompaniesHouse || Model.OrganisationType == OrganisationType.Charities)
                            {
                                if (Model.OrganisationType == OrganisationType.CompaniesHouse)
                                {
