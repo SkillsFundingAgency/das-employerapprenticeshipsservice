@@ -1,7 +1,10 @@
-﻿using SFA.DAS.EAS.Domain;
+﻿using FluentValidation.Attributes;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
+    [Validator(typeof(AddLegalEntityViewModelValidator))]
     public class AddLegalEntityViewModel: ViewModelBase
     {
         public string HashedAccountId { get; set; }

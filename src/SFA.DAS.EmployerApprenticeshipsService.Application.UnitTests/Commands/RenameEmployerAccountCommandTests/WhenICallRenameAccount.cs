@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
@@ -13,6 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
         private Mock<IEmployerAccountRepository> _repository;
         private Mock<IValidator<RenameEmployerAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IMediator> _mediator;
         private const long AccountId = 12343322;
         private const string HashedAccountId = "123ADF23";
         private RenameEmployerAccountCommandHandler _commandHandler;
@@ -30,7 +33,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RenameEmployerAccountCommand>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _validator.Object, _hashingService.Object);
+            _mediator = new Mock<IMediator>();
+
+            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _validator.Object, _hashingService.Object, _mediator.Object);
         }
 
         [Test]
@@ -49,6 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             //Assert
             _repository.Verify(x=> x.RenameAccount(It.Is<long>(l=> l == AccountId), It.Is<string>(s => s== newAccountName)));
+            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == HashedAccountId && e.Event == "AccountRenamed")));
         }
 
     }
