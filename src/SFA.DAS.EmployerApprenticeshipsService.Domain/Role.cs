@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Domain
         {
             switch(role)
             {
-                case "Owner": return "Invite team members, sign agreements, add apprentices and view information";
+                case "Owner": return "Accept agreements, view information and manage PAYE schemes, organisations, apprentices and team members";
                 case "Transactor": return "Add apprentices and view information";
                 case "Viewer": return "View information but can’t make changes";
                 default: throw new ArgumentException("Unexpected role: " + role);
