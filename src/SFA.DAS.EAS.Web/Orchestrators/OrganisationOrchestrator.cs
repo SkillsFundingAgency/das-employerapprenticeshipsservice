@@ -255,7 +255,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
+        public virtual async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
             string hashedAccountId, string externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
@@ -278,7 +278,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return accountEntities;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
             CreateNewLegalEntity request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
@@ -336,7 +336,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -381,7 +381,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
             AddOrganisationAddressModel model)
         {
             try
