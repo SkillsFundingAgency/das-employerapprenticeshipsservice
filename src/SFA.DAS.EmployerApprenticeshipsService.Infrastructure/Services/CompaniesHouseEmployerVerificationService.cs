@@ -27,6 +27,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             _logger.Info($"GetInformation({id})");
 
+            id = id.ToUpper();
+
             if (_configuration.CompaniesHouse.UseManagedList)
             {
                 var companies = _managedCompanyLookupService.GetCompanies();
