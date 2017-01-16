@@ -150,6 +150,9 @@
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisation.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACharity.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACompany.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewMyNewLegalEntityAgreement.cs" />
@@ -159,6 +162,7 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddOrganisationPage.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
@@ -174,6 +178,7 @@
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenIAddAnOrganisationAddress.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityOfOtherType.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForACharity.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingStatusOfCommitment.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />

@@ -6,8 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using MediatR;
 using Moq;
+using NLog;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
@@ -16,7 +20,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
-    public class WhenIAddAnOrganisation
+    public class WhenIGoToAddOrganisationPage
     {
         private OrganisationController _controller;
         private Mock<OrganisationOrchestrator> _orchestrator;
@@ -34,17 +38,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userWhiteList = new Mock<IUserWhiteList>();
             _mapper = new Mock<IMapper>();
 
-            _orchestrator.Setup(x => x.ValidateLegalEntityName(It.IsAny<OrganisationDetailsViewModel>()))
-                .ReturnsAsync(new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.OK
-                });
-
-            _orchestrator.Setup(x =>
-                    x.CreateAddOrganisationAddressViewModelFromOrganisationDetails(
-                        It.IsAny<OrganisationDetailsViewModel>()))
-                .Returns(new OrchestratorResponse<AddOrganisationAddressModel>());
+            _orchestrator.Setup(x => x.GetAddLegalEntityViewModel(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AddLegalEntityViewModel>());
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,
@@ -55,23 +50,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         }
 
         [Test]
-        public async Task ThenOnModelValidationErrorsIAmReturnedToTheViewAndTheErrorsAreInTheErrorDictionary()
+        public async Task ThenIGetTheAddOrganisationView()
         {
-            //Arrange
-            var model = new AddLegalEntityViewModel();
-            _controller.ModelState.AddModelError("OrganisationType", "Organisation Type Error Message");
-
             //Act
-            var result = await _controller.AddOrganisation(model);
+            var result = await _controller.AddOrganisation("ABC123") as ViewResult;
 
             //Assert
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            Assert.AreEqual("", viewResult.ViewName);
-
-            var viewModel = viewResult.Model as OrchestratorResponse<AddLegalEntityViewModel>;
-            Assert.IsNotNull(viewModel);
-            Assert.IsTrue(viewModel.Data.ErrorDictionary.ContainsKey("OrganisationType"));
+            _orchestrator.Verify(x=> x.GetAddLegalEntityViewModel(It.Is<string>(s=> s=="ABC123"), It.IsAny<string>()), Times.Once);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("", result.ViewName);
         }
 
     }
