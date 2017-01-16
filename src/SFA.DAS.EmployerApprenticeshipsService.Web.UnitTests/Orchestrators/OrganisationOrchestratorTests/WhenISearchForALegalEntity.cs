@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -50,10 +49,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 CompanyNumber = "0123456",
                 DateOfIncorporation = DateTime.Now,
                 AddressLine1 = "1 Test Road",
-                AddressLine2 = "Test City",
+                AddressLine2 = "Test Park",
+                TownOrCity = "Test City",
+                County = "Testshire",
                 AddressPostcode = "TE12 3ST",
                 CompanyStatus = "active"
-            }; ;
+            }; 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>()))
                 .ReturnsAsync(expected);
             
@@ -66,7 +67,32 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             Assert.AreEqual(expected.CompanyName,actual.Data.Name);
             Assert.AreEqual(expected.DateOfIncorporation,actual.Data.DateOfInception);
             Assert.AreEqual(expected.CompanyNumber,actual.Data.ReferenceNumber);
-            Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressLine2}, {expected.AddressPostcode}", actual.Data.Address);
+            Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressLine2}, {expected.TownOrCity}, {expected.County}, {expected.AddressPostcode}", actual.Data.Address);
+        }
+
+
+        [Test]
+        public async Task ThenTheCompanyAddressOnlyIncludedPopulatedValues()
+        {
+            //Arrange
+            var expected = new GetEmployerInformationResponse
+            {
+                CompanyName = "Test Corp",
+                CompanyNumber = "0123456",
+                DateOfIncorporation = DateTime.Now,
+                AddressLine1 = "1 Test Road",
+                AddressPostcode = "TE12 3ST",
+                CompanyStatus = "active"
+            };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>()))
+                .ReturnsAsync(expected);
+
+            //Act
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(string.Empty, string.Empty, string.Empty);
+
+            //Assert
+          
+            Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressPostcode}", actual.Data.Address);
         }
 
         [Test]
