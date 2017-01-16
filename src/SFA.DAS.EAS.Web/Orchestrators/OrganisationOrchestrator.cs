@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
 	            if (accountEntities.Entites.LegalEntityList.Any(x =>
-                    (!String.IsNullOrWhiteSpace(x.Code)
+                    (!string.IsNullOrWhiteSpace(x.Code)
                     && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
                 {
 	                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
@@ -85,7 +86,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             _logger.Info($"Returning Data for {companiesHouseNumber}");
-            
+
+            var address = BuildAddressString(response);
+
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
                 Data = new OrganisationDetailsViewModel
@@ -95,7 +98,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
                     DateOfInception = response.DateOfIncorporation.Equals(DateTime.MinValue) ? (DateTime?)null : response.DateOfIncorporation,
-                    Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    Address = address,
                     Status = response.CompanyStatus
                 }
             };
@@ -453,6 +456,40 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var json = JsonConvert.SerializeObject(data);
             _cookieService.Create(context, CookieName, json, 365);
+        }
+
+        private static string BuildAddressString(GetEmployerInformationResponse response)
+        {
+            var addressBuilder = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(response.AddressLine1))
+            {
+                addressBuilder.Append($"{response.AddressLine1}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.AddressLine2))
+            {
+                addressBuilder.Append($"{response.AddressLine2}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.TownOrCity))
+            {
+                addressBuilder.Append($"{response.TownOrCity}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.County))
+            {
+                addressBuilder.Append(string.IsNullOrEmpty(response.AddressPostcode)
+                    ? $"{response.County}"
+                    : $"{response.County}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.AddressPostcode))
+            {
+                addressBuilder.Append(response.AddressPostcode);
+            }
+
+            return addressBuilder.ToString();
         }
     }
 }
