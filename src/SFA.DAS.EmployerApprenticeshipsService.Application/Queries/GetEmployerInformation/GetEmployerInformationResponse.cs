@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
 
         public string CompanyNumber { get; set; }
 
-        public DateTime DateOfIncorporation { get; set; }
+        public DateTime? DateOfIncorporation { get; set; }
 
         public string AddressLine1 { get; set; }
 

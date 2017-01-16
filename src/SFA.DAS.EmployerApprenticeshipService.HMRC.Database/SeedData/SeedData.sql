@@ -10,10 +10,11 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-EXECUTE levy.Cleardown
 
-
-insert into [levy].[TopUpPercentage]
-(datefrom,amount)
-values
-('2015-01-01 00:00:00.000',0.1)
+IF NOT EXISTS(SELECT 1 FROM [Levy].[TopUpPercentage] WHERE datefrom='2015-01-01 00:00:00.000' and amount=0.1 )
+BEGIN
+	insert into [levy].[TopUpPercentage]
+	(datefrom,amount)
+	values
+	('2015-01-01 00:00:00.000',0.1)
+END

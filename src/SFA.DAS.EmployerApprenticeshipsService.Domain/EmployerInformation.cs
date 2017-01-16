@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Domain
         public string CompanyNumber { get; set; }
 
         [JsonProperty("date_of_creation")]
-        public DateTime DateOfIncorporation { get; set; }
+        public DateTime? DateOfIncorporation { get; set; }
 
         [JsonProperty("registered_office_address")]
         public Address RegisteredAddress { get; set; }

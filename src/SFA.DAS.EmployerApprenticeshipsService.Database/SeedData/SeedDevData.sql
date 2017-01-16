@@ -10,9 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-
-EXECUTE account.Cleardown;
-
 -- Role seed data
 SET IDENTITY_INSERT  [account].[Role] ON 
 IF (NOT EXISTS(SELECT * FROM [account].[Role] WHERE Id = 1
