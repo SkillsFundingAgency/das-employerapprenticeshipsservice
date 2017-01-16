@@ -22,7 +22,7 @@
             @if (Model.Data.Accounts.AccountList.Count == 0)
             {
                 <h1 class="heading-xlarge" id="Levy-accounts">Set up your account</h1>
-                <p>To access levy funds you need to set up an account.</p>
+                <p>To access funds you need to set up an account.</p>
                 <p>To do this you'll need:</p>
                 <ul class="list list-bullet" aria-labelledby="Levy-accounts">
                     <li>the Government Gateway login details for your PAYE schemes</li>
@@ -32,12 +32,12 @@
                     <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
                 </p>
                 <p>Search for <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">your Companies House number</a> or <a href="https://www.gov.uk/find-charity-information" rel="external" target="_blank">your Charity number</a></p>
-                <h2 class="heading-medium">If your organisation already has a levy account</h2>
-                <p>If someone in your organisation has already created a levy account, you'll need to ask them to invite you to the account.</p>
+                <h2 class="heading-medium">If your organisation already has an account</h2>
+                <p>If someone in your organisation has already created an account, you'll need to ask them to invite you to the account.</p>
             }
             else
             {
-                <h1 class="heading-xlarge" id="Levy-accounts">Your levy accounts</h1>
+                <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
                 <p>Select an account or add a new one.</p>
                 <table>
                     <thead>
