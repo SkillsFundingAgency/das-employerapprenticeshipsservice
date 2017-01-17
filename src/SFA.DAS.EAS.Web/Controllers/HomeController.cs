@@ -112,7 +112,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult HandleNewRegistration()
         {
-            //TempData["successMessage"] = @"You've created your profile";
             TempData["virtualPageUrl"] = @"/user-created-account";
             TempData["virtualPageTitle"] = @"User Action - Created Account";
 
