@@ -12,6 +12,7 @@
       <Setting name="RedisConnection" value="__RedisConnection__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="0319EE6013CE54044F3C8189383A02C7A2C74EA1" thumbprintAlgorithm="sha1" />
@@ -25,8 +26,8 @@
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />
-      <Setting name="LoggingRedisConnectionString" value="__EventHubConnectionString__" />
-      <Setting name="LoggingRedisKey" value="__EventHubName__" />
+      <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
+      <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
