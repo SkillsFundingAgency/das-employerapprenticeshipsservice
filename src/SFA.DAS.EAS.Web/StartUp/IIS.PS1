@@ -57,9 +57,6 @@ $Azure="Azure"
 if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure }) 
 {  
 
-
-
-
 #Static Variables#
 
 $checkcert=(Get-ChildItem cert:\LocalMachine\My | Where thumbprint -eq $thumbprint).Thumbprint
@@ -99,7 +96,7 @@ break
 
 #Gets PFX Password from table storage#
 $TableName = "Configuration"
-$table = Get-AzureStorageTable –Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
+$table = Get-AzureStorageTable -Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
 $query = New-Object Microsoft.WindowsAzure.Storage.Table.TableQuery 
 
 if (!$table)
@@ -119,8 +116,11 @@ $query.SelectColumns = $list
 
 $entities = $table.CloudTable.ExecuteQuery($query)
 
-$CertPassword=((($entities.Properties).Values).PropertyAsObject)
+$password=$entities.Properties
+$password1=$password.Values
+$CertPassword=$password1.PropertyAsObject
 
+$certpassword
 if (!$CertPassword)
 {
 write-host "Password not available"
@@ -145,4 +145,4 @@ Remove-Item $localTargetDirectory -Force -Recurse
 else  
 {  
  "StartUp\Powershell.msi" | Install-MSIFile
-}
+ }
