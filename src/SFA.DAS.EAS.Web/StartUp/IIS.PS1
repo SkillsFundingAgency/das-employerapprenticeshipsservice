@@ -59,7 +59,7 @@ break
 
 #Gets PFX Password from table storage#
 $TableName = "Configuration"
-$table = Get-AzureStorageTable –Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
+$table = Get-AzureStorageTable â€“Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
 $query = New-Object Microsoft.WindowsAzure.Storage.Table.TableQuery 
 
 if (!$table)
@@ -87,9 +87,9 @@ write-host "Password not available"
 break
 }
 
-$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force –AsPlainText
+$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force â€“AsPlainText
 
-Import-PfxCertificate –FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+Import-PfxCertificate â€“FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
 
 #Setting Permission on the Cert for ReadAccess#
 
@@ -97,6 +97,6 @@ Permissions
 
 #Removing the Certificate download location#
 
-Remove-Item $localTargetDirectory -Force
+Remove-Item $localTargetDirectory -Force -Recurse
 
 }
