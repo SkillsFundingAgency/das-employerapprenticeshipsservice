@@ -57,6 +57,12 @@ $Azure="Azure"
 if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure }) 
 {  
 
+
+
+[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+$ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
+$EnvironmentName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("EnvironmentName")
+$Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenCertificateThumbprint")
 #Static Variables#
 
 $checkcert=(Get-ChildItem cert:\LocalMachine\My | Where thumbprint -eq $thumbprint).Thumbprint
@@ -64,12 +70,6 @@ $Ctx = New-AzureStorageContext -ConnectionString "$ConfigurationStorageConnectio
 $BlobName = "$environmentname/DasIDPCert.pfx"
 $ContainerName = "certs"
 $localTargetDirectory = "C:\Cert"
-
-[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
-$ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
-$EnvironmentName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("EnvironmentName")
-$Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenCertificateThumbprint")
-
 if ($checkcert)
 {
 Write-Warning -Message "Certificate already installed"
@@ -127,9 +127,9 @@ write-host "Password not available"
 break
 }
 
-$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force –AsPlainText
+$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force -AsPlainText
 
-Import-PfxCertificate –FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+Import-PfxCertificate -FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
 
 #Setting Permission on the Cert for ReadAccess#
 
