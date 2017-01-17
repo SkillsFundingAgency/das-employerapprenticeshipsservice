@@ -562,7 +562,6 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
-    <Content Include="App_Data\Certificates\DasIDPCert.pfx" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
