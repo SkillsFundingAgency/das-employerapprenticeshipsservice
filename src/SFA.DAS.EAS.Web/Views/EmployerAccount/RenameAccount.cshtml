@@ -1,7 +1,7 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.RenameEmployerAccountViewModel>
 
 @{ViewBag.PageID = "page-change-account-name"; }
-@{ViewBag.Title = "Rename levy account"; }
+@{ViewBag.Title = "Rename account"; }
 @{ViewBag.HideNav = "true"; }
 
 <form method="post">
@@ -9,7 +9,7 @@
     <div class="grid-row">
         <div class="column-two-thirds">
 
-            <h1 class="heading-xlarge">Rename levy account</h1>
+            <h1 class="heading-xlarge">Rename account</h1>
             
             @Html.AntiForgeryToken()
 
@@ -53,7 +53,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol>
-            <li><a href="/" class="back-link">Back to your levy accounts</a></li>
+            <li><a href="/" class="back-link">Back to your accounts</a></li>
         </ol>
     </div>
 }

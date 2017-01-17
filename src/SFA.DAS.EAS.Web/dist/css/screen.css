@@ -2742,6 +2742,15 @@ a#link-settings:focus {
   }
 }
 
+.govuk-box-highlight {
+  padding: 1.8em 15px 1.5em;
+  margin-bottom: 0;
+}
+
+.govuk-box-highlight p {
+  margin-bottom: 0;
+}
+
 legend {
   margin-bottom: 10px;
 }
@@ -3498,10 +3507,6 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
-}
-
-.breadcrumbs a {
-  font-size: 16px;
 }
 
 .tableResponsive td {

@@ -16,8 +16,6 @@ namespace SFA.DAS.EAS.Web.Validators
             Func<string, int, bool> lengthLessThan = (str, length) => (str?.Length ?? 0) <= length;
             Func<string, int, bool> haveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
 
-            RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number");
-
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");

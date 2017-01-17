@@ -123,9 +123,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     RegistrationNumber = charityRegistrationNumber
                 });
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException ex)
             {
-                _logger.Warn("Charity not found");
+                _logger.Warn(ex);
                 return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),

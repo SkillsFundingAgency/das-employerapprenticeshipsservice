@@ -7,15 +7,15 @@
 }
 @{ViewBag.PageID = "page-transactions"; }
 @{ViewBag.Section = "finance"; }
-@{ViewBag.Title = "Your levy transactions";}
+@{ViewBag.Title = "Your transactions";}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your levy transactions</h1>
+        <h1 class="heading-xlarge">Your transactions</h1>
         @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.TransactionLines.Count == 0)
         {
             <p>
-                No levy funds will be paid into your account until May 2017.
+                No funds will be paid into your account until May 2017.
             </p>
         }
         else
