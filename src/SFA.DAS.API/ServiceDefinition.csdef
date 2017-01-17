@@ -15,8 +15,8 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="LoggingRedisConnectionString" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
       <Setting name="idaAudience" />
       <Setting name="idaTenant" />
     </ConfigurationSettings>

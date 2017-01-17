@@ -559,7 +559,6 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
-    <Content Include="App_Data\Certificates\DasIDPCert.pfx" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -766,6 +765,9 @@
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen.scss" />
+    <Content Include="StartUp\FindPrivateKey.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -914,6 +916,15 @@
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="StartUp\IIS.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\IIS.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\Powershell.msi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
