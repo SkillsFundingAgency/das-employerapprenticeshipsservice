@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.PublicSectorDataJsonFormatter
                     Source = source
                 };
 
-                model.OrganisationNames.Add(organisation);
+                model.Organisations.Add(organisation);
             }
 
             Console.WriteLine($"Imported {lines.Length} {source} records from {filename}");
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.PublicSectorDataJsonFormatter
                 return;
             }
 
-            Console.WriteLine($"Exported {model.OrganisationNames.Count} records");
+            Console.WriteLine($"Exported {model.Organisations.Count} records");
         }
 
     }

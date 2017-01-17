@@ -10,9 +10,9 @@ namespace SFA.DAS.EAS.PublicSectorDataJsonFormatter.Model
     {
         public OrganisationList()
         {
-            OrganisationNames = new List<Organisation>();
+            Organisations = new List<Organisation>();
         }
 
-        public List<Organisation> OrganisationNames { get; set; }
+        public List<Organisation> Organisations { get; set; }
     }
 }
