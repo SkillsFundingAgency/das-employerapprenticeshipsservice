@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             };
 
-            return View("UsedServiceBefore", model);
+            return View("ServiceStartPage", model);
         }
 
         [HttpPost]
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult HandleNewRegistration()
         {
-            TempData["successMessage"] = @"You've created your profile";
+            //TempData["successMessage"] = @"You've created your profile";
             TempData["virtualPageUrl"] = @"/user-created-account";
             TempData["virtualPageTitle"] = @"User Action - Created Account";
 
@@ -129,7 +129,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 TempData["virtualPageUrl"] = @"/user-changed-password";
                 TempData["virtualPageTitle"] = @"User Action - Changed Password";
             }
-            
 
             return RedirectToAction("Index");
         }
@@ -177,6 +176,26 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult Help()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult ServiceStartPage()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult UsedServiceBefore()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
         }
 
 

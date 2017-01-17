@@ -1,0 +1,22 @@
+﻿@{ViewBag.PageID = "page-service-start"; }
+@{ViewBag.Title = "Manage apprenticeships"; }
+@{ViewBag.HideNav = "true"; }
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            @ViewBag.Title
+        </h1>
+        <p class="lede">This service is for organisations that pay the apprenticeship levy. Use this service to:</p>
+        <ul class="list list-bullet">
+            <li>create new accounts</li>
+            <li>start, stop or amend your apprenticeship programmes</li>
+            <li>spend your levy funds on apprentices (from May 2017)</li>
+        </ul>
+        <p><a class="button button-start" id="create_account" href="@Url.Action("UsedServiceBefore", "Home")">Start</a> </p>
+        <h2 class="heading-medium">Before you start</h2>
+        <p><a href="https://www.gov.uk/government/publications/apprenticeship-levy-how-it-will-work/apprenticeship-levy-how-it-will-work" target="_blank" rel="external">Find out how the apprenticeship levy works</a></p>
+        <h2 class="heading-medium">If you don’t pay the apprenticeship levy</h2>
+        <p>You can <a href="https://www.recruit-apprentice.service.gov.uk" target="_blank" rel="external">advertise an apprenticeship vacancy</a> and <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk" target="_blank" rel="external">search for training courses and providers</a>.</p>
+    </div>
+</div>

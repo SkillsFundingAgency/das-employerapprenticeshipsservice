@@ -17,69 +17,67 @@
 }
 <div class="grid-row">
     <div class="column-full">
-        <section>
             
-            @if (Model.Data.Accounts.AccountList.Count == 0)
-            {
-                <h1 class="heading-xlarge" id="Levy-accounts">Set up your account</h1>
-                <p>To access levy funds you need to set up an account.</p>
-                <p>To do this you'll need:</p>
-                <ul class="list list-bullet" aria-labelledby="Levy-accounts">
-                    <li>the Government Gateway login details for your PAYE schemes</li>
-                    <li>your organisation's Companies House number or Charity number (only if your organisation has one)</li>
-                </ul>
-                <p>
-                    <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
-                </p>
-                <p>Search for <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">your Companies House number</a> or <a href="https://www.gov.uk/find-charity-information" rel="external" target="_blank">your Charity number</a></p>
-                <h2 class="heading-medium">If your organisation already has a levy account</h2>
-                <p>If someone in your organisation has already created a levy account, you'll need to ask them to invite you to the account.</p>
-            }
-            else
-            {
-                <h1 class="heading-xlarge" id="Levy-accounts">Your levy accounts</h1>
-                <p>Select an account or add a new one.</p>
-                <table>
-                    <thead>
+        @if (Model.Data.Accounts.AccountList.Count == 0)
+        {
+            <h1 class="heading-xlarge" id="Levy-accounts">Set up your account</h1>
+            <p>To access levy funds you need to set up an account.</p>
+            <p>To do this you'll need:</p>
+            <ul class="list list-bullet" aria-labelledby="Levy-accounts">
+                <li>the Government Gateway login details for your PAYE schemes</li>
+                <li>your organisation's Companies House number or Charity number (only if your organisation has one)</li>
+            </ul>
+            <p>
+                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
+            </p>
+            <p>Search for <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">your Companies House number</a> or <a href="https://www.gov.uk/find-charity-information" rel="external" target="_blank">your Charity number</a></p>
+            <h2 class="heading-medium">If your organisation already has a levy account</h2>
+            <p>If someone in your organisation has already created a levy account, you'll need to ask them to invite you to the account.</p>
+        }
+        else
+        {
+            <h1 class="heading-xlarge" id="Levy-accounts">Your levy accounts</h1>
+            <p>Select an account or add a new one.</p>
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Account name</th>
+                    <th scope="col">What you can do</th>
+                    <th scope="col"><span class="vh">Select account</span></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var account in Model.Data.Accounts.AccountList)
+                {
                     <tr>
-                        <th scope="col">Account name</th>
-                        <th scope="col">What you can do</th>
-                        <th scope="col"><span class="vh">Select account</span></th>
+                        <td class="responsive-td">
+                            <span class="force-word-wrap">
+                                    @account.Name
+                                </span>
+                        </td>
+                        <td class="responsive-td">
+                            @RoleStrings.GetRoleDescription(account.RoleName)
+                        </td>
+                        <td class="responsive-td link-right">
+                            <a aria-label="View account homepage for @account.Name"
+                                title="View account homepage for @account.Name"
+                                href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
+                                Open<span class="vh"> @account.Name account homepage</span>
+                            </a>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var account in Model.Data.Accounts.AccountList)
-                    {
-                        <tr>
-                            <td class="responsive-td">
-                                <span class="force-word-wrap">
-                                        @account.Name
-                                    </span>
-                            </td>
-                            <td class="responsive-td">
-                                @RoleStrings.GetRoleDescription(account.RoleName)
-                            </td>
-                            <td class="responsive-td link-right">
-                                <a aria-label="View account homepage for @account.Name"
-                                   title="View account homepage for @account.Name"
-                                   href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
-                                    Open<span class="vh"> @account.Name account homepage</span>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-                <p>
-                    <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
-                </p>
-            }
+                }
+                </tbody>
+            </table>
+            <p>
+                <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
+            </p>
+        }
             
-        </section>
 
         @if (Model.Data.Accounts.AccountList.Count != 0 && Model.Data.Invitations > 0)
             {
-            <section>
+ 
                 <h2 class="heading-medium">Invitations</h2>
                 <p>
                     You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
@@ -87,20 +85,7 @@
                 <p>
                     <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
                 </p>
-            </section>
-        }
+            }
 
     </div>
 </div>
-@if (TempData.ContainsKey("virtualPageUrl") && TempData.ContainsKey("virtualPageTitle"))
-{
-    <script type="text/javascript">
-
-        dataLayer.push({
-            'event': 'VirtualPageview',
-            'virtualPageURL': '@TempData["virtualPageUrl"]',
-            'virtualPageTitle': '@TempData["virtualPageTitle"]'
-        });
-
-    </script>
-}
