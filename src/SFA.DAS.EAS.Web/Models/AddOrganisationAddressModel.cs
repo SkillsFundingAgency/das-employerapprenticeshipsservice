@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string OrganisationReferenceNumber { get; set; }
         public DateTime? OrganisationDateOfInception { get; set; }
         public OrganisationType OrganisationType { get; set; }
+        public short? PublicSectorDataSource { get; set; }
         public string OrganisationStatus { get; set; }
 
         public string AddressFirstLineError => GetErrorMessage(nameof(AddressFirstLine));

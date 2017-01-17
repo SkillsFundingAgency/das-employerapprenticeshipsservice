@@ -108,7 +108,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 PayeReference = enteredData.PayeReference,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                OrganisationStatus = enteredData.OrganisationStatus
+                OrganisationStatus = enteredData.OrganisationStatus,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource
             };
 
             return View(model);
@@ -135,7 +136,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 AccessToken = enteredData.AccessToken,
                 RefreshToken = enteredData.RefreshToken,
                 OrganisationStatus = enteredData.OrganisationStatus,
-                EmployerRefName = enteredData.EmployerRefName
+                EmployerRefName = enteredData.EmployerRefName,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);

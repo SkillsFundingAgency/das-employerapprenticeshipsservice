@@ -70,6 +70,7 @@ namespace SFA.DAS.EAS.Web
     public class EmployerAccountData
     {
         public OrganisationType OrganisationType { get; set; }
+        public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public string OrganisationRegisteredAddress { get; set; }

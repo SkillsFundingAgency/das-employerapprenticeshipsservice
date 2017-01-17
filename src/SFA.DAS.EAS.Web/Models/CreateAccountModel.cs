@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Web.Models
     {
         public string UserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
+        public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public string OrganisationAddress { get; set; }
