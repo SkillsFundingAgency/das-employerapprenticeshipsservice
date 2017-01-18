@@ -12,6 +12,7 @@ Select
 	acc.HashedId as DasAccountId,
 	acc.Name as DasAccountName,
 	acc.CreatedDate as DateRegistered,
+	le.Id as OrganisationId,
 	le.Name as OrganisationName,
 	le.RegisteredAddress as OrganisationRegisteredAddress,
 	le.[Status] as OrganisationStatus,
