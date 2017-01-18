@@ -1943,6 +1943,11 @@ table.top-border {
   background-image: url("/dist/images/separator.png");
 }
 
+.breadcrumbs a {
+  font-size: 14px;
+  font-size: 16px;
+}
+
 .back-link {
   padding-left: 15px;
   position: relative;
