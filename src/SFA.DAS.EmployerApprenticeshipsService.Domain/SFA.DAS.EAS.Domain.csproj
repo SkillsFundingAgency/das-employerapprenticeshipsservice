@@ -74,6 +74,9 @@
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Audit.Types">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20280\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
@@ -204,6 +207,7 @@
     <Compile Include="InvitationView.cs" />
     <Compile Include="ITrainingProgramme.cs" />
     <Compile Include="LevyDeclarationView.cs" />
+    <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
