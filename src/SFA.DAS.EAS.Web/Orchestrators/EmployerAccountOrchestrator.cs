@@ -53,7 +53,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     AccessToken = model.AccessToken,
                     RefreshToken = model.RefreshToken,  
                     OrganisationStatus = model.OrganisationStatus,
-                    EmployerRefName = model.EmployerRefName
+                    EmployerRefName = model.EmployerRefName,
+                    PublicSectorDataSource = model.PublicSectorDataSource
                 });
 
                 CookieService.Delete(context, CookieName);

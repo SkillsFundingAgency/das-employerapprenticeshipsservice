@@ -5,10 +5,11 @@
 	@employerDateOfIncorporation DATETIME,
 	@status varchar(50),
 	@source TINYINT,
+	@publicSectorDataSource TINYINT,
 	@legalEntityId BIGINT OUTPUT
 AS
 BEGIN
-	INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source]) 
-	VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source);	
+	INSERT INTO [account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source], [PublicSectorDataSource])
+	VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source, @publicSectorDataSource);	
 	SELECT @legalEntityId = SCOPE_IDENTITY();
 END
