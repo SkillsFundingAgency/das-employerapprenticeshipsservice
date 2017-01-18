@@ -227,6 +227,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(response);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Organisation/LegalAgreement")]
+        public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
+        {
+            var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>()
+            {
+                Data = model,
+                Status = HttpStatusCode.OK
+            };
+
+            return View(viewModel);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

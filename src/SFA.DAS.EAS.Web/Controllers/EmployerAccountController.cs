@@ -113,7 +113,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LegalAgreement()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAccount()

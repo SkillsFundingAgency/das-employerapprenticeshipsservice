@@ -29,7 +29,7 @@
             }
         </table>
 
-        <form action="@Url.Action("Confirm")" method="POST">
+        <form action="@Url.Action("OrganisationLegalAgreement", "Organisation")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
@@ -37,8 +37,6 @@
             <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception"/>
             <input type="hidden" id="legalEntityStatus" name="legalEntityStatus" value="@Model.Data.Status"/>
             <input type="hidden" id="organisationType" name="organisationType" value="@Model.Data.Type" />
-            <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
-            <input type="hidden" id="submit" name="submit" value="Sign"/>
 
             <p class="heading-medium">Is this correct?</p>
 
