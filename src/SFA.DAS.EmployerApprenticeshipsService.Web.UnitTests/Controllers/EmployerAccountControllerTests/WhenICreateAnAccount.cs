@@ -56,7 +56,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 PayeReference = "123/ABC",
                 RefreshToken = "123",
                 AccessToken = "456",
-                EmpRefNotFound = true
+                EmpRefNotFound = true,
+                OrganisationType = OrganisationType.Charities
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -130,6 +131,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             //Assert
             Assert.IsTrue(_employerAccountController.TempData.ContainsKey("successHeader"));
+
+        }
+
+
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToTempData()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("employerAccountCreated"));
+            Assert.AreEqual("Charities", _employerAccountController.TempData["employerAccountCreated"]);
 
         }
     }

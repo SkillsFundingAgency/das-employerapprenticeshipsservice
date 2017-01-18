@@ -59,7 +59,10 @@ if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure })
 
 
 
-
+[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+$ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
+$EnvironmentName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("EnvironmentName")
+$Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenCertificateThumbprint")
 #Static Variables#
 
 $checkcert=(Get-ChildItem cert:\LocalMachine\My | Where thumbprint -eq $thumbprint).Thumbprint
@@ -67,12 +70,6 @@ $Ctx = New-AzureStorageContext -ConnectionString "$ConfigurationStorageConnectio
 $BlobName = "$environmentname/DasIDPCert.pfx"
 $ContainerName = "certs"
 $localTargetDirectory = "C:\Cert"
-
-[Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
-$ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
-$EnvironmentName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("EnvironmentName")
-$Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenCertificateThumbprint")
-
 if ($checkcert)
 {
 Write-Warning -Message "Certificate already installed"
@@ -99,7 +96,7 @@ break
 
 #Gets PFX Password from table storage#
 $TableName = "Configuration"
-$table = Get-AzureStorageTable –Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
+$table = Get-AzureStorageTable -Name $TableName -Context $Ctx -ErrorAction SilentlyContinue
 $query = New-Object Microsoft.WindowsAzure.Storage.Table.TableQuery 
 
 if (!$table)
@@ -119,17 +116,20 @@ $query.SelectColumns = $list
 
 $entities = $table.CloudTable.ExecuteQuery($query)
 
-$CertPassword=((($entities.Properties).Values).PropertyAsObject)
+$password=$entities.Properties
+$password1=$password.Values
+$CertPassword=$password1.PropertyAsObject
 
+$certpassword
 if (!$CertPassword)
 {
 write-host "Password not available"
 break
 }
 
-$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force –AsPlainText
+$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force -AsPlainText
 
-Import-PfxCertificate –FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+Import-PfxCertificate -FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
 
 #Setting Permission on the Cert for ReadAccess#
 
@@ -145,4 +145,4 @@ Remove-Item $localTargetDirectory -Force -Recurse
 else  
 {  
  "StartUp\Powershell.msi" | Install-MSIFile
-}
+ }

@@ -149,7 +149,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Summary");
             }
             
-            TempData["employerAccountCreated"] = "true";
+            TempData["employerAccountCreated"] = enteredData.OrganisationType.ToString();
             TempData["successHeader"] = "Account Created";
             
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
