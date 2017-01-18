@@ -13,47 +13,47 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AuditCommandTests
     public class WhenIProcessTheCommand
     {
         private Mock<IAuditService> _auditService;
-        private AuditCommandHandler _auditCommandHandler;
-        private Mock<IValidator<AuditCommand>> _validator;
+        private CreateAuditCommandHandler _createAuditCommandHandler;
+        private Mock<IValidator<CreateAuditCommand>> _validator;
 
         [SetUp]
         public void Arrange()
         {
             _auditService = new Mock<IAuditService>();
-            _validator = new Mock<IValidator<AuditCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<AuditCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
+            _validator = new Mock<IValidator<CreateAuditCommand>>();
+            _validator.Setup(x => x.Validate(It.IsAny<CreateAuditCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
 
-            _auditCommandHandler = new AuditCommandHandler(_auditService.Object, _validator.Object);
+            _createAuditCommandHandler = new CreateAuditCommandHandler(_auditService.Object, _validator.Object);
         }
 
         [Test]
         public async Task ThenTheCommandIsValidated()
         {
             //Act
-            await _auditCommandHandler.Handle(new AuditCommand());
+            await _createAuditCommandHandler.Handle(new CreateAuditCommand());
 
             //Assert
-            _validator.Verify(x=>x.Validate(It.IsAny<AuditCommand>()),Times.Once);
+            _validator.Verify(x=>x.Validate(It.IsAny<CreateAuditCommand>()),Times.Once);
         }
 
         [Test]
         public void ThenIfTheCommandIsNotValidAnInvalidRequestExceptionIsThrown()
         {
             //Arrange
-            _validator.Setup(x => x.Validate(It.IsAny<AuditCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
+            _validator.Setup(x => x.Validate(It.IsAny<CreateAuditCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _auditCommandHandler.Handle(new AuditCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _createAuditCommandHandler.Handle(new CreateAuditCommand()));
         }
 
         [Test]
         public async Task ThenTheCommandIfValidIsPassedToTheService()
         {
             //Arrange
-            var auditCommand = new AuditCommand {EasAuditMessage = new EasAuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<Entity> {new Entity()} } };
+            var auditCommand = new CreateAuditCommand {EasAuditMessage = new EasAuditMessage {ChangedProperties = new List<PropertyUpdate> {new PropertyUpdate()},Description = "test", RelatedEntities = new List<Entity> {new Entity()} } };
 
             //Act
-            await _auditCommandHandler.Handle(auditCommand);
+            await _createAuditCommandHandler.Handle(auditCommand);
 
             //Assert
             _auditService.Verify(x=>x.SendAuditMessage(It.Is<EasAuditMessage>(c=>

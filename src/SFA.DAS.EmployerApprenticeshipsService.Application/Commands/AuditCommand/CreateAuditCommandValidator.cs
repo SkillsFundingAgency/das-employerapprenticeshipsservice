@@ -5,9 +5,9 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.AuditCommand
 {
-    public class AuditCommandValidator : IValidator<AuditCommand>
+    public class CreateAuditCommandValidator : IValidator<CreateAuditCommand>
     {
-        public ValidationResult Validate(AuditCommand item)
+        public ValidationResult Validate(CreateAuditCommand item)
         {
             var validationResult = new ValidationResult();
 
@@ -32,11 +32,16 @@ namespace SFA.DAS.EAS.Application.Commands.AuditCommand
                 validationResult.AddError(nameof(item.EasAuditMessage.RelatedEntities));
             }
 
+            if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))
+            {
+                validationResult.AddError(nameof(item.EasAuditMessage.AffectedEntity));
+            }
+            
             return validationResult;
 
         }
 
-        public Task<ValidationResult> ValidateAsync(AuditCommand item)
+        public Task<ValidationResult> ValidateAsync(CreateAuditCommand item)
         {
             throw new NotImplementedException();
         }
