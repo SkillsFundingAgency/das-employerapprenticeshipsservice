@@ -41,6 +41,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE899B-AD05-470D-B0F8-E5696141CA9A}"
 	ProjectSection(SolutionItems) = preProject
 		DasAmlCert.pfx = DasAmlCert.pfx
+		DasIDPCert.pfx = DasIDPCert.pfx
 		DevInstall.ps1 = DevInstall.ps1
 		localhost.pfx = localhost.pfx
 	EndProjectSection
