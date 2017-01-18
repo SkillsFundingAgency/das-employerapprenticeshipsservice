@@ -28,6 +28,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 auditMessage.Description = message.Description;
                 auditMessage.ChangedProperties = message.ChangedProperties;
                 auditMessage.RelatedEntities = message.RelatedEntities;
+                auditMessage.AffectedEntity = message.AffectedEntity;
 
                 await _auditApiClient.Audit(auditMessage);
             }
