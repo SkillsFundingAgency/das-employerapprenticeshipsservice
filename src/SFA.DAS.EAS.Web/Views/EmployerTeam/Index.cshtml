@@ -10,7 +10,7 @@
 
     if (TempData.ContainsKey("employerAccountCreated"))
     {
-        ViewBag.PageID = "page-employer-account-created";
+        ViewBag.PageID = $"page-employer-account-created-{TempData["employerAccountCreated"]}";
         TempData.Remove("employerAccountCreated");
     }
 }
