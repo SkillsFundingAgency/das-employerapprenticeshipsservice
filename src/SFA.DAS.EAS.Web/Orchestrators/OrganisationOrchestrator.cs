@@ -136,6 +136,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Name = x.Name,
                 Status = "active",
+                Type = OrganisationType.PublicBodies,
                 PublicSectorDataSource = (short)x.Source
             }).ToList();
 
