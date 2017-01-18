@@ -128,6 +128,7 @@
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenValidatingTheApproveApprenticeshipCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenApprovingApprenticeship.cs" />
+    <Compile Include="Commands\AuditCommandTests\WhenIProcessTheCommand.cs" />
     <Compile Include="Commands\AuditCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenICallCreateAccount.cs" />

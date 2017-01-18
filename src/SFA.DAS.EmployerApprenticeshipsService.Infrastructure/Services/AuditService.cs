@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using AutoMapper;
 using NLog;
 using SFA.DAS.Audit.Client;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class AuditService
+    public class AuditService : IAuditService
     {
         private readonly IAuditApiClient _auditApiClient;
         private readonly IAuditMessageFactory _factory;
