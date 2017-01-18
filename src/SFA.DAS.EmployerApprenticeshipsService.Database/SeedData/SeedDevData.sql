@@ -149,3 +149,10 @@ BEGIN
 	WHERE Id = 4
 END 
 SET IDENTITY_INSERT  [account].[EmployerAgreementStatus] OFF
+
+
+IF (NOT EXISTS(SELECT * FROM [account].[EmployerAgreementTemplate] WHERE [Ref] = 'SFA Employer Agreement V1.0BETA'))
+BEGIN 
+	INSERT INTO [account].[EmployerAgreementTemplate]( [Text], CreatedDate, Ref, ReleasedDate) 
+	VALUES('<p> 1 Introduction </p>', GETDATE(), 'SFA Employer Agreement V1.0BETA', GETDATE()) 
+END 
