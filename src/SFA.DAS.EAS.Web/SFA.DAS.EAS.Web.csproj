@@ -794,7 +794,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
-    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
@@ -940,6 +939,9 @@
     <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
+    <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
+    <Content Include="Views\EmployerAccount\Summary.cshtml" />
+    <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
