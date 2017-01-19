@@ -247,7 +247,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Organisation/Confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, bool? userIsAuthorisedToSign, string submit)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
@@ -261,7 +261,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 SignedDate = DateTime.Now,
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
                 LegalEntityStatus = legalEntityStatus,
-                Source = (short)organisationType
+                Source = (short)organisationType,
+                PublicSectorDataSource = publicSectorDataSource
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

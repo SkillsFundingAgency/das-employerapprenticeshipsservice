@@ -135,7 +135,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                Status = "active"
+                Status = "active",
+                Type = OrganisationType.PublicBodies,
+                PublicSectorDataSource = (short)x.Source
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -322,7 +324,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     RegisteredAddress = request.Address,
                     DateOfIncorporation = request.IncorporatedDate,
                     CompanyStatus = request.LegalEntityStatus,
-                    Source = request.Source
+                    Source = request.Source,
+                    PublicSectorDataSource = request.PublicSectorDataSource
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,
@@ -403,6 +406,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         DateOfInception = model.OrganisationDateOfInception,
                         ReferenceNumber = model.OrganisationReferenceNumber,
                         Type = model.OrganisationType,
+                        PublicSectorDataSource = model.PublicSectorDataSource,
                         Status = model.OrganisationStatus
                     }
                 };

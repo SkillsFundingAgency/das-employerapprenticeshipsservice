@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var emprefs = message.PayeReference.Split(',');
 
-            var accountId = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName);
+            var accountId = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource);
 
             var hashedAccountId = _hashingService.HashValue(accountId);
             await _accountRepository.SetHashedId(hashedAccountId, accountId);
