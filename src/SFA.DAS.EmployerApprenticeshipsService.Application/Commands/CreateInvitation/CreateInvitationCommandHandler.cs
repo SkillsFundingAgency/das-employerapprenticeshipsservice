@@ -90,6 +90,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     Description = $"Member {message.Email} added to account {caller.AccountId} as {message.RoleId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
+                        
                         new PropertyUpdate {PropertyName = "AccountId",NewValue = caller.AccountId.ToString()},
                         new PropertyUpdate {PropertyName = "Email",NewValue = message.Email},
                         new PropertyUpdate {PropertyName = "Name",NewValue = message.Name},
