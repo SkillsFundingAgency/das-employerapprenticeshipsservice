@@ -125,8 +125,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     LegalEntityId = legalEntityId,
                     LegalEntityName = legalEntity.Name,
                     LegalEntityCode = legalEntity.Code,
-                    LegalEntityRegisteredAddress = legalEntity.RegisteredAddress,
-                    LegalEntityIncorporatedDate = legalEntity.DateOfIncorporation,
+                    LegalEntityAddress = legalEntity.RegisteredAddress,
+                    LegalEntityInceptionDate = legalEntity.DateOfIncorporation,
                     Status = EmployerAgreementStatus.Pending,
                 };
             });

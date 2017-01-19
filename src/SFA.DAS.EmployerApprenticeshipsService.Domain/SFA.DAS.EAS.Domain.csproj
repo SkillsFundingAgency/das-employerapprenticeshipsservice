@@ -183,6 +183,7 @@
     <Compile Include="Entities\Account\LegalEntity.cs" />
     <Compile Include="Entities\Transaction\TransactionEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
+    <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />

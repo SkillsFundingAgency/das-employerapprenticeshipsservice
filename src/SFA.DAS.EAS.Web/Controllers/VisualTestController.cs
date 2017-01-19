@@ -167,7 +167,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
-                LegalEntityRegisteredAddress = "123 Fake Street",
+                LegalEntityAddress = "123 Fake Street",
                 SignedByName = "Bojack Horseman",
                 SignedDate = new DateTime(2016, 8, 12),
                 Status = EmployerAgreementStatus.Pending,
