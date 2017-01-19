@@ -59,9 +59,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<Account>> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
         {
-            try
+            return await CatchExceptions(async () =>
             {
                 var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
@@ -73,16 +73,84 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Status = HttpStatusCode.OK
                 };
-            }
-            catch (Exception ex)
+            });
+        }
+
+        public async Task<OrchestratorResponse<CommitmentInformViewModel>> GetInform(string hashedAccountId, string externalUserId)
+        {
+            return await CatchExceptions(async () =>
             {
-                return new OrchestratorResponse
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return new OrchestratorResponse<CommitmentInformViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new CommitmentInformViewModel
+                    {
+                        HashedAccountId = hashedAccountId
+                    }
+                };
+            });
+        }
+
+        public async Task<OrchestratorResponse<SelectLegalEntityViewModel>> GetLegalEntities(string hashedAccountId, string cohortRef, string externalUserId)
+        {
+            return await CatchExceptions(async () =>
+            {
+                var accountId = _hashingService.DecodeValue(hashedAccountId);
+                _logger.Info($"Getting list of Legal Entities for Account: {accountId}");
+
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                // TODO: Should this be throwing an Unauthorized exception??
+                var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
+                {
+                    HashedLegalEntityId = hashedAccountId,
+                    UserId = externalUserId,
+                    SignedOnly = false //TODO: This should be true when signed agreements is being used
+                });
+
+                return new OrchestratorResponse<SelectLegalEntityViewModel>
+                {
+                    Data = new SelectLegalEntityViewModel
+                    {
+                        CohortRef = string.IsNullOrWhiteSpace(cohortRef) ? CreateReference() : cohortRef,
+                        LegalEntities = legalEntities.Entites.LegalEntityList
+                    }
+                };
+            });
+        }
+
+        private static string CreateReference()
+        {
+            return Guid.NewGuid().ToString().ToUpper();
+        }
+
+        private async Task<OrchestratorResponse<T>> CatchExceptions<T>(Func<Task<OrchestratorResponse<T>>> code) where T : class
+        {
+            try
+            {
+                return await code.Invoke();
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                return new OrchestratorResponse<T>
                 {
                     Status = HttpStatusCode.Unauthorized,
-                    Exception = ex
+                    Exception = exception
                 };
             }
         }
+
+        
 
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId)
         {
@@ -107,24 +175,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Commitments = data.Commitments.Select(x => MapFrom(x)).ToList(),
                     NumberOfTasks = tasks.Tasks.Count
                 }
-            };
-        }
-
-        public async Task<OrchestratorResponse<IList<LegalEntity>>> GetLegalEntities(string hashedAccountId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting list of Legal Entities for Account: {accountId}");
-
-            var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
-            {
-                HashedLegalEntityId = hashedAccountId,
-                UserId = externalUserId,
-                SignedOnly = false //TODO: This should be true when signed agreements is being used
-            });
-
-            return new OrchestratorResponse<IList<LegalEntity>>
-            {
-                Data = legalEntities.Entites.LegalEntityList
             };
         }
 

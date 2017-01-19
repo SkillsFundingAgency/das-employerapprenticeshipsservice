@@ -51,31 +51,20 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Inform")]
-        public ActionResult Inform(string hashedAccountId)
+        public async Task<ActionResult> Inform(string hashedAccountId)
         {
-            var model = new CommitmentInformViewModel
-            {
-                HashedAccountId = hashedAccountId
-            };
+            var response = await _employerCommitmentsOrchestrator.GetInform(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            return View(model);
+            return View(response);
         }
 
         [HttpGet]
         [Route("Create/LegalEntity")]
         public async Task<ActionResult> SelectLegalEntity(string hashedAccountId, string cohortRef = "")
         {
-            var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var response = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, cohortRef, OwinWrapper.GetClaimValue(@"sub"));
 
-            ViewBag.LegalEntities = legalEntities.Data;
-
-            if (string.IsNullOrWhiteSpace(cohortRef))
-                cohortRef = CreateReference();
-
-            return View(new SelectLegalEntityViewModel
-            {
-                CohortRef = cohortRef
-            });
+            return View(response);
         }
 
         [HttpPost]
@@ -85,10 +74,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var legalEntities = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                ViewBag.LegalEntities = legalEntities.Data;
+                var response = await _employerCommitmentsOrchestrator.GetLegalEntities(hashedAccountId, selectedLegalEntity.CohortRef, OwinWrapper.GetClaimValue(@"sub"));
 
-                return View("SelectLegalEntity", selectedLegalEntity);
+                return View("SelectLegalEntity", response);
             }
 
             return RedirectToAction("SearchProvider", selectedLegalEntity);
@@ -440,11 +428,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
 
             return View("EditApprenticeshipEntry", model.Apprenticeship);
-        }
-
-        private static string CreateReference()
-        {
-            return Guid.NewGuid().ToString().ToUpper();
         }
     }
 }
