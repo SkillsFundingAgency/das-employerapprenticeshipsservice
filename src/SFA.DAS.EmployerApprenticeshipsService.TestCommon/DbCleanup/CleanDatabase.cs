@@ -17,12 +17,12 @@ namespace SFA.DAS.EAS.TestCommon.DbCleanup
             var parameters = new DynamicParameters();
             parameters.Add("@INCLUDEUSERTABLE", 1, DbType.Int16);
             await WithConnection<int>(async c => await c.ExecuteAsync(
-                "[account].[Cleardown]",
+                "[employer_account].[Cleardown]",
                 parameters,
                 commandType: CommandType.StoredProcedure));
 
             await WithConnection<int>(async c => await c.ExecuteAsync(
-                "[account].[SeedDataForRoles]",
+                "[employer_account].[SeedDataForRoles]",
                 null,
                 commandType: CommandType.StoredProcedure));
 

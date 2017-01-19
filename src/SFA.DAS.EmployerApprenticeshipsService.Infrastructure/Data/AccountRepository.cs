@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@publicSectorDataSource", publicSectorDataSource);
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
-                    sql: "[account].[CreateAccount]",
+                    sql: "[employer_account].[CreateAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@RemovedDate", DateTime.UtcNow, DbType.DateTime);
                 
                 var result = await c.ExecuteAsync(
-                   sql: "[account].[UpdateAccountHistory]",
+                   sql: "[employer_account].[UpdateAccountHistory]",
                    param: parameters,
                    commandType: CommandType.StoredProcedure);
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[AddPayeToAccount]",
+                    sql: "[employer_account].[AddPayeToAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[CreateLegalEntityWithAgreement]",
+                    sql: "[employer_account].[CreateLegalEntityWithAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<PayeView>(
-                    sql: "[account].[GetPayeSchemes_ByAccountId]",
+                    sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "account.GetEmployerAgreementsLinkedToAccount",
+                    sql: "[employer_account].[GetEmployerAgreementsLinkedToAccount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -173,7 +173,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@HashedId", hashedId, DbType.String);
 
                 var result = await c.ExecuteAsync(
-                   sql: "[account].[UpdateAccount_SetAccountHashId]",
+                   sql: "[employer_account].[UpdateAccount_SetAccountHashId]",
                    param: parameters,
                    commandType: CommandType.StoredProcedure);
 

@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Domain", "SFA.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EAS.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Account.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EAS.Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Employer_Account.Database", "SFA.DAS.EAS.Employer_Accounts.Database\SFA.DAS.EAS.Employer_Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
 EndProject
