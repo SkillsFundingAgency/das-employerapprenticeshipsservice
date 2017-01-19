@@ -144,9 +144,9 @@ break
 
 $CertPassword = Get-Content "C:\Cert\$environmentname\password.txt"
 
-$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force –AsPlainText
+$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force -AsPlainText
 
-Import-PfxCertificate –FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+Import-PfxCertificate -FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
 $logger.Info("Importing the certificate")
 #Setting Permission on the Cert for ReadAccess#
 Permissions
