@@ -30,6 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             Assert.That(result.IsValid, Is.True);
         }
 
+        [TestCase("1000")]
         [TestCase("1324")]
         [TestCase("123")]
         [TestCase("1")]

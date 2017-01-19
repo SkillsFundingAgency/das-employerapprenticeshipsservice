@@ -114,7 +114,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LegalAgreement()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAccount()
@@ -150,7 +157,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             
             TempData["employerAccountCreated"] = enteredData.OrganisationType.ToString();
-            TempData["successHeader"] = "Account Created";
+            TempData["successHeader"] = "Account created";
             
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });
         }
