@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
