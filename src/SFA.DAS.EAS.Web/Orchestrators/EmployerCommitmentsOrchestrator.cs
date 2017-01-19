@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
@@ -28,16 +27,14 @@ using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Web.Models.Types;
+using Newtonsoft.Json;
+using SFA.DAS.Tasks.Api.Types.Templates;
+using System.Net;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    using System.Globalization;
-    using Newtonsoft.Json;
-
-    using SFA.DAS.EAS.Web.Models.Types;
-
-    using Tasks.Api.Types.Templates;
-
     public sealed class EmployerCommitmentsOrchestrator
     {
         private readonly IMediator _mediator;
@@ -60,6 +57,31 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _hashingService = hashingService;
             _statusCalculator = statusCalculator;
             _logger = logger;
+        }
+
+        public async Task<OrchestratorResponse> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return new OrchestratorResponse<Account>
+                {
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrchestratorResponse
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = ex
+                };
+            }
         }
 
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId)

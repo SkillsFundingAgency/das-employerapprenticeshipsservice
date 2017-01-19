@@ -25,16 +25,19 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
+
             _employerCommitmentsOrchestrator = employerCommitmentsOrchestrator;
         }
 
         [HttpGet]
         [Route("Home")]
-        public ActionResult Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
             ViewBag.HashedAccountId = hashedAccountId;
 
-            return View();
+            var response = await _employerCommitmentsOrchestrator.CheckAccountAuthorization(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(response);
         }
 
         [HttpGet]
