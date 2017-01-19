@@ -44,7 +44,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
                 LastName = "Green"
             };
 
-
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(_owner);

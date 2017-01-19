@@ -6,12 +6,9 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
-using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 {
