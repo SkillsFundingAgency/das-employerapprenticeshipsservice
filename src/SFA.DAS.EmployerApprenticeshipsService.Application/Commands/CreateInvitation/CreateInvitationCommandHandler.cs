@@ -91,12 +91,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         
-                        new PropertyUpdate {PropertyName = "AccountId",NewValue = caller.AccountId.ToString()},
-                        new PropertyUpdate {PropertyName = "Email",NewValue = message.Email},
-                        new PropertyUpdate {PropertyName = "Name",NewValue = message.Name},
-                        new PropertyUpdate {PropertyName = "RoleId",NewValue = message.RoleId.ToString()},
-                        new PropertyUpdate {PropertyName = "Status",NewValue = InvitationStatus.Pending.ToString()},
-                        new PropertyUpdate {PropertyName = "ExpiryDate",NewValue = expiryDate.ToString()}
+                        PropertyUpdate.FromString("AccountId",caller.AccountId.ToString()),
+                        PropertyUpdate.FromString("Email",message.Email),
+                        PropertyUpdate.FromString("Name",message.Name),
+                        PropertyUpdate.FromString("RoleId",message.RoleId.ToString()),
+                        PropertyUpdate.FromString("Status",InvitationStatus.Pending.ToString()),
+                        PropertyUpdate.FromDateTime("ExpiryDate",expiryDate)
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Invitation", Id = invitationId.ToString() }
