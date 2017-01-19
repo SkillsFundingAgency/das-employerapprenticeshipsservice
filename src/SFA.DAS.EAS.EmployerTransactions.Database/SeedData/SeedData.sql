@@ -10,10 +10,11 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-EXECUTE [employer_transactions].Cleardown
 
-
-insert into [employer_transactions].[TopUpPercentage]
-(datefrom,amount)
-values
-('2015-01-01 00:00:00.000',0.1)
+IF NOT EXISTS(SELECT 1 FROM [employer_transactions].[TopUpPercentage] WHERE datefrom='2015-01-01 00:00:00.000' and amount=0.1 )
+BEGIN
+	insert into [employer_transactions].[TopUpPercentage]
+	(datefrom,amount)
+	values
+	('2015-01-01 00:00:00.000',0.1)
+END

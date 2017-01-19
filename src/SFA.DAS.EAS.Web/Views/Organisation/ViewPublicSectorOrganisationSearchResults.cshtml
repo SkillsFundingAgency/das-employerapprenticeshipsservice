@@ -2,7 +2,7 @@
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PublicSectorOrganisationSearchResultsViewModel>
 @{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
 @{
-    ViewBag.Title = "Public Sector Orgainsation Search Results";
+    ViewBag.Title = "Public Sector Organisation Search Results";
     ViewBag.Section = "organisations";
 }
 <div class="grid-row">
@@ -14,13 +14,13 @@
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
-            <input type="hidden" id="orgType" name="orgType" value="@OrganisationType.PublicBodies" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
             <div class="search-field">
                 <fieldset class="search-input">
                     <label for="publicBodyName">
                         <span class="form-label-bold">Search results</span>
                     </label>
-                    <input type="text" name="publicBodyName" id="publicBodyName" class="form-control">
+                    <input type="text" name="publicBodyName" id="publicBodyName" value="@Model.Data.SearchTerm" class="form-control">
                 </fieldset>
                 <fieldset class="search-submit">
                     <button type="submit" class="button">Search</button>
@@ -40,6 +40,7 @@
                                          {
                                              OrganisationName = result.Name,
                                              OrganisationType = OrganisationType.PublicBodies,
+                                             PublicSectorDataSource = result.PublicSectorDataSource,
                                              Status = "active"
                                          })">
                                 @result.Name
@@ -63,7 +64,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to organisations</a></li>
         </ol>
     </div>
 }

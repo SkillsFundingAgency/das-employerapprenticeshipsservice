@@ -227,13 +227,27 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(response);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("Organisation/LegalAgreement")]
+        public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
+        {
+            var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>()
+            {
+                Data = model,
+                Status = HttpStatusCode.OK
+            };
+
+            return View(viewModel);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Organisation/Confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, bool? userIsAuthorisedToSign, string submit)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit)
         {
             var request = new CreateNewLegalEntity
             {
@@ -247,7 +261,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 SignedDate = DateTime.Now,
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
                 LegalEntityStatus = legalEntityStatus,
-                Source = (short)organisationType
+                Source = (short)organisationType,
+                PublicSectorDataSource = publicSectorDataSource
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);
@@ -266,7 +281,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (request.UserIsAuthorisedToSign && request.SignedAgreement)
             {
                 TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds.";
             }
             else
             {

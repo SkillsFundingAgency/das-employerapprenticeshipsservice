@@ -15,7 +15,7 @@
                 <h1 class="heading-xlarge">
                     Create invitation
                 </h1>
-                <p class="lede">Invite somebody to access this levy account.</p>
+                <p class="lede">Invite somebody to access this account.</p>
                 <form method="POST" action="@Url.Action("Invite")">
                     @Html.AntiForgeryToken()
                     <div class="form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "error" : "")">

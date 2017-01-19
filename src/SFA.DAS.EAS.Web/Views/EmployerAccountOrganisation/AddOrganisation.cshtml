@@ -4,104 +4,116 @@
 @{
     ViewBag.Title = "Add an organisation";
     ViewBag.Section = "organisations";
+    ViewBag.HideNav = "true";
 }
+<div class="grid-row">
+    <div class="column-two-thirds org-type-search">
 
-@if (TempData["companyError"] != null || TempData["charityError"] != null || TempData["publicBodyError"] != null)
-{
-    ViewBag.PageID = "error-organisation-entry";
-    <div class="grid-row">
-        <div class="column-full error-summary-wrapper">
-            <div tabindex="-1" role="group" class="error-summary">
-                <h1 id="error-summary" class="heading-medium error-summary-heading">
-                    Errors to fix
-                </h1>
-                <p>Check the following details:</p>
-                <ul class="error-summary-list">
-                    @{
-                        if (TempData["companyError"] != null)
-                        {
-                            <li><a href="#error-company-number" data-focuses="error-company-number">@TempData["companyError"]</a></li>
-                        }
-                        if (TempData["charityError"] != null)
-                        {
-                            <li><a href="#error-charity-number" data-focuses="error-charity-number">@TempData["charityError"]</a></li>
-                        }
-                        if (TempData["publicBodyError"] != null)
-                        {
-                            <li><a href="#error-publicbody-number" data-focuses="error-publicbody-number">@TempData["publicBodyError"]</a></li>
-                        }
+        <h1 class="heading-xlarge">Add an organisation</h1>
+
+        <h2 id="OrganisationType" class="heading-medium">Select your organisation type</h2>
+
+        <form action="@Url.Action("AddOrganisation")" method="POST">
+            @Html.AntiForgeryToken()
+            <section>
+                <label for="company">
+                    <span class="form-label-bold">Listed on Companies House</span>
+                    <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
+                </label>
+                <input type="radio" aria-labelledby="OrganisationType" name="organisationType" id="company" value="@OrganisationType.CompaniesHouse" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.CompaniesHouse) ? "checked='checked'" : "") />
+                <div id="search-company" class="search-form panel panel-border-narrow">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError) ? "error" : "")">
+                        <label for="CompaniesHouseNumber">
+                            <span class="form-label-bold">Enter Companies House number</span>
+                            @if (!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError))
+                            {
+                                <span class="error-message" id="error-message-companieshouse">@Model.Data.CompaniesHouseNumberError</span>
+                            }
+                        </label>
+                        <input type="text" id="CompaniesHouseNumber" value="@Model.Data.CompaniesHouseNumber" name="CompaniesHouseNumber" class="form-control"
+                               @(!string.IsNullOrEmpty(Model.Data.CompaniesHouseNumberError) ? " aria-labelledby=error-message-companieshouse" : "") />
+                    </div>
+                    <p>
+                        <a href="https://beta.companieshouse.gov.uk/" target="_blank" rel="external">Search for your Companies House number</a>.
+                    </p>
+                    @if (!String.IsNullOrEmpty(@Model.Data.CompaniesHouseNumberError))
+                    {
+                        
+                        <h2 class="heading-small">
+                            Not on Companies House?
+                        </h2>
+                        <p>
+                            <a href="@Url.Action("AddOtherOrganisationDetails")">Enter your company details manually</a>.
+                        </p>
+                    }
+                </div>
+            </section>
+            <section>
+                <label for="publicbody">
+                    <span class="form-label-bold">Public sector organisation</span>
+                </label>
+                <input type="radio" aria-labelledby="OrganisationType" name="organisationType" value="@OrganisationType.PublicBodies" id="publicbody" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.PublicBodies) ? "checked='checked'" : "") />
+                <div id="search-publicbody" class="search-form panel panel-border-narrow">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.PublicBodyNameError) ? "error" : "")">
+                        <label for="PublicBodyName">
+                            <span class="form-label-bold">Enter organisation's name</span>
+                            @if (!string.IsNullOrEmpty(Model.Data.PublicBodyNameError))
+                            {
+                                <span class="error-message" id="error-message-publicbody">@Model.Data.PublicBodyNameError</span>
+                            }
+                        </label>
+                        <input type="text" id="PublicBodyName" name="PublicBodyName" value="@Model.Data.PublicBodyName" class="form-control" 
+                                @(!string.IsNullOrEmpty(Model.Data.PublicBodyNameError) ? " aria-labelledby=error-message-publicbody" : "") />
+                    </div>
+                </div>
+            </section>
+            <section>
+                <label for="charity">
+                    <span class="form-label-bold">Registered charity</span>
+                </label>
+                <input type="radio" aria-labelledby="OrganisationType" name="organisationType" value="@OrganisationType.Charities" id="charity" @(Convert.ToBoolean(Model.Data.OrganisationType == OrganisationType.Charities) ? "checked='checked'" : "") />
+                <div id="search-charity" class="search-form panel panel-border-narrow">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.Data.CharityRegistrationNumberError) ? "error" : "")">
+                        <label for="CharityRegistrationNumber">
+                            <span class="form-label-bold">Enter charity number</span>
+                            @if (!string.IsNullOrEmpty(Model.Data.CharityRegistrationNumberError))
+                            {
+                                <span class="error-message" id="error-message-charity">@Model.Data.CharityRegistrationNumberError</span>
+                            }
+                        </label>
+                        <input type="text" id="CharityRegistrationNumber" name="CharityRegistrationNumber" value="@Model.Data.CharityRegistrationNumber" class="form-control" 
+                                 @(!string.IsNullOrEmpty(Model.Data.CharityRegistrationNumberError) ? " aria-labelledby=error-message-charity" : "") />
+                    </div>
+                    <p>
+                        <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external">Search for your Charity number</a>.
+                    </p>
+                    @if (!String.IsNullOrEmpty(@Model.Data.CharityRegistrationNumberError))
+                    {
+                        
+                        <h2 class="heading-small">
+                            Don't have a Charity number?
+                        </h2>
+                        <p>
+                            <a href="@Url.Action("AddOtherOrganisationDetails")">Enter your charity details manually</a>.
+                        </p>
                     }
 
-                    
-                </ul>
+                </div>
+            </section>
+            <section class="last">
+                <label for="other">
+                    <span class="form-label-bold">Other</span>
+                </label>
+                <input type="radio" aria-labelledby="OrganisationType" name="organisationType" value="@OrganisationType.Other" id="other" />
+            </section>
+
+            <div class="form-group">
+                <input class="button" id="addOrganisation" type="submit" value="Continue" />
             </div>
-        </div>
+
+        </form>
     </div>
-}
-
-
-
-<div class="column-two-thirds org-type-search">
-
-    <h1 class="heading-xlarge">Add an organisation</h1>
-
-    <form action="@Url.Action("AddOrganisation")" method="POST">
-        @Html.AntiForgeryToken()
-        <section>
-            <label for="company">
-                <span class="form-label-bold">Listed on Companies House</span>
-                <span>Limited company, public limited company, royal charter or industrial and provident organisation.</span>
-            </label>
-            <input type="radio" name="OrganisationType" id="company" value="@OrganisationType.CompaniesHouse" />
-            <div id="search-company" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="CompaniesHouseNumber">Enter Companies House number</label>
-                    <input type="text" id="CompaniesHouseNumber" name="CompaniesHouseNumber"" class="form-control" />
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="publicbody">
-                <span class="form-label-bold">Public sector organisation</span>
-            </label>
-            <input type="radio" name="OrganisationType" value="@OrganisationType.PublicBodies" id="publicbody" />
-            <div id="search-publicbody" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="PublicBodyName">Enter organisation's name</label>
-                    <input type="text" id="PublicBodyName" name="PublicBodyName"" class="form-control" />
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="charity">
-                <span class="form-label-bold">Registered charity</span>
-            </label>
-            <input type="radio" name="OrganisationType" value="@OrganisationType.Charities" id="charity" />
-            <div id="search-charity" class="search-form panel panel-border-narrow">
-                <div class="form-group">
-                    <label class="strong" for="CharityRegNo">Enter charity number</label>
-                    <input type="text" id="CharityRegNo" name="CharityRegNo" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <h2 class="heading-small">Don't know your charity number?</h2>
-                    <p>You can <a href="http://apps.charitycommission.gov.uk/Showcharity/RegisterOfCharities/registerhomepage.aspx" target="_blank" rel="external"> search for your charity number</a>
-                        or <a href="">enter your charity details manually</a>.</p>
-                </div>
-            </div>
-        </section>
-        <section>
-            <label for="other">
-                <span class="form-label-bold">Sole trader, partnership or other</span>
-            </label>
-            <input type="radio" name="OrganisationType" value="@OrganisationType.Other" id="other" />
-        </section>
-        <div class="form-group">
-            <input class="button" id="addOrganisation" type="submit" value="Continue" />
-        </div>
-
-</form>
 </div>
-
 
 
 

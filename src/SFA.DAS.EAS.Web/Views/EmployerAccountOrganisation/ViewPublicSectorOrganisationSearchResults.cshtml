@@ -4,52 +4,61 @@
 @{
     ViewBag.Title = "Public Sector Orgainsation Search Results";
     ViewBag.Section = "organisations";
+    ViewBag.HideNav = "true";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            Public Sector Search Results
+            Public sector search results
         </h1>
-        
+
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
-            <input type="hidden" id="orgType" name="orgType" value="@OrganisationType.PublicBodies" />
-            <div class="form-group">
-                <input type="text" id="publicBodyName" name="publicBodyName" placeholder="Search term"/>
-                <input type="submit" value="Search" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
+            <div class="search-field">
+                <fieldset class="search-input">
+                    <label for="publicBodyName">
+                        <span class="form-label-bold">Search results</span>
+                    </label>
+                    <input type="text" name="publicBodyName" id="publicBodyName" value="@Model.Data.SearchTerm" class="form-control">
+                </fieldset>
+                <fieldset class="search-submit">
+                    <button type="submit" class="button">Search</button>
+                </fieldset>
             </div>
         </form>
-
         @{
             <p>@Model.Data.Results.Data.Count results found.</p>
-
-            foreach (var result in Model.Data.Results.Data)
-            {
-                if (!result.AddedToAccount)
+            <ol class="search-results">
+                @foreach (var result in Model.Data.Results.Data)
                 {
-                    <div>
-                        <a href="@Url.Action("UpdateOrganisationAddress", new
-                            {
-                                OrganisationName = result.Name,
-                                OrganisationType = OrganisationType.PublicBodies,
-                                OrganisationReferenceNumber = result.ReferenceNumber,
-                                OrganisationDateOfInception = result.DateOfInception,
-                                OrganisationStatus = "active"
-                            })">
-                            @result.Name
-                        </a>
-                    </div>
+                    if (!result.AddedToAccount)
+                    {
+                        <li>
+                            <a href="@Url.Action("UpdateOrganisationAddress", new
+                                    {
+                                        OrganisationName = result.Name,
+                                        OrganisationType = OrganisationType.PublicBodies,
+                                        OrganisationReferenceNumber = result.ReferenceNumber,
+                                        OrganisationDateOfInception = result.DateOfInception,
+                                        PublicSectorDataSource = result.PublicSectorDataSource,
+                                        OrganisationStatus = "active"
+                                    })">
+                                @result.Name
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>@result.Name (Already added)</li>
+                    }
                 }
-                else
-                {
-                    <div>@result.Name (Already added)</div>
-                }
-            }
+            </ol>
         }
-        
+
         <h3 class="heading-small">Can't find your organisation?</h3>
-        <p>You can <a href="#">add it manually here</a>.</p>
+        <p>You can <a href="@Url.Action("AddOtherOrganisationDetails")">add it manually here</a>.</p>
 
     </div>
 </div>
@@ -57,7 +66,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+            <li><a href="@Url.Action("AddOrganisation", "EmployerAccountOrganisation")" class="back-link">Back</a></li>
         </ol>
     </div>
 }

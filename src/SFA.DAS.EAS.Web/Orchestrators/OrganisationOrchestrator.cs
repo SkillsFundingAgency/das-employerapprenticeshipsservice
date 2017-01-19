@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
@@ -53,9 +54,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
 	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-	            if (accountEntities.Entites.LegalEntityList.Any(
-	                x => x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase)))
-	            {
+	            if (accountEntities.Entites.LegalEntityList.Any(x =>
+                    (!string.IsNullOrWhiteSpace(x.Code)
+                    && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
+                {
 	                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
 	                {
 	                    Data = new OrganisationDetailsViewModel(),
@@ -85,6 +87,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             _logger.Info($"Returning Data for {companiesHouseNumber}");
 
+            var address = BuildAddressString(response);
+
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
                 Data = new OrganisationDetailsViewModel
@@ -93,8 +97,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Type = OrganisationType.CompaniesHouse,
                     ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
-                    DateOfInception = response.DateOfIncorporation,
-                    Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    DateOfInception = response.DateOfIncorporation.Equals(DateTime.MinValue) ? (DateTime?)null : response.DateOfIncorporation,
+                    Address = address,
                     Status = response.CompanyStatus
                 }
             };
@@ -107,7 +111,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 SearchTerm = searchTerm,
                 PageNumber = 1,
-                PageSize = 1000
+                PageSize = 200
             });
 
             if (searchResults == null || !searchResults.Organisaions.Data.Any())
@@ -118,6 +122,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new PublicSectorOrganisationSearchResultsViewModel
                     {
                         HashedAccountId = hashedAccountId,
+                        SearchTerm = searchTerm,
                         Results = new PagedResponse<OrganisationDetailsViewModel>
                         {
                             Data = new List<OrganisationDetailsViewModel>()
@@ -130,7 +135,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                Status = "active"
+                Status = "active",
+                Type = OrganisationType.PublicBodies,
+                PublicSectorDataSource = (short)x.Source
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -159,6 +166,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new PublicSectorOrganisationSearchResultsViewModel
                 {
                     HashedAccountId = hashedAccountId,
+                    SearchTerm = searchTerm,
                     Results = pagedResponse
                 },
                 Status = HttpStatusCode.OK
@@ -174,7 +182,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
 	            if (accountEntities.Entites.LegalEntityList.Any(
-	                x => x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase)
+	                x =>(!String.IsNullOrWhiteSpace(x.Code) && x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
 	                && x.Source == (short)OrganisationType.Charities))
 	            {
 	                var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
@@ -246,12 +254,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ReferenceNumber = charity.RegistrationNumber.ToString(),
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
-                    Address = $"{charity.Address1}, {charity.Address2}, {charity.Address3}, {charity.Address4}, {charity.Address5}",
-                    Status = "active"}
+                    Address = charity.FormattedAddress,
+                    Status = "active"
+                }
             };
         }
 
-        public async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
+        public virtual async Task<OrchestratorResponse<AddLegalEntityViewModel>> GetAddLegalEntityViewModel(
             string hashedAccountId, string externalUserId)
         {
             var userRole = await GetUserAccountRole(hashedAccountId, externalUserId);
@@ -274,7 +283,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return accountEntities;
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
             CreateNewLegalEntity request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
@@ -315,7 +324,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     RegisteredAddress = request.Address,
                     DateOfIncorporation = request.IncorporatedDate,
                     CompanyStatus = request.LegalEntityStatus,
-                    Source = request.Source
+                    Source = request.Source,
+                    PublicSectorDataSource = request.PublicSectorDataSource
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,
@@ -332,7 +342,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -377,7 +387,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
             AddOrganisationAddressModel model)
         {
             try
@@ -396,6 +406,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         DateOfInception = model.OrganisationDateOfInception,
                         ReferenceNumber = model.OrganisationReferenceNumber,
                         Type = model.OrganisationType,
+                        PublicSectorDataSource = model.PublicSectorDataSource,
                         Status = model.OrganisationStatus
                     }
                 };
@@ -449,6 +460,40 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var json = JsonConvert.SerializeObject(data);
             _cookieService.Create(context, CookieName, json, 365);
+        }
+
+        private static string BuildAddressString(GetEmployerInformationResponse response)
+        {
+            var addressBuilder = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(response.AddressLine1))
+            {
+                addressBuilder.Append($"{response.AddressLine1}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.AddressLine2))
+            {
+                addressBuilder.Append($"{response.AddressLine2}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.TownOrCity))
+            {
+                addressBuilder.Append($"{response.TownOrCity}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.County))
+            {
+                addressBuilder.Append(string.IsNullOrEmpty(response.AddressPostcode)
+                    ? $"{response.County}"
+                    : $"{response.County}, ");
+            }
+
+            if (!string.IsNullOrEmpty(response.AddressPostcode))
+            {
+                addressBuilder.Append(response.AddressPostcode);
+            }
+
+            return addressBuilder.ToString();
         }
     }
 }

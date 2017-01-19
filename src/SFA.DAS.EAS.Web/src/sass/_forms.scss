@@ -1,4 +1,12 @@
-﻿legend {
+﻿.govuk-box-highlight {
+    padding: 1.8em 15px 1.5em;
+    margin-bottom: 0;
+    p {
+        margin-bottom: 0;
+    }
+}
+
+legend {
     margin-bottom: 10px;
 }
 
@@ -26,7 +34,6 @@
 
 .error-summary-wrapper {
     .error-summary {
-        margin-top: 0;
         margin-bottom: 0
     }
 }

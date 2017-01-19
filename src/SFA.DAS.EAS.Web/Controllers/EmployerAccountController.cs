@@ -102,17 +102,26 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 OrganisationType = enteredData.OrganisationType,
                 OrganisationName = enteredData.OrganisationName,
+                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
                 OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
                 PayeReference = enteredData.PayeReference,
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
-                OrganisationStatus = enteredData.OrganisationStatus
+                OrganisationStatus = enteredData.OrganisationStatus,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource
             };
 
             return View(model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LegalAgreement()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> CreateAccount()
@@ -134,7 +143,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 AccessToken = enteredData.AccessToken,
                 RefreshToken = enteredData.RefreshToken,
                 OrganisationStatus = enteredData.OrganisationStatus,
-                EmployerRefName = enteredData.EmployerRefName
+                EmployerRefName = enteredData.EmployerRefName,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
@@ -146,7 +156,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Summary");
             }
             
-            TempData["employerAccountCreated"] = "true";
+            TempData["employerAccountCreated"] = enteredData.OrganisationType.ToString();
             TempData["successHeader"] = "Account Created";
             
             return RedirectToAction("Index", "EmployerTeam", new { response.Data.EmployerAgreement.HashedAccountId });

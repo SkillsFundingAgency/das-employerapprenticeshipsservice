@@ -16,8 +16,6 @@ namespace SFA.DAS.EAS.Web.Validators
             Func<string, int, bool> lengthLessThan = (str, length) => (str?.Length ?? 0) <= length;
             Func<string, int, bool> haveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
 
-            RuleFor(x => x.ULN).Matches("^$|^[1-9]{1}[0-9]{9}$").WithMessage("Enter a valid unique learner number");
-
             RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("First name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");
@@ -42,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Validators
                 .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
 
             RuleFor(x => x.Cost)
-                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage("Enter the total agreed training cost")
+                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage("Enter the total agreed training cost")
                 .Must(m => haveNumberOfDigitsFewerThan(m, 7)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
 
             RuleFor(x => x.EmployerRef)

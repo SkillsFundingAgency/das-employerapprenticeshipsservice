@@ -106,9 +106,24 @@ namespace SFA.DAS.EAS.Web
 
             return () =>
             {
-                var certificatePath = $@"{AppDomain.CurrentDomain.BaseDirectory}App_Data\Certificates\DasIDPCert.pfx";
+                var store = new X509Store(StoreLocation.LocalMachine);
+                store.Open(OpenFlags.ReadOnly);
+                try
+                {
+                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
-                return new X509Certificate2(certificatePath, "idsrv3test");
+                    if (certificates.Count < 1)
+                    {
+                        throw new Exception($"Could not find certificate with thumbprint {thumbprint} in LocalMachine store");
+                    }
+
+                    return certificates[0];
+                }
+                finally
+                {
+                    store.Close();
+                }
             };
         }
 

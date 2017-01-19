@@ -15,6 +15,10 @@
                 <th role="row">Organisation name</th>
                 <td class="responsive-td">@Model.Data.Name</td>
             </tr>
+            <tr>
+                <th role="row">Organisation address</th>
+                <td class="responsive-td">@Model.Data.Address</td>
+            </tr>
 
             @if (Model.Data.Type != OrganisationType.PublicBodies && Model.Data.Type != OrganisationType.Other)
             {
@@ -23,21 +27,16 @@
                     <td class="responsive-td">@Model.Data.ReferenceNumber</td>
                 </tr>
             }
-            <tr>
-                <th role="row">Address</th>
-                <td class="responsive-td">@Model.Data.Address</td>
-            </tr>
         </table>
 
-        <form action="@Url.Action("Confirm")" method="POST">
+        <form action="@Url.Action("OrganisationLegalAgreement", "Organisation")" method="POST">
             @Html.AntiForgeryToken()
             <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
             <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.ReferenceNumber" />
             <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
             <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception"/>
+            <input type="hidden" id="legalEntityStatus" name="legalEntityStatus" value="@Model.Data.Status"/>
             <input type="hidden" id="organisationType" name="organisationType" value="@Model.Data.Type" />
-            <input type="hidden" id="userAuthorised" name="userIsAuthorisedToSign" value="true" />
-            <input type="hidden" id="submit" name="submit" value="Sign"/>
 
             <p class="heading-medium">Is this correct?</p>
 
@@ -52,7 +51,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to organisations</a></li>
         </ol>
     </div>
 }

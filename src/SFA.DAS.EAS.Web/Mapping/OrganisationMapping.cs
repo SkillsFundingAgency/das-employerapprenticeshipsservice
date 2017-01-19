@@ -16,6 +16,7 @@ namespace SFA.DAS.EAS.Web.Mapping
                 .ForMember(dest => dest.OrganisationDateOfInception, opt => opt.MapFrom(src => src.DateOfInception))
                 .ForMember(dest => dest.OrganisationType, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.OrganisationStatus, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.PublicSectorDataSource, opt=> opt.MapFrom(src=> src.PublicSectorDataSource))
                 .ForMember(dest => dest.ErrorDictionary, opt => opt.MapFrom(src => src.ErrorDictionary));
         }
     }

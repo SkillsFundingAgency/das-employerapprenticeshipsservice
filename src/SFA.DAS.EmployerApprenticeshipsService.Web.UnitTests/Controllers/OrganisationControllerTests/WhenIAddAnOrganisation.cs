@@ -54,20 +54,25 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _mapper.Object);
         }
 
-        //[Test]
-        //public async Task ThenIMustSelectAType()
-        //{
-        //    //Arrange
-        //    var model = new AddLegalEntityViewModel();
+        [Test]
+        public async Task ThenOnModelValidationErrorsIAmReturnedToTheViewAndTheErrorsAreInTheErrorDictionary()
+        {
+            //Arrange
+            var model = new AddLegalEntityViewModel();
+            _controller.ModelState.AddModelError("OrganisationType", "Organisation Type Error Message");
 
-        //    //Act
-        //    var result = await _controller.AddOrganisation(model);
+            //Act
+            var result = await _controller.AddOrganisation(model);
 
-        //    //Assert
-        //    var viewResult = result as ViewResult;
-        //    Assert.IsNotNull(viewResult);
-        //    Assert.AreEqual("", viewResult.ViewName);
-        //}
+            //Assert
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.AreEqual("", viewResult.ViewName);
+
+            var viewModel = viewResult.Model as OrchestratorResponse<AddLegalEntityViewModel>;
+            Assert.IsNotNull(viewModel);
+            Assert.IsTrue(viewModel.Data.ErrorDictionary.ContainsKey("OrganisationType"));
+        }
 
     }
 }

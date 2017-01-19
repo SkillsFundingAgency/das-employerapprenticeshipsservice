@@ -43,6 +43,12 @@
     li {
         background-image:  url('/dist/images/separator.png');
     }
+    a {
+        font-size: 14px;
+        @include media(tablet) {
+            font-size: 16px;
+        }
+    }
 }
 
 .back-link {

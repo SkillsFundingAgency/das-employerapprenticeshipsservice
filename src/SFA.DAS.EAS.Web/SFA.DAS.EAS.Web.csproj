@@ -232,8 +232,8 @@
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.18735, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.18735\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.20127, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.20127\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
@@ -476,7 +476,6 @@
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\elements.css" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
@@ -529,9 +528,7 @@
     <Content Include="dist\javascripts\selection-buttons.js" />
     <Content Include="dist\javascripts\stacker.js" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Gruntfile.js" />
     <Content Include="robots.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -562,7 +559,6 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
-    <Content Include="App_Data\Certificates\DasIDPCert.pfx" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -769,6 +765,9 @@
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen.scss" />
+    <Content Include="StartUp\FindPrivateKey.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -783,7 +782,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
-    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
@@ -917,9 +915,21 @@
     <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
     <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="StartUp\IIS.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\IIS.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\Powershell.msi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
-     <Content Include="Views\Home\Help.cshtml" />
-    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\ServiceStartPage.cshtml" />
+    <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
+    <Content Include="Views\EmployerAccount\Summary.cshtml" />
+    <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
@@ -936,9 +946,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />

@@ -30,27 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             Assert.That(result.IsValid, Is.True);
         }
 
-        [TestCase("abc123")]
-        [TestCase("123456789")]
-        [TestCase(" ")]
-        public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
-        {
-            _validModel.ULN = uln;
-
-            var result = _validator.Validate(_validModel);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
-        public void ULNThatStartsWithAZeroIsInvalid()
-        {
-            _validModel.ULN = "0123456789";
-
-            var result = _validator.Validate(_validModel);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
+        [TestCase("1000")]
         [TestCase("1324")]
         [TestCase("123")]
         [TestCase("1")]

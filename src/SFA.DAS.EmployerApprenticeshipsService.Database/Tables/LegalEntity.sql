@@ -6,5 +6,6 @@
     [RegisteredAddress] NVARCHAR(256) NULL, 
     [DateOfIncorporation] DATETIME NULL,
 	[Status] NVARCHAR(50) NULL,
-	[Source] TINYINT NOT NULL DEFAULT 1
+	[Source] TINYINT NOT NULL DEFAULT 1,
+	[PublicSectorDataSource] TINYINT NULL
 )
