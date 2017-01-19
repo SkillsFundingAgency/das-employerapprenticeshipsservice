@@ -69,7 +69,6 @@ $Prms = $Parms.Split(" ")
 return $cmdOutput
 )
 }
-
 #Set Permissions on the cert#
 Function Permissions {
 $location=GetLocation
@@ -86,7 +85,6 @@ Import-Module -Name "..\..\approot\bin\StackExchange.Redis.dll"
 Import-Module -Name "..\..\approot\bin\NLog.dll"
 Import-Module -Name "..\..\approot\bin\Newtonsoft.Json.dll"
 Import-Module -Name "..\..\approot\bin\Microsoft.WindowsAzure.Configuration.dll"
-Import-Module -Name "..\..\approot\bin\Microsoft.WindowsAzure.Storage.dll"
 
 #Redis Logging 
 $drive=(Get-Location).Drive.Root
@@ -101,8 +99,6 @@ $Azure="Azure"
 
 if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure }) 
 {  
-
-
 
 [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
 $ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
@@ -129,8 +125,7 @@ else{
 #Create Folder#
 New-Item $localTargetDirectory -type directory -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
 
-#Download Certifacte#
-
+#Download Certifacte & Password#
 $error.clear()
 Try {Get-AzureStorageBlobContent -Blob $BlobName -Container $ContainerName -Destination $localTargetDirectory -Context $ctx -Force }
 catch {
@@ -149,9 +144,9 @@ break
 
 $CertPassword = Get-Content "C:\Cert\$environmentname\password.txt"
 
-$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force –AsPlainText
+$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force â€“AsPlainText
 
-Import-PfxCertificate –FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+Import-PfxCertificate â€“FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
 $logger.Info("Importing the certificate")
 #Setting Permission on the Cert for ReadAccess#
 Permissions
@@ -161,7 +156,6 @@ $logger.Info("Setting Permissions on the certificate")
 Remove-Item $localTargetDirectory -Force -Recurse
 $logger.Info("Removing local folder")
 	
-
 }
 
 }
