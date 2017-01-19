@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<DateTime> GetLastUpdateDate()
         {
             var result = await WithConnection(async c => await c.QueryAsync<DateTime>(
-                sql: "SELECT Top(1) DateCalculated FROM [levy].[EnglishFractionCalculationDate] ORDER BY DateCalculated DESC;",
+                sql: "SELECT Top(1) DateCalculated FROM [employer_financial].[EnglishFractionCalculationDate] ORDER BY DateCalculated DESC;",
                 commandType: CommandType.Text));
 
             return result.FirstOrDefault();
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@dateCalculated", dateUpdated, DbType.Date);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[EnglishFractionCalculationDate] (DateCalculated) VALUES (@dateCalculated);",
+                    sql: "INSERT INTO [employer_financial].[EnglishFractionCalculationDate] (DateCalculated) VALUES (@dateCalculated);",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", employerReference, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
+                    sql: "SELECT * FROM [employer_financial].[EnglishFraction] WHERE EmpRef = @empRef AND DateCalculated = @dateCalculated;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", employerReference, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT top 1 * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef Order by DateCalculated desc;",
+                    sql: "SELECT top 1 * FROM [employer_financial].[EnglishFraction] WHERE EmpRef = @empRef Order by DateCalculated desc;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -81,7 +81,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@empRef", employerReference, DbType.String);
 
                 return await c.QueryAsync<DasEnglishFraction>(
-                    sql: "SELECT * FROM [levy].[EnglishFraction] WHERE EmpRef = @empRef ORDER BY DateCalculated desc;",
+                    sql: "SELECT * FROM [employer_financial].[EnglishFraction] WHERE EmpRef = @empRef ORDER BY DateCalculated desc;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@dateCalculated", fractions.DateCalculated, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [levy].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
+                    sql: "INSERT INTO [employer_financial].[EnglishFraction] (EmpRef, DateCalculated, Amount) VALUES (@empRef, @dateCalculated, @amount);",
                     param: parameters,
                     commandType: CommandType.Text);
             });

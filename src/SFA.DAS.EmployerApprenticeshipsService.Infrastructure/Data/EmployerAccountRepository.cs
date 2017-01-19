@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Account>(
-                    sql: "select a.* from [account].[Account] a where a.Id = @id;",
+                    sql: "select a.* from [employer_account].[Account] a where a.Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
 
                 return await c.QueryAsync<Account>(
-                    sql: "select a.* from [account].[Account] a where a.HashedId = @HashedAccountId;",
+                    sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var countResult = await GetNumberOfAccounts();
 
             var result = await WithConnection(async c => await c.QueryAsync<Account>(
-                sql:    $"select a.* from [account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;", 
+                sql:    $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;", 
                 commandType: CommandType.Text));
 
             return new Accounts<Account> {AccountsCount = countResult.First(), AccountList = result.ToList()};
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@pageSize", pageSize, DbType.Int32);
 
                 return await c.QueryAsync<AccountInformation>(
-                    sql: "[account].[GetAccountInformation_ByDateRange]",
+                    sql: "[employer_account].[GetAccountInformation_ByDateRange]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             }
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<List<Account>> GetAllAccounts()
         {
             var result = await WithConnection(async c => 
-                await c.QueryAsync<Account>("select * from [account].[Account]", commandType: CommandType.Text));
+                await c.QueryAsync<Account>("select * from [employer_account].[Account]", commandType: CommandType.Text));
 
             return result.AsList();
         }
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.QueryAsync<AccountHistoryEntry>(
-                    sql: "[account].[GetAccountHistory]",
+                    sql: "[employer_account].[GetAccountHistory]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountName", name, DbType.String);
 
                 return await c.ExecuteAsync(
-                    sql: "[account].[UpdateAccount_SetAccountName]",
+                    sql: "[employer_account].[UpdateAccount_SetAccountName]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         private async Task<IEnumerable<int>> GetNumberOfAccounts()
         {
             var countResult =
-                await WithConnection(async c => await c.QueryAsync<int>(sql: $"select count(*) from [account].[Account] a;"));
+                await WithConnection(async c => await c.QueryAsync<int>(sql: $"select count(*) from [employer_account].[Account] a;"));
             return countResult;
         }
     }
