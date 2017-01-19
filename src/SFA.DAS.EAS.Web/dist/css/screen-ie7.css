@@ -1850,6 +1850,12 @@ dl.inline dd {
   color: #6f777b;
 }
 
+.heading-dashboard {
+  border-bottom: 5px solid #bfc1c3;
+  padding-bottom: .25em;
+  padding-bottom: .5em;
+}
+
 main, .header-inner {
   max-width: 960px;
   margin: 0 15px;
@@ -1984,6 +1990,11 @@ table.top-border {
 
 .breadcrumbs li {
   background-image: url("/dist/images/separator.png");
+}
+
+.breadcrumbs a {
+  font-size: 14px;
+  font-size: 16px;
 }
 
 .back-link {
@@ -3075,7 +3086,7 @@ span.helpText {
 }
 
 .alert-default {
-  background-color: #eaf4f9;
+  background-color: #d5e8f3;
   border-color: #2b8cc4;
 }
 

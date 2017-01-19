@@ -24,9 +24,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
-                const string sql = @"select tm.* from [account].[GetTeamMembers] tm 
-                            join [account].[Membership] m on m.AccountId = tm.AccountId
-                            join [account].[User] u on u.Id = m.UserId
+                const string sql = @"select tm.* from [employer_account].[GetTeamMembers] tm 
+                            join [employer_account].[Membership] m on m.AccountId = tm.AccountId
+                            join [employer_account].[User] u on u.Id = m.UserId
                             where u.PireanKey = @externalUserId and tm.hashedId = @hashedAccountId";
                 return await connection.QueryAsync<TeamMember>(
                     sql: sql,
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await connection.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE HashedId = @hashedAccountId AND Email = @email;",
+                    sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE HashedId = @hashedAccountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

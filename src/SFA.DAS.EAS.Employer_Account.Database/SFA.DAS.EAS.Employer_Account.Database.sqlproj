@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>SFA.DAS.EAS.Employer_Account.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{927a0bea-b043-4a03-9311-f49cb60541d5}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>SFA.DAS.EAS.EmployerAccount.Database</RootNamespace>
+    <AssemblyName>SFA.DAS.EAS.EmployerAccount.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>employer_account</DefaultSchema>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="SeedData" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Views" />
+    <Folder Include="Tables" />
+    <Folder Include="Schemas" />
+    <Folder Include="Pre-deployment" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="StoredProcedures\Cleardown.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
+    <Build Include="Views\GetInvitations.sql" />
+    <Build Include="Views\GetTeamMembers.sql" />
+    <Build Include="StoredProcedures\CreateNotification.sql" />
+    <Build Include="StoredProcedures\GetNotification.sql" />
+    <Build Include="StoredProcedures\SeedDataForRoles.sql" />
+    <Build Include="Views\MembershipView.sql" />
+    <Build Include="StoredProcedures\AcceptInvitation.sql" />
+    <Build Include="StoredProcedures\GetAccounts_ByUserId.sql" />
+    <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserId.sql" />
+    <Build Include="Views\GetAccountPayeSchemes.sql" />
+    <Build Include="Tables\LegalEntity.sql" />
+    <Build Include="StoredProcedures\CreatePaye.sql" />
+    <Build Include="Tables\EmployerAgreementTemplate.sql" />
+    <Build Include="Tables\EmployerAgreement.sql" />
+    <Build Include="Tables\AccountEmployerAgreement.sql" />
+    <Build Include="Tables\EmployerAgreementStatus.sql" />
+    <Build Include="StoredProcedures\GetLegalEntitiesLinkedToAccount.sql" />
+    <Build Include="StoredProcedures\AddPayeToAccount.sql" />
+    <Build Include="StoredProcedures\CreateLegalEntity.sql" />
+    <Build Include="StoredProcedures\CreateEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\CreateAccountEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\GetEmployerAgreementsLinkedToAccount.sql" />
+    <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
+    <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
+    <Build Include="StoredProcedures\ReleaseEmployerAgreementTemplate.sql" />
+    <Build Include="Schemas\Employer_Account.sql" />
+    <Build Include="Tables\Account.sql" />
+    <Build Include="Tables\User.sql" />
+    <Build Include="Tables\AccountHistory.sql" />
+    <Build Include="StoredProcedures\CreateAccountHistory.sql" />
+    <Build Include="StoredProcedures\UpdateAccountHistory.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemes_ByAccountId.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemesInUse.sql" />
+    <Build Include="StoredProcedures\UpdatePaye.sql" />
+    <Build Include="StoredProcedures\CreateLegalEntityWithAgreement.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountHashId.sql" />
+    <Build Include="StoredProcedures\GetAccountHistory.sql" />
+    <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
+    <Build Include="StoredProcedures\GetAccountInformation_ByDateRange.sql" />
+    <Build Include="StoredProcedures\CreateInvitation.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SeedData\SeedDevData.sql" />
+    <None Include="SeedData\SeedProdData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Database.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Invitation.sql" />
+    <Build Include="Tables\Membership.sql" />
+    <Build Include="Tables\Paye.sql" />
+    <Build Include="Tables\Role.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Pre-deployment\Script.PreDeployment1.sql" />
+  </ItemGroup>
+</Project>
