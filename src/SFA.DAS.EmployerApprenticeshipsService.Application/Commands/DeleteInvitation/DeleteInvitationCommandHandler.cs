@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.Audit;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
 {
@@ -11,9 +14,10 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
     {
         private readonly IInvitationRepository _invitationRepository;
         private readonly IMembershipRepository _membershipRepository;
+        private readonly IMediator _mediator;
         private readonly DeleteInvitationCommandValidator _validator;
 
-        public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository)
+        public DeleteInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -21,6 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
                 throw new ArgumentNullException(nameof(membershipRepository));
             _invitationRepository = invitationRepository;
             _membershipRepository = membershipRepository;
+            _mediator = mediator;
             _validator = new DeleteInvitationCommandValidator();
         }
 
@@ -47,6 +52,23 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
             existing.Status = InvitationStatus.Deleted;
 
             await _invitationRepository.ChangeStatus(existing);
+
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Description = $"Invitation to {message.Email} deleted from account {existing.AccountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        new PropertyUpdate {PropertyName = "Status",NewValue = existing.Status.ToString()}
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
+                }
+            });
+
+
         }
 
         private bool IsWrongStatusToDelete(InvitationStatus status)
