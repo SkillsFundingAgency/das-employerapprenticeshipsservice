@@ -1,7 +1,8 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
-@model ConfirmProviderView
+@model OrchestratorResponse<ConfirmProviderView>
 
 @{
     ViewBag.Title = "Confirm training provider";
@@ -15,53 +16,53 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        @if (Model.Providers != null && Model.Providers.Count > 0)
+        @if (Model.Data.Providers != null && Model.Data.Providers.Count > 0)
         { 
             <form action="@Url.Action("ConfirmProvider")" method="POST">
                 @Html.AntiForgeryToken()
                 @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
                 <h1 class="heading-xlarge">Confirm training provider</h1>
-                <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.ProviderId'</span> matches:</p>
+                <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.Data.ProviderId'</span> matches:</p>
 
-                <h2 class="heading-large" style="margin-bottom:0;">@Model.Providers[0].ProviderName</h2>
-                <h3 class="heading-small" style="margin-top:0px; color:#6F777B">UKPRN: @Model.ProviderId</h3>
+                <h2 class="heading-large" style="margin-bottom:0;">@Model.Data.Providers[0].ProviderName</h2>
+                <h3 class="heading-small" style="margin-top:0px; color:#6F777B">UKPRN: @Model.Data.ProviderId</h3>
 
                 <fieldset class="spacerConfirmProvider" role="radiogroup" aria-required="true">
                     <legend class="visuallyhidden">Training provider</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Confirmation, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Data.Confirmation, "error")">
                         <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
                         <div>
-                            @Html.ValidationMessageFor(m => m.Confirmation, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Confirmation) + "-True" })
+                            @Html.ValidationMessageFor(m => m.Data.Confirmation, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Data.Confirmation) + "-True" })
                         </div>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-True">
-                            @Html.RadioButtonFor(m => m.Confirmation, "True", new { id = Html.IdFor(m => m.Confirmation) + "-True" })
-                            Yes, use @Model.Providers[0].ProviderName
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.Confirmation)-True">
+                            @Html.RadioButton("Confirmation", "True", new { id = Html.IdFor(m => m.Data.Confirmation) + "-True" })
+                            Yes, use @Model.Data.Providers[0].ProviderName
                         </label>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Confirmation)-False">
-                            @Html.RadioButtonFor(m => m.Confirmation, "False", new { id = Html.IdFor(m => m.Confirmation) + "-False" })
+                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.Confirmation)-False">
+                            @Html.RadioButton("Confirmation", "False", new { id = Html.IdFor(m => m.Data.Confirmation) + "-False" })
                             No, change UK Provider Reference Number
                         </label>
                     </div>
                 </fieldset>
 
-                @Html.HiddenFor(x => x.HashedAccountId)
-                @Html.HiddenFor(x => x.LegalEntityCode)
-                @Html.HiddenFor(x => x.CohortRef)
-                @Html.HiddenFor(x => x.ProviderId)
+                @Html.Hidden("HashedAccountId", Model.Data.HashedAccountId)
+                @Html.Hidden("LegalEntityCode", Model.Data.LegalEntityCode)
+                @Html.Hidden("CohortRef", Model.Data.CohortRef)
+                @Html.Hidden("ProviderId", Model.Data.ProviderId)
                 <button class="button" type="submit">Continue</button>
             </form>
         }
         else
         {
             <h1 class="heading-xlarge">Training provider not found</h1>
-            <p class="">No matches found for <span style="font-weight:700">'@Model.ProviderId'</span>.</p>
+            <p class="">No matches found for <span style="font-weight:700">'@Model.Data.ProviderId'</span>.</p>
             <form action="@Url.Action("SearchProvider")" method="GET">
                 @Html.AntiForgeryToken()
-                <input id="providerId" type="hidden" name="providerId" value="">
-                @Html.HiddenFor(x => x.HashedAccountId)
-                @Html.HiddenFor(x => x.LegalEntityCode)
-                @Html.HiddenFor(x => x.CohortRef)
+                @Html.Hidden("HashedAccountId", Model.Data.HashedAccountId)
+                @Html.Hidden("LegalEntityCode", Model.Data.LegalEntityCode)
+                @Html.Hidden("CohortRef", Model.Data.CohortRef)
+                @Html.Hidden("ProviderId", "")
                 <button class="button" type="submit">Search again</button>
             </form>
         }

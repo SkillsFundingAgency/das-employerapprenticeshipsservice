@@ -97,6 +97,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
+        public async Task<OrchestratorResponse<SelectProviderViewModel>> GetProviderSearch(string hashedAccountId, string externalUserId, string legalEntityCode, string cohortRef)
+        {
+            return await CatchExceptions(async () =>
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return new OrchestratorResponse<SelectProviderViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = new SelectProviderViewModel
+                    {
+                        LegalEntityCode = legalEntityCode,
+                        CohortRef = cohortRef
+                    }
+                };
+            });
+        }
+
         public async Task<OrchestratorResponse<SelectLegalEntityViewModel>> GetLegalEntities(string hashedAccountId, string cohortRef, string externalUserId)
         {
             return await CatchExceptions(async () =>
@@ -127,6 +149,55 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             });
+        }
+        public async Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, SelectProviderViewModel model)
+        {
+            var providerId = int.Parse(model.ProviderId);
+
+            return await GetProvider(hashedAccountId, externalUserId, providerId, model.LegalEntityCode, model.CohortRef);
+        }
+
+        public async Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, ConfirmProviderView model)
+        {
+            return await GetProvider(hashedAccountId, externalUserId, model.ProviderId, model.LegalEntityCode, model.CohortRef);
+        }
+
+        private Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, int providerId, string legalEntityCode, string cohortRef)
+        {
+            return CatchExceptions(async () =>
+            {
+                _logger.Info($"Getting Provider Details, Provider: {providerId}");
+
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                var providers = await ProviderSearch(providerId);
+
+                return new OrchestratorResponse<ConfirmProviderView>
+                {
+                    Data = new ConfirmProviderView
+                    {
+                        HashedAccountId = hashedAccountId,
+                        LegalEntityCode = legalEntityCode,
+                        ProviderId = providerId,
+                        Providers = providers,
+                        CohortRef = cohortRef,
+                    }
+                };
+            });
+        }
+
+        private async Task<IList<Provider>> ProviderSearch(int providerId)
+        {
+            var response =  await _mediator.SendAsync(new GetProviderQueryRequest
+            {
+                ProviderId = providerId
+            });
+
+            return response?.ProvidersView.Providers;
         }
 
         private static string CreateReference()
@@ -183,7 +254,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting Commitment Summary Model for Account: {accountId}, LegalEntity: {legalEntityCode}, Provider: {providerId}");
 
-            var providers = await GetProvider(int.Parse(providerId));
+            var providers = await ProviderSearch(int.Parse(providerId));
             var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
 
             var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
@@ -502,17 +573,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        public async Task<List<Provider>> GetProvider(int providerId)
-        {
-            _logger.Info($"Getting Provider Details, Provider: {providerId}");
 
-            var data = await _mediator.SendAsync(new GetProviderQueryRequest
-            {
-                ProviderId = providerId
-            });
-
-            return data?.ProvidersView?.Providers;
-        }
 
         private static ApprovalState GetApprovalState(Commitment commitment)
         {

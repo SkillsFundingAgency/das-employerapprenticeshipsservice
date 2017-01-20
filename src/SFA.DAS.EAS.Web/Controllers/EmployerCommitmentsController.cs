@@ -84,9 +84,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Create/Provider")]
-        public ActionResult SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
+        public async Task<ActionResult> SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
         {
-            return View(new SelectProviderViewModel { LegalEntityCode = legalEntityCode, CohortRef = cohortRef });
+            var response = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, cohortRef);
+
+            return View(response);
         }
 
         [HttpPost]
@@ -99,19 +101,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModel.LegalEntityCode, CohortRef = viewModel.CohortRef });
             }
 
-            var providerId = int.Parse(viewModel.ProviderId);
+            var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
 
-            // The api returns a list but there should only ever be one per ukprn.
-            var providers = await _employerCommitmentsOrchestrator.GetProvider(providerId);
-
-            return View(new ConfirmProviderView
-            {
-                HashedAccountId = hashedAccountId,
-                LegalEntityCode = viewModel.LegalEntityCode,
-                ProviderId = providerId,
-                Providers = providers,
-                CohortRef = viewModel.CohortRef
-            });
+            return View(response);
         }
 
         [HttpPost]
@@ -123,9 +115,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 if (viewModel.Confirmation == null)
                 {
-                    viewModel.Providers = await _employerCommitmentsOrchestrator.GetProvider(viewModel.ProviderId);
+                    var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
 
-                    return View("SelectProvider", viewModel);
+                    return View("SelectProvider", response);
                 }
             }
 
