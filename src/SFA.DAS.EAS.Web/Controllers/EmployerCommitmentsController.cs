@@ -152,12 +152,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.SelectedRoute == "employer")
             {
-                var hashedCommitmentId = await _employerCommitmentsOrchestrator.CreateEmployerAssignedCommitment(viewModel);
+                var response = await _employerCommitmentsOrchestrator.CreateEmployerAssignedCommitment(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
-                return RedirectToAction("Details", new { hashedCommitmentId = hashedCommitmentId });
+                return RedirectToAction("Details", new { hashedCommitmentId = response.Data });
             }
 
-            return RedirectToAction("SubmitNewCommitment", 
+            return RedirectToAction("SubmitNewCommitment", // TODO: LWA Still need to check auth for this action
                 new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef, saveStatus = SaveStatus.Save });
         }
 
@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId);
+            var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
             ViewBag.HashedAccountId = hashedAccountId;
 
