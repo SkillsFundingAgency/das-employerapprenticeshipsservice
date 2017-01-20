@@ -133,11 +133,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Create/ChoosePath")]
         public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef)
         {
-            var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, cohortRef, OwinWrapper.GetClaimValue(@"sub"));
 
-            model.Data.CohortRef = cohortRef;
-
-            return View(model.Data);
+            return View(model);
         }
 
         [HttpPost]
@@ -147,11 +145,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.ProviderId.ToString(), OwinWrapper.GetClaimValue(@"sub"));
+                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.CohortRef, viewModel.ProviderId.ToString(), OwinWrapper.GetClaimValue(@"sub"));
 
-                model.Data.CohortRef = viewModel.CohortRef;
-
-                return View("ChoosePath", model.Data);
+                return View("ChoosePath", model);
             }
 
             if (viewModel.SelectedRoute == "employer")

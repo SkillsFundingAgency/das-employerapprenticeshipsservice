@@ -200,6 +200,40 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response?.ProvidersView.Providers;
         }
 
+        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef, string externalUserId)
+        {
+            return await CatchExceptions(async () =>
+            {
+                var accountId = _hashingService.DecodeValue(hashedAccountId);
+                _logger.Info($"Getting Commitment Summary Model for Account: {accountId}, LegalEntity: {legalEntityCode}, Provider: {providerId}");
+
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                var providers = await ProviderSearch(int.Parse(providerId));
+                var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
+
+                var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
+                var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
+
+                return new OrchestratorResponse<CreateCommitmentViewModel>
+                {
+                    Data = new CreateCommitmentViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        LegalEntityCode = legalEntityCode,
+                        LegalEntityName = legalEntity.Name,
+                        ProviderId = provider.Ukprn,
+                        ProviderName = provider.ProviderName,
+                        CohortRef = cohortRef
+                    }
+                };
+            });
+        }
+
         private static string CreateReference()
         {
             return Guid.NewGuid().ToString().ToUpper();
@@ -249,29 +283,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting Commitment Summary Model for Account: {accountId}, LegalEntity: {legalEntityCode}, Provider: {providerId}");
-
-            var providers = await ProviderSearch(int.Parse(providerId));
-            var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
-
-            var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
-            var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
-
-            return new OrchestratorResponse<CreateCommitmentViewModel>
-            {
-                Data = new CreateCommitmentViewModel
-                {
-                    HashedAccountId = hashedAccountId,
-                    LegalEntityCode = legalEntityCode,
-                    LegalEntityName = legalEntity.Name,
-                    ProviderId = provider.Ukprn,
-                    ProviderName = provider.ProviderName
-                }
-            };
-        }
+        
 
         public async Task<string> CreateEmployerAssignedCommitment(CreateCommitmentViewModel model)
         {
