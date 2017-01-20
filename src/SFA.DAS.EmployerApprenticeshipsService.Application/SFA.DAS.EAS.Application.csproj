@@ -293,6 +293,10 @@
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountsByHashedId\GetEmployerAccountsByHashedIdHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccountsByHashedId\GetEmployerAccountsByHashedIdQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountsByHashedId\GetEmployerAccountsByHashedIdResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountsByHashedId\GetEmployerAccountsByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionHandler.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
