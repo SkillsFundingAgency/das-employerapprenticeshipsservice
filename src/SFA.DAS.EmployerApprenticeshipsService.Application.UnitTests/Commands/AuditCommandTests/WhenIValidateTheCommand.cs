@@ -42,7 +42,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AuditCommandTests
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("ChangedProperties", "ChangedProperties has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("Description", "Description has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("RelatedEntities", "RelatedEntities has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("AffectedEntity", "AffectedEntity has not been supplied"), actual.ValidationDictionary);
         }
 
@@ -50,12 +49,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AuditCommandTests
         public void ThenFalseIsReturnedAndTheDictionaryIsPopulatedWhenTheListsAreEmpty()
         {
             //Act
-            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new EasAuditMessage {Description = "test", RelatedEntities = new List<Entity>(),ChangedProperties = new List<PropertyUpdate>()} });
+            var actual = _validator.Validate(new CreateAuditCommand { EasAuditMessage = new EasAuditMessage {Description = "test", ChangedProperties = new List<PropertyUpdate>()} });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("ChangedProperties", "ChangedProperties has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("RelatedEntities", "RelatedEntities has not been supplied"), actual.ValidationDictionary);
+            
         }
 
         [Test]

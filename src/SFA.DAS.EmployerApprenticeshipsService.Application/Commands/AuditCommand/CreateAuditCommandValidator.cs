@@ -26,12 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.AuditCommand
             {
                 validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
             }
-
-            if (item.EasAuditMessage.RelatedEntities == null || !item.EasAuditMessage.RelatedEntities.Any())
-            {
-                validationResult.AddError(nameof(item.EasAuditMessage.RelatedEntities));
-            }
-
+            
             if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))
             {
                 validationResult.AddError(nameof(item.EasAuditMessage.AffectedEntity));
