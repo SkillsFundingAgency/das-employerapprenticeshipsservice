@@ -8,7 +8,9 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EAS.Application;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccountsByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccountsByDateRange;
+using SFA.DAS.EAS.Domain.Entities.Account;
 
 namespace SFA.DAS.EAS.Api.Controllers
 {
@@ -31,11 +33,8 @@ namespace SFA.DAS.EAS.Api.Controllers
         {
             DateTime fromDateConverted;
             DateTime toDateConverted;
-            
-            if (!DateTime.TryParseExact(fromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out fromDateConverted) ||
-                !DateTime.TryParseExact(toDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out toDateConverted) ||
-                toDateConverted.Equals(DateTime.MinValue) || 
-                fromDateConverted.Equals(DateTime.MinValue))
+
+            if (!ValidateAndConvertDates(fromDate, toDate, out fromDateConverted, out toDateConverted))
             {
                 _logger.Info($"API AccountsInformation - Invalid dates entered fromDate:{fromDate} toDate:{toDate}");
                 return BadRequest();
@@ -52,21 +51,7 @@ namespace SFA.DAS.EAS.Api.Controllers
                 });
 
                 var data = new List<AccountInformationViewModel>();
-                data.AddRange(results.Accounts.AccountList.Select(result => new AccountInformationViewModel
-                {
-                    DasAccountName = result.DasAccountName,
-                    DateRegistered = result.DateRegistered,
-                    OrganisationRegisteredAddress = result.OrganisationRegisteredAddress,
-                    OrganisationSource = result.OrganisationSource,
-                    OrganisationStatus = result.OrganisationStatus,
-                    OrganisationName = result.OrganisationName,
-                    OwnerEmail = result.OwnerEmail,
-                    OrgansiationCreatedDate = result.OrgansiationCreatedDate,
-                    DasAccountId = result.DasAccountId,
-                    OrganisationNumber = result.OrganisationNumber,
-                    PayeSchemeName= result.PayeSchemeName,
-                    OrganisationId = result.OrganisationId
-                }));
+                data.AddRange(results.Accounts.AccountList.Select(ConvertAccountInformationToViewModel));
 
                 var returnResult = new PagedApiResponseViewModel<AccountInformationViewModel>
                 {
@@ -84,9 +69,71 @@ namespace SFA.DAS.EAS.Api.Controllers
             {
                 _logger.Error(ex);
             }
+            
+            return BadRequest();
+        }
 
+        [HttpGet]
+        [Route("{HashedAccountId}")]
+        public async Task<IHttpActionResult> Index(string hashedAccountId)
+        {
+            if (string.IsNullOrEmpty(hashedAccountId))
+            {
+                _logger.Info("API AccountsInformation - hashed account id not provided");
+                return BadRequest();
+            }
+
+            try
+            {
+                var results = await _mediator.SendAsync(new GetEmployerAccountsByHashedIdQuery { HashedAccountId = hashedAccountId });
+
+                var returnResult = new List<AccountInformationViewModel>();
+                returnResult.AddRange(results.Accounts.Select(ConvertAccountInformationToViewModel));
+
+                return Ok(returnResult);
+            }
+            catch (InvalidRequestException ex)
+            {
+                _logger.Info(ex, "Invalid Request for EmployerAccountsInformationController");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
 
             return BadRequest();
+        }
+
+        private static AccountInformationViewModel ConvertAccountInformationToViewModel(AccountInformation result)
+        {
+            return new AccountInformationViewModel
+            {
+                DasAccountName = result.DasAccountName,
+                DateRegistered = result.DateRegistered,
+                OrganisationRegisteredAddress = result.OrganisationRegisteredAddress,
+                OrganisationSource = result.OrganisationSource,
+                OrganisationStatus = result.OrganisationStatus,
+                OrganisationName = result.OrganisationName,
+                OwnerEmail = result.OwnerEmail,
+                OrgansiationCreatedDate = result.OrgansiationCreatedDate,
+                DasAccountId = result.DasAccountId,
+                OrganisationNumber = result.OrganisationNumber,
+                PayeSchemeName= result.PayeSchemeName,
+                OrganisationId = result.OrganisationId
+            };
+        }
+
+        private bool ValidateAndConvertDates(string fromDate, string toDate, out DateTime fromDateConverted, out DateTime toDateConverted)
+        {
+            toDateConverted = DateTime.Now;
+
+            if (!DateTime.TryParseExact(fromDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out fromDateConverted) ||
+                !DateTime.TryParseExact(toDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out toDateConverted) ||
+                toDateConverted.Equals(DateTime.MinValue) || fromDateConverted.Equals(DateTime.MinValue))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
