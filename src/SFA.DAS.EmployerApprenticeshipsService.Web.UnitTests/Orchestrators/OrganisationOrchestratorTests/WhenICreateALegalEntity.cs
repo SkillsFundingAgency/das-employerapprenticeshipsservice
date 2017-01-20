@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                              LegalEntityId = legalEntityId,
                              LegalEntityName = request.Name,
                              LegalEntityCode = request.Code,
-                             LegalEntityRegisteredAddress = request.Address,
+                             LegalEntityAddress = request.Address,
                              LegalEntityStatus = request.LegalEntityStatus,
                              Status = EmployerAgreementStatus.Pending
                          }

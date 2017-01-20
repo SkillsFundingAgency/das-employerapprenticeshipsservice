@@ -29,7 +29,7 @@
                 </p>
 
                 <h2 class="heading-medium">@Model.Data.EmployerAgreement.LegalEntityName</h2>
-                <p>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</p>
+                <p>@Model.Data.EmployerAgreement.LegalEntityAddress</p>
 
                 <hr />
 
@@ -40,8 +40,8 @@
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.EmployerAgreement.LegalEntityName" />
                     <input type="hidden" id="legalEntityCode" name="code" value="@Model.Data.EmployerAgreement.LegalEntityCode" />
-                    <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress" />
-                    <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityIncorporatedDate" />
+                    <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.EmployerAgreement.LegalEntityAddress" />
+                    <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.EmployerAgreement.LegalEntityInceptionDate" />
                     <div class="form-group @(TempData["userNotAuthorised"] != null ? "error" : "")">
 
                         @if (TempData["userNotAuthorised"] != null)

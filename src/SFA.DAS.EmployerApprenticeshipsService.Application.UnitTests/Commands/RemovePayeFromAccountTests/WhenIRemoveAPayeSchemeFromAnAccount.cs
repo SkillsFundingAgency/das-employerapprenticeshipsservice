@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
@@ -16,6 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IValidator<RemovePayeFromAccountCommand>> _validator;
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IHashingService> _hashingService;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
@@ -26,9 +30,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemovePayeFromAccountCommand>())).ReturnsAsync(new ValidationResult());
 
             _hashingService = new Mock<IHashingService>();
+
+            _mediator = new Mock<IMediator>();
             
 
-            _handler = new RemovePayeFromAccountCommandHandler(_validator.Object, _accountRepository.Object, _hashingService.Object);
+            _handler = new RemovePayeFromAccountCommandHandler(_mediator.Object, _validator.Object, _accountRepository.Object, _hashingService.Object);
         }
 
         [Test]
@@ -82,6 +88,41 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheAuditCommandIsCalledWhenTheCommandIsValid()
+        {
+            //Arrange
+            var accountId = 123456;
+            var command = new RemovePayeFromAccountCommand
+            {
+                UserId = "54256",
+                HashedAccountId = "ABC123",
+                PayeRef = "3674826874623",
+                RemoveScheme = true
+            };
+
+            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(accountId);
+
+            //Act
+            await _handler.Handle(command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(accountId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(command.UserId)) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("PayeRef") && y.NewValue.Equals(command.PayeRef)) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {command.UserId} has removed PAYE schema {command.PayeRef} from account {accountId}"))));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(accountId.ToString()) && y.Type.Equals("Account")) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(command.PayeRef) &&
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Paye"))));
         }
     }
 }
