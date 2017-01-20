@@ -7,6 +7,8 @@
 	@employerRegisteredAddress NVARCHAR(256),
 	@employerDateOfIncorporation DATETIME,
 	@accountId BIGINT OUTPUT,
+	@legalEntityId BIGINT OUTPUT,
+	@employerAgreementId BIGINT OUTPUT,
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
 	@addedDate DATETIME	,
@@ -18,9 +20,6 @@
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	DECLARE @legalEntityId BIGINT;
-	DECLARE @employerAgreementId BIGINT;
 
 	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();

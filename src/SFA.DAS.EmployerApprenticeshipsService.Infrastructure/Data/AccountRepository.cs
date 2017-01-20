@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<long> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource)
+        public async Task<Tuple<long,long,long>> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource)
         {
             return await WithConnection(async c =>
             {
@@ -30,6 +30,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
                 parameters.Add("@employerRef", employerRef, DbType.String);
                 parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
+                parameters.Add("@legalentityId", null, DbType.Int64, ParameterDirection.Output, 8);
+                parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output, 8);
                 parameters.Add("@accessToken", accessToken, DbType.String);
                 parameters.Add("@refreshToken", refreshToken, DbType.String);
                 parameters.Add("@addedDate",DateTime.UtcNow,DbType.DateTime);
@@ -43,8 +45,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
-                
-                return parameters.Get<long>("@accountId");
+
+                var accountId = parameters.Get<long>("@accountId");
+                var legalEntityId = parameters.Get<long>("@legalentityId");
+                var employerAgreementId = parameters.Get<long>("@employerAgreementId");
+                return new Tuple<long,long,long> ( accountId , legalEntityId, employerAgreementId); 
             });
         }
         
