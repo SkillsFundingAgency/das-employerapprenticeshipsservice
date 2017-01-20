@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Client.Dtos;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
@@ -24,17 +25,26 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             _httpClient = new Mock<SecureHttpClient>();
             _httpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    JsonConvert.SerializeObject(new Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>
+                    JsonConvert.SerializeObject(new Dtos.PagedApiResponseViewModel<AccountInformationViewModel>
                     {
                         Page = 1,
                         TotalPages = 1,
-                        Data = new List<Dtos.AccountInformationViewModel>
+                        Data = new List<AccountInformationViewModel>
                         {
-                            new Dtos.AccountInformationViewModel
+                            new AccountInformationViewModel
                             {
                                 DasAccountName = "Test Account",
                                 OrganisationName = "Test Organisation",
-                                OrganisationStatus = "Active"
+                                OrganisationStatus = "Active",
+                                DasAccountId = "ABC",
+                                DateRegistered = DateTime.Now,
+                                OrganisationId = 123,
+                                OrganisationNumber = "12345",
+                                OrganisationRegisteredAddress = "Test Address",
+                                OrganisationSource = "Source",
+                                OrgansiationCreatedDate = DateTime.Now.AddDays(-31),
+                                OwnerEmail = "test@email.com",
+                                PayeSchemeName = "Scheme"
                             }
                         }
                     })));
