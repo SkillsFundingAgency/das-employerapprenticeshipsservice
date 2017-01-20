@@ -109,6 +109,7 @@
     <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
     <Build Include="StoredProcedures\GetAccountInformation_ByDateRange.sql" />
     <Build Include="Views\AccountInformation.sql" />
+    <Build Include="StoredProcedures\GetAccountInformation_ByHashedId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />
