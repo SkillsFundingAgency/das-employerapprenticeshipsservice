@@ -15,7 +15,7 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformationTests
 {
-    public class WhenIGetAccountInformation
+    public class WhenIGetAccountInformationByDate
     {
         private EmployerAccountsInformationController _controller;
         private Mock<IMediator> _mediator;

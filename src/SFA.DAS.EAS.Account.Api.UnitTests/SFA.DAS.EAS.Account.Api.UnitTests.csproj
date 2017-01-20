@@ -72,7 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformation.cs" />
+    <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformationByHashedId.cs" />
+    <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformationByDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
