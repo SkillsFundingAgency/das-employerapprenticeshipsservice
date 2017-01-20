@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
             
             AddMediatrRegistrations();
 
-            //RegisterAuditService();
+            RegisterAuditService();
         }
 
         private void AddMediatrRegistrations()
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
 
             if (environment.Equals("LOCAL"))
             {
-                For<IAuditApiClient>().Use<StubAuditApiClient>().Ctor<string>("outputDirectory").Is(@"C:\Temp");
+                For<IAuditApiClient>().Use<StubAuditApiClient>();
             }
             else
             {
