@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
@@ -19,13 +23,15 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IAccountRepository _accountRepository;
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
+        private readonly IMediator _mediator;
 
-        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService)
+        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator)
         {
             _validator = validator;
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
+            _mediator = mediator;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
@@ -49,6 +55,25 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                         RefName = message.EmprefName
                     }
                 );
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Description = $"Paye scheme {message.Empref} added to account {accountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+
+                        PropertyUpdate.FromString("Ref",message.Empref),
+                        PropertyUpdate.FromString("AccessToken",message.AccessToken),
+                        PropertyUpdate.FromString("RefreshToken",message.RefreshToken),
+                        PropertyUpdate.FromString("Name",message.EmprefName)
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Paye", Id = message.Empref }
+                }
+            });
+
 
             await _messagePublisher.PublishAsync(
                 new EmployerRefreshLevyQueueMessage
