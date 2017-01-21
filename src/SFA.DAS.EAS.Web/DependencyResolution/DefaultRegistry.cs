@@ -105,7 +105,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             {
                 For<IAuditApiClient>().Use<AuditApiClient>();
             }
-
         }
 
         private void RegisterMapper()

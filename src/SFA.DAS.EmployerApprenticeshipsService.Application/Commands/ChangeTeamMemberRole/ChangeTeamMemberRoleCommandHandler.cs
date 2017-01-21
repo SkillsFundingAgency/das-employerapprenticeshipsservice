@@ -53,6 +53,7 @@ namespace SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "UPDATED",
                     Description = $"Member {message.Email} on account {caller.AccountId} role has changed to {message.RoleId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

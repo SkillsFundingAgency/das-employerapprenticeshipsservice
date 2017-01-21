@@ -81,6 +81,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Account {message.OrganisationName} created with id {returnValue.Item1}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
@@ -113,6 +114,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Legal Entity {message.OrganisationName} created of type {message.OrganisationType} with id {returnValue.Item2}",
                     ChangedProperties = changedProperties,
                     AffectedEntity = new Entity { Type = "LegalEntity", Id = returnValue.Item2.ToString() },
@@ -125,10 +127,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.Item2}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-
                         PropertyUpdate.FromLong("Id",returnValue.Item3),
                         PropertyUpdate.FromLong("LegalEntityId",returnValue.Item2),
                         PropertyUpdate.FromString("TemplateId",hashedAccountId),
@@ -144,6 +146,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.Item2}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
@@ -166,6 +169,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Paye scheme {message.PayeReference} added to account {returnValue.Item1}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
@@ -185,6 +189,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"User {message.ExternalUserId} added to account {returnValue.Item1} as owner",
                     ChangedProperties = new List<PropertyUpdate>
                     {

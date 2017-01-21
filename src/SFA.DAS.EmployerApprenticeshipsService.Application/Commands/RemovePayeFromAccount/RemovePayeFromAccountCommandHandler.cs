@@ -54,6 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "DELETED",
                     Description = $"User {userId} has removed PAYE schema {payeRef} from account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

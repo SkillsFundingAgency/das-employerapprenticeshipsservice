@@ -58,6 +58,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteInvitation
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "DELETED",
                     Description = $"Invitation to {message.Email} deleted from account {existing.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

@@ -51,8 +51,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             {
                 EasAuditMessage = new EasAuditMessage
                 {
-                    Description =
-                        $"User {owner.Email} added legal entity {agreementView.LegalEntityId} to account {owner.AccountId}",
+                    Category = "UPDATED",
+                    Description = $"User {owner.Email} added legal entity {agreementView.LegalEntityId} to account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString()},
@@ -72,6 +72,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "UPDATED",
                     Description = $"User {owner.Email} added signed agreement {agreementView.Id} to account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

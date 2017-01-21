@@ -87,6 +87,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Member {message.Email} added to account {caller.AccountId} as {message.RoleId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

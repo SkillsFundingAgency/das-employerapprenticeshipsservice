@@ -64,6 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "UPDATED",
                     Description = $"User {ownerEmail} has renamed account {accountId} to {name}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

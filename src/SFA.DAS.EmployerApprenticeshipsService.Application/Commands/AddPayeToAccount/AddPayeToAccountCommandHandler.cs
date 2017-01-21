@@ -60,6 +60,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "CREATED",
                     Description = $"Paye scheme {message.Empref} added to account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

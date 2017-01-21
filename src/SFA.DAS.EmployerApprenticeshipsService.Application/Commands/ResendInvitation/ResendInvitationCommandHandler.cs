@@ -70,6 +70,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             {
                 EasAuditMessage = new EasAuditMessage
                 {
+                    Category = "INVITATION_RESENT",
                     Description = $"Invitation to {message.Email} resent in Account {existing.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {

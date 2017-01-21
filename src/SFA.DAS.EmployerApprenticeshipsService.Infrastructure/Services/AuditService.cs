@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             try
             {
                 var auditMessage = _factory.Build();
+                auditMessage.Category = message.Category;
                 auditMessage.Description = message.Description;
                 auditMessage.ChangedProperties = message.ChangedProperties;
                 auditMessage.RelatedEntities = message.RelatedEntities;
