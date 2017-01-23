@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
@@ -94,6 +95,35 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             //Assert
           
             Assert.AreEqual($"{expected.AddressLine1}, {expected.AddressPostcode}", actual.Data.Address);
+        }
+
+
+        [Test]
+        [TestCase("active", HttpStatusCode.OK)]
+        [TestCase("administration", HttpStatusCode.OK)]
+        [TestCase("voluntary-arrangement", HttpStatusCode.OK)]
+        [TestCase("dissolved", HttpStatusCode.Conflict)]
+        [TestCase("liquidation", HttpStatusCode.Conflict)]
+        [TestCase("receivership", HttpStatusCode.Conflict)]
+        [TestCase("converted-closed", HttpStatusCode.Conflict)]
+        [TestCase("insolvency-proceedings", HttpStatusCode.Conflict)]
+        public async Task ThenCompaniesWithSpecificStatusesCannotBeAdded(string status, HttpStatusCode expectedHttpStatusCode)
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>()))
+                .ReturnsAsync(new GetEmployerInformationResponse
+                {
+                    CompanyName = "Test Co",
+                    CompanyStatus = status
+                });
+
+            //Act
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber("test", "362546752", string.Empty);
+
+
+            //Assert
+            Assert.AreEqual(expectedHttpStatusCode, actual.Status);
+
         }
 
         [Test]
