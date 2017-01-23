@@ -174,6 +174,74 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
+        public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId);
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
+        public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayCreateApprenticeshipView(apprenticeship);
+                }
+
+                // TODO: LWA - What's the best way to check user is authorised for account
+                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex);
+
+                return await RedisplayCreateApprenticeshipView(apprenticeship);
+            }
+
+            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Edit")]
+        public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
+
+            return View("EditApprenticeshipEntry", response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedCommitmentId}/Apprenticeships/{HashedApprenticeshipId}/Edit")]
+        public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return await RedisplayEditApprenticeshipView(apprenticeship);
+                }
+
+                // TODO: LWA - What's the best way to check user is authorised for account
+                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship);
+            }
+            catch (InvalidRequestException ex)
+            {
+                AddErrorsToModelState(ex);
+
+                return await RedisplayEditApprenticeshipView(apprenticeship);
+            }
+
+            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
+        }
+
+        [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/Finished")]
         public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
@@ -205,17 +273,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
-        }
-
-        [HttpGet]
-        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Edit")]
-        public async Task<ActionResult> EditApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
-
-            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
-            ViewBag.ApprovalWarningState = model.ApprovalValidation;
-            return View("EditApprenticeshipEntry", model.Apprenticeship);
         }
 
         [HttpGet]
@@ -333,65 +390,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
         }
 
-        [HttpGet]
-        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
-        public async Task<ActionResult> CreateApprenticeshipEntry(string hashedAccountId, string hashedCommitmentId)
-        {
-            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(hashedAccountId, hashedCommitmentId);
-
-            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
-
-            return View(model.Apprenticeship);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/Apprenticeships/Create")]
-        public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayCreateApprenticeshipView(apprenticeship);
-                }
-
-                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
-            }
-            catch (InvalidRequestException ex)
-            {
-                AddErrorsToModelState(ex);
-
-                return await RedisplayCreateApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{hashedCommitmentId}/Apprenticeships/{HashedApprenticeshipId}/Edit")]
-        public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayEditApprenticeshipView(apprenticeship);
-                }
-
-                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship);
-            }
-            catch (InvalidRequestException ex)
-            {
-                AddErrorsToModelState(ex);
-
-                return await RedisplayEditApprenticeshipView(apprenticeship);
-            }
-
-            return RedirectToAction("Details", new { hashedAccountId = apprenticeship.HashedAccountId, hashedCommitmentId = apprenticeship.HashedCommitmentId });
-        }
-
         private void AddErrorsToModelState(InvalidRequestException ex)
         {
             foreach (var error in ex.ErrorMessages)
@@ -402,20 +400,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private async Task<ActionResult> RedisplayCreateApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
-            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
-            model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
+            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
+            response.Data.Apprenticeship = apprenticeship;
 
-            return View("CreateApprenticeshipEntry", model.Apprenticeship);
+            return View("CreateApprenticeshipEntry", response);
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
         {
-            var model = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId);
-            model.Apprenticeship = apprenticeship;
-            ViewBag.ApprenticeshipProducts = model.ApprenticeshipProgrammes;
+            var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
+            response.Data.Apprenticeship = apprenticeship;
 
-            return View("EditApprenticeshipEntry", model.Apprenticeship);
+            return View("EditApprenticeshipEntry", response);
         }
     }
 }

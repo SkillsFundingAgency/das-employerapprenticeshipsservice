@@ -229,6 +229,93 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, model.HashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetSkeletonApprenticeshipDetails(string hashedAccountId, string externalUserId, string hashedCommitmentId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting skeleton apprenticeship model, Account: {accountId}, Commitment: {commitmentId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var apprenticeship = new ApprenticeshipViewModel
+                {
+                    HashedAccountId = hashedAccountId,
+                    HashedCommitmentId = hashedCommitmentId,
+                };
+
+                return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
+                {
+                    Data = new ExtendedApprenticeshipViewModel
+                    {
+                        Apprenticeship = apprenticeship,
+                        ApprenticeshipProgrammes = await GetTrainingProgrammes()
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            // TODO: LWA - We should authorise user
+            var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+            _logger.Info($"Creating Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            await _mediator.SendAsync(new CreateApprenticeshipCommand
+            {
+                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
+                Apprenticeship = await MapFrom(apprenticeship)
+            });
+        }
+
+        public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetApprenticeship(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            _logger.Info($"Getting Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () => 
+            {
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                var apprenticeship = MapFrom(data.Apprenticeship);
+
+                apprenticeship.HashedAccountId = hashedAccountId;
+
+                // TODO: Validation errors to be used in a future story.
+                var approvalValidator = new ApprenticeshipViewModelApproveValidator();
+
+                return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
+                {
+                    Data = new ExtendedApprenticeshipViewModel
+                    {
+                        Apprenticeship = apprenticeship,
+                        ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                        ApprovalValidation = approvalValidator.Validate(apprenticeship) // TODO: LWA - Do we need this anymore?
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            // TODO: LWA - We should authorise user
+            var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+            _logger.Info($"Updating Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            await _mediator.SendAsync(new UpdateApprenticeshipCommand
+            {
+                AccountId = accountId,
+                Apprenticeship = await MapFrom(apprenticeship)
+            });
+        }
+
         private static string CreateReference()
         {
             return Guid.NewGuid().ToString().ToUpper();
@@ -397,34 +484,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<ExtendedApprenticeshipViewModel> GetApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-            _logger.Info($"Getting Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
-
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
-            {
-                AccountId = accountId,
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
-                ApprenticeshipId = apprenticeshipId
-            });
-
-            var apprenticeship = MapFrom(data.Apprenticeship);
-
-            apprenticeship.HashedAccountId = hashedAccountId;
-
-            // TODO: Validation errors to be used in a future story.
-            var approvalValidator = new ApprenticeshipViewModelApproveValidator();
-
-            return new ExtendedApprenticeshipViewModel
-            {
-                Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                ApprovalValidation = approvalValidator.Validate(apprenticeship)
-            };
-        }
-
         public async Task<FinishEditingViewModel> GetFinishEditingViewModel(string hashedAccountId, string hashedCommitmentId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -471,51 +530,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LastAction = lastAction,
                 CreateTask = saveStatus != SaveStatus.Approve
             });
-        }
-
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
-            _logger.Info($"Creating Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
-
-            await _mediator.SendAsync(new CreateApprenticeshipCommand
-            {
-                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                Apprenticeship = await MapFrom(apprenticeship)
-            });
-        }
-
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
-        {
-            var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
-            _logger.Info($"Updating Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
-
-            await _mediator.SendAsync(new UpdateApprenticeshipCommand
-            {
-                AccountId = accountId,
-                Apprenticeship = await MapFrom(apprenticeship)
-            });
-        }
-
-        public async Task<ExtendedApprenticeshipViewModel> GetSkeletonApprenticeshipDetails(string hashedAccountId, string hashedCommitmentId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Getting skeleton apprenticeship model, Account: {accountId}, Commitment: {commitmentId}");
-
-            var apprenticeship = new ApprenticeshipViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HashedCommitmentId = hashedCommitmentId,
-            };
-
-            return new ExtendedApprenticeshipViewModel
-            {
-                Apprenticeship = apprenticeship,
-                ApprenticeshipProgrammes = await GetTrainingProgrammes()
-            };
         }
 
         public async Task SubmitCommitment(SubmitCommitmentModel model)
