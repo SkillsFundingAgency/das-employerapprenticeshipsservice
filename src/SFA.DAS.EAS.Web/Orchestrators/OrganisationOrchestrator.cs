@@ -302,8 +302,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         {
                             LegalEntityName = request.Name,
                             LegalEntityCode = request.Code,
-                            LegalEntityRegisteredAddress = request.Address,
-                            LegalEntityIncorporatedDate = request.IncorporatedDate,
+                            LegalEntityAddress = request.Address,
+                            LegalEntityInceptionDate = request.IncorporatedDate,
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text,
