@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 PayeReference = enteredData.PayeReference,
                 AccessToken = enteredData.AccessToken,
                 RefreshToken = enteredData.RefreshToken,
-                OrganisationStatus = enteredData.OrganisationStatus,
+                OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.OrganisationStatus) ? null : enteredData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerRefName,
                 PublicSectorDataSource = enteredData.PublicSectorDataSource
             };

@@ -147,7 +147,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                Status = "active",
+                Status = string.Empty,
                 Type = OrganisationType.PublicBodies,
                 PublicSectorDataSource = (short)x.Source
             }).ToList();
@@ -267,7 +267,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
                     Address = charity.FormattedAddress,
-                    Status = "active"
+                    Status = string.Empty
                 }
             };
         }
