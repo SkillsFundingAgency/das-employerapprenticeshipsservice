@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Messages;
@@ -33,7 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         {
             _accountRepository = new Mock<IAccountRepository>();
             _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(ExpectedAccountId)).ReturnsAsync(new List<PayeView> { new PayeView { LegalEntityId = ExpectedLegalEntityId } });
-            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(ExpectedAccountId);
+            _accountRepository.Setup(x => x.CreateAccount(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<DateTime?>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>())).ReturnsAsync(new Tuple<long, long, long>(ExpectedAccountId,0L,0L));
 
             _userRepository = new Mock<IUserRepository>();
             _userRepository.Setup(x => x.GetByUserRef(It.IsAny<string>())).ReturnsAsync(new User());
@@ -59,7 +61,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(createAccountCommand);
 
             //Assert
-            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime?>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>()), Times.Once);
+            _accountRepository.Verify(x=>x.CreateAccount(It.IsAny<long>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<string>(),It.IsAny<DateTime?>(),"123/abc", "123rd", "45YT","active",It.IsAny<string>(), It.IsAny<short>(), It.IsAny<short?>()), Times.Once);
             _accountRepository.Verify(x => x.AddPayeToAccount(It.Is<Paye>(c => c.AccountId.Equals(ExpectedAccountId) && c.EmpRef.Equals("456/123") && c.AccessToken.Equals("123rd") && c.RefreshToken.Equals("45YT"))), Times.Once);
         }
 
@@ -141,16 +143,49 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             };
 
             _userRepository.Setup(x => x.GetByUserRef(cmd.ExternalUserId)).ReturnsAsync(user);
-            _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName)).ReturnsAsync(accountId);
+            _accountRepository.Setup(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName, (short)cmd.OrganisationType, cmd.PublicSectorDataSource)).ReturnsAsync(new Tuple<long, long, long>(accountId,0,0));
 
             var expectedHashedAccountId = "DJRR4359";
             _hashingService.Setup(x => x.HashValue(accountId)).Returns(expectedHashedAccountId);
 
             await _handler.Handle(cmd);
 
-            _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName));
+            _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName, (short)cmd.OrganisationType, cmd.PublicSectorDataSource));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
             _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == expectedHashedAccountId && e.Event == "AccountCreated")), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheCommandIsValidTheCreateAuditCommandIsCalledForEachComponent()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand
+            {
+                PayeReference = "123/abc,456/123",
+                AccessToken = "123rd",
+                RefreshToken = "45YT",
+                OrganisationType = OrganisationType.CompaniesHouse,
+                OrganisationName = "OrgName",
+                EmployerRefName = "123AB",
+                ExternalUserId = "4566",
+                OrganisationAddress = "Address",
+                OrganisationDateOfInception = new DateTime(2017,01,30),
+                OrganisationReferenceNumber = "TYG56",
+                OrganisationStatus = "Active",
+                PublicSectorDataSource = 2
+            };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            _mediator.Verify(
+                x => x.SendAsync(It.Is<CreateAuditCommand>(c => 
+                    c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null &&
+                    c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(ExpectedAccountId.ToString())) != null
+                    )));
+
+
         }
 
     }

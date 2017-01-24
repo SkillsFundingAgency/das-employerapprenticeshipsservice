@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.Dtos
     {
         public string DasAccountName { get; set; }
         public DateTime DateRegistered { get; set; }
+        public long OrganisationId { get; set; }
         public string OrganisationRegisteredAddress { get; set; }
         public string OrganisationSource { get; set; }
         public string OrganisationStatus { get; set; }

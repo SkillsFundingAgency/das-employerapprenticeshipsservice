@@ -56,12 +56,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             //Assert
             Assert.AreEqual(entityName, response.Data.EmployerAgreement.LegalEntityName);
-            Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityRegisteredAddress);
+            Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityAddress);
             Assert.AreEqual(latestTemplate.Text, response.Data.EmployerAgreement.TemplateText);
             Assert.AreEqual(latestTemplate.Ref, response.Data.EmployerAgreement.TemplateRef);
             Assert.AreEqual(EmployerAgreementStatus.Pending, response.Data.EmployerAgreement.Status);
             Assert.AreEqual(entityRef, response.Data.EmployerAgreement.LegalEntityCode);
-            Assert.AreEqual(incorporatedDate, response.Data.EmployerAgreement.LegalEntityIncorporatedDate);
+            Assert.AreEqual(incorporatedDate, response.Data.EmployerAgreement.LegalEntityInceptionDate);
         }
     }
 }

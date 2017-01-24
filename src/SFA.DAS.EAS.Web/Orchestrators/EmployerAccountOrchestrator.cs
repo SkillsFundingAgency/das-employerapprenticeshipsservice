@@ -53,7 +53,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     AccessToken = model.AccessToken,
                     RefreshToken = model.RefreshToken,  
                     OrganisationStatus = model.OrganisationStatus,
-                    EmployerRefName = model.EmployerRefName
+                    EmployerRefName = model.EmployerRefName,
+                    PublicSectorDataSource = model.PublicSectorDataSource
                 });
 
                 CookieService.Delete(context, CookieName);
@@ -117,8 +118,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     LegalEntityName = model.OrganisationName,
                     LegalEntityCode = model.OrganisationReferenceNumber,
-                    LegalEntityRegisteredAddress = model.OrganisationAddress,
-                    LegalEntityIncorporatedDate = model.OrganisationDateOfInception,
+                    LegalEntityAddress = model.OrganisationAddress,
+                    LegalEntityInceptionDate = model.OrganisationDateOfInception,
                     Status = EmployerAgreementStatus.Pending,
                     TemplateRef = templateResponse.Template.Ref,
                     TemplateText = templateResponse.Template.Text

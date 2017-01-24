@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Web.Models
     public class SummaryViewModel
     {
         public OrganisationType OrganisationType { get; set; }
+        public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public DateTime? OrganisationDateOfInception { get; set; }

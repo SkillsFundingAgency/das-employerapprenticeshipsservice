@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
     {
         public string ExternalUserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
+        public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }
         public string OrganisationAddress { get; set; }

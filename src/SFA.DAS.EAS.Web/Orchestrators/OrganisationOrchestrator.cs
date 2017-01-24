@@ -85,6 +85,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return errorResponse;
             }
 
+            if (response.CompanyStatus != "active" && response.CompanyStatus != "administration" &&
+                response.CompanyStatus != "voluntary-arrangement")
+            {
+                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
+                {
+                    Data = new OrganisationDetailsViewModel(),
+                    Status = HttpStatusCode.Conflict
+                };
+                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company is not active";
+                return errorResponse;
+            }
+
             _logger.Info($"Returning Data for {companiesHouseNumber}");
 
             var address = BuildAddressString(response);
@@ -135,7 +147,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
-                Status = "active"
+                Status = string.Empty,
+                Type = OrganisationType.PublicBodies,
+                PublicSectorDataSource = (short)x.Source
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -253,7 +267,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Name = charity.Name,
                     Type = OrganisationType.Charities,
                     Address = charity.FormattedAddress,
-                    Status = "active"
+                    Status = string.Empty
                 }
             };
         }
@@ -300,8 +314,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         {
                             LegalEntityName = request.Name,
                             LegalEntityCode = request.Code,
-                            LegalEntityRegisteredAddress = request.Address,
-                            LegalEntityIncorporatedDate = request.IncorporatedDate,
+                            LegalEntityAddress = request.Address,
+                            LegalEntityInceptionDate = request.IncorporatedDate,
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text,
@@ -322,7 +336,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     RegisteredAddress = request.Address,
                     DateOfIncorporation = request.IncorporatedDate,
                     CompanyStatus = request.LegalEntityStatus,
-                    Source = request.Source
+                    Source = request.Source,
+                    PublicSectorDataSource = request.PublicSectorDataSource
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,
@@ -403,6 +418,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         DateOfInception = model.OrganisationDateOfInception,
                         ReferenceNumber = model.OrganisationReferenceNumber,
                         Type = model.OrganisationType,
+                        PublicSectorDataSource = model.PublicSectorDataSource,
                         Status = model.OrganisationStatus
                     }
                 };

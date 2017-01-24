@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
                 OwnerEmail = "test@test.com",
                 OrganisationName = "Test Organisation",
                 DasAccountName = "My Account",
+                OrganisationId = 123,
                 OrganisationStatus = "active",
                 OrganisationRegisteredAddress = "My Address",
                 OrganisationSource = "companies house",
@@ -104,6 +105,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsInformat
             var item = model.Content.Data.First();
             Assert.AreEqual(_accountInformation.DasAccountName,item.DasAccountName);
             Assert.AreEqual(_accountInformation.DateRegistered,item.DateRegistered);
+            Assert.AreEqual(_accountInformation.OrganisationId, item.OrganisationId);
             Assert.AreEqual(_accountInformation.OrganisationRegisteredAddress,item.OrganisationRegisteredAddress);
             Assert.AreEqual(_accountInformation.OrganisationSource,item.OrganisationSource);
             Assert.AreEqual(_accountInformation.OrganisationStatus,item.OrganisationStatus);

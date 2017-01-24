@@ -33,9 +33,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             if (string.IsNullOrWhiteSpace(item.OrganisationName))
                 validationResult.AddError(nameof(item.OrganisationName), "No organisation name supplied");
 
-            if (string.IsNullOrWhiteSpace(item.OrganisationStatus))
-                validationResult.AddError(nameof(item.OrganisationStatus));
-
             if (string.IsNullOrWhiteSpace(item.PayeReference))
                 validationResult.AddError(nameof(item.EmployerRefName), "No employer reference name supplied");
 

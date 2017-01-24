@@ -1,7 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Extensions;
+using SFA.DAS.EAS.Domain.Models.Audit;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {
@@ -28,6 +34,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
                 message.SignAgreement, 
                 message.SignedDate,
                 owner.UserId);
+            
+            await CreateAuditEntries(owner, agreementView);
 
             await _mediator.PublishAsync(new CreateAccountEventCommand { HashedAccountId = message.HashedAccountId, Event = "LegalEntityCreated" });
             
@@ -35,6 +43,47 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             {
                 AgreementView = agreementView
             };
+        }
+
+        private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)
+        {
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "UPDATED",
+                    Description = $"User {owner.Email} added legal entity {agreementView.LegalEntityId} to account {owner.AccountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        new PropertyUpdate {PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString()},
+                        new PropertyUpdate {PropertyName = "Id", NewValue = agreementView.LegalEntityId.ToString()},
+                        new PropertyUpdate {PropertyName = "Name", NewValue = agreementView.LegalEntityName},
+                        new PropertyUpdate {PropertyName = "Code", NewValue = agreementView.LegalEntityCode},
+                        new PropertyUpdate {PropertyName = "Status", NewValue = agreementView.LegalEntityStatus},
+                        new PropertyUpdate {PropertyName = "Address", NewValue = agreementView.LegalEntityAddress},
+                        new PropertyUpdate {PropertyName = "DateOfInception", NewValue = agreementView.LegalEntityInceptionDate.GetDateString("G")},
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "LegalEntity", Id = agreementView.LegalEntityId.ToString() }
+                }
+            });
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "UPDATED",
+                    Description = $"User {owner.Email} added signed agreement {agreementView.Id} to account {owner.AccountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        new PropertyUpdate {PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString()},
+                        new PropertyUpdate {PropertyName = "SignedDate", NewValue = agreementView.SignedDate.GetDateString("G")},
+                        new PropertyUpdate {PropertyName = "SignedBy", NewValue = $"{owner.FirstName} {owner.LastName}"}
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }
+                }
+            });
         }
     }
 }

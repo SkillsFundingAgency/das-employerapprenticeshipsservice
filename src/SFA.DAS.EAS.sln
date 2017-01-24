@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Domain", "SFA.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Application.UnitTests", "SFA.DAS.EmployerApprenticeshipsService.Application.UnitTests\SFA.DAS.EAS.Application.UnitTests.csproj", "{9DD77DF0-827E-4C14-B14B-B991BF26FD8C}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Account.Database", "SFA.DAS.EmployerApprenticeshipsService.Database\SFA.DAS.EAS.Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Employer_Account.Database", "SFA.DAS.EAS.Employer_Account.Database\SFA.DAS.EAS.Employer_Account.Database.sqlproj", "{927A0BEA-B043-4A03-9311-F49CB60541D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyDeclarationProvider.Worker", "SFA.DAS.LevyDeclarationProvider.Worker\SFA.DAS.EAS.LevyDeclarationProvider.Worker.csproj", "{386ADB6F-CE56-4AFD-B762-DE93E74AFD41}"
 EndProject
@@ -41,11 +41,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PreReqs", "PreReqs", "{15DE899B-AD05-470D-B0F8-E5696141CA9A}"
 	ProjectSection(SolutionItems) = preProject
 		DasAmlCert.pfx = DasAmlCert.pfx
+		DasIDPCert.pfx = DasIDPCert.pfx
 		DevInstall.ps1 = DevInstall.ps1
 		localhost.pfx = localhost.pfx
 	EndProjectSection
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Levy.Database", "SFA.DAS.EmployerApprenticeshipService.HMRC.Database\SFA.DAS.EAS.Levy.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SFA.DAS.EAS.Employer_Financial.Database", "SFA.DAS.EAS.Employer_Financial.Database\SFA.DAS.EAS.Employer_Financial.Database.sqlproj", "{6C145D4A-CBA9-439C-984E-0A5953CBE04D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests", "SFA.DAS.LevyAggregationProvider.Worker.AcceptanceTests\SFA.DAS.EAS.LevyAggregationProvider.Worker.AcceptanceTests.csproj", "{093678BE-45CD-4EC9-9EB0-3665C74E0E38}"
 EndProject
@@ -74,6 +75,10 @@ EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.API", "SFA.DAS.API\SFA.DAS.API.ccproj", "{D89C34DD-1A5B-4A18-9EA1-3D5846F228CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Account.Api.UnitTests", "SFA.DAS.EAS.Account.Api.UnitTests\SFA.DAS.EAS.Account.Api.UnitTests.csproj", "{58339964-2584-4CB1-B6B6-BAF28AA20FE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{ADBEB366-0CD1-42EB-AC83-0E3B8EBB6F3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.PublicSectorDataJsonFormatter", "SFA.DAS.EAS.PublicSectorDataJsonFormatter\SFA.DAS.EAS.PublicSectorDataJsonFormatter.csproj", "{784985A7-9103-42E0-AF17-A4D1878B96DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -194,6 +199,10 @@ Global
 		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58339964-2584-4CB1-B6B6-BAF28AA20FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{784985A7-9103-42E0-AF17-A4D1878B96DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{784985A7-9103-42E0-AF17-A4D1878B96DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{784985A7-9103-42E0-AF17-A4D1878B96DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{784985A7-9103-42E0-AF17-A4D1878B96DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -212,5 +221,6 @@ Global
 		{1E6E4E4E-D876-4D0B-8672-85D385FE640E} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{4FB1B694-7D97-4735-9978-81E827B8DBD4} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
 		{58339964-2584-4CB1-B6B6-BAF28AA20FE8} = {331690B3-1DA8-408E-B6A7-A3237310E6AB}
+		{784985A7-9103-42E0-AF17-A4D1878B96DB} = {ADBEB366-0CD1-42EB-AC83-0E3B8EBB6F3B}
 	EndGlobalSection
 EndGlobal

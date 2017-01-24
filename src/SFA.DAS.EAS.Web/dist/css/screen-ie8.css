@@ -1807,6 +1807,12 @@ dl.inline dd {
   color: #6f777b;
 }
 
+.heading-dashboard {
+  border-bottom: 5px solid #bfc1c3;
+  padding-bottom: .25em;
+  padding-bottom: .5em;
+}
+
 main, .header-inner {
   max-width: 960px;
   margin: 0 15px;
@@ -1941,6 +1947,11 @@ table.top-border {
 
 .breadcrumbs li {
   background-image: url("/dist/images/separator.png");
+}
+
+.breadcrumbs a {
+  font-size: 14px;
+  font-size: 16px;
 }
 
 .back-link {
@@ -2288,6 +2299,15 @@ a#link-settings:focus {
 .js-enabled a#link-settings {
   display: inline-block;
   display: none;
+}
+
+.govuk-box-highlight {
+  padding: 1.8em 15px 1.5em;
+  margin-bottom: 0;
+}
+
+.govuk-box-highlight p {
+  margin-bottom: 0;
 }
 
 legend {
@@ -3019,7 +3039,7 @@ span.helpText {
 }
 
 .alert-default {
-  background-color: #eaf4f9;
+  background-color: #d5e8f3;
   border-color: #2b8cc4;
 }
 
@@ -3055,10 +3075,6 @@ span.helpText {
 .form-group #StartDate_Year,
 .form-group #EndDate_Year {
   width: 60px;
-}
-
-.breadcrumbs a {
-  font-size: 16px;
 }
 
 .tableResponsive td {
