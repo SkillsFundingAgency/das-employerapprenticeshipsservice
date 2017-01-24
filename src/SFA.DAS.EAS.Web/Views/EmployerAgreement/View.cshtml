@@ -28,7 +28,7 @@
 
                     <h1 class="heading-xlarge">Employer agreement</h1>
                     <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
-                    <h3>@Model.Data.EmployerAgreement.LegalEntityRegisteredAddress</h3>
+                    <h3>@Model.Data.EmployerAgreement.LegalEntityAddress</h3>
                     <p>@Html.Raw(Model.Data.EmployerAgreement.TemplateText)</p>
 
                     @if (Model.Data.EmployerAgreement.Status == EmployerAgreementStatus.Pending && !Model.Data.EmployerAgreement.ExpiredDate.HasValue)
@@ -75,9 +75,8 @@
             @section breadcrumb {
                 <div class="breadcrumbs">
                     <ol role="navigation">
-                        <li><a href="/">Your User Profile</a></li>
-                        <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-                        <li><a href="@Url.Action("Index", "EmployerAgreement")">Your Organisations</a></li>
+                        <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+                        <li><a href="@Url.Action("Index", "EmployerAgreement")">Organisations</a></li>
                         <li>Employer agreement</li>
                     </ol>
                 </div>

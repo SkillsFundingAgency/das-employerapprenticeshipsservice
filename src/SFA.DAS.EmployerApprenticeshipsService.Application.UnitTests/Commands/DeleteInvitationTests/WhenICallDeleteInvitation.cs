@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
@@ -12,6 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
     {
         private Mock<IInvitationRepository> _invitationRepository;
         private Mock<IMembershipRepository> _membershipRepository;
+        private Mock<IMediator> _mediator;
         private DeleteInvitationCommandHandler _handler;
         private Invitation _invitation;
         private DeleteInvitationCommand _command;
@@ -21,7 +25,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
         {
             _invitationRepository = new Mock<IInvitationRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
-            _handler = new DeleteInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object);
+            _mediator = new Mock<IMediator>();
+            _handler = new DeleteInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -74,6 +79,26 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteInvitationTests
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
 
             Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task ThenTheAuditCommandIsCalledWhenTheDeleteInvitationCommandIsValid()
+        {
+            _invitation.Status = InvitationStatus.Pending;
+            _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
+            {
+                RoleId = (int)Role.Owner,
+                AccountId = _invitation.AccountId
+            });
+
+            await _handler.Handle(_command);
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(
+                    y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Deleted.ToString())) != null
+                )));
+
         }
     }
 }

@@ -30,27 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             Assert.That(result.IsValid, Is.True);
         }
 
-        [TestCase("abc123")]
-        [TestCase("123456789")]
-        [TestCase(" ")]
-        public void ULNThatIsNotNumericOr10DigitsInLengthIsIvalid(string uln)
-        {
-            _validModel.ULN = uln;
-
-            var result = _validator.Validate(_validModel);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
-        public void ULNThatStartsWithAZeroIsInvalid()
-        {
-            _validModel.ULN = "0123456789";
-
-            var result = _validator.Validate(_validModel);
-
-            Assert.That(result.IsValid, Is.False);
-        }
-
+        [TestCase("1000")]
         [TestCase("1324")]
         [TestCase("123")]
         [TestCase("1")]
@@ -102,6 +82,26 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
             result.IsValid.Should().BeTrue();
         }
 
+        [TestCase("1234567")]
+        public void CostMustContain6DigitsOrLess(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeFalse();
+        }
+
+        [TestCase("123,567")]
+        public void CostMustContain6DigitsOrLessIgnoringCommas(string value)
+        {
+            _validModel.Cost = value;
+
+            var result = _validator.Validate(_validModel);
+
+            result.IsValid.Should().BeTrue();
+        }
+
         [TestCase(",111")]
         [TestCase("1,22")]
         [TestCase("1,22,222")]
@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
 
             var result = _validator.Validate(_validModel);
 
-            result.Errors.Count(m => m.ErrorMessage == "First names must be entered").Should().Be(1);
+            result.Errors.Count(m => m.ErrorMessage == "First name must be entered").Should().Be(1);
             result.Errors.Count(m => m.ErrorMessage == "Last name must be entered").Should().Be(1);
             Assert.That(result.IsValid, Is.False);
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Azure;
 using NLog;
 using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
@@ -38,9 +39,16 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
         public async Task Handle()
         {
+    
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
+                // TODO - Remove this tempory PROD switch once HMRC API is ready
+                if (CloudConfigurationManager.GetSetting("EnvironmentName") == "PROD")
+                {
+                    await message.CompleteAsync();
+                    return;
+                }
                 var employerAccountId = message.Content.AccountId;
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");

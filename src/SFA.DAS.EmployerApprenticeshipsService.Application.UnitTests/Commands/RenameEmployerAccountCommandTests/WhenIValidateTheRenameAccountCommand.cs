@@ -1,21 +1,30 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Data;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountCommandTests
 {
     public class WhenIValidateTheRenameAccountCommand
     {
         private RenameEmployerAccountCommandValidator _validator;
+        private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new RenameEmployerAccountCommandValidator();
+            _membershipRepository = new Mock<IMembershipRepository>();
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
+            _membershipRepository.Setup(x => x.Get(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new TeamMember { IsUser = false });
+
+            _validator = new RenameEmployerAccountCommandValidator(_membershipRepository.Object);
         }
 
         [Test]
-        public void ThenNewAccountNameCannotBeEmpty()
+        public async Task ThenNewAccountNameCannotBeEmpty()
         {
             //Arrange
             var command = new RenameEmployerAccountCommand
@@ -24,14 +33,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             };
 
             //Act
-            var result = _validator.Validate(command);
+            var result = await _validator.ValidateAsync(command);
 
             //Assert
             Assert.IsFalse(result.IsValid());
         }
 
         [Test]
-        public void ThenNewAccountNameIsValidIfNotEmpty()
+        public async Task ThenNewAccountNameIsValidIfNotEmpty()
         {
             //Arrange
             var command = new RenameEmployerAccountCommand
@@ -40,7 +49,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
             };
 
             //Act
-            var result = _validator.Validate(command);
+            var result = await _validator.ValidateAsync(command);
 
             //Assert
             Assert.IsTrue(result.IsValid());

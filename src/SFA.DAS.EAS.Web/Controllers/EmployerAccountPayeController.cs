@@ -35,17 +35,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (TempData["successMessage"] != null)
-            {
-                model.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = TempData["successMessage"].ToString(),
-                    Message = TempData["subMessage"].ToString()
-                };
-                TempData.Remove("subMessage");
-                TempData.Remove("successMessage");
-            }
-
             return View(model);
         }
 
@@ -108,10 +97,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
             TempData["payeSchemeAdded"] = "true";
-            TempData["successMessage"] = $"You've added {model.PayeScheme}";
-            TempData["subMessage"] = "Levy funds from this PAYE scheme will now credit your account";
-
-
+            TempData["successHeader"] = $"You've added {model.PayeScheme}";
+            
             return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId });
         }
 
@@ -150,9 +137,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             TempData["payeSchemeDeleted"] = "true";
-            TempData["successMessage"] = $"You've removed {model.PayeRef}";
-            TempData["subMessage"] = "No future levy funds will credit your account from this PAYE scheme";
-
+            TempData["successHeader"] = $"You've removed {model.PayeRef}";
+            
             return RedirectToAction("Index", "EmployerAccountPaye", new {model.HashedAccountId});
         }
     }

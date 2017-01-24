@@ -42,65 +42,65 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
             };
         }
-        
-        [Test]
-        public void ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
-        {
-            //Arrange
-            var companyName = "My Company";
-            var companyNumber = "12345";
-            var dateOfIncorporation = new DateTime(2016, 01, 10);
-            var registeredAddress = "Test Address";
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(new EmployerAccountData
-            {
-                CompanyName = companyName,
-                CompanyNumber = companyNumber,
-                DateOfIncorporation = dateOfIncorporation,
-                RegisteredAddress = registeredAddress,
-                HideBreadcrumb = true
-            });
-            
 
-            //Act
-            _employerAccountController.GatewayInform(new SelectEmployerViewModel());
+        //TODO add EmployerAccountOrganisationController tests when created
+        //[Test]
+        //public void ThenIfThePayeSchemeIsInUseMySearchedCompanyDetailsThatAreSavedAreUsed()
+        //{
+        //    //Arrange
+        //    var companyName = "My Company";
+        //    var companyNumber = "12345";
+        //    var dateOfIncorporation = new DateTime(2016, 01, 10);
+        //    var registeredAddress = "Test Address";
+        //    _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(new EmployerAccountData
+        //    {
+        //        OrganisationName = companyName,
+        //        OrganisationReferenceNumber = companyNumber,
+        //        OrganisationDateOfInception = dateOfIncorporation,
+        //        OrganisationRegisteredAddress = registeredAddress,
 
-            //Assert
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
-                c =>  ((EmployerAccountData)c).CompanyName.Equals(companyName) 
-                && ((EmployerAccountData)c).CompanyNumber.Equals(companyNumber) 
-                && ((EmployerAccountData)c).DateOfIncorporation.Equals(dateOfIncorporation) 
-                && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
-                && ((EmployerAccountData)c).HideBreadcrumb
-                )));
+        //    });
 
-        }
 
-        [Test]
-        public void ThenIfTheCompanyInformationModelIsNotEmptyTheDataIsNotReadFromTheCookie()
-        {
-            //Act
-            var companyName = "Test";
-            var companyNumber = "123TEST";
-            var registeredAddress = "Test Address";
-            var dateOfIncorporation = new DateTime(2016, 05, 25);
-            _employerAccountController.GatewayInform(new SelectEmployerViewModel
-            {
-                CompanyName = companyName,
-                CompanyNumber = companyNumber,
-                RegisteredAddress = registeredAddress,
-                DateOfIncorporation = dateOfIncorporation
-            });
+        //    //Act
+        //    _employerAccountController.GatewayInform(new OrganisationDetailsViewModel());
 
-            //Assert
-            _orchestrator.Verify(x=>x.GetCookieData(It.IsAny<HttpContextBase>()), Times.Never);
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
-                c => ((EmployerAccountData)c).CompanyName.Equals(companyName)
-                && ((EmployerAccountData)c).CompanyNumber.Equals(companyNumber)
-                && ((EmployerAccountData)c).DateOfIncorporation.Equals(dateOfIncorporation)
-                && ((EmployerAccountData)c).RegisteredAddress.Equals(registeredAddress)
-                )));
-        }
-        
+        //    //Assert
+        //    _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
+        //        c =>  ((EmployerAccountData)c).OrganisationName.Equals(companyName) 
+        //        && ((EmployerAccountData)c).OrganisationReferenceNumber.Equals(companyNumber) 
+        //        && ((EmployerAccountData)c).OrganisationDateOfInception.Equals(dateOfIncorporation) 
+        //        && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
+        //        )));
+
+        //}
+
+        //[Test]
+        //public void ThenIfTheCompanyInformationModelIsNotEmptyTheDataIsNotReadFromTheCookie()
+        //{
+        //    //Act
+        //    var companyName = "Test";
+        //    var companyNumber = "123TEST";
+        //    var registeredAddress = "Test Address";
+        //    var dateOfIncorporation = new DateTime(2016, 05, 25);
+        //    _employerAccountController.GatewayInform(new OrganisationDetailsViewModel
+        //    {
+        //        Name = companyName,
+        //        ReferenceNumber = companyNumber,
+        //        Address = registeredAddress,
+        //        DateOfInception = dateOfIncorporation
+        //    });
+
+        //    //Assert
+        //    _orchestrator.Verify(x=>x.GetCookieData(It.IsAny<HttpContextBase>()), Times.Never);
+        //    _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.Is<object>(
+        //        c => ((EmployerAccountData)c).OrganisationName.Equals(companyName)
+        //        && ((EmployerAccountData)c).OrganisationReferenceNumber.Equals(companyNumber)
+        //        && ((EmployerAccountData)c).OrganisationDateOfInception.Equals(dateOfIncorporation)
+        //        && ((EmployerAccountData)c).OrganisationRegisteredAddress.Equals(registeredAddress)
+        //        )));
+        //}
+
         [Test]
         public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
@@ -128,23 +128,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             //Assert
             _orchestrator.Verify(x => x.DeleteCookieData(It.IsAny<HttpContextBase>()), Times.Once);
         }
-
-        [Test]
-        public void ThenTheTempDataIsReadToSeeIfTheBreadcrumbShouldBeHidden()
-        {
-            //Arrange
-            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true}};
-
-            //Act
-            var actual = _employerAccountController.SelectEmployer();
-
-            //Assert
-            Assert.IsNotNull(actual);
-            var actualViewResult = actual as ViewResult;
-            Assert.IsNotNull(actualViewResult);
-            var actualModel = actualViewResult.Model as OrchestratorResponse<SelectEmployerViewModel>;
-            Assert.IsNotNull(actualModel);
-            Assert.IsTrue(actualModel.Data.HideBreadcrumb);
-        }
+        
     }
 }

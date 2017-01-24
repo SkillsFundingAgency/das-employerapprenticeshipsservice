@@ -25,8 +25,8 @@
     text-decoration: underline;
 }
 .alert-default {
-    background-color: #eaf4f9;
-    border-color: #2b8cc4;
+    background-color: $light-blue-25;
+    border-color: $light-blue;
 }
 
 //validation styles
@@ -75,8 +75,7 @@
     }
 }
 
-.breadcrumbs{
-    a{
-        font-size:16px;
-    }
+.tableResponsive{
+     td{font-size:16px;}
+    
 }

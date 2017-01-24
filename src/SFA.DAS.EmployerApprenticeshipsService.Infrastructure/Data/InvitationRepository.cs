@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<InvitationView>(
-                    sql: "SELECT * FROM [account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
+                    sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE ExternalUserId = @userId AND Status = 1;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<InvitationView>(
-                    sql: "SELECT * FROM [account].[GetInvitations] WHERE Id = @id;",
+                    sql: "SELECT * FROM [employer_account].[GetInvitations] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -49,10 +49,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task Create(Invitation invitation)
+        public async Task<long> Create(Invitation invitation)
         {
-            await WithConnection(async c =>
+            return await WithConnection(async c =>
             {
+                var invitationId = 0L;
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", invitation.AccountId, DbType.Int64);
                 parameters.Add("@name", invitation.Name, DbType.String);
@@ -60,11 +61,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
                 parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
+                parameters.Add("@invitationId", invitationId, DbType.Int64,ParameterDirection.Output);
 
-                return await c.ExecuteAsync(
-                    sql: "INSERT INTO [account].[Invitation] ([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) VALUES (@accountId, @name, @email, @expiryDate, @statusId, @roleId)",
+                await c.ExecuteAsync(
+                    sql: "[employer_account].[CreateInvitation]",
                     param: parameters,
-                    commandType: CommandType.Text);
+                    commandType: CommandType.StoredProcedure);
+                return parameters.Get<long>("@invitationId");
             });
         }
 
@@ -76,7 +79,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<Invitation>(
-                    sql: "SELECT * FROM [account].[Invitation] WHERE Id = @id;",
+                    sql: "SELECT * FROM [employer_account].[Invitation] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -93,7 +96,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<Invitation>(
-                    sql: "SELECT * FROM [account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [employer_account].[Invitation] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -110,7 +113,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@statusId", invitation.Status, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [account].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
+                    sql: "UPDATE [employer_account].[Invitation] SET Status = CASE WHEN @statusId = 1 AND ExpiryDate < GETDATE() THEN 3 ELSE @statusId END WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -128,7 +131,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [account].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                    sql: "UPDATE [employer_account].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -144,7 +147,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "[account].[AcceptInvitation]",
+                    sql: "[employer_account].[AcceptInvitation]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -158,7 +161,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<int>(
-                    sql: "[account].[GetNumberOfInvitations_ByUserId]",
+                    sql: "[employer_account].[GetNumberOfInvitations_ByUserId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

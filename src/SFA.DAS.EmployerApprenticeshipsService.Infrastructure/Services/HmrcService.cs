@@ -16,12 +16,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly ILogger _logger;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
+        private readonly ITotpService _totpService;
 
-        public HmrcService(ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper)
+        public HmrcService(ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITotpService totpService)
         {
             _logger = logger;
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
+            _totpService = totpService;
         }
 
         public string GenerateAuthRedirectUrl(string redirectUrl)
@@ -55,22 +57,36 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return json.Emprefs.SingleOrDefault();
         }
 
-        public async Task<LevyDeclarations> GetLevyDeclarations(string authToken, string empRef)
+        public async Task<LevyDeclarations> GetLevyDeclarations(string empRef)
         {
+            var authToken = await GetOgdAuthenticationToken();
+
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
-            return await _httpClientWrapper.Get<LevyDeclarations>(authToken, url);
+            return await _httpClientWrapper.Get<LevyDeclarations>(authToken.AccessToken, url);
         }
 
-        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string authToken, string empRef)
+        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef)
         {
+            var authToken = await GetOgdAuthenticationToken();
+
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
-            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken, url);
+            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken.AccessToken, url);
         }
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
             const string url = "apprenticeship-levy/fraction-calculation-date";
             return await _httpClientWrapper.Get<DateTime>(_configuration.Hmrc.ServerToken, url);
+        }
+
+        public async Task<HmrcTokenResponse> GetOgdAuthenticationToken()
+        {
+            var code = _totpService.GetCode();
+            var url = $"oauth/token?client_secret={code}&client_id={_configuration.Hmrc.OgdClientId}&grant_type=client_credentials&scopes=read:apprenticeship-levy";
+
+            var response = await _httpClientWrapper.SendMessage("", url);
+
+            return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
         }
     }
 }

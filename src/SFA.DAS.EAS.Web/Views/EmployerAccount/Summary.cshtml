@@ -1,10 +1,11 @@
-﻿@model SFA.DAS.EAS.Web.Models.SummaryViewModel
+﻿@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.Models.SummaryViewModel
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
 @{ViewBag.Title = "Check Details"; }
 @{ViewBag.HideNav = "true"; }
 
-@if (string.IsNullOrEmpty(Model.EmployerRef))
+@if (string.IsNullOrEmpty(Model.PayeReference))
 {
     ViewBag.PageID = "page-onboard-paye-scheme-in-use";
     ViewBag.Title = "PAYE scheme already in use";
@@ -17,7 +18,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        @if (string.IsNullOrEmpty(Model.EmployerRef) && !Model.EmpRefNotFound)
+        @if (string.IsNullOrEmpty(Model.PayeReference) && !Model.EmpRefNotFound)
         {
             <h1 class="heading-xlarge">PAYE scheme already in use</h1>
             <p>The PAYE scheme for the Government Gateway details you entered is already added to an account.</p>
@@ -38,9 +39,23 @@
                     <td>
                         <dl class="inline">
                             <dt>Name:</dt>
-                            <dd>@Model.CompanyName</dd>
-                            <dt>Companies House number:</dt>
-                            <dd>@Model.CompanyNumber</dd>
+                            <dd>@Model.OrganisationName</dd>
+                            
+                            <dt>Address:</dt>
+                            <dd>@Model.RegisteredAddress</dd>
+                            
+                            @if (Model.OrganisationType == OrganisationType.CompaniesHouse || Model.OrganisationType == OrganisationType.Charities)
+                           {
+                               if (Model.OrganisationType == OrganisationType.CompaniesHouse)
+                               {
+                                   <dt>Companies House number:</dt>
+                               }
+                               else
+                               {
+                                    <dt>Charity number:</dt>
+                               }
+                               <dd>@Model.OrganisationReferenceNumber</dd>
+                           }
                         </dl>
                     </td>
                 </tr>
@@ -49,13 +64,18 @@
                         PAYE scheme
                     </th>
                     <td>
-                        @Model.EmployerRef
+                        <dl class="inline">
+                            <dt>@Model.PayeReference</dt>
+                            @if (!string.IsNullOrEmpty(Model.EmployerRefName))
+                            {
+                                <dt>@Model.EmployerRefName</dt>
+                            }
+                        </dl>
                     </td>
                 </tr>
             </table>
-            <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
+            <form method="POST" action="@Url.Action("LegalAgreement", "EmployerAccount")">
                 @Html.AntiForgeryToken()
-                <input id="radio1" type="hidden" name="confirm_create" checked="checked" value="1">
                 <div class="form-group">
                     <button type="submit" class="button" id="continue">These details are correct</button>
                     <a class="button-link" href="@Url.Action("SelectEmployer", "EmployerAccount")">Change details</a>
@@ -64,11 +84,9 @@
         }
     </div>
 </div>
-@if (!Model.HideBreadcrumb)
-{
+
     @section breadcrumb {
         <div class="breadcrumbs">
-            <a href="/" class="back-link">Back to Your User Profile</a>
+            <a href="/" class="back-link">Back to your accounts</a>
         </div>
     }
-}

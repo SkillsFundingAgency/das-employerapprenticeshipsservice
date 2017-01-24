@@ -29,9 +29,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var declarations = await _hmrcService.GetLevyDeclarations(message.AuthToken, message.EmpRef);
+            var declarations = await _hmrcService.GetLevyDeclarations(message.EmpRef);
             
-            var fractions = await _hmrcService.GetEnglishFractions(message.AuthToken, message.EmpRef);
+            var fractions = await _hmrcService.GetEnglishFractions(message.EmpRef);
             
             var getLevyDeclarationResponse = new GetHMRCLevyDeclarationResponse
             {

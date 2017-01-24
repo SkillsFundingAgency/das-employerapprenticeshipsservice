@@ -14,8 +14,8 @@ namespace SFA.DAS.EAS.Domain
         public long LegalEntityId { get; set; }
         public string LegalEntityName { get; set; }
         public string LegalEntityCode { get; set; }
-        public string LegalEntityRegisteredAddress { get; set; }
-        public DateTime LegalEntityIncorporatedDate { get; set; }
+        public string LegalEntityAddress { get; set; }
+        public DateTime? LegalEntityInceptionDate { get; set; }
         public int TemplateId { get; set; }
         public string TemplateText { get; set; }
         public string TemplateRef { get; set; }

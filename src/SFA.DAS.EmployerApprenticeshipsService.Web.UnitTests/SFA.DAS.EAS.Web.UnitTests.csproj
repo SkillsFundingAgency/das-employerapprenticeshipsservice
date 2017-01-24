@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
@@ -143,8 +147,14 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
+    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAgreementControllerTests\WhenITryToFindACompany.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisation.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACharity.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACompany.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewMyNewLegalEntityAgreement.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIAddAnLegalEntityToAnAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
@@ -152,6 +162,7 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
+    <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddOrganisationPage.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenInitalisingTheContainer.cs" />
@@ -163,9 +174,12 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenISearchForALegalEntity.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenIAddAnOrganisationAddress.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntity.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityOfOtherType.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForACharity.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForALegalEntity.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingStatusOfCommitment.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIChangeATeamMemberRole.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestratorTests\WhenIGetATeamMembersDetails.cs" />
@@ -181,6 +195,7 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
+    <Compile Include="Validators\WhenValidatingAddLegalEntityViewModel.cs" />
     <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
     <Compile Include="Validators\WhenValidatingApprenticeshipViewModelForApproval.cs" />
   </ItemGroup>

@@ -22,6 +22,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private string ExpectedClientSecret = "my_secret";
         private string ExpectedName = "My Company Name";
+        private const string ExpectedTotpToken = "789654321AGFVD";
+        private Mock<ITotpService> _totpService;
 
         [SetUp]
         public void Arrange()
@@ -41,7 +43,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.Get<EmprefDiscovery>(It.IsAny<string>(), "apprenticeship-levy/")).ReturnsAsync(new EmprefDiscovery {Emprefs = new List<string> {ExpectedEmpref} });
 
-            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
+            _totpService = new Mock<ITotpService>();
+            _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
+
+            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object, _totpService.Object);
         }
 
         [Test]

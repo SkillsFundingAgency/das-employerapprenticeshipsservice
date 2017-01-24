@@ -10,14 +10,14 @@
 
     if (TempData.ContainsKey("employerAccountCreated"))
     {
-        ViewBag.PageID = "page-employer-account-created";
+        ViewBag.PageID = $"page-employer-account-created-{TempData["employerAccountCreated"]}";
         TempData.Remove("employerAccountCreated");
     }
 }
 
 
 
-<h1 class="heading-xlarge" id="company-Name">@Model.Data.Name</h1>
+<h1 class="heading-xlarge heading-dashboard" id="company-Name">@Model.Data.Name</h1>
 
 <div class="grid-row page-dashboard">
     <div class="column-two-thirds">
@@ -58,25 +58,25 @@
                     </h2>
                     <p>Update the status of your apprentices, or recruit new ones.</p>
                 </div>
+                <div class="column-full">
+                    <div class="panel panel-filled">
+                        <h3 class="heading-medium">Help us improve this service</h3>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
+                    </div>
+                </div>
             </div>
         </div>
     <div class="column-one-third">
 
         <section>
-            <div class="panel panel-filled">
-                <h3 class="heading-medium">Help us improve this section</h3>
-                <p>Take a 3 minute survey about managing your account or invitations so that we can improve the service.</p>
-                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing your own account or being invited to a team</span></a></p>
+            <div class="panel alert-default">
+                <h3 class="heading-medium">Notice</h3>
+                <p>Before May 2017 you'll be asked to accept an agreement for each of your organisations that will spend levy funds. This agreement will allow the <abbr title="Skills Funding Agency">SFA</abbr> to pay your training providers. </p>
             </div>
+            
         </section>
     </div>
 </div>
 
-@section breadcrumb {
-<div class="breadcrumbs">
-    <ol role="navigation">
-        <li><a href="/">Your User Profile</a></li>
-        <li>Employer Account Homepage</li>
-    </ol>
-</div>
-}
+

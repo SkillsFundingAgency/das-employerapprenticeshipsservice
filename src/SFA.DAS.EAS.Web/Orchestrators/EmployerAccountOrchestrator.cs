@@ -44,14 +44,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var result = await Mediator.SendAsync(new CreateAccountCommand
                 {
                     ExternalUserId = model.UserId,
-                    CompanyNumber = model.CompanyNumber,
-                    CompanyName = model.CompanyName,
-                    CompanyRegisteredAddress = model.CompanyRegisteredAddress,
-                    CompanyDateOfIncorporation = model.CompanyDateOfIncorporation,
-                    EmployerRef = model.EmployerRef,
+                    OrganisationType = model.OrganisationType,
+                    OrganisationName = model.OrganisationName,
+                    OrganisationReferenceNumber = model.OrganisationReferenceNumber,
+                    OrganisationAddress = model.OrganisationAddress,
+                    OrganisationDateOfInception = model.OrganisationDateOfInception,
+                    PayeReference = model.PayeReference,
                     AccessToken = model.AccessToken,
                     RefreshToken = model.RefreshToken,  
-                    CompanyStatus = model.CompanyStatus
+                    OrganisationStatus = model.OrganisationStatus,
+                    EmployerRefName = model.EmployerRefName,
+                    PublicSectorDataSource = model.PublicSectorDataSource
                 });
 
                 CookieService.Delete(context, CookieName);
@@ -113,10 +116,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 EmployerAgreement = new EmployerAgreementView
                 {
-                    LegalEntityName = model.CompanyName,
-                    LegalEntityCode = model.CompanyNumber,
-                    LegalEntityRegisteredAddress = model.CompanyRegisteredAddress,
-                    LegalEntityIncorporatedDate = model.CompanyDateOfIncorporation,
+                    LegalEntityName = model.OrganisationName,
+                    LegalEntityCode = model.OrganisationReferenceNumber,
+                    LegalEntityAddress = model.OrganisationAddress,
+                    LegalEntityInceptionDate = model.OrganisationDateOfInception,
                     Status = EmployerAgreementStatus.Pending,
                     TemplateRef = templateResponse.Template.Ref,
                     TemplateText = templateResponse.Template.Text
@@ -186,6 +189,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new RenameEmployerAccountCommand
                 {
                     HashedAccountId = model.HashedId,
+                    ExternalUserId = userId,
                     NewName = (model.NewName ?? String.Empty).Trim()
                 });
 

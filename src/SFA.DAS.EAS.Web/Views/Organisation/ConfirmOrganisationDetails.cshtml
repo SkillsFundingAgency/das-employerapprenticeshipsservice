@@ -1,0 +1,57 @@
+@using SFA.DAS.EAS.Domain
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.OrganisationDetailsViewModel>
+@{ViewBag.PageID = "page-extra-confirm-organisation"; }
+@{
+    ViewBag.Title = "Confirm details";
+    ViewBag.Section = "organisations";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Confirm details
+        </h1>
+        <table>
+            <tr>
+                <th role="row">Organisation name</th>
+                <td class="responsive-td">@Model.Data.Name</td>
+            </tr>
+            <tr>
+                <th role="row">Organisation address</th>
+                <td class="responsive-td">@Model.Data.Address</td>
+            </tr>
+
+            @if (Model.Data.Type != OrganisationType.PublicBodies && Model.Data.Type != OrganisationType.Other)
+            {
+                <tr>
+                    <th role="row">Organisation number</th>
+                    <td class="responsive-td">@Model.Data.ReferenceNumber</td>
+                </tr>
+            }
+        </table>
+
+        <form action="@Url.Action("OrganisationLegalAgreement", "Organisation")" method="POST">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="legalEntityName" name="name" value="@Model.Data.Name" />
+            <input type="hidden" id="legalEntityCode" name="ReferenceNumber" value="@Model.Data.ReferenceNumber" />
+            <input type="hidden" id="legalEntityAddress" name="address" value="@Model.Data.Address" />
+            <input type="hidden" id="legalEntityIncorporationDate" name="incorporated" value="@Model.Data.DateOfInception"/>
+            <input type="hidden" id="legalEntityStatus" name="legalEntityStatus" value="@Model.Data.Status"/>
+            <input type="hidden" id="organisationType" name="type" value="@Model.Data.Type" />
+
+            <p class="heading-medium">Is this correct?</p>
+
+            <span>
+                <input class="button" type="submit" value="Yes, continue" />
+                <a class="button button-link" href="@Url.Action("AddOrganisation", new {AccountId = @Model.Data.HashedId})">No, search again</a>
+            </span>
+        </form>
+        
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to organisations</a></li>
+        </ol>
+    </div>
+}

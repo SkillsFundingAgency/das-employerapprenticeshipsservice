@@ -78,6 +78,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                  
                 HashedAccountId = hashedId,
                 PayeScheme = hmrcResponse.Empref,
+                PayeName = hmrcResponse?.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                 EmprefNotFound = hmrcResponse.EmprefNotFound,
                 AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
                 RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
@@ -123,8 +124,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
         
 
-        public async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
+        public virtual async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
         {
+            //TODO change to return the OrchestratorResposne as this can have a unauthorized resposne
             await Mediator.SendAsync(new AddPayeToAccountCommand
             {
                 HashedAccountId = model.HashedAccountId,
@@ -132,6 +134,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 RefreshToken = model.RefreshToken,
                 Empref = model.PayeScheme,
                 ExternalUserId = userId,
+                EmprefName = model.PayeName
             });
         }
 

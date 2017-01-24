@@ -32,12 +32,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
-                if (accounts.Data.Accounts?.AccountList != null && accounts.Data.Accounts.AccountList.Count == 0)
-                {
-                    TempData["HideBreadcrumb"] = true;
-                    return RedirectToAction("SelectEmployer", "EmployerAccount");
-                }
-
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
                 {
                     accounts.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
@@ -65,7 +59,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             };
 
-            return View("UsedServiceBefore", model);
+            return View("ServiceStartPage", model);
         }
 
         [HttpPost]
@@ -118,7 +112,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         public ActionResult HandleNewRegistration()
         {
-            TempData["successMessage"] = @"You've created your profile";
             TempData["virtualPageUrl"] = @"/user-created-account";
             TempData["virtualPageTitle"] = @"User Action - Created Account";
 
@@ -135,7 +128,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 TempData["virtualPageUrl"] = @"/user-changed-password";
                 TempData["virtualPageTitle"] = @"User Action - Changed Password";
             }
-            
 
             return RedirectToAction("Index");
         }
@@ -178,6 +170,33 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult Help()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ServiceStartPage()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult UsedServiceBefore()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
+        }
+
 
 
     }

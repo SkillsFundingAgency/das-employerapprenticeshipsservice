@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", employerId, DbType.Int64);
 
                 return await c.QueryAsync<Scheme>(
-                    sql: "[account].[GetPayeSchemes_ByAccountId]",
+                    sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@payeRef", empref, DbType.String);
 
                 return await c.QueryAsync<Scheme>(
-                    sql: "[account].[GetPayeSchemesInUse]",
+                    sql: "[employer_account].[GetPayeSchemesInUse]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

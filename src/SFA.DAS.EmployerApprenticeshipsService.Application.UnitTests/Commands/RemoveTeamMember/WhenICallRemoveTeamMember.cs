@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
@@ -17,52 +19,56 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
         private Mock<IMembershipRepository> _membershipRepository;
         private RemoveTeamMemberCommandHandler _handler;
         private Mock<IValidator<RemoveTeamMemberCommand>> _validator;
+        private RemoveTeamMemberCommand _command;
+        private Membership _teamMember;
+        private MembershipView _owner;
+        private Mock<IMediator> _mediator;
 
         private const long ExpectedAccountId = 54561561;
 
         [SetUp]
         public void Setup()
         {
-
-            _validator = new Mock<IValidator<RemoveTeamMemberCommand>>();
-
-            _validator.Setup(x => x.Validate(It.IsAny<RemoveTeamMemberCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string>()});
-
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _handler = new RemoveTeamMemberCommandHandler(_membershipRepository.Object, _validator.Object);
-        }
-
-        [Test]
-        public async Task ThenMembershipIsRemoved()
-        {
-
-            var membership = new Membership
+            _teamMember = new Membership
             {
                 UserId = 12,
                 AccountId = ExpectedAccountId,
                 RoleId = (int)Role.Owner
             };
 
-            var ownerMembership = new MembershipView
+            _owner = new MembershipView
             {
-                UserId =1,
+                UserId = 1,
                 AccountId = ExpectedAccountId,
                 RoleId = (int)Role.Owner
             };
 
-            var cmd = new RemoveTeamMemberCommand
+            _command = new RemoveTeamMemberCommand
             {
-                UserId = membership.UserId,
+                UserId = _teamMember.UserId,
                 HashedAccountId = "123a",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
-            _membershipRepository.Setup(x => x.Get(membership.UserId, membership.AccountId)).ReturnsAsync(membership);
-            _membershipRepository.Setup(x => x.GetCaller(cmd.HashedAccountId, cmd.ExternalUserId)).ReturnsAsync(ownerMembership);
+            _validator = new Mock<IValidator<RemoveTeamMemberCommand>>();
 
-            await _handler.Handle(cmd);
+            _validator.Setup(x => x.Validate(It.IsAny<RemoveTeamMemberCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string>()});
 
-            _membershipRepository.Verify(x => x.Remove(cmd.UserId, ExpectedAccountId), Times.Once);
+            _mediator = new Mock<IMediator>();
+            _membershipRepository = new Mock<IMembershipRepository>();
+
+            _membershipRepository.Setup(x => x.Get(_teamMember.UserId, _teamMember.AccountId)).ReturnsAsync(_teamMember);
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(_owner);
+            
+            _handler = new RemoveTeamMemberCommandHandler(_mediator.Object, _membershipRepository.Object, _validator.Object);
+        }
+
+        [Test]
+        public async Task ThenMembershipIsRemoved()
+        {
+            await _handler.Handle(_command);
+
+            _membershipRepository.Verify(x => x.Remove(_command.UserId, ExpectedAccountId), Times.Once);
         }
         
         [Test]
@@ -179,5 +185,29 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
 
             _membershipRepository.Verify(x => x.Remove(command.UserId, ExpectedAccountId), Times.Never);
         }
+
+        [Test]
+        public async Task ThenTheAuditCommandIsCalledWhenTheCommandIsValid()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RoleId") && y.NewValue.Equals(_teamMember.RoleId.ToString())) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} with role {_owner.RoleId} has removed user {_teamMember.UserId} with role {_teamMember.RoleId} from account {_owner.AccountId}"))));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_owner.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(_teamMember.UserId.ToString()) &&
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Membership"))));
+        }
+
     }
 }
