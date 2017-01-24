@@ -73,8 +73,9 @@ namespace SFA.DAS.EAS.Api.Controllers
             return BadRequest();
         }
 
-        [HttpGet]
         [Route("{HashedAccountId}")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
         public async Task<IHttpActionResult> Index(string hashedAccountId)
         {
             if (string.IsNullOrEmpty(hashedAccountId))
