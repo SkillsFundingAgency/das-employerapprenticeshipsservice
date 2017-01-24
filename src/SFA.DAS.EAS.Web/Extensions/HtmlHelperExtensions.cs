@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Extensions
             return new MvcHtmlString(errorClass);
         }
 
-        public static MvcHtmlString AddClassIfPropertyInErrorOld<TModel, TProperty>(
+        public static MvcHtmlString AddClassIfModelPropertyInError<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression,
             string errorClass)

@@ -24,16 +24,16 @@
             <p>If you ask your training provider to add them, you need to check and agree the details before any payments are made.</p>
             <fieldset role="radiogroup" aria-required="true">
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Data.SelectedRoute, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError("SelectedRoute", "error")">
                  
-                        @Html.ValidationMessageFor(m => m.Data.SelectedRoute, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Data.SelectedRoute) + "-Employer" })
+                        @Html.ValidationMessage("SelectedRoute", "Please choose an option", new { id = "error-message-SelectedRoute-Employer" })
                    
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.SelectedRoute)-Employer">
-                        @Html.RadioButton("SelectedRoute", "employer", new { id = Html.IdFor(m => m.Data.SelectedRoute) + "-Employer" })
+                        @Html.RadioButton("SelectedRoute", "employer", new { id = "SelectedRoute-Employer" })
                         I will add apprentices
                     </label>
                     <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.SelectedRoute)-Provider">
-                        @Html.RadioButton("SelectedRoute", "provider", new { id = Html.IdFor(m => m.Data.SelectedRoute) + "-Provider" })
+                        @Html.RadioButton("SelectedRoute", "provider", new { id = "SelectedRoute-Provider" })
                         I would like my provider to add apprentices
                     </label>
                 </div>

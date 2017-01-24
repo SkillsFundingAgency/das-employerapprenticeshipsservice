@@ -21,17 +21,17 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             <h1 class="heading-xlarge">Choose organisation</h1>
             @Html.AntiForgeryToken()
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Data.LegalEntityCode, "error")">
+            <div class="form-group @Html.AddClassIfPropertyInError("LegalEntityCode", "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Choose the organisation your apprentices will be employed through:</span>
-                        @Html.ValidationMessageFor(m => m.Data.LegalEntityCode, "Please choose an option")
+                        @Html.ValidationMessage("LegalEntityCode", "Please choose an option", new { id = "error-message-LegalEntityCode" })
                     </legend>
   
                     @foreach (LegalEntity entity in Model.Data.LegalEntities)
                     {
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.LegalEntityCode)-@entity.Code">
-                        @Html.RadioButton("LegalEntityCode", @entity.Code, new { @id = @Html.IdFor(m => m.Data.LegalEntityCode) + "-" + entity.Code })
+                        <label class="block-label selection-button-radio" for="LegalEntityCode-@entity.Code">
+                        @Html.RadioButton("LegalEntityCode", @entity.Code, new { @id = "LegalEntityCode-" + entity.Code })
                             @entity.Name
                         </label>
                     }

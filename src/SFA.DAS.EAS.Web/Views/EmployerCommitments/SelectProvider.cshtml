@@ -30,17 +30,17 @@
 
                 <fieldset class="spacerConfirmProvider" role="radiogroup" aria-required="true">
                     <legend class="visuallyhidden">Training provider</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.Data.Confirmation, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError("Confirmation", "error")">
                         <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
                         <div>
-                            @Html.ValidationMessageFor(m => m.Data.Confirmation, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Data.Confirmation) + "-True" })
+                            @Html.ValidationMessage("Confirmation", "Please choose an option", new { id = "error-message-Confirmation" + "-True" })
                         </div>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.Confirmation)-True">
-                            @Html.RadioButton("Confirmation", "True", new { id = Html.IdFor(m => m.Data.Confirmation) + "-True" })
+                        <label class="block-label selection-button-radio" for="Confirmation-True">
+                            @Html.RadioButton("Confirmation", "True", new { id = "Confirmation-True" })
                             Yes, use @Model.Data.Providers[0].ProviderName
                         </label>
-                        <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.Confirmation)-False">
-                            @Html.RadioButton("Confirmation", "False", new { id = Html.IdFor(m => m.Data.Confirmation) + "-False" })
+                        <label class="block-label selection-button-radio" for="Confirmation-False">
+                            @Html.RadioButton("Confirmation", "False", new { id = "Confirmation-False" })
                             No, change UK Provider Reference Number
                         </label>
                     </div>

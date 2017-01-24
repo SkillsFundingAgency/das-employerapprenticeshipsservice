@@ -98,7 +98,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModel.LegalEntityCode, CohortRef = viewModel.CohortRef });
+                var defaultViewModel = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.LegalEntityCode, viewModel.CohortRef);
+                
+                return View("SearchProvider", defaultViewModel);
             }
 
             var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
@@ -145,7 +147,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.CohortRef, viewModel.ProviderId.ToString(), OwinWrapper.GetClaimValue(@"sub"));
+                var model = await _employerCommitmentsOrchestrator.CreateSummary(viewModel.HashedAccountId, viewModel.LegalEntityCode, viewModel.ProviderId.ToString(), viewModel.CohortRef,  OwinWrapper.GetClaimValue(@"sub"));
 
                 return View("ChoosePath", model);
             }
