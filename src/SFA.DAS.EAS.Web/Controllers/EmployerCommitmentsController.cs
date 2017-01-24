@@ -196,7 +196,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return await RedisplayCreateApprenticeshipView(apprenticeship);
                 }
 
-                // TODO: LWA - What's the best way to check user is authorised for account
                 await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
@@ -230,7 +229,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                     return await RedisplayEditApprenticeshipView(apprenticeship);
                 }
 
-                // TODO: LWA - What's the best way to check user is authorised for account
                 await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
