@@ -455,17 +455,8 @@ namespace SFA.DAS.EAS.Web.Controllers
          {
              if (filterContext.Exception is InvalidStateException)
              {
-                 filterContext.ExceptionHandled = true;
-                var flashmessage = new FlashMessageViewModel
-                {
-                    Headline = "Invalid request",
-                    Message = "You have been redirected from a page that is no longer accessible",
-                    Severity = FlashMessageSeverityLevel.Info
-                };
-
-                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-                filterContext.Result = RedirectToAction("Index", "Home");
- 
+                filterContext.ExceptionHandled = true;
+                filterContext.Result = RedirectToAction("Index", "Error"); 
              }
          }
     }
