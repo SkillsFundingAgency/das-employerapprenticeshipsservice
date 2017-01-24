@@ -680,51 +680,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
         }
 
-        public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
-        {
-            // TODO: LWA - DELETE
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
-            _logger.Info($"Approving Apprenticeship, Account: {accountId}, ApprenticeshipId: {model.HashedApprenticeshipId}");
-
-            await _mediator.SendAsync(new ApproveApprenticeshipCommand
-            {
-                EmployerAccountId = accountId,
-                CommitmentId = _hashingService.DecodeValue(model.HashedCommitmentId),
-                ApprenticeshipId = apprenticeshipId
-            });
-        }
-
-        public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            // TODO: LWA - DELETE
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-            _logger.Info($"Pausing Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
-
-            await _mediator.SendAsync(new PauseApprenticeshipCommand
-            {
-                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
-                ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
-            });
-        }
-
-        public async Task ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
-        {
-            // TODO: LWA - DELETE
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
-            _logger.Info($"Resume Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
-
-            await _mediator.SendAsync(new ResumeApprenticeshipCommand
-            {
-                EmployerAccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
-                ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
-            });
-        }
-
         private static ApprovalState GetApprovalState(Commitment commitment)
         {
             if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
