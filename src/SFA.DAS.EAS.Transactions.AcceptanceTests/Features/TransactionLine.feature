@@ -79,7 +79,7 @@ Scenario T07: Transaction History levy declarations next year registration multi
 		| 327/ABC     | 100        | 17-18        | 01            | 1                |
 		| 427/ABC     | 100        | 17-18        | 01            | 1                |	
 	And I register on DAS in year 16-17 month 01
-	Then the balance should be 2200 on the screen
+	Then the balance should be 2420 on the screen
 	
 Scenario T08: Single PAYE scheme removed
 	Given I have an account
@@ -90,4 +90,4 @@ Scenario T08: Single PAYE scheme removed
 		| 328/ABC     | 1200       | 16-17        | 03            | 1                |	
 	And I register on DAS in year 16-17 month 01
 	And I remove the PAYE scheme in month 04
-	Then the balance should be 1330 on the screen
+	Then the balance should be 1320 on the screen
