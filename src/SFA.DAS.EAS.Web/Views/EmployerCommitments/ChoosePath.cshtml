@@ -26,13 +26,13 @@
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("SelectedRoute", "error")">
                  
-                        @Html.ValidationMessage("SelectedRoute", "Please choose an option", new { id = "error-message-SelectedRoute-Employer" })
+                        @Html.ValidationMessage("SelectedRoute", "Please choose an option", new { id = "error-message-SelectedRoute" })
                    
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.SelectedRoute)-Employer">
+                    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
                         @Html.RadioButton("SelectedRoute", "employer", new { id = "SelectedRoute-Employer" })
                         I will add apprentices
                     </label>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.SelectedRoute)-Provider">
+                    <label class="block-label selection-button-radio" for="SelectedRoute-Provider">
                         @Html.RadioButton("SelectedRoute", "provider", new { id = "SelectedRoute-Provider" })
                         I would like my provider to add apprentices
                     </label>

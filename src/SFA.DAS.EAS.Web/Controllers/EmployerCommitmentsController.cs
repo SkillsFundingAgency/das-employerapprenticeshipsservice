@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Cohorts")]
         public async Task<ActionResult> Cohorts(string hashedAccountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId);
+            var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
@@ -159,7 +159,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { hashedCommitmentId = response.Data });
             }
 
-            return RedirectToAction("SubmitNewCommitment", // TODO: LWA Still need to check auth for this action
+            return RedirectToAction("SubmitNewCommitment",
                 new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef, saveStatus = SaveStatus.Save });
         }
 
@@ -197,7 +197,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
 
                 // TODO: LWA - What's the best way to check user is authorised for account
-                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship);
+                await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
             {
@@ -231,7 +231,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 }
 
                 // TODO: LWA - What's the best way to check user is authorised for account
-                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship);
+                await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
             {
@@ -248,9 +248,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Finished")]
         public async Task<ActionResult> FinishedEditing(string hashedAccountId, string hashedCommitmentId)
         {
-            var viewmodel = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(hashedAccountId, hashedCommitmentId);
+            var response = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId);
 
-            return View(viewmodel);
+            return View(response);
         }
 
         [HttpPost]
@@ -260,7 +260,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(viewModel);
+                var response = await _employerCommitmentsOrchestrator.GetFinishEditingViewModel(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId);
+                response.Data = viewModel;
+
+                return View(response);
             }
 
             if(viewModel.SaveStatus.IsSend())
@@ -271,7 +274,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.SaveStatus.IsApproveWithoutSend())
             {
-                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveStatus);
+                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
             }
 
             return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
@@ -279,20 +282,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("Submit")]
-        public ActionResult SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
         {
-            var model = new SubmitCommitmentViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                LegalEntityCode = legalEntityCode,
-                LegalEntityName = legalEntityName,
-                ProviderId = long.Parse(providerId),
-                ProviderName = providerName,
-                CohortRef = cohortRef,
-                SaveStatus = saveStatus
-            };
+            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
 
-            return View("SubmitCommitmentEntry", model);
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpGet]
@@ -300,18 +294,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            // TODO: Should this be a different Orchestrator call?
-            var commitment = await _employerCommitmentsOrchestrator.GetCommitmentCheckState(hashedAccountId, hashedCommitmentId);
+            var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
 
-            var model = new SubmitCommitmentViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HashedCommitmentId = hashedCommitmentId,
-                ProviderName = commitment.ProviderName,
-                SaveStatus = saveStatus
-            };
-
-            return View("SubmitCommitmentEntry", model);
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -319,7 +304,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Submit")]
         public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmentModel model)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model);
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
             return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
         }
@@ -329,37 +314,29 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Submit")]
         public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmentModel model)
         {
-            var hashedCommitmentId = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model);
+            var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("AcknowledgementNew", new { hashedCommitmentId, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
+            return RedirectToAction("AcknowledgementNew", new { response.Data, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
         }
 
         [HttpGet]
         [Route("Acknowledgement")]
-        public ActionResult AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
+        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
         {
-            return View("Acknowledgement", new AcknowledgementViewModel
-            {
-                HashedCommitmentId = hashedCommitmentId,
-                ProviderName = providerName,
-                LegalEntityName = legalEntityName,
-                Message = message
-            });
+            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
+
+            // TODO: LWA - Is message in querystring a security issue?
+            return View("Acknowledgement", response);
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
         public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
         {
-            var model = await _employerCommitmentsOrchestrator.GetCommitment(hashedAccountId, hashedCommitmentId);
+            // TODO: LWA - Is message in querystring a security issue?
+            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
 
-            return View("Acknowledgement", new AcknowledgementViewModel
-            {
-                HashedCommitmentId = hashedCommitmentId,
-                ProviderName = model.ProviderName,
-                LegalEntityName = model.LegalEntityName,
-                Message = message
-            });
+            return View("Acknowledgement", response);
         }
 
         [HttpPost]
@@ -367,6 +344,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Approve")]
         public async Task<ActionResult> ApproveApprenticeship([System.Web.Http.FromUri]ApproveApprenticeshipModel model)
         {
+            // TODO: LWA - DELETE
             await _employerCommitmentsOrchestrator.ApproveApprenticeship(model);
 
             return RedirectToAction("Details", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = model.HashedCommitmentId });
@@ -377,6 +355,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Pause")]
         public async Task<ActionResult> PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
+            // TODO: LWA - DELETE
             await _employerCommitmentsOrchestrator.PauseApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });
@@ -387,6 +366,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Resume")]
         public async Task<ActionResult> ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
+            // TODO: LWA - DELETE
             await _employerCommitmentsOrchestrator.ResumeApprenticeship(hashedAccountId, hashedCommitmentId, hashedApprenticeshipId);
 
             return RedirectToAction("Details", new { hashedAccountId = hashedAccountId, hashedCommitmentId = hashedCommitmentId });

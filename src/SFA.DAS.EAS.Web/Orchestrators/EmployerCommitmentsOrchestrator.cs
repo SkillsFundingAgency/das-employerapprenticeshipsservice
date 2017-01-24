@@ -17,7 +17,6 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetCommitments;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
-using SFA.DAS.EAS.Application.Queries.GetProviders;
 using SFA.DAS.EAS.Application.Queries.GetStandards;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
 using SFA.DAS.EAS.Domain;
@@ -108,7 +107,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-                // TODO: Should this be throwing an Unauthorized exception??
                 var legalEntities = await _mediator.SendAsync(new GetAccountLegalEntitiesRequest
                 {
                     HashedLegalEntityId = hashedAccountId,
@@ -229,6 +227,36 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, model.HashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<string>> CreateProviderAssignedCommitment(SubmitCommitmentModel model, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+            _logger.Info($"Creating Provider assigned Commitment. AccountId: {accountId}, Provider: {model.ProviderId}");
+
+            return await CheckUserAuthorization(async () => 
+            {
+                var response = await _mediator.SendAsync(new CreateCommitmentCommand
+                {
+                    Message = model.Message,
+                    Commitment = new Commitment
+                    {
+                        Reference = model.CohortRef,
+                        EmployerAccountId = accountId,
+                        LegalEntityId = model.LegalEntityCode,
+                        LegalEntityName = model.LegalEntityName,
+                        ProviderId = long.Parse(model.ProviderId),
+                        ProviderName = model.ProviderName,
+                        CommitmentStatus = CommitmentStatus.Active,
+                        EditStatus = EditStatus.ProviderOnly
+                    }
+                });
+
+                return new OrchestratorResponse<string>
+                {
+                    Data = _hashingService.HashValue(response.CommitmentId)
+                };
+            }, model.HashedAccountId, externalUserId);
+        }
+
         public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetSkeletonApprenticeshipDetails(string hashedAccountId, string externalUserId, string hashedCommitmentId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -254,18 +282,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        public async Task CreateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId)
         {
-            // TODO: LWA - We should authorise user
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
             _logger.Info($"Creating Apprenticeship, Account: {accountId}, CommitmentId: {commitmentId}");
 
-            await _mediator.SendAsync(new CreateApprenticeshipCommand
+            await CheckUserAuthorization(async () => 
             {
-                AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                Apprenticeship = await MapFrom(apprenticeship)
-            });
+                await _mediator.SendAsync(new CreateApprenticeshipCommand
+                {
+                    AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
+                    Apprenticeship = await MapFrom(apprenticeship)
+                });
+            }, apprenticeship.HashedAccountId, externalUserId);
         }
 
         public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetApprenticeship(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
@@ -302,146 +332,234 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        public async Task UpdateApprenticeship(ApprenticeshipViewModel apprenticeship, string externalUserId)
         {
-            // TODO: LWA - We should authorise user
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
             _logger.Info($"Updating Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
-            await _mediator.SendAsync(new UpdateApprenticeshipCommand
+            await CheckUserAuthorization(async () => 
             {
-                AccountId = accountId,
-                Apprenticeship = await MapFrom(apprenticeship)
-            });
-        }
-
-        private static string CreateReference()
-        {
-            return Guid.NewGuid().ToString().ToUpper();
-        }
-
-        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
+                    AccountId = accountId,
+                    Apprenticeship = await MapFrom(apprenticeship)
+                });
+            }, apprenticeship.HashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<FinishEditingViewModel>> GetFinishEditingViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting Finish Editing Model, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var response = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                {
+                    AccountId = accountId,
+                    CommitmentId = commitmentId
                 });
 
-                return await code.Invoke();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                return new OrchestratorResponse<T>
+                AssertCommitmentStatus(response.Commitment, EditStatus.EmployerOnly);
+                AssertCommitmentStatus(response.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
+                return new OrchestratorResponse<FinishEditingViewModel>
                 {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = exception
+                    Data = new FinishEditingViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        NotReadyForApproval = !response.Commitment.CanBeApproved,
+                        ApprovalState = GetApprovalState(response.Commitment),
+                        HasApprenticeships = response.Commitment.Apprenticeships.Any(),
+                        InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
+                    }
                 };
-            }
+            }, hashedAccountId, externalUserId);
         }
 
-        
+        public async Task ApproveCommitment(string hashedAccountId, string externalUserId, string hashedCommitmentId, SaveStatus saveStatus)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Approving Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId)
+            await CheckUserAuthorization(async () => 
+            {
+                var lastAction = saveStatus == SaveStatus.AmendAndSend
+                    ? LastAction.Amend
+                    : LastAction.Approve;
+
+                await _mediator.SendAsync(new SubmitCommitmentCommand
+                {
+                    EmployerAccountId = accountId,
+                    CommitmentId = commitmentId,
+                    Message = string.Empty,
+                    LastAction = lastAction,
+                    CreateTask = saveStatus != SaveStatus.Approve
+                });
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<SubmitCommitmentViewModel>> GetSubmitNewCommitmentModel(string hashedAccountId, string externalUserId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting Submit New Commitment ViewModel, Account: {accountId}");
+
+            return await CheckUserAuthorization(() => 
+            {
+                return new OrchestratorResponse<SubmitCommitmentViewModel>
+                {
+                    Data = new SubmitCommitmentViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        LegalEntityCode = legalEntityCode,
+                        LegalEntityName = legalEntityName,
+                        ProviderId = long.Parse(providerId),
+                        ProviderName = providerName,
+                        CohortRef = cohortRef,
+                        SaveStatus = saveStatus
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<SubmitCommitmentViewModel>> GetSubmitCommitmentModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, SaveStatus saveStatus)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting Submit Existing Commitment ViewModel, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            return await CheckUserAuthorization(async () => 
+            {
+                var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                {
+                    AccountId = _hashingService.DecodeValue(hashedAccountId),
+                    CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+                });
+
+                AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
+                AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
+                var commitment = MapFrom(data.Commitment);
+
+                return new OrchestratorResponse<SubmitCommitmentViewModel>
+                {
+                    Data = new SubmitCommitmentViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        ProviderName = commitment.ProviderName,
+                        SaveStatus = saveStatus
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task SubmitCommitment(SubmitCommitmentModel model, string externalUserId)
+        {
+            await CheckUserAuthorization(async () => 
+            {
+                if (model.SaveStatus != SaveStatus.Save)
+                {
+                    var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+                    var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
+                    _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
+
+                    var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
+                        ? LastAction.Amend
+                        : LastAction.Approve;
+
+                    await _mediator.SendAsync(new SubmitCommitmentCommand
+                    {
+                        EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
+                        CommitmentId = commitmentId,
+                        Message = model.Message,
+                        LastAction = lastAction,
+                        CreateTask = model.SaveStatus != SaveStatus.Approve
+                    });
+                }
+            }, model.HashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<AcknowledgementViewModel>> GetAcknowledgementModelForExistingCommitment(string hashedAccountId, string externalUserId, string hashedCommitmentId, string message)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+            _logger.Info($"Getting Acknowldedgement Model for existing commitment, Account: {accountId}, CommitmentId: {commitmentId}");
+
+            return await CheckUserAuthorization(async () => 
+            {
+                var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                {
+                    AccountId = _hashingService.DecodeValue(hashedAccountId),
+                    CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+                });
+
+                var commitment = MapFrom(data.Commitment);
+
+                return new OrchestratorResponse<AcknowledgementViewModel>
+                {
+                    Data = new AcknowledgementViewModel
+                    {
+                        HashedCommitmentId = hashedCommitmentId,
+                        ProviderName = commitment.ProviderName,
+                        LegalEntityName = commitment.LegalEntityName,
+                        Message = message
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<AcknowledgementViewModel>> GetAcknowledgementModelForNewCommitment(string hashedAccountId, string externalUserId, string temporaryCommitmentid, string providerName, string legalEntityName, string message)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting Acknowldedgement Model for existing commitment, Account: {accountId}, Temporary CommitmentId: {temporaryCommitmentid}");
+
+            return await CheckUserAuthorization(() =>
+            {
+                return new OrchestratorResponse<AcknowledgementViewModel>
+                {
+                    Data = new AcknowledgementViewModel
+                    {
+                        HashedCommitmentId = temporaryCommitmentid,
+                        ProviderName = providerName,
+                        LegalEntityName = legalEntityName,
+                        Message = message
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting all Commitments for Account: {accountId}");
 
-            var data = await _mediator.SendAsync(new GetCommitmentsQuery
+            return await CheckUserAuthorization(async () => 
             {
-                AccountId = accountId
-            });
-
-            var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
-            {
-                AccountId = accountId
-            });
-
-            return new OrchestratorResponse<CommitmentListViewModel>
-            {
-                Data = new CommitmentListViewModel
+                var data = await _mediator.SendAsync(new GetCommitmentsQuery
                 {
-                    AccountHashId = hashedAccountId,
-                    Commitments = data.Commitments.Select(x => MapFrom(x)).ToList(),
-                    NumberOfTasks = tasks.Tasks.Count
-                }
-            };
-        }
+                    AccountId = accountId
+                });
 
-      
-
-        public async Task<string> CreateProviderAssignedCommitment(SubmitCommitmentModel model)
-        {
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            _logger.Info($"Creating Provider assigned Commitment. AccountId: {accountId}, Provider: {model.ProviderId}");
-
-            var response = await _mediator.SendAsync(new CreateCommitmentCommand
-            {
-                Message = model.Message,
-                Commitment = new Commitment
+                var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
                 {
-                    Reference = model.CohortRef,
-                    EmployerAccountId = accountId,
-                    LegalEntityId = model.LegalEntityCode,
-                    LegalEntityName = model.LegalEntityName,
-                    ProviderId = long.Parse(model.ProviderId),
-                    ProviderName = model.ProviderName,
-                    CommitmentStatus = CommitmentStatus.Active,
-                    EditStatus = EditStatus.ProviderOnly
-                }
-            });
+                    AccountId = accountId
+                });
 
-            return _hashingService.HashValue(response.CommitmentId);
-        }
-
-        public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
-        {
-            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
-            _logger.Info($"Approving Apprenticeship, Account: {accountId}, ApprenticeshipId: {model.HashedApprenticeshipId}");
-
-            await _mediator.SendAsync(new ApproveApprenticeshipCommand
-            {
-                EmployerAccountId = accountId,
-                CommitmentId = _hashingService.DecodeValue(model.HashedCommitmentId),
-                ApprenticeshipId = apprenticeshipId
-            });
-        }
-
-        public async Task<CommitmentViewModel> GetCommitmentCheckState(string hashedAccountId, string hashedCommitmentId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
-
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                AccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
-            });
-
-            AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
-            AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
-
-            return MapFrom(data.Commitment);
-        }
-
-        public async Task<CommitmentViewModel> GetCommitment(string hashedAccountId, string hashedCommitmentId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Getting Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
-
-            var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                AccountId = _hashingService.DecodeValue(hashedAccountId),
-                CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
-            });
-
-            return MapFrom(data.Commitment);
+                return new OrchestratorResponse<CommitmentListViewModel>
+                {
+                    Data = new CommitmentListViewModel
+                    {
+                        AccountHashId = hashedAccountId,
+                        Commitments = data.Commitments.Select(x => MapFrom(x)).ToList(),
+                        NumberOfTasks = tasks.Tasks.Count
+                    }
+                };
+            }, hashedAccountId, externalUserId);
         }
 
         public async Task<OrchestratorResponse<CommitmentDetailsViewModel>> GetCommitmentDetails(string hashedAccountId, string hashedCommitmentId, string externalUserId)
@@ -484,79 +602,102 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<FinishEditingViewModel> GetFinishEditingViewModel(string hashedAccountId, string hashedCommitmentId)
+
+        private static string CreateReference()
         {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Getting Finish Editing Model, Account: {accountId}, CommitmentId: {commitmentId}");
-
-            var response = await _mediator.SendAsync(new GetCommitmentQueryRequest
-            {
-                AccountId = accountId,
-                CommitmentId = commitmentId
-            });
-
-            AssertCommitmentStatus(response.Commitment, EditStatus.EmployerOnly);
-            AssertCommitmentStatus(response.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
-
-            var viewmodel = new FinishEditingViewModel
-            {
-                HashedAccountId = hashedAccountId,
-                HashedCommitmentId = hashedCommitmentId,
-                NotReadyForApproval = !response.Commitment.CanBeApproved,
-                ApprovalState = GetApprovalState(response.Commitment),
-                HasApprenticeships = response.Commitment.Apprenticeships.Any(),
-                InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
-            };
-
-            return viewmodel;
+            return Guid.NewGuid().ToString().ToUpper();
         }
 
-        public async Task ApproveCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
+        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return await code.Invoke();
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
+
+                return new OrchestratorResponse<T>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = exception
+                };
+            }
+        }
+
+        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<OrchestratorResponse<T>> code, string hashedAccountId, string externalUserId) where T : class
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return code.Invoke();
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
+
+                return new OrchestratorResponse<T>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = exception
+                };
+            }
+        }
+
+        private async Task CheckUserAuthorization(Func<Task> code, string hashedAccountId, string externalUserId)
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                await code.Invoke();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
+            }
+        }
+
+        private void LogUnauthorizedUserAttempt(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
-            _logger.Info($"Approving Commitment, Account: {accountId}, CommitmentId: {commitmentId}");
+            _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
+        }
 
-            var lastAction = saveStatus == SaveStatus.AmendAndSend 
-                ? LastAction.Amend
-                : LastAction.Approve;
+        public async Task ApproveApprenticeship(ApproveApprenticeshipModel model)
+        {
+            // TODO: LWA - DELETE
+            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+            _logger.Info($"Approving Apprenticeship, Account: {accountId}, ApprenticeshipId: {model.HashedApprenticeshipId}");
 
-            await _mediator.SendAsync(new SubmitCommitmentCommand
+            await _mediator.SendAsync(new ApproveApprenticeshipCommand
             {
                 EmployerAccountId = accountId,
-                CommitmentId = commitmentId,
-                Message = string.Empty,
-                LastAction = lastAction,
-                CreateTask = saveStatus != SaveStatus.Approve
+                CommitmentId = _hashingService.DecodeValue(model.HashedCommitmentId),
+                ApprenticeshipId = apprenticeshipId
             });
-        }
-
-        public async Task SubmitCommitment(SubmitCommitmentModel model)
-        {
-            if (model.SaveStatus != SaveStatus.Save)
-            {
-                var accountId = _hashingService.DecodeValue(model.HashedAccountId);
-                var commitmentId = _hashingService.DecodeValue(model.HashedCommitmentId);
-                _logger.Info($"Submiting Commitment, Account: {accountId}, Commitment: {commitmentId}, Action: {model.SaveStatus}");
-
-                var lastAction = model.SaveStatus == SaveStatus.AmendAndSend
-                    ? LastAction.Amend
-                    : LastAction.Approve;
-
-                await _mediator.SendAsync(new SubmitCommitmentCommand
-                {
-                    EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
-                    CommitmentId = commitmentId,
-                    Message = model.Message,
-                    LastAction = lastAction,
-                    CreateTask = model.SaveStatus != SaveStatus.Approve
-                });
-            }
         }
 
         public async Task PauseApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
+            // TODO: LWA - DELETE
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             _logger.Info($"Pausing Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
@@ -571,6 +712,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task ResumeApprenticeship(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
+            // TODO: LWA - DELETE
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             _logger.Info($"Resume Apprenticeship, Account: {accountId}, Apprenticeship: {apprenticeshipId}");
@@ -582,8 +724,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ApprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId)
             });
         }
-
-
 
         private static ApprovalState GetApprovalState(Commitment commitment)
         {
@@ -608,11 +748,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var message = taskForCommitment?.Task?.Message ?? string.Empty;
 
             return message;
-        }
-
-        private async Task<GetProvidersQueryResponse> GetProviders()
-        {
-            return await _mediator.SendAsync(new GetProvidersQueryRequest());
         }
 
         private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(string hashedAccountId, string externalUserId)
