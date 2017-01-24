@@ -317,16 +317,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 apprenticeship.HashedAccountId = hashedAccountId;
 
-                // TODO: Validation errors to be used in a future story.
-                var approvalValidator = new ApprenticeshipViewModelApproveValidator();
-
                 return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
                 {
                     Data = new ExtendedApprenticeshipViewModel
                     {
                         Apprenticeship = apprenticeship,
                         ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                        ApprovalValidation = approvalValidator.Validate(apprenticeship) // TODO: LWA - Do we need this anymore?
                     }
                 };
             }, hashedAccountId, externalUserId);
