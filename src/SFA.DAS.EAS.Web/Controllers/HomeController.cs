@@ -197,7 +197,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-
+        public ActionResult CatchAll(string path = null)
+        {
+            return RedirectToAction("NotFound", "Error", new { path });
+        }
 
     }
 }
