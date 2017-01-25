@@ -1,4 +1,6 @@
-﻿@model SFA.DAS.EAS.Web.Models.AcknowledgementViewModel
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
+@model OrchestratorResponse<AcknowledgementViewModel>
 
 @{
     ViewBag.Title = "Instructions sent";
@@ -22,11 +24,11 @@
             <tbody>
                 <tr>
                     <td>Cohort reference</td>
-                    <td class="strong">@Model.HashedCommitmentId</td>
+                    <td class="strong">@Model.Data.HashedCommitmentId</td>
                 </tr>
                 <tr>
                     <td>Sent to </td>
-                    <td  class="strong">@Model.ProviderName</td>
+                    <td  class="strong">@Model.Data.ProviderName</td>
                     
                 </tr>
                 @*<tr>
@@ -36,7 +38,7 @@
                 </tr>*@
                 <tr>
                     <td>On behalf of</td>
-                    <td  class="strong">@Model.LegalEntityName</td>
+                    <td  class="strong">@Model.Data.LegalEntityName</td>
                 </tr>
                 @*<tr>
                     <td>Date</td>
@@ -44,7 +46,7 @@
                 </tr>*@
                 <tr>
                     <td>Instructions</td>
-                    <td  class="strong">@Model.Message</td>
+                    <td  class="strong">@Model.Data.Message</td>
                 </tr>
             </tbody>
         </table>

@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
 @{
@@ -6,7 +7,7 @@
     ViewBag.PageID = "apprentice-details";
 }
 
-@model CommitmentDetailsViewModel
+@model OrchestratorResponse<CommitmentDetailsViewModel>
     
 <div class="grid-row">
     <div class="column-full">
@@ -17,21 +18,21 @@
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
-        <p><span class="strong">Training provider:</span> @Model.ProviderName</p>
-        <p><span class="strong">Status:</span> @Model.Status.GetDescription()</p>
+        <p><span class="strong">Training provider:</span> @Model.Data.ProviderName</p>
+        <p><span class="strong">Status:</span> @Model.Data.Status.GetDescription()</p>
     </div>
 
        
     <div class="column-one-half employer-details">
             <p class="strong">Instructions:</p>
-            <p>@(string.IsNullOrWhiteSpace(Model.LatestMessage) ? "No note added" : Model.LatestMessage)</p>
+            <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
 
 <div class="grid-row">
     <div class="column-full">
         @{
-            var finishEditingText = Model.ShowApproveOnlyOption ? "Continue to approval" : "Save and continue";
+            var finishEditingText = Model.Data.ShowApproveOnlyOption ? "Continue to approval" : "Save and continue";
         }
 
         <div class="grid-row">
@@ -56,7 +57,7 @@
             }
         }
 
-        @if (!Model.HasApprenticeships)
+        @if (!Model.Data.HasApprenticeships)
         {
 
             <div class="grid-row" id="empty-alert-top">
@@ -71,7 +72,7 @@
         {
             <div class="grid-row">
                 <div class="column-full">
-                    <p class="heading-medium apprentice-count-heading">@GetApprenticesCountText(Model.Apprenticeships)</p>
+                    <p class="heading-medium apprentice-count-heading">@GetApprenticesCountText(Model.Data.Apprenticeships)</p>
                     <table class="tableResponsive viewCommitment">
                         <thead>
                             <tr>
@@ -83,7 +84,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var apprenticeship in Model.Apprenticeships)
+                            @foreach (var apprenticeship in Model.Data.Apprenticeships)
                             {
                                 <tr>
                                     <td>

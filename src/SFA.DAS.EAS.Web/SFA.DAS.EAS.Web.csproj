@@ -938,6 +938,7 @@
     </Content>
     <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
     <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
     <Content Include="Views\EmployerAccount\Summary.cshtml" />
