@@ -161,6 +161,7 @@
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
     <Compile Include="Configuration\TasksApiClientConfiguration.cs" />
+    <Compile Include="CreateAccountResult.cs" />
     <Compile Include="Data\BaseRepository.cs" />
     <Compile Include="Data\IAccountRepository.cs" />
     <Compile Include="Data\IAccountTeamRepository.cs" />
