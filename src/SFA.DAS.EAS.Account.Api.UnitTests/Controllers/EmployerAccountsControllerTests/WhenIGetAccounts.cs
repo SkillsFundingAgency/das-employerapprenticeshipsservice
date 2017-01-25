@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using System.Web.Http.Routing;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         private EmployerAccountsController _controller;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
+        private Mock<UrlHelper> _urlHelper;
 
         [SetUp]
         public void Arrange()
@@ -31,10 +33,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             _logger = new Mock<ILogger>();
             var orchestrator = new AccountsOrchestrator(_mediator.Object, _logger.Object);
             _controller = new EmployerAccountsController(orchestrator);
+
+            _urlHelper = new Mock<UrlHelper>();
+            _controller.Url = _urlHelper.Object;
         }
 
         [Test]
-        public async Task ThenAccountsAreReturnedWithTheirBalance()
+        public async Task ThenAccountsAreReturnedWithTheirBalanceAndAUriToGetAccountDetails()
         {
             var pageNumber = 123;
             var pageSize = 9084;
@@ -61,6 +66,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
 
+            _urlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedId = accountsResponse.Accounts[0].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
+            _urlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedId = accountsResponse.Accounts[1].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
+
             var response = await _controller.GetAccounts(toDate, pageSize, pageNumber);
 
             Assert.IsNotNull(response);
@@ -75,6 +83,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 var returnedAccount = model.Content.Data.SingleOrDefault(x => x.AccountId == expectedAccount.Id && x.AccountHashId == expectedAccount.HashedId && x.AccountName == expectedAccount.Name);
                 returnedAccount.Should().NotBeNull();
                 returnedAccount.Balance.Should().Be(balancesResponse.Accounts.Single(b => b.AccountId == returnedAccount.AccountId).Balance);
+                returnedAccount.Href.Should().Be($"/api/accounts/{returnedAccount.AccountHashId}");
             }
         }
 

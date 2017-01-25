@@ -9,5 +9,7 @@ namespace SFA.DAS.EAS.Api.Models
         public long AccountId { get; set; }
 
         public decimal Balance { get; set; }
+
+        public string Href { get; set; }
     }
 }

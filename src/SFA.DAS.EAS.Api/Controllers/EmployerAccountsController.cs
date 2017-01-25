@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             
             if (result.Status == HttpStatusCode.OK)
             {
+                result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedId = x.AccountHashId }));
                 return Ok(result.Data);
             }
             else
