@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
-using System.Web.Http.Routing;
 using FluentAssertions;
-using MediatR;
 using Moq;
-using NLog;
 using NUnit.Framework;
-using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.Models;
-using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Domain.Entities.Account;
@@ -19,25 +14,8 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     [TestFixture]
-    public class WhenIGetAccounts
+    public class WhenIGetAccounts : EmployerAccountsControllerTests
     {
-        private EmployerAccountsController _controller;
-        private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
-        private Mock<UrlHelper> _urlHelper;
-
-        [SetUp]
-        public void Arrange()
-        {
-            _mediator = new Mock<IMediator>();
-            _logger = new Mock<ILogger>();
-            var orchestrator = new AccountsOrchestrator(_mediator.Object, _logger.Object);
-            _controller = new EmployerAccountsController(orchestrator);
-
-            _urlHelper = new Mock<UrlHelper>();
-            _controller.Url = _urlHelper.Object;
-        }
-
         [Test]
         public async Task ThenAccountsAreReturnedWithTheirBalanceAndAUriToGetAccountDetails()
         {
@@ -54,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Entities.Account.Account {HashedId = "ABC999", Id = 987, Name = "Test 2"}
                     }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate))).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate))).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse
             {
@@ -64,12 +42,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new AccountBalance {AccountId = accountsResponse.Accounts[1].Id, Balance = 123.45m}
                     }
             };
-            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
 
-            _urlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedId = accountsResponse.Accounts[0].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
-            _urlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedId = accountsResponse.Accounts[1].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
+            UrlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[0].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
+            UrlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[1].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
 
-            var response = await _controller.GetAccounts(toDate, pageSize, pageNumber);
+            var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>>(response);
@@ -91,42 +69,42 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         public async Task AndNoToDateIsProvidedThenAllAccountsAreReturned()
         {
             var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>()};
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
 
-            await _controller.GetAccounts();
+            await Controller.GetAccounts();
 
-            _mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.ToDate == DateTime.MaxValue.ToString("yyyyMMddHHmmss"))));
+            Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.ToDate == DateTime.MaxValue.ToString("yyyyMMddHHmmss"))));
         }
 
         [Test]
         public async Task AndNoPageSizeIsProvidedThen1000AccountsAreReturned()
         {
             var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
 
-            await _controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
+            await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageSize == 1000)));
+            Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageSize == 1000)));
         }
 
         [Test]
         public async Task AndNoPageNumberIsProvidedThenTheFirstPageOfAccountsAreReturned()
         {
             var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
 
-            await _controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
+            await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
 
-            _mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == 1)));
+            Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == 1)));
         }
 
         [Test]
@@ -140,12 +118,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         new Domain.Entities.Account.Account {HashedId = "ABC123", Id = 123, Name = "Test 1"}
                     }
             };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
 
-            var response = await _controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
+            var response = await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
             var model = response as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountWithBalanceViewModel>>;
 
             model.Content.Data.First().Balance.Should().Be(0);

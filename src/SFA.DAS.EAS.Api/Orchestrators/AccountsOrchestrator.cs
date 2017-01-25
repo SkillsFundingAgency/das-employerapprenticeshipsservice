@@ -9,6 +9,7 @@ using NLog;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetBatchEmployerAccountTransactions;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
@@ -50,5 +51,31 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1} };
         }
 
+        public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
+        {
+            var accountResult = await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery { HashedAccountId = hashedAccountId });
+            if (accountResult.Account == null)
+            {
+                return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
+            }
+
+            var viewModel = ConvertAccountDetailToViewModel(accountResult);
+            return new OrchestratorResponse<AccountDetailViewModel>() { Data = viewModel };
+        }
+
+        private static AccountDetailViewModel ConvertAccountDetailToViewModel(GetEmployerAccountByHashedIdResponse accountResult)
+        {
+            var accountDetailViewModel = new AccountDetailViewModel
+            {
+                DasAccountId = accountResult.Account.HashedId,
+                DateRegistered = accountResult.Account.CreatedDate,
+                OwnerEmail = accountResult.Account.OwnerEmail,
+                DasAccountName = accountResult.Account.Name,
+                LegalEntities = accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() }).ToList(),
+                PayeSchemes = accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }).ToList()
+            };
+
+            return accountDetailViewModel;
+        }
     }
 }

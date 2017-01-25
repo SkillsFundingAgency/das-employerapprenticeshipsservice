@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             
             if (result.Status == HttpStatusCode.OK)
             {
-                result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedId = x.AccountHashId }));
+                result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
             else
@@ -34,15 +34,26 @@ namespace SFA.DAS.EAS.Api.Controllers
             }
         }
 
-        [Route("{hashedId}", Name = "GetAccount")]
+        [Route("{hashedAccountId}", Name = "GetAccount")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
         {
-            return NotFound();
+            var result = await _orchestrator.GetAccount(hashedAccountId);
+
+            if (result.Data != null)
+            {
+                result.Data.LegalEntities.ForEach(x => x.Href = Url.Link("GetLegalEntity", new { hashedAccountId, legalEntityId = x.Id }));
+                result.Data.PayeSchemes.ForEach(x => x.Href = Url.Link("GetPayeScheme", new { hashedAccountId, payeSchemeRef = x.Id }));
+                return Ok(result.Data);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
-        [Route("{hashedId}/legalentities", Name = "GetLegalEntities")]
+        [Route("{hashedAccountId}/legalentities", Name = "GetLegalEntities")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
@@ -50,7 +61,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             return NotFound();
         }
 
-        [Route("{hashedId}/legalentities/{legalentityid}", Name = "GetLegalEntity")]
+        [Route("{hashedAccountId}/legalentities/{legalentityid}", Name = "GetLegalEntity")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
@@ -58,7 +69,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             return NotFound();
         }
 
-        [Route("{hashedId}/payeschemes", Name = "GetPayeSchemes")]
+        [Route("{hashedAccountId}/payeschemes", Name = "GetPayeSchemes")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
@@ -66,7 +77,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             return NotFound();
         }
 
-        [Route("{hashedId}/payeschemes/{payeschemeref}", Name = "GetPayeScheme")]
+        [Route("{hashedAccountId}/payeschemes/{payeschemeref}", Name = "GetPayeScheme")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)

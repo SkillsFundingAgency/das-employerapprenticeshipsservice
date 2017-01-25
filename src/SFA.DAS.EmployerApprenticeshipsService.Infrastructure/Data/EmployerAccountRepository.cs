@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@HashedId", hashedAccountId, DbType.String);
 
-                return await c.QuerySingleAsync<AccountDetail>(
+                return await c.QuerySingleOrDefaultAsync<AccountDetail>(
                     sql: "[employer_account].[GetAccountDetails_ByHashedId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
