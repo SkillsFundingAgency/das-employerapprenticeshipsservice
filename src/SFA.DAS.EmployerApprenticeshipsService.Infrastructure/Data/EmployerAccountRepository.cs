@@ -87,20 +87,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return new Accounts<AccountInformation> {AccountsCount = countResult.First(), AccountList = result.ToList()};
         }
 
-        public async Task<List<AccountInformation>> GetAccountsInformationByHashedId(string hashedAccountId)
+        public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@HashedId", hashedAccountId, DbType.String);
 
-                return await c.QueryAsync<AccountInformation>(
-                    sql: "[employer_account].[GetAccountInformation_ByHashedId]",
+                return await c.QuerySingleAsync<AccountDetail>(
+                    sql: "[employer_account].[GetAccountDetails_ByHashedId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
-            return result.ToList();
+            return result;
         }
 
         public async Task<List<Account>> GetAllAccounts()

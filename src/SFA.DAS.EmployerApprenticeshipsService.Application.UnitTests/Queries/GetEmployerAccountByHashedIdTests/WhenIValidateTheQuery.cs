@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountsByHashedId;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountsByHashedIdTests
+namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountByHashedIdTests
 {
     public class WhenIValidateTheQuery
     {
-        private GetEmployerAccountsByHashedIdValidator _validator;
+        private GetEmployerAccountByHashedIdValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new GetEmployerAccountsByHashedIdValidator();
+            _validator = new GetEmployerAccountByHashedIdValidator();
         }
 
         [Test]
         public void ThenFalseIsReturnedWhenTheHashedIdIsntPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetEmployerAccountsByHashedIdQuery());
+            var actual = _validator.Validate(new GetEmployerAccountByHashedIdQuery());
 
             //Assert
             Assert.IsNotNull(actual);
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountsByHashedI
         public void ThenTrueIsReturnedWhenTheHashedIdHasBeenPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetEmployerAccountsByHashedIdQuery
+            var actual = _validator.Validate(new GetEmployerAccountByHashedIdQuery
             {
                 HashedAccountId = "ABC123"
             });

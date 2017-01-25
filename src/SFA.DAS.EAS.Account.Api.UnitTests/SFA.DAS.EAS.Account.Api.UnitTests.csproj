@@ -81,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformationByHashedId.cs" />
     <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformationByDate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

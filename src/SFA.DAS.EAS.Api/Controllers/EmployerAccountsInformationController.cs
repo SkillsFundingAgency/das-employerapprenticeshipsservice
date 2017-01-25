@@ -8,7 +8,6 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountsByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccountsByDateRange;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
@@ -70,38 +69,6 @@ namespace SFA.DAS.EAS.Api.Controllers
                 _logger.Error(ex);
             }
             
-            return BadRequest();
-        }
-
-        [Route("{HashedAccountId}")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> Index(string hashedAccountId)
-        {
-            if (string.IsNullOrEmpty(hashedAccountId))
-            {
-                _logger.Info("API AccountsInformation - hashed account id not provided");
-                return BadRequest();
-            }
-
-            try
-            {
-                var results = await _mediator.SendAsync(new GetEmployerAccountsByHashedIdQuery { HashedAccountId = hashedAccountId });
-
-                var returnResult = new List<AccountInformationViewModel>();
-                returnResult.AddRange(results.Accounts.Select(ConvertAccountInformationToViewModel));
-
-                return Ok(returnResult);
-            }
-            catch (InvalidRequestException ex)
-            {
-                _logger.Info(ex, "Invalid Request for EmployerAccountsInformationController");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
-
             return BadRequest();
         }
 

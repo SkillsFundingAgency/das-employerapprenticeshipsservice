@@ -183,6 +183,7 @@
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\AccountBalance.cs" />
+    <Compile Include="Entities\Account\AccountDetail.cs" />
     <Compile Include="Entities\Account\AccountInformation.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />

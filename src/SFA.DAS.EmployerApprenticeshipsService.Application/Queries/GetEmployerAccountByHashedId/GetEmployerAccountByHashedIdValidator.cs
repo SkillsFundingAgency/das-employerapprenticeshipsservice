@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountsByHashedId
+namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId
 {
-    public class GetEmployerAccountsByHashedIdValidator : IValidator<GetEmployerAccountsByHashedIdQuery>
+    public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountByHashedIdQuery>
     {
-        public ValidationResult Validate(GetEmployerAccountsByHashedIdQuery item)
+        public ValidationResult Validate(GetEmployerAccountByHashedIdQuery item)
         {
             var validationResult = new ValidationResult();
 
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountsByHashedId
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetEmployerAccountsByHashedIdQuery item)
+        public Task<ValidationResult> ValidateAsync(GetEmployerAccountByHashedIdQuery item)
         {
             throw new NotImplementedException();
         }
