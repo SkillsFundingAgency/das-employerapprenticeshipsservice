@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateCommitment;
-using SFA.DAS.EAS.Application.Commands.PauseApprenticeship;
-using SFA.DAS.EAS.Application.Commands.ResumeApprenticeship;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
@@ -24,7 +21,6 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Models;
-using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Web.Models.Types;
 using Newtonsoft.Json;
@@ -265,6 +261,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
+                await AssertCommitmentStatus(commitmentId, accountId);
+
                 var apprenticeship = new ApprenticeshipViewModel
                 {
                     HashedAccountId = hashedAccountId,
@@ -290,6 +288,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             await CheckUserAuthorization(async () => 
             {
+                await AssertCommitmentStatus(commitmentId, accountId);
+
                 await _mediator.SendAsync(new CreateApprenticeshipCommand
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
@@ -302,14 +302,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
             _logger.Info($"Getting Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             return await CheckUserAuthorization(async () => 
             {
+                await AssertCommitmentStatus(commitmentId, accountId);
+
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
                 {
                     AccountId = accountId,
-                    CommitmentId = _hashingService.DecodeValue(hashedCommitmentId),
+                    CommitmentId = commitmentId,
                     ApprenticeshipId = apprenticeshipId
                 });
 
@@ -332,10 +335,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var accountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
+            var commitmentId = _hashingService.DecodeValue(apprenticeship.HashedCommitmentId);
             _logger.Info($"Updating Apprenticeship, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             await CheckUserAuthorization(async () => 
             {
+                await AssertCommitmentStatus(commitmentId, accountId);
+
                 await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
                     AccountId = accountId,
@@ -833,6 +839,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!allowedAgreementStatuses.Contains(commitment.AgreementStatus))
                 throw new InvalidStateException($"Invalid commitment state (agreement status is {commitment.AgreementStatus}, expected {string.Join(",", allowedAgreementStatuses)})");
+        }
+
+        private async Task AssertCommitmentStatus(long commitmentId, long accountId)
+        {
+            var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId
+            });
+            AssertCommitmentStatus(commitmentData.Commitment, EditStatus.EmployerOnly);
+            AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
         }
 
         private static void AssertCommitmentStatus(Commitment commitment, params EditStatus[] allowedEditStatuses)
