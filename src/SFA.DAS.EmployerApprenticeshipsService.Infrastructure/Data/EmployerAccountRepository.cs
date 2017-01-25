@@ -89,18 +89,40 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            var result = await WithConnection(async c =>
+            AccountDetail accountDetail = null;
+
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@HashedId", hashedAccountId, DbType.String);
 
-                return await c.QuerySingleOrDefaultAsync<AccountDetail>(
+                return await c.QueryAsync<AccountDetail, string, long, AccountDetail>(
                     sql: "[employer_account].[GetAccountDetails_ByHashedId]",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure,
+                    splitOn: "PayeSchemeId,LegalEntityId",
+                    map: (parent, payeSchemeRef, legalEntityId) =>
+                    {
+                        if (accountDetail == null)
+                        {
+                            accountDetail = parent;
+                        }
+
+                        if (!accountDetail.PayeSchemes.Contains(payeSchemeRef))
+                        {
+                            accountDetail.PayeSchemes.Add(payeSchemeRef);
+                        }
+
+                        if (!accountDetail.LegalEntities.Contains(legalEntityId))
+                        {
+                            accountDetail.LegalEntities.Add(legalEntityId);
+                        }
+
+                        return accountDetail;
+                    });
             });
 
-            return result;
+            return accountDetail;
         }
 
         public async Task<List<Account>> GetAllAccounts()

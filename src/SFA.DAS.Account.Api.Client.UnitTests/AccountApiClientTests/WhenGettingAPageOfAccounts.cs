@@ -35,7 +35,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                                 AccountId = 1,
                                 AccountHashId = "1",
                                 AccountName = "Account 1",
-                                Balance = 1234567.89m
+                                Balance = 1234567.89m,
+                                Href = "http://localhost/api/accounts/1"
                             }
                         }
                     })));

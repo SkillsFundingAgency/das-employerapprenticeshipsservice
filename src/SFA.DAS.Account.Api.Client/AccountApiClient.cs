@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client.Dtos;
@@ -49,13 +48,10 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(json);
         }
 
-        public async Task<List<AccountInformationViewModel>> GetAccountInformationById(string accountId)
+        public async Task<T> GetResource<T>(string uri)
         {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accountsinformation/{accountId}";
-
-            var json = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<List<Dtos.AccountInformationViewModel>>(json);
+            var json = await _httpClient.GetAsync(uri);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         private string GetBaseUrl()

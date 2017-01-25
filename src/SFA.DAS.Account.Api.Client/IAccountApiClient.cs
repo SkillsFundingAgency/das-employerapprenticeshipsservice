@@ -17,10 +17,6 @@ namespace SFA.DAS.EAS.Account.Api.Client
         /// <param name="pageSize">Number of records per page</param>
         Task<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>> GetPageOfAccountInformation(DateTime fromDate, DateTime toDate,int pageNumber = 1, int pageSize = 1000);
 
-        /// <summary>
-        /// Gets account information for a specific account.
-        /// </summary>
-        /// <param name="accountId">The account to get information for</param>
-        Task<List<Dtos.AccountInformationViewModel>> GetAccountInformationById(string accountId);
+        Task<T> GetResource<T>(string uri);
     }
 }

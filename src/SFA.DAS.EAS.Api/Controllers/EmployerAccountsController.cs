@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Api.Orchestrators;
 
@@ -44,7 +45,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             if (result.Data != null)
             {
                 result.Data.LegalEntities.ForEach(x => x.Href = Url.Link("GetLegalEntity", new { hashedAccountId, legalEntityId = x.Id }));
-                result.Data.PayeSchemes.ForEach(x => x.Href = Url.Link("GetPayeScheme", new { hashedAccountId, payeSchemeRef = x.Id }));
+                result.Data.PayeSchemes.ForEach(x => x.Href = Url.Link("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(x.Id) }));
                 return Ok(result.Data);
             }
             else

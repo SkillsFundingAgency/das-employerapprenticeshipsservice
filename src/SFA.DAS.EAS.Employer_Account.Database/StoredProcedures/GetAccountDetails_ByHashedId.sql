@@ -12,7 +12,6 @@ from employer_account.account acc
 inner join employer_account.AccountEmployerAgreement aea on aea.AccountId = acc.Id
 inner join employer_account.EmployerAgreement ea on ea.Id = aea.EmployerAgreementId
 inner join employer_account.AccountHistory ach on ach.AccountId = acc.Id
-inner join employer_account.Paye py on py.Ref = ach.PayeRef
 OUTER APPLY
 (
 	SELECT TOP 1 u.email
