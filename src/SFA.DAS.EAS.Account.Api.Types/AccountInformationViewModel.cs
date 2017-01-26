@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class AccountInformationViewModel
+    public class AccountInformationViewModel : IAccountResource
     {
         public string DasAccountName { get; set; }
         public DateTime DateRegistered { get; set; }

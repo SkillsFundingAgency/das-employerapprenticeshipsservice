@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountInformationViewModel>>(json);
         }
 
-        public async Task<T> GetResource<T>(string uri)
+        public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var json = await _httpClient.GetAsync(uri);
             return JsonConvert.DeserializeObject<T>(json);

@@ -18,6 +18,6 @@ namespace SFA.DAS.EAS.Account.Api.Client
         /// <param name="pageSize">Number of records per page</param>
         Task<PagedApiResponseViewModel<AccountInformationViewModel>> GetPageOfAccountInformation(DateTime fromDate, DateTime toDate,int pageNumber = 1, int pageSize = 1000);
 
-        Task<T> GetResource<T>(string uri);
+        Task<T> GetResource<T>(string uri) where T : IAccountResource;
     }
 }

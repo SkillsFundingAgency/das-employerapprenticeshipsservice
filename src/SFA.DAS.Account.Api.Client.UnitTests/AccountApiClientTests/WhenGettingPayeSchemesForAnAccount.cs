@@ -37,11 +37,11 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         public async Task ThenTheAccountDetailsAreReturned()
         {
             // Act
-            var response = await _apiClient.GetResource<List<ResourceViewModel>>(_uri);
+            var response = await _apiClient.GetResource<ResourceList>(_uri);
 
             // Assert
             Assert.IsNotNull(response);
-            Assert.IsAssignableFrom<List<ResourceViewModel>>(response);
+            Assert.IsAssignableFrom<ResourceList>(response);
             response.Should().NotBeNull();
             response.ShouldBeEquivalentTo(_payeSchemes);
         }

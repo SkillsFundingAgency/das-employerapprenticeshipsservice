@@ -44,8 +44,10 @@
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="AccountInformationViewModel.cs" />
     <Compile Include="AccountWithBalanceViewModel.cs" />
+    <Compile Include="IAccountResource.cs" />
     <Compile Include="PagedApiResponseViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceList.cs" />
     <Compile Include="ResourceViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

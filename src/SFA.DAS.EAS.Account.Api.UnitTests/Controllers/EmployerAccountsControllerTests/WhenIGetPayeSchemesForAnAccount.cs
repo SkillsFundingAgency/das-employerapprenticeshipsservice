@@ -27,8 +27,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var response = await Controller.GetPayeSchemes(hashedAccountId);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<List<ResourceViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<List<ResourceViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<ResourceList>>(response);
+            var model = response as OkNegotiatedContentResult<ResourceList>;
 
             model?.Content.Should().NotBeNull();
 

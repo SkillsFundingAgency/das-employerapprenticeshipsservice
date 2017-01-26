@@ -68,8 +68,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 DateRegistered = accountResult.Account.CreatedDate,
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
-                LegalEntities = accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() }).ToList(),
-                PayeSchemes = accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }).ToList()
+                LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
+                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }))
             };
 
             return accountDetailViewModel;
