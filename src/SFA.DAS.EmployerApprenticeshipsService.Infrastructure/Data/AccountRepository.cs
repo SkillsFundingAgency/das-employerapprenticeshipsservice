@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<Tuple<long,long,long>> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource)
+        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource)
         {
             return await WithConnection(async c =>
             {
@@ -46,10 +46,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
 
-                var accountId = parameters.Get<long>("@accountId");
-                var legalEntityId = parameters.Get<long>("@legalentityId");
-                var employerAgreementId = parameters.Get<long>("@employerAgreementId");
-                return new Tuple<long,long,long> ( accountId , legalEntityId, employerAgreementId); 
+                return new CreateAccountResult
+                {
+                    AccountId = parameters.Get<long>("@accountId"),
+                    LegalEntityId = parameters.Get<long>("@legalentityId"),
+                    EmployerAgreementId = parameters.Get<long>("@employerAgreementId")
+                };
             });
         }
         
