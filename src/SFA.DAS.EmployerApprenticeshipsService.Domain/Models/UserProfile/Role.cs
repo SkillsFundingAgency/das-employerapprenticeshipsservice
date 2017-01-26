@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Domain.Models.User
+namespace SFA.DAS.EAS.Domain.Models.UserProfile
 {
     public enum Role : short
     {

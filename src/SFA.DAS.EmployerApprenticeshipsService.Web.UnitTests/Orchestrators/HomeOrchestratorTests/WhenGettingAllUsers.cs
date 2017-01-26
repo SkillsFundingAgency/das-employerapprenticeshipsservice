@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUsers;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.User;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 

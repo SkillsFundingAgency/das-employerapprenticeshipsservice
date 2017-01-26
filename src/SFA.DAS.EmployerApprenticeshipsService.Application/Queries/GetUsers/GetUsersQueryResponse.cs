@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.User;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Queries.GetUsers
 {

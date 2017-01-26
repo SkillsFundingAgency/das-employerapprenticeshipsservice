@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.User
+﻿namespace SFA.DAS.EAS.Domain.Models.UserProfile
 {
     public class User
     {

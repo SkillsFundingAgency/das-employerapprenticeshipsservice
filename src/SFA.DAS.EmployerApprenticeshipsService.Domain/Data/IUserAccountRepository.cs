@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.User;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Data
 {
