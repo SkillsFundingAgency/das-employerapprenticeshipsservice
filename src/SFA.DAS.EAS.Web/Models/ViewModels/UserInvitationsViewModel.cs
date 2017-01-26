@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.EAS.Domain;
 
-namespace SFA.DAS.EAS.Domain.ViewModels
+namespace SFA.DAS.EAS.Web.Models.ViewModels
 {
     public class UserInvitationsViewModel
     {
