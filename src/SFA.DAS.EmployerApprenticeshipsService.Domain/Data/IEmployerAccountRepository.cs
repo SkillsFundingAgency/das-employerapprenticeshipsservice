@@ -10,7 +10,6 @@ namespace SFA.DAS.EAS.Domain.Data
         Task<Account> GetAccountById(long id);
         Task<Account> GetAccountByHashedId(string hashedAccountId);
         Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
-        Task<Accounts<AccountInformation>> GetAccountsByDateRange(DateTime fromDate, DateTime toDate, int pageNumber, int pageSize);
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
         Task<List<Account>> GetAllAccounts();
         Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId);

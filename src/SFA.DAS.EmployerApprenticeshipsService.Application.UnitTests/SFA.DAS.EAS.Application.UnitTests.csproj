@@ -221,8 +221,6 @@
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRangeTests\WhenIGetPagedEmployerAccounts.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRangeTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />

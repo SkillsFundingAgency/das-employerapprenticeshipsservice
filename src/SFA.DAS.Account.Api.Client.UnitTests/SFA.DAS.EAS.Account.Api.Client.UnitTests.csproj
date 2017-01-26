@@ -70,7 +70,6 @@
     <Compile Include="AccountApiClientTests\WhenGettingLegalEntitiesForAnAccount.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountDetails.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAPageOfAccounts.cs" />
-    <Compile Include="AccountApiClientTests\WhenGettingAPageOfAccountsInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

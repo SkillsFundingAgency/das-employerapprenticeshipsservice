@@ -64,29 +64,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return new Accounts<Account> {AccountsCount = countResult.First(), AccountList = result.ToList()};
         }
 
-        public async Task<Accounts<AccountInformation>> GetAccountsByDateRange(DateTime fromDate, DateTime toDate, int pageNumber, int pageSize)
-        {
-            var countResult = await GetNumberOfAccounts();
-            var offset = pageSize * (pageNumber - 1);
-
-            var result = await WithConnection(async c =>
-                {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("@fromDate", fromDate, DbType.DateTime);
-                    parameters.Add("@toDate", toDate, DbType.DateTime);
-                    parameters.Add("@offset", offset, DbType.Int32);
-                    parameters.Add("@pageSize", pageSize, DbType.Int32);
-
-                    return await c.QueryAsync<AccountInformation>(
-                        sql: "[employer_account].[GetAccountInformation_ByDateRange]",
-                        param: parameters,
-                        commandType: CommandType.StoredProcedure);
-                }
-            );
-
-            return new Accounts<AccountInformation> {AccountsCount = countResult.First(), AccountList = result.ToList()};
-        }
-
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             AccountDetail accountDetail = null;

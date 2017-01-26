@@ -34,20 +34,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(json);
         }
-
-        public async Task<PagedApiResponseViewModel<AccountInformationViewModel>> GetPageOfAccountInformation(DateTime fromDate, DateTime toDate, int pageNumber = 1, int pageSize = 1000)
-        {
-
-            var fromDateFormatted = new DateTime(fromDate.Date.Year,fromDate.Month,fromDate.Day).ToString("yyyy-MM-dd");
-            var toDateFormatted = new DateTime(toDate.Date.Year,toDate.Month,toDate.Day).ToString("yyyy-MM-dd");
-
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accountsinformation?fromDate={fromDateFormatted}&toDate={toDateFormatted}&page={pageNumber}&pageSize={pageSize}";
-            
-            var json = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountInformationViewModel>>(json);
-        }
-
+        
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var json = await _httpClient.GetAsync(uri);

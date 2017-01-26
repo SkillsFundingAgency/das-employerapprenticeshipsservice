@@ -86,7 +86,6 @@
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetALegalEntity.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountsInformationTests\WhenIGetAccountInformationByDate.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
