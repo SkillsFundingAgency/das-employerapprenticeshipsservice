@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.ReleaseEmployerAgreementTemplate;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ReleaseEmployerAgreementTemplateTests

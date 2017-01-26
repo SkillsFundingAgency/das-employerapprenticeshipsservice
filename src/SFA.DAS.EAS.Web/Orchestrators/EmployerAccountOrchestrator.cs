@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
 

@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Models;
 

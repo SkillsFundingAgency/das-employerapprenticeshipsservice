@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Account;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
 namespace SFA.DAS.EAS.Infrastructure.Data

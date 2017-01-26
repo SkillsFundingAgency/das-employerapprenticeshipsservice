@@ -178,9 +178,9 @@
     <Compile Include="Data\IUserAccountRepository.cs" />
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="Duration.cs" />
-    <Compile Include="EmployerAgreementStatus.cs" />
-    <Compile Include="EmployerAgreementTemplate.cs" />
-    <Compile Include="EmployerAgreementView.cs" />
+    <Compile Include="EmployerAgreement\EmployerAgreementStatus.cs" />
+    <Compile Include="EmployerAgreement\EmployerAgreementTemplate.cs" />
+    <Compile Include="EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\AccountBalance.cs" />

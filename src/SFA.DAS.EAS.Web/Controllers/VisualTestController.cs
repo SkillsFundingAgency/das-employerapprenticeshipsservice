@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq;
+using SFA.DAS.EAS.Domain.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Domain.Extensions
 {
