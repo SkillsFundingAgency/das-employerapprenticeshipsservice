@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Domain
+﻿namespace SFA.DAS.EAS.Domain.Account
 {
     public class CreateAccountResult
     {

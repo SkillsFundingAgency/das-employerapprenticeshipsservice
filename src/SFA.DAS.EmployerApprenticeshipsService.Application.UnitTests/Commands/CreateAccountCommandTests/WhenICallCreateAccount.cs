@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Account;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Messaging;
