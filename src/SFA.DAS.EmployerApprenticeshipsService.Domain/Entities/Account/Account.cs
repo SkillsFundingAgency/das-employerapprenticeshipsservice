@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Entities.Account
+﻿using SFA.DAS.EAS.Domain.Models.User;
+
+namespace SFA.DAS.EAS.Domain.Entities.Account
 {
     public class Account
     {

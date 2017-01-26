@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.User;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveTeamMember
 {

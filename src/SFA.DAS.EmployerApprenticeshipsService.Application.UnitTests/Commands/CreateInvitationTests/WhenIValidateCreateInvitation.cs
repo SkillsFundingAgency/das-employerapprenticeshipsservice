@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.User;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
 {
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
                 ExternalUserId = "123",
                 HashedAccountId = "123dfg",
                 Name = "Test",
-                RoleId = Domain.Role.Owner
+                RoleId = Role.Owner
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();

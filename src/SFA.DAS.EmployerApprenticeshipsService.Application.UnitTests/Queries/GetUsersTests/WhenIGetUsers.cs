@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUsers;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.User;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUsersTests
 {

@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.User;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {

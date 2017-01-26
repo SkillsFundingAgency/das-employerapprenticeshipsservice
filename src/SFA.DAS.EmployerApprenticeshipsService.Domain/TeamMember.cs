@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.EAS.Domain.Models.User;
 
 namespace SFA.DAS.EAS.Domain
 {
