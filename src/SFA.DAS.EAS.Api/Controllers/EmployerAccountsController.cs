@@ -74,7 +74,14 @@ namespace SFA.DAS.EAS.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
-            return NotFound();
+            var result = await _orchestrator.GetLegalEntity(legalEntityId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Data);
         }
 
         [Route("{hashedAccountId}/payeschemes", Name = "GetPayeSchemes")]

@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountApiClientTests\WhenGettingALegalEntity.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingPayeSchemesForAnAccount.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingLegalEntitiesForAnAccount.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAccountDetails.cs" />

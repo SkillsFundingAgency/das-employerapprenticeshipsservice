@@ -7,6 +7,7 @@ using NLog;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
@@ -23,8 +24,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             _mediator = mediator;
             _logger = logger;
         }
-
-
+        
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all account balances.");
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             accountsResult.Accounts.ForEach(account =>
             {
                 var accountBalance = transactionResult.Accounts.SingleOrDefault(c=>c.AccountId==account.Id);
-                data.Add(new AccountWithBalanceViewModel() { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = accountBalance?.Balance ?? 0 });
+                data.Add(new AccountWithBalanceViewModel { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = accountBalance?.Balance ?? 0 });
             });
 
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1} };
@@ -57,7 +57,35 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             }
 
             var viewModel = ConvertAccountDetailToViewModel(accountResult);
-            return new OrchestratorResponse<AccountDetailViewModel>() { Data = viewModel };
+            return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
+        }
+
+        public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(long legalEntityId)
+        {
+            var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { Id = legalEntityId });
+            if (legalEntityResult.LegalEntity == null)
+            {
+                return new OrchestratorResponse<LegalEntityViewModel> { Data = null };
+            }
+
+            var viewModel = ConvertLegalEntityToViewModel(legalEntityResult);
+            return new OrchestratorResponse<LegalEntityViewModel> { Data = viewModel };
+        }
+
+        private LegalEntityViewModel ConvertLegalEntityToViewModel(GetLegalEntityByIdResponse legalEntityResult)
+        {
+            var legalEntityViewModel = new LegalEntityViewModel
+            {
+                DateOfIncorporation = legalEntityResult.LegalEntity.DateOfIncorporation,
+                Id = legalEntityResult.LegalEntity.Id,
+                Name = legalEntityResult.LegalEntity.Name,
+                Source = legalEntityResult.LegalEntity.Source,
+                RegisteredAddress = legalEntityResult.LegalEntity.RegisteredAddress,
+                Code = legalEntityResult.LegalEntity.Code,
+                CompanyStatus = legalEntityResult.LegalEntity.CompanyStatus
+            };
+
+            return legalEntityViewModel;
         }
 
         private static AccountDetailViewModel ConvertAccountDetailToViewModel(GetEmployerAccountByHashedIdResponse accountResult)
