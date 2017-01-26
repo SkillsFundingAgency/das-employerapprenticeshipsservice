@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Api.Models
+﻿namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class ResourceViewModel
     {

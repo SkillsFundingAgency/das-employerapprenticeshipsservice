@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using MediatR;
 using NLog;
-using SFA.DAS.EAS.Api.Models;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccountsByDateRange;
 using SFA.DAS.EAS.Domain.Entities.Account;

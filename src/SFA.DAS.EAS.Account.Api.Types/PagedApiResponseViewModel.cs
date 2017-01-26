@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Api.Models
+namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class PagedApiResponseViewModel<T>
     {

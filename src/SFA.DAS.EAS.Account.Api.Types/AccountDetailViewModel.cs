@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Account.Api.Client.Dtos
+namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class AccountDetailViewModel
     {

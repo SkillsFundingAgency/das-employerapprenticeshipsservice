@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace SFA.DAS.EAS.Api.Models
+namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class AccountInformationViewModel
     {
@@ -11,10 +11,10 @@ namespace SFA.DAS.EAS.Api.Models
         public string OrganisationSource { get; set; }
         public string OrganisationStatus { get; set; }
         public string OrganisationName { get; set; }
-        public DateTime OrgansiationCreatedDate { get; set; }
-        public string OwnerEmail { get; set; }
-        public string DasAccountId { get; set; }
         public string OrganisationNumber { get; set; }
+        public DateTime OrgansiationCreatedDate { get; set; }
+        public string DasAccountId { get; set; }
+        public string OwnerEmail { get; set; }
         public string PayeSchemeName { get; set; }
     }
 }

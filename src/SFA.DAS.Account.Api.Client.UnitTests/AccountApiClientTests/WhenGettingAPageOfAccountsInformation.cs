@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Client.Dtos;
+using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             _httpClient = new Mock<SecureHttpClient>();
             _httpClient.Setup(c => c.GetAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    JsonConvert.SerializeObject(new Dtos.PagedApiResponseViewModel<AccountInformationViewModel>
+                    JsonConvert.SerializeObject(new PagedApiResponseViewModel<AccountInformationViewModel>
                     {
                         Page = 1,
                         TotalPages = 1,
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             var actual = await _apiClient.GetPageOfAccountInformation(new DateTime(2016, 10, 01), new DateTime(2016, 11, 16));
 
             // Assert
-            Assert.IsAssignableFrom<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(actual);
+            Assert.IsAssignableFrom<PagedApiResponseViewModel<AccountInformationViewModel>>(actual);
         }
     }
 }
