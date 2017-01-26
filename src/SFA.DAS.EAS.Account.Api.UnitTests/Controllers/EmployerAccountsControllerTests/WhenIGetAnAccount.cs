@@ -46,7 +46,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             model?.Content.Should().NotBeNull();
             
-            //Check properties match
             model.Content.DasAccountId.Should().Be(hashedAccountId);
             model.Content.DasAccountName.Should().Be(accountResponse.Account.Name);
             model.Content.DateRegistered.Should().Be(accountResponse.Account.CreatedDate);
