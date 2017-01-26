@@ -41,8 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LegalEntityViewModel.cs" />
+    <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
+    <Compile Include="LegalEntityViewModel.cs" />
     <Compile Include="AccountInformationViewModel.cs" />
     <Compile Include="AccountWithBalanceViewModel.cs" />
     <Compile Include="IAccountResource.cs" />

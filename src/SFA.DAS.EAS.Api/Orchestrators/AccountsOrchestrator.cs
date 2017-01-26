@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
@@ -70,6 +71,29 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             var viewModel = ConvertLegalEntityToViewModel(legalEntityResult);
             return new OrchestratorResponse<LegalEntityViewModel> { Data = viewModel };
+        }
+
+        public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string payeSchemeRef)
+        {
+            var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { Ref = payeSchemeRef });
+            if (payeSchemeResult.PayeScheme == null)
+            {
+                return new OrchestratorResponse<PayeSchemeViewModel> { Data = null };
+            }
+
+            var viewModel = ConvertPayeSchemeToViewModel(payeSchemeResult);
+            return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
+        }
+
+        private PayeSchemeViewModel ConvertPayeSchemeToViewModel(GetPayeSchemeByRefResponse payeSchemeResult)
+        {
+            var payeSchemeViewModel = new PayeSchemeViewModel
+            {
+                Name = payeSchemeResult.PayeScheme.Name,
+                Ref = payeSchemeResult.PayeScheme.Ref
+            };
+
+            return payeSchemeViewModel;
         }
 
         private LegalEntityViewModel ConvertLegalEntityToViewModel(GetLegalEntityByIdResponse legalEntityResult)

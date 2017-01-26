@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
+    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetALegalEntity.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />

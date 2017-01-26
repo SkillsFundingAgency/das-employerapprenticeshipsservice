@@ -105,7 +105,14 @@ namespace SFA.DAS.EAS.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return NotFound();
+            var result = await _orchestrator.GetPayeScheme(HttpUtility.UrlDecode(payeSchemeRef));
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result.Data);
         }
 
         private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)

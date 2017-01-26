@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     public class WhenIGetALegalEntity : EmployerAccountsControllerTests
     {
         [Test]
-        public async Task ThenTheAccountIsReturned()
+        public async Task ThenTheLegalEntityIsReturned()
         {
             var hashedAccountId = "ABC123";
             var legalEntityId = 123;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         }
 
         [Test]
-        public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
+        public async Task AndTheLegalEntityDoesNotExistThenItIsNotReturned()
         {
             var hashedAccountId = "ABC123";
             var legalEntityId = 123;
