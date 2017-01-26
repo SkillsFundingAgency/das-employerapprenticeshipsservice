@@ -456,6 +456,7 @@
     <Compile Include="Models\Types\SaveStatus.cs" />
     <Compile Include="Models\UserLinks.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
+    <Compile Include="Models\ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />

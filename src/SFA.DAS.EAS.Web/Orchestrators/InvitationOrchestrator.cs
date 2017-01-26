@@ -9,8 +9,8 @@ using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.ViewModels;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Models.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

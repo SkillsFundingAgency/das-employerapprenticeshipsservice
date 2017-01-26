@@ -8,8 +8,8 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Domain.ViewModels;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Models.ViewModels;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
