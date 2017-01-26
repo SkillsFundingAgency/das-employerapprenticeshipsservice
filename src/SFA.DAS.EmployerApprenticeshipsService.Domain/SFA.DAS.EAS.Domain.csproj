@@ -189,6 +189,7 @@
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
+    <Compile Include="Entities\Account\LegalEntityView.cs" />
     <Compile Include="Entities\Transaction\TransactionEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
@@ -199,6 +200,7 @@
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
+    <Compile Include="Data\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />

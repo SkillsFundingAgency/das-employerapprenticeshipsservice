@@ -111,6 +111,7 @@
     <Build Include="Views\AccountInformation.sql" />
     <Build Include="StoredProcedures\GetAccountDetails_ByHashedId.sql" />
     <Build Include="StoredProcedures\CreateInvitation.sql" />
+    <Build Include="StoredProcedures\GetLegalEntity_ById.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />
