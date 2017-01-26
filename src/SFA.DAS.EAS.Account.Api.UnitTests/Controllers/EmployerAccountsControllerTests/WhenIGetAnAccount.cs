@@ -57,8 +57,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             }
             foreach (var payeScheme in accountResponse.Account.PayeSchemes)
             {
-                var matchedEntity = model.Content.PayeSchemes.Single(x => x.Id == payeScheme);
-                matchedEntity.Href.Should().Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Replace(@"/", "%2f")}");
+                var matchedScheme = model.Content.PayeSchemes.Single(x => x.Id == payeScheme);
+                matchedScheme.Href.Should().Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Replace(@"/", "%2f")}");
             }
         }
 

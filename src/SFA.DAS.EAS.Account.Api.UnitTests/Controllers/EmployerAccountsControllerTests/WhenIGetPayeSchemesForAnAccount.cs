@@ -12,30 +12,30 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
     [TestFixture]
-    public class WhenIGetLegalEntitiesForAnAccount : EmployerAccountsControllerTests
+    public class WhenIGetPayeSchemesForAnAccount : EmployerAccountsControllerTests
     {
         [Test]
-        public async Task ThenTheLegalEntitiesAreReturned()
+        public async Task ThenThePayeSchemesAreReturned()
         {
             var hashedAccountId = "ABC123";
-            var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail { LegalEntities = new List<long> { 1, 4 }, PayeSchemes = new List<string> () } };
+            var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail { LegalEntities = new List<long>(), PayeSchemes = new List<string> { "ABC/123", "ZZZ/999" } } };
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
 
-            UrlHelper.Setup(x => x.Link("GetLegalEntity", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[0].ToString() }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[0]}");
-            UrlHelper.Setup(x => x.Link("GetLegalEntity", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, legalEntityId = accountResponse.Account.LegalEntities[1].ToString() }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/legalentities/{accountResponse.Account.LegalEntities[1]}");
-            
-            var response = await Controller.GetLegalEntities(hashedAccountId);
+            UrlHelper.Setup(x => x.Link("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f")}");
+            UrlHelper.Setup(x => x.Link("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f")}");
+
+            var response = await Controller.GetPayeSchemes(hashedAccountId);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<List<ResourceViewModel>>>(response);
             var model = response as OkNegotiatedContentResult<List<ResourceViewModel>>;
 
             model?.Content.Should().NotBeNull();
-            
-            foreach (var legalEntity in accountResponse.Account.LegalEntities)
+
+            foreach (var payeScheme in accountResponse.Account.PayeSchemes)
             {
-                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.ToString());
-                matchedEntity.Href.Should().Be($"/api/accounts/{hashedAccountId}/legalentities/{legalEntity}");
+                var matchedScheme = model.Content.Single(x => x.Id == payeScheme);
+                matchedScheme.Href.Should().Be($"/api/accounts/{hashedAccountId}/payeschemes/{payeScheme.Replace(@"/", "%2f")}");
             }
         }
 
@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
 
-            var response = await Controller.GetLegalEntities(hashedAccountId);
+            var response = await Controller.GetPayeSchemes(hashedAccountId);
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
