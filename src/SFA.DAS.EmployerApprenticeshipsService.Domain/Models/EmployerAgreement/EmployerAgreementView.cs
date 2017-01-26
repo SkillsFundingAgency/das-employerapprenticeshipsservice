@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Domain.EmployerAgreement
+namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
 {
     public class EmployerAgreementView
     {

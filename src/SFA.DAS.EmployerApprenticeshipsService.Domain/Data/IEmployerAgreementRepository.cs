@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Domain.Data
 {

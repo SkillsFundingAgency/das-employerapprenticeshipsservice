@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Account;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {

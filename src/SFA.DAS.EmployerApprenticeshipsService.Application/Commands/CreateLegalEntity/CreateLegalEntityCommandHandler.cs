@@ -6,9 +6,9 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Extensions;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 {

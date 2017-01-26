@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Domain.Account
+﻿namespace SFA.DAS.EAS.Domain.Models.Account
 {
     public class CreateAccountResult
     {

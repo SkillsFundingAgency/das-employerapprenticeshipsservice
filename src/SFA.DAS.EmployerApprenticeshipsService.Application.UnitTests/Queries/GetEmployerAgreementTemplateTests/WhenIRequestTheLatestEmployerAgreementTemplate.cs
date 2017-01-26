@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementTemplateTests
 {
