@@ -23,7 +23,9 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 ApiBaseUrl = "http://some-url/"
             };
 
-            _uri = "http://localhost/api/accounts/ABC123/payeschemes/ABC%f123";
+            _uri = "/api/accounts/ABC123/payeschemes/ABC%F123";
+            var absoluteUri = _configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+
             _expectedPayeScheme = new PayeSchemeViewModel
             {
                 Ref = "ABC/123",
@@ -31,13 +33,13 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             };
 
             _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(_uri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedPayeScheme)));
+            _httpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedPayeScheme)));
 
             _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }
 
         [Test]
-        public async Task ThenTheLegalEntityIsReturned()
+        public async Task ThenThePayeSchemeIsReturned()
         {
             // Act
             var response = await _apiClient.GetResource<PayeSchemeViewModel>(_uri);

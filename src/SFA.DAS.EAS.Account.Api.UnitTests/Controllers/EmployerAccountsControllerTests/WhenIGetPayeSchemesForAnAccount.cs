@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var accountResponse = new GetEmployerAccountByHashedIdResponse { Account = new AccountDetail { LegalEntities = new List<long>(), PayeSchemes = new List<string> { "ABC/123", "ZZZ/999" } } };
             Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
 
-            UrlHelper.Setup(x => x.Link("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f")}");
-            UrlHelper.Setup(x => x.Link("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f")}");
+            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[0].Replace(@"/", "%2f")}");
+            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId, payeSchemeRef = accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f") }.GetHashCode()))).Returns($"/api/accounts/{hashedAccountId}/payeschemes/{accountResponse.Account.PayeSchemes[1].Replace(@"/", "%2f")}");
 
             var response = await Controller.GetPayeSchemes(hashedAccountId);
 

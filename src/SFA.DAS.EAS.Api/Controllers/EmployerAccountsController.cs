@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Api.Controllers
             
             if (result.Status == HttpStatusCode.OK)
             {
-                result.Data.Data.ForEach(x => x.Href = Url.Link("GetAccount", new { hashedAccountId = x.AccountHashId }));
+                result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
             else
@@ -117,12 +117,12 @@ namespace SFA.DAS.EAS.Api.Controllers
 
         private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
         {
-            legalEntity.Href = Url.Link("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
+            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
         }
 
         private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)
         {
-            payeScheme.Href = Url.Link("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
+            payeScheme.Href = Url.Route("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
         }
     }
 }

@@ -24,11 +24,13 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 ApiBaseUrl = "http://some-url/"
             };
 
-            _uri = "http://localhost/api/accounts/ABC123/legalentities";
+            _uri = "/api/accounts/ABC123/legalentities";
+            var absoluteUri = _configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+
             _legalEntities = new List<ResourceViewModel>() { new ResourceViewModel { Id = "1", Href = "/api/legalentities/test1" } };
 
             _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(_uri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_legalEntities)));
+            _httpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_legalEntities)));
 
             _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }

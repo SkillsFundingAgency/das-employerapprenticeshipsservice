@@ -44,8 +44,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             };
             Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
 
-            UrlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[0].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
-            UrlHelper.Setup(x => x.Link("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[1].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
+            UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[0].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[0].HashedId}");
+            UrlHelper.Setup(x => x.Route("GetAccount", It.Is<object>(o => o.GetHashCode() == new { hashedAccountId = accountsResponse.Accounts[1].HashedId }.GetHashCode()))).Returns($"/api/accounts/{accountsResponse.Accounts[1].HashedId}");
 
             var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 

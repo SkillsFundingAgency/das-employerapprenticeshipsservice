@@ -24,7 +24,9 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 ApiBaseUrl = "http://some-url/"
             };
 
-            _uri = "http://localhost/api/accounts/ABC123";
+            _uri = "/api/accounts/ABC123";
+            var absoluteUri = _configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+
             _expectedAccount = new AccountDetailViewModel
             {
                 DasAccountId = "1",
@@ -36,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
             };
 
             _httpClient = new Mock<SecureHttpClient>();
-            _httpClient.Setup(c => c.GetAsync(_uri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
+            _httpClient.Setup(c => c.GetAsync(absoluteUri)).Returns(Task.FromResult(JsonConvert.SerializeObject(_expectedAccount)));
 
             _apiClient = new AccountApiClient(_configuration, _httpClient.Object);
         }
