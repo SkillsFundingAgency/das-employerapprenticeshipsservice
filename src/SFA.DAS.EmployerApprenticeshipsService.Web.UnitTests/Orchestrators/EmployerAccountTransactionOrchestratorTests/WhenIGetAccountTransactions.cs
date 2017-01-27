@@ -9,8 +9,11 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
@@ -19,8 +22,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
     {
         private const string HashedAccountId = "123ABC";
         private const string ExternalUser = "Test user";
-        private readonly DateTime _fromDate = DateTime.Now.AddDays(-20);
-        private readonly DateTime _toDate = DateTime.Now.AddDays(-20);
 
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
@@ -45,7 +46,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
 
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
-                .ReturnsAsync(new GetEmployerAccountTransactionsResponse());
+                .ReturnsAsync(new GetEmployerAccountTransactionsResponse
+                {
+                    Data = new AggregationData
+                    {
+                        TransactionLines = new List<TransactionLine>
+                        {
+                            new LevyDeclarationTransactionLine()
+                        }
+                    }
+                });
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object);
         }
@@ -53,9 +63,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         [Test]
         public async Task ThenARequestShouldBeMadeForTransactions()
         {
-           var result = await _orchestrator.GetAccountTransactions(HashedAccountId, ExternalUser);
+            //Act
+           await _orchestrator.GetAccountTransactions(HashedAccountId, ExternalUser);
 
-
+            //Assert
+            _mediator.Verify(x=> x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()), Times.Once);
         }
     }
 }
