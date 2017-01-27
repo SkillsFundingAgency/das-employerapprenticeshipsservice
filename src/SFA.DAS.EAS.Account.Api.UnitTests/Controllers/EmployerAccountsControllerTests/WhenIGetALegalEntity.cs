@@ -25,9 +25,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                         Id = legalEntityId,
                         Name = "Test",
                         Code = "ABC123",
-                        CompanyStatus = "active",
-                        DateOfIncorporation = DateTime.Now.AddYears(-3),
-                        RegisteredAddress = "Some address",
+                        Status = "active",
+                        DateOfInception = DateTime.Now.AddYears(-3),
+                        Address = "Some address",
                         Source = "Companies House"
                     }
             };

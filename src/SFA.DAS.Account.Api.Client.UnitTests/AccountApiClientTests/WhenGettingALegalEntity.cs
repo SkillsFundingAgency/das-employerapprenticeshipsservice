@@ -32,10 +32,10 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
                 Id = 123,
                 Code = "Code",
                 Name = "Name",
-                DateOfIncorporation = DateTime.Now.AddYears(-1),
+                DateOfInception = DateTime.Now.AddYears(-1),
                 Source = "Source",
-                RegisteredAddress = "An address",
-                CompanyStatus = "Status"
+                Address = "An address",
+                Status = "Status"
             };
 
             _httpClient = new Mock<SecureHttpClient>();

@@ -100,13 +100,13 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         {
             var legalEntityViewModel = new LegalEntityViewModel
             {
-                DateOfIncorporation = legalEntityResult.LegalEntity.DateOfIncorporation,
+                DateOfInception = legalEntityResult.LegalEntity.DateOfInception,
                 Id = legalEntityResult.LegalEntity.Id,
                 Name = legalEntityResult.LegalEntity.Name,
                 Source = legalEntityResult.LegalEntity.Source,
-                RegisteredAddress = legalEntityResult.LegalEntity.RegisteredAddress,
+                Address = legalEntityResult.LegalEntity.Address,
                 Code = legalEntityResult.LegalEntity.Code,
-                CompanyStatus = legalEntityResult.LegalEntity.CompanyStatus
+                Status = legalEntityResult.LegalEntity.Status
             };
 
             return legalEntityViewModel;
