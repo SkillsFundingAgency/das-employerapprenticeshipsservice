@@ -85,6 +85,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
            
         }
 
+
+        public virtual OrchestratorResponse<SummaryViewModel> GetSummaryViewModel(HttpContextBase context)
+        {
+            var enteredData = GetCookieData(context);
+
+            var model = new SummaryViewModel
+            {
+                OrganisationType = enteredData.OrganisationType,
+                OrganisationName = enteredData.OrganisationName,
+                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
+                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
+                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
+                PayeReference = enteredData.PayeReference,
+                EmployerRefName = enteredData.EmployerRefName,
+                EmpRefNotFound = enteredData.EmpRefNotFound,
+                OrganisationStatus = enteredData.OrganisationStatus,
+                PublicSectorDataSource = enteredData.PublicSectorDataSource
+            };
+
+            return new OrchestratorResponse<SummaryViewModel>
+            {
+                Data = model
+            };
+
+        }
+
+
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
             var cookie = (string)CookieService.Get(context, CookieName);

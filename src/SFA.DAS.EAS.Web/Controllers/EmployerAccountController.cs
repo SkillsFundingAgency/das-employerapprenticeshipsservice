@@ -111,25 +111,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
 
         [HttpGet]
-        public ActionResult Summary()
+        public ViewResult Summary()
         {
-            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-
-            var model = new SummaryViewModel
-            {
-                OrganisationType = enteredData.OrganisationType,
-                OrganisationName = enteredData.OrganisationName,
-                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
-                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
-                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
-                PayeReference = enteredData.PayeReference,
-                EmployerRefName = enteredData.EmployerRefName,
-                EmpRefNotFound = enteredData.EmpRefNotFound,
-                OrganisationStatus = enteredData.OrganisationStatus,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource
-            };
-
-            return View(model);
+            var result = _employerAccountOrchestrator.GetSummaryViewModel(HttpContext);
+            return View(result);
         }
 
         [HttpPost]
