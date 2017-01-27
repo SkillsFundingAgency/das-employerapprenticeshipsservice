@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
             //Assert
             Assert.IsNotNull(actual);
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Id", "Id has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("Id", "LegalEntityId has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]

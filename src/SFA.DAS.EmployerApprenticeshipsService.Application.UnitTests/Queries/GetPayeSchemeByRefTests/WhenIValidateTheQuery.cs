@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
             //Assert
             Assert.IsNotNull(actual);
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("Ref", "Ref has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("Ref", "PayeSchemeRef has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]

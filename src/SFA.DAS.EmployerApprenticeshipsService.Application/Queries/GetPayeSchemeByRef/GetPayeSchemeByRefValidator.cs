@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
 
             if (string.IsNullOrEmpty(item.Ref))
             {
-                validationResult.AddError(nameof(item.Ref));
+                validationResult.AddError(nameof(item.Ref), "PayeSchemeRef has not been supplied");
             }
             return validationResult;
         }

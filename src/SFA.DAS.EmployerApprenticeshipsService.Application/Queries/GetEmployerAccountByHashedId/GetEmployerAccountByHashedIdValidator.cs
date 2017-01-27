@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId
 
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                validationResult.AddError(nameof(item.HashedAccountId));
+                validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
             return validationResult;
         }

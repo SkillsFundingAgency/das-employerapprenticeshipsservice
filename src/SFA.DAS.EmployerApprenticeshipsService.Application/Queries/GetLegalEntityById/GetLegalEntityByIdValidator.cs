@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntityById
 
             if (item.Id == 0)
             {
-                validationResult.AddError(nameof(item.Id));
+                validationResult.AddError(nameof(item.Id), "LegalEntityId has not been supplied");
             }
             return validationResult;
         }
