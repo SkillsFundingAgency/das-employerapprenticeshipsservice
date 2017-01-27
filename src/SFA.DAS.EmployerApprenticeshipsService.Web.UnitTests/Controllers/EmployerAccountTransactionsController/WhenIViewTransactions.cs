@@ -28,12 +28,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _userWhiteList = new Mock<IUserWhiteList>();
 
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new TransactionViewResult
+                .ReturnsAsync(new OrchestratorResponse<TransactionViewResult>
                 {
-                    Account = new Account(),
-                    Model = new TransactionViewModel
+                    Data = new TransactionViewResult
                     {
-                        Data = new AggregationData()
+                        Account = new Account(),
+                        Model = new TransactionViewModel
+                        {
+                            Data = new AggregationData()
+                        }
                     }
                 });
 

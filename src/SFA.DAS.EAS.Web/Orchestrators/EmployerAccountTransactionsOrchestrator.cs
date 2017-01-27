@@ -103,7 +103,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<TransactionViewResult>> GetAccountTransactions(string hashedId,
+            string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
@@ -112,10 +113,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
             if (employerAccountResult.Account == null)
             {
-                return new TransactionViewResult();
+                return new OrchestratorResponse<TransactionViewResult> {Data = new TransactionViewResult()};
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedAccountId = hashedId});
+            var data =
+                await
+                    _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
+                    {
+                        AccountId = employerAccountResult.Account.Id,
+                        ExternalUserId = externalUserId,
+                        HashedAccountId = hashedId
+                    });
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
@@ -131,14 +139,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            return new TransactionViewResult
+            return new OrchestratorResponse<TransactionViewResult>
             {
-                Account = employerAccountResult.Account,
-                Model = new TransactionViewModel
+                Data = new TransactionViewResult
                 {
-                    CurrentBalance = currentBalance,
-                    CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
-                    Data = data.Data
+                    Account = employerAccountResult.Account,
+                    Model = new TransactionViewModel
+                    {
+                        CurrentBalance = currentBalance,
+                        CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
+                        Data = data.Data
+                    }
                 }
             };
         }

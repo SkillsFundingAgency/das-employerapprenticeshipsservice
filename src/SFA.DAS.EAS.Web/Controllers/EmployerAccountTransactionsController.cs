@@ -25,13 +25,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (transactionViewResult.Account == null)
+            if (transactionViewResult.Data.Account == null)
             {
                 return RedirectToAction("Index", "AccessDenied");
             }
 
-            transactionViewResult.Model.Data.HashedAccountId = hashedAccountId;
-            return View(transactionViewResult.Model);
+            transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
+            return View(transactionViewResult.Data.Model);
         }
 
         [Route("Balance/LevyDeclarationDetail")]
