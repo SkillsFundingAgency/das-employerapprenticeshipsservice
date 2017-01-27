@@ -17,6 +17,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
 
+        public EmployerAccountTransactionsOrchestrator()
+        {
+            
+        }
+
         public EmployerAccountTransactionsOrchestrator(IMediator mediator)
         {
             if (mediator == null)
@@ -98,7 +103,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
+        public virtual async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
