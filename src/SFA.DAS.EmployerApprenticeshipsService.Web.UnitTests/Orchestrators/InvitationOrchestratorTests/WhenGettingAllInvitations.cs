@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             var actual = await _invitationOrchestrator.GetAllInvitationsForUser("123abc");
 
             //Assert
-            Assert.AreEqual(expectedValue, actual.Invitations.FirstOrDefault().ExpiryDays());
+            Assert.AreEqual(expectedValue, actual.Data.Invitations.FirstOrDefault().ExpiryDays());
         }
 
         [Test]

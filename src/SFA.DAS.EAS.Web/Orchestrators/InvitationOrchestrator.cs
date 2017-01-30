@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public async Task<UserInvitationsViewModel> GetAllInvitationsForUser(string externalUserId)
+        public async Task<OrchestratorResponse<UserInvitationsViewModel>> GetAllInvitationsForUser(string externalUserId)
         {
             try
             {
@@ -85,9 +85,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                return new UserInvitationsViewModel {
-                    Invitations = response.Invitations,
-                    ShowBreadCrumbs = getUserAccountsQueryResponse.Accounts.AccountList.Count!=0 };
+                var result = new OrchestratorResponse<UserInvitationsViewModel>
+                {
+                    Data = new UserInvitationsViewModel
+                    {
+                        Invitations = response.Invitations,
+                        ShowBreadCrumbs = getUserAccountsQueryResponse.Accounts.AccountList.Count != 0
+                    }
+                };
+
+                return result;
             }
             catch (InvalidRequestException ex)
             {
@@ -95,7 +102,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 _logger.Info(ex);
             }
 
-            return null;
+            return new OrchestratorResponse<UserInvitationsViewModel>
+            {
+                Data = new UserInvitationsViewModel()
+            };
         }
     }
 }
