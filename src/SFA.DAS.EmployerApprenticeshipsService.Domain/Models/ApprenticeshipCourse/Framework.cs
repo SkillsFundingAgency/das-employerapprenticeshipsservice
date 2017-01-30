@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
+﻿using SFA.DAS.EAS.Domain.Models.Time;
+
+namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
 {
     public class Framework : ITrainingProgramme
     {

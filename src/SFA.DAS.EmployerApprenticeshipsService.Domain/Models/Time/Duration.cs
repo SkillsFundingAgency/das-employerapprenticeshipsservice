@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Domain
+﻿namespace SFA.DAS.EAS.Domain.Models.Time
 {
     public class Duration
     {

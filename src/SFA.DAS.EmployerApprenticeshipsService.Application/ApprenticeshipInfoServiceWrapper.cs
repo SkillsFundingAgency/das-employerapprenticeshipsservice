@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.Domain.Models.Time;
 using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
 using Provider = SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider.Provider;
 using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
