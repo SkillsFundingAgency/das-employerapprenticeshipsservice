@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using FluentValidation.Attributes;
+using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
@@ -10,6 +13,8 @@ namespace SFA.DAS.EAS.Web.Models
         public string LegalEntityCode { get; set; }
 
         public string CohortRef { get; set; }
+
+        public IEnumerable<LegalEntity> LegalEntities { get; set; }
     }
 
     [Validator(typeof(SelectProviderViewModelValidator))]

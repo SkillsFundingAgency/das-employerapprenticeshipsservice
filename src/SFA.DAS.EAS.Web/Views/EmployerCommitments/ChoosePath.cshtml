@@ -1,7 +1,8 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.Extensions
 
-@model CreateCommitmentViewModel
+@model OrchestratorResponse<CreateCommitmentViewModel>
 
 @{
     ViewBag.Title = "Start adding apprentices";
@@ -23,25 +24,25 @@
             <p>If you ask your training provider to add them, you need to check and agree the details before any payments are made.</p>
             <fieldset role="radiogroup" aria-required="true">
                 <legend class="visuallyhidden">Choose provider to enter details</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SelectedRoute, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError("SelectedRoute", "error")">
                  
-                        @Html.ValidationMessageFor(m => m.SelectedRoute, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SelectedRoute) + "-Employer" })
+                        @Html.ValidationMessage("SelectedRoute", "Please choose an option", new { id = "error-message-SelectedRoute" })
                    
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Employer">
-                        @Html.RadioButtonFor(m => m.SelectedRoute, "employer", new { id = Html.IdFor(m => m.SelectedRoute) + "-Employer" })
+                    <label class="block-label selection-button-radio" for="SelectedRoute-Employer">
+                        @Html.RadioButton("SelectedRoute", "employer", new { id = "SelectedRoute-Employer" })
                         I will add apprentices
                     </label>
-                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.SelectedRoute)-Provider">
-                        @Html.RadioButtonFor(m => m.SelectedRoute, "provider", new { id = Html.IdFor(m => m.SelectedRoute) + "-Provider" })
+                    <label class="block-label selection-button-radio" for="SelectedRoute-Provider">
+                        @Html.RadioButton("SelectedRoute", "provider", new { id = "SelectedRoute-Provider" })
                         I would like my provider to add apprentices
                     </label>
                 </div>
             </fieldset>
-            @Html.HiddenFor(x => x.CohortRef)
-            @Html.HiddenFor(x => x.LegalEntityCode)
-            @Html.HiddenFor(x => x.LegalEntityName)
-            @Html.HiddenFor(x => x.ProviderId)
-            @Html.HiddenFor(x => x.ProviderName)
+            @Html.Hidden("CohortRef", Model.Data.CohortRef)
+            @Html.Hidden("LegalEntityCode", Model.Data.LegalEntityCode)
+            @Html.Hidden("LegalEntityName", Model.Data.LegalEntityName)
+            @Html.Hidden("ProviderId", Model.Data.ProviderId)
+            @Html.Hidden("ProviderName", Model.Data.ProviderName)
             <button type="submit" class="button">Continue</button>
         </form>
     </div>

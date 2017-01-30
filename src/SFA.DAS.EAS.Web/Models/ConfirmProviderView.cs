@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.Models
         public string LegalEntityName { get; set; }
         public int ProviderId { get; set; }
         public string ProviderName { get; set; }
-        public List<Provider> Providers { get; set; }
+        public IList<Provider> Providers { get; set; }
 
         [Required(ErrorMessage = "Select a training provider")]
         public bool? Confirmation { get; set; }

@@ -57,21 +57,21 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource);
 
-            var hashedAccountId = _hashingService.HashValue(returnValue.Item1);
-            await _accountRepository.SetHashedId(hashedAccountId, returnValue.Item1);
+            var hashedAccountId = _hashingService.HashValue(returnValue.AccountId);
+            await _accountRepository.SetHashedId(hashedAccountId, returnValue.AccountId);
 
             if (emprefs.Length > 1)
             {
                 for (var i = 1; i < emprefs.Length; i++)
                 {
-                    await _accountRepository.AddPayeToAccount(new Paye {AccountId= returnValue.Item1, EmpRef= emprefs[i], AccessToken= message.AccessToken, RefreshToken = message.RefreshToken});
+                    await _accountRepository.AddPayeToAccount(new Paye {AccountId= returnValue.AccountId, EmpRef= emprefs[i], AccessToken= message.AccessToken, RefreshToken = message.RefreshToken});
                 }
             }
             
 
             await _messagePublisher.PublishAsync(new EmployerRefreshLevyQueueMessage
             {
-                AccountId = returnValue.Item1
+                AccountId = returnValue.AccountId
             });
 
             await _mediator.PublishAsync(new CreateAccountEventCommand { HashedAccountId = hashedAccountId, Event = "AccountCreated" });
@@ -82,16 +82,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Account {message.OrganisationName} created with id {returnValue.Item1}",
+                    Description = $"Account {message.OrganisationName} created with id {returnValue.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
 
-                        PropertyUpdate.FromLong("AccountId",returnValue.Item1),
+                        PropertyUpdate.FromLong("AccountId",returnValue.AccountId),
                         PropertyUpdate.FromString("HashedId",hashedAccountId),
                         PropertyUpdate.FromString("Name",message.OrganisationName),
                         PropertyUpdate.FromDateTime("CreatedDate",DateTime.UtcNow),
                     },
-                    AffectedEntity = new Entity { Type = "Account", Id = returnValue.Item1.ToString() },
+                    AffectedEntity = new Entity { Type = "Account", Id = returnValue.AccountId.ToString() },
                     RelatedEntities = new List<Entity>()
                 }
             });
@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             var changedProperties = new List<PropertyUpdate>
             {
 
-                PropertyUpdate.FromLong("Id",returnValue.Item2),
+                PropertyUpdate.FromLong("Id",returnValue.LegalEntityId),
                 PropertyUpdate.FromString("Name",message.OrganisationName),
                 PropertyUpdate.FromString("Code",message.OrganisationReferenceNumber),
                 PropertyUpdate.FromString("RegisteredAddress",message.OrganisationAddress),
@@ -115,9 +115,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Legal Entity {message.OrganisationName} created of type {message.OrganisationType} with id {returnValue.Item2}",
+                    Description = $"Legal Entity {message.OrganisationName} created of type {message.OrganisationType} with id {returnValue.LegalEntityId}",
                     ChangedProperties = changedProperties,
-                    AffectedEntity = new Entity { Type = "LegalEntity", Id = returnValue.Item2.ToString() },
+                    AffectedEntity = new Entity { Type = "LegalEntity", Id = returnValue.LegalEntityId.ToString() },
                     RelatedEntities = new List<Entity>()
                 }
             });
@@ -128,16 +128,16 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.Item2}",
+                    Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.LegalEntityId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        PropertyUpdate.FromLong("Id",returnValue.Item3),
-                        PropertyUpdate.FromLong("LegalEntityId",returnValue.Item2),
+                        PropertyUpdate.FromLong("Id",returnValue.EmployerAgreementId),
+                        PropertyUpdate.FromLong("LegalEntityId",returnValue.LegalEntityId),
                         PropertyUpdate.FromString("TemplateId",hashedAccountId),
                         PropertyUpdate.FromInt("StatusId",2),
                     },
-                    RelatedEntities = new List<Entity> { new Entity { Id=returnValue.Item3.ToString(),Type="LegalEntity"} },
-                    AffectedEntity = new Entity { Type = "EmployerAgreement", Id = returnValue.Item3.ToString() }
+                    RelatedEntities = new List<Entity> { new Entity { Id=returnValue.EmployerAgreementId.ToString(),Type="LegalEntity"} },
+                    AffectedEntity = new Entity { Type = "EmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
                 }
             });
 
@@ -147,20 +147,20 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.Item2}",
+                    Description = $"Employer Agreement Created for {message.OrganisationName} legal entity id {returnValue.LegalEntityId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
 
-                        PropertyUpdate.FromLong("AccountId",returnValue.Item1),
-                        PropertyUpdate.FromLong("EmployerAgreementId",returnValue.Item3),
+                        PropertyUpdate.FromLong("AccountId",returnValue.AccountId),
+                        PropertyUpdate.FromLong("EmployerAgreementId",returnValue.EmployerAgreementId),
                         
                     },
                     RelatedEntities = new List<Entity>
                     {
-                        new Entity { Id = returnValue.Item3.ToString(), Type = "LegalEntity" },
-                        new Entity { Id = returnValue.Item1.ToString(), Type = "Account" }
+                        new Entity { Id = returnValue.EmployerAgreementId.ToString(), Type = "LegalEntity" },
+                        new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" }
                     },
-                    AffectedEntity = new Entity { Type = "AccountEmployerAgreement", Id = returnValue.Item3.ToString() }
+                    AffectedEntity = new Entity { Type = "AccountEmployerAgreement", Id = returnValue.EmployerAgreementId.ToString() }
                 }
             });
 
@@ -170,7 +170,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Paye scheme {message.PayeReference} added to account {returnValue.Item1}",
+                    Description = $"Paye scheme {message.PayeReference} added to account {returnValue.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
 
@@ -179,7 +179,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                         PropertyUpdate.FromString("RefreshToken",message.RefreshToken),
                         PropertyUpdate.FromString("Name",message.EmployerRefName)
                     },
-                    RelatedEntities = new List<Entity> { new Entity { Id = returnValue.Item1.ToString(), Type = "Account" } },
+                    RelatedEntities = new List<Entity> { new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Paye", Id = message.PayeReference }
                 }
             });
@@ -190,18 +190,18 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"User {message.ExternalUserId} added to account {returnValue.Item1} as owner",
+                    Description = $"User {message.ExternalUserId} added to account {returnValue.AccountId} as owner",
                     ChangedProperties = new List<PropertyUpdate>
                     {
 
-                        PropertyUpdate.FromLong("AccountId",returnValue.Item1),
+                        PropertyUpdate.FromLong("AccountId",returnValue.AccountId),
                         PropertyUpdate.FromString("UserId",message.ExternalUserId),
                         PropertyUpdate.FromString("RoleId",Role.Owner.ToString()),
                         PropertyUpdate.FromDateTime("CreatedDate",DateTime.UtcNow)
                     },
                     RelatedEntities = new List<Entity>
                     {
-                        new Entity { Id = returnValue.Item1.ToString(), Type = "Account" },
+                        new Entity { Id = returnValue.AccountId.ToString(), Type = "Account" },
                         new Entity { Id = user.Id.ToString(), Type = "User" }
                     },
                     AffectedEntity = new Entity { Type = "Membership", Id = message.ExternalUserId }
