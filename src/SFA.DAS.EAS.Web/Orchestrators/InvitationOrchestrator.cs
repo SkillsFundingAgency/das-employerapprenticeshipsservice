@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return result;
         }
 
-        public async Task AcceptInvitation(long invitationId, string externalUserId)
+        public virtual async Task AcceptInvitation(long invitationId, string externalUserId)
         {
             await _mediator.SendAsync(new AcceptInvitationCommand
             {
