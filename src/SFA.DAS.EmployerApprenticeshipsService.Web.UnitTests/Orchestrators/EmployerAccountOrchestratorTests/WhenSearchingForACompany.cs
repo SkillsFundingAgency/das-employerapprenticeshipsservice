@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public async Task ThenIShouldGetBackABadRequestIfACompanyCannotBeFound()
         {
             //Assign
-            var request = new SelectEmployerModel
+            var request = new SelectEmployerViewModel
             {
                 EmployerRef = "251643"
             };
@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public async Task ThenTheValuesWillBeCorrectlyMappedInTheResponse()
         {
             //Arrange
-            var request = new SelectEmployerModel { EmployerRef = "251643" };
+            var request = new SelectEmployerViewModel { EmployerRef = "251643" };
             var response = new GetEmployerInformationResponse
             {
                 CompanyStatus = "active",

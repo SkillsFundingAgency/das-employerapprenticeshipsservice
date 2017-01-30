@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Attributes;
-using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Enums;
 using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.ViewModels

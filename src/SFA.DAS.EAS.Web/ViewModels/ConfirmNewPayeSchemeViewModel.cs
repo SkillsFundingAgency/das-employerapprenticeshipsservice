@@ -1,12 +1,12 @@
-﻿namespace SFA.DAS.EAS.Web.Models
+﻿namespace SFA.DAS.EAS.Web.ViewModels
 {
-    public class ConfirmNewPayeScheme : AddNewPayeScheme
+    public class ConfirmNewPayeSchemeViewModel : AddNewPayeSchemeViewModel
     {
-        public ConfirmNewPayeScheme()
+        public ConfirmNewPayeSchemeViewModel()
         {
         }
 
-        public ConfirmNewPayeScheme(AddNewPayeScheme model)
+        public ConfirmNewPayeSchemeViewModel(AddNewPayeSchemeViewModel model)
         {
             AccessToken = model.AccessToken;
             RefreshToken = model.RefreshToken;

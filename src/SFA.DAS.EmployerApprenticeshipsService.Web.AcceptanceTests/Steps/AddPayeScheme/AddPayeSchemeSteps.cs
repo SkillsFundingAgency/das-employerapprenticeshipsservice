@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme
+            var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",

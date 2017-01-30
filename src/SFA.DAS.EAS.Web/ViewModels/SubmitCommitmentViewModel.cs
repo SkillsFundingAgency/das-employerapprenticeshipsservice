@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Web.Extensions;
+﻿using SFA.DAS.EAS.Web.Enums;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {

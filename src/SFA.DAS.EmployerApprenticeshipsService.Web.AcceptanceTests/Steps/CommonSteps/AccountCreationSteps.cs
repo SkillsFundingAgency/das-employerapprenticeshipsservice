@@ -60,12 +60,12 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             CreateUserWithRole(accountRole);
         }
 
-        public static void CreateDasAccount(SignInUserModel user, EmployerAccountOrchestrator orchestrator)
+        public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
 
-            orchestrator.CreateAccount(new CreateAccountModel
+            orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = user.UserId,
+                UserId = userView.UserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationDateOfInception = new DateTime(2016, 01, 01),
@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             Role roleOut;
             Enum.TryParse(accountRole, out roleOut);
 
-            var signInModel = new SignInUserModel
+            var signInModel = new UserViewModel
             {
                 Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "test",
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             var accountOwnerUserId = Guid.NewGuid().ToString();
             ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
 
-            var signInUserModel = new SignInUserModel
+            var signInUserModel = new UserViewModel
             {
                 UserId = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),

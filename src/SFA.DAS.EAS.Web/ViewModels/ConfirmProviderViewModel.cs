@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class ConfirmProviderView
+    public class ConfirmProviderViewModel
     {
         public string CohortRef { get; set; }
         public string HashedAccountId { get; set; }

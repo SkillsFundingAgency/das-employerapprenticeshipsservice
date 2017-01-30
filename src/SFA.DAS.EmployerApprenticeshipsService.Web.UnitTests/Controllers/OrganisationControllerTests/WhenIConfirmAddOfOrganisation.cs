@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userWhiteList = new Mock<IUserWhiteList>();
             _mapper = new Mock<IMapper>();
 
-            _orchestrator.Setup(x => x.CreateLegalEntity(It.IsAny<CreateNewLegalEntity>()))
+            _orchestrator.Setup(x => x.CreateLegalEntity(It.IsAny<CreateNewLegalEntityViewModel>()))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Status = HttpStatusCode.OK,

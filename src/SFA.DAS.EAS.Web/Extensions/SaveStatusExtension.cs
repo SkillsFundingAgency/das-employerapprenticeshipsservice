@@ -1,14 +1,8 @@
-﻿namespace SFA.DAS.EAS.Web.Extensions
+﻿using SFA.DAS.EAS.Web.Enums;
+
+namespace SFA.DAS.EAS.Web.Extensions
 {
-     public enum SaveStatus
-     {
-         Save = 1,
-         Approve = 2,
-         ApproveAndSend = 3,
-         AmendAndSend = 4
-     }
- 
-     public static class SaveStatusExtension
+    public static class SaveStatusExtension
      {
          public static bool IsSend(this SaveStatus status)
          {

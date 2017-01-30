@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class SignInUserViewModel
     {
-        public List<SignInUserModel> AvailableUsers { get; set; }
+        public List<UserViewModel> AvailableUsers { get; set; }
     }
 }

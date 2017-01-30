@@ -26,14 +26,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public virtual async Task<SignInUserViewModel> GetUsers()
+        public virtual async Task<ViewModels.SignInUserViewModel> GetUsers()
         {
             var actual = await _mediator.SendAsync(new GetUsersQuery());
 
-            return new SignInUserViewModel
+            return new ViewModels.SignInUserViewModel
             {
                 AvailableUsers = actual.Users.Select(x =>
-                                                new SignInUserModel
+                                                new UserViewModel
                                                 {
                                                     Email = x.Email,
                                                     FirstName = x.FirstName,

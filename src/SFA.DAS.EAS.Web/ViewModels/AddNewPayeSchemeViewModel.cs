@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
-    public class AddNewPayeScheme : ViewModelBase
+    public class AddNewPayeSchemeViewModel : ViewModelBase
     {
         public string PayeScheme { get; set; }
         public List<LegalEntity> LegalEntities { get; set; }

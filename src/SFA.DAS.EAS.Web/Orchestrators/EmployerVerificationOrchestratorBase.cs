@@ -115,11 +115,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerViewModel viewModel)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
-                Id = model.EmployerRef
+                Id = viewModel.EmployerRef
             });
 
             if (response == null)
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            Logger.Info($"Returning Data for {model.EmployerRef}");
+            Logger.Info($"Returning Data for {viewModel.EmployerRef}");
 
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {

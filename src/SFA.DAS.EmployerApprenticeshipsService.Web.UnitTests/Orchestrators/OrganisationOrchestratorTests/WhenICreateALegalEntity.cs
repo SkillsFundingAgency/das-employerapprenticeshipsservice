@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         public async Task ThenTheLegalEntityShouldBeCreated()
         {
             //Assign
-            var request = new CreateNewLegalEntity
+            var request = new CreateNewLegalEntityViewModel
             {
                 HashedAccountId = "1",
                 Name = "Test Corp",

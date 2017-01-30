@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class PayeSchemeDetail
+    public class PayeSchemeDetailViewModel
     {
         public IEnumerable<DasEnglishFraction> Fractions { get; set; }
         public string EmpRef { get; set; }

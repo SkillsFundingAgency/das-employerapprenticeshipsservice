@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class CreateAccountModel
+    public class CreateAccountViewModel
     {
         public string UserId { get; set; }
         public OrganisationType OrganisationType { get; set; }

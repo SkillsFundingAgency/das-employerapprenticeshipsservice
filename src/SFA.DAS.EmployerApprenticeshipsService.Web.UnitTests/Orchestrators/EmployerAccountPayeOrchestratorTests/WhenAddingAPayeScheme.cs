@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
-        private ConfirmNewPayeScheme _model;
+        private ConfirmNewPayeSchemeViewModel _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private const string ExpectedHashedId = "jgdfg786";
         private const string ExpectedEmpref = "123/DFDS";
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         [SetUp]
         public void Arrange()
         {
-            _model = new ConfirmNewPayeScheme
+            _model = new ConfirmNewPayeSchemeViewModel
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),

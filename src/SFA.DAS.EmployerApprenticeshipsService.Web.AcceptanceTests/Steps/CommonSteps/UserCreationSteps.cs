@@ -32,20 +32,20 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
         }
 
-        public void UpsertUser(SignInUserModel user)
+        public void UpsertUser(UserViewModel userView)
         {
             var mediator = _container.GetInstance<IMediator>();
 
             mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserRef = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                EmailAddress = user.Email
+                UserRef = userView.UserId,
+                FirstName = userView.FirstName,
+                LastName = userView.LastName,
+                EmailAddress = userView.Email
             }).Wait();
         }
 
-        public SignInUserModel GetExistingUserAccount()
+        public UserViewModel GetExistingUserAccount()
         {
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserId"].ToString());
             var orchestrator = _container.GetInstance<HomeOrchestrator>();

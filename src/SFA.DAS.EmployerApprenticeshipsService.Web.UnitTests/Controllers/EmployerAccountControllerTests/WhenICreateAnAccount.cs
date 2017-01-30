@@ -80,7 +80,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
@@ -114,7 +114,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
+            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountViewModel>(
                 c =>
                     c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
                     c.OrganisationName.Equals(_accountData.OrganisationName) &&

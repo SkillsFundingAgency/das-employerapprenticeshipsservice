@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SignInUserViewModel = SFA.DAS.EAS.Web.ViewModels.SignInUserViewModel;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {

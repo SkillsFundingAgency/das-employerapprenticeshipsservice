@@ -2,12 +2,13 @@
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsController
 {
@@ -28,9 +29,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _userWhiteList = new Mock<IUserWhiteList>();
 
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<TransactionViewResult>
+                .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
                 {
-                    Data = new TransactionViewResult
+                    Data = new TransactionViewResultViewModel
                     {
                         Account = new Account(),
                         Model = new TransactionViewModel

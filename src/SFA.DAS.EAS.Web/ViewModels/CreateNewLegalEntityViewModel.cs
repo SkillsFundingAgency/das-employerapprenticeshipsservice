@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class CreateNewLegalEntity
+    public class CreateNewLegalEntityViewModel
     {
         public string HashedAccountId { get; set; }
         public string Name { get; set; }

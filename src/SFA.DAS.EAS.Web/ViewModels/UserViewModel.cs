@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Web.Models
 {
-    public class SignInUserModel
+    public class UserViewModel
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }

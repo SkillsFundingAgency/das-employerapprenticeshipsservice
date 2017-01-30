@@ -251,7 +251,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
             string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit)
         {
-            var request = new CreateNewLegalEntity
+            var request = new CreateNewLegalEntityViewModel
             {
                 HashedAccountId = hashedAccountId,
                 Name = name,

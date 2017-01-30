@@ -178,8 +178,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
         
         private void PopulateSystemDetails(string envName)
         {
-            SystemDetails.EnvironmentName = envName;
-            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            SystemDetailsViewModel.EnvironmentName = envName;
+            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

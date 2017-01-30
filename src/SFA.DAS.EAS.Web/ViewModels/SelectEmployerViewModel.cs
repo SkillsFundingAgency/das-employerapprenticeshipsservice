@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Web.ViewModels
 {
-    public class SelectEmployerModel
+    public class SelectEmployerViewModel
     {
         public string EmployerRef { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.Enums
 {
     public enum RequestStatus
     {

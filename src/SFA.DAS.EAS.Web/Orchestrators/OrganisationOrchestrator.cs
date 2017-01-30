@@ -300,7 +300,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
-            CreateNewLegalEntity request)
+            CreateNewLegalEntityViewModel request)
         {
             if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
             {

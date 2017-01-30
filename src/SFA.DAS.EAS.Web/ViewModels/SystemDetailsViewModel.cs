@@ -1,6 +1,6 @@
 namespace SFA.DAS.EAS.Web.Models
 {
-    public static class SystemDetails
+    public static class SystemDetailsViewModel
     {
         public static string VersionNumber { get; set; }
         

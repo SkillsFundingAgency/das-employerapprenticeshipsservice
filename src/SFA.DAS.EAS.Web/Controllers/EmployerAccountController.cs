@@ -134,7 +134,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (enteredData == null)
                 return RedirectToAction("SelectEmployer", "EmployerAccount");
 
-            var request = new CreateAccountModel
+            var request = new CreateAccountViewModel
             {
                 UserId = GetUserId(),
                 OrganisationType = enteredData.OrganisationType,

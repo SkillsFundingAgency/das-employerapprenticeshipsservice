@@ -1,8 +1,8 @@
-﻿using SFA.DAS.EAS.Web.Extensions;
+﻿using SFA.DAS.EAS.Web.Enums;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public sealed class SubmitCommitmentModel
+    public sealed class SubmitCommitmenViewModel
     {
         public string HashedAccountId { get; set; }
         public string HashedCommitmentId { get; set; }
