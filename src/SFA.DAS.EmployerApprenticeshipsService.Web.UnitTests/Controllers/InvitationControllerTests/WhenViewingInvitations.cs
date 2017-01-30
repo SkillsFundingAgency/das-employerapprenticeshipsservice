@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
 
             //Act
-            var actual = _controller.Index();
+            var actual = _controller.Invite();
 
             //Assert
             Assert.IsNotNull(actual);
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
                 _invitationOrchestrator, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
 
             //Act
-            var actual = _controller.Index();
+            var actual = _controller.Invite();
 
             //Assert
             Assert.IsNotNull(actual);

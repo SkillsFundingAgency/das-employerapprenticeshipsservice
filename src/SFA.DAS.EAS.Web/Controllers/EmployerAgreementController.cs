@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
@@ -29,7 +28,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Agreements")]
+        [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -46,11 +45,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(model);
         }
-
-
-     
+        
 		[HttpGet]
-		[Route("Agreements/{agreementid}/View")]
+		[Route("agreements/{agreementid}/view")]
         public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
             var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -60,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [HttpPost]
-        [Route("Agreements/{agreementid}/Sign")]
+        [Route("agreements/{agreementid}/sign")]
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
         {
@@ -83,10 +80,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
         }
         
-
         [HttpPost]
 		[ValidateAntiForgeryToken]
-        [Route("Agreements/ViewAgreement")]
+        [Route("agreements/new/view")]
         public async Task<ActionResult> ViewEntityAgreement(string hashedAccountId, string name, string code, string address, 
             DateTime incorporated)
         {
@@ -94,7 +90,5 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(response);
         }
-
-        
     }
 }

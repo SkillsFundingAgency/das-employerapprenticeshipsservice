@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Schemes")]
+        [Route("schemes")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Schemes/{empRef}/Detail")]
+        [Route("schemes/{empRef}/details")]
         public async Task<ActionResult> Details(string hashedAccountId, string empRef)
         {
             empRef = empRef.FormatPayeFromUrl();
@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
 
         [HttpGet]
-        [Route("Schemes/GatewayInform")]
+        [Route("schemes/gatewayInform")]
         public async Task<ActionResult> GatewayInform(string hashedAccountId)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
@@ -65,14 +65,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [HttpGet]
-        [Route("Schemes/Gateway")]
+        [Route("schemes/gateway")]
         public async Task<ActionResult> GetGateway(string hashedAccountId)
         {
             return Redirect(await _employerAccountPayeOrchestrator.GetGatewayUrl(Url.Action("ConfirmPayeScheme", "EmployerAccountPaye", new { hashedAccountId }, Request.Url.Scheme)));
         }
 
         [HttpGet]
-        [Route("Schemes/ConfirmPayeScheme")]
+        [Route("schemes/confirm")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId)
         {
 
@@ -91,7 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Schemes/ConfirmPayeScheme")]
+        [Route("schemes/confirm")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeScheme model)
         {
             var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
@@ -109,7 +109,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         
         [HttpGet]
-        [Route("Schemes/{empRef}/Remove")]
+        [Route("schemes/{empRef}/remove")]
         public async Task<ActionResult> Remove(string hashedAccountId, string empRef)
         {
             var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeScheme
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Schemes/RemovePaye")]
+        [Route("schemes/remove")]
         public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeScheme model)
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");

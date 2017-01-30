@@ -12,6 +12,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     
+    [RoutePrefix("invitations")]
     public class InvitationController : BaseController
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
@@ -27,9 +28,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             _userIdClaim = OwinWrapper.GetClaimValue("sub");
         }
 
+        [Route("invite")]
+        public ActionResult Invite()
+        {
+            if (string.IsNullOrEmpty(_userIdClaim))
+            {
+                return View();
+            }
 
+            return RedirectToAction("Index", "Home");
+        }
+        
         [HttpGet]
         [AuthoriseActiveUser]
+        [Route]
         public async Task<ActionResult> All()
         {
             if (string.IsNullOrEmpty(_userIdClaim))
@@ -44,6 +56,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Authorize]
+        [Route("view")]
         public async Task<ActionResult> View(string invitationId)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
@@ -59,6 +72,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
@@ -84,6 +98,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
+        [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
             if (string.IsNullOrEmpty(_userIdClaim))
@@ -96,14 +111,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public ActionResult Index()
-        {
-            if (string.IsNullOrEmpty(_userIdClaim))
-            {
-                return View();
-            }
-
-            return RedirectToAction("Index", "Home");
-        }
+     
     }
 }

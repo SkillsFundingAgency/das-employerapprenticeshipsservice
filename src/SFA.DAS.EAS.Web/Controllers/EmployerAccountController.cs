@@ -12,6 +12,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [RoutePrefix("accounts")]
     [AuthoriseActiveUser]
     public class EmployerAccountController : BaseController
     {
@@ -28,8 +29,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
         }
-
+        
         [HttpGet]
+        [Route("selectEmployer")]
         public ActionResult SelectEmployer()
         {
             _employerAccountOrchestrator.DeleteCookieData(HttpContext);
@@ -39,6 +41,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("gatewayInform")]
         public ActionResult GatewayInform()
         {
             var flashMessageViewModel = new FlashMessageViewModel();
@@ -62,11 +65,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
             return Redirect(await _employerAccountOrchestrator.GetGatewayUrl(Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme)));
         }
 
+        [Route("gatewayResponse")]
         public async Task<ActionResult> GateWayResponse()
         {
             try
@@ -108,9 +113,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw;
             }
         }
-
-
+        
         [HttpGet]
+        [Route("summary")]
         public ViewResult Summary()
         {
             var result = _employerAccountOrchestrator.GetSummaryViewModel(HttpContext);
@@ -119,6 +124,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("legalAgreement")]
         public ActionResult LegalAgreement()
         {
             return View();
@@ -126,6 +132,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("create")]
         public async Task<ActionResult> CreateAccount()
         {
             var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
@@ -165,7 +172,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("accounts/{HashedAccountId}/rename")]
+        [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");
@@ -175,7 +182,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("accounts/{HashedAccountId}/rename")]
+        [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(RenameEmployerAccountViewModel vm)
         {
             var userIdClaim = OwinWrapper.GetClaimValue(@"sub");

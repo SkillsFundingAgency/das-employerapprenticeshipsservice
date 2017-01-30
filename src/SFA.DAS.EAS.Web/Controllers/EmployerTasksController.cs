@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedAccountId}")]
+    [RoutePrefix("accounts/{hashedAccountId}/tasks")]
     public class EmployerTasksController : BaseController
     {
         private readonly IOwinWrapper _owinWrapper;
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Tasks/List")]
+        [Route("list")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Tasks/{hashedTaskId}")]
+        [Route("{hashedTaskId}")]
         public async Task<ActionResult> ViewTask(string hashedAccountId, string hashedTaskId)
         {
             var userIdClaim = _owinWrapper.GetClaimValue(@"sub");

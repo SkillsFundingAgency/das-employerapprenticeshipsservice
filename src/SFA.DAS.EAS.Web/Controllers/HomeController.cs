@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -11,6 +10,7 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [RoutePrefix("service")]
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             _configuration = configuration;
         }
 
-
+        [Route]
         public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue("sub");
@@ -62,8 +62,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("ServiceStartPage", model);
         }
 
+        [HttpGet]
+        [Route("usedServiceBefore")]
+        public ActionResult UsedServiceBefore()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("usedServiceBefore")]
         public ActionResult UsedServiceBefore(int? choice)
         {
             switch (choice ?? 0)
@@ -83,6 +95,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed()
         {
             var model = new
@@ -94,12 +107,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed(int? choice)
         {
             return RedirectToAction("RegisterUser");
         }
 
         [HttpGet]
+        [Route("register")]
         public ActionResult RegisterUser()
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
@@ -110,6 +125,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Authorize]
         [HttpGet]
+        [Route("register/new")]
         public ActionResult HandleNewRegistration()
         {
             TempData["virtualPageUrl"] = @"/user-created-account";
@@ -120,6 +136,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Authorize]
         [HttpGet]
+        [Route("password/change")]
         public ActionResult HandlePasswordChanged(bool userCancelled = false)
         {
             if (!userCancelled)
@@ -134,6 +151,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Authorize]
         [HttpGet]
+        [Route("email/change")]
         public async Task<ActionResult> HandleEmailChanged(bool userCancelled = false)
         {
             if (!userCancelled)
@@ -155,29 +173,34 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Authorize]
+        [Route("signIn")]
         public ActionResult SignIn()
         {
             return RedirectToAction("Index");
         }
 
+        [Route("signOut")]
         public ActionResult SignOut()
         {
             return OwinWrapper.SignOutUser();
         }
 
         [HttpGet]
+        [Route("privacy")]
         public ActionResult Privacy()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("help")]
         public ActionResult Help()
         {
             return View();
         }
 
         [HttpGet]
+        [Route("start")]
         public ActionResult ServiceStartPage()
         {
             var model = new
@@ -187,20 +210,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult UsedServiceBefore()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-            return View(model);
-        }
-
+        [Route("catchAll")]
         public ActionResult CatchAll(string path = null)
         {
             return RedirectToAction("NotFound", "Error", new { path });
         }
-
     }
 }

@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [RoutePrefix("accounts/{HashedAccountId}")]
+    [RoutePrefix("accounts/{HashedAccountId}/organisations")]
     public class OrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Organisation/Add")]
+        [Route("add")]
         public async Task<ActionResult> AddOrganisation(string hashedAccountId)
         {
             var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/Add")]
+        [Route("add")]
         public async Task<ActionResult> AddOrganisation(AddLegalEntityViewModel model)
         {
             if (!ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Organisation/UpdateAddress")]
+        [Route("address/update")]
         public ActionResult AddOrganisationAddress(AddOrganisationAddressModel request)
         {
             var response = new OrchestratorResponse<AddOrganisationAddressModel>
@@ -163,7 +163,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/UpdateAddress")]
+        [Route("address/update")]
         public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
@@ -186,26 +186,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("ConfirmOrganisationDetails", response);
         }
 
-        private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
-            return response;
-        }
-
-        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.GetLimitedCompanyByRegistrationNumber(companiesHouseNumber, hashedAccountId, userIdClaim);
-            return response;
-        }
-
-        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
-        {
-            var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
-            return response;
-        }
-
         [HttpGet]
-        [Route("Organisation/Add/Other")]
+        [Route("custom/add")]
         public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
         {
             var response = _orchestrator.GetAddOtherOrganisationViewModel(hashedAccountId);
@@ -213,7 +195,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("Organisation/Add/Other")]
+        [Route("custom/add")]
         public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
@@ -229,7 +211,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/LegalAgreement")]
+        [Route("legalAgreement")]
         public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
         {
             var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>()
@@ -244,7 +226,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/Confirm")]
+        [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
             string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit)
@@ -290,8 +272,24 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
+        
+        private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
+            return response;
+        }
 
+        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCompany(string companiesHouseNumber, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.GetLimitedCompanyByRegistrationNumber(companiesHouseNumber, hashedAccountId, userIdClaim);
+            return response;
+        }
 
+        private async Task<OrchestratorResponse<OrganisationDetailsViewModel>> FindCharity(string charityRegNo, string hashedAccountId, string userIdClaim)
+        {
+            var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
+            return response;
+        }
 
     }
 }
