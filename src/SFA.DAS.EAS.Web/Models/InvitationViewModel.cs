@@ -1,5 +1,6 @@
 ﻿using System;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Web.Models

@@ -1,7 +1,6 @@
 ﻿using System;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Domain
+namespace SFA.DAS.EAS.Domain.Models.AccountTeam
 {
     public class Invitation
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
 namespace SFA.DAS.EAS.Web.Models.ViewModels
 {
