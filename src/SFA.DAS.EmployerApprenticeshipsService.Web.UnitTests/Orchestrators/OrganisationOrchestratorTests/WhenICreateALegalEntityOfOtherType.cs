@@ -5,6 +5,7 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Models;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests

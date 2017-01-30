@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EAS.Domain
+namespace SFA.DAS.EAS.Domain.Models.Employer
 {
     public class EmployerInformation
     {
