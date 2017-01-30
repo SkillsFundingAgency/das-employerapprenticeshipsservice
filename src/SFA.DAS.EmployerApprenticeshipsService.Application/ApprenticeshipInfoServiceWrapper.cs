@@ -7,8 +7,9 @@ using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using Framework = SFA.DAS.EAS.Domain.Framework;
-using Provider = SFA.DAS.EAS.Domain.Provider;
+using Provider = SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider.Provider;
 
 namespace SFA.DAS.EAS.Application
 {
