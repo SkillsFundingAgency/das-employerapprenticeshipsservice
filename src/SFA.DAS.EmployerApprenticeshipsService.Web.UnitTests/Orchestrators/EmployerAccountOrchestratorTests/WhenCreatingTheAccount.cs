@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Moq;
+using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
@@ -80,7 +81,40 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
 
         }
-        
+
+        [Test]
+        public async Task ThenTheSummaryViewRetrievesCookieData()
+        {
+            //Arrange
+            var employerAccountData = new EmployerAccountData
+            {
+                OrganisationStatus = "Active",
+                OrganisationName = "Test Company",
+                OrganisationDateOfInception = DateTime.MaxValue,
+                OrganisationReferenceNumber = "ABC12345",
+                OrganisationRegisteredAddress = "My Address",
+                PayeReference = "123/abc",
+                EmpRefNotFound = true
+            };
+
+            _cookieService.Setup(x => x.Get(It.IsAny<HttpContextBase>(), It.IsAny<string>()))
+                .Returns(JsonConvert.SerializeObject(employerAccountData));
+
+            var context = new Mock<HttpContextBase>();
+
+            //Act
+            var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);
+
+            //Assert
+            Assert.AreEqual(employerAccountData.OrganisationName, model.Data.OrganisationName);
+            Assert.AreEqual(employerAccountData.OrganisationStatus, model.Data.OrganisationStatus);
+            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
+            Assert.AreEqual(employerAccountData.PayeReference, model.Data.PayeReference);
+            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.Data.EmpRefNotFound);
+
+        }
+
+
         private static CreateAccountModel ArrangeModel()
         {
             return new CreateAccountModel

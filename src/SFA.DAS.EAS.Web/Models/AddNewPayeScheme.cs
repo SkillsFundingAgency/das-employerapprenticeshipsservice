@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class AddNewPayeScheme
+    public class AddNewPayeScheme : ViewModelBase
     {
         public string PayeScheme { get; set; }
         public List<LegalEntity> LegalEntities { get; set; }

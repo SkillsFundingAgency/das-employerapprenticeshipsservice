@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
         }
 
         [Test]
-        public async Task ThenTheCommandIsInvalidIfTheUserIsNotAnOwner()
+        public async Task ThenTheCommandIsUnauthorisedIfTheUserIsNotAnOwner()
         {
             //Arrange
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create(ExpectedNonOwnerUserId);
@@ -77,8 +77,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
 
             //Assert
             _membershiprepository.Verify(x => x.GetCaller(command.HashedAccountId, command.ExternalUserId), Times.Once);
-            Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("member", "Unauthorised: User is not an owner"), actual.ValidationDictionary);
+            Assert.IsTrue(actual.IsUnauthorized);
         }
 
         [Test]

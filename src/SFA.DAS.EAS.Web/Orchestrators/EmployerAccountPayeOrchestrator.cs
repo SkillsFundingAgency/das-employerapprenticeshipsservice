@@ -124,18 +124,35 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
         
 
-        public virtual async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
+        public virtual async Task<OrchestratorResponse<AddNewPayeScheme>> AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
         {
-            //TODO change to return the OrchestratorResposne as this can have a unauthorized resposne
-            await Mediator.SendAsync(new AddPayeToAccountCommand
+            var response = new OrchestratorResponse<AddNewPayeScheme> { Data = model };
+
+            try
             {
-                HashedAccountId = model.HashedAccountId,
-                AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken,
-                Empref = model.PayeScheme,
-                ExternalUserId = userId,
-                EmprefName = model.PayeName
-            });
+                await Mediator.SendAsync(new AddPayeToAccountCommand
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    AccessToken = model.AccessToken,
+                    RefreshToken = model.RefreshToken,
+                    Empref = model.PayeScheme,
+                    ExternalUserId = userId,
+                    EmprefName = model.PayeName
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.Data.ErrorDictionary = ex.ErrorMessages;
+                response.Exception = ex;
+            }
+
+            return response;
         }
 
         public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)

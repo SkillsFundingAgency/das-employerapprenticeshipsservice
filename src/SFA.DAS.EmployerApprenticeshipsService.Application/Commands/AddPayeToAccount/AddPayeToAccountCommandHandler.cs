@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
@@ -37,6 +38,11 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         protected override async Task HandleCore(AddPayeToAccountCommand message)
         {
             var result = await _validator.ValidateAsync(message);
+
+            if (result.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
             if (!result.IsValid())
             {

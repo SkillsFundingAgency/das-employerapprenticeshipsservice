@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -42,6 +43,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             //Arrange
             var expectedAddNewPayeScheme = new AddNewPayeScheme {AccessToken = "123DFG",HashedAccountId = ExpectedAccountId,PayeName = "123/ABC",RefreshToken = "987TGH"};
 
+            _employerAccountPayeOrchestrator.Setup(
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeScheme>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AddNewPayeScheme>
+                {
+                    Status = HttpStatusCode.OK
+                });
+                
             //Act
             await _controller.ConfirmPayeScheme(ExpectedAccountId, expectedAddNewPayeScheme);
 
@@ -57,6 +65,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         [Test]
         public async Task ThenTheSuccessMessageIsCorrectlyPopulated()
         {
+            //Arrange
+            _employerAccountPayeOrchestrator.Setup(
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeScheme>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AddNewPayeScheme>
+                {
+                    Status = HttpStatusCode.OK
+                });
+
             //Act
             await _controller.ConfirmPayeScheme(ExpectedAccountId, new AddNewPayeScheme());
 

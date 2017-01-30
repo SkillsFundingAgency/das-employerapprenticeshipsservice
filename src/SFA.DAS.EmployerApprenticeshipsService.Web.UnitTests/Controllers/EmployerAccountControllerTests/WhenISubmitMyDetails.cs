@@ -78,37 +78,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         }
 
         [Test]
-        public void ThenTheInformationIsReadFromTheCookie()
+        public void ThenIAmShownASummary()
         {
             //Arrange
-            var employerAccountData = new EmployerAccountData
-            {
-                OrganisationStatus = "Active",
-                OrganisationName = "Test Company",
-                OrganisationDateOfInception = DateTime.MaxValue,
-                OrganisationReferenceNumber = "ABC12345",
-                OrganisationRegisteredAddress = "My Address",
-                PayeReference = "123/abc",
-                EmpRefNotFound = true
-            };
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(employerAccountData);
-
+            _orchestrator.Setup(x => x.GetSummaryViewModel(It.IsAny<HttpContextBase>()))
+                .Returns(new OrchestratorResponse<SummaryViewModel>());
 
             //Act
             var actual = _employerAccountController.Summary();
 
             //Assert
+            _orchestrator.Verify(x=> x.GetSummaryViewModel(It.IsAny<HttpContextBase>()), Times.Once);
             Assert.IsNotNull(actual);
-            var viewResult = actual as ViewResult;
-            Assert.IsNotNull(viewResult);
-            var model = viewResult.Model as SummaryViewModel;
+            var model = actual.Model as OrchestratorResponse<SummaryViewModel>;
             Assert.IsNotNull(model);
-            Assert.AreEqual(employerAccountData.OrganisationName, model.OrganisationName);
-            Assert.AreEqual(employerAccountData.OrganisationStatus, model.OrganisationStatus);
-            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.OrganisationReferenceNumber);
-            Assert.AreEqual(employerAccountData.PayeReference, model.PayeReference);
-            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.EmpRefNotFound);
-
         }
     }
 }

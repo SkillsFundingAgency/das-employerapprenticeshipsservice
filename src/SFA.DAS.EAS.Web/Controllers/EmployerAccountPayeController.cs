@@ -94,7 +94,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Schemes/ConfirmPayeScheme")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeScheme model)
         {
-            await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
+            var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
+
+            if (result.Status != HttpStatusCode.OK)
+            {
+                return View(result);
+            }
 
             TempData["payeSchemeAdded"] = "true";
             TempData["successHeader"] = $"You've added {model.PayeScheme}";
