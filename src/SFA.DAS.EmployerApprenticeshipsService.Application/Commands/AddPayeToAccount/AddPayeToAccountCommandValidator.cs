@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 {
                     if (member.RoleId != (short) Role.Owner)
                     {
-                        validationResult.AddError(nameof(member), "Unauthorised: User is not an owner");
+                        validationResult.IsUnauthorized = true;
                     }
                 }
             }

@@ -18,7 +18,7 @@
 
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Organisations</h1>
+        <h1 class="heading-xlarge">Your organisations</h1>
     </div>
     <div class="column-one-third">
         <form action="@Url.Action("AddOrganisation", "Organisation")" method="GET">
@@ -28,7 +28,8 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p class="lede">Add the organisations that you want to hire apprentices through.</p>
+        <p>Add your organisations or subsidiaries that will employ your apprentices. You can then use these organisations in the agreements you make with training providers.</p>
+        <p>There are no restrictions on the number of organisations that you can add.</p>
         <div class="panel alert-default">
             <p>Before May 2017 you'll be asked to accept an agreement for each of your organisations that will spend levy funds. This agreement will allow the <abbr title="Skills Funding Agency">SFA</abbr> to pay your training providers. </p>
             <p>We'll tell you when the agreement is available to read.</p>
@@ -59,7 +60,7 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
-            <li>Organisations</li>
+            <li>Your organisations</li>
         </ol>
     </div>
 }

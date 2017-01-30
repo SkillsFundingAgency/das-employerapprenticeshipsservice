@@ -140,7 +140,11 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             };
             try
             {
-                employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Wait();
+                var result = employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Result;
+                if (result.Status == HttpStatusCode.Unauthorized)
+                {
+                    _exceptionCount++;
+                }
             }
             catch (Exception ex)
             {

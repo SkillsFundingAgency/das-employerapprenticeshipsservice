@@ -149,6 +149,7 @@
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
     <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
+    <Compile Include="Controllers\EmployerAccountTransactionsController\WhenIViewTransactions.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
@@ -173,6 +174,7 @@
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
+    <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenIAddAnOrganisationAddress.cs" />

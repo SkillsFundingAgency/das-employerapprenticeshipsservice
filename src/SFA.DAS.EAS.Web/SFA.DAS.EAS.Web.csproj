@@ -384,7 +384,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
-    <Compile Include="Controllers\OrganisationControllerBase.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -476,7 +475,6 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="Models\TransactionViewResult.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

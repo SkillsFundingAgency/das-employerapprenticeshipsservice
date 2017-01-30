@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 
 namespace SFA.DAS.EAS.Web.Models
 {
-    public class AddNewPayeScheme
+    public class AddNewPayeScheme : ViewModelBase
     {
         public string PayeScheme { get; set; }
         public List<LegalEntity> LegalEntities { get; set; }
