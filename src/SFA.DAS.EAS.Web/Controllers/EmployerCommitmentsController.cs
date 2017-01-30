@@ -6,8 +6,9 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.Models.Types;
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

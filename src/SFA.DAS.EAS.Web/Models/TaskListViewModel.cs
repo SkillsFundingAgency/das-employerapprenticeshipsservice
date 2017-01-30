@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Models
 {

@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using StructureMap.Graph.Scanning;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests

@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -139,7 +140,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
+        public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
             var response = await
                     Mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -150,12 +151,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             model.AccountName = response.Account.Name;
 
-            return new OrchestratorResponse<RemovePayeScheme> {Data = model};
+            return new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
         }
 
-        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> RemoveSchemeFromAccount(RemovePayeScheme model)
+        public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> RemoveSchemeFromAccount(RemovePayeSchemeViewModel model)
         {
-            var response = new OrchestratorResponse<RemovePayeScheme> {Data = model};
+            var response = new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
             try
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand

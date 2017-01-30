@@ -1,5 +1,4 @@
 ﻿using System;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Web.Models

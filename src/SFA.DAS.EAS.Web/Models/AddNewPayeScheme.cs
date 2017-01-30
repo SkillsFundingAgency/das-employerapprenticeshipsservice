@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 
 namespace SFA.DAS.EAS.Web.Models
 {

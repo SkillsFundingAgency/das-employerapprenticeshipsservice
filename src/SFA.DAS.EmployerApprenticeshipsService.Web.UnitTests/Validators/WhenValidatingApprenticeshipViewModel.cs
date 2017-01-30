@@ -3,8 +3,8 @@ using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Web.Models;
-using SFA.DAS.EAS.Web.Models.Types;
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Validators
 {

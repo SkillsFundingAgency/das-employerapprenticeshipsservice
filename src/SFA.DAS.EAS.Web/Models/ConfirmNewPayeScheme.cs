@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SFA.DAS.EAS.Web.Models
+﻿namespace SFA.DAS.EAS.Web.Models
 {
     public class ConfirmNewPayeScheme : AddNewPayeScheme
     {
@@ -15,6 +13,5 @@ namespace SFA.DAS.EAS.Web.Models
             PayeScheme = model.PayeScheme;
             HashedAccountId = model.HashedAccountId;
         }
-
     }
 }

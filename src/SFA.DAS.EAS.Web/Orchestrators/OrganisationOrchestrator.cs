@@ -26,6 +26,7 @@ using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

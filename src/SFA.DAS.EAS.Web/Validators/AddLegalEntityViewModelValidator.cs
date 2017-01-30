@@ -7,6 +7,7 @@ using FluentValidation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Validators
 {

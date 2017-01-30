@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.GetTask;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Tasks.Api.Types.Templates;
 
 namespace SFA.DAS.EAS.Web.Orchestrators

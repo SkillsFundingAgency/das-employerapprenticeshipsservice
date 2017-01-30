@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Web.Models
         ReadyForApproval,
 
         [Description("Approved")]
-        Approved,
-
+        Approved
     }
 }

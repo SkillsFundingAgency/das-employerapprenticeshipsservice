@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 
 namespace SFA.DAS.EAS.Web.Models

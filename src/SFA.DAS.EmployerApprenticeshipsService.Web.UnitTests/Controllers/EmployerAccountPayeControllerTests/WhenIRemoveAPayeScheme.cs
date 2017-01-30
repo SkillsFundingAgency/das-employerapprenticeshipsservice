@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests
 {
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         public void Arrange()
         {
             _employerAccountPayeOrchestrator = new Mock<Web.Orchestrators.EmployerAccountPayeOrchestrator>();
-            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme>());
+            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeSchemeViewModel>())).ReturnsAsync(new OrchestratorResponse<RemovePayeSchemeViewModel>());
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("123abc");
             _featureToggle = new Mock<IFeatureToggle>();
@@ -36,10 +37,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         public async Task ThenTheOrchestratorIsCalledIfYouConfirmToRemoveTheScheme()
         {
             //Act
-            var actual = await _controller.RemovePaye("", new RemovePayeScheme { RemoveScheme = 2 });
+            var actual = await _controller.RemovePaye("", new RemovePayeSchemeViewModel { RemoveScheme = 2 });
 
             //Assert
-            _employerAccountPayeOrchestrator.Verify(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>()), Times.Once);
+            _employerAccountPayeOrchestrator.Verify(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeSchemeViewModel>()), Times.Once);
             Assert.IsNotNull(actual);
             var actualRedirect = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirect);
@@ -52,10 +53,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         public async Task ThenTheConfirmRemoveSchemeViewIsReturnedIfThereIsAValidationError()
         {
             //Arrange
-            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeScheme>())).ReturnsAsync(new OrchestratorResponse<RemovePayeScheme> { Status = HttpStatusCode.BadRequest });
+            _employerAccountPayeOrchestrator.Setup(x => x.RemoveSchemeFromAccount(It.IsAny<RemovePayeSchemeViewModel>())).ReturnsAsync(new OrchestratorResponse<RemovePayeSchemeViewModel> { Status = HttpStatusCode.BadRequest });
 
             //Act
-            var actual = await _controller.RemovePaye("", new RemovePayeScheme());
+            var actual = await _controller.RemovePaye("", new RemovePayeSchemeViewModel());
 
             //Assert
             Assert.IsNotNull(actual);
