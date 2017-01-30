@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 
