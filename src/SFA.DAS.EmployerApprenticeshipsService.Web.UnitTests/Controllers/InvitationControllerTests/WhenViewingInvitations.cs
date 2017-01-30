@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
 
             _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
-                .ReturnsAsync(new InvitationView());
+                .ReturnsAsync(new OrchestratorResponse<InvitationView> { Data = new InvitationView()});
 
 
             _controller = new InvitationController(
