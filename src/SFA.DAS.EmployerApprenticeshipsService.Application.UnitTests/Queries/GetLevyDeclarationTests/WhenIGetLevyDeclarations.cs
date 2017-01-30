@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
@@ -36,9 +37,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
             _repository.Setup(x => x.GetAccountLevyDeclarations(It.IsAny<long>())).ReturnsAsync(_expectedLevyDeclarationViews);
 
             _dasAccountService = new Mock<IDasAccountService>();
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme>
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes {SchemesList = new List<PayeScheme>
             {
-                new Scheme
+                new PayeScheme
                 {
                     Ref = ExpectedEmpref
                 }
@@ -87,8 +88,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
             //Arrange
             var expectedAddedDate = new DateTime(2016,01,10);
             var expectedRemovedDate = new DateTime(2016,03,29);
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes { SchemesList = new List<Scheme> {
-                new Scheme
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> {
+                new PayeScheme
                     {
                         AddedDate = expectedAddedDate,
                         RemovedDate = expectedRemovedDate,

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 {
@@ -66,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         public async Task ThenFalseIsReturnedIftheSchemeIsAlreadtInUse()
         {
             //Arrange
-            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(new Scheme());
+            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(_createAccountCommand.PayeReference)).ReturnsAsync(new PayeScheme());
 
             //Act
             var result = await _createCommandValidator.ValidateAsync(_createAccountCommand);

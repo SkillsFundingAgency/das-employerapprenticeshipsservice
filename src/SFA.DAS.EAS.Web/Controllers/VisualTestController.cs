@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Models;

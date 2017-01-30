@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IEmployerSchemesRepository
     {
-        Task<Schemes> GetSchemesByEmployerId(long employerId);
-        Task<Scheme> GetSchemeByRef(string empref);
+        Task<PayeSchemes> GetSchemesByEmployerId(long employerId);
+        Task<PayeScheme> GetSchemeByRef(string empref);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EAS.Domain
+namespace SFA.DAS.EAS.Domain.Models.PAYE
 {
     public class PayeView
     {

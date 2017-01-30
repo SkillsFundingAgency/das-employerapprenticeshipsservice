@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Types;

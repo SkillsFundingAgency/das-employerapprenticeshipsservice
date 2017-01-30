@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount

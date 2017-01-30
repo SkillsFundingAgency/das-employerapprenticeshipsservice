@@ -142,9 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\AccountHistoryEntry.cs" />
-    <Compile Include="AggregationData.cs" />
-    <Compile Include="AggregationLine.cs" />
-    <Compile Include="AggregationLineItem.cs" />
+    <Compile Include="Models\Transaction\AggregationData.cs" />
+    <Compile Include="Models\Transaction\AggregationLine.cs" />
+    <Compile Include="Models\Transaction\AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
     <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
@@ -215,7 +215,7 @@
     <Compile Include="InvitationStatus.cs" />
     <Compile Include="InvitationView.cs" />
     <Compile Include="ITrainingProgramme.cs" />
-    <Compile Include="LevyDeclarationView.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
@@ -223,9 +223,9 @@
     <Compile Include="Models\ReferenceData\PagedResponse.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
     <Compile Include="OrganisationType.cs" />
-    <Compile Include="TransactionItemType.cs" />
-    <Compile Include="Membership.cs" />
-    <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\Transaction\TransactionItemType.cs" />
+    <Compile Include="Models\AccountTeam\Membership.cs" />
+    <Compile Include="Models\AccountTeam\MembershipView.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
@@ -254,20 +254,17 @@
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
     <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
-    <Compile Include="Paye.cs" />
-    <Compile Include="PayeView.cs" />
+    <Compile Include="Models\PAYE\Paye.cs" />
+    <Compile Include="Models\PAYE\PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="Providers.cs" />
     <Compile Include="ProvidersView.cs" />
-    <Compile Include="Role.cs" />
-    <Compile Include="Scheme.cs" />
-    <Compile Include="Schemes.cs" />
+    <Compile Include="Models\PAYE\PayeScheme.cs" />
+    <Compile Include="Models\PAYE\PayeSchemes.cs" />
     <Compile Include="Standard.cs" />
     <Compile Include="StandardsView.cs" />
-    <Compile Include="TeamMember.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="Users.cs" />
+    <Compile Include="Models\AccountTeam\TeamMember.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -275,9 +272,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerSchemes
 {
@@ -17,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerSchemes
         public async Task<GetEmployerSchemesResponse> Handle(GetEmployerSchemesQuery message)
         {
              var employerSchemes = await _employerSchemesRepository.GetSchemesByEmployerId(message.Id);
-            return new GetEmployerSchemesResponse {Schemes = new Schemes {SchemesList = employerSchemes.SchemesList} };
+            return new GetEmployerSchemesResponse {PayeSchemes = new PayeSchemes {SchemesList = employerSchemes.SchemesList} };
         }
     }
 }

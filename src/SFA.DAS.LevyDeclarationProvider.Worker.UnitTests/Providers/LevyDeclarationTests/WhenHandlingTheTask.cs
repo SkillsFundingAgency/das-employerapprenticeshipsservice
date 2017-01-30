@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             _mediator.Setup(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>())).ReturnsAsync(Unit.Value);
 
             _dasAccountService = new Mock<IDasAccountService>();
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes());
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes());
 
             _logger = new Mock<ILogger>();
 
@@ -117,7 +118,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             //Arrange
             var expectedAccessToken= "myaccesstoken";
             var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme> {new Scheme {AccessToken = expectedAccessToken,AccountId = ExpectedAccountId,Id=1,Ref=expectedEmpref,RefreshToken = "token"} } });
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes {SchemesList = new List<PayeScheme> {new PayeScheme {AccessToken = expectedAccessToken,AccountId = ExpectedAccountId,Id=1,Ref=expectedEmpref,RefreshToken = "token"} } });
             _mediator.Setup(x =>x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
 
             //Act
@@ -133,7 +134,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             //Assign
             var expectedAccessToken = "myaccesstoken";
             var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes { SchemesList = new List<Scheme> { new Scheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
             _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
 
 
@@ -166,7 +167,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             //Arrange
             var expectedAccessToken = "myaccesstoken";
             var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes { SchemesList = new List<Scheme> { new Scheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
+            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new PayeSchemes { SchemesList = new List<PayeScheme> { new PayeScheme { AccessToken = expectedAccessToken, AccountId = ExpectedAccountId, Id = 1, Ref = expectedEmpref, RefreshToken = "token" } } });
             _mediator.Setup(x => x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.AuthToken.Equals(expectedAccessToken) && c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
                .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
