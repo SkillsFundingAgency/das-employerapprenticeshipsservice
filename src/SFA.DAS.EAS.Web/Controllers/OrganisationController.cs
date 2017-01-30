@@ -260,7 +260,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
                 SignedDate = DateTime.Now,
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
-                LegalEntityStatus = legalEntityStatus,
+                LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = (short)organisationType,
                 PublicSectorDataSource = publicSectorDataSource
             };
