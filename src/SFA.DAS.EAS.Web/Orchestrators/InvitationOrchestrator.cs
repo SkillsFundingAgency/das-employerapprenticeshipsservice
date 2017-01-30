@@ -104,7 +104,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return new OrchestratorResponse<UserInvitationsViewModel>
             {
-                Data = new UserInvitationsViewModel()
+                Data = null
             };
         }
     }
