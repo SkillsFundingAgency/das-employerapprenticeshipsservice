@@ -172,6 +172,7 @@
     <Compile Include="Data\IEmployerAgreementRepository.cs" />
     <Compile Include="Data\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\IInvitationRepository.cs" />
+    <Compile Include="Data\IPayeRepository.cs" />
     <Compile Include="Data\IMembershipRepository.cs" />
     <Compile Include="Data\IProviderRepository.cs" />
     <Compile Include="Data\IStandardsRepository.cs" />
@@ -184,10 +185,12 @@
     <Compile Include="EmployerInformation.cs" />
     <Compile Include="Entities\Account\Account.cs" />
     <Compile Include="Entities\Account\AccountBalance.cs" />
-    <Compile Include="Entities\Account\AccountInformation.cs" />
+    <Compile Include="Entities\Account\AccountDetail.cs" />
     <Compile Include="Entities\Account\Accounts.cs" />
     <Compile Include="Entities\Account\LegalEntities.cs" />
     <Compile Include="Entities\Account\LegalEntity.cs" />
+    <Compile Include="Entities\Account\LegalEntityView.cs" />
+    <Compile Include="Entities\Account\PayeSchemeView.cs" />
     <Compile Include="Entities\Transaction\TransactionEntity.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
+    <Compile Include="Data\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />

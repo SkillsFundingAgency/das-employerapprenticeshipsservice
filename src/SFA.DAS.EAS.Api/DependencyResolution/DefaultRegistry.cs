@@ -16,16 +16,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
-using Microsoft.Azure;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
-using SFA.DAS.EAS.Api.Models;
 using SFA.DAS.EAS.Domain.Configuration;
 using StructureMap;
 using WebGrease.Css.Extensions;

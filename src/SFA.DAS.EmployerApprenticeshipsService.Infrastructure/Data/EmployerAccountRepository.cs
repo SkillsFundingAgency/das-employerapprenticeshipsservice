@@ -64,27 +64,42 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return new Accounts<Account> {AccountsCount = countResult.First(), AccountList = result.ToList()};
         }
 
-        public async Task<Accounts<AccountInformation>> GetAccountsByDateRange(DateTime fromDate, DateTime toDate, int pageNumber, int pageSize)
+        public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            var countResult = await GetNumberOfAccounts();
-            var offset = pageSize * (pageNumber - 1);
+            AccountDetail accountDetail = null;
 
-            var result = await WithConnection(async c =>
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@fromDate", fromDate, DbType.DateTime);
-                parameters.Add("@toDate", toDate, DbType.DateTime);
-                parameters.Add("@offset",offset,DbType.Int32);
-                parameters.Add("@pageSize", pageSize, DbType.Int32);
+                parameters.Add("@HashedId", hashedAccountId, DbType.String);
 
-                return await c.QueryAsync<AccountInformation>(
-                    sql: "[employer_account].[GetAccountInformation_ByDateRange]",
+                return await c.QueryAsync<AccountDetail, string, long, AccountDetail>(
+                    sql: "[employer_account].[GetAccountDetails_ByHashedId]",
                     param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            }
-                );
+                    commandType: CommandType.StoredProcedure,
+                    splitOn: "PayeSchemeId,LegalEntityId",
+                    map: (parent, payeSchemeRef, legalEntityId) =>
+                    {
+                        if (accountDetail == null)
+                        {
+                            accountDetail = parent;
+                        }
 
-            return new Accounts<AccountInformation> {AccountsCount = countResult.First(), AccountList = result.ToList()};
+                        if (!accountDetail.PayeSchemes.Contains(payeSchemeRef))
+                        {
+                            accountDetail.PayeSchemes.Add(payeSchemeRef);
+                        }
+
+                        if (!accountDetail.LegalEntities.Contains(legalEntityId))
+                        {
+                            accountDetail.LegalEntities.Add(legalEntityId);
+                        }
+
+                        return accountDetail;
+                    });
+            });
+
+            return accountDetail;
         }
 
         public async Task<List<Account>> GetAllAccounts()
