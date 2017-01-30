@@ -9,10 +9,10 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
     [TestFixture]
-    public class WhenIGetPayeSchemesForAnAccount : EmployerAccountsControllerTests
+    public class WhenIGetPayeSchemesForAnAccount : AccountPayeSchemesControllerTests
     {
         [Test]
         public async Task ThenThePayeSchemesAreReturned()

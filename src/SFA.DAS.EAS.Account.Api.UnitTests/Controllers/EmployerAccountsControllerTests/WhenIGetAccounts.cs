@@ -68,12 +68,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [Test]
         public async Task AndNoToDateIsProvidedThenAllAccountsAreReturned()
         {
-            var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>()};
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-
-            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
-
             await Controller.GetAccounts();
 
             Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.ToDate == DateTime.MaxValue.ToString("yyyyMMddHHmmss"))));
@@ -82,12 +76,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [Test]
         public async Task AndNoPageSizeIsProvidedThen1000AccountsAreReturned()
         {
-            var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-
-            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
-
             await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
 
             Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageSize == 1000)));
@@ -96,12 +84,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         [Test]
         public async Task AndNoPageNumberIsProvidedThenTheFirstPageOfAccountsAreReturned()
         {
-            var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-
-            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
-
             await Controller.GetAccounts(DateTime.Now.AddDays(-1).ToString("yyyyMMddHHmmss"));
 
             Mediator.Verify(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == 1)));

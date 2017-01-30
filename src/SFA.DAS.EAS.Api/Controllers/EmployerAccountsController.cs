@@ -53,68 +53,6 @@ namespace SFA.DAS.EAS.Api.Controllers
             return Ok(result.Data);
         }
 
-        [Route("{hashedAccountId}/legalentities", Name = "GetLegalEntities")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
-        {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
-            return Ok(result.Data.LegalEntities);
-        }
-
-        [Route("{hashedAccountId}/legalentities/{legalentityid}", Name = "GetLegalEntity")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
-        {
-            var result = await _orchestrator.GetLegalEntity(hashedAccountId, legalEntityId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
-        }
-
-        [Route("{hashedAccountId}/payeschemes", Name = "GetPayeSchemes")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
-        {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
-            return Ok(result.Data.PayeSchemes);
-        }
-
-        [Route("{hashedAccountId}/payeschemes/{payeschemeref}", Name = "GetPayeScheme")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]
-        public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
-        {
-            var result = await _orchestrator.GetPayeScheme(hashedAccountId, HttpUtility.UrlDecode(payeSchemeRef));
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
-        }
-
         private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
         {
             legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });

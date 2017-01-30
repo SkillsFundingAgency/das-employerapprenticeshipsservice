@@ -9,10 +9,10 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesControllerTests
 {
     [TestFixture]
-    public class WhenIGetLegalEntitiesForAnAccount : EmployerAccountsControllerTests
+    public class WhenIGetLegalEntitiesForAnAccount : AccountLegalEntitiesControllerTests
     {
         [Test]
         public async Task ThenTheLegalEntitiesAreReturned()

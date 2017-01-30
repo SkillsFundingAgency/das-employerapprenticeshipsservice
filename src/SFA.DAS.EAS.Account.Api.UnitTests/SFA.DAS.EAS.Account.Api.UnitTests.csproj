@@ -80,12 +80,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\AccountLegalEntitiesControllerTests.cs" />
+    <Compile Include="Controllers\AccountPayeSchemesControllerTests\AccountPayeSchemesControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetALegalEntity.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
+    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetAPayeScheme.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
+    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

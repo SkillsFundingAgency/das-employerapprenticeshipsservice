@@ -8,10 +8,10 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Domain.Entities.Account;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
+namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLegalEntitiesControllerTests
 {
     [TestFixture]
-    public class WhenIGetALegalEntity : EmployerAccountsControllerTests
+    public class WhenIGetALegalEntity : AccountLegalEntitiesControllerTests
     {
         [Test]
         public async Task ThenTheLegalEntityIsReturned()

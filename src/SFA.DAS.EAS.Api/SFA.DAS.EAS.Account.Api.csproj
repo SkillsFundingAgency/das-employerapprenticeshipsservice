@@ -272,6 +272,8 @@
     <Compile Include="App_Start\StructuremapWebApi.cs" />
     <Compile Include="App_Start\ValidationErrorResult.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
+    <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />

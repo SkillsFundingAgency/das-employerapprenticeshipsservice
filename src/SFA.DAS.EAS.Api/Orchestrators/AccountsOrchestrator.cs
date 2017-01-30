@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
 
-        public AccountsOrchestrator(IMediator mediator, ILogger logger )
+        public AccountsOrchestrator(IMediator mediator, ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -51,6 +51,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
         {
+            _logger.Info($"Getting account {hashedAccountId}");
+
             var accountResult = await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery { HashedAccountId = hashedAccountId });
             if (accountResult.Account == null)
             {
@@ -63,6 +65,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
         public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
+            _logger.Info($"Getting legal entity {legalEntityId} for account {hashedAccountId}");
+
             var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { Id = legalEntityId });
             if (legalEntityResult.LegalEntity == null)
             {
@@ -75,6 +79,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
         public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
+            _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
+
             var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
             if (payeSchemeResult.PayeScheme == null)
             {
