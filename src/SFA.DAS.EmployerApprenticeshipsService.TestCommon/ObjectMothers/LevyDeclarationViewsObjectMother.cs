@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {

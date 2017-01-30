@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Domain
+namespace SFA.DAS.EAS.Domain.Models.Levy
 {
     public class LevyDeclarationView
     {

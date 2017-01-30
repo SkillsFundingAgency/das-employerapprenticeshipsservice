@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLevyDeclarationTests
