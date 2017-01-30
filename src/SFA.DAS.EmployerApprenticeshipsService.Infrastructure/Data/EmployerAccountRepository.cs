@@ -70,21 +70,37 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var offset = pageSize * (pageNumber - 1);
 
             var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@fromDate", fromDate, DbType.DateTime);
-                parameters.Add("@toDate", toDate, DbType.DateTime);
-                parameters.Add("@offset",offset,DbType.Int32);
-                parameters.Add("@pageSize", pageSize, DbType.Int32);
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@fromDate", fromDate, DbType.DateTime);
+                    parameters.Add("@toDate", toDate, DbType.DateTime);
+                    parameters.Add("@offset", offset, DbType.Int32);
+                    parameters.Add("@pageSize", pageSize, DbType.Int32);
 
-                return await c.QueryAsync<AccountInformation>(
-                    sql: "[employer_account].[GetAccountInformation_ByDateRange]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            }
-                );
+                    return await c.QueryAsync<AccountInformation>(
+                        sql: "[employer_account].[GetAccountInformation_ByDateRange]",
+                        param: parameters,
+                        commandType: CommandType.StoredProcedure);
+                }
+            );
 
             return new Accounts<AccountInformation> {AccountsCount = countResult.First(), AccountList = result.ToList()};
+        }
+
+        public async Task<List<AccountInformation>> GetAccountsInformationByHashedId(string hashedAccountId)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@HashedId", hashedAccountId, DbType.String);
+
+                return await c.QueryAsync<AccountInformation>(
+                    sql: "[employer_account].[GetAccountInformation_ByHashedId]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
         }
 
         public async Task<List<Account>> GetAllAccounts()

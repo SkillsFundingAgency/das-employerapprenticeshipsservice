@@ -1,8 +1,5 @@
-﻿CREATE PROCEDURE employer_account.GetAccountInformation_ByDateRange
-	@fromDate DATETIME,
-	@toDate DATETIME,
-	@offset int,
-	@pageSize int
+﻿CREATE PROCEDURE employer_account.GetAccountInformation_ByHashedId
+	@HashedId VARCHAR(100)
 AS
 Select 
 	DasAccountId, 
@@ -18,7 +15,4 @@ Select
 	OrganisationSource,
 	PayeSchemeName
 FROM [employer_account].[AccountInformation]
-WHERE AccountRemovedDate is null
-and AccountCreatedDate BETWEEN @fromDate and @toDate
-Order by AccountId
-OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY
+WHERE DasAccountId = @HashedId

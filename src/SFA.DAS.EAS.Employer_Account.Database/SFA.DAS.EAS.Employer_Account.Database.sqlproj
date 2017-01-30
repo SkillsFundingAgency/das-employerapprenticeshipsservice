@@ -108,6 +108,8 @@
     <Build Include="StoredProcedures\GetAccountHistory.sql" />
     <Build Include="StoredProcedures\UpdateAccount_SetAccountName.sql" />
     <Build Include="StoredProcedures\GetAccountInformation_ByDateRange.sql" />
+    <Build Include="Views\AccountInformation.sql" />
+    <Build Include="StoredProcedures\GetAccountInformation_ByHashedId.sql" />
     <Build Include="StoredProcedures\CreateInvitation.sql" />
   </ItemGroup>
   <ItemGroup>

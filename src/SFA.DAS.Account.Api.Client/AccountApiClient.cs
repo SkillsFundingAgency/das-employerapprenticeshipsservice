@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Client.Dtos;
@@ -23,9 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
 
         public async Task<Dtos.PagedApiResponseViewModel<Dtos.AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
         {
-            var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
-                ? _configuration.ApiBaseUrl
-                : _configuration.ApiBaseUrl + "/";
+            var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/accounts?page={pageNumber}&pageSize={pageSize}";
             if (toDate.HasValue)
             {
@@ -43,13 +42,27 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var fromDateFormatted = new DateTime(fromDate.Date.Year,fromDate.Month,fromDate.Day).ToString("yyyy-MM-dd");
             var toDateFormatted = new DateTime(toDate.Date.Year,toDate.Month,toDate.Day).ToString("yyyy-MM-dd");
 
-            var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
-                ? _configuration.ApiBaseUrl
-                : _configuration.ApiBaseUrl + "/";
+            var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/accountsinformation?fromDate={fromDateFormatted}&toDate={toDateFormatted}&page={pageNumber}&pageSize={pageSize}";
             
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(json);
+        }
+
+        public async Task<List<AccountInformationViewModel>> GetAccountInformationById(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accountsinformation/{accountId}";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<List<Dtos.AccountInformationViewModel>>(json);
+        }
+
+        private string GetBaseUrl()
+        {
+            return _configuration.ApiBaseUrl.EndsWith("/")
+                ? _configuration.ApiBaseUrl
+                : _configuration.ApiBaseUrl + "/";
         }
     }
 }
