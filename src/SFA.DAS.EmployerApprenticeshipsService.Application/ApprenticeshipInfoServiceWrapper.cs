@@ -7,9 +7,11 @@ using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
-using Framework = SFA.DAS.EAS.Domain.Framework;
+using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
 using Provider = SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider.Provider;
+using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
 
 namespace SFA.DAS.EAS.Application
 {
@@ -120,7 +122,7 @@ namespace SFA.DAS.EAS.Application
             return new StandardsView
             {
                 CreationDate = DateTime.UtcNow,
-                Standards = standards.Select(x => new EAS.Domain.Standard
+                Standards = standards.Select(x => new Standard
                 {
                     Id = x.Id,
                     Code = long.Parse(x.Id),

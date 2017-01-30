@@ -1,6 +1,4 @@
-﻿using System.Security;
-
-namespace SFA.DAS.EAS.Domain
+﻿namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
 {
     public class Standard : ITrainingProgramme
     {
