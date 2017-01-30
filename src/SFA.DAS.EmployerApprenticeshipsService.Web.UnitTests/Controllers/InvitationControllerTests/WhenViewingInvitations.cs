@@ -1,6 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
@@ -10,7 +12,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
 {
     public class WhenViewingInvitations : ControllerTestBase
     {
-        private InvitationOrchestrator _invitationOrchestrator;
+        private Mock<InvitationOrchestrator> _invitationOrchestrator;
         private InvitationController _controller;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
@@ -25,10 +27,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
-            _invitationOrchestrator = new InvitationOrchestrator(Mediator.Object, Logger.Object);
+            _invitationOrchestrator = new Mock<InvitationOrchestrator>(Mediator.Object, Logger.Object);
 
             _controller = new InvitationController(
-                _invitationOrchestrator, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
         }
 
         [Test]
@@ -50,7 +52,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("my_user_id");
             _controller = new InvitationController(
-                _invitationOrchestrator, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
 
             //Act
             var actual = _controller.Index();
@@ -62,5 +64,29 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             Assert.AreEqual("Index",actualRedirectResult.RouteValues["action"]);
             Assert.AreEqual("Home",actualRedirectResult.RouteValues["controller"]);
         }
+
+        [Test]
+        public async Task ThenTheCorrectInvitationIsRetrieved()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+
+            _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
+                .ReturnsAsync(new InvitationView());
+
+
+            _controller = new InvitationController(
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+
+            //Act
+            var actual = await _controller.View("123");
+
+            //Assert
+            _invitationOrchestrator.Verify(x => x.GetInvitation(It.Is<string>(i => i == "123")));
+            Assert.IsNotNull(actual);
+            var viewResult = actual as ViewResult;
+            Assert.IsNotNull(viewResult);
+        }
+
     }
 }

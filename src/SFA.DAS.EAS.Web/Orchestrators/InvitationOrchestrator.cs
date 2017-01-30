@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<InvitationView> GetInvitation(string id)
+        public virtual async Task<InvitationView> GetInvitation(string id)
         {
             var response = await _mediator.SendAsync(new GetInvitationRequest
             {
