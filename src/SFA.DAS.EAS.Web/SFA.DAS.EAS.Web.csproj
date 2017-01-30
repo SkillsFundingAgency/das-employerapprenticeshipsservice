@@ -477,6 +477,7 @@
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
+    <Compile Include="Plumbing\Mvc\LogAndHandleErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
