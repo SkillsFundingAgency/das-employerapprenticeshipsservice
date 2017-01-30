@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Domain
+namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
     public class AggregationData
     {
