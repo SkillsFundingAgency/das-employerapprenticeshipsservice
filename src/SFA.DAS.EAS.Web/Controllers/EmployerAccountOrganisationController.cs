@@ -291,7 +291,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationName = response.Data.Name,
                     OrganisationDateOfInception = response.Data.DateOfInception,
                     OrganisationRegisteredAddress = response.Data.Address,
-                    OrganisationStatus = response.Data.Status ?? string.Empty,
+                    OrganisationStatus = response.Data.Status ?? "active",
                     PublicSectorDataSource = response.Data.PublicSectorDataSource
                 };
             }

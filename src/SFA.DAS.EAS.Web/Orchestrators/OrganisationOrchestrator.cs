@@ -85,18 +85,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return errorResponse;
             }
 
-            if (response.CompanyStatus != "active" && response.CompanyStatus != "administration" &&
-                response.CompanyStatus != "voluntary-arrangement")
-            {
-                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.Conflict
-                };
-                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company is not active";
-                return errorResponse;
-            }
-
             _logger.Info($"Returning Data for {companiesHouseNumber}");
 
             var address = BuildAddressString(response);
