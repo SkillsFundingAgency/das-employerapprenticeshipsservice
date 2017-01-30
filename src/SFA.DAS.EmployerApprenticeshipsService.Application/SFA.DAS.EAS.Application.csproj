@@ -74,12 +74,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.18.0.21291, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.18.0.21291\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.18.0.21291, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.18.0.21291\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.9.0.19625, Culture=neutral, processorArchitecture=MSIL">
@@ -285,6 +285,9 @@
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsRequest.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsHandler.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsResponse.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsRequest.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />

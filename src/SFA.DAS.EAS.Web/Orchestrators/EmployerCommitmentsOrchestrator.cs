@@ -312,7 +312,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
                 {
                     AccountId = accountId,
-                    CommitmentId = commitmentId,
                     ApprenticeshipId = apprenticeshipId
                 });
 
