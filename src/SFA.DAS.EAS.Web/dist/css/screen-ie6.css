@@ -1860,6 +1860,18 @@ dl.inline dd {
   padding-bottom: .5em;
 }
 
+.account-id {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-size: 16px;
+  line-height: 1.25;
+  display: block;
+  color: #6f777b;
+}
+
 main, .header-inner {
   max-width: 960px;
   margin: 0 15px;
