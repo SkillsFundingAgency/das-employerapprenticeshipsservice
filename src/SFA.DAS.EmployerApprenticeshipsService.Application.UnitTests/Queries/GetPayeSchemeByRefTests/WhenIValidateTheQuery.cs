@@ -15,10 +15,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
         }
 
         [Test]
-        public void ThenFalseIsReturnedWhenTheIdIsntPopulated()
+        public void ThenFalseIsReturnedWhenTheHashedIdIsntPopulated()
         {
             //Act
-            var actual = _validator.Validate(new GetPayeSchemeByRefQuery());
+            var actual = _validator.Validate(new GetPayeSchemeByRefQuery { Ref = "ABC/123" });
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.IsFalse(actual.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("Ref", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
+        }
+
+        [Test]
+        public void ThenFalseIsReturnedWhenTheRefIsntPopulated()
+        {
+            //Act
+            var actual = _validator.Validate(new GetPayeSchemeByRefQuery { HashedAccountId = "ABC123" });
 
             //Assert
             Assert.IsNotNull(actual);
@@ -32,6 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
             //Act
             var actual = _validator.Validate(new GetPayeSchemeByRefQuery
             {
+                HashedAccountId = "ABC123",
                 Ref = "ABC/123"
             });
 

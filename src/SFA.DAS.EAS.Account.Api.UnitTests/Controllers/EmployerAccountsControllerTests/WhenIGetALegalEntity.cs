@@ -40,7 +40,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var model = response as OkNegotiatedContentResult<LegalEntityViewModel>;
 
             model?.Content.Should().NotBeNull();
-            model.Content.ShouldBeEquivalentTo(legalEntityResponse.LegalEntity);
+            model.Content.ShouldBeEquivalentTo(legalEntityResponse.LegalEntity, options => options.Excluding(x => x.DasAccountId).Excluding(x => x.LegalEntityId));
+            model.Content.DasAccountId.Should().Be(hashedAccountId);
+            model.Content.LegalEntityId.Should().Be(legalEntityId);
         }
 
         [Test]

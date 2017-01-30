@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
@@ -22,10 +23,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 PayeScheme = new PayeSchemeView
                     {
                         Ref = payeSchemeRef,
-                        Name = "Test"
+                        Name = "Test",
+                        AddedDate = DateTime.Now.AddYears(-10),
+                        RemovedDate = DateTime.Now
                     }
             };
-            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef))).ReturnsAsync(payeSchemeResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId))).ReturnsAsync(payeSchemeResponse);
 
             var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef.Replace("/", "%2f"));
 
@@ -34,7 +37,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var model = response as OkNegotiatedContentResult<PayeSchemeViewModel>;
 
             model?.Content.Should().NotBeNull();
-            model.Content.ShouldBeEquivalentTo(payeSchemeResponse.PayeScheme);
+            model.Content.ShouldBeEquivalentTo(payeSchemeResponse.PayeScheme, options => options.Excluding(x => x.DasAccountId));
+            model.Content.DasAccountId.Should().Be(hashedAccountId);
         }
 
         [Test]
@@ -44,7 +48,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             var payeSchemeRef = "ZZZ/123";
             var payeSchemeResponse = new GetPayeSchemeByRefResponse { PayeScheme = null };
 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef))).ReturnsAsync(payeSchemeResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeByRefQuery>(q => q.Ref == payeSchemeRef && q.HashedAccountId == hashedAccountId))).ReturnsAsync(payeSchemeResponse);
 
             var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef);
 

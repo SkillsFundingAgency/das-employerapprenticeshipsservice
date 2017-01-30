@@ -26,10 +26,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
             _expectedPayeScheme = new PayeSchemeView();
 
             _payeRepository = new Mock<IPayeRepository>();
-            _payeRepository.Setup(x => x.GetPayeByRef(It.IsAny<string>())).ReturnsAsync(_expectedPayeScheme);
+            _payeRepository.Setup(x => x.GetPayeForAccountByRef(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_expectedPayeScheme);
 
             Query = new GetPayeSchemeByRefQuery
             {
+                HashedAccountId = "ABC123",
                 Ref = "ABC/123"
             };
 
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeByRefTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _payeRepository.Verify(x => x.GetPayeByRef(Query.Ref), Times.Once);
+            _payeRepository.Verify(x => x.GetPayeForAccountByRef(Query.HashedAccountId, Query.Ref), Times.Once);
         }
 
         [Test]

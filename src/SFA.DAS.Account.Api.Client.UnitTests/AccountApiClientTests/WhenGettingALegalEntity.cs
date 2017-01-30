@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             _expectedLegalEntity = new LegalEntityViewModel
             {
-                Id = 123,
+                LegalEntityId = 123,
                 Code = "Code",
                 Name = "Name",
                 DateOfInception = DateTime.Now.AddYears(-1),

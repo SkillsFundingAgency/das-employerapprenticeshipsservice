@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
 
-        public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(long legalEntityId)
+        public async Task<OrchestratorResponse<LegalEntityViewModel>> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
             var legalEntityResult = await _mediator.SendAsync(new GetLegalEntityByIdQuery { Id = legalEntityId });
             if (legalEntityResult.LegalEntity == null)
@@ -69,39 +69,43 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 return new OrchestratorResponse<LegalEntityViewModel> { Data = null };
             }
 
-            var viewModel = ConvertLegalEntityToViewModel(legalEntityResult);
+            var viewModel = ConvertLegalEntityToViewModel(hashedAccountId, legalEntityResult);
             return new OrchestratorResponse<LegalEntityViewModel> { Data = viewModel };
         }
 
-        public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string payeSchemeRef)
+        public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { Ref = payeSchemeRef });
+            var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
             if (payeSchemeResult.PayeScheme == null)
             {
                 return new OrchestratorResponse<PayeSchemeViewModel> { Data = null };
             }
 
-            var viewModel = ConvertPayeSchemeToViewModel(payeSchemeResult);
+            var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
             return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
         }
 
-        private PayeSchemeViewModel ConvertPayeSchemeToViewModel(GetPayeSchemeByRefResponse payeSchemeResult)
+        private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
         {
             var payeSchemeViewModel = new PayeSchemeViewModel
             {
+                DasAccountId = hashedAccountId,
                 Name = payeSchemeResult.PayeScheme.Name,
-                Ref = payeSchemeResult.PayeScheme.Ref
+                Ref = payeSchemeResult.PayeScheme.Ref,
+                AddedDate = payeSchemeResult.PayeScheme.AddedDate,
+                RemovedDate = payeSchemeResult.PayeScheme.RemovedDate
             };
 
             return payeSchemeViewModel;
         }
 
-        private LegalEntityViewModel ConvertLegalEntityToViewModel(GetLegalEntityByIdResponse legalEntityResult)
+        private LegalEntityViewModel ConvertLegalEntityToViewModel(string hashedAccountId, GetLegalEntityByIdResponse legalEntityResult)
         {
             var legalEntityViewModel = new LegalEntityViewModel
             {
+                DasAccountId = hashedAccountId,
                 DateOfInception = legalEntityResult.LegalEntity.DateOfInception,
-                Id = legalEntityResult.LegalEntity.Id,
+                LegalEntityId = legalEntityResult.LegalEntity.Id,
                 Name = legalEntityResult.LegalEntity.Name,
                 Source = legalEntityResult.LegalEntity.Source,
                 Address = legalEntityResult.LegalEntity.Address,

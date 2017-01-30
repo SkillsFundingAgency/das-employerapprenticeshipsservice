@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Domain.Data
 {
     public interface IPayeRepository
     {
-        Task<PayeSchemeView> GetPayeByRef(string payeRef);
+        Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string payeRef);
     }
 }

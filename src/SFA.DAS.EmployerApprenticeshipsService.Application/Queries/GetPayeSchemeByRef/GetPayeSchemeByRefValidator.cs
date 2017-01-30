@@ -10,6 +10,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
         {
             var validationResult = new ValidationResult();
 
+            if (string.IsNullOrEmpty(item.HashedAccountId))
+            {
+                validationResult.AddError(nameof(item.Ref), "HashedAccountId has not been supplied");
+            }
+
             if (string.IsNullOrEmpty(item.Ref))
             {
                 validationResult.AddError(nameof(item.Ref), "PayeSchemeRef has not been supplied");

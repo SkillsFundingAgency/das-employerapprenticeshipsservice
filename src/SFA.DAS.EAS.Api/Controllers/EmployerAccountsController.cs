@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
-            var result = await _orchestrator.GetLegalEntity(legalEntityId);
+            var result = await _orchestrator.GetLegalEntity(hashedAccountId, legalEntityId);
 
             if (result.Data == null)
             {
@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            var result = await _orchestrator.GetPayeScheme(HttpUtility.UrlDecode(payeSchemeRef));
+            var result = await _orchestrator.GetPayeScheme(hashedAccountId, HttpUtility.UrlDecode(payeSchemeRef));
 
             if (result.Data == null)
             {

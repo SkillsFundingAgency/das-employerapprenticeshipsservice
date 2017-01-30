@@ -110,7 +110,7 @@
     <Build Include="StoredProcedures\GetAccountDetails_ByHashedId.sql" />
     <Build Include="StoredProcedures\CreateInvitation.sql" />
     <Build Include="StoredProcedures\GetLegalEntity_ById.sql" />
-    <Build Include="StoredProcedures\GetPaye_ByRef.sql" />
+    <Build Include="StoredProcedures\GetPayeForAccount_ByRef.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

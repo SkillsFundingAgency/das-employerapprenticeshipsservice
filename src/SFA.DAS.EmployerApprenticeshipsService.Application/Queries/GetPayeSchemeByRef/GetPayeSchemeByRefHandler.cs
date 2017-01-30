@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var payeScheme = await _payeRepository.GetPayeByRef(message.Ref);
+            var payeScheme = await _payeRepository.GetPayeForAccountByRef(message.HashedAccountId, message.Ref);
 
             return new GetPayeSchemeByRefResponse { PayeScheme = payeScheme};
         }

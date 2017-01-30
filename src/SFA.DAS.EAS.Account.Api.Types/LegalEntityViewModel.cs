@@ -5,7 +5,8 @@ namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class LegalEntityViewModel : IAccountResource
     {
-        public long Id { get; set; }
+        public string DasAccountId { get; set; }
+        public long LegalEntityId { get; set; }
         public string Address { get; set; }
         public string Source { get; set; }
         public string Status { get; set; }

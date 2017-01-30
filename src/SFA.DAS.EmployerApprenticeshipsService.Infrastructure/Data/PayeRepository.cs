@@ -14,15 +14,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<PayeSchemeView> GetPayeByRef(string reference)
+        public async Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string reference)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
+                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
                 parameters.Add("@Ref", reference, DbType.String);
 
                 return await c.QueryAsync<PayeSchemeView>(
-                    sql: "[employer_account].[GetPaye_ByRef]",
+                    sql: "[employer_account].[GetPayeForAccount_ByRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
