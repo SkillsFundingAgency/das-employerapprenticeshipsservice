@@ -66,10 +66,13 @@
                 <td>@Model.ProviderName</td>
 
             </tr>
+            <!--
+                enhancement    
             <tr>
                 <td>End-point assessor</td>
                 <td>Pham Assessment Ltd</td>
             </tr>
+            -->
 
             </tbody>
         </table>
@@ -96,16 +99,19 @@
                 <td>
                     @if (Model.EndDate.HasValue)
                     {
-                            @Model.EndDate.Value.ToGdsFormat()
+                        @Model.EndDate.Value.ToGdsFormat()
                     }
                 </td>
                 <td>&nbsp;</td>
             </tr>
+            <!--
+                enhancement    
             <tr>
                 <td>Time left</td>
                 <td> 10 months</td>
                 <td>&nbsp;</td>
             </tr>
+            -->
 
             </tbody>
         </table>
@@ -119,9 +125,11 @@
             <tbody>
             <tr>
                 <td>Total training cost</td>
-                <td>@Model.Cost &pound;2,957.56</td>
+                <td>@FormatCost(Model.Cost)</td>
                 <td>&nbsp;</td>
             </tr>
+            <!--
+                enhancement
             <tr>
                 <td>Amount paid to date</td>
                 <td>&pound;1,312.56</td>
@@ -132,6 +140,8 @@
                 <td>&pound;1,645.00</td>
                 <td><a href="#">View</a></td>
             </tr>
+
+            -->
             </tbody>
         </table>
 
@@ -146,4 +156,14 @@
     <div class="breadcrumbs">
         <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
     </div>
+}
+
+@functions {
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"£{cost.Value:n0}";
+    }
 }
