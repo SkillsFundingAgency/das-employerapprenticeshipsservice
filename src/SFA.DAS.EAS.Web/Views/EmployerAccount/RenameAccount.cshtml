@@ -2,7 +2,6 @@
 
 @{ViewBag.PageID = "page-change-account-name"; }
 @{ViewBag.Title = "Rename account"; }
-@{ViewBag.HideNav = "true"; }
 
 <form method="post">
 
@@ -41,7 +40,7 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="button" id="accept">Save and continue</button>
-                <a class="button-link" href="@Url.Action("Index", "Home")">Cancel</a>
+                <a class="button-link" href="@Url.Action("Index", "EmployerTeam")">Cancel</a>
             </div>
 
         </div>
@@ -49,12 +48,11 @@
 
 </form>
 
-
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol>
-            <li><a href="/" class="back-link">Back to your accounts</a></li>
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li>@ViewBag.Title</li>
         </ol>
     </div>
 }
-    
