@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -20,6 +21,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             IUserWhiteList userWhiteList)
                 : base(owinWrapper, featureToggle, userWhiteList)
         {
+            if (orchestrator == null)
+                throw new ArgumentNullException(nameof(orchestrator));
+
             _orchestrator = orchestrator;
         }
 
@@ -34,10 +38,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{apprenticeshipid}/details")]
-        public async Task<ActionResult> Details(string hashedaccountId, long apprenticeshipId)
+        [Route("{hashedApprenticeshipId}/details")]
+        public async Task<ActionResult> Details(string hashedaccountId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeship(hashedaccountId, apprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _orchestrator.GetApprenticeship(hashedaccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             return View(model);
         }
     }

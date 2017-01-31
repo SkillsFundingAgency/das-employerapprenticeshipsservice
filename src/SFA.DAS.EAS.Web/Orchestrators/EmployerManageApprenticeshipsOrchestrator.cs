@@ -42,9 +42,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
         {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting On-programme apprenticeships for empployer: {accountId}");
+
             return await CheckUserAuthorization(async () =>
             {
-                    var accountId = _hashingService.DecodeValue(hashedAccountId);
                     var data = await _mediator.SendAsync(new GetAllApprenticeshipsRequest { AccountId = accountId });
 
                     var apprenticeships = data.Apprenticeships
@@ -63,11 +65,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<ApprenticeshipDetailsViewModel>> GetApprenticeship(string hashedAccountId, long apprenticeshipId, string externalUserId)
+        public async Task<OrchestratorResponse<ApprenticeshipDetailsViewModel>> GetApprenticeship(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
         {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting On-programme apprenticeships Provider: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
             return await CheckUserAuthorization(async () =>
                 {
-                    var accountId = _hashingService.DecodeValue(hashedAccountId);
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
@@ -81,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new ApprenticeshipDetailsViewModel
             {
-                Id = apprenticeship.Id,
+                HashedAccountId = _hashingService.HashValue(apprenticeship.Id),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 DateOfBirth = apprenticeship.DateOfBirth,

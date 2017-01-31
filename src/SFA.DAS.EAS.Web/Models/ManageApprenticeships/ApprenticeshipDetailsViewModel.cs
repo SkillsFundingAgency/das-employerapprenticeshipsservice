@@ -4,13 +4,13 @@ namespace SFA.DAS.EAS.Web.Models.ManageApprenticeships
 {
     public class ApprenticeshipDetailsViewModel
     {
+        public string HashedAccountId { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
-
-        public long Id { get; set; }
 
         public DateTime? StartDate { get; set; }
 
