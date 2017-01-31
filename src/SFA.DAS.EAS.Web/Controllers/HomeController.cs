@@ -24,7 +24,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             _configuration = configuration;
         }
 
+        [Route("~/")]
         [Route]
+        [Route("Index")]
         public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue("sub");
@@ -160,14 +162,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 TempData["virtualPageUrl"] = @"/user-changed-email";
                 TempData["virtualPageTitle"] = @"User Action - Changed Email";
 
-	            await OwinWrapper.UpdateClaims();
+                await OwinWrapper.UpdateClaims();
 
-	            var userRef = OwinWrapper.GetClaimValue("sub");
-	            var email = OwinWrapper.GetClaimValue("email");
-	            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-	            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+                var userRef = OwinWrapper.GetClaimValue("sub");
+                var email = OwinWrapper.GetClaimValue("email");
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
 
-	            await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef,email,firstName,lastName);
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
             }
             return RedirectToAction("Index");
         }
