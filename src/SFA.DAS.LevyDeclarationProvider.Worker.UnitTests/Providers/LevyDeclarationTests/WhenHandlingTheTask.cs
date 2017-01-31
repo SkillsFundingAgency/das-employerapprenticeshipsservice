@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
 using MediatR;
@@ -34,6 +35,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         public void Arrange()
         {
             var stubDataFile = new FileInfo(@"C:\SomeFile.txt");
+
+            ConfigurationManager.AppSettings["DeclarationsEnabled"] = "true";
 
             _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
             _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
@@ -179,6 +182,19 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<CreateEnglishFractionCalculationDateCommand>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenWhenTheDeclarationsEnabledConfigValueIsFalseNoSchemesAreProcessed()
+        {
+            //Arrange
+            ConfigurationManager.AppSettings["DeclarationsEnabled"] = "false";
+
+            //Act
+            await _levyDeclaration.Handle();
+
+            //Assert
+            _dasAccountService.Verify(x=>x.GetAccountSchemes(It.IsAny<long>()), Times.Never);
         }
     }
 }
