@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Azure;
 using Moq;
 using SFA.DAS.Audit.Client;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
             {
                 scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 scan.RegisterConcreteTypesAgainstTheFirstInterface();
-                
+                scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
             });
             
             For<IUserRepository>().Use<UserRepository>();
