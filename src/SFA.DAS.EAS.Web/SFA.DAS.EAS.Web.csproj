@@ -379,7 +379,6 @@
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
-    <Compile Include="Controllers\EmployerTasksController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -469,7 +468,6 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerTasksOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
