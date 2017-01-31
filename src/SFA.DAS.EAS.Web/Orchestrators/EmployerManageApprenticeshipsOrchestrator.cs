@@ -33,7 +33,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedaccountId);
             var data = await _mediator.SendAsync(new GetAllApprenticeshipsRequest { AccountId = accountId });
 
-            var apprenticeships = data.Apprenticeships.Select(MapFrom).ToList();
+            var apprenticeships = data.Apprenticeships
+                .OrderBy(m => m.ApprenticeshipName)
+                .Select(MapFrom)
+                .ToList();
 
             var model = new ManageApprenticeshipsViewModel
                             {
