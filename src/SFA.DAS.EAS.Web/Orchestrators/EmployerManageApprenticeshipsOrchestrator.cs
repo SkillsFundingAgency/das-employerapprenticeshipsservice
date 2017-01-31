@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 using MediatR;
 
+using NLog;
+
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Models.ManageApprenticeships;
 
@@ -17,42 +21,60 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
 
-        public EmployerManageApprenticeshipsOrchestrator(IMediator mediator, IHashingService hashingService)
+        private readonly ILogger _logger;
+
+        public EmployerManageApprenticeshipsOrchestrator(
+            IMediator mediator, 
+            IHashingService hashingService,
+            ILogger logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
-        public async Task<ManageApprenticeshipsViewModel> GetApprenticeships(string hashedaccountId, string getClaimValue)
+        public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
         {
-            var accountId = _hashingService.DecodeValue(hashedaccountId);
-            var data = await _mediator.SendAsync(new GetAllApprenticeshipsRequest { AccountId = accountId });
+            return await CheckUserAuthorization(async () =>
+            {
+                    var accountId = _hashingService.DecodeValue(hashedAccountId);
+                    var data = await _mediator.SendAsync(new GetAllApprenticeshipsRequest { AccountId = accountId });
 
-            var apprenticeships = data.Apprenticeships
-                .OrderBy(m => m.ApprenticeshipName)
-                .Select(MapFrom)
-                .ToList();
+                    var apprenticeships = data.Apprenticeships
+                        .OrderBy(m => m.ApprenticeshipName)
+                        .Select(MapFrom)
+                        .ToList();
 
-            var model = new ManageApprenticeshipsViewModel
-                            {
-                                HashedaccountId = hashedaccountId,
-                                Apprenticeships = apprenticeships
-                            };
+                    var model = new ManageApprenticeshipsViewModel
+                                    {
+                                        HashedaccountId = hashedAccountId,
+                                        Apprenticeships = apprenticeships
+                                    };
 
-            return await Task.FromResult(model);
+                return new OrchestratorResponse<ManageApprenticeshipsViewModel> { Data = model };
+
+            }, hashedAccountId, externalUserId);
         }
 
-        public async Task<ApprenticeshipDetailsViewModel> GetApprenticeship(string hashedaccountId, long apprenticeshipId)
+        public async Task<OrchestratorResponse<ApprenticeshipDetailsViewModel>> GetApprenticeship(string hashedAccountId, long apprenticeshipId, string externalUserId)
         {
-            var accountId = _hashingService.DecodeValue(hashedaccountId);
-            var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+            return await CheckUserAuthorization(async () =>
+                {
+                    var accountId = _hashingService.DecodeValue(hashedAccountId);
+                    var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
-            return MapFrom(data.Apprenticeship);
+                    return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
+                               {
+                                   Data = MapFrom(data.Apprenticeship)
+                               };
+                }, hashedAccountId, externalUserId);
         }
 
         private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
@@ -70,6 +92,30 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = MapPaymentStatus(apprenticeship.PaymentStatus),
                 ProviderName = string.Empty
             };
+        }
+
+        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                return await code.Invoke();
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
+
+                return new OrchestratorResponse<T>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = exception
+                };
+            }
         }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus)
@@ -91,6 +137,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 default:
                     return string.Empty;
             }
+        }
+
+        private void LogUnauthorizedUserAttempt(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
         }
     }
 }

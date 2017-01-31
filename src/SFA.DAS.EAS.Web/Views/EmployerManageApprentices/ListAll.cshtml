@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.Models.ManageApprenticeships.ManageApprenticeshipsViewModel
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.ManageApprenticeships.ManageApprenticeshipsViewModel>
 
 @{
     ViewBag.PageID = "manage-apprentices";
@@ -23,7 +23,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var apprenticeship in Model.Apprenticeships)
+        @foreach (var apprenticeship in Model.Data.Apprenticeships)
         {
             <tr>
                 <td>
@@ -39,7 +39,7 @@
                     @apprenticeship.Status &nbsp;
                 </td>
                 <td>
-                    <a href="@Url.Action("Details", new { Model.HashedaccountId, apprenticeshipId = apprenticeship.Id })"
+                    <a href="@Url.Action("Details", new { Model.Data.HashedaccountId, apprenticeshipId = apprenticeship.Id })"
                        title="View  @apprenticeship.FirstName @apprenticeship.LastName"
                        aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
                 </td>

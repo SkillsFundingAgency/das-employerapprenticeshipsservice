@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.Models.ManageApprenticeships.ApprenticeshipDetailsViewModel
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.ManageApprenticeships.ApprenticeshipDetailsViewModel>
 
 @{
     ViewBag.Title = "Apprentice detail";
@@ -9,7 +9,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
-            <h1 class="heading-xlarge">@Model.FirstName @Model.LastName</h1>
+            <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
         </div>
 
         <table class="status-section">
@@ -35,14 +35,14 @@
             <tbody>
             <tr>
                 <td>Name</td>
-                <td>@Model.FirstName @Model.LastName</td>
+                <td>@Model.Data.FirstName @Model.Data.LastName</td>
             </tr>
             <tr>
                 <td>Date of birth</td>
                 <td>
-                    @if (Model.DateOfBirth.HasValue)
+                    @if (Model.Data.DateOfBirth.HasValue)
                     {
-                        @Model.DateOfBirth.Value.ToGdsFormat()
+                        @Model.Data.DateOfBirth.Value.ToGdsFormat()
                     }
                 </td>
             </tr>
@@ -58,14 +58,14 @@
             <tbody>
             <tr>
                 <td>Apprenticeship training course</td>
-                <td>@Model.TrainingName</td>
+                <td>@Model.Data.TrainingName</td>
 
             </tr>
             <!--
                 enhancement    
             <tr>
                 <td>Provider</td>
-                <td>@Model.ProviderName</td>
+                <td>@Model.Data.ProviderName</td>
 
             </tr>
             -->
@@ -91,9 +91,9 @@
             <tr>
                 <td>Training start date</td>
                 <td>
-                    @if (@Model.StartDate.HasValue)
+                    @if (@Model.Data.StartDate.HasValue)
                     {
-                        @Model.StartDate.Value.ToGdsFormat()
+                        @Model.Data.StartDate.Value.ToGdsFormat()
                     }
                 </td>
                 <td>&nbsp;</td>
@@ -101,9 +101,9 @@
             <tr>
                 <td>Training end date</td>
                 <td>
-                    @if (Model.EndDate.HasValue)
+                    @if (Model.Data.EndDate.HasValue)
                     {
-                        @Model.EndDate.Value.ToGdsFormat()
+                        @Model.Data.EndDate.Value.ToGdsFormat()
                     }
                 </td>
                 <td>&nbsp;</td>
@@ -129,7 +129,7 @@
             <tbody>
             <tr>
                 <td>Total training cost</td>
-                <td>@FormatCost(Model.Cost)</td>
+                <td>@FormatCost(Model.Data.Cost)</td>
                 <td>&nbsp;</td>
             </tr>
             <!--

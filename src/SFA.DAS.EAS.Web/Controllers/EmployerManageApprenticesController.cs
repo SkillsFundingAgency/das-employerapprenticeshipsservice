@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{apprenticeshipid}/details")]
         public async Task<ActionResult> Details(string hashedaccountId, long apprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeship(hashedaccountId, apprenticeshipId);
+            var model = await _orchestrator.GetApprenticeship(hashedaccountId, apprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             return View(model);
         }
     }
