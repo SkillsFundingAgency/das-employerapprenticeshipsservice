@@ -7,12 +7,20 @@
     ViewBag.HideNav = "true";
 }
 <div class="grid-row">
-    <div class="column-two-thirds org-type-search">
-
+    <div class="column-two-thirds">
         <h1 class="heading-xlarge">Add an organisation</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-one-third pull-right">
+        <div class="panel-warning">
+            <span class="icon"></span>
+            <p>Unincorporated charities are not accepted.</p>
+        </div>
+    </div>
+    <div class="column-two-thirds org-type-search">
         <p>Add the main organisation that will employ your apprentices and make agreements with training providers.</p>
         <h2 id="OrganisationType" class="heading-medium">Select your organisation type</h2>
-
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
             <section>
@@ -113,6 +121,7 @@
 
         </form>
     </div>
+
 </div>
 
 
