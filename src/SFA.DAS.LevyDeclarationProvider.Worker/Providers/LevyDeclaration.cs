@@ -74,7 +74,9 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         });
                     }
 
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
+
+                    //TODO need to check here to see if we need to get the fractions.
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { EmpRef = scheme.Ref });
 
                     var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
 
