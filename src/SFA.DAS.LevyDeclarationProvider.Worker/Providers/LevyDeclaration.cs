@@ -43,8 +43,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
-                // TODO - Remove this tempory PROD switch once HMRC API is ready
-                if (CloudConfigurationManager.GetSetting("EnvironmentName") == "PROD")
+                if (CloudConfigurationManager.GetSetting("DeclarationsEnabled").Equals("false",StringComparison.CurrentCultureIgnoreCase))
                 {
                     await message.CompleteAsync();
                     return;
