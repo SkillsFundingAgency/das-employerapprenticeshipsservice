@@ -82,7 +82,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     return "On programme";
                 case PaymentStatus.Paused:
                     return "Paused";
-                case PaymentStatus.Cancelled:
+                case PaymentStatus.Withdrawn:
                     return "Stopped";
                 case PaymentStatus.Completed:
                     return "Completed";
