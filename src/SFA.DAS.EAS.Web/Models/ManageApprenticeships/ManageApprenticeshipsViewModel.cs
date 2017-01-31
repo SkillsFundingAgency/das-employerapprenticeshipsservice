@@ -4,9 +4,8 @@ namespace SFA.DAS.EAS.Web.Models.ManageApprenticeships
 {
     public class ManageApprenticeshipsViewModel
     {
-        // ToDo: use list view model
         public IEnumerable<ApprenticeshipDetailsViewModel> Apprenticeships { get; set; }
 
-        public string HashedaccountId { get; set; }
+        public string HashedAccountId { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var model = new ManageApprenticeshipsViewModel
                                     {
-                                        HashedaccountId = hashedAccountId,
+                                        HashedAccountId = hashedAccountId,
                                         Apprenticeships = apprenticeships
                                     };
 
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             return new ApprenticeshipDetailsViewModel
             {
-                HashedAccountId = _hashingService.HashValue(apprenticeship.Id),
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 FirstName = apprenticeship.FirstName,
                 LastName = apprenticeship.LastName,
                 DateOfBirth = apprenticeship.DateOfBirth,

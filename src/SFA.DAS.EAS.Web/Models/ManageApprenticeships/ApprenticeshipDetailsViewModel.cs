@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Web.Models.ManageApprenticeships
 {
     public class ApprenticeshipDetailsViewModel
     {
-        public string HashedAccountId { get; set; }
+        public string HashedApprenticeshipId { get; set; }
 
         public string FirstName { get; set; }
 

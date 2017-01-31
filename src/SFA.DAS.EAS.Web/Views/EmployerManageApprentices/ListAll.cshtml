@@ -1,5 +1,8 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.ManageApprenticeships.ManageApprenticeshipsViewModel>
+@using SFA.DAS.EAS.Web.Models.ManageApprenticeships
+@using SFA.DAS.EAS.Web
+
+@model OrchestratorResponse<ManageApprenticeshipsViewModel>
 
 @{
     ViewBag.PageID = "manage-apprentices";
@@ -39,7 +42,7 @@
                     @apprenticeship.Status &nbsp;
                 </td>
                 <td>
-                    <a href="@Url.Action("Details", new { Model.Data.HashedaccountId, hashedApprenticeshipId = apprenticeship.Id })"
+                    <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"
                        title="View  @apprenticeship.FirstName @apprenticeship.LastName"
                        aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
                 </td>
