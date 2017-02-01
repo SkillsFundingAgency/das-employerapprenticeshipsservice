@@ -28,7 +28,6 @@ namespace SFA.DAS.EAS.Web.Authentication
 
         public void SignInUser(string id, string displayName, string email)
         {
-            if (!_configuration.Identity.UseFake) { throw new NotImplementedException(); }
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, displayName),
