@@ -203,6 +203,7 @@
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />

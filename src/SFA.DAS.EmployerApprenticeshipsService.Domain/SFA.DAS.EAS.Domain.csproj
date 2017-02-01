@@ -196,6 +196,7 @@
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Framework.cs" />
     <Compile Include="FrameworksView.cs" />
+    <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
