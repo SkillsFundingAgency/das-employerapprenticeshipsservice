@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.Is<GetUserInvitationsRequest>(c=>c.UserId.Equals(userId))), Times.Once);
-            Assert.IsAssignableFrom<UserInvitationsViewModel>(actual);
+            Assert.IsAssignableFrom<UserInvitationsViewModel>(actual.Data);
         }
 
         [TestCase(1, "Today")]
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             var actual = await _invitationOrchestrator.GetAllInvitationsForUser("123abc");
 
             //Assert
-            Assert.AreEqual(expectedValue, actual.Invitations.FirstOrDefault().ExpiryDays());
+            Assert.AreEqual(expectedValue, actual.Data.Invitations.FirstOrDefault().ExpiryDays());
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             var actual = await _invitationOrchestrator.GetAllInvitationsForUser("test");
 
             //Assert
-            Assert.IsNull(actual);
+            Assert.IsNull(actual.Data);
             _logger.Verify(x=>x.Info(It.IsAny<InvalidRequestException>()), Times.Once);
         }
 

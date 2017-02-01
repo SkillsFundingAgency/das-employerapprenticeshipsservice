@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.Account.Api.Client.Dtos;
+using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client
 {
@@ -21,11 +21,9 @@ namespace SFA.DAS.EAS.Account.Api.Client
             _httpClient = httpClient;
         }
 
-        public async Task<Dtos.PagedApiResponseViewModel<Dtos.AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
+        public async Task<PagedApiResponseViewModel<AccountWithBalanceViewModel>> GetPageOfAccounts(int pageNumber = 1, int pageSize = 1000, DateTime? toDate = null)
         {
-            var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
-                ? _configuration.ApiBaseUrl
-                : _configuration.ApiBaseUrl + "/";
+            var baseUrl = GetBaseUrl();
             var url = $"{baseUrl}api/accounts?page={pageNumber}&pageSize={pageSize}";
             if (toDate.HasValue)
             {
@@ -34,22 +32,21 @@ namespace SFA.DAS.EAS.Account.Api.Client
             }
 
             var json = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountWithBalanceViewModel>>(json);
+            return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(json);
+        }
+        
+        public async Task<T> GetResource<T>(string uri) where T : IAccountResource
+        {
+            var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
+            var json = await _httpClient.GetAsync(absoluteUri.ToString());
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public async Task<PagedApiResponseViewModel<AccountInformationViewModel>> GetPageOfAccountInformation(DateTime fromDate, DateTime toDate, int pageNumber = 1, int pageSize = 1000)
+        private string GetBaseUrl()
         {
-
-            var fromDateFormatted = new DateTime(fromDate.Date.Year,fromDate.Month,fromDate.Day).ToString("yyyy-MM-dd");
-            var toDateFormatted = new DateTime(toDate.Date.Year,toDate.Month,toDate.Day).ToString("yyyy-MM-dd");
-
-            var baseUrl = _configuration.ApiBaseUrl.EndsWith("/")
+            return _configuration.ApiBaseUrl.EndsWith("/")
                 ? _configuration.ApiBaseUrl
                 : _configuration.ApiBaseUrl + "/";
-            var url = $"{baseUrl}api/accountsinformation?fromDate={fromDateFormatted}&toDate={toDateFormatted}&page={pageNumber}&pageSize={pageSize}";
-            
-            var json = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<Dtos.PagedApiResponseViewModel<Dtos.AccountInformationViewModel>>(json);
         }
     }
 }

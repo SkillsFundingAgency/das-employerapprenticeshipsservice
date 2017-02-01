@@ -44,6 +44,7 @@
       <Setting name="LogLevel" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
+      <Setting name="DeclarationsEnabled" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50121" />

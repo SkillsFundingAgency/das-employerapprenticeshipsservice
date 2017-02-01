@@ -1,0 +1,74 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Castle.Components.DictionaryAdapter;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.ViewModels;
+using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Controllers;
+using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Orchestrators;
+
+namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
+{
+    public class WhenIAcceptAnInvitation : ControllerTestBase
+    {
+        private Mock<InvitationOrchestrator> _invitationOrchestrator;
+        private InvitationController _controller;
+        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<IFeatureToggle> _featureToggle;
+        private Mock<IUserWhiteList> _userWhiteList;
+
+        [SetUp]
+        public void Arrange()
+        {
+            base.Arrange();
+
+            _owinWrapper = new Mock<IOwinWrapper>();
+            _featureToggle = new Mock<IFeatureToggle>();
+            _userWhiteList = new Mock<IUserWhiteList>();
+
+            _invitationOrchestrator = new Mock<InvitationOrchestrator>(Mediator.Object, Logger.Object);
+
+
+        }
+
+
+        [Test]
+        public async Task ThenTheInvitationIsAccepted()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
+
+            var invitationId = 12345L;
+            var invitation = new UserInvitationsViewModel
+            {
+                Invitations = new List<InvitationView>
+                {
+                    new InvitationView
+                    {
+                        Id = invitationId,
+                        AccountName = "Test Account"
+                    }
+                }
+            };
+
+            _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<string>()))
+                .Returns(Task.FromResult<object>(null));
+
+            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+
+            //Act
+            await _controller.Accept(invitationId, invitation);
+
+            //Assert
+            _invitationOrchestrator.Verify(x=> x.AcceptInvitation(It.Is<long>(l => l==12345L), It.IsAny<string>()), Times.Once);
+        }
+
+    }
+}

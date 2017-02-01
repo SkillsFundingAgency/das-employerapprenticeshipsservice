@@ -177,6 +177,8 @@
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
+    <Compile Include="Data\PayeRepository.cs" />
+    <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\EnglishFractionRepository.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\DasLevyService.cs" />
+    <Compile Include="Services\EventPublisher.cs" />
     <Compile Include="Services\ManagedCompanyLookupService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />

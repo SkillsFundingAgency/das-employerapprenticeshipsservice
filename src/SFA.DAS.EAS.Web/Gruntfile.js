@@ -15,7 +15,8 @@ module.exports = function(grunt) {
             'src/govuk_template/assets/stylesheets',
             'src/govuk_frontend_toolkit/stylesheets'
           ],
-          outputStyle: 'expanded'
+	      outputStyle: 'expanded',
+          noCache: true
         }
       }
     },

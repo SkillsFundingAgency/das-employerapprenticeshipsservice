@@ -29,6 +29,7 @@ using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -42,7 +43,6 @@ using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
 using StructureMap.Graph;
 using StructureMap.TypeRules;
-using WebGrease.Css.Extensions;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution {
@@ -59,26 +59,23 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
                 {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                 });
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             
             var config = this.GetConfiguration();
-            if (config.Identity.UseFake)
-            {
-                For<IUserRepository>().Use<FileSystemUserRepository>();
-            }
-            else
-            {
-                For<IUserRepository>().Use<UserRepository>();
-            }
+
+            For<IUserRepository>().Use<UserRepository>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
+            For<IEventsApi>().Use<EventsApi>()
+                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
+                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
             RegisterMapper();
 

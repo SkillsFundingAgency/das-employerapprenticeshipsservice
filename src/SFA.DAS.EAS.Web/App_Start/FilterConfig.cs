@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Plumbing.Mvc;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -8,7 +9,7 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.Add(new HandleErrorAttribute());
+            filters.Add(new LogAndHandleErrorAttribute());
             filters.Add(new InvalidStateExceptionFilter());
         }
     }

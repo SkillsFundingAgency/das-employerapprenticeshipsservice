@@ -20,11 +20,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
         private Mock<IValidator<RenameEmployerAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
+        private Mock<IMembershipRepository> _membershipRepository;
+        private Mock<IEventPublisher> _eventPublisher;
         private const long AccountId = 12343322;
         private const string HashedAccountId = "123ADF23";
         private RenameEmployerAccountCommandHandler _commandHandler;
         private RenameEmployerAccountCommand _command;
-        private Mock<IMembershipRepository> _membershipRepository;
         private MembershipView _owner;
 
         [SetUp]
@@ -60,8 +61,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
                 .ReturnsAsync(new ValidationResult());
 
             _mediator = new Mock<IMediator>();
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _membershipRepository.Object, _validator.Object, _hashingService.Object, _mediator.Object);
+            _commandHandler = new RenameEmployerAccountCommandHandler(_repository.Object, _membershipRepository.Object, _validator.Object, _hashingService.Object, _mediator.Object, _eventPublisher.Object);
         }
 
         [Test]
@@ -72,7 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RenameEmployerAccountComman
 
             //Assert
             _repository.Verify(x=> x.RenameAccount(It.Is<long>(l=> l == AccountId), It.Is<string>(s => s== _command.NewName)));
-            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == HashedAccountId && e.Event == "AccountRenamed")));
+            _eventPublisher.Verify(x => x.PublishAccountRenamedEvent(HashedAccountId), Times.Once);
         }
 
         [Test]

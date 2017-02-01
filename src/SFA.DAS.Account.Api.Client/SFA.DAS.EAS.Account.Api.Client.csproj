@@ -54,9 +54,6 @@
   <ItemGroup>
     <Compile Include="AccountApiClient.cs" />
     <Compile Include="AccountApiConfiguration.cs" />
-    <Compile Include="Dtos\AccountInformationViewModel.cs" />
-    <Compile Include="Dtos\AccountWithBalanceViewModel.cs" />
-    <Compile Include="Dtos\PagedApiResponseViewModel.cs" />
     <Compile Include="IAccountApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecureHttpClient.cs" />
@@ -64,6 +61,12 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="SFA.DAS.Account.Api.Client.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

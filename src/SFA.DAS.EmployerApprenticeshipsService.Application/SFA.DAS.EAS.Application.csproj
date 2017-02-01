@@ -74,20 +74,20 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.9.0.19625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.9.0.19625\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.9.0.19625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.9.0.19625\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -285,6 +285,9 @@
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsRequest.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsHandler.cs" />
+    <Compile Include="Queries\GetAllApprenticeships\GetAllApprenticeshipsResponse.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsRequest.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />
@@ -312,14 +315,22 @@
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
+    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdHandler.cs" />
+    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdQuery.cs" />
+    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdResponse.cs" />
+    <Compile Include="Queries\GetLegalEntityById\GetLegalEntityByIdValidator.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdHandler.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdQuery.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdResponse.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionHandler.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeHandler.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeQuery.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeResponse.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccountsByDateRange\GetPagedEmployerAccountsByDateRangeValidator.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
     <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
