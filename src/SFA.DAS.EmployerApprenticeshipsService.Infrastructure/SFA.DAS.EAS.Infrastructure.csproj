@@ -209,6 +209,8 @@
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
+    <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
+    <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
