@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccountEvent
         {
             try
             {
-                await _eventsApi.CreateAccountEvent(new AccountEvent { EmployerAccountId = notification.HashedAccountId, Event = notification.Event });
+                await _eventsApi.CreateAccountEvent(new AccountEvent { ResourceUri = notification.ResourceUri, Event = notification.Event });
             }
             catch (Exception ex)
             {
