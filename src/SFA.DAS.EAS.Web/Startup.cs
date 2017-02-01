@@ -39,62 +39,52 @@ namespace SFA.DAS.EAS.Web
         {
             var config = GetConfigurationObject();
 
-            if (config.Identity.UseFake)
-            {
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "Cookies",
-                    LoginPath = new PathString("/home/FakeUserSignIn")
-                });
-            }
-            else
-            {
-                var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
-                var logger = LogManager.GetLogger("Startup");
+            
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+            var logger = LogManager.GetLogger("Startup");
             
 
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
-                JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Cookies",
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "TempState",
+                AuthenticationMode = AuthenticationMode.Passive
+            });
+
+            var constants = new Constants(config.Identity);
+
+            var urlHelper = new UrlHelper();
+
+            UserLinks.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
+            UserLinks.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
+
+            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
+            {
+                ClientId = config.Identity.ClientId,
+                ClientSecret = config.Identity.ClientSecret,
+                Scopes = config.Identity.Scopes,
+                BaseUrl = constants.Configuration.BaseAddress,
+                TokenEndpoint = constants.TokenEndpoint(),
+                UserInfoEndpoint = constants.UserInfoEndpoint(),
+                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
+                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
+                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
+                AuthenticatedCallback = identity =>
                 {
-                    AuthenticationType = "Cookies",
-                    ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                    SlidingExpiration = true
-                });
+                    PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
+                }
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "TempState",
-                    AuthenticationMode = AuthenticationMode.Passive
-                });
-
-                var constants = new Constants(config.Identity);
-
-                var urlHelper = new UrlHelper();
-
-                UserLinks.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
-                UserLinks.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
-
-                app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-                {
-                    ClientId = config.Identity.ClientId,
-                    ClientSecret = config.Identity.ClientSecret,
-                    Scopes = config.Identity.Scopes,
-                    BaseUrl = constants.Configuration.BaseAddress,
-                    TokenEndpoint = constants.TokenEndpoint(),
-                    UserInfoEndpoint = constants.UserInfoEndpoint(),
-                    AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
-                    TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
-                    AuthenticatedCallback = identity =>
-                    {
-                        PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
-                    }
-                });
-
-                ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
-            }
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)

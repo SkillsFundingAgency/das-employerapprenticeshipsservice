@@ -65,14 +65,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             
             var config = this.GetConfiguration();
-            if (config.Identity.UseFake)
-            {
-                For<IUserRepository>().Use<FileSystemUserRepository>();
-            }
-            else
-            {
-                For<IUserRepository>().Use<UserRepository>();
-            }
+
+            For<IUserRepository>().Use<UserRepository>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
 
