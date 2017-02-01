@@ -110,7 +110,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             //Act
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
-                EmployerReference = _employerReference
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true}
             });
 
             //Assert
@@ -149,7 +150,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             //Act
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
-                EmployerReference = _employerReference
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
             });
 
             //Assert
@@ -185,7 +187,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             //Act
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
-                EmployerReference = _employerReference
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
             });
 
             //Assert
@@ -232,7 +235,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             //Act
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
-                EmployerReference = _employerReference
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
             });
 
             //Assert
