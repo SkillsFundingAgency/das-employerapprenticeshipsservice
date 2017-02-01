@@ -187,6 +187,9 @@
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommand.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandHandler.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandValidator.cs" />
+    <Compile Include="Commands\DeleteApprentice\DeleteApprenticeCommand.cs" />
+    <Compile Include="Commands\DeleteApprentice\DeleteApprenticeCommandHandler.cs" />
+    <Compile Include="Commands\DeleteApprentice\DeleteApprenticeCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
