@@ -3,6 +3,7 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Web
 {

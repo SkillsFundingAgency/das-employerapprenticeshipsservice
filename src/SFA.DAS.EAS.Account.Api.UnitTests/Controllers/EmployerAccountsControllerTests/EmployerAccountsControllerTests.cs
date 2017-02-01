@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Api.Controllers;
 using SFA.DAS.EAS.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;
 
-            var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Entities.Account.Account>() };
+            var accountsResponse = new GetPagedEmployerAccountsResponse { Accounts = new List<Domain.Data.Entities.Account.Account>() };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
 
             var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };

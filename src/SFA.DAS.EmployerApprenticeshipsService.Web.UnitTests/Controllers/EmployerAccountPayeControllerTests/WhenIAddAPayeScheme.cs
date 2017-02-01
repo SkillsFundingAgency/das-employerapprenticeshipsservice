@@ -9,7 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests
 {
@@ -41,11 +41,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         public async Task ThenTheAddPayeSchemeToAccountIsCalledWithTheCorrectParameters()
         {
             //Arrange
-            var expectedAddNewPayeScheme = new AddNewPayeScheme {AccessToken = "123DFG",HashedAccountId = ExpectedAccountId,PayeName = "123/ABC",RefreshToken = "987TGH"};
+            var expectedAddNewPayeScheme = new AddNewPayeSchemeViewModel {AccessToken = "123DFG",HashedAccountId = ExpectedAccountId,PayeName = "123/ABC",RefreshToken = "987TGH"};
 
             _employerAccountPayeOrchestrator.Setup(
-                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeScheme>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<AddNewPayeScheme>
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AddNewPayeSchemeViewModel>
                 {
                     Status = HttpStatusCode.OK
                 });
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             await _controller.ConfirmPayeScheme(ExpectedAccountId, expectedAddNewPayeScheme);
 
             //Assert
-            _employerAccountPayeOrchestrator.Verify(x=>x.AddPayeSchemeToAccount(It.Is<AddNewPayeScheme>(
+            _employerAccountPayeOrchestrator.Verify(x=>x.AddPayeSchemeToAccount(It.Is<AddNewPayeSchemeViewModel>(
                 c=>c.AccessToken.Equals(expectedAddNewPayeScheme.AccessToken) &&
                 c.HashedAccountId.Equals(expectedAddNewPayeScheme.HashedAccountId) &&
                 c.PayeName.Equals(expectedAddNewPayeScheme.PayeName) &&
@@ -67,14 +67,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         {
             //Arrange
             _employerAccountPayeOrchestrator.Setup(
-                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeScheme>(), It.IsAny<string>()))
-                .ReturnsAsync(new OrchestratorResponse<AddNewPayeScheme>
+                x => x.AddPayeSchemeToAccount(It.IsAny<AddNewPayeSchemeViewModel>(), It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AddNewPayeSchemeViewModel>
                 {
                     Status = HttpStatusCode.OK
                 });
 
             //Act
-            await _controller.ConfirmPayeScheme(ExpectedAccountId, new AddNewPayeScheme());
+            await _controller.ConfirmPayeScheme(ExpectedAccountId, new AddNewPayeSchemeViewModel());
 
             //Assert
             Assert.IsTrue(_controller.TempData.ContainsKey("successHeader"));

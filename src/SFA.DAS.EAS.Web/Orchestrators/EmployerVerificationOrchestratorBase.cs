@@ -13,7 +13,7 @@ using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -114,11 +114,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerViewModel viewModel)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
-                Id = model.EmployerRef
+                Id = viewModel.EmployerRef
             });
 
             if (response == null)
@@ -131,7 +131,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            Logger.Info($"Returning Data for {model.EmployerRef}");
+            Logger.Info($"Returning Data for {viewModel.EmployerRef}");
 
             return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
