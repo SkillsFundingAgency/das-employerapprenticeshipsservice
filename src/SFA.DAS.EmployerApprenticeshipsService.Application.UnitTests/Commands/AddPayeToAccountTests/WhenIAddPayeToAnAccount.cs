@@ -13,7 +13,6 @@ using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
-using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 {
@@ -25,6 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
 
@@ -42,8 +42,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(ExpectedAccountId);
 
             _mediator = new Mock<IMediator>();
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object, _hashingService.Object, _mediator.Object);
+            _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object, _hashingService.Object, _mediator.Object, _eventPublisher.Object);
         }
 
         [Test]
@@ -86,6 +87,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 
             //Assert
             _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
+        }
+
+        [Test]
+        public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenAdded()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+
+            //Act
+            await _addPayeToAccountCommandHandler.Handle(command);
+
+            //Assert
+            _eventPublisher.Verify(x => x.PublishPayeSchemeAddedEvent(command.HashedAccountId, command.Empref));
         }
 
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Web;
 using MediatR;
 using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -30,6 +31,23 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             var resourceUri = CreateAccountUri(hashedAccountId) + $"/legalentities/{legalEntityId}";
             await PublishEvent(resourceUri, "LegalEntityCreated");
+        }
+
+        public async Task PublishPayeSchemeAddedEvent(string hashedAccountId, string payeSchemeRef)
+        {
+            var resourceUri = CreatePayeSchemeUri(hashedAccountId, payeSchemeRef);
+            await PublishEvent(resourceUri, "PayeSchemeAdded");
+        }
+
+        public async Task PublishPayeSchemeRemovedEvent(string hashedAccountId, string payeSchemeRef)
+        {
+            var resourceUri = CreatePayeSchemeUri(hashedAccountId, payeSchemeRef);
+            await PublishEvent(resourceUri, "PayeSchemeRemoved");
+        }
+
+        private string CreatePayeSchemeUri(string hashedAccountId, string payeSchemeRef)
+        {
+            return CreateAccountUri(hashedAccountId) + $"/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}";
         }
 
         private string CreateAccountUri(string hashedAccountId)
