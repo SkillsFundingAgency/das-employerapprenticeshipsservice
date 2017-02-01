@@ -225,11 +225,13 @@
     <Compile Include="Services\HttpClientWrapper.cs" />
     <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
+    <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\TotpService.cs" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration\" />
+    <Folder Include="Interfaces\PostcodeAnywhere\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
