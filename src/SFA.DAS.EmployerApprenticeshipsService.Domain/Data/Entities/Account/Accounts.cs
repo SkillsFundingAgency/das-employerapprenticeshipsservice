@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Domain.Entities.Account
+namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 {
     public class Accounts<T>
     {

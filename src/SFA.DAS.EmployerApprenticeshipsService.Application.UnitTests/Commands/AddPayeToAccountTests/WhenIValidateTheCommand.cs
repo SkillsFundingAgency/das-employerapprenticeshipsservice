@@ -3,13 +3,12 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToNewLegalEntity
+namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
 {
     public class WhenIValidateTheCommand
     {

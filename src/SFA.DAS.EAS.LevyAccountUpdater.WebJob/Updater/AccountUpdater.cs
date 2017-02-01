@@ -6,6 +6,7 @@ using NLog;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater

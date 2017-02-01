@@ -2,6 +2,7 @@
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Events.ProcessPayment
 {

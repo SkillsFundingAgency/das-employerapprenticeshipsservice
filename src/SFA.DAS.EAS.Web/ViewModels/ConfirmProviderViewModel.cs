@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class ConfirmProviderViewModel
     {

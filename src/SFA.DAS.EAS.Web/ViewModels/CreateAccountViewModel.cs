@@ -1,7 +1,7 @@
 ﻿using System;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class CreateAccountViewModel
     {

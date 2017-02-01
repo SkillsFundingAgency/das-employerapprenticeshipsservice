@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EAS.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public abstract class BaseRepository
     {

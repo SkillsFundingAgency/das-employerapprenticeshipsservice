@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
-namespace SFA.DAS.EAS.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IEnglishFractionRepository
     {

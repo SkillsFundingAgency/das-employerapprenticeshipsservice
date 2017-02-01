@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Web.Enums;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public sealed class SubmitCommitmenViewModel
     {

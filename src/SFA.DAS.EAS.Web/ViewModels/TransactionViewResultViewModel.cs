@@ -1,7 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Web.ViewModels;
+﻿using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     public class TransactionViewResultViewModel
     {

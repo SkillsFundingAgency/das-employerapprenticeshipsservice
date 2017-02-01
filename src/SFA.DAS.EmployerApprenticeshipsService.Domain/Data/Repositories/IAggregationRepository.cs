@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
-namespace SFA.DAS.EAS.Domain.Data
+namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IAggregationRepository
     {

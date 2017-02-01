@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Domain.Entities.Account
+namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 {
     public class Account
     {

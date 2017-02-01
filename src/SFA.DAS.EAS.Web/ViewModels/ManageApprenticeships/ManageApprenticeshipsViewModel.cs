@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Web.Models.ManageApprenticeships
+namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
     public class ManageApprenticeshipsViewModel
     {

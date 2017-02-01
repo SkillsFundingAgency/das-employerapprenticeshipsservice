@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentValidation;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Validators

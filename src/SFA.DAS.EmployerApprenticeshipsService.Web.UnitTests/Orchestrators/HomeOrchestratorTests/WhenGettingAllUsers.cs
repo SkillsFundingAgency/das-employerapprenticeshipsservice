@@ -8,7 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUsers;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SignInUserViewModel = SFA.DAS.EAS.Web.ViewModels.SignInUserViewModel;

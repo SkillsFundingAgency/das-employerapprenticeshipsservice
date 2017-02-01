@@ -415,8 +415,8 @@
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
-    <Compile Include="Models\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
-    <Compile Include="Models\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
     <Compile Include="ViewModels\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\FinishEditingViewModel.cs" />
