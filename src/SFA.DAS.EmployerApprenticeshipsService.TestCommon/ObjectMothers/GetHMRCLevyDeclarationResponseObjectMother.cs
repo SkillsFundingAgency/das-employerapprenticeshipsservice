@@ -10,7 +10,6 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
             var declarationResponse = new GetHMRCLevyDeclarationResponse
             {
                 Empref = empref,
-                Fractions = EnglishFractionObjectMother.Create(empref),
                 LevyDeclarations = DeclarationsObjectMother.Create(empref)
             };
 

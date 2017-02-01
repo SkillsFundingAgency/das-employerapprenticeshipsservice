@@ -74,18 +74,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.GetEmployerDeclaration(It.Is<string>(c => c.Equals("1") || c.Equals("2") || c.Equals("4")), ExpectedEmpRef), Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Declarations.Declarations.Count(c=>!c.NoPaymentForPeriod)));
         }
-
-        [Test]
-        public async Task ThenEveryFractionIsAddedToTheRepository()
-        {
-            //Act
-            var refreshEmployerLevyDataCommand = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
-            await _refreshEmployerLevyDataCommandHandler.Handle(refreshEmployerLevyDataCommand);
-
-            //Assert
-            _englishFractionRepository.Verify(x=>x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(),ExpectedEmpRef),Times.Exactly(refreshEmployerLevyDataCommand.EmployerLevyData[0].Fractions.Fractions.Count));
-        }
-
+        
         [Test]
         public async Task ThenTheLevyRepositoryIsUpdatedIfTheDeclarationDoesNotExist()
         {

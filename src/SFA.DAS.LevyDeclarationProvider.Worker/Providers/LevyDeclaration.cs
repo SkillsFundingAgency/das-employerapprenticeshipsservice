@@ -43,8 +43,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
-                // TODO - Remove this tempory PROD switch once HMRC API is ready
-                if (CloudConfigurationManager.GetSetting("EnvironmentName") == "PROD")
+                if (CloudConfigurationManager.GetSetting("DeclarationsEnabled").Equals("false",StringComparison.CurrentCultureIgnoreCase))
                 {
                     await message.CompleteAsync();
                     return;
@@ -62,33 +61,24 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                 var employerDataList = new List<EmployerLevyData>();
 
-                var updateEnglishFractionsRequired = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+                var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
-                    if (updateEnglishFractionsRequired.UpdateRequired)
+                    
+                    await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                     {
-                        await _mediator.SendAsync(new UpdateEnglishFractionsCommand
-                        {
-                            AuthToken = scheme.AccessToken,
-                            EmployerReference = scheme.Ref
-                        });
-                    }
+                        EmployerReference = scheme.Ref,
+                        EnglishFractionUpdateResponse = englishFractionUpdateResponse
+                    });
+                    
+                    
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { EmpRef = scheme.Ref });
 
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
+                    var employerData = new EmployerLevyData();
 
-                    var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
-
-                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.LevyDeclarations != null)
                     {
-                        foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
-                        {
-                            employerData.Fractions.Fractions.Add(new DasEnglishFraction
-                            {
-                                Amount = decimal.Parse(fractionCalculation.Fractions.Find(fr => fr.Region == "England").Value),
-                                DateCalculated = DateTime.Parse(fractionCalculation.CalculatedAt)
-                            });
-                        }
 
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
@@ -115,11 +105,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     }
                 }
 
-                if (updateEnglishFractionsRequired.UpdateRequired)
+                if (englishFractionUpdateResponse.UpdateRequired)
                 {
                     await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                     {
-                        DateCalculated = updateEnglishFractionsRequired.DateCalculated
+                        DateCalculated = englishFractionUpdateResponse.DateCalculated
                     });
                 }
 
