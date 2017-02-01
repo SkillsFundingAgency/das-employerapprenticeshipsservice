@@ -37,6 +37,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILogger _logger;
         private readonly ICommitmentStatusCalculator _statusCalculator;
 
+        private readonly Func<int, string> _addSSurfix = i => i > 1 ? "s" : "";
+
         public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ICommitmentStatusCalculator statusCalculator, ILogger logger)
         {
             if (mediator == null)
@@ -533,8 +535,155 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }, hashedAccountId, externalUserId);
         }
+        
+        public async Task<OrchestratorResponse<YourCohortsViewModel>> GetYourCohorts(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting your cohorts for Account: {accountId}");
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId, string externalUserId)
+            return await CheckUserAuthorization(async () =>
+            {
+                var data = await _mediator.SendAsync(new GetCommitmentsQuery
+                {
+                    AccountId = accountId
+                });
+
+                var commitmentStatuses = data.Commitments
+                    .Select(m => _statusCalculator.GetStatus(
+                        m.EditStatus,
+                        m.ApprenticeshipCount,
+                        m.LastAction,
+                        m.AgreementStatus))
+                    .ToList();
+
+                return new OrchestratorResponse<YourCohortsViewModel>
+                {
+                    Data = new YourCohortsViewModel
+                               {
+                                   WaitingToBeSentCount = commitmentStatuses.Count(m => m == RequestStatus.NewRequest),
+                                   ReadyForApprovalCount = commitmentStatuses.Count(m => m == RequestStatus.ReadyForApproval),
+                                   ReadyForReviewCount = commitmentStatuses.Count(m => m == RequestStatus.ReadyForReview),
+                                   WithProviderCount = commitmentStatuses.Count(m => 
+                                        m == RequestStatus.WithProviderForApproval 
+                                     || m == RequestStatus.SentToProvider
+                                     || m == RequestStatus.SentForReview),
+                    }
+                }; 
+                        
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllWaitingToBeSent(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting your cohorts waiting ro be sent for Account: {accountId}");
+
+            return await CheckUserAuthorization(async () =>
+                {
+                    var commitments = (await GetAll(accountId, RequestStatus.NewRequest)).ToList();
+
+                    return new OrchestratorResponse<CommitmentListViewModel2>
+                    {
+                        Data = new CommitmentListViewModel2
+                        {
+                            AccountHashId = hashedAccountId,
+                            Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                            PageTitle = "Waiting to be sent",
+                            PageId = "waiting-to-be-sent",
+                            PageHeading = "Waiting to be sent",
+                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are waiting to be sent:",
+                        }
+                    };
+
+                }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllReadyForApproval(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting your cohorts ready for approval for Account: {accountId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var commitments = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
+
+                return new OrchestratorResponse<CommitmentListViewModel2>
+                {
+                    Data = new CommitmentListViewModel2
+                    {
+                        AccountHashId = hashedAccountId,
+                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        PageTitle = "Ready fr approval",
+                        PageId = "ready-for-approval",
+                        PageHeading = "Readyu for approval",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for approval:",
+
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllReadyForReview(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting your cohorts ready for review for Account: {accountId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var commitments = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
+
+                return new OrchestratorResponse<CommitmentListViewModel2>
+                {
+                    Data = new CommitmentListViewModel2
+                    {
+                        AccountHashId = hashedAccountId,
+                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        PageTitle = "Ready for review",
+                        PageId = "ready-for-review",
+                        PageHeading = "Ready for review",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for review:",
+
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllWithProvider(string hashedAccountId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            _logger.Info($"Getting your cohorts with the provider sent for Account: {accountId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var withProviderForApproval = await GetAll(accountId, RequestStatus.WithProviderForApproval);
+                var sentForReview = await GetAll(accountId, RequestStatus.SentForReview);
+                var sentToProvider = await GetAll(accountId, RequestStatus.SentToProvider);
+
+                var commitments = withProviderForApproval
+                                  .Concat(sentForReview)
+                                  .Concat(sentToProvider)
+                                  .ToList();
+
+                return new OrchestratorResponse<CommitmentListViewModel2>
+                {
+                    Data = new CommitmentListViewModel2
+                    {
+                        AccountHashId = hashedAccountId,
+                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        PageTitle = "With the provider",
+                        PageId = "with-the-provider",
+                        PageHeading = "With the provider",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are with the provider:",
+
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+    public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting all Commitments for Account: {accountId}");
@@ -561,6 +710,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }, hashedAccountId, externalUserId);
+        }
+
+        private async Task<IEnumerable<CommitmentListItem>> GetAll(long accountId, RequestStatus requestStatus)
+        {
+            _logger.Info($"Getting all Commitments for Account: {accountId}");
+
+            var data = await _mediator.SendAsync(new GetCommitmentsQuery
+            {
+                AccountId = accountId
+            });
+            return data.Commitments.Where(
+                            m => _statusCalculator.GetStatus(m.EditStatus, m.ApprenticeshipCount, m.LastAction, m.AgreementStatus)
+                                    == requestStatus);
         }
 
         public async Task<OrchestratorResponse<CommitmentDetailsViewModel>> GetCommitmentDetails(string hashedAccountId, string hashedCommitmentId, string externalUserId)

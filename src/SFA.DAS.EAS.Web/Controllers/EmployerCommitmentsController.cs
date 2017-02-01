@@ -42,6 +42,47 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("YourCohorts")]
+        public async Task<ActionResult> YourCohorts(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("WaitingToBeSent")]
+        public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForApproval")]
+        public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForReview")]
+        public async Task<ActionResult> ReadyForReview(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("WithProvider")]
+        public async Task<ActionResult> WithProvider(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
         [Route("Cohorts")]
         public async Task<ActionResult> Cohorts(string hashedAccountId)
         {

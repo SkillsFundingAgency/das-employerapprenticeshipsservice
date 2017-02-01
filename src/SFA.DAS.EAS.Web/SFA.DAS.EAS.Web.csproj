@@ -458,6 +458,7 @@
     <Compile Include="Models\Types\SaveStatus.cs" />
     <Compile Include="Models\UserLinks.cs" />
     <Compile Include="Models\ViewModelBase.cs" />
+    <Compile Include="Models\YourCohortsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
@@ -950,6 +951,8 @@
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
+    <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
+    <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
