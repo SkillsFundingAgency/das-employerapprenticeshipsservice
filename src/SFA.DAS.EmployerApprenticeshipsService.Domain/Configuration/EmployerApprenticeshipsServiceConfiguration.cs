@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string Hashstring { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
 		public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }
+        public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration
