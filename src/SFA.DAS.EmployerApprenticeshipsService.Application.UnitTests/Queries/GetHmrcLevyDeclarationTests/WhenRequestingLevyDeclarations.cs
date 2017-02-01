@@ -17,7 +17,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
         private GetHMRCLevyDeclarationQueryHandler _getHMRCLevyDeclarationQueryHandler;
         private Mock<IValidator<GetHMRCLevyDeclarationQuery>> _validator;
         private Mock<IHmrcService> _hmrcService;
-        private Mock<IEnglishFractionRepository> _englishFractionRepository;
 
         [SetUp]
         public void Arrange()
@@ -28,10 +27,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.GetEnglishFractions(ExpectedEmpRef)).ReturnsAsync(EnglishFractionObjectMother.Create(ExpectedEmpRef));
             _hmrcService.Setup(x => x.GetLevyDeclarations(ExpectedEmpRef)).ReturnsAsync(DeclarationsObjectMother.Create(ExpectedEmpRef));
-
-            _englishFractionRepository = new Mock<IEnglishFractionRepository>();
-
-            _getHMRCLevyDeclarationQueryHandler = new GetHMRCLevyDeclarationQueryHandler(_validator.Object, _hmrcService.Object, _englishFractionRepository.Object);
+            
+            _getHMRCLevyDeclarationQueryHandler = new GetHMRCLevyDeclarationQueryHandler(_validator.Object, _hmrcService.Object);
         }
 
         [Test]
@@ -63,16 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
             //Assert
             _hmrcService.Verify(x => x.GetLevyDeclarations(It.Is<string>(c => c.Equals(ExpectedEmpRef))), Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheLevyServiceIsCalledWithThePassedIdToGetTheFractions()
-        {
-            //Act
-            await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { EmpRef = ExpectedEmpRef });
-
-            //Assert
-            _hmrcService.Verify(x => x.GetEnglishFractions(It.Is<string>(c => c.Equals(ExpectedEmpRef))), Times.Once);
-        }
+        
 
         [Test]
         public async Task ThenTheResponseIsPopulatedWithDeclarations()
@@ -84,7 +72,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
             Assert.IsNotNull(actual);
             Assert.AreEqual(ExpectedEmpRef, actual.Empref);
             Assert.IsTrue(actual.LevyDeclarations.Declarations.Any());
-            Assert.IsTrue(actual.Fractions.FractionCalculations.Any());
         }
     }
 }

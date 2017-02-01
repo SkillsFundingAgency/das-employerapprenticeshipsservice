@@ -61,35 +61,24 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                 var employerDataList = new List<EmployerLevyData>();
 
-                var updateEnglishFractionsRequired = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+                var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
-                    if (updateEnglishFractionsRequired.UpdateRequired)
+                    
+                    await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                     {
-                        await _mediator.SendAsync(new UpdateEnglishFractionsCommand
-                        {
-                            AuthToken = scheme.AccessToken,
-                            EmployerReference = scheme.Ref
-                        });
-                    }
-
-
-                    //TODO need to check here to see if we need to get the fractions.
+                        EmployerReference = scheme.Ref,
+                        EnglishFractionUpdateResponse = englishFractionUpdateResponse
+                    });
+                    
+                    
                     var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { EmpRef = scheme.Ref });
 
-                    var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
+                    var employerData = new EmployerLevyData();
 
-                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.LevyDeclarations != null)
                     {
-                        foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
-                        {
-                            employerData.Fractions.Fractions.Add(new DasEnglishFraction
-                            {
-                                Amount = decimal.Parse(fractionCalculation.Fractions.Find(fr => fr.Region == "England").Value),
-                                DateCalculated = DateTime.Parse(fractionCalculation.CalculatedAt)
-                            });
-                        }
 
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
@@ -116,11 +105,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     }
                 }
 
-                if (updateEnglishFractionsRequired.UpdateRequired)
+                if (englishFractionUpdateResponse.UpdateRequired)
                 {
                     await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                     {
-                        DateCalculated = updateEnglishFractionsRequired.DateCalculated
+                        DateCalculated = englishFractionUpdateResponse.DateCalculated
                     });
                 }
 

@@ -115,22 +115,6 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
         }
 
         [Test]
-        public async Task ThenEachFractionReturnedFromTheServiceIsAddedToTheRepository()
-        {
-            //Arrange
-            var expectedAccessToken= "myaccesstoken";
-            var expectedEmpref = "123/fgh456";
-            _dasAccountService.Setup(x => x.GetAccountSchemes(ExpectedAccountId)).ReturnsAsync(new Schemes {SchemesList = new List<Scheme> {new Scheme {AccessToken = expectedAccessToken,AccountId = ExpectedAccountId,Id=1,Ref=expectedEmpref,RefreshToken = "token"} } });
-            _mediator.Setup(x =>x.SendAsync(It.Is<GetHMRCLevyDeclarationQuery>(c => c.EmpRef.Equals(expectedEmpref)))).ReturnsAsync(GetHMRCLevyDeclarationResponseObjectMother.Create(expectedEmpref));
-
-            //Act
-            await _levyDeclaration.Handle();
-
-            //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<RefreshEmployerLevyDataCommand>(c=>c.AccountId.Equals(ExpectedAccountId) && c.EmployerLevyData[0].Fractions.Fractions.Count==2)));
-        }
-
-        [Test]
         public async Task ThenWhenHmrcHaveUpdatedTheirEnglishFractionCalculationsIShouldUpdateTheLevyCalculations()
         {
             //Assign

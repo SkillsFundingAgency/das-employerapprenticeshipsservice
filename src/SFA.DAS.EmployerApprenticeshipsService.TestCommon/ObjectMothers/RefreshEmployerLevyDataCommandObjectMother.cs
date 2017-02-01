@@ -47,24 +47,6 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                             Date = DateTime.UtcNow.AddMonths(3)
                         }
                     }
-                },
-                Fractions = new DasEnglishFractions
-                {
-                    Fractions = new List<DasEnglishFraction>
-                    {
-                        new DasEnglishFraction
-                        {
-                            Amount = 0.89m,
-                            Id = "1",
-                            DateCalculated = DateTime.UtcNow
-                        },
-                        new DasEnglishFraction
-                        {
-                            Amount = 0.89m,
-                            Id = "1",
-                            DateCalculated = DateTime.UtcNow
-                        }
-                    }
                 }
                 }
                }
