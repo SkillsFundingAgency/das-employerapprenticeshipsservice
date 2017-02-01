@@ -73,7 +73,9 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
+            For<IEventsApi>().Use<EventsApi>()
+                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
+                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
             RegisterMapper();
 
