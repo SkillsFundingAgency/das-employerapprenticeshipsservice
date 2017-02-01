@@ -523,6 +523,8 @@
     <Content Include="dist\images\gov.uk_logotype_crown.svg" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert.png" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="dist\images\icon-important-2x.png" />
+    <Content Include="dist\images\icon-important.png" />
     <Content Include="dist\images\icon-pointer-2x.png" />
     <Content Include="dist\images\icon-pointer-black-2x.png" />
     <Content Include="dist\images\icon-pointer-black.png" />
