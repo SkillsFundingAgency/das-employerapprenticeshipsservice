@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
-                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company is not active";
+                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company must be active, under administration or in a voluntary arrangement";
                 return errorResponse;
             }
 
@@ -254,7 +254,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.BadRequest
                 };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity removed";
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity must have registered status";
                 return notFoundResponse;
             }
 
