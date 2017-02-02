@@ -21,6 +21,7 @@ using SFA.DAS.EAS.Web.Exceptions;
 using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
+using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Web.Extensions;
@@ -756,7 +757,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
         {
-            throw new NotImplementedException();
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                AccountId = model.EmployerAccountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                AccountId = model.EmployerAccountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
         private static string CreateReference()
