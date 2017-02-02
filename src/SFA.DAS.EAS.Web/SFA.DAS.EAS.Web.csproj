@@ -411,7 +411,6 @@
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\CommitmentInformViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListItemViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
