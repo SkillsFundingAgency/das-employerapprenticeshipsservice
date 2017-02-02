@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.CommitmentListViewModel2>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CommitmentListViewModel2>
 
 @{
     ViewBag.Title = Model.Data.PageTitle;
@@ -13,38 +13,44 @@
 
         <table class="tableResponsive employerListing">
             <thead>
-                <tr>
-                    <th>Employer</th>
-                    <th>Cohort reference</th>
-                    <th>Last message</th>
-                    <th></th>
+            <tr>
+                <th>Employer</th>
+                <th>Cohort reference</th>
+                <th>Last message</th>
+                <th></th>
 
-                </tr>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var commitment in Model.Data.Commitments)
-                {
-                    <tr>
-                        <td>
-                            @commitment.ProviderName &nbsp;
-                        </td>
-                        <td>
-                            @commitment.HashedCommitmentId &nbsp;
-                        </td>
-                        <td>
-                            commitment.LatestMessage &nbsp;
-                        </td>
-                        <td>
-                            @if (commitment.ShowViewLink)
-                            {
-                                <a href="@Url.Action("Details", new { Model.Data.AccountHashId, commitment.HashedCommitmentId })" title="View cohort" aria-label="View cohort">View</a>
-                            }
-                        </td>
-                    </tr>
-                }
+            @foreach (var commitment in Model.Data.Commitments)
+            {
+                <tr>
+                    <td>
+                        @commitment.ProviderName &nbsp;
+                    </td>
+                    <td>
+                        @commitment.HashedCommitmentId &nbsp;
+                    </td>
+                    <td>
+                        commitment.LatestMessage &nbsp;
+                    </td>
+                    <td>
+                        @if (commitment.ShowViewLink)
+                        {
+                            <a href="@Url.Action("Details", new { Model.Data.AccountHashId, commitment.HashedCommitmentId })" title="View cohort" aria-label="View cohort">View</a>
+                        }
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
 
 
     </div>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("YourCohorts", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
+    </div>
+}

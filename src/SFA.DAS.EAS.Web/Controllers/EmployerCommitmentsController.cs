@@ -19,6 +19,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
 
+        private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
+
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
             : base(owinWrapper, featureToggle, userWhiteList)
@@ -56,6 +58,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
             return View("RequestList", model);
         }
 
@@ -64,6 +67,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
             return View("RequestList", model);
         }
 
@@ -72,6 +76,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForReview(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
             return View("RequestList", model);
         }
 
@@ -367,7 +372,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Acknowledgement")]
         public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
         {
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
+            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
 
             // TODO: LWA - Is message in querystring a security issue?
             return View("Acknowledgement", response);
@@ -378,9 +384,33 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
         {
             // TODO: LWA - Is message in querystring a security issue?
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
+
+            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment
+                        (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
+
+            var returnUrl = GetSessionRequestStatus(hashedAccountId);
+            response.Data.BackLink = !string.IsNullOrEmpty(returnUrl)
+                ? new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" } 
+                : new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" };
 
             return View("Acknowledgement", response);
+        }
+
+        private string GetSessionRequestStatus(string hashedAccountId)
+        {
+            var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
+            Session[LastCohortPageSessionKey] = null;
+            switch (status)
+            {
+                case RequestStatus.NewRequest:
+                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { hashedAccountId });
+                default:
+                    return string.Empty;
+            }
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
