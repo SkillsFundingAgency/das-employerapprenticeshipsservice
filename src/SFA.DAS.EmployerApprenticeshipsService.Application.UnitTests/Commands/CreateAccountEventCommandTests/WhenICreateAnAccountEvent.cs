@@ -27,20 +27,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountEventCommandTe
         [Test]
         public async Task ThenTheEventIsCreated()
         {
-            var command = new CreateAccountEventCommand { Event = "Created", HashedAccountId = "ABC123" };
+            var command = new CreateAccountEventCommand { Event = "Created", ResourceUri = "/api/accounts/ABC123" };
 
             await _handler.Handle(command);
 
-            _eventApi.Verify(x => x.CreateAccountEvent(It.Is<AccountEvent>( e => e.Event == command.Event && e.EmployerAccountId == command.HashedAccountId)), Times.Once);
+            _eventApi.Verify(x => x.CreateAccountEvent(It.Is<AccountEvent>( e => e.Event == command.Event && e.ResourceUri == command.ResourceUri)), Times.Once);
         }
 
         [Test]
         public async Task AndTheEventCreationFails()
         {
             var expectedException = new Exception();
-            var command = new CreateAccountEventCommand { Event = "Created", HashedAccountId = "ABC123" };
+            var command = new CreateAccountEventCommand { Event = "Created", ResourceUri = "/api/accounts/ABC123" };
 
-            _eventApi.Setup(x => x.CreateAccountEvent(It.Is<AccountEvent>(e => e.Event == command.Event && e.EmployerAccountId == command.HashedAccountId))).Throws(expectedException);
+            _eventApi.Setup(x => x.CreateAccountEvent(It.Is<AccountEvent>(e => e.Event == command.Event && e.ResourceUri == command.ResourceUri))).Throws(expectedException);
 
             await _handler.Handle(command);
 

@@ -5,7 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityByIdTests
 {

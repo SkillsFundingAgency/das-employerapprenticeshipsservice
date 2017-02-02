@@ -5,11 +5,14 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
-using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -18,6 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
         private CreateLegalEntityCommandHandler _commandHandler;
         private CreateLegalEntityCommand _command;
         private MembershipView _owner;
@@ -66,18 +70,20 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity, _command.SignAgreement, _command.SignedDate, _owner.UserId))
                               .ReturnsAsync(_agreementView);
 
-            _commandHandler = new CreateLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _mediator.Object);
+            _eventPublisher = new Mock<IEventPublisher>();
+
+            _commandHandler = new CreateLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _mediator.Object, _eventPublisher.Object);
         }
 
         [Test]
-        public async Task ThenTheAccountIsRenamedToTheNewName()
+        public async Task ThenTheLegalEntityIsCreated()
         {
             //Act
             var result = await _commandHandler.Handle(_command);
 
             //Assert
             Assert.AreSame(_agreementView, result.AgreementView);
-            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == _command.HashedAccountId && e.Event == "LegalEntityCreated")), Times.Once);
+            _eventPublisher.Verify(x => x.PublishLegalEntityCreatedEvent(_command.HashedAccountId, _agreementView.LegalEntityId));
         }
 
         [Test]

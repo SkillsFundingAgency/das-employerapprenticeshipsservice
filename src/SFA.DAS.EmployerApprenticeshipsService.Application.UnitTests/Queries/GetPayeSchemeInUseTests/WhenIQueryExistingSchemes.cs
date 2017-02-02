@@ -5,6 +5,8 @@ using SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeInUseTests
 {
@@ -22,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPayeSchemeInUseTests
             SetUp();
             Query = new GetPayeSchemeInUseQuery {Empref=""};
             _employerSchemesRepository = new Mock<IEmployerSchemesRepository>();
-            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(It.IsAny<string>())).ReturnsAsync(new Scheme {AccountId = ExpectedAccountId});
+            _employerSchemesRepository.Setup(x => x.GetSchemeByRef(It.IsAny<string>())).ReturnsAsync(new PayeScheme {AccountId = ExpectedAccountId});
 
             RequestHandler = new GetPayeSchemeInUseHandler(RequestValidator.Object, _employerSchemesRepository.Object);
         }

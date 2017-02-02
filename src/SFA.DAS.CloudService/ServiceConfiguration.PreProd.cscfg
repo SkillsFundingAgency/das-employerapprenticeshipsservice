@@ -28,6 +28,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="DeclarationsEnabled" value="true" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>

@@ -1,12 +1,11 @@
 ﻿using System;
 using FluentValidation;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Validators
 {
     using System.Linq;
     using System.Text.RegularExpressions;
-    using Models.Types;
 
     public class ApprenticeshipViewModelValidator : AbstractValidator<ApprenticeshipViewModel>
     {

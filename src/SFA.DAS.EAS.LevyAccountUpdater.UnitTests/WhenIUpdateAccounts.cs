@@ -6,7 +6,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.LevyAccountUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
 

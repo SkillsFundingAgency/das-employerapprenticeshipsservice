@@ -5,8 +5,8 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 
@@ -18,16 +18,31 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
         private readonly IValidator<RemovePayeFromAccountCommand> _validator;
         private readonly IAccountRepository _accountRepository;
         private readonly IHashingService _hashingService;
+        private readonly IEventPublisher _eventPublisher;
 
-        public RemovePayeFromAccountCommandHandler(IMediator mediator, IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService)
+        public RemovePayeFromAccountCommandHandler(IMediator mediator, IValidator<RemovePayeFromAccountCommand> validator, IAccountRepository accountRepository, IHashingService hashingService, IEventPublisher eventPublisher)
         {
             _mediator = mediator;
             _validator = validator;
             _accountRepository = accountRepository;
             _hashingService = hashingService;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(RemovePayeFromAccountCommand message)
+        {
+            await ValidateMessage(message);
+
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+            await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
+
+            await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
+
+            await NotifyPayeSchemeRemoved(message.HashedAccountId, message.PayeRef);
+        }
+
+        private async Task ValidateMessage(RemovePayeFromAccountCommand message)
         {
             var result = await _validator.ValidateAsync(message);
 
@@ -40,12 +55,11 @@ namespace SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount
             {
                 throw new UnauthorizedAccessException();
             }
+        }
 
-            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            await AddAuditEntry(message.UserId, message.PayeRef, accountId.ToString());
-
-            await _accountRepository.RemovePayeFromAccount(accountId, message.PayeRef);
+        private async Task NotifyPayeSchemeRemoved(string hashedAccountId, string payeRef)
+        {
+            await _eventPublisher.PublishPayeSchemeAddedEvent(hashedAccountId, payeRef);
         }
 
         private async Task AddAuditEntry(string userId, string payeRef, string accountId)

@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = new GatewayInformViewModel
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
-                    BreadcrumbUrl = Url.Action("Index", "Home"),
+                    BreadcrumbUrl = Url.Action("SelectEmployer", "EmployerAccount"),
                     ConfirmUrl = Url.Action("Gateway", "EmployerAccount"),
                 },
                 FlashMessage = flashMessageViewModel
@@ -133,7 +133,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (enteredData == null)
                 return RedirectToAction("SelectEmployer", "EmployerAccount");
 
-            var request = new CreateAccountModel
+            var request = new CreateAccountViewModel
             {
                 UserId = GetUserId(),
                 OrganisationType = enteredData.OrganisationType,

@@ -32,10 +32,11 @@ using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
@@ -65,21 +66,17 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             
             var config = this.GetConfiguration();
-            if (config.Identity.UseFake)
-            {
-                For<IUserRepository>().Use<FileSystemUserRepository>();
-            }
-            else
-            {
-                For<IUserRepository>().Use<UserRepository>();
-            }
+
+            For<IUserRepository>().Use<UserRepository>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
+            For<IEventsApi>().Use<EventsApi>()
+                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
+                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
             RegisterMapper();
 
@@ -179,8 +176,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
         
         private void PopulateSystemDetails(string envName)
         {
-            SystemDetails.EnvironmentName = envName;
-            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            SystemDetailsViewModel.EnvironmentName = envName;
+            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

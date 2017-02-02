@@ -17,8 +17,9 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

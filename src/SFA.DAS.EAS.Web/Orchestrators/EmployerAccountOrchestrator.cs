@@ -12,8 +12,9 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -37,24 +38,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountModel model, HttpContextBase context)
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
         {
             try
             {
                 var result = await Mediator.SendAsync(new CreateAccountCommand
                 {
-                    ExternalUserId = model.UserId,
-                    OrganisationType = model.OrganisationType,
-                    OrganisationName = model.OrganisationName,
-                    OrganisationReferenceNumber = model.OrganisationReferenceNumber,
-                    OrganisationAddress = model.OrganisationAddress,
-                    OrganisationDateOfInception = model.OrganisationDateOfInception,
-                    PayeReference = model.PayeReference,
-                    AccessToken = model.AccessToken,
-                    RefreshToken = model.RefreshToken,  
-                    OrganisationStatus = model.OrganisationStatus,
-                    EmployerRefName = model.EmployerRefName,
-                    PublicSectorDataSource = model.PublicSectorDataSource
+                    ExternalUserId = viewModel.UserId,
+                    OrganisationType = viewModel.OrganisationType,
+                    OrganisationName = viewModel.OrganisationName,
+                    OrganisationReferenceNumber = viewModel.OrganisationReferenceNumber,
+                    OrganisationAddress = viewModel.OrganisationAddress,
+                    OrganisationDateOfInception = viewModel.OrganisationDateOfInception,
+                    PayeReference = viewModel.PayeReference,
+                    AccessToken = viewModel.AccessToken,
+                    RefreshToken = viewModel.RefreshToken,  
+                    OrganisationStatus = viewModel.OrganisationStatus,
+                    EmployerRefName = viewModel.EmployerRefName,
+                    PublicSectorDataSource = viewModel.PublicSectorDataSource
                 });
 
                 CookieService.Delete(context, CookieName);
@@ -133,7 +134,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             CookieService.Update(context, CookieName, JsonConvert.SerializeObject(data));
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountModel model)
+        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountViewModel viewModel)
         {
             var response = new OrchestratorResponse<EmployerAgreementViewModel>();
 
@@ -143,10 +144,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 EmployerAgreement = new EmployerAgreementView
                 {
-                    LegalEntityName = model.OrganisationName,
-                    LegalEntityCode = model.OrganisationReferenceNumber,
-                    LegalEntityAddress = model.OrganisationAddress,
-                    LegalEntityInceptionDate = model.OrganisationDateOfInception,
+                    LegalEntityName = viewModel.OrganisationName,
+                    LegalEntityCode = viewModel.OrganisationReferenceNumber,
+                    LegalEntityAddress = viewModel.OrganisationAddress,
+                    LegalEntityInceptionDate = viewModel.OrganisationDateOfInception,
                     Status = EmployerAgreementStatus.Pending,
                     TemplateRef = templateResponse.Template.Ref,
                     TemplateText = templateResponse.Template.Text

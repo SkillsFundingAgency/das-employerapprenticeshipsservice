@@ -9,7 +9,10 @@ using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 

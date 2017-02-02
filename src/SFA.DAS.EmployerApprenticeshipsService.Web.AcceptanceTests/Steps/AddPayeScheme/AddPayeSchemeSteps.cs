@@ -7,8 +7,8 @@ using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
             var scheme = legalEntities.Data.PayeSchemes.First();
 
-            var removeScheme = new RemovePayeScheme
+            var removeScheme = new RemovePayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 RemoveScheme = 2,
@@ -130,7 +130,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme
+            var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",

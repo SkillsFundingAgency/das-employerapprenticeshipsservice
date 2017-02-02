@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Validators
 {

@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Models.ManageApprenticeships;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {

@@ -93,12 +93,12 @@
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents">
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.9.0.19625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.9.0.19625\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.9.0.19625, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.9.0.19625\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client">
@@ -141,10 +141,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountHistoryEntry.cs" />
-    <Compile Include="AggregationData.cs" />
-    <Compile Include="AggregationLine.cs" />
-    <Compile Include="AggregationLineItem.cs" />
+    <Compile Include="Models\Account\AccountHistoryEntry.cs" />
+    <Compile Include="Models\Account\CreateAccountResult.cs" />
+    <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
+    <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
+    <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
+    <Compile Include="Models\Transaction\AggregationData.cs" />
+    <Compile Include="Models\Transaction\AggregationLine.cs" />
+    <Compile Include="Models\Transaction\AggregationLineItem.cs" />
     <Compile Include="Attributes\QueueNameAttribute.cs" />
     <Compile Include="Configuration\AuditApiClientConfiguration.cs" />
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
@@ -162,41 +166,37 @@
     <Compile Include="Configuration\PostcodeAnywhereConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
     <Compile Include="Configuration\TasksApiClientConfiguration.cs" />
-    <Compile Include="CreateAccountResult.cs" />
-    <Compile Include="Data\BaseRepository.cs" />
-    <Compile Include="Data\IAccountRepository.cs" />
-    <Compile Include="Data\IAccountTeamRepository.cs" />
-    <Compile Include="Data\IAggregationRepository.cs" />
-    <Compile Include="Data\IEnglishFractionRepository.cs" />
-    <Compile Include="Data\IDasLevyRepository.cs" />
-    <Compile Include="Data\IEmployerAccountRepository.cs" />
-    <Compile Include="Data\IEmployerAgreementRepository.cs" />
-    <Compile Include="Data\IEmployerSchemesRepository.cs" />
-    <Compile Include="Data\IInvitationRepository.cs" />
+    <Compile Include="Data\Repositories\BaseRepository.cs" />
+    <Compile Include="Data\Repositories\IAccountRepository.cs" />
+    <Compile Include="Data\Repositories\IAccountTeamRepository.cs" />
+    <Compile Include="Data\Repositories\IAggregationRepository.cs" />
+    <Compile Include="Data\Repositories\IEnglishFractionRepository.cs" />
+    <Compile Include="Data\Repositories\IDasLevyRepository.cs" />
+    <Compile Include="Data\Repositories\IEmployerAccountRepository.cs" />
+    <Compile Include="Data\Repositories\IEmployerAgreementRepository.cs" />
+    <Compile Include="Data\Repositories\IEmployerSchemesRepository.cs" />
+    <Compile Include="Data\Repositories\IInvitationRepository.cs" />
+    <Compile Include="Data\Repositories\IMembershipRepository.cs" />
+    <Compile Include="Data\Repositories\IProviderRepository.cs" />
+    <Compile Include="Data\Repositories\IStandardsRepository.cs" />
+    <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
+    <Compile Include="Data\Repositories\IUserRepository.cs" />
+    <Compile Include="Models\Time\Duration.cs" />
+    <Compile Include="Models\Employer\EmployerInformation.cs" />
+    <Compile Include="Data\Entities\Account\Account.cs" />
+    <Compile Include="Data\Entities\Account\AccountBalance.cs" />
+    <Compile Include="Data\Entities\Account\Accounts.cs" />
+    <Compile Include="Data\Entities\Account\LegalEntities.cs" />
+    <Compile Include="Data\Entities\Account\LegalEntity.cs" />
+    <Compile Include="Data\Entities\Transaction\TransactionEntity.cs" />
     <Compile Include="Data\IPayeRepository.cs" />
-    <Compile Include="Data\IMembershipRepository.cs" />
-    <Compile Include="Data\IProviderRepository.cs" />
-    <Compile Include="Data\IStandardsRepository.cs" />
-    <Compile Include="Data\IUserAccountRepository.cs" />
-    <Compile Include="Data\IUserRepository.cs" />
-    <Compile Include="Duration.cs" />
-    <Compile Include="EmployerAgreementStatus.cs" />
-    <Compile Include="EmployerAgreementTemplate.cs" />
-    <Compile Include="EmployerAgreementView.cs" />
-    <Compile Include="EmployerInformation.cs" />
-    <Compile Include="Entities\Account\Account.cs" />
-    <Compile Include="Entities\Account\AccountBalance.cs" />
-    <Compile Include="Entities\Account\AccountDetail.cs" />
-    <Compile Include="Entities\Account\Accounts.cs" />
-    <Compile Include="Entities\Account\LegalEntities.cs" />
-    <Compile Include="Entities\Account\LegalEntity.cs" />
-    <Compile Include="Entities\Account\LegalEntityView.cs" />
-    <Compile Include="Entities\Account\PayeSchemeView.cs" />
-    <Compile Include="Entities\Transaction\TransactionEntity.cs" />
+    <Compile Include="Data\Entities\Account\AccountDetail.cs" />
+    <Compile Include="Data\Entities\Account\LegalEntityView.cs" />
+    <Compile Include="Data\Entities\Account\PayeSchemeView.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
-    <Compile Include="Framework.cs" />
-    <Compile Include="FrameworksView.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\Framework.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\FrameworksView.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
@@ -204,6 +204,7 @@
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\ILegalEntityRepository.cs" />
+    <Compile Include="Interfaces\IEventPublisher.cs" />
     <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />
@@ -217,21 +218,21 @@
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Interfaces\ITotpService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
-    <Compile Include="Invitation.cs" />
-    <Compile Include="InvitationStatus.cs" />
-    <Compile Include="InvitationView.cs" />
-    <Compile Include="ITrainingProgramme.cs" />
-    <Compile Include="LevyDeclarationView.cs" />
+    <Compile Include="Models\AccountTeam\Invitation.cs" />
+    <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
+    <Compile Include="Models\AccountTeam\InvitationView.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\ITrainingProgramme.cs" />
+    <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
     <Compile Include="Models\ReferenceData\PagedResponse.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
-    <Compile Include="OrganisationType.cs" />
-    <Compile Include="TransactionItemType.cs" />
-    <Compile Include="Membership.cs" />
-    <Compile Include="MembershipView.cs" />
+    <Compile Include="Models\Organisation\OrganisationType.cs" />
+    <Compile Include="Models\Transaction\TransactionItemType.cs" />
+    <Compile Include="Models\AccountTeam\Membership.cs" />
+    <Compile Include="Models\AccountTeam\MembershipView.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleLookup.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
@@ -259,22 +260,21 @@
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />
     <Compile Include="Models\Notification\NotificationMessage.cs" />
+    <Compile Include="Models\UserProfile\Role.cs" />
+    <Compile Include="Models\UserProfile\User.cs" />
+    <Compile Include="Models\UserProfile\Users.cs" />
     <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
-    <Compile Include="Paye.cs" />
-    <Compile Include="PayeView.cs" />
+    <Compile Include="Models\PAYE\Paye.cs" />
+    <Compile Include="Models\PAYE\PayeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Provider.cs" />
-    <Compile Include="Providers.cs" />
-    <Compile Include="ProvidersView.cs" />
-    <Compile Include="Role.cs" />
-    <Compile Include="Scheme.cs" />
-    <Compile Include="Schemes.cs" />
-    <Compile Include="Standard.cs" />
-    <Compile Include="StandardsView.cs" />
-    <Compile Include="TeamMember.cs" />
-    <Compile Include="User.cs" />
-    <Compile Include="Users.cs" />
-    <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
+    <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
+    <Compile Include="Models\PAYE\PayeScheme.cs" />
+    <Compile Include="Models\PAYE\PayeSchemes.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\Standard.cs" />
+    <Compile Include="Models\ApprenticeshipCourse\StandardsView.cs" />
+    <Compile Include="Models\AccountTeam\TeamMember.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

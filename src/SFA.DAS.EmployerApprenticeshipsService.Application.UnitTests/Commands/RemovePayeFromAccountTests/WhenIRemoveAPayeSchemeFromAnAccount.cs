@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
 
         [SetUp]
         public void Arrange()
@@ -32,9 +34,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _hashingService = new Mock<IHashingService>();
 
             _mediator = new Mock<IMediator>();
-            
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _handler = new RemovePayeFromAccountCommandHandler(_mediator.Object, _validator.Object, _accountRepository.Object, _hashingService.Object);
+            _handler = new RemovePayeFromAccountCommandHandler(_mediator.Object, _validator.Object, _accountRepository.Object, _hashingService.Object, _eventPublisher.Object);
         }
 
         [Test]
@@ -88,6 +90,25 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
 
             //Assert
             _accountRepository.Verify(x=>x.RemovePayeFromAccount(accountId,payeRef), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenRemoved()
+        {
+            //Arrange
+            var command = new RemovePayeFromAccountCommand
+            {
+                UserId = "54256",
+                HashedAccountId = "ABC123",
+                PayeRef = "3674826874623",
+                RemoveScheme = true
+            };
+
+            //Act
+            await _handler.Handle(command);
+
+            //Assert
+            _eventPublisher.Verify(x => x.PublishPayeSchemeAddedEvent(command.HashedAccountId, command.PayeRef));
         }
 
         [Test]

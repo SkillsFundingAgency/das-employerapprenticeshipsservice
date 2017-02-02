@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Castle.Components.DictionaryAdapter;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.ViewModels;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
 {

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {

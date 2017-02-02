@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.GatewayInformViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.GatewayInformViewModel>
 
 @{ViewBag.PageID = "page-onboard-gov-gateway-inform"; }
 @{ViewBag.Title = "Check details"; }
@@ -23,7 +23,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol>
-            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
+            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">Back</a></li>
         </ol>
     </div>
 }

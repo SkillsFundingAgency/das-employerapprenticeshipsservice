@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
