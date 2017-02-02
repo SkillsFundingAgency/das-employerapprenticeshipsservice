@@ -684,35 +684,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-    public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAll(string hashedAccountId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting all Commitments for Account: {accountId}");
-
-            return await CheckUserAuthorization(async () => 
-            {
-                var data = await _mediator.SendAsync(new GetCommitmentsQuery
-                {
-                    AccountId = accountId
-                });
-
-                var tasks = await _mediator.SendAsync(new GetTasksQueryRequest
-                {
-                    AccountId = accountId
-                });
-
-                return new OrchestratorResponse<CommitmentListViewModel>
-                {
-                    Data = new CommitmentListViewModel
-                    {
-                        AccountHashId = hashedAccountId,
-                        Commitments = data.Commitments.Select(x => MapFrom(x)).ToList(),
-                        NumberOfTasks = tasks.Tasks.Count
-                    }
-                };
-            }, hashedAccountId, externalUserId);
-        }
-
         private async Task<IEnumerable<CommitmentListItem>> GetAll(long accountId, RequestStatus requestStatus)
         {
             _logger.Info($"Getting all Commitments for Account: {accountId}");

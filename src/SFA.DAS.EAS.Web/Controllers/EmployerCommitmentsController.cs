@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
+using Newtonsoft.Json;
+
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -50,6 +53,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
+
             return View(model);
         }
 
@@ -86,15 +94,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
             return View("RequestList", model);
-        }
-
-        [HttpGet]
-        [Route("Cohorts")]
-        public async Task<ActionResult> Cohorts(string hashedAccountId)
-        {
-            var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(model);
         }
 
         [HttpGet]
@@ -325,7 +324,14 @@ namespace SFA.DAS.EAS.Web.Controllers
                 await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
             }
 
-            return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
+            var flashmessage = new FlashMessageViewModel
+            {
+                Headline = "Details saved but not send",
+                Severity = FlashMessageSeverityLevel.Info
+            };
+
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
         [HttpGet]
