@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.Azure;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EmployerApprenticeshipsService.Infrastructure.Caching;
 using StackExchange.Redis;
 
 namespace SFA.DAS.EAS.Infrastructure.Caching

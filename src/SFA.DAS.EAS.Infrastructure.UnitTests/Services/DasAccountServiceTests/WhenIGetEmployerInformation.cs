@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Infrastructure.Services;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasAccountServiceTests
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasAccountServiceTests
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerSchemesQuery>())).ReturnsAsync(new GetEmployerSchemesResponse {Schemes = new Schemes()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerSchemesQuery>())).ReturnsAsync(new GetEmployerSchemesResponse {PayeSchemes = new PayeSchemes()});
 
             _dasAccountService = new DasAccountService(_mediator.Object);
         }

@@ -10,7 +10,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;

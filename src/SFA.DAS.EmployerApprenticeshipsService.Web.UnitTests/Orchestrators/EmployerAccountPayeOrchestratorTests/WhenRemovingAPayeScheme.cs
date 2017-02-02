@@ -10,8 +10,8 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             var hashedId = "ABV465";
             var userRef = "abv345";
             var payeRef = "123/abc";
-            var model = new RemovePayeScheme { HashedAccountId = hashedId,PayeRef = payeRef,UserId = userRef};
+            var model = new RemovePayeSchemeViewModel { HashedAccountId = hashedId,PayeRef = payeRef,UserId = userRef};
 
             //Act
             var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(model);
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new UnauthorizedAccessException(""));
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeScheme ());
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel ());
 
             //Assert
             Assert.AreEqual(actual.Status,HttpStatusCode.Unauthorized);
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemovePayeFromAccountCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeScheme());
+            var actual = await _employerAccountPayeOrchestrator.RemoveSchemeFromAccount(new RemovePayeSchemeViewModel());
 
             //Assert
             Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest);

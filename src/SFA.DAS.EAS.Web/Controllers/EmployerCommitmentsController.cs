@@ -4,10 +4,11 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.Enums;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.Models.Types;
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -153,24 +154,24 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Create/ConfirmProvider")]
-        public async Task<ActionResult> ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]ConfirmProviderView viewModel)
+        public async Task<ActionResult> ConfirmProvider(string hashedAccountId, [System.Web.Http.FromUri]ConfirmProviderViewModel viewModelModel)
         {
             if (!ModelState.IsValid)
             {
-                if (viewModel.Confirmation == null)
+                if (viewModelModel.Confirmation == null)
                 {
-                    var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
+                    var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModelModel);
 
                     return View("SelectProvider", response);
                 }
             }
 
-            if (!viewModel.Confirmation.Value)
+            if (!viewModelModel.Confirmation.Value)
             {
-                return RedirectToAction("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModel.LegalEntityCode, CohortRef = viewModel.CohortRef });
+                return RedirectToAction("SearchProvider", new SelectProviderViewModel { LegalEntityCode = viewModelModel.LegalEntityCode, CohortRef = viewModelModel.CohortRef });
             }
 
-            return RedirectToAction("ChoosePath", new { hashedAccountId = hashedAccountId, legalEntityCode = viewModel.LegalEntityCode, providerId = viewModel.ProviderId, cohortRef = viewModel.CohortRef });
+            return RedirectToAction("ChoosePath", new { hashedAccountId = hashedAccountId, legalEntityCode = viewModelModel.LegalEntityCode, providerId = viewModelModel.ProviderId, cohortRef = viewModelModel.CohortRef });
         }
 
         [HttpGet]
@@ -345,7 +346,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedCommitmentId}/Submit")]
-        public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmentModel model)
+        public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmenViewModel model)
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
@@ -355,7 +356,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Submit")]
-        public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmentModel model)
+        public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmenViewModel model)
         {
             var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 

@@ -19,9 +19,9 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 
@@ -63,8 +63,8 @@ namespace SFA.DAS.EAS.Web
 
             var urlHelper = new UrlHelper();
 
-            UserLinks.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
-            UserLinks.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
 
             app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
             {

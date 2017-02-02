@@ -16,17 +16,18 @@ using SFA.DAS.EAS.Application.Queries.GetCommitments;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
 using SFA.DAS.EAS.Application.Queries.GetStandards;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Exceptions;
-using SFA.DAS.EAS.Web.Models;
-using SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks;
-using SFA.DAS.EAS.Web.Models.Types;
 using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
+using SFA.DAS.EAS.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.Web.Enums;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -123,19 +124,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, SelectProviderViewModel model)
+        public async Task<OrchestratorResponse<ConfirmProviderViewModel>> GetProvider(string hashedAccountId, string externalUserId, SelectProviderViewModel model)
         {
             var providerId = int.Parse(model.ProviderId);
 
             return await GetProvider(hashedAccountId, externalUserId, providerId, model.LegalEntityCode, model.CohortRef);
         }
 
-        public async Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, ConfirmProviderView model)
+        public async Task<OrchestratorResponse<ConfirmProviderViewModel>> GetProvider(string hashedAccountId, string externalUserId, ConfirmProviderViewModel model)
         {
             return await GetProvider(hashedAccountId, externalUserId, model.ProviderId, model.LegalEntityCode, model.CohortRef);
         }
 
-        private Task<OrchestratorResponse<ConfirmProviderView>> GetProvider(string hashedAccountId, string externalUserId, int providerId, string legalEntityCode, string cohortRef)
+        private Task<OrchestratorResponse<ConfirmProviderViewModel>> GetProvider(string hashedAccountId, string externalUserId, int providerId, string legalEntityCode, string cohortRef)
         {
             _logger.Info($"Getting Provider Details, Provider: {providerId}");
 
@@ -143,9 +144,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var providers = await ProviderSearch(providerId);
 
-                return new OrchestratorResponse<ConfirmProviderView>
+                return new OrchestratorResponse<ConfirmProviderViewModel>
                 {
-                    Data = new ConfirmProviderView
+                    Data = new ConfirmProviderViewModel
                     {
                         HashedAccountId = hashedAccountId,
                         LegalEntityCode = legalEntityCode,
@@ -225,7 +226,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, model.HashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<string>> CreateProviderAssignedCommitment(SubmitCommitmentModel model, string externalUserId)
+        public async Task<OrchestratorResponse<string>> CreateProviderAssignedCommitment(SubmitCommitmenViewModel model, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
             _logger.Info($"Creating Provider assigned Commitment. AccountId: {accountId}, Provider: {model.ProviderId}");
@@ -461,7 +462,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task SubmitCommitment(SubmitCommitmentModel model, string externalUserId)
+        public async Task SubmitCommitment(SubmitCommitmenViewModel model, string externalUserId)
         {
             await CheckUserAuthorization(async () => 
             {

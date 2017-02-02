@@ -11,7 +11,12 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
+using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests

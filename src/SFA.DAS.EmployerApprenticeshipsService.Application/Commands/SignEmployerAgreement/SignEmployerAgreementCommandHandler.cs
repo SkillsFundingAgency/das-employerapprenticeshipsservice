@@ -4,7 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 {

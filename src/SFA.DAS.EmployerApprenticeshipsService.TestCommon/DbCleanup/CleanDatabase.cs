@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.TestCommon.DbCleanup
 {

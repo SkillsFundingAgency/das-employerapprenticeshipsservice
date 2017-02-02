@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Events;
 using SFA.DAS.EAS.Application.Events.ProcessDeclaration;
-using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
 {
@@ -15,14 +13,12 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
         
         private readonly IValidator<RefreshEmployerLevyDataCommand> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
-        private readonly IEnglishFractionRepository _englishFractionRepository;
         private readonly IMediator _mediator;
 
         public RefreshEmployerLevyDataCommandHandler(IValidator<RefreshEmployerLevyDataCommand> validator, IDasLevyRepository dasLevyRepository, IEnglishFractionRepository englishFractionRepository, IMediator mediator)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
-            _englishFractionRepository = englishFractionRepository;
             _mediator = mediator;
         }
 
@@ -55,26 +51,13 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                         sendLevyDataChanged = true;
                     }
                 }
-
-                foreach (var fraction in employerLevyData.Fractions.Fractions)
-                {
-                    var dasFraction = await _englishFractionRepository.GetEmployerFraction(fraction.DateCalculated, employerLevyData.EmpRef);
-
-                    if (dasFraction == null)
-                    {
-                        await _englishFractionRepository.CreateEmployerFraction(fraction, employerLevyData.EmpRef);
-                        sendLevyDataChanged = true;
-                    }
-                }
             }
 
             if (sendLevyDataChanged)
             {
                 await _mediator.PublishAsync(new ProcessDeclarationsEvent());
             }
-
             
-
         }
     }
 }

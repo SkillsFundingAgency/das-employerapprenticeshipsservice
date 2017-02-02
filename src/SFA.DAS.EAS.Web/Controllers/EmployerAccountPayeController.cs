@@ -5,8 +5,8 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -92,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/ConfirmPayeScheme")]
-        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeScheme model)
+        public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
         {
             var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue("sub"));
 
@@ -112,7 +112,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Schemes/{empRef}/Remove")]
         public async Task<ActionResult> Remove(string hashedAccountId, string empRef)
         {
-            var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeScheme
+            var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeSchemeViewModel
             {
                 HashedAccountId = hashedAccountId,
                 PayeRef = empRef.FormatPayeFromUrl(),
@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Schemes/RemovePaye")]
-        public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeScheme model)
+        public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
         {
             model.UserId = OwinWrapper.GetClaimValue("sub");
 
