@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.EventPublisherServiceTes
         {
             var hashedAccountId = "ABC123";
             var payeSchemeRef = "ABC/123";
-            var expectedAccountResourceUri = $"api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}";
+            var expectedAccountResourceUri = $"api/accounts/{hashedAccountId}/payeschemes/ABC%252f123";
 
             await Publisher.PublishPayeSchemeAddedEvent(hashedAccountId, payeSchemeRef);
 

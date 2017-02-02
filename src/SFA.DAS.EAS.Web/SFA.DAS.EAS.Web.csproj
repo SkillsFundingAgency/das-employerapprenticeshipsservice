@@ -379,7 +379,6 @@
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
-    <Compile Include="Controllers\EmployerTasksController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -470,7 +469,6 @@
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerTasksOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -812,7 +810,7 @@
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
-    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\Invite.cshtml" />
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\ViewTeam.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
@@ -835,10 +833,8 @@
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
-    <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
-    <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SearchProvider.cshtml" />
