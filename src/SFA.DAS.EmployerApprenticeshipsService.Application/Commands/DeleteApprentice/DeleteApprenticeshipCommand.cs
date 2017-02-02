@@ -7,7 +7,7 @@ using MediatR;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
 {
-    public class DeleteApprenticeCommand : IAsyncRequest
+    public class DeleteApprenticeshipCommand : IAsyncRequest
     {
         public long AccountId { get; set; }
         public long ApprenticeshipId { get; set; }

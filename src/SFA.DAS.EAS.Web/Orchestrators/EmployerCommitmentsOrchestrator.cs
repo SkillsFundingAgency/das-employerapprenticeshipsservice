@@ -23,6 +23,7 @@ using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
@@ -728,6 +729,35 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
+
+        public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return new OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>
+            {
+                Data = new DeleteApprenticeshipConfirmationViewModel
+                {
+                    EmployerAccountId = accountId,
+                    HashedCommitmentId = hashedCommitmentId,
+                    HashedApprenticeshipId = hashedApprenticeshipId,
+                    ApprenticeshipName  = apprenticeship.Apprenticeship.ApprenticeshipName,
+                    DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+                }
+            };
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
+        {
+            throw new NotImplementedException();
+        }
 
         private static string CreateReference()
         {

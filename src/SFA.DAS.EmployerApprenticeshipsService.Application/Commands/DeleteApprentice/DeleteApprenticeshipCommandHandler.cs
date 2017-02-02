@@ -10,18 +10,18 @@ using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
 {
-    public class DeleteApprenticeCommandHandler : AsyncRequestHandler<DeleteApprenticeCommand>
+    public class DeleteApprenticeshipCommandHandler : AsyncRequestHandler<DeleteApprenticeshipCommand>
     {
         private readonly ICommitmentsService _commitmentsService;
-        private readonly IValidator<DeleteApprenticeCommand> _validator;
+        private readonly IValidator<DeleteApprenticeshipCommand> _validator;
 
-        public DeleteApprenticeCommandHandler(ICommitmentsService commitmentsService, IValidator<DeleteApprenticeCommand> validator)
+        public DeleteApprenticeshipCommandHandler(ICommitmentsService commitmentsService, IValidator<DeleteApprenticeshipCommand> validator)
         {
             _validator = validator;
             _commitmentsService = commitmentsService;
         }
 
-        protected override async Task HandleCore(DeleteApprenticeCommand message)
+        protected override async Task HandleCore(DeleteApprenticeshipCommand message)
         {
             var validationResult = _validator.Validate(message);
 

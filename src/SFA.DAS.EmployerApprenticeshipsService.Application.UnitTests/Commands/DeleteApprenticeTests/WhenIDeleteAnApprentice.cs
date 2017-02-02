@@ -12,8 +12,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
     public class WhenIDeleteAnApprentice
     {
         private Mock<ICommitmentsService> _commitmentsService;
-        private Mock<IValidator<DeleteApprenticeCommand>> _validator;
-        private DeleteApprenticeCommandHandler _handler;
+        private Mock<IValidator<DeleteApprenticeshipCommand>> _validator;
+        private DeleteApprenticeshipCommandHandler _handler;
 
         [SetUp]
         public void Arrange()
@@ -22,18 +22,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             _commitmentsService.Setup(x => x.DeleteEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
                 .Returns(Task.FromResult<object>(null));
 
-            _validator = new Mock<IValidator<DeleteApprenticeCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<DeleteApprenticeCommand>()))
+            _validator = new Mock<IValidator<DeleteApprenticeshipCommand>>();
+            _validator.Setup(x => x.Validate(It.IsAny<DeleteApprenticeshipCommand>()))
                 .Returns(new ValidationResult());
 
-            _handler = new DeleteApprenticeCommandHandler(_commitmentsService.Object, _validator.Object);
+            _handler = new DeleteApprenticeshipCommandHandler(_commitmentsService.Object, _validator.Object);
         }
 
         [Test]
         public async Task TheCommitmentsServiceShouldBeCalledIfTheRequestIsValid()
         {
             //Arrange
-            var command = new DeleteApprenticeCommand
+            var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 1,
                 ApprenticeshipId = 2
@@ -51,9 +51,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
         public async Task ThenIShouldGetAInvalidRequestExceptionIfValidationFails()
         {
             //Arrange
-            var command = new DeleteApprenticeCommand();
-            _validator = new Mock<IValidator<DeleteApprenticeCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<DeleteApprenticeCommand>()))
+            var command = new DeleteApprenticeshipCommand();
+            _validator = new Mock<IValidator<DeleteApprenticeshipCommand>>();
+            _validator.Setup(x => x.Validate(It.IsAny<DeleteApprenticeshipCommand>()))
                 .Returns(new ValidationResult
                 {
                     ValidationDictionary = new Dictionary<string, string>
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
                     }
                 });
 
-            _handler = new DeleteApprenticeCommandHandler(_commitmentsService.Object, _validator.Object);
+            _handler = new DeleteApprenticeshipCommandHandler(_commitmentsService.Object, _validator.Object);
 
             //Act + Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));

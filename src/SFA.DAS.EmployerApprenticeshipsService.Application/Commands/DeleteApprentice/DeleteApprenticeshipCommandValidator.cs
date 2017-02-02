@@ -7,9 +7,9 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
 {
-    public class DeleteApprenticeCommandValidator : IValidator<DeleteApprenticeCommand>
+    public class DeleteApprenticeshipCommandValidator : IValidator<DeleteApprenticeshipCommand>
     {
-        public ValidationResult Validate(DeleteApprenticeCommand item)
+        public ValidationResult Validate(DeleteApprenticeshipCommand item)
         {
             var result = new ValidationResult();
 
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
             return result;
         }
 
-        public Task<ValidationResult> ValidateAsync(DeleteApprenticeCommand item)
+        public Task<ValidationResult> ValidateAsync(DeleteApprenticeshipCommand item)
         {
             throw new NotImplementedException();
         }

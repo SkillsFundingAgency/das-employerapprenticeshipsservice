@@ -11,19 +11,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
     [TestFixture]
     public class WhenIValidateTheRequest
     {
-        private DeleteApprenticeCommandValidator _validator;
+        private DeleteApprenticeshipCommandValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new DeleteApprenticeCommandValidator();
+            _validator = new DeleteApprenticeshipCommandValidator();
         }
 
         [Test]
         public void ThenAccountIdMustBeGreaterThanZero()
         {
             //Arrange
-            var command = new DeleteApprenticeCommand
+            var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 0,
                 ApprenticeshipId = 1
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
         public void ThenApprenticeshipIdMustBeGreaterThanZero()
         {
             //Arrange
-            var command = new DeleteApprenticeCommand
+            var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 1,
                 ApprenticeshipId = 0
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
         public void ThenTheRequestIsValidIfAllRequiredPropertiesAreProvided()
         {
             //Arrange
-            var command = new DeleteApprenticeCommand
+            var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 1,
                 ApprenticeshipId = 1

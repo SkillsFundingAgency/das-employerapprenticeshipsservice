@@ -415,6 +415,7 @@
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
+    <Compile Include="Models\DeleteApprenticeshipConfirmationViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
     <Compile Include="ViewModels\PublicSectorOrganisationSearchResultsViewModel.cs" />
@@ -485,6 +486,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
+    <Compile Include="Validators\DeleteApprenticeshipConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
