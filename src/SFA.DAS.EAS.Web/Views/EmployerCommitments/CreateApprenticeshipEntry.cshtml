@@ -13,7 +13,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("CreateApprenticeship")">
+        <form method="POST" action="@Url.Action("CreateApprenticeship")" novalidate="novalidate">
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
 
@@ -108,14 +108,14 @@
                                 Month
                             </label>
 
-                            @Html.TextBox("StartDate.Month", Model.Data.Apprenticeship.StartDate.Month, new { @class = "form-control", type = "text", aria_labelledby = "StartDate.Month" })
+                            @Html.TextBox("StartDate.Month", Model.Data.Apprenticeship.StartDate.Month, new { @class = "form-control", type = "number", aria_labelledby = "StartDate.Month" })
 
                         </div>
                         <div class="form-group form-group-month">
                             <label for="StartDate.Year">
                                 Year
                             </label>
-                            @Html.TextBox("StartDate.Year", Model.Data.Apprenticeship.StartDate.Year, new { @class = "form-control", type = "text", aria_labelledby = "StartDate.Year" })
+                            @Html.TextBox("StartDate.Year", Model.Data.Apprenticeship.StartDate.Year, new { @class = "form-control", type = "number", aria_labelledby = "StartDate.Year" })
                         </div>
                     </div>
 
@@ -133,14 +133,14 @@
                                 Month
                             </label>
 
-                            @Html.TextBox("EndDate.Month", Model.Data.Apprenticeship.EndDate.Month, new { @class = "form-control", type = "text", aria_labelledby = "EndDate.Month" })
+                            @Html.TextBox("EndDate.Month", Model.Data.Apprenticeship.EndDate.Month, new { @class = "form-control", type = "number", aria_labelledby = "EndDate.Month" })
 
                         </div>
                         <div class="form-group form-group-month">
                             <label for="EndDate.Year">
                                 Year
                             </label>
-                            @Html.TextBox("EndDate.Year", Model.Data.Apprenticeship.EndDate.Year, new { @class = "form-control", type = "text", aria_labelledby = "EndDate.Year" })
+                            @Html.TextBox("EndDate.Year", Model.Data.Apprenticeship.EndDate.Year, new { @class = "form-control", type = "number", aria_labelledby = "EndDate.Year" })
                         </div>
                     </div>
 
