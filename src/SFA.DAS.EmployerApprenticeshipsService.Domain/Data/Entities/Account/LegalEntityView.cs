@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public DateTime? DateOfInception { get; set; }
         public string Status { get; set; }
         public string Source { get; set; }
+        public string PublicSectorDataSource { get; set; }
     }
 }
