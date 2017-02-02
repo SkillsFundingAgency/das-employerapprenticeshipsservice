@@ -48,6 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("YourCohorts")]
         public async Task<ActionResult> YourCohorts(string hashedAccountId)
         {
