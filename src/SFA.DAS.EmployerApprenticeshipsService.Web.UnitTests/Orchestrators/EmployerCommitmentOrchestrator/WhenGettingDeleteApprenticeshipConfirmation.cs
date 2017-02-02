@@ -6,6 +6,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
+using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -27,6 +28,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .ReturnsAsync(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        EditStatus = EditStatus.EmployerOnly,
+                        AgreementStatus = AgreementStatus.NotAgreed
+                    }
+                });
+
             _logger = new Mock<ILogger>();
             _calculator = new Mock<ICommitmentStatusCalculator>();
 
