@@ -24,6 +24,7 @@
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
       <Setting name="TokenCertificateThumbprint"/>
+      <Setting name="RedisSessionProviderConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-prd-eas-ilb"/>
