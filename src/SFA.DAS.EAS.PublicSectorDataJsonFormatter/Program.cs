@@ -46,9 +46,12 @@ namespace SFA.DAS.EAS.PublicSectorDataJsonFormatter
 
             foreach (var line in lines)
             {
+                var splitLine = line.Split('|');
+
                 var organisation = new Organisation
                 {
-                    Name = line,
+                    Name = splitLine[0],
+                    Sector = splitLine.Length > 1 ? splitLine[1] : "",
                     Source = source
                 };
 
