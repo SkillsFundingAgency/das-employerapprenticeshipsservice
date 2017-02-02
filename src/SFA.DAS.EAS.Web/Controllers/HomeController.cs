@@ -122,7 +122,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/Home/HandleNewRegistration");
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register");
         }
 
         [Authorize]
