@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private string CreatePayeSchemeUri(string hashedAccountId, string payeSchemeRef)
         {
-            return CreateAccountUri(hashedAccountId) + $"/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}";
+            return CreateAccountUri(hashedAccountId) + $"/payeschemes/{HttpUtility.UrlEncode(HttpUtility.UrlEncode(payeSchemeRef))}";
         }
 
         private string CreateAccountUri(string hashedAccountId)
