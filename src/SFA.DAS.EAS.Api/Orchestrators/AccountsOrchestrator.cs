@@ -114,6 +114,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 LegalEntityId = legalEntityResult.LegalEntity.Id,
                 Name = legalEntityResult.LegalEntity.Name,
                 Source = legalEntityResult.LegalEntity.Source,
+                PublicSectorDataSource = legalEntityResult.LegalEntity.PublicSectorDataSource,
                 Address = legalEntityResult.LegalEntity.Address,
                 Code = legalEntityResult.LegalEntity.Code,
                 Status = legalEntityResult.LegalEntity.Status
