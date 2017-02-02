@@ -345,9 +345,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(
                 hashedAccountId,
-                OwinWrapper.GetClaimValue(@"sub"),
                 hashedCommitmentId,
-                "Fix message!!!");
+                OwinWrapper.GetClaimValue(@"sub"));
 
             var currentStatusCohortAny = await _employerCommitmentsOrchestrator
                 .GetCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
@@ -358,15 +357,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("Submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
-        {
-            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
-
-            return View("SubmitCommitmentEntry", response);
-        }
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
@@ -385,7 +375,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("Submit")]
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
+
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -395,28 +396,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("AcknowledgementNew", new { response.Data, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
+            return RedirectToAction("AcknowledgementNew", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = response.Data });
         }
 
         [HttpGet]
-        [Route("Acknowledgement")]
-        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
+        [Route("{hashedCommitmentId}/NewCohortAcknowledgement")]
+        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
         {
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment
-                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
-            // TODO: LWA - Is message in querystring a security issue?
             return View("Acknowledgement", response);
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
+        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
         {
-            // TODO: LWA - Is message in querystring a security issue?
-
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment
-                        (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
             var returnUrl = GetSessionRequestStatus(hashedAccountId);
             response.Data.BackLink = !string.IsNullOrEmpty(returnUrl)

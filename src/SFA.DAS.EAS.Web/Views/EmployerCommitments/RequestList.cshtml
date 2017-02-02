@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CommitmentListViewModel2>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CommitmentListViewModel>
 
 @{
     ViewBag.Title = Model.Data.PageTitle;
@@ -32,7 +32,7 @@
                         @commitment.HashedCommitmentId &nbsp;
                     </td>
                     <td>
-                        commitment.LatestMessage &nbsp;
+                        @commitment.LatestMessage &nbsp;
                     </td>
                     <td>
                         @if (commitment.ShowViewLink)

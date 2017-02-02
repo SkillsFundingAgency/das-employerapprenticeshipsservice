@@ -402,6 +402,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
