@@ -113,8 +113,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@signAgreement", signAgreement, DbType.Boolean);
                 parameters.Add("@signedDate", signedDate, DbType.DateTime);
                 parameters.Add("@signedById", signedById, DbType.Int64);
-                parameters.Add("@legalEntityId", signedById, DbType.Int64);
-                parameters.Add("@employerAgreementId", signedById, DbType.Int64);
+                parameters.Add("@legalEntityId", signedById, DbType.Int64, ParameterDirection.Output);
+                parameters.Add("@employerAgreementId", signedById, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
                 parameters.Add("@source", legalEntity.Source, DbType.Int16);
                 parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
