@@ -2188,6 +2188,23 @@ dl.inline dd {
   }
 }
 
+.account-id {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  display: block;
+  color: #6f777b;
+}
+
+@media (min-width: 641px) {
+  .account-id {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
 main, .header-inner {
   max-width: 960px;
   margin: 0 15px;
@@ -2259,7 +2276,6 @@ table.top-border {
 
 .org-type-search section {
   padding-top: 0;
-  width: 100%;
 }
 
 .org-type-search section.last {
@@ -3122,6 +3138,33 @@ tr.total td {
 
 .panel-filled {
   background: #dee0e2;
+}
+
+.panel-warning {
+  border-top: 10px solid #005ea5;
+  padding-left: 50px;
+  padding-top: 15px;
+  position: relative;
+}
+
+.panel-warning .icon {
+  width: 35px;
+  height: 35px;
+  background-image: url("/public/images/../../dist/images/icon-important.png");
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .panel-warning .icon {
+    background-image: url("/public/images/../../dist/images/icon-important-2x.png");
+    background-size: 100%;
+  }
+}
+
+.panel-warning p {
+  font-weight: 600;
 }
 
 .validation-summary-valid,

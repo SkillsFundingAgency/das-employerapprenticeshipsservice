@@ -1,7 +1,7 @@
 ﻿
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
+@using SFA.DAS.EAS.Web.ViewModels
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -121,8 +121,8 @@
                                     <li><a href="@Url.Action("Index", "Home")" role="menuitem">Switch account</a></li>
                                     <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
                                     }
-                                    <li><a href="@UserLinks.ChangePasswordLink">Change your password</a></li>
-                                    <li><a href="@UserLinks.ChangeEmailLink">Change your email address</a></li>
+                                    <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>
+                                    <li><a href="@UserLinksViewModel.ChangeEmailLink">Change your email address</a></li>
                                     
                                 </ul>
                             </li>
@@ -202,10 +202,10 @@
 
     @RenderSection("pageSpecificJS", required: false)
 
-    @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
+    @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
         <div class="about">
-            Environment: @SystemDetails.EnvironmentName ● Version: @SystemDetails.VersionNumber
+            Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
         </div>
     }
 

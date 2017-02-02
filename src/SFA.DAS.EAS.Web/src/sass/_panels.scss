@@ -16,3 +16,19 @@
 .panel-filled {
     background: $panel-colour;
 }
+
+.panel-warning {
+    border-top: 10px solid $govuk-blue;
+    padding-left: 50px;
+    padding-top: 15px;
+    position: relative;
+    .icon {
+        @include icon(icon-important, 35, 35, '../../dist/images');
+        position: absolute;
+        top: 20px;
+        left: 0;
+    }
+    p {
+        font-weight: 600;
+    }
+}

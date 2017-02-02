@@ -4,6 +4,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Events.ProcessPaymentTests
 {

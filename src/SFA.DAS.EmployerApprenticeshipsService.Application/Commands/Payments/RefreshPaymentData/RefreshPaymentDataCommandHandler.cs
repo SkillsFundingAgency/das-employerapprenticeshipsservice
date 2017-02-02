@@ -7,6 +7,7 @@ using NLog;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Payments.Events.Api.Client;
 using SFA.DAS.Payments.Events.Api.Types;

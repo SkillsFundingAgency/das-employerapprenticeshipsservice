@@ -37,3 +37,9 @@ dl.inline {
         padding-bottom: .5em;
     }
 }
+
+.account-id {
+    @include core-16;
+    display: block;
+    color: $secondary-text-colour;
+}

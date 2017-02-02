@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Domain
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.SummaryViewModel>
+@using SFA.DAS.EAS.Domain.Models.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.SummaryViewModel>
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
 @{ViewBag.Title = "Check Details"; }
@@ -87,6 +88,6 @@
 
     @section breadcrumb {
         <div class="breadcrumbs">
-            <a href="/" class="back-link">Back to your accounts</a>
+            <a href="@Url.Action("GatewayInform", "EmployerAccount")" class="back-link">Back</a>
         </div>
     }

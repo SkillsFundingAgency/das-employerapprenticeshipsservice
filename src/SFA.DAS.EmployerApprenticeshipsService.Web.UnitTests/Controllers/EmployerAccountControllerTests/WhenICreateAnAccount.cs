@@ -9,10 +9,12 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -77,7 +79,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
@@ -111,7 +113,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
+            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountViewModel>(
                 c =>
                     c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
                     c.OrganisationName.Equals(_accountData.OrganisationName) &&

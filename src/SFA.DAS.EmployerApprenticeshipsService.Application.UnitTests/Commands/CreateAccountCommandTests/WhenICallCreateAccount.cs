@@ -7,12 +7,16 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
-using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.Organisation;
+using SFA.DAS.EAS.Domain.Models.PAYE;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
@@ -26,6 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IMediator> _mediator;
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IEventPublisher> _eventPublisher;
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const string ExpectedHashString = "123ADF23";
@@ -48,7 +53,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedHashString);
 
-            _handler = new CreateAccountCommandHandler(_accountRepository.Object, _userRepository.Object, _messagePublisher.Object, _mediator.Object, _validator.Object, _hashingService.Object);
+            _eventPublisher = new Mock<IEventPublisher>();
+
+            _handler = new CreateAccountCommandHandler(_accountRepository.Object, _userRepository.Object, _messagePublisher.Object, _mediator.Object, _validator.Object, _hashingService.Object, _eventPublisher.Object);
         }
 
         [Test]
@@ -152,7 +159,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateAccountCommandTests
 
             _accountRepository.Verify(x => x.CreateAccount(user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken,cmd.OrganisationStatus,cmd.EmployerRefName, (short)cmd.OrganisationType, cmd.PublicSectorDataSource));
             _messagePublisher.Verify(x => x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c => c.AccountId == accountId)), Times.Once());
-            _mediator.Verify(x => x.PublishAsync(It.Is<CreateAccountEventCommand>(e => e.HashedAccountId == expectedHashedAccountId && e.Event == "AccountCreated")), Times.Once);
+            _eventPublisher.Verify(x => x.PublishAccountCreatedEvent(expectedHashedAccountId));
         }
 
         [Test]

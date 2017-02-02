@@ -9,8 +9,10 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
@@ -25,29 +27,21 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
+        private readonly IEventPublisher _eventPublisher;
 
-        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator)
+        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IEventPublisher eventPublisher)
         {
             _validator = validator;
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
             _mediator = mediator;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
         {
-            var result = await _validator.ValidateAsync(message);
-
-            if (result.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            if (!result.IsValid())
-            {
-                throw new InvalidRequestException(result.ValidationDictionary);
-            }
+            await ValidateMessage(message);
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
@@ -62,6 +56,44 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     }
                 );
 
+            await AddAuditEntry(message, accountId);
+
+            await RefreshLevy(accountId);
+
+            await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
+        }
+
+        private async Task ValidateMessage(AddPayeToAccountCommand message)
+        {
+            var result = await _validator.ValidateAsync(message);
+
+            if (result.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            if (!result.IsValid())
+            {
+                throw new InvalidRequestException(result.ValidationDictionary);
+            }
+        }
+
+        private async Task NotifyPayeSchemeAdded(string hashedAccountId, string payeRef)
+        {
+            await _eventPublisher.PublishPayeSchemeAddedEvent(hashedAccountId, payeRef);
+        }
+
+        private async Task RefreshLevy(long accountId)
+        {
+            await _messagePublisher.PublishAsync(
+                new EmployerRefreshLevyQueueMessage
+                {
+                    AccountId = accountId
+                });
+        }
+
+        private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)
+        {
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
@@ -70,23 +102,15 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                     Description = $"Paye scheme {message.Empref} added to account {accountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-
-                        PropertyUpdate.FromString("Ref",message.Empref),
-                        PropertyUpdate.FromString("AccessToken",message.AccessToken),
-                        PropertyUpdate.FromString("RefreshToken",message.RefreshToken),
-                        PropertyUpdate.FromString("Name",message.EmprefName)
+                        PropertyUpdate.FromString("Ref", message.Empref),
+                        PropertyUpdate.FromString("AccessToken", message.AccessToken),
+                        PropertyUpdate.FromString("RefreshToken", message.RefreshToken),
+                        PropertyUpdate.FromString("Name", message.EmprefName)
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Paye", Id = message.Empref }
                 }
             });
-
-
-            await _messagePublisher.PublishAsync(
-                new EmployerRefreshLevyQueueMessage
-                {
-                    AccountId = accountId
-                });
         }
     }
 }

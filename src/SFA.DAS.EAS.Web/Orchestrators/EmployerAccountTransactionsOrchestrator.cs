@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<TransactionViewResult>> GetAccountTransactions(string hashedId,
+        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId,
             string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
             if (employerAccountResult.Account == null)
             {
-                return new OrchestratorResponse<TransactionViewResult> {Data = new TransactionViewResult()};
+                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
             }
 
             var data =
@@ -139,9 +139,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            return new OrchestratorResponse<TransactionViewResult>
+            return new OrchestratorResponse<TransactionViewResultViewModel>
             {
-                Data = new TransactionViewResult
+                Data = new TransactionViewResultViewModel
                 {
                     Account = employerAccountResult.Account,
                     Model = new TransactionViewModel

@@ -8,8 +8,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountViewModel(), It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
@@ -115,9 +115,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         }
 
 
-        private static CreateAccountModel ArrangeModel()
+        private static CreateAccountViewModel ArrangeModel()
         {
-            return new CreateAccountModel
+            return new CreateAccountViewModel
             {
                 OrganisationName = "test",
                 UserId = Guid.NewGuid().ToString(),

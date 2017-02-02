@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests

@@ -5,10 +5,12 @@ using Moq;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -31,20 +33,20 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
         }
 
-        public void UpsertUser(SignInUserModel user)
+        public void UpsertUser(UserViewModel userView)
         {
             var mediator = _container.GetInstance<IMediator>();
 
             mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserRef = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                EmailAddress = user.Email
+                UserRef = userView.UserId,
+                FirstName = userView.FirstName,
+                LastName = userView.LastName,
+                EmailAddress = userView.Email
             }).Wait();
         }
 
-        public SignInUserModel GetExistingUserAccount()
+        public UserViewModel GetExistingUserAccount()
         {
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserId"].ToString());
             var orchestrator = _container.GetInstance<HomeOrchestrator>();

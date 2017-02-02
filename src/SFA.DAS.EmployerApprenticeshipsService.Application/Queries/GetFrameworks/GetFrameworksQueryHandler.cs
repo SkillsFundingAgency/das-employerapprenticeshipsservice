@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Domain.Interfaces;
 
-namespace SFA.DAS.EmployerApprenticeshipsService.Application.Queries.GetFrameworks
+namespace SFA.DAS.EAS.Application.Queries.GetFrameworks
 {
     public class GetFrameworksQueryHandler : IAsyncRequestHandler<GetFrameworksQueryRequest, GetFrameworksQueryResponse>
     {
