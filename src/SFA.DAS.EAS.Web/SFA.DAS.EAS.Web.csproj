@@ -809,7 +809,7 @@
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
-    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\Invite.cshtml" />
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\ViewTeam.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />

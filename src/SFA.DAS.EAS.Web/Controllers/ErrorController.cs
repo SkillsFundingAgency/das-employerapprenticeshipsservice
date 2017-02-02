@@ -4,6 +4,7 @@ using NLog;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [RoutePrefix("Error")]
     public class ErrorController : Controller
     {
         private readonly ILogger _logger;
@@ -12,13 +13,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             _logger = logger;
         }
-
-        public ActionResult NotFound()
-        {
-            Response.StatusCode = (int)HttpStatusCode.NotFound;
-            return View();
-        }
-
+        
+        [Route]
         public ActionResult Index()
         {
             try
@@ -30,11 +26,18 @@ namespace SFA.DAS.EAS.Web.Controllers
                     _logger.Error(lastError);
                 }
             }
-            catch 
+            catch
             {
-                
+
             }
             return View("Error");
+        }
+
+        [Route("NotFound")]
+        public ActionResult NotFound()
+        {
+            Response.StatusCode = (int)HttpStatusCode.NotFound;
+            return View();
         }
     }
 }
