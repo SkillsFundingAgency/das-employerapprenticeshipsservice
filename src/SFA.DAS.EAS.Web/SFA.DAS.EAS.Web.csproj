@@ -951,6 +951,7 @@
     <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
+    <Content Include="Views\EmployerCommitments\DeleteApprenticeshipConfirmation.cshtml" />
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
   </ItemGroup>

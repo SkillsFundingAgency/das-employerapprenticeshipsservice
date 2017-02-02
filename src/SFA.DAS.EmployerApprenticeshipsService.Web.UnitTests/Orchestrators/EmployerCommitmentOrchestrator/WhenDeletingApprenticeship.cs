@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
@@ -45,7 +44,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             //Arrange
             var model = new DeleteApprenticeshipConfirmationViewModel
             {
-                EmployerAccountId = 123L,
+                HashedAccountId = "ABC123",
                 HashedCommitmentId = "ABC321",
                 HashedApprenticeshipId = "ABC456"
             };
@@ -71,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             //Arrange
             var model = new DeleteApprenticeshipConfirmationViewModel
             {
-                EmployerAccountId = 123L,
+                HashedAccountId = "ABC123",
                 HashedCommitmentId = "ABC321",
                 HashedApprenticeshipId = "ABC456"
             };
@@ -96,8 +95,5 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             //Assert
             Assert.AreEqual(expected.ApprenticeshipName, result);
         }
-
-
-
     }
 }

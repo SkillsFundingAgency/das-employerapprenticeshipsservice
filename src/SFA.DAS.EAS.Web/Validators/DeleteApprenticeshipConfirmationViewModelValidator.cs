@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Web.Validators
     {
         public DeleteApprenticeshipConfirmationViewModelValidator()
         {
-            throw new NotImplementedException();
+            RuleFor(x => x.DeleteConfirmed).NotNull().WithMessage("Please choose an option");
         }
     }
 }

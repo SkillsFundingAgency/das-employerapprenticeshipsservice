@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using FluentValidation.Attributes;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Models
 {
+    [Validator(typeof(DeleteApprenticeshipConfirmationViewModelValidator))]
     public class DeleteApprenticeshipConfirmationViewModel
     {
-        public long EmployerAccountId { get; set; }
+        public string HashedAccountId { get; set; }
         public string HashedCommitmentId { get; set; }
         public string HashedApprenticeshipId { get; set; }
         public bool? DeleteConfirmed { get; set; }

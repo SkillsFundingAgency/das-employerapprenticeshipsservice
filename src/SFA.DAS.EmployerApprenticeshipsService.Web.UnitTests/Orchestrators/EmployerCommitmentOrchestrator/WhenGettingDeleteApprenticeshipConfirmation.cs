@@ -34,6 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             _hashingService.Setup(x => x.DecodeValue("ABC123")).Returns(123L);
             _hashingService.Setup(x => x.DecodeValue("ABC321")).Returns(321L);
             _hashingService.Setup(x => x.DecodeValue("ABC456")).Returns(456L);
+            _hashingService.Setup(x => x.DecodeValue("EXT789")).Returns(789L);
 
             _employerCommitmentOrchestrator = new EmployerCommitmentsOrchestrator(_mediator.Object,
                 _hashingService.Object, _calculator.Object, _logger.Object);
@@ -50,7 +51,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
                 });
 
             //Act
-            await _employerCommitmentOrchestrator.GetDeleteApprenticeshipViewModel("ABC123", "ABC321", "ABC456");
+            await _employerCommitmentOrchestrator.GetDeleteApprenticeshipViewModel("ABC123", "EXT789", "ABC321", "ABC456");
 
             //Assert
             _mediator.Verify(x=> x.SendAsync(It.Is<GetApprenticeshipQueryRequest>(r=> r.ApprenticeshipId == 456 && r.AccountId == 123)));
@@ -74,7 +75,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
                 });
 
             //Act
-            var viewModel = await _employerCommitmentOrchestrator.GetDeleteApprenticeshipViewModel("ABC123", "ABC321", "ABC456");
+            var viewModel = await _employerCommitmentOrchestrator.GetDeleteApprenticeshipViewModel("ABC123", "EXT789", "ABC321", "ABC456");
 
             //Assert
             Assert.AreEqual(String.Format($"{expected.FirstName} {expected.LastName}"), viewModel.Data.ApprenticeshipName);

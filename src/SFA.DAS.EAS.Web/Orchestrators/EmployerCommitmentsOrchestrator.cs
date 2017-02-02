@@ -731,10 +731,42 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
-        public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                await AssertCommitmentStatus(commitmentId, accountId);
+
+                return new OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>
+                {
+                    Data = new DeleteApprenticeshipConfirmationViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        HashedApprenticeshipId = hashedApprenticeshipId,
+                        ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                        DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
+        {
+            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
 
             var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
             {
@@ -742,32 +774,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ApprenticeshipId = apprenticeshipId
             });
 
-            return new OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>
-            {
-                Data = new DeleteApprenticeshipConfirmationViewModel
-                {
-                    EmployerAccountId = accountId,
-                    HashedCommitmentId = hashedCommitmentId,
-                    HashedApprenticeshipId = hashedApprenticeshipId,
-                    ApprenticeshipName  = apprenticeship.Apprenticeship.ApprenticeshipName,
-                    DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
-                }
-            };
-        }
-
-        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
-        {
-            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
-
-            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
-            {
-                AccountId = model.EmployerAccountId,
-                ApprenticeshipId = apprenticeshipId
-            });
-
             await _mediator.SendAsync(new DeleteApprenticeshipCommand
             {
-                AccountId = model.EmployerAccountId,
+                AccountId = accountId,
                 ApprenticeshipId = apprenticeshipId
             });
 
