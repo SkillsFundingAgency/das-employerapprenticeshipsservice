@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Web.Extensions
              return status == SaveStatus.ApproveAndSend || status == SaveStatus.AmendAndSend;
          }
  
-         public static bool IsApproveWithoutSend(this SaveStatus status)
+         public static bool IsFinalApproval(this SaveStatus status)
          {
              return status == SaveStatus.Approve;
          }

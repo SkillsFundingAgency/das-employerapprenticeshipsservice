@@ -319,9 +319,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                     new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
             }
 
-            if (viewModel.SaveStatus.IsApproveWithoutSend())
+            if (viewModel.SaveStatus.IsFinalApproval())
             {
-                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
+                await _employerCommitmentsOrchestrator.ApproveCommitment
+                    (viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
+
+                return RedirectToAction("Approved",
+                    new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
             var flashmessage = new FlashMessageViewModel
@@ -332,6 +336,26 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
             return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
+        }
+
+        [HttpGet]
+        [Route("{hashedCommitmentId}/CohortApproved")]
+        public async Task<ActionResult> Approved(string hashedAccountId, string hashedCommitmentId)
+        {
+
+            var model = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(
+                hashedAccountId,
+                OwinWrapper.GetClaimValue(@"sub"),
+                hashedCommitmentId,
+                "Fix message!!!");
+
+            var currentStatusCohortAny = await _employerCommitmentsOrchestrator
+                .GetCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
+            model.Data.BackLink = currentStatusCohortAny
+                ? new LinkViewModel { Text = "Return to Approve cohorts", Url = Url.Action("ReadyForApproval", new { hashedAccountId }) }
+                : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
+
+            return View(model);
         }
 
         [HttpGet]

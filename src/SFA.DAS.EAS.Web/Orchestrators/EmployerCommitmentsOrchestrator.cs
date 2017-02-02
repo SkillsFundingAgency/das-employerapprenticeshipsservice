@@ -616,7 +616,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
                         PageTitle = "Ready fr approval",
                         PageId = "ready-for-approval",
-                        PageHeading = "Readyu for approval",
+                        PageHeading = "Ready for approval",
                         PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for approval:",
 
                     }
@@ -992,6 +992,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!allowedEditStatuses.Contains(commitment.EditStatus))
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
+        }
+
+        public async Task<bool> GetCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
+            return data.Any();
         }
     }
 }
