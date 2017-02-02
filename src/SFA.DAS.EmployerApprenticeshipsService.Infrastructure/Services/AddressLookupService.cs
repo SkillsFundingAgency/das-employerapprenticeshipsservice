@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Employer;
 using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 using SFA.DAS.EAS.Infrastructure.Models;
 using SFA.DAS.EAS.Infrastructure.Models.PostcodeAnywhere;

@@ -5,8 +5,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Employer;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
 {
