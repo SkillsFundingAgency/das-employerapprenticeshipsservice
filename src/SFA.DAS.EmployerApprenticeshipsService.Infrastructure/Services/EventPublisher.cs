@@ -47,7 +47,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private string CreatePayeSchemeUri(string hashedAccountId, string payeSchemeRef)
         {
-            return CreateAccountUri(hashedAccountId) + $"/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}";
+            // This is deliberately double encoded to minic the response the accounts web api returns when encoding the URI to json as part of the GetAccounts method.
+            return CreateAccountUri(hashedAccountId) + $"/payeschemes/{HttpUtility.UrlEncode(HttpUtility.UrlEncode(payeSchemeRef))}";
         }
 
         private string CreateAccountUri(string hashedAccountId)

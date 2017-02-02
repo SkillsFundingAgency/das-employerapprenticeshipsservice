@@ -1,4 +1,4 @@
 ﻿{
-  "schedule": "0 */5 * * * *",
+  "schedule": "0 0 0 20 1/1 *",
   "is_in_place": false
 }

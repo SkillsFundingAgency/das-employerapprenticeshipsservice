@@ -13,7 +13,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [RoutePrefix("accounts")]
+    [RoutePrefix("accounts/organisations")]
     public class EmployerAccountOrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
@@ -32,17 +32,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Organisation/Add")]
+        [Route("add")]
         public ActionResult AddOrganisation()
         {
             return View("AddOrganisation",
                 new OrchestratorResponse<AddLegalEntityViewModel> {Data = new AddLegalEntityViewModel()});
         }
-
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/Add")]
+        [Route("add")]
         public async Task<ActionResult> AddOrganisation(AddLegalEntityViewModel model)
         {
             if (!ModelState.IsValid)
@@ -159,7 +158,38 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Organisation/UpdateAddress")]
+        [Route("custom/add")]
+        public ActionResult AddCustomOrganisationDetails()
+        {
+            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel()
+            };
+
+            return View("AddOtherOrganisationDetails", response);
+        }
+
+        [HttpPost]
+        [Route("custom/add")]
+        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
+        {
+            var response = await _orchestrator.ValidateLegalEntityName(model);
+
+            if (response.Status == HttpStatusCode.BadRequest)
+            {
+                return View("AddOtherOrganisationDetails", response);
+            }
+
+            model.Type = OrganisationType.Other;
+
+            var addressModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+
+
+            return RedirectToAction("AddOrganisationAddress", addressModel);
+        }
+
+        [HttpGet]
+        [Route("address/update")]
         public ActionResult AddOrganisationAddress(AddOrganisationAddressModel request)
         {
             var response = new OrchestratorResponse<AddOrganisationAddressModel>
@@ -173,7 +203,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Organisation/UpdateAddress")]
+        [Route("address/update")]
         public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
@@ -196,38 +226,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return RedirectToAction("GatewayInform", "EmployerAccount", response.Data);
         }
-
-        [HttpGet]
-        [Route("Organisation/Add/Other")]
-        public ActionResult AddCustomOrganisationDetails()
-        {
-            var response = new OrchestratorResponse<OrganisationDetailsViewModel>
-            {
-                Data = new OrganisationDetailsViewModel()
-            };
-
-            return View("AddOtherOrganisationDetails", response);
-        }
-
-        [HttpPost]
-        [Route("Organisation/Add/Other")]
-        public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
-        {
-            var response = await _orchestrator.ValidateLegalEntityName(model);
-            
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                return View("AddOtherOrganisationDetails", response);
-            }
-
-            model.Type = OrganisationType.Other;
-
-            var addressModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
-
-
-            return RedirectToAction("AddOrganisationAddress", addressModel);
-        }
-
+        
         private async Task<OrchestratorResponse<PublicSectorOrganisationSearchResultsViewModel>> FindPublicSectorOrganisation(string publicSectorOrganisationName, string hashedAccountId, string userIdClaim)
         {
             var response = await _orchestrator.FindPublicSectorOrganisation(publicSectorOrganisationName, hashedAccountId, userIdClaim);
