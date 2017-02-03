@@ -3157,3 +3157,40 @@ span.helpText {
 #cohorts-landing-page .block-two, #cohorts-landing-page .block-four {
   margin-left: 2%;
 }
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  .manage-all-apprentices td:nth-of-type(1):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .manage-all-apprentices td:nth-of-type(2):before {
+    content: "Date of birth";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .manage-all-apprentices td:nth-of-type(3):before {
+    content: "Satus";
+    font-weight: normal;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+  .to-be-sent-list td:nth-of-type(1):before {
+    content: "Employer";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  .to-be-sent-list td:nth-of-type(2):before {
+    content: "Cohort reference";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  .to-be-sent-list td:nth-of-type(3):before {
+    content: "Last message";
+    font-weight: normal;
+    margin-top: 5px;
+    word-wrap: break-word;
+  }
+}
