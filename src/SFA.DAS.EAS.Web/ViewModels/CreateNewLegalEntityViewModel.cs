@@ -16,5 +16,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LegalEntityStatus { get; set; }
         public short Source { get; set; }
         public short? PublicSectorDataSource { get; set; }
+        public string Sector { get; set; }
     }
 }

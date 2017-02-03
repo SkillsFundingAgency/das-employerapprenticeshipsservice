@@ -258,7 +258,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationDateOfInception = response.Data.DateOfInception,
                     OrganisationRegisteredAddress = response.Data.Address,
                     OrganisationStatus = response.Data.Status ?? string.Empty,
-                    PublicSectorDataSource = response.Data.PublicSectorDataSource
+                    PublicSectorDataSource = response.Data.PublicSectorDataSource,
+                    Sector = response.Data.Sector
                 };
             }
             else
@@ -273,7 +274,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     OrganisationDateOfInception = existingData.OrganisationDateOfInception,
                     OrganisationRegisteredAddress = existingData.OrganisationRegisteredAddress,
                     OrganisationStatus = existingData.OrganisationStatus,
-                    PublicSectorDataSource = existingData.PublicSectorDataSource
+                    PublicSectorDataSource = existingData.PublicSectorDataSource,
+                    Sector = existingData.Sector
                 };
             }
 
