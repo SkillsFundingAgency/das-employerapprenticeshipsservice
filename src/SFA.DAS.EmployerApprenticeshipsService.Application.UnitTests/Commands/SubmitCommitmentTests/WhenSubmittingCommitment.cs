@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         {
             await _handler.Handle(_validCommand);
 
-            _mockCommitmentApi.Verify(x => x.PatchEmployerCommitment(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<LastAction>()));
+            _mockCommitmentApi.Verify(x => x.PatchEmployerCommitment(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<CommitmentSubmission>()));
         }
 
         [Test]

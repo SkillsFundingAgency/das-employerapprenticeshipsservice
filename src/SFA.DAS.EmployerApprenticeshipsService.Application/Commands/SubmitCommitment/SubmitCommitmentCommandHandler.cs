@@ -38,7 +38,13 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (commitment.EmployerAccountId != message.EmployerAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Commitment", "This commiment does not belong to this Employer Account " } });
 
-            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, message.LastAction);
+            var submission = new CommitmentSubmission
+            {
+                Action = message.LastAction,
+                LastUpdatedByInfo = new LastUpdateInfo { Name = "", EmailAddress = "" } // TODO: LWA Need to populate
+            };
+
+            await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, submission);
 
             await CreateAgreementEvent(message, commitment);
 
