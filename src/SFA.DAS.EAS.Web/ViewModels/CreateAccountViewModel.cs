@@ -17,5 +17,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string RefreshToken { get; set; }
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
+        public string Sector { get; set; }
     }
 }

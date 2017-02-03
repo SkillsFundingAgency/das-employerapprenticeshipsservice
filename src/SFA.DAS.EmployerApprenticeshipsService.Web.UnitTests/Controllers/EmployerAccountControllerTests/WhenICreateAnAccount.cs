@@ -61,7 +61,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 RefreshToken = "123",
                 AccessToken = "456",
                 EmpRefNotFound = true,
-                OrganisationType = OrganisationType.Charities
+                OrganisationType = OrganisationType.Charities,
+                Sector = "Public"
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -123,6 +124,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     c.AccessToken.Equals(_accountData.AccessToken) &&
                     c.PayeReference.Equals(_accountData.PayeReference) &&
                     c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
+                    c.Sector.Equals(_accountData.Sector) &&
                     c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
         }

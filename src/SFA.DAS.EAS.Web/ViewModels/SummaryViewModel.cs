@@ -15,6 +15,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public bool EmpRefNotFound { get; set; }
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
-      
+        public string Sector { get; set; }
     }
 }
