@@ -48,6 +48,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("YourCohorts")]
         public async Task<ActionResult> YourCohorts(string hashedAccountId)
         {
@@ -319,9 +320,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                     new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
             }
 
-            if (viewModel.SaveStatus.IsApproveWithoutSend())
+            if (viewModel.SaveStatus.IsFinalApproval())
             {
-                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
+                await _employerCommitmentsOrchestrator.ApproveCommitment
+                    (viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
+
+                return RedirectToAction("Approved",
+                    new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
             var flashmessage = new FlashMessageViewModel
@@ -335,14 +340,24 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        [Route("{hashedCommitmentId}/CohortApproved")]
+        public async Task<ActionResult> Approved(string hashedAccountId, string hashedCommitmentId)
         {
-            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
 
-            return View("SubmitCommitmentEntry", response);
+            var model = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(
+                hashedAccountId,
+                hashedCommitmentId,
+                OwinWrapper.GetClaimValue(@"sub"));
+
+            var currentStatusCohortAny = await _employerCommitmentsOrchestrator
+                .GetCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
+            model.Data.BackLink = currentStatusCohortAny
+                ? new LinkViewModel { Text = "Return to Approve cohorts", Url = Url.Action("ReadyForApproval", new { hashedAccountId }) }
+                : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
+
+            return View(model);
         }
+
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
@@ -361,7 +376,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             await _employerCommitmentsOrchestrator.SubmitCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("Submit")]
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
+
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -371,28 +397,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
 
-            return RedirectToAction("AcknowledgementNew", new { response.Data, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
+            return RedirectToAction("AcknowledgementNew", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = response.Data });
         }
 
         [HttpGet]
-        [Route("acknowledgement")]
-        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
+        [Route("{hashedCommitmentId}/NewCohortAcknowledgement")]
+        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
         {
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment
-                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
-            // TODO: LWA - Is message in querystring a security issue?
             return View("Acknowledgement", response);
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/acknowledgement")]
-        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
+        [Route("{hashedCommitmentId}/Acknowledgement")]
+        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
         {
-            // TODO: LWA - Is message in querystring a security issue?
-
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment
-                        (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
             var returnUrl = GetSessionRequestStatus(hashedAccountId);
             response.Data.BackLink = !string.IsNullOrEmpty(returnUrl)

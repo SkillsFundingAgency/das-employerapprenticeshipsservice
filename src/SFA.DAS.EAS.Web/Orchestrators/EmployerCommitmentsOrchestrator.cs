@@ -40,6 +40,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private readonly Func<int, string> _addSSurfix = i => i > 1 ? "s" : "";
 
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
+
+        readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
+
         public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ICommitmentStatusCalculator statusCalculator, ILogger logger)
         {
             if (mediator == null)
@@ -55,6 +59,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _hashingService = hashingService;
             _statusCalculator = statusCalculator;
             _logger = logger;
+
+            _latestMessageFromProviderFunc = async item => await GetLatestMessageFromProvider(item.EmployerAccountId, item.Id);
+            _latestMessageFromEmployerFunc = async item => await GetLatestMessageFromEmployer(item.ProviderId, item.Id);
         }
 
         public async Task<OrchestratorResponse<Account>> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
@@ -488,7 +495,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, model.HashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<AcknowledgementViewModel>> GetAcknowledgementModelForExistingCommitment(string hashedAccountId, string externalUserId, string hashedCommitmentId, string message)
+        public async Task<OrchestratorResponse<AcknowledgementViewModel>> GetAcknowledgementModelForExistingCommitment(string hashedAccountId, string hashedCommitmentId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -498,40 +505,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var data = await _mediator.SendAsync(new GetCommitmentQueryRequest
                 {
-                    AccountId = _hashingService.DecodeValue(hashedAccountId),
-                    CommitmentId = _hashingService.DecodeValue(hashedCommitmentId)
+                    AccountId = accountId,
+                    CommitmentId = commitmentId
                 });
 
-                var commitment = MapFrom(data.Commitment);
+                var messageTask = GetLatestMessageFromEmployer(data.Commitment);
 
                 return new OrchestratorResponse<AcknowledgementViewModel>
                 {
                     Data = new AcknowledgementViewModel
                     {
+                        HashedAccount = hashedAccountId,
                         HashedCommitmentId = hashedCommitmentId,
-                        ProviderName = commitment.ProviderName,
-                        LegalEntityName = commitment.LegalEntityName,
-                        Message = message
-                    }
-                };
-            }, hashedAccountId, externalUserId);
-        }
-
-        public async Task<OrchestratorResponse<AcknowledgementViewModel>> GetAcknowledgementModelForNewCommitment(string hashedAccountId, string externalUserId, string temporaryCommitmentid, string providerName, string legalEntityName, string message)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting Acknowldedgement Model for existing commitment, Account: {accountId}, Temporary CommitmentId: {temporaryCommitmentid}");
-
-            return await CheckUserAuthorization(() =>
-            {
-                return new OrchestratorResponse<AcknowledgementViewModel>
-                {
-                    Data = new AcknowledgementViewModel
-                    {
-                        HashedCommitmentId = temporaryCommitmentid,
-                        ProviderName = providerName,
-                        LegalEntityName = legalEntityName,
-                        Message = message
+                        ProviderName = data.Commitment.ProviderName,
+                        LegalEntityName = data.Commitment.LegalEntityName,
+                        Message = await messageTask
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -574,7 +562,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllWaitingToBeSent(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllWaitingToBeSent(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting your cohorts waiting ro be sent for Account: {accountId}");
@@ -583,12 +571,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     var commitments = (await GetAll(accountId, RequestStatus.NewRequest)).ToList();
 
-                    return new OrchestratorResponse<CommitmentListViewModel2>
+                    return new OrchestratorResponse<CommitmentListViewModel>
                     {
-                        Data = new CommitmentListViewModel2
+                        Data = new CommitmentListViewModel
                         {
                             AccountHashId = hashedAccountId,
-                            Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                            Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
@@ -599,7 +587,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllReadyForApproval(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllReadyForApproval(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting your cohorts ready for approval for Account: {accountId}");
@@ -608,15 +596,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
 
-                return new OrchestratorResponse<CommitmentListViewModel2>
+                return new OrchestratorResponse<CommitmentListViewModel>
                 {
-                    Data = new CommitmentListViewModel2
+                    Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
                         PageTitle = "Ready fr approval",
                         PageId = "ready-for-approval",
-                        PageHeading = "Readyu for approval",
+                        PageHeading = "Ready for approval",
                         PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for approval:",
 
                     }
@@ -625,7 +613,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllReadyForReview(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllReadyForReview(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting your cohorts ready for review for Account: {accountId}");
@@ -634,12 +622,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
 
-                return new OrchestratorResponse<CommitmentListViewModel2>
+                return new OrchestratorResponse<CommitmentListViewModel>
                 {
-                    Data = new CommitmentListViewModel2
+                    Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
                         PageTitle = "Ready for review",
                         PageId = "ready-for-review",
                         PageHeading = "Ready for review",
@@ -651,7 +639,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<CommitmentListViewModel2>> GetAllWithProvider(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllWithProvider(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting your cohorts with the provider sent for Account: {accountId}");
@@ -667,17 +655,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                   .Concat(sentToProvider)
                                   .ToList();
 
-                return new OrchestratorResponse<CommitmentListViewModel2>
+                return new OrchestratorResponse<CommitmentListViewModel>
                 {
-                    Data = new CommitmentListViewModel2
+                    Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = commitments.Select(MapFrom), // ToDo: add latest message,
+                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromEmployerFunc))),
                         PageTitle = "With the provider",
                         PageId = "with-the-provider",
                         PageHeading = "With the provider",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are with the provider:",
-
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are with the provider:"
                     }
                 };
 
@@ -714,7 +701,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-                string message = await GetLatestMessage(accountId, commitmentId);
+                var messageTask = GetLatestMessageFromProvider(data.Commitment);
                 var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
                 var viewModel = new CommitmentDetailsViewModel
@@ -727,7 +714,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HasApprenticeships = apprenticships.Count > 0,
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
-                    LatestMessage = message
+                    LatestMessage = await messageTask
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -824,10 +811,30 @@ namespace SFA.DAS.EAS.Web.Orchestrators
  
             return approvalState;
          }
- 
-        private async Task<string> GetLatestMessage(long accountId, long commitmentId)
+
+        private async Task<string> GetLatestMessageFromEmployer(Commitment commitment)
         {
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountId = accountId });
+            return await GetLatestMessage(commitment.ProviderId, commitment.Id, false);
+        }
+
+        private async Task<string> GetLatestMessageFromEmployer(long? providerId, long commitmentId)
+        {
+            return await GetLatestMessage(providerId, commitmentId, false);
+        }
+        private async Task<string> GetLatestMessageFromProvider(Commitment commitment)
+        {
+            return await GetLatestMessage(commitment.EmployerAccountId, commitment.Id, true);
+        }
+
+        private async Task<string> GetLatestMessageFromProvider(long? employerAccountId, long commitmentId)
+        {
+            return await GetLatestMessage(employerAccountId, commitmentId, true);
+        }
+
+        private async Task<string> GetLatestMessage(long? accountId, long commitmentId, bool assigneeEmployer)
+        {
+            if (accountId == null) return string.Empty;
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountId = accountId.Value, AssigneeEmployer = assigneeEmployer });
 
             var taskForCommitment = allTasks?.Tasks
                 .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
@@ -860,8 +867,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private CommitmentListItemViewModel MapFrom(CommitmentListItem commitment)
+        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem commitment, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
+            var message = latestMessageFunc.Invoke(commitment);
+
             return new CommitmentListItemViewModel
             {
                 HashedCommitmentId = _hashingService.HashValue(commitment.Id),
@@ -869,7 +878,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 LegalEntityName = commitment.LegalEntityName,
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
-                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly
+                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly,
+                LatestMessage = await message
             };
         }
 
@@ -992,6 +1002,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!allowedEditStatuses.Contains(commitment.EditStatus))
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
+        }
+
+        public async Task<bool> GetCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
+            return data.Any();
         }
     }
 }
