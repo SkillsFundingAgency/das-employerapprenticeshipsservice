@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RestSharp;
@@ -11,17 +12,22 @@ using SFA.DAS.EAS.Infrastructure.Models.PostcodeAnywhere;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class AddressLookupService : RestService, IAddressLookupService
+    public class AddressLookupService : IAddressLookupService
     {
         private const string ParameterAddressIdString = "&key={key}&id={id}";
         private const string ParameterPostCodeOnlyString = "&key={key}&Postcode={postcode}";
 
+        private readonly IRestService _findByPostCodeService;
+        private readonly IRestService _findByIdService;
         private readonly PostcodeAnywhereConfiguration _configuration;
 
-        public AddressLookupService(IRestClientFactory restClientFactory, EmployerApprenticeshipsServiceConfiguration configuration)
-            :base(restClientFactory)
+        public AddressLookupService(
+            IRestServiceFactory restServiceFactory, 
+            EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _configuration = configuration.PostcodeAnywhere;
+            _findByPostCodeService = restServiceFactory.Create(_configuration.FindPartsBaseUrl);
+            _findByIdService = restServiceFactory.Create(_configuration.RetrieveServiceBaseUrl);
         }
 
         public async Task<ICollection<Address>> GetAddressesByPostcode(string postcode)
@@ -33,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             return await Task.Run(() =>
             {
-                var restRequest = Create(
+                var restRequest = _findByPostCodeService.Create(
                     ParameterPostCodeOnlyString,
                     new KeyValuePair<string, string>("key", _configuration.Key),
                     new KeyValuePair<string, string>("postcode", postcode));
@@ -46,7 +52,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private ICollection<Address> ValidatedPostalAddresses(IRestRequest request)
         {
-            var result = Execute<List<PcaServiceFindResult>>(request);
+            
+            var result = _findByPostCodeService.Execute<List<PcaServiceFindResult>>(request);
 
             var addresses = result.Data?.Where(x => x.Id != null).ToArray();
 
@@ -58,20 +65,19 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var validatedAddresses = addresses.Select(x => RetrieveValidatedAddress(x.Id))
                                               .Where(x => x != null)
                                               .ToList();
-
             return validatedAddresses;
         }
 
         private Address RetrieveValidatedAddress(string addressId)
         {
-            var request = Create(
+            var request = _findByIdService.Create(
                 ParameterAddressIdString,
                 new KeyValuePair<string, string>("key", _configuration.Key),
                 new KeyValuePair<string, string>("id", addressId));
 
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
 
-            var addresses = Execute<List<PcaAddress>>(request);
+            var addresses = _findByIdService.Execute<List<PcaAddress>>(request);
 
             var address = addresses.Data?.SingleOrDefault();
 

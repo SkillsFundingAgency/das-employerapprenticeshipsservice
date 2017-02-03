@@ -1,0 +1,59 @@
+﻿@using Newtonsoft.Json
+@using SFA.DAS.EAS.Domain.Models.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
+@{
+    ViewBag.Title = "Select address";
+    ViewBag.Section = "organisations";
+    ViewBag.PageID = "select-organisation-address";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Find organisation address</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+      
+        <ul>
+            @foreach (var address in Model.Data.Addresses)
+            {
+                var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+                {
+                    @Model.Data.OrganisationName,
+                    @Model.Data.OrganisationType,
+                    @Model.Data.PublicSectorDataSource,
+                    @Model.Data.OrganisationStatus
+                });
+
+                url += "&Address.AddressFirstLine=12TestLane";
+
+                <li>
+                    <a href="@url">@address.ToString()</a>
+
+
+                    @*<a href="@Url.Action("UpdateOrganisationAddress", "Organisation", new
+                        {
+                            Address = JsonConvert.SerializeObject(address),
+                            @Model.Data.OrganisationName,
+                            @Model.Data.OrganisationType,
+                            @Model.Data.PublicSectorDataSource,
+                            @Model.Data.OrganisationStatus
+                        })">
+                        @address.ToString()
+                    </a>*@
+
+                    @*<a href="#">@address.AddressFirstLine, @address.AddressSecondLine, @address.TownOrCity, @address.County @address.Postcode</a>*@
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

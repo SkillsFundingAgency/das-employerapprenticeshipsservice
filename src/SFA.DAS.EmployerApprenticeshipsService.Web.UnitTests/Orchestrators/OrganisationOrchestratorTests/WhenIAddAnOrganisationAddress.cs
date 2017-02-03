@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 using StructureMap.Graph.Scanning;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
@@ -21,14 +22,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMapper> _mapper;
 
         private CreateOrganisationAddressRequest _request;
-        private AddOrganisationAddressModel _model;
+        private AddOrganisationAddressViewModel _viewModel;
         private string _address;
         private Mock<ICookieService> _cookieService;
 
         [SetUp]
         public void Arrange()
         {
-            _model = new AddOrganisationAddressModel();
+            _viewModel = new AddOrganisationAddressViewModel();
 
             _request = new CreateOrganisationAddressRequest()
             {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _logger = new Mock<ILogger>();
             _mapper = new Mock<IMapper>();
 
-            _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressModel>()))
+            _mapper.Setup(x => x.Map<CreateOrganisationAddressRequest>(It.IsAny<AddOrganisationAddressViewModel>()))
                 .Returns(_request);
 
             _mediator.Setup(x => x.Send(It.IsAny<CreateOrganisationAddressRequest>()))
@@ -62,10 +63,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         public void ThenIShouldReturnAnOrganisationWithTheCorrectAddress()
         {
             //Act
-            var result = _orchestrator.AddOrganisationAddress(_model);
+            var result = _orchestrator.AddOrganisationAddress(_viewModel);
 
             //Assert
-            _mapper.Verify(x => x.Map<CreateOrganisationAddressRequest>(_model), Times.Once);
+            _mapper.Verify(x => x.Map<CreateOrganisationAddressRequest>(_viewModel), Times.Once);
             _mediator.Verify(x => x.Send(_request), Times.Once);
             Assert.AreEqual(_address, result.Data.Address);
         }
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
 
 
             //Act
-            var result = _orchestrator.AddOrganisationAddress(_model);
+            var result = _orchestrator.AddOrganisationAddress(_viewModel);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);

@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 
-namespace SFA.DAS.EAS.Web.ViewModels
+namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     public class OrganisationDetailsViewModel : NavigationViewModel
     {

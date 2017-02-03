@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
@@ -44,7 +45,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _orchestrator.Setup(x =>
                     x.CreateAddOrganisationAddressViewModelFromOrganisationDetails(
                         It.IsAny<OrganisationDetailsViewModel>()))
-                .Returns(new OrchestratorResponse<AddOrganisationAddressModel>());
+                .Returns(new OrchestratorResponse<AddOrganisationAddressViewModel>());
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,

@@ -203,7 +203,9 @@
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />
+    <Compile Include="Interfaces\REST\IRestServiceFactory.cs" />
     <Compile Include="Factories\RestClientFactory.cs" />
+    <Compile Include="Factories\RestServiceFactory.cs" />
     <Compile Include="Interfaces\REST\IRestClientFactory.cs" />
     <Compile Include="Interfaces\REST\IRestService.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />

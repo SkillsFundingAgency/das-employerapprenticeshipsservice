@@ -5,28 +5,13 @@ using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public abstract class RestService : IRestService
+    public class RestService : IRestService
     {
-        private readonly IRestClientFactory _restClientFactory;
-        private IRestClient _client;
+        private readonly IRestClient _client;
 
-        public Uri BaseUrl { get; protected set; }
-
-        protected RestService(IRestClientFactory restClientFactory)
-            : this(restClientFactory, string.Empty)
-        { }
-
-        protected RestService(IRestClientFactory restClientFactory, string baseUrl)
+        public RestService(IRestClient client)
         {
-            _restClientFactory = restClientFactory;
-            BaseUrl = string.IsNullOrEmpty(baseUrl) ? null : new Uri(baseUrl);
-        }
-
-        public IRestClient Client
-        {
-            get { return _client ?? (_client = _restClientFactory.Create(BaseUrl)); }
-
-            set { _client = value; }
+            _client = client;
         }
 
         public virtual IRestRequest Create(
@@ -62,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public virtual IRestResponse<T> Execute<T>(IRestRequest request) where T : new()
         {
-            var response = Client.Execute<T>(request);
+            var response = _client.Execute<T>(request);
 
             if (response.ResponseStatus != ResponseStatus.Completed)
             {

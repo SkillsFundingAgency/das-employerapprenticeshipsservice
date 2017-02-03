@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
+using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
@@ -26,6 +27,7 @@ using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -403,11 +405,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
-            AddOrganisationAddressModel model)
+            AddOrganisationAddressViewModel viewModel)
         {
             try
             {
-                var request = _mapper.Map<CreateOrganisationAddressRequest>(model);
+                var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel);
 
                 var response = _mediator.Send(request);
 
@@ -415,14 +417,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Data = new OrganisationDetailsViewModel
                     {
-                        HashedId = model.OrganisationHashedId,
-                        Name = model.OrganisationName,
+                        HashedId = viewModel.OrganisationHashedId,
+                        Name = viewModel.OrganisationName,
                         Address = response.Address,
-                        DateOfInception = model.OrganisationDateOfInception,
-                        ReferenceNumber = model.OrganisationReferenceNumber,
-                        Type = model.OrganisationType,
-                        PublicSectorDataSource = model.PublicSectorDataSource,
-                        Status = model.OrganisationStatus
+                        DateOfInception = viewModel.OrganisationDateOfInception,
+                        ReferenceNumber = viewModel.OrganisationReferenceNumber,
+                        Type = viewModel.OrganisationType,
+                        PublicSectorDataSource = viewModel.PublicSectorDataSource,
+                        Status = viewModel.OrganisationStatus
                     }
                 };
             }
@@ -447,11 +449,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual OrchestratorResponse<AddOrganisationAddressModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
+        public virtual OrchestratorResponse<AddOrganisationAddressViewModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
         {
-            var result = new OrchestratorResponse<AddOrganisationAddressModel>
+            var result = new OrchestratorResponse<AddOrganisationAddressViewModel>
             {
-                Data = new AddOrganisationAddressModel
+                Data = new AddOrganisationAddressViewModel
                 {
                     OrganisationType = OrganisationType.Other,
                     OrganisationHashedId = model.HashedId,
@@ -475,6 +477,32 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var json = JsonConvert.SerializeObject(data);
             _cookieService.Create(context, CookieName, json, 365);
+        }
+
+        public async  Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(FindOrganisationAddressViewModel request)
+        {
+            var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest {Postcode = request.Postcode});
+
+            var addressViewModels = addresses.Addresses.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
+
+            var viewModel = new SelectOrganisationAddressViewModel
+            {
+                Addresses = addressViewModels,
+                Postcode = request.Postcode,
+                OrganisationName = request.OrganisationName,
+                OrganisationDateOfInception = request.OrganisationDateOfInception,
+                OrganisationHashedId = request.OrganisationHashedId,
+                OrganisationReferenceNumber = request.OrganisationReferenceNumber,
+                OrganisationStatus = request.OrganisationStatus,
+                OrganisationType = request.OrganisationType,
+                PublicSectorDataSource = request.PublicSectorDataSource
+            };
+
+            return new OrchestratorResponse<SelectOrganisationAddressViewModel>
+            {
+                Data = viewModel,
+                Status = HttpStatusCode.OK
+            };
         }
 
         private static string BuildAddressString(GetEmployerInformationResponse response)

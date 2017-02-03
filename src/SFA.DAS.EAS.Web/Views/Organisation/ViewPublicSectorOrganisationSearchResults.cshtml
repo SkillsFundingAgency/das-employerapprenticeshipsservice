@@ -1,6 +1,7 @@
 @using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.PublicSectorOrganisationSearchResultsViewModel>
+@using SFA.DAS.EAS.Web.ViewModels.Organisation
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.PublicSectorOrganisationSearchResultsViewModel>
 @{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
 @{
     ViewBag.Title = "Public Sector Organisation Search Results";
@@ -37,12 +38,12 @@
                     if (!result.AddedToAccount)
                     {
                         <li>
-                            <a href="@Url.Action("UpdateOrganisationAddress", new
+                            <a href="@Url.Action("FindAddress", "Organisation", new
                                          {
                                              OrganisationName = result.Name,
                                              OrganisationType = OrganisationType.PublicBodies,
                                              PublicSectorDataSource = result.PublicSectorDataSource,
-                                             Status = result.Status
+                                             OrganisationStatus = result.Status
                                          })">
                                 @result.Name
                             </a>

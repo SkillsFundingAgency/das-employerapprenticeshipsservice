@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -124,9 +125,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 if (string.IsNullOrWhiteSpace(address))
                 {
-                    var addressViewModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+                    var addressViewModel = _mapper.Map<AddOrganisationAddressViewModel>(response.Data);
 
-                    var addressResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                    var addressResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
                     {
                         Data = addressViewModel
                     };
@@ -182,7 +183,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             model.Type = OrganisationType.Other;
 
-            var addressModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+            var addressModel = _mapper.Map<AddOrganisationAddressViewModel>(response.Data);
 
 
             return RedirectToAction("AddOrganisationAddress", addressModel);
@@ -190,9 +191,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("address/update")]
-        public ActionResult AddOrganisationAddress(AddOrganisationAddressModel request)
+        public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)
         {
-            var response = new OrchestratorResponse<AddOrganisationAddressModel>
+            var response = new OrchestratorResponse<AddOrganisationAddressViewModel>
             {
                 Data = request,
                 Status = HttpStatusCode.OK
@@ -204,7 +205,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("address/update")]
-        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
+        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressViewModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
 
@@ -212,7 +213,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 request.ErrorDictionary = response.Data.ErrorDictionary;
 
-                var errorResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                var errorResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
                 {
                     Data = request,
                     Status = HttpStatusCode.BadRequest,

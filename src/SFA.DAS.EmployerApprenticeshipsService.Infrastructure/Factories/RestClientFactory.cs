@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
 
 namespace SFA.DAS.EAS.Infrastructure.Factories
 {
-    internal class RestClientFactory : IRestClientFactory
+    public class RestClientFactory : IRestClientFactory
     {
         public IRestClient Create(Uri baseUrl)
         {
