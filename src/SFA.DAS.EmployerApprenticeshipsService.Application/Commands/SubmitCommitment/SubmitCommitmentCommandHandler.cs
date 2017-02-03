@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             var submission = new CommitmentSubmission
             {
                 Action = message.LastAction,
-                LastUpdatedByInfo = new LastUpdateInfo { Name = "", EmailAddress = "" } // TODO: LWA Need to populate
+                LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress }
             };
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, submission);

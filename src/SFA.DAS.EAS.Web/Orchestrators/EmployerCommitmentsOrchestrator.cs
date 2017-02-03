@@ -384,7 +384,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task ApproveCommitment(string hashedAccountId, string externalUserId, string hashedCommitmentId, SaveStatus saveStatus)
+        public async Task ApproveCommitment(string hashedAccountId, string externalUserId, string userDisplayName, string userEmail, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -402,6 +402,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CommitmentId = commitmentId,
                     Message = string.Empty,
                     LastAction = lastAction,
+                    UserDisplayName = userDisplayName,
+                    UserEmailAddress = userEmail,
                     CreateTask = saveStatus != SaveStatus.Approve
                 });
             }, hashedAccountId, externalUserId);
@@ -462,7 +464,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task SubmitCommitment(SubmitCommitmenViewModel model, string externalUserId)
+        public async Task SubmitCommitment(SubmitCommitmenViewModel model, string externalUserId, string userDisplayName, string userEmail)
         {
             await CheckUserAuthorization(async () => 
             {
@@ -482,6 +484,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CommitmentId = commitmentId,
                         Message = model.Message,
                         LastAction = lastAction,
+                        UserDisplayName = userDisplayName,
+                        UserEmailAddress = userEmail,
                         CreateTask = model.SaveStatus != SaveStatus.Approve
                     });
                 }

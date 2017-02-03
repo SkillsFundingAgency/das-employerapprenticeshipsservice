@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         [SetUp]
         public void Setup()
         {
-            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L };
+            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, UserDisplayName = "Test User", UserEmailAddress = "test@test.com" };
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
 
