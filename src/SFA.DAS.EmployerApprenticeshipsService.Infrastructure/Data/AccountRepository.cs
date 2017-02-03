@@ -4,9 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -22,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource)
+        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector)
         {
             return await WithConnection(async c =>
             {
@@ -43,6 +41,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@status", companyStatus);
                 parameters.Add("@source", source);
                 parameters.Add("@publicSectorDataSource", publicSectorDataSource);
+                parameters.Add("@sector", sector, DbType.String);
                 var trans = c.BeginTransaction();
                 await c.ExecuteAsync(
                     sql: "[employer_account].[CreateAccount]",
@@ -118,6 +117,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
                 parameters.Add("@source", legalEntity.Source, DbType.Int16);
                 parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
+                parameters.Add("@sector", legalEntity.Sector, DbType.String);
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
@@ -138,6 +138,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     LegalEntityCode = legalEntity.Code,
                     LegalEntityAddress = legalEntity.RegisteredAddress,
                     LegalEntityInceptionDate = legalEntity.DateOfIncorporation,
+                    Sector = legalEntity.Sector,
                     Status = EmployerAgreementStatus.Pending,
                 };
             });

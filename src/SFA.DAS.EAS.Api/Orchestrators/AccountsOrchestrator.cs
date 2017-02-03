@@ -117,7 +117,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 PublicSectorDataSource = legalEntityResult.LegalEntity.PublicSectorDataSource,
                 Address = legalEntityResult.LegalEntity.Address,
                 Code = legalEntityResult.LegalEntity.Code,
-                Status = legalEntityResult.LegalEntity.Status
+                Status = legalEntityResult.LegalEntity.Status,
+                Sector = legalEntityResult.LegalEntity.Sector
             };
 
             return legalEntityViewModel;

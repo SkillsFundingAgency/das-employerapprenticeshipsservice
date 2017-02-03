@@ -4,6 +4,8 @@
     {
         public string Name { get; set; }
         public DataSource Source { get; set; }
+
+        public string Sector { get; set; }
     }
 
     public enum DataSource : short

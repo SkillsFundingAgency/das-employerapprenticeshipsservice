@@ -153,7 +153,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 RefreshToken = enteredData.RefreshToken,
                 OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.OrganisationStatus) ? null : enteredData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerRefName,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource
+                PublicSectorDataSource = enteredData.PublicSectorDataSource,
+                Sector = enteredData.Sector
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
@@ -162,7 +163,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 response.Status = HttpStatusCode.OK;
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
-                return RedirectToAction("Summary");
+                return RedirectToAction("summary");
             }
 
             TempData["employerAccountCreated"] = enteredData.OrganisationType.ToString();
