@@ -14,5 +14,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string Code { get; set; }
         public DateTime? DateOfInception { get; set; }
         public string PublicSectorDataSource { get; set; }
+        public string Sector { get; set; }
     }
 }

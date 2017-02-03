@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var emprefs = message.PayeReference.Split(',');
 
-            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource);
+            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
             var hashedAccountId = _hashingService.HashValue(returnValue.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, returnValue.AccountId);
@@ -138,6 +138,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
                 PropertyUpdate.FromString("Name", message.OrganisationName),
                 PropertyUpdate.FromString("Code", message.OrganisationReferenceNumber),
                 PropertyUpdate.FromString("RegisteredAddress", message.OrganisationAddress),
+                PropertyUpdate.FromString("OrganisationType", message.OrganisationType.ToString()),
+                PropertyUpdate.FromString("PublicSectorDataSource", message.PublicSectorDataSource.ToString()),
+                PropertyUpdate.FromString("Sector", message.Sector)
             };
             if (message.OrganisationDateOfInception != null)
             {
