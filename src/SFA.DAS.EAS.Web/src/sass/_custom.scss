@@ -79,3 +79,46 @@
      td{font-size:16px;}
     
 }
+
+//cohors summary block styles
+.js-enabled{
+    .clickable{cursor:pointer;}
+}
+#cohorts-landing-page{
+  .bingo-background{
+            background:#2e358b;
+            color:#fff; 
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            
+              @include media(tablet) {
+                    min-height:160px;
+                    width:48%;
+                    padding: 0 15px;
+              }
+              h2{margin-top:20px;
+                 a{
+                     text-decoration:none;
+                     color:#fff;
+                 }
+              }
+              .heading-small{margin-bottom:20px;}
+        }
+ 
+  .block-one, .block-two{
+       @include media(tablet) {
+            margin-bottom:30px;
+            }
+  }
+
+  .block-one,.block-three{
+       @include media(tablet) {
+      margin-right:2%;
+      }
+  }
+  .block-two, .block-four{
+     @include media(tablet) {
+      margin-left:2%;
+      }
+  }
+}

@@ -3165,3 +3165,42 @@ span.helpText {
 .tableResponsive td {
   font-size: 16px;
 }
+
+.js-enabled .clickable {
+  cursor: pointer;
+}
+
+#cohorts-landing-page .bingo-background {
+  background: #2e358b;
+  color: #fff;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+  min-height: 160px;
+  width: 48%;
+  padding: 0 15px;
+}
+
+#cohorts-landing-page .bingo-background h2 {
+  margin-top: 20px;
+}
+
+#cohorts-landing-page .bingo-background h2 a {
+  text-decoration: none;
+  color: #fff;
+}
+
+#cohorts-landing-page .bingo-background .heading-small {
+  margin-bottom: 20px;
+}
+
+#cohorts-landing-page .block-one, #cohorts-landing-page .block-two {
+  margin-bottom: 30px;
+}
+
+#cohorts-landing-page .block-one, #cohorts-landing-page .block-three {
+  margin-right: 2%;
+}
+
+#cohorts-landing-page .block-two, #cohorts-landing-page .block-four {
+  margin-left: 2%;
+}
