@@ -16,5 +16,6 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public string CompanyStatus { get; set; }
         public short Source { get; set; }
         public short? PublicSectorDataSource { get; set; }
+        public string Sector { get; set; }
     }
 }

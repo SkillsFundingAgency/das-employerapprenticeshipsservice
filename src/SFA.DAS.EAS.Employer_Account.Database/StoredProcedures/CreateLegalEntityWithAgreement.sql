@@ -11,14 +11,17 @@
 	@source TINYINT,
 	@publicSectorDataSource TINYINT,
 	@legalEntityId BIGINT OUTPUT,
-	@employerAgreementId BIGINT OUTPUT
+	@employerAgreementId BIGINT OUTPUT,
+	@sector NVARCHAR(100) NULL
 AS
 BEGIN	
 	DECLARE @firstName NVARCHAR(MAX)	
 	DECLARE @lastName NVARCHAR(MAX)
 	DECLARE @signedByName NVARCHAR(100)	
 
-	EXEC [employer_account].[CreateLegalEntity] @companyNumber,@companyName,@companyAddress,@companyDateOfIncorporation, @status, @source, @publicSectorDataSource, @legalEntityId OUTPUT	
+	EXEC [employer_account].[CreateLegalEntity] 
+	@companyNumber,@companyName,@companyAddress,
+	@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
 
 	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
 

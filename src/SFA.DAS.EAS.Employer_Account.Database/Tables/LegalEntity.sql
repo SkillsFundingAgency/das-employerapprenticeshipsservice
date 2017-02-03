@@ -7,5 +7,6 @@
     [DateOfIncorporation] DATETIME NULL,
 	[Status] NVARCHAR(50) NULL,
 	[Source] TINYINT NOT NULL DEFAULT 1,
-	[PublicSectorDataSource] TINYINT NULL
+	[PublicSectorDataSource] TINYINT NULL,
+	[Sector] NVARCHAR(100) NULL
 )

@@ -15,7 +15,8 @@
 	@status varchar(50),
 	@source TINYINT,
 	@publicSectorDataSource TINYINT,
-	@employerRefName varchar(500) null
+	@employerRefName varchar(500) null,
+	@sector NVARCHAR(100)
 )
 AS
 BEGIN
@@ -28,7 +29,7 @@ BEGIN
 	
 	IF (@legalEntityId IS NULL)
 	BEGIN
-		INSERT INTO [employer_account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source], [PublicSectorDataSource]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source, @publicSectorDataSource);
+		INSERT INTO [employer_account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source], [PublicSectorDataSource],[Sector]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source, @publicSectorDataSource,@sector);
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	
