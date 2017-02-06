@@ -208,7 +208,6 @@
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\EventPublisher.cs" />
-    <Compile Include="Services\ManagedCompanyLookupService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\HashingService.cs" />
