@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using NLog;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
@@ -13,17 +14,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class HmrcService : IHmrcService
     {
-        private readonly ILogger _logger;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ITotpService _totpService;
 
-        public HmrcService(ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITotpService totpService)
+        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITotpService totpService)
         {
-            _logger = logger;
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
             _totpService = totpService;
+            _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
+            _httpClientWrapper.AuthScheme = "Bearer";
+            _httpClientWrapper.MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue> {new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json")};
         }
 
         public string GenerateAuthRedirectUrl(string redirectUrl)
