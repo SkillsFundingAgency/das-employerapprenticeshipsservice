@@ -770,6 +770,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 ApprenticeName = apprenticeship.ApprenticeshipName,
+                TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
