@@ -8,5 +8,6 @@
     [SubmissionDate] DATETIME NULL, 
     [SubmissionId] BIGINT NOT NULL DEFAULT 0,
 	[PayrollYear] NVARCHAR(10) NULL,
-	[PayrollMonth] TINYINT NULL
+	[PayrollMonth] TINYINT NULL,
+	[CreatedDate] DATETIME NOT NULL
 )
