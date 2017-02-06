@@ -602,10 +602,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountHashId = hashedAccountId,
                         Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
-                        PageTitle = "Ready fr approval",
+                        PageTitle = "Approve cohorts",
                         PageId = "ready-for-approval",
-                        PageHeading = "Ready for approval",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for approval:",
+                        PageHeading = "Approve cohorts",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that need your approval:",
 
                     }
                 };
