@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Employer;
@@ -15,13 +13,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly ILogger _logger;
-        private readonly IManagedCompanyLookupService _managedCompanyLookupService;
+        private readonly IHttpClientWrapper _httpClientWrapper;
 
-        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger,IManagedCompanyLookupService managedCompanyLookupService)
+        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger, IHttpClientWrapper httpClientWrapper)
         {
             _configuration = configuration;
             _logger = logger;
-            _managedCompanyLookupService = managedCompanyLookupService;
+            _httpClientWrapper = httpClientWrapper;
+            _httpClientWrapper.AuthScheme = "Basic";
+            _httpClientWrapper.BaseUrl = _configuration.CompaniesHouse.BaseUrl;
         }
 
         public async Task<EmployerInformation> GetInformation(string id)
@@ -30,34 +30,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             id = id?.ToUpper();
 
-            if (_configuration.CompaniesHouse.UseManagedList)
-            {
-                var companies = _managedCompanyLookupService.GetCompanies();
-                var company = companies?.Data.SingleOrDefault(c => c.CompanyNumber.Equals(id, StringComparison.CurrentCultureIgnoreCase));
-                if (company != null)
-                {
-                    _logger.Info($"Company {id} returned via managed lookup service.");
-                    return company;
-                }
-            }
-
-            var webClient = new WebClient();
-            
-            webClient.Headers.Add($"Authorization: Basic {_configuration.CompaniesHouse.ApiKey}");
-            
-
-            try
-            {
-                var result = await webClient.DownloadStringTaskAsync($"https://api.companieshouse.gov.uk/company/{id}");
-
-                return JsonConvert.DeserializeObject<EmployerInformation>(result);
-            }
-            catch (WebException ex)
-            {
-                _logger.Error(ex, "There was a problem with the call to Companies House");
-            }
-
-            return null;
+            var result = await _httpClientWrapper.Get<EmployerInformation>(
+                $"{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey))}",
+                $"{_configuration.CompaniesHouse.BaseUrl}/company/{id}");
+            return result;
         }
     }
 }
