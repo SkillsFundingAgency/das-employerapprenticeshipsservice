@@ -210,3 +210,24 @@ only screen and (max-width: 480px) {
 
 
 }
+
+//delete apprentice
+#edit-apprentice{
+    .delete-button{
+        background-color:$error-colour;
+        float:right;
+        margin:15px 0;
+        @include media(tablet){
+            margin:auto;
+        }
+    }
+}
+
+#confirm-delete{
+    .heading-large{margin-bottom:0;}
+    .heading-small{margin-top:0;}
+    .secondary-text{
+        color:$grey-1;
+    }
+
+}

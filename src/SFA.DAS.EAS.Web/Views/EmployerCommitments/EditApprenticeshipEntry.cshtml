@@ -168,7 +168,7 @@
 
             <button type="submit" class="button">Save</button>
             <a class="button delete-button" href="@Url.Action("DeleteApprenticeshipConfirmation", new { Model.Data.Apprenticeship.HashedCommitmentId, Model.Data.Apprenticeship.HashedApprenticeshipId })" aria-label="Cancel">Delete</a>
-            <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+            <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
             
         </form>
     </div>
