@@ -23,9 +23,9 @@ namespace SFA.DAS.EAS.Web.Validators
                 .NotEmpty().WithMessage("Last name must be entered")
                 .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a last name that's no longer than 100 characters");
 
-            RuleFor(x => x.NINumber)
-                .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
-                .WithMessage("Enter a valid national insurance number");
+            //RuleFor(x => x.NINumber)
+            //    .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
+            //    .WithMessage("Enter a valid national insurance number");
 
             RuleFor(r => r.StartDate)
                 .Must(ValidDateValue).Unless(m => m.StartDate == null).WithMessage("Enter a valid start date");
