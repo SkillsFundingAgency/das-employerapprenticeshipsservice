@@ -88,5 +88,19 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
         }
+
+
+        [Test]
+        public void ThenTheCodeIsDefaultedToEmptyStringIfNull()
+        {
+            //Arrange
+            _model.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = _orchestrator.AddOrganisationAddress(_model);
+
+            //Assert
+            Assert.AreEqual("",actual.Data.ReferenceNumber);
+        }
     }
 }
