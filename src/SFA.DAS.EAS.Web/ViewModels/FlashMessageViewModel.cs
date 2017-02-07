@@ -31,6 +31,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
                         return "panel panel-info";
                     case FlashMessageSeverityLevel.Warning:
                         return "panel panel-warning";
+                    case FlashMessageSeverityLevel.Okay:
+                        return "panel panel-okay";
                 }
                 return "panel panel-info";
             }
@@ -46,6 +48,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         Info,
         Danger,
         Warning,
-        Error
+        Error,
+        Okay
     }
 }

@@ -511,7 +511,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 var flashMessage = new FlashMessageViewModel
                 {
-                    Severity = FlashMessageSeverityLevel.Success,
+                    Severity = FlashMessageSeverityLevel.Okay,
                     Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted")
                 };
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
