@@ -18,7 +18,7 @@
         else
         {
             
-            <form method="post" action="~/Invitation/Accept">
+            <form method="post" action="@Url.Action("Accept","Invitation")">
                 @Html.AntiForgeryToken()
                 <table>
                     <thead>
