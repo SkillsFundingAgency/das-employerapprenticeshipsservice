@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -19,6 +21,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         private static IContainer _container;
         private static bool _newLegalEntity;
         private static int _exceptionCount;
+        private static int _unauthorizedCount;
 
 
 
@@ -43,19 +46,64 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         public void ResetData()
         {
             _exceptionCount = 0;
+            _unauthorizedCount = 0;
             _newLegalEntity = false;
         }
 
         [When(@"I remove a scheme")]
         public void WhenIRemoveAScheme()
         {
-            ScenarioContext.Current.Pending();
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
+            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+
+            var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
+            var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
+            var scheme = legalEntities.Data.PayeSchemes.First();
+
+            var removeScheme = new RemovePayeSchemeViewModel
+            {
+                HashedAccountId = hashedId,
+                RemoveScheme = 2,
+                UserId = userId,
+                AccountName = "",
+                PayeRef = scheme.PayeRef
+            };
+
+            try
+            {
+                var result = employerPayeOrchestrator.RemoveSchemeFromAccount(removeScheme).Result;
+                if (result.Status == HttpStatusCode.Unauthorized)
+                {
+                    _unauthorizedCount++;
+                }
+            }
+            catch(Exception ex)
+            {
+                _exceptionCount++;
+            }
         }
 
         [Then(@"Scheme is ""(.*)""")]
         public void ThenSchemeIs(string schemeStatus)
         {
-            ScenarioContext.Current.Pending();
+            var accountId = (long)ScenarioContext.Current["AccountId"];
+            var hashedId = ScenarioContext.Current["HashedAccountId"].ToString();
+            var userId = ScenarioContext.Current["ExternalUserId"].ToString();
+
+            var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
+            var payeSchemes = employerPayeOrchestrator.Get(hashedId, userId).Result;
+
+            if (schemeStatus.Equals("removed", StringComparison.CurrentCultureIgnoreCase))
+            {
+                Assert.AreEqual(0, _unauthorizedCount);
+                Assert.AreEqual(0, payeSchemes.Data.PayeSchemes.Count);
+            }
+            else
+            {
+                Assert.AreEqual(1, payeSchemes.Data.PayeSchemes.Count);
+                Assert.AreEqual(1, _unauthorizedCount);
+            }
         }
 
 
@@ -82,7 +130,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme
+            var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
@@ -91,7 +139,11 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             };
             try
             {
-                employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Wait();
+                var result = employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Result;
+                if (result.Status == HttpStatusCode.Unauthorized)
+                {
+                    _exceptionCount++;
+                }
             }
             catch (Exception ex)
             {

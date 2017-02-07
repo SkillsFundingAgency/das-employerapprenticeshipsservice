@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Employer;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
 {
@@ -52,7 +53,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
                     Line1 = "1 The Strand",
                     Line2 = "London",
                     PostCode = "N1 2TT"
-                }
+                },
+                CompanyStatus = "active"
             };
 
             _employerService.Setup(x => x.GetInformation(id)).ReturnsAsync(employer);
@@ -68,6 +70,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
             Assert.That(response.AddressLine1, Is.EqualTo(employer.RegisteredAddress.Line1));
             Assert.That(response.AddressLine2, Is.EqualTo(employer.RegisteredAddress.Line2));
             Assert.That(response.AddressPostcode, Is.EqualTo(employer.RegisteredAddress.PostCode));
+            Assert.AreEqual(employer.CompanyStatus,response.CompanyStatus);
         }
     }
 }

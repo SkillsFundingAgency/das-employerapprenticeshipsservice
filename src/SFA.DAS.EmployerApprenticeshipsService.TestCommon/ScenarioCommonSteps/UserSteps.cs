@@ -1,42 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
+using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Messaging;
+using StructureMap;
+using TechTalk.SpecFlow;
 
 namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 {
     public class UserSteps
     {
-        public static void UpsertUser(IMediator mediator, SignInUserModel user)
+        private IContainer _container;
+        private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<ICookieService> _cookieService;
+
+        public UserSteps()
         {
+            _messagePublisher = new Mock<IMessagePublisher>();
+            _owinWrapper = new Mock<IOwinWrapper>();
+            _cookieService = new Mock<ICookieService>();
+
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+        }
+
+        public void UpsertUser(UserViewModel userView)
+        {
+            var mediator = _container.GetInstance<IMediator>();
+
             mediator.SendAsync(new UpsertRegisteredUserCommand
             {
-                UserRef = user.UserId,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                EmailAddress = user.Email
+                UserRef = userView.UserId,
+                FirstName = userView.FirstName,
+                LastName = userView.LastName,
+                EmailAddress = userView.Email
             }).Wait();
         }
 
-        public static SignInUserModel GetExistingUserAccount(string accountOwnerUserId, Mock<IOwinWrapper> owinwrapper, HomeOrchestrator orchestrator)
+
+        public UserViewModel GetExistingUserAccount()
         {
-            owinwrapper.Setup(x => x.GetClaimValue("sub")).Returns(accountOwnerUserId);
-            
-            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserId.Equals(accountOwnerUserId, StringComparison.CurrentCultureIgnoreCase));
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ScenarioContext.Current["AccountOwnerUserId"].ToString());
+            var orchestrator = _container.GetInstance<HomeOrchestrator>();
+            var user = orchestrator.GetUsers().Result.AvailableUsers.FirstOrDefault(c => c.UserId.Equals(ScenarioContext.Current["AccountOwnerUserId"].ToString(), StringComparison.CurrentCultureIgnoreCase));
             return user;
         }
 
-        public static long CreateUserWithRole(User user, Role role, long accountId, IUserRepository userRepository, IMembershipRepository membershipRepository)
+        public long CreateUserWithRole(User user, Role role, long accountId)
         {
+            var userRepository = _container.GetInstance<IUserRepository>();
+            var membershipRepository = _container.GetInstance<IMembershipRepository>();
             var userRecord = userRepository.GetByUserRef(user.UserRef).Result;
 
             membershipRepository.Create(userRecord.Id, accountId, (short)role).Wait();

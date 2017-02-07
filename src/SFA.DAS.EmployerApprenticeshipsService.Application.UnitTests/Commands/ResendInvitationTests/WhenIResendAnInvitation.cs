@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.TimeProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
@@ -165,6 +169,29 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                                                                                   && c.Email.Subject.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("123456"))));
         }
-        
+
+        [Test]
+        public async Task ThenTheAuditCommandIsCalledWhenTheResendCommandIsValid()
+        {
+            //Arrange
+            var invitation = new Invitation
+            {
+                Id = 1,
+                Email = "test@email",
+                AccountId = 1,
+                ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
+            };
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
+
+            //Act
+            await _handler.Handle(_command);
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Pending.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExpiryDate") && y.NewValue.Equals(DateTimeProvider.Current.UtcNow.Date.AddDays(8).ToString())) != null
+                    )));
+        }
+
     }
+
 }

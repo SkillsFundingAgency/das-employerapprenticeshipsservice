@@ -1,11 +1,12 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Web
 
-@model OrchestratorResponse<InvitationView>
+@model OrchestratorResponse<SFA.DAS.EAS.Domain.Models.AccountTeam.InvitationView>
 
 @{
     ViewBag.PageID = "page-team-member-cancel-invite";
     ViewBag.Title = "Cancel invitation";
+    ViewBag.Section = "team";
 }
 
 <div class="grid-row">
@@ -25,8 +26,6 @@
 </div>
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to Manage Team Members</a></li>
-        </ol>
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
     </div>
 }

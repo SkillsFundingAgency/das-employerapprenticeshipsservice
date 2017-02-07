@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web;
@@ -147,9 +144,14 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
 
             var actual = employerAccountTransactionsOrchestraotor.GetAccountTransactions(hashedAccountId, userId).Result;
 
-            Assert.AreEqual(balance,actual.Model.CurrentBalance);
+            Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
         }
 
+        [When(@"I register on month (.*)")]
+        public void WhenIRegisterOnDASInMonth(string p0)
+        {
+            ScenarioContext.Current.Pending();
+        }
 
     }
 }

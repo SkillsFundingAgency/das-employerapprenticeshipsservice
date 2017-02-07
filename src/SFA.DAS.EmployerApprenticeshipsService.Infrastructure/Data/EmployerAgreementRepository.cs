@@ -7,7 +7,9 @@ using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
-                var sql = "SELECT le.* FROM[account].[LegalEntity] le INNER JOIN[account].[EmployerAgreement] ea ON ea.LegalEntityId = le.Id INNER JOIN[account].[AccountEmployerAgreement] aea ON aea.EmployerAgreementId = ea.Id WHERE aea.AccountId = @accountId";
+                var sql = "SELECT le.* FROM[employer_account].[LegalEntity] le INNER JOIN[employer_account].[EmployerAgreement] ea ON ea.LegalEntityId = le.Id INNER JOIN[employer_account].[AccountEmployerAgreement] aea ON aea.EmployerAgreementId = ea.Id WHERE aea.AccountId = @accountId";
 
                 if (signedOnly)
                     sql += " AND ea.StatusId = 2";
@@ -49,7 +51,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[CreateEmployerAgreementTemplate]",
+                    sql: "[employer_account].[CreateEmployerAgreementTemplate]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -65,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@agreementId", agreementId, DbType.Int64);
 
                 return await c.QueryAsync<EmployerAgreementView>(
-                    sql: "[account].[GetEmployerAgreement]",
+                    sql: "[employer_account].[GetEmployerAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -84,7 +86,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@signedDate", signedDate, DbType.DateTime);
 
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[SignEmployerAgreement]",
+                    sql: "[employer_account].[SignEmployerAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
                 return result;
@@ -100,7 +102,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 var trans = c.BeginTransaction();
                 var result = await c.ExecuteAsync(
-                    sql: "[account].[ReleaseEmployerAgreementTemplate]",
+                    sql: "[employer_account].[ReleaseEmployerAgreementTemplate]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure, transaction: trans);
                 trans.Commit();
@@ -116,7 +118,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@templateId", templateId, DbType.Int32);
 
                 return await c.QueryAsync<EmployerAgreementTemplate>(
-                    sql: "SELECT * FROM [account].[EmployerAgreementTemplate] WHERE Id = @templateId;",
+                    sql: "SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = @templateId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -127,7 +129,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<EmployerAgreementTemplate> GetLatestAgreementTemplate()
         {
             var result = await WithConnection(async c => await c.QueryAsync<EmployerAgreementTemplate>(
-                sql: "SELECT * FROM [account].[EmployerAgreementTemplate] ORDER BY ReleasedDate DESC;",
+                sql: "SELECT * FROM [employer_account].[EmployerAgreementTemplate] ORDER BY ReleasedDate DESC;",
                 commandType: CommandType.Text));
 
             return result.FirstOrDefault();

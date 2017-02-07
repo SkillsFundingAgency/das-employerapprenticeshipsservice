@@ -1,10 +1,13 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -23,7 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<TeamMember>(
-                    sql: "SELECT * FROM [account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
+                    sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -40,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userId", userId, DbType.Int64);
 
                 return await c.QueryAsync<Membership>(
-                    sql: "SELECT * FROM [account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "SELECT * FROM [employer_account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -57,7 +60,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@accountId", accountId, DbType.Int64);
 
                 return await c.ExecuteAsync(
-                    sql: "DELETE FROM [account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "DELETE FROM [employer_account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -73,7 +76,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@roleId", roleId, DbType.Int16);
 
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [account].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
+                    sql: "UPDATE [employer_account].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -88,7 +91,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -105,7 +108,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@externalUserId", externalUserId, DbType.String);
 
                 return await c.QueryAsync<MembershipView>(
-                    sql: "SELECT * FROM [account].[MembershipView] m inner join account.account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
+                    sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.HashedId = @hashedAccountId AND UserRef = @externalUserId;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -121,9 +124,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userId", userId, DbType.Int64);
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
+                parameters.Add("@createdDate",DateTime.UtcNow, DbType.DateTime);
 
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [account].[Membership] ([AccountId], [UserId], [RoleId]) VALUES(@accountId, @userId, @roleId); ",
+                    sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId], [CreatedDate]) VALUES(@accountId, @userId, @roleId, @createdDate); ",
                     param: parameters,
                     commandType: CommandType.Text);
             });

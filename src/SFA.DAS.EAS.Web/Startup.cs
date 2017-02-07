@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -16,7 +19,10 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -33,70 +39,108 @@ namespace SFA.DAS.EAS.Web
         {
             var config = GetConfigurationObject();
 
-            if (config.Identity.UseFake)
-            {
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "Cookies",
-                    LoginPath = new PathString("/home/FakeUserSignIn")
-                });
-            }
-            else
-            {
-                var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
-                var logger = LogManager.GetLogger("Startup");
+            
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+            var logger = LogManager.GetLogger("Startup");
             
 
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
-                JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Cookies",
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "TempState",
+                AuthenticationMode = AuthenticationMode.Passive
+            });
+
+            var constants = new Constants(config.Identity);
+
+            var urlHelper = new UrlHelper();
+
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/service/password/change")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
+
+            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
+            {
+                ClientId = config.Identity.ClientId,
+                ClientSecret = config.Identity.ClientSecret,
+                Scopes = config.Identity.Scopes,
+                BaseUrl = constants.Configuration.BaseAddress,
+                TokenEndpoint = constants.TokenEndpoint(),
+                UserInfoEndpoint = constants.UserInfoEndpoint(),
+                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
+                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
+                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
+                AuthenticatedCallback = identity =>
                 {
-                    AuthenticationType = "Cookies",
-                    ExpireTimeSpan = new TimeSpan(0,10,0),
-                    SlidingExpiration = true
-                });
+                    PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
+                }
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "TempState",
-                    AuthenticationMode = AuthenticationMode.Passive
-                });
-
-                var constants = new Constants(config.Identity.BaseAddress);
-                app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-                {
-                    ClientId = config.Identity.ClientId, 
-                    ClientSecret = config.Identity.ClientSecret, 
-                    Scopes = "openid",
-                    BaseUrl = constants.BaseAddress,
-                    TokenEndpoint = constants.TokenEndpoint(),
-                    UserInfoEndpoint = constants.UserInfoEndpoint(),
-                    AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    AuthenticatedCallback = identity =>
-                    {
-                        PostAuthentiationAction(identity, authenticationOrchestrator, logger);
-                    }
-                });
-            }
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger)
+        private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
+        {
+            if (!useCertificate)
+            {
+                return null;
+            }
+
+            return () =>
+            {
+                var store = new X509Store(StoreLocation.LocalMachine);
+                store.Open(OpenFlags.ReadOnly);
+                try
+                {
+                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
+
+                    if (certificates.Count < 1)
+                    {
+                        throw new Exception($"Could not find certificate with thumbprint {thumbprint} in LocalMachine store");
+                    }
+
+                    return certificates[0];
+                }
+                finally
+                {
+                    store.Close();
+                }
+            };
+        }
+
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestraor authenticationOrchestrator, ILogger logger, Constants constants)
         {
             logger.Info("PostAuthenticationAction called");
-            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == @"sub")?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == @"email")?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == @"given_name")?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == @"family_name")?.Value;
-            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email,  firstName,  lastName);
+            var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
+            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
+            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
+            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
+            logger.Info("Claims retrieved from OIDC server {0}: {1} : {2} : {3}", userRef, email, firstName, lastName);
 
-            Task.Run(async ()  =>
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
+            identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
+            identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
+
+
+            Task.Run(async () =>
             {
+
+
                 await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
             }).Wait();
-           
+
             //HttpContext.Current.Response.Redirect(HttpContext.Current.Request.Path, true);
-            
+
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetConfigurationObject()
@@ -138,22 +182,28 @@ namespace SFA.DAS.EAS.Web
 
     public class Constants
     {
-
-        public Constants(string baseAddress)
+        private readonly string _baseUrl;
+        public IdentityServerConfiguration Configuration { get; set; }
+        public Constants(IdentityServerConfiguration configuration)
         {
-            this.BaseAddress = baseAddress;
+            this.Configuration = configuration;
+            _baseUrl = configuration.ClaimIdentifierConfiguration.ClaimsBaseUrl;
         }
-        public string BaseAddress { get; set; }
 
-        public string AuthorizeEndpoint() => BaseAddress + "/Login/dialog/appl/oidc/wflow/authorize";
-        public string LogoutEndpoint() => BaseAddress + "/connect/endsession";
-        public string TokenEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/token";
-        public string UserInfoEndpoint() =>  BaseAddress + "/Login/rest/appl/oidc/wflow/userinfo";
-        public string IdentityTokenValidationEndpoint() =>  BaseAddress + "/connect/identitytokenvalidation";
-        public string TokenRevocationEndpoint() => BaseAddress + "/connect/revocation";
+        public string AuthorizeEndpoint() => $"{Configuration.BaseAddress}{Configuration.AuthorizeEndPoint}";
+        public string LogoutEndpoint() => $"{Configuration.BaseAddress}{Configuration.LogoutEndpoint}";
+        public string TokenEndpoint() => $"{Configuration.BaseAddress}{Configuration.TokenEndpoint}";
+        public string UserInfoEndpoint() => $"{Configuration.BaseAddress}{Configuration.UserInfoEndpoint}";
+        public string ChangePasswordLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.ChangePasswordLink, Configuration.ClientId);
+        public string ChangeEmailLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.ChangeEmailLink, Configuration.ClientId);
+        public string RegisterLink() => Configuration.BaseAddress.Replace("/identity", "") + string.Format(Configuration.RegisterLink,Configuration.ClientId);
+        
 
-        public string ChangePasswordLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changepwdpg";
-
-        public string ChangeEmailLink() => BaseAddress + "/Login/dialog/appl/selfcare/wflow/changeemailpg";
+        public string Id () => _baseUrl + Configuration.ClaimIdentifierConfiguration.Id;
+        public string Email() => _baseUrl + Configuration.ClaimIdentifierConfiguration.Email;
+        public string GivenName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.GivenName;
+        public string FamilyName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.FaimlyName;
+        public string DisplayName() => _baseUrl + Configuration.ClaimIdentifierConfiguration.DisplayName;
+        public string RequiresVerification() => _baseUrl + "requires_verification";
     }
 }

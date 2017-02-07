@@ -7,7 +7,9 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Infrastructure.Entities;
 
 namespace SFA.DAS.EAS.Infrastructure.Data

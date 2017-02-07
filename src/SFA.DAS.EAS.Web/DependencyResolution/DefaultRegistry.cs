@@ -16,30 +16,34 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
+using SFA.DAS.Audit.Client;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Client.Configuration;
 using StructureMap;
 using StructureMap.Graph;
-using WebGrease.Css.Extensions;
+using StructureMap.TypeRules;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution {
@@ -56,41 +60,70 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
                 {
                     scan.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith(ServiceNamespace));
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
+                    scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                 });
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
             
             var config = this.GetConfiguration();
-            if (config.Identity.UseFake)
-            {
-                For<IUserRepository>().Use<FileSystemUserRepository>();
-            }
-            else
-            {
-                For<IUserRepository>().Use<UserRepository>();
-            }
+
+            For<IUserRepository>().Use<UserRepository>();
 
             For<ICache>().Use<InMemoryCache>(); //RedisCache
 
             For<IApprenticeshipInfoServiceConfiguration>().Use(config.ApprenticeshipInfoService);
             For<ICommitmentsApi>().Use<CommitmentsApi>().Ctor<ICommitmentsApiClientConfiguration>().Is(config.CommitmentsApi);
             For<ITasksApi>().Use<TasksApi>().Ctor<ITasksApiClientConfiguration>().Is(config.TasksApi);
-            For<IEventsApi>().Use<EventsApi>().Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi);
+            For<IEventsApi>().Use<EventsApi>()
+                .Ctor<IEventsApiClientConfiguration>().Is(config.EventsApi)
+                .SelectConstructor(() => new EventsApi(null)); // The default one isn't the one we want to use.;
 
             RegisterMapper();
 
             RegisterMediator();
+
+            RegisterAuditService();
+        }
+
+        private void RegisterAuditService()
+        {
+            var environment = Environment.GetEnvironmentVariable("DASENV");
+            if (string.IsNullOrEmpty(environment))
+            {
+                environment = CloudConfigurationManager.GetSetting("EnvironmentName");
+            }
+
+            For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
+
+            if (environment.Equals("LOCAL"))
+            {
+                For<IAuditApiClient>().Use<StubAuditApiClient>();
+            }
+            else
+            {
+                For<IAuditApiClient>().Use<AuditApiClient>();
+            }
         }
 
         private void RegisterMapper()
         {
-            var profiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
-                            .Where(t => typeof(Profile).IsAssignableFrom(t))
-                            .Select(t => (Profile) Activator.CreateInstance(t));
-           
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
+
+            var mappingProfiles = new List<Profile>();
+
+            foreach (var assembly in assemblies)
+            {
+                var profiles = Assembly.Load(assembly.FullName).GetTypes()
+                                       .Where(t => typeof(Profile).IsAssignableFrom(t))
+                                       .Where(t => t.IsConcrete() && t.HasConstructors())
+                                       .Select(t => (Profile)Activator.CreateInstance(t));
+
+                mappingProfiles.AddRange(profiles);
+            }
+            
             var config  = new MapperConfiguration(cfg =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                mappingProfiles.ForEach(cfg.AddProfile);
             });
 
             var mapper = config.CreateMapper();
@@ -143,8 +176,8 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
         
         private void PopulateSystemDetails(string envName)
         {
-            SystemDetails.EnvironmentName = envName;
-            SystemDetails.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            SystemDetailsViewModel.EnvironmentName = envName;
+            SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

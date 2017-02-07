@@ -1,4 +1,5 @@
-﻿@model SFA.DAS.EAS.Web.Models.AcknowledgementViewModel
+﻿@using SFA.DAS.EAS.Web
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AcknowledgementViewModel>
 
 @{
     ViewBag.Title = "Instructions sent";
@@ -16,17 +17,17 @@
 </div>
 
 <div class="grid-row">
-    <div class="column-two-thirds">
+    <div class="column-full">
 
         <table class="instructionSent">
             <tbody>
                 <tr>
                     <td>Cohort reference</td>
-                    <td class="strong">@Model.HashedCommitmentId</td>
+                    <td class="strong">@Model.Data.HashedCommitmentId</td>
                 </tr>
                 <tr>
                     <td>Sent to </td>
-                    <td  class="strong">@Model.ProviderName</td>
+                    <td  class="strong">@Model.Data.ProviderName</td>
                     
                 </tr>
                 @*<tr>
@@ -36,7 +37,7 @@
                 </tr>*@
                 <tr>
                     <td>On behalf of</td>
-                    <td  class="strong">@Model.LegalEntityName</td>
+                    <td  class="strong">@Model.Data.LegalEntityName</td>
                 </tr>
                 @*<tr>
                     <td>Date</td>
@@ -44,7 +45,7 @@
                 </tr>*@
                 <tr>
                     <td>Instructions</td>
-                    <td  class="strong">@Model.Message</td>
+                    <td  class="strong">@Model.Data.Message</td>
                 </tr>
             </tbody>
         </table>
@@ -55,25 +56,25 @@
 
         @*<a class="button" href="@Url.Action("Index")">Continue</a>*@
     </div>
+</div>
 
-    <div class="column-one-third">
-        <aside>
-            <div class="panel panel-filled">
-                <h2 class="heading-medium">Help us improve this section</h2>
-                <p>Take a 3 minute survey about adding apprentices so that we can improve the service.</p>
-                <a href=" https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button" title="Take the survey" aria-label="Take the survey">Take the survey</a>
+<div class="grid-row">
+        <div class="column-full">
+            <aside>
+                <div class="panel panel-filled">
+                    <h2 class="heading-medium">Help us improve this section</h2>
+                    <p>Take a 3 minute survey about adding apprentices so that we can improve the service.</p>
+                    <a href=" https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button" title="Take the survey" aria-label="Take the survey">Take the survey</a>
 
 
-            </div>
-        </aside>
-    </div>
+                </div>
+            </aside>
+        </div>
 </div>
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+    <div class="breadcrumbs">       
+            <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

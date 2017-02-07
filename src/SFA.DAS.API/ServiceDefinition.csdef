@@ -15,10 +15,10 @@
       <Setting name="EnvironmentName" />
       <Setting name="ConfigurationStorageConnectionString" />
       <Setting name="LogLevel" />
-      <Setting name="LoggingRedisKey" />
-      <Setting name="LoggingRedisConnectionString" />
-      <Setting name="ida_Audience" />
-      <Setting name="ida_Tenant" />
+      <Setting name="LoggingRedisConnectionString"/>
+      <Setting name="LoggingRedisKey"/>
+      <Setting name="idaAudience" />
+      <Setting name="idaTenant" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" />

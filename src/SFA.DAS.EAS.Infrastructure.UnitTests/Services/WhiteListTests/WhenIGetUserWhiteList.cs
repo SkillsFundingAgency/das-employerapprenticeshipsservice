@@ -112,5 +112,22 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
             _cacheProvider.Verify(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()), Times.Never);
             _mockUserWhiteList.Verify(x => x.GetDataFromStorage(), Times.Never);
         }
+
+        [Test]
+        public void ThenIShouldBeOnWhiteListIfMyEmailIsCapitalisedDifferently()
+        {
+            //Assign
+            _mockUserWhiteList.Setup(x => x.GetList()).Returns(_lookup);
+
+            _cacheProvider.Setup(x => x.Get<UserWhiteListLookUp>(It.IsAny<string>()))
+                          .Returns((UserWhiteListLookUp)null);
+
+            //Act
+            var result = _userWhiteList.IsEmailOnWhiteList("TEST@TEST.COM");
+
+            //Assert
+            _mockUserWhiteList.Verify(x => x.GetList(), Times.Once);
+            Assert.IsTrue(result);
+        }
     }
 }

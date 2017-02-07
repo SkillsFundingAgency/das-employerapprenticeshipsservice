@@ -121,6 +121,14 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
       <Private>True</Private>
@@ -172,12 +180,24 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Audit.Client.Web, Version=1.0.0.20510, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.Web.1.0.0.20510\lib\net45\SFA.DAS.Audit.Client.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -192,12 +212,16 @@
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.6634\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.7.0.16714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.7.0.16714\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.7.0.16714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.7.0.16714\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -216,8 +240,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.OidcMiddleware, Version=1.0.0.8638, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.OidcMiddleware.1.0.0.8638\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+    <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.18229, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.21673, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.21673\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
@@ -339,82 +367,98 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Controllers\EmployerAccountOrganisationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
-    <Compile Include="Controllers\EmployerTasksController.cs" />
+    <Compile Include="Controllers\EmployerManageApprenticesController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
+    <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Exceptions\InvalidStateException.cs" />
+    <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Enums\SaveStatus.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="ICookieService.cs" />
-    <Compile Include="Models\AcknowledgementViewModel.cs" />
-    <Compile Include="Models\AddLegalEntityViewModel.cs" />
-    <Compile Include="Models\ApprenticeshipListItemViewModel.cs" />
-    <Compile Include="Models\ApprenticeshipViewModel.cs" />
-    <Compile Include="Models\BeginNewPayeScheme.cs" />
-    <Compile Include="Models\AddNewPayeScheme.cs" />
-    <Compile Include="Models\CommitmentInformViewModel.cs" />
-    <Compile Include="Models\CommitmentListItemViewModel.cs" />
-    <Compile Include="Models\CommitmentListViewModel.cs" />
-    <Compile Include="Models\CommitmentViewModel.cs" />
-    <Compile Include="Models\ConfirmNewPayeScheme.cs" />
-    <Compile Include="Models\ConfirmProviderView.cs" />
-    <Compile Include="Models\FinishEditingViewModel.cs" />
-    <Compile Include="Models\GatewayInformViewModel.cs" />
-    <Compile Include="Models\PayeSchemeDetail.cs" />
-    <Compile Include="Models\PaymentTransactionViewModel.cs" />
-    <Compile Include="Models\PrivacyViewModel.cs" />
-    <Compile Include="Models\CreateAccountModel.cs" />
-    <Compile Include="Models\CreateCommitmentViewModel.cs" />
-    <Compile Include="Models\CreateNewLegalEntity.cs" />
-    <Compile Include="Models\EmployerAccountPayeListViewModel.cs" />
-    <Compile Include="Models\EmployerAgreementListViewModel.cs" />
-    <Compile Include="Models\EmployerAgreementViewModel.cs" />
-    <Compile Include="Models\EmployerTeamMembersViewModel.cs" />
-    <Compile Include="Models\ExtendedApprenticeshipViewModel.cs" />
-    <Compile Include="Models\FindOrganisationViewModel.cs" />
-    <Compile Include="Models\GatewayModel.cs" />
-    <Compile Include="Models\InviteTeamMemberViewModel.cs" />
-    <Compile Include="Models\InvitationViewModel.cs" />
-    <Compile Include="Models\RemovePayeScheme.cs" />
-    <Compile Include="Models\RequestStatus.cs" />
-    <Compile Include="Models\SelectEmployerModel.cs" />
-    <Compile Include="Models\SelectEmployerViewModel.cs" />
-    <Compile Include="Models\SignInUserModel.cs" />
-    <Compile Include="Models\SignInUserViewModel.cs" />
-    <Compile Include="Models\FlashMessageViewModel.cs" />
-    <Compile Include="Models\ApproveApprenticeshipModel.cs" />
-    <Compile Include="Models\ApproveApprenticeshipViewModel.cs" />
-    <Compile Include="Models\SubmitCommitmentViewModel.cs" />
-    <Compile Include="Models\SubmitCommitmentModel.cs" />
-    <Compile Include="Models\SystemDetails.cs" />
-    <Compile Include="Models\TaskListItemModel.cs" />
-    <Compile Include="Models\TaskListItemViewModel.cs" />
-    <Compile Include="Models\TaskListViewModel.cs" />
-    <Compile Include="Models\TaskViewModel.cs" />
-    <Compile Include="Models\TransactionViewModel.cs" />
-    <Compile Include="Models\SummaryViewModel.cs" />
-    <Compile Include="Models\Types\SaveStatus.cs" />
-    <Compile Include="Models\ViewModelBase.cs" />
+    <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
+    <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
+    <Compile Include="ViewModels\AddOrganisationAddressModel.cs" />
+    <Compile Include="ViewModels\ApprenticeshipListItemViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\BeginNewPayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\CommitmentInformViewModel.cs" />
+    <Compile Include="ViewModels\CommitmentListItemViewModel.cs" />
+    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
+    <Compile Include="ViewModels\CommitmentViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
+    <Compile Include="ViewModels\PublicSectorOrganisationSearchResultsViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\FinishEditingViewModel.cs" />
+    <Compile Include="ViewModels\GatewayInformViewModel.cs" />
+    <Compile Include="ViewModels\NavigationViewModel.cs" />
+    <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
+    <Compile Include="ViewModels\PaymentTransactionViewModel.cs" />
+    <Compile Include="ViewModels\PrivacyViewModel.cs" />
+    <Compile Include="ViewModels\CreateAccountViewModel.cs" />
+    <Compile Include="ViewModels\CreateCommitmentViewModel.cs" />
+    <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
+    <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
+    <Compile Include="ViewModels\ExtendedApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\GatewayViewModel.cs" />
+    <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
+    <Compile Include="ViewModels\InvitationViewModel.cs" />
+    <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="Enums\RequestStatus.cs" />
+    <Compile Include="ViewModels\SelectEmployerViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\SignInUserViewModel.cs" />
+    <Compile Include="ViewModels\FlashMessageViewModel.cs" />
+    <Compile Include="ViewModels\ApproveApprenticeshipModel.cs" />
+    <Compile Include="ViewModels\ApproveApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\SubmitCommitmentViewModel.cs" />
+    <Compile Include="ViewModels\SubmitCommitmenViewModel.cs" />
+    <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="ViewModels\TaskListItemModel.cs" />
+    <Compile Include="ViewModels\TaskListItemViewModel.cs" />
+    <Compile Include="ViewModels\TaskListViewModel.cs" />
+    <Compile Include="ViewModels\TaskViewModel.cs" />
+    <Compile Include="ViewModels\TransactionViewModel.cs" />
+    <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="ViewModels\DateTimeViewModel.cs" />
+    <Compile Include="Extensions\SaveStatusExtension.cs" />
+    <Compile Include="ViewModels\UserLinksViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestraor.cs" />
     <Compile Include="Orchestrators\CommitmentStatusCalculator.cs" />
@@ -423,27 +467,30 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentsOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerTasksOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\ICommitmentStatusCalculator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestrator.cs" />
-    <Compile Include="Models\UserAccountsViewModel.cs" />
-    <Compile Include="Models\TransactionLineViewModel.cs" />
-    <Compile Include="Models\TransactionViewResult.cs" />
+    <Compile Include="ViewModels\UserAccountsViewModel.cs" />
+    <Compile Include="ViewModels\TransactionLineViewModel.cs" />
+    <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
+    <Compile Include="Plumbing\Mvc\LogAndHandleErrorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
+    <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\elements.css" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
@@ -476,11 +523,15 @@
     <Content Include="dist\images\gov.uk_logotype_crown.svg" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert.png" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="dist\images\icon-important-2x.png" />
+    <Content Include="dist\images\icon-important.png" />
     <Content Include="dist\images\icon-pointer-2x.png" />
     <Content Include="dist\images\icon-pointer-black-2x.png" />
     <Content Include="dist\images\icon-pointer-black.png" />
     <Content Include="dist\images\icon-pointer-indexed.png" />
     <Content Include="dist\images\icon-pointer.png" />
+    <Content Include="dist\images\icon-search-2x.png" />
+    <Content Include="dist\images\icon-search.png" />
     <Content Include="dist\images\opengraph-image.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
@@ -492,10 +543,9 @@
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
     <Content Include="dist\javascripts\respond.min.js" />
     <Content Include="dist\javascripts\selection-buttons.js" />
+    <Content Include="dist\javascripts\stacker.js" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Gruntfile.js" />
     <Content Include="robots.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -732,6 +782,9 @@
     <Content Include="src\sass\screen-ie6.scss" />
     <Content Include="src\sass\screen-ie7.scss" />
     <Content Include="src\sass\screen.scss" />
+    <Content Include="StartUp\FindPrivateKey.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -745,9 +798,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\EmployerAccount\SelectEmployer.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
-    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
     <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
@@ -758,7 +809,7 @@
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
-    <Content Include="Views\Invitation\Index.cshtml" />
+    <Content Include="Views\Invitation\Invite.cshtml" />
     <Content Include="Views\Invitation\All.cshtml" />
     <Content Include="Views\EmployerTeam\ViewTeam.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
@@ -777,16 +828,12 @@
     <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
-    <Content Include="Views\EmployerCommitments\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\EmployerAgreement\FindLegalEntity.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
-    <Content Include="Views\EmployerTasks\Index.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
-    <Content Include="Views\EmployerTasks\ViewTask.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
     <Content Include="Views\EmployerCommitments\CreateApprenticeshipEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\SearchProvider.cshtml" />
@@ -873,6 +920,34 @@
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisation.cshtml" />
+    <Content Include="Views\Organisation\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\Organisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="Views\Organisation\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
+    <Content Include="Views\Organisation\AddOtherOrganisationDetails.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\AddOrganisation.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\EmployerAccountOrganisation\ViewPublicSectorOrganisationSearchResults.cshtml" />
+    <Content Include="StartUp\IIS.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\IIS.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StartUp\Powershell.msi">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\EmployerAccountOrganisation\AddOtherOrganisationDetails.cshtml" />
+    <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\Home\ServiceLandingPage.cshtml" />
+    <Content Include="Views\Home\ServiceStartPage.cshtml" />
+    <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
+    <Content Include="Views\EmployerAccount\Summary.cshtml" />
+    <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
@@ -889,9 +964,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />

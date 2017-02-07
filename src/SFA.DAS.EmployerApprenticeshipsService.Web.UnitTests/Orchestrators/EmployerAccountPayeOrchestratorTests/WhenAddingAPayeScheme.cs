@@ -14,10 +14,12 @@ using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
 {
@@ -27,21 +29,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<ICookieService> _cookieService;
-        private ConfirmNewPayeScheme _model;
+        private ConfirmNewPayeSchemeViewModel _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private const string ExpectedHashedId = "jgdfg786";
         private const string ExpectedEmpref = "123/DFDS";
+        private const string ExpectedEmprefName = "Paye Scheme 1";
         private const string ExpectedUserId = "someid";
 
         [SetUp]
         public void Arrange()
         {
-            _model = new ConfirmNewPayeScheme
+            _model = new ConfirmNewPayeSchemeViewModel
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 HashedAccountId = ExpectedHashedId,
-                PayeScheme = ExpectedEmpref
+                PayeScheme = ExpectedEmpref,
+                PayeName = ExpectedEmprefName
             };
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration {Hmrc = new HmrcConfiguration()};
@@ -52,8 +56,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>())).ReturnsAsync(new GetAccountLegalEntitiesResponse{Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}});
             _mediator.Setup(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c=>c.AccessCode.Equals("1")))).ReturnsAsync(new GetGatewayTokenQueryResponse {HmrcTokenResponse = new HmrcTokenResponse {AccessToken = "1"} });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "123/ABC"});
-            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("2")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "456/ABC"});
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("1")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "123/ABC", EmployerLevyInformation = new EmpRefLevyInformation {Employer = new Employer {Name = new Name {EmprefAssociatedName = ExpectedEmprefName} } } });
+            _mediator.Setup(x => x.SendAsync(It.Is<GetHmrcEmployerInformationQuery>(c=>c.AuthToken.Equals("2")))).ReturnsAsync(new GetHmrcEmployerInformationResponse {Empref = "456/ABC", EmployerLevyInformation = new EmpRefLevyInformation { Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmprefName } } } });
 
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object,_logger.Object, _cookieService.Object, _configuration);
         }
@@ -66,7 +70,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(_model, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountCommand>(c=>c.HashedAccountId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) )),Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<AddPayeToAccountCommand>(c=>c.HashedAccountId.Equals(ExpectedHashedId) && c.Empref.Equals(ExpectedEmpref) && c.ExternalUserId.Equals(ExpectedUserId) && c.EmprefName.Equals(ExpectedEmprefName) )),Times.Once);
         }
         
 
@@ -94,6 +98,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             Assert.IsEmpty(actual.Data.PayeScheme);
             Assert.IsEmpty(actual.Data.AccessToken);
             Assert.IsEmpty(actual.Data.RefreshToken);
+            Assert.IsEmpty(actual.Data.PayeName);
         }
 
         [Test]

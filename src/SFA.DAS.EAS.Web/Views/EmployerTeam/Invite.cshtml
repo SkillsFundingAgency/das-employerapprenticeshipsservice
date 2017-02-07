@@ -1,12 +1,13 @@
 @using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
 
-@model OrchestratorResponse<InviteTeamMemberViewModel>
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.InviteTeamMemberViewModel>
 
 @{
     ViewBag.PageID = "page-invite-team-member";
     ViewBag.Title = "Create invitation";
+    ViewBag.Section = "team";
 }
 
         <div class="grid-row">
@@ -14,7 +15,7 @@
                 <h1 class="heading-xlarge">
                     Create invitation
                 </h1>
-                <p class="lede">Invite somebody to access this levy account.</p>
+                <p class="lede">Invite somebody to access this account.</p>
                 <form method="POST" action="@Url.Action("Invite")">
                     @Html.AntiForgeryToken()
                     <div class="form-group @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? "error" : "")">
@@ -32,7 +33,7 @@
                             }
                         </label>
                         <input class="form-control form-control-3-4" id="Email" name="Email" type="text"
-                               @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " aria-describedby=\"error-message-email\" " : "")
+                               @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " aria-describedby=error-message-email " : "")
                                aria-required="true" value="@Model.Data.Email" />
                     </div>
 
@@ -45,7 +46,7 @@
                             }
                         </label>
                         <input class="form-control form-control-3-4" id="Name" name="Name" type="text"
-                               @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=\"error-message-name\" " : "")
+                               @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=error-message-name " : "")
                                aria-required="true" value="@Model.Data.Name" />
                     </div>
                     <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RoleError) ? "error" : "")">
@@ -80,8 +81,6 @@
 
         @section breadcrumb {
             <div class="breadcrumbs">
-                <ol role="navigation">
-                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to Manage Team Members</a></li>
-                </ol>
+               <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
             </div>
         }

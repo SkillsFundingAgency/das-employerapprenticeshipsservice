@@ -3,7 +3,7 @@
 	I want view transactions in and out for my account
 
 
-Scenario T01: Transaction History levy declarations
+Scenario: Transaction History levy declarations
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -11,7 +11,7 @@ Scenario T01: Transaction History levy declarations
 		| 223/ABC     | 1100       | 16-17        | 12            | 1                |
 	Then the balance should be 1210 on the screen
 
-Scenario T02: Transaction History levy declarations with multiple schemes
+Scenario: Transaction History levy declarations with multiple schemes
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -20,7 +20,7 @@ Scenario T02: Transaction History levy declarations with multiple schemes
 		| 123/ABC     | 1100       | 16-17        | 12            | 1                |
 	Then the balance should be 2310 on the screen
 
-Scenario T04: Transaction History levy declarations over Payroll_year
+Scenario: Transaction History levy declarations over Payroll_year
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -40,17 +40,7 @@ Scenario: Transaction History levy declarations and Payments
 		| 200            | cofund       |
 	Then the balance should be 1110 on the screen
 	
-Scenario T03: Transaction History levy declarations late account registration in payroll year
-	Given I have an account
-	When I have the following submissions
-		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
-		| 423/ABC     | 1000       | 16-17        | 01            | 1                |
-		| 423/ABC     | 2000       | 16-17        | 02            | 1                |
-		| 423/ABC     | 3000       | 16-17        | 03            | 1                |
-	And I register on DAS in month 03
-	Then the balance should be 3300 on the screen
-
-Scenario T05: Transaction History levy declarations late account registration in payroll year
+Scenario Outline: Transaction History levy declarations late account registration in payroll year
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -58,10 +48,14 @@ Scenario T05: Transaction History levy declarations late account registration in
 		| 424/ABC     | 100        | 16-17        | 01            | 1                |
 		| 425/ABC     | 2000       | 16-17        | 02            | 1                |
 		| 424/ABC     | 200        | 16-17        | 02            | 1                |	
-	And I register on DAS in month 02
-	Then the balance should be 2420 on the screen
+	And I register on month "<Month>"
+	Then the balance should be <Balance> on the screen
+	Examples: 
+	| Month | Balance |
+	| 02    | 2420    |
+	| 03    | 3300    |
 
-Scenario T06: Transaction History levy declarations next year registration 
+Scenario: Transaction History levy declarations next year registration 
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -70,7 +64,7 @@ Scenario T06: Transaction History levy declarations next year registration
 	And I register on DAS in year 16-17 month 12
 	Then the balance should be 1210 on the screen
 
-Scenario T07: Transaction History levy declarations next year registration multiple PAYE schemes
+Scenario: Transaction History levy declarations next year registration multiple PAYE schemes
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
@@ -81,7 +75,7 @@ Scenario T07: Transaction History levy declarations next year registration multi
 	And I register on DAS in year 16-17 month 01
 	Then the balance should be 2420 on the screen
 	
-Scenario T08: Single PAYE scheme removed
+Scenario: Single PAYE scheme removed
 	Given I have an account
 	When I have the following submissions
 		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |

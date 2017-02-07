@@ -29,3 +29,17 @@ dl.inline {
 .responsive-detail {
     color: $grey-1;
 }
+
+.heading-dashboard {
+    border-bottom: 5px solid $grey-2;
+    padding-bottom: .25em;
+    @include media(tablet) { 
+        padding-bottom: .5em;
+    }
+}
+
+.account-id {
+    @include core-16;
+    display: block;
+    color: $secondary-text-colour;
+}

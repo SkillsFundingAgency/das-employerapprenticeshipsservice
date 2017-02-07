@@ -1,7 +1,7 @@
 ﻿
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
+@using SFA.DAS.EAS.Web.ViewModels
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -10,7 +10,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - Apprenticeships</title>
+    <title>@ViewBag.Title - Manage apprentices</title>
     <!--[if gt IE 8]><!-->
     <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
     <!--[if IE 6]><link href="/dist/css/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
@@ -36,9 +36,6 @@
     <!--[if gt IE 8]><!-->
     <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
     <!--<![endif]-->
-
-  
-
 
     <!-- Google Tag Manager -->
     <script>
@@ -79,52 +76,92 @@
         </div>
     </div>
     <div id="global-cookie-message">
-
         <p>
             GOV.UK uses cookies to make the site simpler. <a href="@Url.Action("Privacy","Home")">Find out more about cookies</a>
         </p>
-
     </div>
 
-    <header role="banner" id="global-header" class="">
+    <header role="banner" id="global-header" class="with-proposition">
         <div class="header-wrapper">
             <div class="header-global">
-                <div class="header-global__title">
-                    <a title="Skills Funding Agency" href="/">
-                        Apprenticeships
+                <div class="header-logo">
+                    <a href="https://www.gov.uk" title="Go to the GOV.UK homepage" id="logo" class="content">
+                        <img src="https://assets.publishing.service.gov.uk/static/gov.uk_logotype_crown_invert_trans-203e1db49d3eff430d7dc450ce723c1002542fe1d2bce661b6d8571f14c1043c.png" alt="" width="36" height="32"> GOV.UK
                     </a>
+                </div>
+            </div>
+            <div class="header-proposition">
+                <div class="content">
+                    <a id="proposition-name" href="/">Manage apprenticeships</a>
                 </div>
             </div>
         </div>
     </header>
 
-
-    <div id="global-header-bar"></div>
-    <main role="main" id="content">
-        <div class="service-info">
+    <div class="header-user">
+        <div class="header-inner">
             <div class="phase-banner">
                 <p>
                     <strong class="phase-tag">BETA</strong>
-                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
+                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">feedback</a> will help us to improve it. </span>
                 </p>
             </div>
+
+            @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
+            <div class="account-information" role="navigation">
+                <nav id="user-nav">
+                    <ul role="menubar">
+                        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+                        {
+                            <li class="has-sub-menu">
+                                <a href="/" role="menuitem">Settings</a>
+                                <ul role="menu">
+                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                    {
+                                    <li><a href="@Url.Action("Index", "Home")" role="menuitem">Switch account</a></li>
+                                    <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
+                                    }
+                                    <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>
+                                    <li><a href="@UserLinksViewModel.ChangeEmailLink">Change your email address</a></li>
+                                    
+                                </ul>
+                            </li>
+                            <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
+                            
+                        }
+                        else
+                        {
+                            if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                            {
+                                <li><a href="@Url.Action("SignIn", "Home")" role="menuitem">Sign in / Register</a></li>
+                            }
+                        }
+                    </ul>
+                </nav>
+            </div>
+            }
         </div>
-        <div class="user-menu @(HttpContext.Current.User.Identity.IsAuthenticated ? "logged-in" : string.Empty)">
-            <ul id="service-info-list" role="navigation">
-                @if (HttpContext.Current.User.Identity.IsAuthenticated)
-            {
-                    <li><a href="/" class="link-user-profile">@HttpContext.Current.User.Identity.Name</a></li>
-                    <li><a href="@Url.Action("SignOut", "Home")">Log out</a></li>
-                }
-                else
+    </div>
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
                 {
-                    if (Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+                    var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
+                    if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
                     {
-                        <li><a href="@Url.Action("SignIn", "Home")">Sign in / Register</a></li>
-                    }
-                }
-            </ul>
+        <div class="header-organisation" role="navigation">
+            <nav class="header-inner">
+                <ul role="menubar" id="global-nav-links">
+                    <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")"  role="menuitem">Home</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
+                    <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>
+                </ul>
+            </nav>
         </div>
+        }
+    }
+    <main role="main" id="content">
 
         @RenderSection("breadcrumb", required: false)
 
@@ -136,12 +173,11 @@
 
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
-
             <div class="footer-meta">
                 <div class="footer-meta-inner">
                     <ul class="platform-help-links">
-                        <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
-                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
+                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                        <li><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Feedback</a></li>
                         <li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>
                     </ul>
@@ -149,14 +185,14 @@
                         <p class="logo">
                             <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence</a>
                         </p>
-
                         <p>
                             All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>, except where otherwise stated
                         </p>
-
                     </div>
                 </div>
-
+                <div class="copyright">
+                    <a href="http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">© Crown copyright</a>
+                </div>
             </div>
         </div>
     </footer>
@@ -166,10 +202,10 @@
 
     @RenderSection("pageSpecificJS", required: false)
 
-    @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
+    @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
         <div class="about">
-            Environment: @SystemDetails.EnvironmentName ● Version: @SystemDetails.VersionNumber
+            Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
         </div>
     }
 

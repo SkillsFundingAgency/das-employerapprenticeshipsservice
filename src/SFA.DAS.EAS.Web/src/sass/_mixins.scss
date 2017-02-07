@@ -1,0 +1,20 @@
+@mixin closed-arrow {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    display: block;
+    border-width: 4px 7px;
+    border-color: rgba(0, 0, 0, 0);
+    border-left-color: $black;
+    border-style: solid;
+    left: 10px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+@mixin open-arrow {
+    border-width: 7px 4px;
+    border-top-color: $black;
+    border-left-color: transparent;
+}

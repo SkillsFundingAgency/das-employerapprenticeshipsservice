@@ -9,13 +9,18 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Levy;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountTransactionsOrchestrator
     {
         private readonly IMediator _mediator;
+
+        public EmployerAccountTransactionsOrchestrator()
+        {
+            
+        }
 
         public EmployerAccountTransactionsOrchestrator(IMediator mediator)
         {
@@ -98,7 +103,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<TransactionViewResult> GetAccountTransactions(string hashedId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId,
+            string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
@@ -107,10 +113,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
             if (employerAccountResult.Account == null)
             {
-                return new TransactionViewResult();
+                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
             }
 
-            var data = await _mediator.SendAsync(new GetEmployerAccountTransactionsQuery {AccountId = employerAccountResult.Account.Id,ExternalUserId = externalUserId,HashedAccountId = hashedId});
+            var data =
+                await
+                    _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
+                    {
+                        AccountId = employerAccountResult.Account.Id,
+                        ExternalUserId = externalUserId,
+                        HashedAccountId = hashedId
+                    });
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
             decimal currentBalance;
             DateTime currentBalanceCalcultedOn;
@@ -126,14 +139,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
-            return new TransactionViewResult
+            return new OrchestratorResponse<TransactionViewResultViewModel>
             {
-                Account = employerAccountResult.Account,
-                Model = new TransactionViewModel
+                Data = new TransactionViewResultViewModel
                 {
-                    CurrentBalance = currentBalance,
-                    CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
-                    Data = data.Data
+                    Account = employerAccountResult.Account,
+                    Model = new TransactionViewModel
+                    {
+                        CurrentBalance = currentBalance,
+                        CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
+                        Data = data.Data
+                    }
                 }
             };
         }

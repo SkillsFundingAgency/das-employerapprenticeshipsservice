@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>("SFA.DAS.EmployerApprenticeshipsService"));
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
+                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MockMessagePolicy(messagePublisher));
                 c.AddRegistry(new DefaultRegistry(owinWrapper, cookieService));

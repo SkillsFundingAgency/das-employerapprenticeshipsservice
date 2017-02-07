@@ -1,6 +1,6 @@
-﻿@using SFA.DAS.EAS.Web.Models
+﻿@using SFA.DAS.EAS.Web
 
-@model SubmitCommitmentViewModel
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.SubmitCommitmentViewModel>
 
 @{
     ViewBag.Title = "Instructions for your training provider";
@@ -8,14 +8,14 @@
 }
 
 @{
-    var targetName = string.IsNullOrWhiteSpace(Model.HashedCommitmentId) ? "SubmitNewCommitmentEntry" : "SubmitExistingCommitmentEntry";
+    var targetName = string.IsNullOrWhiteSpace(Model.Data.HashedCommitmentId) ? "SubmitNewCommitmentEntry" : "SubmitExistingCommitmentEntry";
 }
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Instructions for your training provider</h1>
 
-        <p class="lede">Let <span class="heading-medium">@Model.ProviderName</span> know what you'd like them to do next.
+        <p class="lede">Let <span class="heading-medium">@Model.Data.ProviderName</span> know what you'd like them to do next.
         </p>
         <form method="POST" action="@Url.Action(targetName)">
             @Html.AntiForgeryToken()
@@ -27,13 +27,13 @@
                           cols="40" rows="10"
                           aria-required="true"></textarea>
             </div>
-            @Html.HiddenFor(x => x.HashedCommitmentId)
-            @Html.HiddenFor(x => x.LegalEntityCode)
-            @Html.HiddenFor(x => x.LegalEntityName)
-            @Html.HiddenFor(x => x.ProviderId)
-            @Html.HiddenFor(x => x.ProviderName)
-            @Html.HiddenFor(x => x.CohortRef)
-            @Html.HiddenFor(x => x.SaveStatus)
+            @Html.Hidden("HashedCommitmentId", Model.Data.HashedCommitmentId)
+            @Html.Hidden("LegalEntityCode", Model.Data.LegalEntityCode)
+            @Html.Hidden("LegalEntityName", Model.Data.LegalEntityName)
+            @Html.Hidden("ProviderId", Model.Data.ProviderId)
+            @Html.Hidden("ProviderName", Model.Data.ProviderName)
+            @Html.Hidden("CohortRef", Model.Data.CohortRef)
+            @Html.Hidden("SaveStatus", Model.Data.SaveStatus)
             <button type="submit" class="button">Send</button>
         </form>
     </div>
@@ -42,8 +42,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

@@ -57,3 +57,48 @@ table.top-border {
         margin-top: 0;
     }
 }
+
+.org-type-search {
+    section {
+        @extend .block-label;
+        padding-top: 0;
+        &.last {
+            margin-bottom: 20px;
+        }
+    }
+    .search-form {
+        display: none;
+        clear: both;
+        margin-left: -50px;
+        input[type='text'] {
+            position: static;
+            top: auto;
+            left: auto;
+            width: inherit;
+            height: inherit;
+            cursor: inherit;
+            opacity: 1;
+        }
+    }
+    input[type='radio'] {
+        z-index: 1;
+    }
+    label {
+        display: block;
+        min-height: 38px;
+        margin-left: -50px;
+        padding-left: 50px;
+        padding-top: 7px;
+        z-index: 2;
+    }
+    input:checked ~ div {
+       display:block;
+    }
+    .panel {
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .form-group {
+        margin-bottom: 10px;
+    }
+}

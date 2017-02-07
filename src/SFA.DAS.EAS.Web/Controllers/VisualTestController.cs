@@ -5,12 +5,15 @@ using System.Linq;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EAS.Domain.ViewModels;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -138,7 +141,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 RegisteredAddress = "123 Fake street"
             };
 
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme()
+            var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel()
             {
                 AccessToken = "MyAccessToken",
                 
@@ -152,7 +155,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 RefreshToken = "refresh-123"
             };
 
-            var addNewPayeScheme = new AddNewPayeScheme()
+            var addNewPayeScheme = new AddNewPayeSchemeViewModel()
             {
                 AccessToken = "MyAccessToken",
                 
@@ -167,7 +170,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Id = 012345678,
                 LegalEntityId = 123,
                 LegalEntityName = "My little legal entity",
-                LegalEntityRegisteredAddress = "123 Fake Street",
+                LegalEntityAddress = "123 Fake Street",
                 SignedByName = "Bojack Horseman",
                 SignedDate = new DateTime(2016, 8, 12),
                 Status = EmployerAgreementStatus.Pending,
@@ -196,18 +199,18 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 {"~/Views/EmployerAccount/Summary.cshtml", new SummaryViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
-                        CompanyNumber = "1234567890",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        EmployerRef = "emp-123",
+                        OrganisationName = "sushiCorp Ltd.",
+                        OrganisationReferenceNumber = "1234567890",
+                        OrganisationDateOfInception = new DateTime(2016, 05, 16),
+                        PayeReference = "emp-123",
                         RegisteredAddress = "123 Fake St."
                     }},
-                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new SelectEmployerViewModel()
+                {"~/Views/EmployerAccount/VerifyEmployer.cshtml", new OrganisationDetailsViewModel()
                     {
-                        CompanyName = "sushiCorp Ltd.",
-                        CompanyNumber = "0123456789",
-                        DateOfIncorporation = new DateTime(2016, 05, 16),
-                        RegisteredAddress = "123 Fake St."
+                        Name = "sushiCorp Ltd.",
+                        ReferenceNumber = "0123456789",
+                        DateOfInception = new DateTime(2016, 05, 16),
+                        Address = "123 Fake St."
                     }},
                 {"~/Views/EmployerAccountTransactions/Index.cshtml", new TransactionViewModel() {
                     CurrentBalance = 12m,
@@ -227,12 +230,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                     {
                         
                     }},
-                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeScheme> {Data = new BeginNewPayeScheme { HashedId = "3", ValidationFailed = true } } },
+                {"~/Views/EmployerAccountPaye/Add.cshtml", new OrchestratorResponse<BeginNewPayeSchemeViewModel> {Data = new BeginNewPayeSchemeViewModel { HashedId = "3", ValidationFailed = true } } },
                 {"~/Views/EmployerAccountPaye/AddNewLegalEntity.cshtml", confirmNewPayeScheme},
                 {"~/Views/EmployerAccountPaye/ChooseCompany.cshtml", addNewPayeScheme },
                 {"~/Views/EmployerAccountPaye/Confirm.cshtml", confirmNewPayeScheme },
-                {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
-                {"~/Views/EmployerAccountPaye/ErrorConfrimPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeScheme>() {Data = addNewPayeScheme } },
+                {"~/Views/EmployerAccountPaye/ConfirmPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeSchemeViewModel>() {Data = addNewPayeScheme } },
+                {"~/Views/EmployerAccountPaye/ErrorConfrimPayeScheme.cshtml", new OrchestratorResponse<AddNewPayeSchemeViewModel>() {Data = addNewPayeScheme } },
                 {"~/Views/EmployerAccountPaye/Index.cshtml", new OrchestratorResponse<EmployerAccountPayeListViewModel>()
                 {
                     Data = new EmployerAccountPayeListViewModel()
@@ -266,16 +269,16 @@ namespace SFA.DAS.EAS.Web.Controllers
                 {"~/Views/EmployerTeam/Review.cshtml", invitationViewModel },
                 {"~/Views/EmployerTeam/Remove.cshtml", invitationViewModel },
                 {"~/Views/EmployerTeam/View.cshtml", new OrchestratorResponse<EmployerTeamMembersViewModel> {Data= employerTeamMembersViewModel }},
-                {"~/Views/Home/FakeUserSignIn.cshtml", new SignInUserViewModel ()
+                {"~/Views/Home/FakeUserSignIn.cshtml", new ViewModels.SignInUserViewModel ()
                     {
-                        AvailableUsers = new List<SignInUserModel>() {
-                            new SignInUserModel() {Email = "a@b.com", FirstName = "Bojack", LastName = "Horseman", UserId="123", UserSelected= "foo" }
+                        AvailableUsers = new List<UserViewModel>() {
+                            new UserViewModel() {Email = "a@b.com", FirstName = "Bojack", LastName = "Horseman", UserId="123", UserSelected= "foo" }
                         }
                     }},
                 {"~/Views/Home/Index.cshtml", new OrchestratorResponse<UserAccountsViewModel>()
                     {
                         Data = new UserAccountsViewModel() {
-                                Accounts = new Accounts()
+                                Accounts = new Accounts<Account>()
                                 {
                                     AccountList = new List<Account>() {
                                         new Account() {Id = 123, Name= "My account", RoleId = 1 }

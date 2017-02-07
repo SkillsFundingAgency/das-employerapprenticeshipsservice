@@ -1,9 +1,9 @@
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 
 namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
 {
     public class GetUserAccountsQueryResponse
     {
-        public Accounts Accounts { get; set; }
+        public Accounts<Account> Accounts { get; set; }
     }
 }

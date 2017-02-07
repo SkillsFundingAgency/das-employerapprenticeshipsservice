@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Moq;
+using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
-using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
+using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -18,6 +19,28 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
 {
     public class AccountSteps
     {
+        private IContainer _container;
+        private Mock<IMessagePublisher> _messagePublisher;
+        private Mock<IOwinWrapper> _owinWrapper;
+        private Mock<ICookieService> _cookieService;
+
+        private string _externalUserId;
+        private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
+
+        public AccountSteps()
+        {
+            _messagePublisher = new Mock<IMessagePublisher>();
+            _owinWrapper = new Mock<IOwinWrapper>();
+            _cookieService = new Mock<ICookieService>();
+            _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
+
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
+                .ReturnsAsync(new ValidationResult());
+
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+
+            _container.Inject(_validator.Object);
+        }
         public static void SetAccountIdForUser(IMediator mediator, ScenarioContext scenarioContext)
         {
             var accountOwnerId = scenarioContext["AccountOwnerUserId"].ToString();
@@ -28,41 +51,40 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
             scenarioContext["HashedAccountId"] = account.HashedId;
         }
 
-        public static Guid CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IOwinWrapper> owinWrapper, HomeOrchestrator homeOrchestrator)
+        public void CreateAccountWithOwner(EmployerAccountOrchestrator orchestrator, IMediator mediator, Mock<IOwinWrapper> owinWrapper, HomeOrchestrator homeOrchestrator)
         {
-            var accountOwnerUserId = Guid.NewGuid();
-            //ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
+            var accountOwnerUserId = Guid.NewGuid().ToString();
+            ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
 
-            var signInUserModel = new SignInUserModel
+            var signInUserModel = new UserViewModel
             {
-                UserId = accountOwnerUserId.ToString(),
+                UserId = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
             };
+            var userCreationSteps = new UserSteps();
+            userCreationSteps.UpsertUser(signInUserModel);
 
-            UserSteps.UpsertUser(mediator,signInUserModel);
+            var user = userCreationSteps.GetExistingUserAccount();
 
-            var user = UserSteps.GetExistingUserAccount(accountOwnerUserId.ToString(),owinWrapper,homeOrchestrator);
-
-            CreateDasAccount(user, orchestrator);
-
-            return accountOwnerUserId;
+            CreateDasAccount(user, _container.GetInstance<EmployerAccountOrchestrator>());
         }
 
-        public static void CreateDasAccount(SignInUserModel user, EmployerAccountOrchestrator orchestrator)
+        public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
 
-            orchestrator.CreateAccount(new CreateAccountModel
+            orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = user.UserId,
+                UserId = userView.UserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyDateOfIncorporation = new DateTime(2016, 01, 01),
-                EmployerRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
-                CompanyName = "Test Company",
-                CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
-                CompanyRegisteredAddress = "Address Line 1"
+                OrganisationDateOfInception = new DateTime(2016, 01, 01),
+                PayeReference = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
+                OrganisationName = "Test Company",
+                OrganisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
+                OrganisationAddress = "Address Line 1",
+                OrganisationStatus = "active"
             }, new Mock<HttpContextBase>().Object).Wait();
 
 

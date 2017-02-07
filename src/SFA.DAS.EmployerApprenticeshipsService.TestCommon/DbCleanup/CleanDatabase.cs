@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.TestCommon.DbCleanup
 {
@@ -17,12 +18,12 @@ namespace SFA.DAS.EAS.TestCommon.DbCleanup
             var parameters = new DynamicParameters();
             parameters.Add("@INCLUDEUSERTABLE", 1, DbType.Int16);
             await WithConnection<int>(async c => await c.ExecuteAsync(
-                "[account].[Cleardown]",
+                "[employer_account].[Cleardown]",
                 parameters,
                 commandType: CommandType.StoredProcedure));
 
             await WithConnection<int>(async c => await c.ExecuteAsync(
-                "[account].[SeedDataForRoles]",
+                "[employer_account].[SeedDataForRoles]",
                 null,
                 commandType: CommandType.StoredProcedure));
 

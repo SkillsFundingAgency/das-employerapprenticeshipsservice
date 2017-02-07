@@ -1,6 +1,7 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.RemovePayeScheme>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.RemovePayeSchemeViewModel>
 @{ViewBag.PageID = "page-remove-paye-scheme";} 
-@{ViewBag.Title = "Remove PAYE scheme";} 
+@{ViewBag.Title = "Remove PAYE scheme";}
+@{ViewBag.Section = "paye";} 
 
 @if (!Model.Data.Valid)
 {
@@ -24,7 +25,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Remove this scheme?</h1>
         <h2 class="heading-medium">@Model.Data.PayeRef</h2>
-        <p>The @Model.Data.AccountName levy account will stop receiving funds through this PAYE scheme.</p>
+        <p>The @Model.Data.AccountName account will stop receiving funds through this PAYE scheme.</p>
         <form method="post" action="@Url.Action("RemovePaye","EmployerAccountPaye")">
             @Html.AntiForgeryToken()    
             <input type="hidden" value="@Model.Data.PayeRef" name="PayeRef"/>
@@ -57,10 +58,9 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
-            <li>Remove PAYE Scheme</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a></li>
+            <li>Remove PAYE scheme</li>
         </ol>
     </div>
 }

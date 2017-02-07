@@ -1,6 +1,9 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.AddLegalEntityViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AddLegalEntityViewModel>
 @{ViewBag.PageID = "enter-companies-house-detail"; }
-@{ViewBag.Title = "Enter your Companies House number";}
+@{
+    ViewBag.Title = "Enter your Companies House number";
+    ViewBag.Section = "organisations";
+ }
 @if (TempData["companyNumberError"] != null)
 {
    ViewBag.PageID = "error-companies-house-entry";
@@ -40,8 +43,6 @@
 </div>
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to Your Organisations</a></li>
-        </ol>
+       <a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to organisations</a>
     </div>
 }

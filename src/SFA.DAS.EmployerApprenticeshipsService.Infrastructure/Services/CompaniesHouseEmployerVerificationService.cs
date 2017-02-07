@@ -7,6 +7,7 @@ using NLog;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Employer;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -26,6 +27,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public async Task<EmployerInformation> GetInformation(string id)
         {
             _logger.Info($"GetInformation({id})");
+
+            id = id?.ToUpper();
 
             if (_configuration.CompaniesHouse.UseManagedList)
             {

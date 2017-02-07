@@ -1,5 +1,7 @@
-﻿@model SFA.DAS.EAS.Web.Models.SelectProviderViewModel
+﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
+
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.SelectProviderViewModel>
 
 @{
     ViewBag.Title = "Add training provider details";
@@ -19,14 +21,12 @@
 
             @Html.AntiForgeryToken()
             
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.ProviderId, "error")">
-                @Html.LabelFor(m => m.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("ProviderId", "error")">
+                @Html.LabelFor(m => m.Data.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
-             
-                    @Html.ValidationMessageFor(m => m.ProviderId, "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-" + Html.IdFor(m => m.ProviderId) })
-
+                @Html.ValidationMessage("ProviderId", "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-ProviderId" })
            
-                @Html.TextBoxFor(m => m.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_describedby= "8-digit UK Provider Reference Number" })
+                @Html.TextBox("ProviderId", Model.Data.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_labelledby = "ProviderId" })
             </div>
 
             <details>
@@ -41,10 +41,8 @@
 
             <button type="submit" class="button">Continue</button>
 
-
-            @Html.HiddenFor(x => x.LegalEntityCode)
-            @Html.HiddenFor(x => x.CohortRef)
-
+            @Html.Hidden("LegalEntityCode", Model.Data.LegalEntityCode)
+            @Html.Hidden("CohortRef", Model.Data.CohortRef)
         </div>
     </div>
 </form>
@@ -52,8 +50,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

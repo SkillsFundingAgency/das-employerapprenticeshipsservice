@@ -1,8 +1,11 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.PayeSchemeDetail>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.PayeSchemeDetailViewModel>
 
-
-@{ViewBag.Title = "View PAYE scheme";}
+@{
+    ViewBag.Title = "View PAYE scheme";
+    ViewBag.PageID = "page-paye-schemes-view";
+    ViewBag.Section = "paye";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -10,7 +13,7 @@
             <span class="heading-secondary">PAYE scheme </span>
             @Model.Data.EmpRef
         </h1>
-        <h2 class="heading-medium">Scheme history</h2>
+        @*<h2 class="heading-medium">Scheme history</h2>
         <table>
             <thead>
                 <tr>
@@ -19,20 +22,34 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach (var fraction in Model.Data.Fractions)
+            @if (Model.Data.Fractions.Any())
+            {
+                foreach (var fraction in Model.Data.Fractions)
+                {
+                    <tr>
+                        <td>
+                            <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
+                        </td>
+                        <td class="numeric">
+                            <span>@fraction.Amount.ToString("P3")</span>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
                     <td>
-                        <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
+                        <span>@Model.Data.EmpRefAdded.ToString("dd MMM yy")</span>
                     </td>
                     <td class="numeric">
-                        <span>@fraction.Amount.ToString("P3")</span>
+                        <span>100.000%</span>
                     </td>
                 </tr>
-
             }
+
             </tbody>
-        </table>
+        </table>*@
     </div>
     <div class="column-one-third">
         <a aria-label="Remove PAYE scheme @Model.Data.EmpRef"
@@ -44,9 +61,8 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE Schemes</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a></li>
             <li>PAYE scheme @Model.Data.EmpRef </li>
         </ol>
     </div>

@@ -1,0 +1,50 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.OrganisationDetailsViewModel>
+@{ViewBag.PageID = "enter-organisation-type"; }
+@{
+    ViewBag.Title = "Enter your organisation name";
+    ViewBag.Section = "organisations";
+    ViewBag.HideNav = "true";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Enter your organisation name
+        </h1>
+        <form action="@Url.Action("AddOtherOrganisationDetails")" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.NameError) ? "error" : "")">
+                <label id="NewName-label" for="Name" class="form-label-bold">
+                    <span class="form-label-bold">Name</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.NameError))
+                    {
+                        <span class="error-message" id="error-message-newname">@Model.Data.NameError</span>
+                    }
+                </label>
+                @Html.TextBoxFor(
+                    m => m.Data.Name,
+                    new
+                    {
+                        Id = "Name",
+                        Name = "Name",
+                        @class = "form-control organisationName",
+                        MaxLength = 100,
+                        aria_required = "true",
+                        aria_describedby = !string.IsNullOrEmpty(Model.Data.NameError) ? "error-message-newname" : ""
+                    })
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button" id="accept">Continue</button>
+                <a class="button-link" href="@Url.Action("Index", "Home")">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("AddOrganisation", "EmployerAccountOrganisation")" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

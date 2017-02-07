@@ -1,12 +1,16 @@
-﻿@using SFA.DAS.EAS.Domain
-@model SFA.DAS.EAS.Domain.ViewModels.UserInvitationsViewModel
-@{ViewBag.Title = "Invitations"; }
+﻿@using SFA.DAS.EAS.Domain.Models.UserProfile
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.UserInvitationsViewModel>
+@{
+    ViewBag.Title = "Invitations";
+    ViewBag.HideNav = "true";
+}
+
 
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Invitations</h1>
-        @if (Model.Invitations.Count == 0)
+        @if (Model.Data.Invitations.Count == 0)
         {
             <p>You have no invitations. Invitations expire after 7 days.</p>
             <p><a class="button" href="@Url.Action("Index","Home")">Return to your profile</a></p>
@@ -22,14 +26,14 @@
                             <th scope="col">Account name</th>
                             <th scope="col">What you can do</th>
                             <th scope="col">Expires in</th>
-                            <th> </th>
+                            <th scope="col"><span class="vh">Action</span></th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @for (var index = 0; index < Model.Invitations.Count; index++)
+                        @for (var index = 0; index < Model.Data.Invitations.Count; index++)
                         {
-                            var invitation = Model.Invitations[index];
+                            var invitation = Model.Data.Invitations[index];
                             <tr>
                                 <td>
                                     <div>@invitation.AccountName</div>
@@ -60,12 +64,12 @@
     </div>
 </div>
 
-@if (Model.ShowBreadCrumbs)
+@if (Model.Data.ShowBreadCrumbs)
 {
     @section breadcrumb {
         <div class="breadcrumbs">
             <ol role="navigation">
-                <li><a href="/">Your User Profile</a></li>
+                <li><a href="/">Your accounts</a></li>
                 <li>Invitations</li>
             </ol>
         </div>

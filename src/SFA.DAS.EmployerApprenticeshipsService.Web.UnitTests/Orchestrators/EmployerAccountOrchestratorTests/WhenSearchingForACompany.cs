@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -6,8 +7,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
@@ -35,7 +36,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         public async Task ThenIShouldGetBackABadRequestIfACompanyCannotBeFound()
         {
             //Assign
-            var request = new SelectEmployerModel
+            var request = new SelectEmployerViewModel
             {
                 EmployerRef = "251643"
             };
@@ -48,6 +49,35 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, response.Status);
             _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerInformationRequest>( info => info.Id.Equals(request.EmployerRef))));
+        }
+
+        [Test]
+        public async Task ThenTheValuesWillBeCorrectlyMappedInTheResponse()
+        {
+            //Arrange
+            var request = new SelectEmployerViewModel { EmployerRef = "251643" };
+            var response = new GetEmployerInformationResponse
+            {
+                CompanyStatus = "active",
+                AddressLine1 = "address1",
+                AddressLine2 = "address2",
+                AddressPostcode = "ADD123",
+                CompanyName = "Company Name",
+                CompanyNumber = "ABC12345",
+                DateOfIncorporation = DateTime.MaxValue
+            };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerInformationRequest>())).ReturnsAsync(response);
+
+            //Act
+            var actual = await _employerAccountOrchestrator.GetCompanyDetails(request);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            Assert.AreEqual(response.DateOfIncorporation, actual.Data.DateOfInception);
+            Assert.AreEqual(response.CompanyStatus, actual.Data.Status);
+            Assert.AreEqual($"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}", actual.Data.Address);
+            Assert.AreEqual(response.CompanyName, actual.Data.Name);
+            Assert.AreEqual(response.CompanyNumber, actual.Data.ReferenceNumber);
         }
     }
 }

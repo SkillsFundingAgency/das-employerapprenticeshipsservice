@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             var whiteList = GetList();
 
-            return whiteList?.EmailPatterns?.Any(pattern => Regex.IsMatch(email, pattern)) ?? false;
+            return whiteList?.EmailPatterns?.Any(pattern => Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase)) ?? false;
         }
 
         public virtual UserWhiteListLookUp GetList()

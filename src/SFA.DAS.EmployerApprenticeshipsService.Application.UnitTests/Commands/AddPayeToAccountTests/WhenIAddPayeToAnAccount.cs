@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
 using SFA.DAS.Messaging;
 
@@ -20,7 +25,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IHashingService> _hashingService;
+        private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
         private const long ExpectedAccountId = 54564;
+        private const string ExpectedPayeName = "Paye Scheme 1";
 
         [SetUp]
         public void Arrange()
@@ -35,7 +43,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(ExpectedAccountId);
 
-            _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object, _hashingService.Object);
+            _mediator = new Mock<IMediator>();
+            _eventPublisher = new Mock<IEventPublisher>();
+
+            _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(_validator.Object, _accountRepository.Object, _messagePublisher.Object, _hashingService.Object, _mediator.Object, _eventPublisher.Object);
         }
 
         [Test]
@@ -80,13 +91,54 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AddPayeToAccountTests
             _messagePublisher.Verify(x=>x.PublishAsync(It.Is<EmployerRefreshLevyQueueMessage>(c=>c.AccountId.Equals(ExpectedAccountId))));
         }
 
+        [Test]
+        public async Task ThenAnEventIsPublishedToNofifyThePayeSchemeHasBeenAdded()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+
+            //Act
+            await _addPayeToAccountCommandHandler.Handle(command);
+
+            //Assert
+            _eventPublisher.Verify(x => x.PublishPayeSchemeAddedEvent(command.HashedAccountId, command.Empref));
+        }
+
+        [Test]
+        public async Task ThenTheAuditCommandIsCalledWhenTheCreateInvitationCommandIsValid()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
+
+            //Act
+            await _addPayeToAccountCommandHandler.Handle(command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Ref") && y.NewValue.Equals(command.Empref)) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccessToken") && y.NewValue.Equals(command.AccessToken)) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RefreshToken") && y.NewValue.Equals(command.RefreshToken)) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(command.EmprefName)) != null
+                    )));
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"Paye scheme {command.Empref} added to account {ExpectedAccountId}"))));
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
+                    )));
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(command.Empref.ToString()) &&
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Paye")
+                    )));
+        }
+
         private static Paye AssertPayeScheme(AddPayeToAccountCommand command)
         {
             return It.Is<Paye>(
                 c=>c.AccessToken.Equals(command.AccessToken)  &&
                    c.RefreshToken.Equals(command.RefreshToken) &&
                    c.EmpRef.Equals(command.Empref) &&
-                   c.AccountId.Equals(ExpectedAccountId)
+                   c.AccountId.Equals(ExpectedAccountId) &&
+                   c.RefName.Equals(ExpectedPayeName)
                 );
         }
     }

@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
@@ -38,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
                 {
                     if (member.RoleId != (short) Role.Owner)
                     {
-                        validationResult.AddError(nameof(member), "Unauthorised: User is not an owner");
+                        validationResult.IsUnauthorized = true;
                     }
                 }
             }

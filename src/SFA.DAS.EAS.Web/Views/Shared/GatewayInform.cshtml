@@ -1,8 +1,9 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.GatewayInformViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.GatewayInformViewModel>
 
 @{ViewBag.PageID = "page-onboard-gov-gateway-inform"; }
 @{ViewBag.Title = "Check details"; }
-
+@{ViewBag.Section = "paye"; }
+@{ViewBag.HideNav = "true"; }
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -12,21 +13,19 @@
         <h2 class="heading-medium">By continuing you agree to the following:</h2>
         <div class="panel">
             <p>I have authority to add PAYE schemes to this account.</p>
-            <p>I understand that all account users will be able to see levy funds from any PAYE schemes I add.</p>
+            <p>I understand that all account users will be able to see funds from any PAYE schemes I add.</p>
             <p>I'll only add PAYE schemes that are used by my organisation or used by a <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external" target="_blank">connected organisation</a>.</p>
         </div>
         <p><a href="@Model.Data.ConfirmUrl" id="agree_and_continue" class="button">Agree and continue</a></p>
     </div>
 </div>
-@if (!Model.Data.HideBreadcrumb)
-{
 
-    @section breadcrumb {
-        <div class="breadcrumbs">
-            <ol>
-                <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">@Model.Data.BreadcrumbDescription</a></li>
-            </ol>
-        </div>
-    }
-
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="@Model.Data.BreadcrumbUrl" class="back-link">Back</a></li>
+        </ol>
+    </div>
 }
+
+

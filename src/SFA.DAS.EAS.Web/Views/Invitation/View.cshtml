@@ -1,5 +1,9 @@
-﻿@using SFA.DAS.EAS.Domain
-@model SFA.DAS.EAS.Domain.InvitationView
+﻿@using SFA.DAS.EAS.Domain.Models.UserProfile
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Domain.Models.AccountTeam.InvitationView>
+@{
+    ViewBag.Title = "Accept invitation";
+    ViewBag.HideNav = "true";
+}
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -15,15 +19,15 @@
                 <tbody>
                     <tr>
                         <td>Account</td>
-                        <td>@Model.AccountName</td>
+                        <td>@Model.Data.AccountName</td>
                     </tr>
                     <tr>
                         <td>Email</td>
-                        <td>@Model.Email</td>
+                        <td>@Model.Data.Email</td>
                     </tr>
                     <tr>
                         <td>What you can do</td>
-                        <td>@RoleStrings.GetRoleDescription(Model.RoleName)</td>
+                        <td>@RoleStrings.GetRoleDescription(Model.Data.RoleName)</td>
                     </tr>
                     <tr>
                         <td>Status</td>
@@ -32,7 +36,7 @@
                 </tbody>
             </table>
             <p></p>
-            <input type="hidden" id="invitationId" name="invitationId" value="@Model.Id" />
+            <input type="hidden" id="invitationId" name="invitationId" value="@Model.Data.Id" />
             <button type="submit" class="button" id="accept">Accept</button>
         </form>
     </div>

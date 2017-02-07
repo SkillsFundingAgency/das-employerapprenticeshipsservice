@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
@@ -62,6 +68,22 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             existing.ExpiryDate = expiryDate;
             
             await _invitationRepository.Resend(existing);
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "INVITATION_RESENT",
+                    Description = $"Invitation to {message.Email} resent in Account {existing.AccountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        new PropertyUpdate {PropertyName = "Status",NewValue = existing.Status.ToString()},
+                        new PropertyUpdate {PropertyName = "ExpiryDate",NewValue = existing.ExpiryDate.ToString()}
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
+                }
+            });
 
             await _mediator.SendAsync(new SendNotificationCommand
             {

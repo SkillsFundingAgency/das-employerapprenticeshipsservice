@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
@@ -41,11 +46,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            if(validationResult.IsUnauthorized)
+            if (validationResult.IsUnauthorized)
                 throw new UnauthorizedAccessException();
 
             var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
-            
+
             ////Verify the email is not used by an existing invitation for the account
             var existingInvitation = await _invitationRepository.Get(caller.AccountId, message.Email);
 
@@ -53,9 +58,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 throw new InvalidRequestException(new Dictionary<string, string> { { "ExistingMember", $"{message.Email} is already invited" } });
 
             var expiryDate = DateTimeProvider.Current.UtcNow.Date.AddDays(8);
+
+            var invitationId = 0L;
+
             if (existingInvitation == null)
             {
-                await _invitationRepository.Create(new Invitation
+                invitationId = await _invitationRepository.Create(new Invitation
                 {
                     AccountId = caller.AccountId,
                     Email = message.Email,
@@ -73,10 +81,33 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 existingInvitation.ExpiryDate = expiryDate;
 
                 await _invitationRepository.Resend(existingInvitation);
+
+                invitationId = existingInvitation.Id;
             }
 
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "CREATED",
+                    Description = $"Member {message.Email} added to account {caller.AccountId} as {message.RoleId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        
+                        PropertyUpdate.FromString("AccountId",caller.AccountId.ToString()),
+                        PropertyUpdate.FromString("Email",message.Email),
+                        PropertyUpdate.FromString("Name",message.Name),
+                        PropertyUpdate.FromString("RoleId",message.RoleId.ToString()),
+                        PropertyUpdate.FromString("Status",InvitationStatus.Pending.ToString()),
+                        PropertyUpdate.FromDateTime("ExpiryDate",expiryDate)
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Invitation", Id = invitationId.ToString() }
+                }
+            });
+
             await _mediator.SendAsync(new SendNotificationCommand
-            {   
+            {
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
@@ -91,6 +122,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                     }
                 }
             });
+
+
         }
     }
 }

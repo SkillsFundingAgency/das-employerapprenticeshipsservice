@@ -17,10 +17,10 @@ namespace SFA.DAS.EAS.Api
                {
                    TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                    {
-                       ValidAudience = CloudConfigurationManager.GetSetting("ida_Audience"),
+                       ValidAudience = CloudConfigurationManager.GetSetting("idaAudience"),
                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
                    },
-                   Tenant = CloudConfigurationManager.GetSetting("ida_Tenant")
+                   Tenant = CloudConfigurationManager.GetSetting("idaTenant")
                });
         }
     }

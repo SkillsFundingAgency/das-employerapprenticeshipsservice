@@ -1,0 +1,77 @@
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AddOrganisationAddressModel>
+@{ViewBag.PageID = "page-extra-add-organisation-address"; }
+@{
+    ViewBag.Title = "Add Organisation Address";
+    ViewBag.Section = "organisations";
+    ViewBag.HideNav = "true";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Enter your organisation's address
+        </h1>
+        <p class="lede">Use your organisation's main address, such as your head office.</p>
+        <form action="@Url.Action("UpdateOrganisationAddress")" method="POST" novalidate>
+            @Html.AntiForgeryToken()
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.AddressFirstLineError) ? "error" : "")">
+                <label for="AddressFirstLine">
+                    <span class="form-label-bold">Address line 1</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.AddressFirstLineError))
+                    {
+                        <span class="error-message" id="error-message-address">@Model.Data.AddressFirstLineError</span>
+                    }
+                </label>
+                <input type="text" id="AddressFirstLine" name="addressFirstLine" value="@Model.Data.AddressFirstLine" class="form-control" required="required" aria-required="true"
+                       @(!string.IsNullOrEmpty(Model.Data.AddressFirstLineError) ? "aria-invalid=true aria-describedby=error-message-address" : "" ) />
+            </div>
+            <div class="form-group">
+                <label for="AddressSecondLine">
+                    <span class="form-label-bold">Address line 2</span>
+                </label>
+                <input type="text" id="AddressSecondLine" name="addressSecondLine" value="@Model.Data.AddressSecondLine" class="form-control" />
+            </div>
+            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.TownOrCityError) ? "error" : "")">
+                <label for="TownOrCity">
+                    <span class="form-label-bold">Town or city</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.TownOrCityError))
+                    {
+                        <span class="error-message" id="error-message-town">@Model.Data.TownOrCityError</span>
+                    }
+                </label>
+                <input type="text" id="TownOrCity" name="townOrCity" value="@Model.Data.TownOrCity" class="form-control" required="required" aria-required="true"
+                       @(!string.IsNullOrEmpty(Model.Data.TownOrCityError) ? "aria-invalid=true aria-describedby=error-message-town" : "" ) />
+            </div>
+            <div class="form-group">
+                <label for="County">
+                    <span class="form-label-bold">County</span>
+                </label>
+                <input type="text" id="County" name="county" value="@Model.Data.County" class="form-control" />
+            </div>
+            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
+                <label for="Postcode">
+                    <span class="form-label-bold">Postcode</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.PostcodeError))
+                    {
+                        <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
+                    }
+                </label>
+                <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
+                       @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
+            </div>
+            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
+            <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />
+            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType"/>
+            <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
+            <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
+            <input class="button" type="submit" value="Continue" />
+        </form>
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("AddOrganisation", "EmployerAccountOrganisation")" class="back-link">Back</a></li>
+        </ol>
+    </div>
+}

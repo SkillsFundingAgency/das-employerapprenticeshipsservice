@@ -1,11 +1,14 @@
 ﻿@using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Domain.Models.AccountTeam
+@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web
 
-@model OrchestratorResponse<TeamMember>
+@model OrchestratorResponse<SFA.DAS.EAS.Domain.Models.AccountTeam.TeamMember>
 
 @{
     ViewBag.PageID = "page-review-team-member";
     ViewBag.Title = Model.Data.Name;
+    ViewBag.Section = "team";
 }
 
 <div class="grid-row">
@@ -62,8 +65,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to Manage Team Members</a></li>
-        </ol>
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
     </div>
 }

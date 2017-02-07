@@ -14,11 +14,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
     public class WhenRequestingLevyDeclarations
     {
         private const string ExpectedEmpRef = "12345";
-        private const string AuthToken = "123";
         private GetHMRCLevyDeclarationQueryHandler _getHMRCLevyDeclarationQueryHandler;
         private Mock<IValidator<GetHMRCLevyDeclarationQuery>> _validator;
         private Mock<IHmrcService> _hmrcService;
-        private Mock<IEnglishFractionRepository> _englishFractionRepository;
 
         [SetUp]
         public void Arrange()
@@ -27,12 +25,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
             _validator.Setup(x => x.Validate(It.IsAny<GetHMRCLevyDeclarationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _hmrcService = new Mock<IHmrcService>();
-            _hmrcService.Setup(x => x.GetEnglishFractions(It.IsAny<string>(), ExpectedEmpRef)).ReturnsAsync(EnglishFractionObjectMother.Create(ExpectedEmpRef));
-            _hmrcService.Setup(x => x.GetLevyDeclarations(It.IsAny<string>(), ExpectedEmpRef)).ReturnsAsync(DeclarationsObjectMother.Create(ExpectedEmpRef));
-
-            _englishFractionRepository = new Mock<IEnglishFractionRepository>();
-
-            _getHMRCLevyDeclarationQueryHandler = new GetHMRCLevyDeclarationQueryHandler(_validator.Object, _hmrcService.Object, _englishFractionRepository.Object);
+            _hmrcService.Setup(x => x.GetEnglishFractions(ExpectedEmpRef)).ReturnsAsync(EnglishFractionObjectMother.Create(ExpectedEmpRef));
+            _hmrcService.Setup(x => x.GetLevyDeclarations(ExpectedEmpRef)).ReturnsAsync(DeclarationsObjectMother.Create(ExpectedEmpRef));
+            
+            _getHMRCLevyDeclarationQueryHandler = new GetHMRCLevyDeclarationQueryHandler(_validator.Object, _hmrcService.Object);
         }
 
         [Test]
@@ -59,33 +55,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
         public async Task ThenTheLevyServiceIsCalledWithThePassedIdToGetTheLevyDeclarations()
         {
             //Act
-            await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { AuthToken = AuthToken, EmpRef = ExpectedEmpRef });
+            await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { EmpRef = ExpectedEmpRef });
 
             //Assert
-            _hmrcService.Verify(x => x.GetLevyDeclarations(AuthToken, It.Is<string>(c => c.Equals(ExpectedEmpRef))), Times.Once);
+            _hmrcService.Verify(x => x.GetLevyDeclarations(It.Is<string>(c => c.Equals(ExpectedEmpRef))), Times.Once);
         }
-
-        [Test]
-        public async Task ThenTheLevyServiceIsCalledWithThePassedIdToGetTheFractions()
-        {
-            //Act
-            await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { AuthToken = AuthToken, EmpRef = ExpectedEmpRef });
-
-            //Assert
-            _hmrcService.Verify(x => x.GetEnglishFractions(AuthToken, It.Is<string>(c => c.Equals(ExpectedEmpRef))), Times.Once);
-        }
+        
 
         [Test]
         public async Task ThenTheResponseIsPopulatedWithDeclarations()
         {
             //Act
-            var actual = await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { AuthToken = AuthToken, EmpRef = ExpectedEmpRef });
+            var actual = await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { EmpRef = ExpectedEmpRef });
 
             //Assert
             Assert.IsNotNull(actual);
             Assert.AreEqual(ExpectedEmpRef, actual.Empref);
             Assert.IsTrue(actual.LevyDeclarations.Declarations.Any());
-            Assert.IsTrue(actual.Fractions.FractionCalculations.Any());
         }
     }
 }

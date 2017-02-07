@@ -255,3 +255,4 @@ src/Tools/**/*.*
 src/ReleaseTemplate.sql
 *.jfm
 *.DS_Store
+src/SFA.DAS.EAS.Web/App_Data/audit/*.*
