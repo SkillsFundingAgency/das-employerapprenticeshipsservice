@@ -40,12 +40,12 @@
 
                 </div>
 
-                <div class="form-group @Html.AddClassIfPropertyInError("NINumber", "error")">
+                @*<div class="form-group @Html.AddClassIfPropertyInError("NINumber", "error")">
                     <hr />
                     @Html.Label("NINumber", "National insurance number", new { @class = "form-label form-label-bold" })
                     @Html.ValidationMessage("NINumber", new { id = "error-message-NINumber" })
                     @Html.TextBox("NINumber", Model.Data.Apprenticeship.NINumber, new { @class = "form-control form-control-3-4" })
-                </div>
+                </div>*@
 
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("DateOfBirth", "error")">
                     <hr />
