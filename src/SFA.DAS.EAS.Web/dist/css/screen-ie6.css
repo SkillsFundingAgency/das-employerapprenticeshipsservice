@@ -2012,6 +2012,10 @@ table.top-border {
   font-size: 16px;
 }
 
+.breadcrumbs .link-back {
+  margin: 0;
+}
+
 .back-link {
   padding-left: 15px;
   position: relative;
