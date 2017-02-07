@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
                     case FlashMessageSeverityLevel.Warning:
                         return "panel panel-warning";
                     case FlashMessageSeverityLevel.Okay:
-                        return "panel panel-okay";
+                        return "panel panel-border-wide alert-default flash-alert";
                 }
                 return "panel panel-info";
             }
