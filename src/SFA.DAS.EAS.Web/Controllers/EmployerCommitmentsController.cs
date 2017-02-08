@@ -306,9 +306,15 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/submit")]
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
-
-            return View("SubmitCommitmentEntry", response);
+            try
+            {
+                var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
+                return View("SubmitCommitmentEntry", response);
+            }
+            catch (InvalidStateException)
+            {
+                return RedirectToAction("Index", "EmployerCommitments");
+            }
         }
 
         [HttpPost]
