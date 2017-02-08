@@ -21,3 +21,9 @@ BEGIN
 	ALTER TABLE [employer_financial].[EnglishFraction] 
 	ALTER COLUMN EmpRef NVARCHAR(50) NULL
 END
+IF NOT EXISTS(select 1 from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = 'LevyDeclaration' and COLUMN_NAME = 'CreatedDate')
+BEGIN
+	ALTER TABLE [employer_financial].[LevyDeclaration] 
+	Add CreatedDate DATETIME NOT NULL DEFAULT GETDATE()
+END
+
