@@ -18,7 +18,8 @@ SELECT
 		x.submissionDate 
 	when 
 		ld.SubmissionDate then 1 
-	else 0 end as LastSubmission
+	else 0 end as LastSubmission,
+	ld.CreatedDate
 FROM [employer_financial].[LevyDeclaration] ld
 inner join
 (
