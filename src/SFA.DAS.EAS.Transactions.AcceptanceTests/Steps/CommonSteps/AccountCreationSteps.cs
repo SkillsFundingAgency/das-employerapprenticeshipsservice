@@ -6,10 +6,11 @@ using Moq;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
-
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
+using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -17,7 +18,7 @@ using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
 
-namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
+namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
 {
     [Binding]
     public class AccountCreationSteps
@@ -45,10 +46,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             _container.Inject(_validator.Object);
         }
 
-        [Given(@"I am an account ""(.*)""")]
-        public void GivenIAmAnAccount(string accountRole)
+        [Given(@"I have an account")]
+        public void GivenIHaveAnAccount()
         {
-
             CreateAccountWithOwner();
 
             SetAccountIdForUser();
@@ -58,9 +58,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             _externalUserId = Guid.NewGuid().ToString();
             ScenarioContext.Current["ExternalUserId"] = _externalUserId;
 
-            CreateUserWithRole(accountRole);
+            CreateUserWithRole("Owner");
         }
-
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
             orchestrator.CreateAccount(new CreateAccountViewModel
