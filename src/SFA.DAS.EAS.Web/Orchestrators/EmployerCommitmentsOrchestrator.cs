@@ -1010,7 +1010,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
 
-        public async Task<bool> GetCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var data = (await GetAll(accountId, requestStatusFromSession)).ToList();

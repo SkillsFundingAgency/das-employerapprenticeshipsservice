@@ -357,7 +357,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 OwinWrapper.GetClaimValue(@"sub"));
 
             var currentStatusCohortAny = await _employerCommitmentsOrchestrator
-                .GetCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
+                .AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
             model.Data.BackLink = currentStatusCohortAny
                 ? new LinkViewModel { Text = "Return to Approve cohorts", Url = Url.Action("ReadyForApproval", new { hashedAccountId }) }
                 : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
@@ -432,18 +432,28 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerCommitmentsOrchestrator
                 .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
-            var returnUrl = GetSessionRequestStatus(hashedAccountId);
-            response.Data.BackLink = !string.IsNullOrEmpty(returnUrl)
-                ? new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" } 
-                : new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" };
+            var status = GetSessionRequestStatus();
+            var returnToCohortsList = 
+                   status != RequestStatus.None 
+                && await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, status);
+
+            var returnUrl = GetReturnUrl(status, hashedAccountId);
+            response.Data.BackLink = string.IsNullOrEmpty(returnUrl) || !returnToCohortsList
+                ? new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" }
+                : new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" };
 
             return View("Acknowledgement", response);
         }
 
-        private string GetSessionRequestStatus(string hashedAccountId)
+        private RequestStatus GetSessionRequestStatus()
         {
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
             Session[LastCohortPageSessionKey] = null;
+            return status;
+        }
+
+        private string GetReturnUrl(RequestStatus status, string hashedAccountId)
+        {
             switch (status)
             {
                 case RequestStatus.NewRequest:
