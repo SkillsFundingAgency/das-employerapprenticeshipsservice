@@ -409,7 +409,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             try
             {
-                var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel);
+                var request = _mapper.Map<CreateOrganisationAddressRequest>(viewModel.Address);
 
                 var response = _mediator.Send(request);
 

@@ -20,29 +20,22 @@
                 var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
                 {
                     @Model.Data.OrganisationName,
+                    @Model.Data.OrganisationReferenceNumber,
                     @Model.Data.OrganisationType,
                     @Model.Data.PublicSectorDataSource,
                     @Model.Data.OrganisationStatus
                 });
 
-                url += "&Address.AddressFirstLine=12TestLane";
+                url += $"&Address.{nameof(address.AddressFirstLine)}={ address.AddressFirstLine}";
+                url += $"&Address.{nameof(address.AddressSecondLine)}={ address.AddressSecondLine}";
+                url += $"&Address.{nameof(address.TownOrCity)}={ address.TownOrCity}";
+                url += $"&Address.{nameof(address.County)}={ address.County}";
+                url += $"&Address.{nameof(address.Postcode)}={ address.Postcode}";
 
                 <li>
-                    <a href="@url">@address.ToString()</a>
-
-
-                    @*<a href="@Url.Action("UpdateOrganisationAddress", "Organisation", new
-                        {
-                            Address = JsonConvert.SerializeObject(address),
-                            @Model.Data.OrganisationName,
-                            @Model.Data.OrganisationType,
-                            @Model.Data.PublicSectorDataSource,
-                            @Model.Data.OrganisationStatus
-                        })">
+                    <a href="@url">
                         @address.ToString()
-                    </a>*@
-
-                    @*<a href="#">@address.AddressFirstLine, @address.AddressSecondLine, @address.TownOrCity, @address.County @address.Postcode</a>*@
+                    </a>
                 </li>
             }
         </ul>

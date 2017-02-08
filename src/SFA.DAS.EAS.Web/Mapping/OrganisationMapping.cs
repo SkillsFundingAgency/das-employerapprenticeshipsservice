@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Web.Mapping
     {
         public OrganisationMapping()
         {
-            CreateMap<AddOrganisationAddressViewModel, CreateOrganisationAddressRequest>();
+            CreateMap<AddressViewModel, CreateOrganisationAddressRequest>();
             CreateMap<OrganisationDetailsViewModel, FindOrganisationAddressViewModel>()
                 .ForMember(dest => dest.OrganisationHashedId, opt => opt.MapFrom(src => src.HashedId))
                 .ForMember(dest => dest.OrganisationName, opt => opt.MapFrom(src => src.Name))
