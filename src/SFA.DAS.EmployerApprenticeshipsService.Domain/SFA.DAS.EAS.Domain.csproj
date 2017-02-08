@@ -203,7 +203,6 @@
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IEventPublisher.cs" />
-    <Compile Include="Interfaces\IManagedCompanyLookupService.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
@@ -253,7 +252,6 @@
     <Compile Include="Models\Transaction\TransactionLine.cs" />
     <Compile Include="Models\Transaction\TransactionLineDetail.cs" />
     <Compile Include="Models\Transaction\TransactionSummary.cs" />
-    <Compile Include="Models\ManagedCompany\ManagedCompanyLookup.cs" />
     <Compile Include="Models\Notification\EmailContent.cs" />
     <Compile Include="Models\Notification\EmailMessage.cs" />
     <Compile Include="Models\Notification\MessageFormat.cs" />

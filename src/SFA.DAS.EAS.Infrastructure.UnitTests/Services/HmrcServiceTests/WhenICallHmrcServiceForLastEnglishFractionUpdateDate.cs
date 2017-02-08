@@ -18,7 +18,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedTotpToken = "789654321AGFVD";
 
         private HmrcService _hmrcService;
-        private Mock<ILogger> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<ITotpService> _totpService;
@@ -37,14 +36,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     ServerToken = "token1234"
                 }
             };
-
-            _logger = new Mock<ILogger>();
+            
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
 
             _totpService = new Mock<ITotpService>();
             _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
 
-            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object, _totpService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _totpService.Object);
         }
 
         [Test]
