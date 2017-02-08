@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("AddOrganisationAddress", result.ViewName);
+            Assert.AreEqual("FindAddress", result.ViewName);
         }
 
         [Test]
