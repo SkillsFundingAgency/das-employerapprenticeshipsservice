@@ -12,69 +12,30 @@
     
 <div class="grid-row">
     <div class="column-full">
-        <h1 class="heading-xlarge">Add apprentices</h1>
+        <h1 class="heading-xlarge">Review your cohort</h1>
     </div>
 </div>
 
-
-<style>
-    .bingo-background {
-        margin-right: 15px;
-        padding: 10px;
-        color: White;
-        min-height: 160px;
-        width: 30%;
-    }
-
-    .bingo-background.block-one { background-color: #2E3391; }
-    .bingo-background.block-two { background-color: #8E2A8D; }
-    .bingo-background.block-three { background-color: #D03A84; }
-
-    .bingo-group {
-        margin-bottom: 1em;
-    }
-
-    .missing {
-        font-weight: bold;
-    }
-
-    .group-header {
-        margin-bottom: 1em;
-        margin-top: 1.8em;
-    }
-
-    .group-header .heading-medium { margin: 0; }
-
-</style>
-
-
-<div class="grid-row">
-    <div class="column-full bingo-group">
-
-        <div class="column-one-third bingo-background block-one">
-            <h2 class="bold-xxlarge">
-                <span>@Model.Data.Apprenticeships.Count</span>
-            </h2>
+<div class="grid-row" id="review-cohorts">
+    <div class="column-one-third all-apps">
+        <div class="">
+            <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count</h2>
             <p class="heading-small">@PluraliseApprentice(Model.Data.Apprenticeships.Count)</p>
         </div>
-
-        <div class="column-one-third bingo-background block-two">
-            <h2 class="bold-xxlarge">
-                <span>@Model.Data.Apprenticeships.Count(x => !x.CanBeApproved)</span>
-            </h2>
+    </div>
+    <div class="column-one-third incomplete-apps">
+        <div class="">
+            <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count(x => !x.CanBeApproved)</h2>
             <p class="heading-small">@PluraliseIncompleteRecords(Model.Data.Apprenticeships.Count(x => !x.CanBeApproved))</p>
         </div>
-
-        <div class="column-one-third bingo-background block-three">
-            <h2 class="bold-xlarge">
-                <span>@Model.Data.Apprenticeships.Sum(x=> x.Cost ?? 0).ToString("C0")</span>
-            </h2>
+    </div>
+    <div class="column-one-third total-cost">
+        <div class="">
+            <h2 class="bold-xlarge">&pound;@Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("C0")</h2>
             <p class="heading-small">Total cost</p>
         </div>
-
     </div>
 </div>
-
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
@@ -84,7 +45,7 @@
 
        
     <div class="column-one-half employer-details">
-            <p class="strong">Instructions:</p>
+            <p class="strong">Note:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
@@ -99,9 +60,10 @@
             <div class="column-full">
                 <div class="emptyStateButton">
                     <hr class="hr-top">
-                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
                     <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-                    <hr class="hr-bottom">
+                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+                    
+                    @*<hr class="hr-bottom">*@
                 </div>
             </div>
         </div>
