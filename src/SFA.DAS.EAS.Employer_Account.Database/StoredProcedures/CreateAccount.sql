@@ -25,8 +25,11 @@ BEGIN
 	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
 	SELECT @accountId = SCOPE_IDENTITY();
 
-	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @employerNumber;
-	
+	if(@employerNumber is not null)
+	BEGIN
+		SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @employerNumber and Source in (1,2);
+	END
+
 	IF (@legalEntityId IS NULL)
 	BEGIN
 		INSERT INTO [employer_account].[LegalEntity](Name, Code, RegisteredAddress, DateOfIncorporation, [Status], [Source], [PublicSectorDataSource],[Sector]) VALUES (@employerName, @employerNumber, @employerRegisteredAddress, @employerDateOfIncorporation,@status, @source, @publicSectorDataSource,@sector);
