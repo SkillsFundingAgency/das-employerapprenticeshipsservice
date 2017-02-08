@@ -1,6 +1,6 @@
 ﻿using Moq;
 using SFA.DAS.EAS.TestCommon.DbCleanup;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Messaging;
 using StructureMap;

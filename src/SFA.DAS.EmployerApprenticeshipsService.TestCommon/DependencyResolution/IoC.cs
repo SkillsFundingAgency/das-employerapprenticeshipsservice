@@ -2,11 +2,12 @@
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.MockPolicy;
+using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Messaging;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution
+namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
     public static class IoC
     {

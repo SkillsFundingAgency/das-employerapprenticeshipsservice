@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
         {
             var employer = await _employerVerificationService.GetInformation(message.Id);
 
-            if (employer == null)
+            if (employer?.CompanyNumber == null)
                 return null;
 
             return new GetEmployerInformationResponse

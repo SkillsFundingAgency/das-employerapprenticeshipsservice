@@ -203,7 +203,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<string>> CreateEmployerAssignedCommitment(CreateCommitmentViewModel model, string externalUserId)
+        public async Task<OrchestratorResponse<string>> CreateEmployerAssignedCommitment(CreateCommitmentViewModel model, string externalUserId, string userDisplayName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
             _logger.Info($"Creating Employer assigned commitment. AccountId: {accountId}, Provider: {model.ProviderId}");
@@ -221,7 +221,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderId = model.ProviderId,
                         ProviderName = model.ProviderName,
                         CommitmentStatus = CommitmentStatus.New,
-                        EditStatus = EditStatus.EmployerOnly
+                        EditStatus = EditStatus.EmployerOnly,
+                        EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail }
                     }
                 });
 
@@ -233,7 +234,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, model.HashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<string>> CreateProviderAssignedCommitment(SubmitCommitmenViewModel model, string externalUserId)
+        public async Task<OrchestratorResponse<string>> CreateProviderAssignedCommitment(SubmitCommitmenViewModel model, string externalUserId, string userDisplayName, string userEmail)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
             _logger.Info($"Creating Provider assigned Commitment. AccountId: {accountId}, Provider: {model.ProviderId}");
@@ -252,7 +253,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderId = long.Parse(model.ProviderId),
                         ProviderName = model.ProviderName,
                         CommitmentStatus = CommitmentStatus.Active,
-                        EditStatus = EditStatus.ProviderOnly
+                        EditStatus = EditStatus.ProviderOnly,
+                        EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail }
                     }
                 });
 
@@ -391,7 +393,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task ApproveCommitment(string hashedAccountId, string externalUserId, string hashedCommitmentId, SaveStatus saveStatus)
+        public async Task ApproveCommitment(string hashedAccountId, string externalUserId, string userDisplayName, string userEmail, string hashedCommitmentId, SaveStatus saveStatus)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
@@ -409,6 +411,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CommitmentId = commitmentId,
                     Message = string.Empty,
                     LastAction = lastAction,
+                    UserDisplayName = userDisplayName,
+                    UserEmailAddress = userEmail,
                     CreateTask = saveStatus != SaveStatus.Approve
                 });
             }, hashedAccountId, externalUserId);
@@ -469,7 +473,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task SubmitCommitment(SubmitCommitmenViewModel model, string externalUserId)
+        public async Task SubmitCommitment(SubmitCommitmenViewModel model, string externalUserId, string userDisplayName, string userEmail)
         {
             await CheckUserAuthorization(async () => 
             {
@@ -489,6 +493,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CommitmentId = commitmentId,
                         Message = model.Message,
                         LastAction = lastAction,
+                        UserDisplayName = userDisplayName,
+                        UserEmailAddress = userEmail,
                         CreateTask = model.SaveStatus != SaveStatus.Approve
                     });
                 }

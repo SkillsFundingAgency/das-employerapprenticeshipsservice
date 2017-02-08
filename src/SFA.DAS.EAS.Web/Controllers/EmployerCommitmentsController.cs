@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -202,7 +203,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.SelectedRoute == "employer")
             {
-                var response = await _employerCommitmentsOrchestrator.CreateEmployerAssignedCommitment(viewModel, OwinWrapper.GetClaimValue(@"sub"));
+                var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
+                var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
+                var userId = OwinWrapper.GetClaimValue(@"sub");
+
+                var response = await _employerCommitmentsOrchestrator.CreateEmployerAssignedCommitment(viewModel, userId, userDisplayName, userEmail);
 
                 return RedirectToAction("Details", new { hashedCommitmentId = response.Data });
             }
@@ -322,8 +327,10 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.SaveStatus.IsFinalApproval())
             {
-                await _employerCommitmentsOrchestrator.ApproveCommitment
-                    (viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.SaveStatus);
+                var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
+                var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
+                var userId = OwinWrapper.GetClaimValue(@"sub");
+                await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, userId, userDisplayName, userEmail, viewModel.HashedCommitmentId, viewModel.SaveStatus);
 
                 return RedirectToAction("Approved",
                     new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
@@ -374,7 +381,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/submit")]
         public async Task<ActionResult> SubmitExistingCommitmentEntry(SubmitCommitmenViewModel model)
         {
-            await _employerCommitmentsOrchestrator.SubmitCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
+            var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
+            var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            await _employerCommitmentsOrchestrator.SubmitCommitment(model, userId, userDisplayName, userEmail);
 
             return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
         }
@@ -395,7 +406,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("submit")]
         public async Task<ActionResult> SubmitNewCommitmentEntry(SubmitCommitmenViewModel model)
         {
-            var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, OwinWrapper.GetClaimValue(@"sub"));
+            var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
+            var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
+            var userId = OwinWrapper.GetClaimValue(@"sub");
+
+            var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, userId, userDisplayName, userEmail);
 
             return RedirectToAction("AcknowledgementNew", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = response.Data });
         }

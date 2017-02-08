@@ -23,8 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
                 StartDate = new DateTimeViewModel(1, 5, 2200),
                 EndDate = new DateTimeViewModel(1, 5, 2200),
                 TrainingId = "5",
-                DateOfBirth = new DateTimeViewModel(5, 9, 1882),
-                NINumber = "SE000NI00NUKBER"
+                DateOfBirth = new DateTimeViewModel(5, 9, 1882)
             };
         }
 
@@ -33,7 +32,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators
         {
             var result = _validator.Validate(new ApprenticeshipViewModel());
             result.IsValid.Should().BeFalse();
-            result.Errors.Count.Should().Be(8);
+            result.Errors.Count.Should().Be(7);
         }
 
         [Test]

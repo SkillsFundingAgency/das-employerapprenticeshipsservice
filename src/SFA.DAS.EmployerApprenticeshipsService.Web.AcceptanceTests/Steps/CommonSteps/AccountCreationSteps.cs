@@ -6,9 +6,10 @@ using Moq;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
+
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -62,7 +63,6 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
         public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
-
             orchestrator.CreateAccount(new CreateAccountViewModel
             {
                 UserId = userView.UserId,
@@ -74,9 +74,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 OrganisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
                 OrganisationAddress = "Address Line 1",
                 OrganisationStatus = "active"
-            },new Mock<HttpContextBase>().Object).Wait();
-
-
+            }, new Mock<HttpContextBase>().Object).Wait();
         }
 
         private void CreateUserWithRole(string accountRole)
@@ -92,7 +90,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 LastName = "tester",
                 UserId = _externalUserId
             };
-            var userCreation = new UserCreationSteps();
+            var userCreation = new UserSteps();
             userCreation.UpsertUser(signInModel);
 
             userCreation.CreateUserWithRole(
@@ -117,7 +115,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
                 FirstName = "Test",
                 LastName = "Tester"
             };
-            var userCreationSteps = new UserCreationSteps();
+            var userCreationSteps = new UserSteps();
             userCreationSteps.UpsertUser(signInUserModel);
 
             var user = userCreationSteps.GetExistingUserAccount();
