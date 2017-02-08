@@ -4,8 +4,6 @@ using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
-using SFA.DAS.Events.Api.Client;
-using SFA.DAS.Events.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
@@ -17,7 +15,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         private SubmitCommitmentCommandHandler _handler;
         private Mock<ICommitmentsApi> _mockCommitmentApi;
         private Mock<ITasksApi> _mockTasksApi;
-        private Mock<IEventsApi> _mockEventsApi;
         private SubmitCommitmentCommand _validCommand;
 
         [SetUp]
@@ -29,8 +26,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L, EmployerAccountId = 12L });
             _mockTasksApi = new Mock<ITasksApi>();
-            _mockEventsApi = new Mock<IEventsApi>();
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockEventsApi.Object);
+
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object);
         }
 
         [Test]
@@ -55,14 +52,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _validCommand.EmployerAccountId = 2;
 
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
-        }
-
-        [Test]
-        public async Task ThenAnEventShouldBeCreated()
-        {
-            await _handler.Handle(_validCommand);
-
-            _mockEventsApi.Verify(x => x.CreateAgreementEvent(It.IsAny<AgreementEvent>()));
         }
 
         [Test]
