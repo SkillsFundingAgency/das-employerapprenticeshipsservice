@@ -1,21 +1,61 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Select address";
-    ViewBag.Section = "employer-account-organisations";
     ViewBag.PageID = "select-organisation-address";
+    ViewBag.HideNav = "true";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-full">
+
+        @if (Model.Status == HttpStatusCode.OK)
+        {
+
+            if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
+            {
+                <div class="panel panel-filled">
+                    <p>No addresses found for the postcode @(Model?.Data?.Postcode) </p>
+                </div>
+            }
+            else
+            {
+                <p>Select your address from the list</p>
+                <ol class="search-results">
+                    @foreach (var address in Model.Data.Addresses)
+                    {
+                        var url = Url.Action("UpdateOrganisationAddress", "EmployerAccountOrganisation", new
+                        {
+                            @Model.Data.OrganisationName,
+                            @Model.Data.OrganisationReferenceNumber,
+                            @Model.Data.OrganisationType,
+                            @Model.Data.PublicSectorDataSource,
+                            @Model.Data.OrganisationStatus
+                        });
+
+                        url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
+                        url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
+                        url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
+                        url += $"&Address.{nameof(address.County)}={address.County}";
+                        url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
+
+                        <li>
+                            <a href="@url">
+                                @address.ToString()
+                            </a>
+                        </li>
+                    }
+                </ol>
+                <hr />
+                <p>Or search again for your address.</p>
+            }
+        }
+
+
         <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
                 <label for="Postcode">
-                    <span class="form-label-bold">Postcode</span>
+                    <span class="form-label-bold">Enter postcode</span>
                     @if (!string.IsNullOrEmpty(Model.Data.PostcodeError))
                     {
                         <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
@@ -29,52 +69,15 @@
             <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
             <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
-            <input class="button" type="submit" value="Continue" />
+            <input class="button" type="submit" value="Find UK address" />
         </form>
 
-        @if (Model.Status == HttpStatusCode.OK)
-        {
-
-             if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
-             {
-                 <p>No addresses found for the postcode @(Model?.Data?.Postcode) </p>
-             }
-             else
-             {
-                 <ul>
-                     @foreach (var address in Model.Data.Addresses)
-                     {
-                         var url = Url.Action("UpdateOrganisationAddress", "EmployerAccountOrganisation", new
-                         {
-                             @Model.Data.OrganisationName,
-                             @Model.Data.OrganisationReferenceNumber,
-                             @Model.Data.OrganisationType,
-                             @Model.Data.PublicSectorDataSource,
-                             @Model.Data.OrganisationStatus
-                         });
-
-                         url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
-                         url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
-                         url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
-                         url += $"&Address.{nameof(address.County)}={address.County}";
-                         url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
-
-                         <li>
-                             <a href="@url">
-                                 @address.ToString()
-                             </a>
-                         </li>
-                     }
-                 </ul>
-             }
-        }
+        
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
+        <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="link-back">Back</a>
     </div>
 }

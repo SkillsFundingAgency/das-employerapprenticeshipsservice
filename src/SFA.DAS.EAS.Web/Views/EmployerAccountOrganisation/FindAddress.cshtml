@@ -1,21 +1,18 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.FindOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Find address";
-    ViewBag.Section = "Employer-account-organisations";
     ViewBag.PageID = "find-organisation-address";
+    ViewBag.HideNav = "true";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-one-third pull-right">
+
         <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
                 <label for="Postcode">
-                    <span class="form-label-bold">Postcode</span>
+                    <span class="form-label-bold">Enter postcode</span>
                     @if (!string.IsNullOrEmpty(Model.Data.PostcodeError))
                     {
                         <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
@@ -29,15 +26,13 @@
             <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
             <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
-            <input class="button" type="submit" value="Continue" />
+            <input class="button" type="submit" value="Find UK address" />
         </form> 
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
+        <a href="@Url.Action("SelectEmployer", "EmployerAccount")" class="link-back">Back</a>
     </div>
 }
