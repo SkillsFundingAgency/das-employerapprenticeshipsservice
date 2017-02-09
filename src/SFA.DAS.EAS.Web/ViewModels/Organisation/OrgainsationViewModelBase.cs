@@ -5,7 +5,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     public class OrganisationViewModelBase : ViewModelBase
     {
-        public string HashedAccountId { get; set; }
         public string OrganisationHashedId { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationReferenceNumber { get; set; }

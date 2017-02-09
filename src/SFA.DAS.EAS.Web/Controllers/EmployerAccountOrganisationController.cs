@@ -184,8 +184,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             model.Type = OrganisationType.Other;
 
             var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
-
-
+            
             return RedirectToAction("FindAddress", addressModel);
         }
 

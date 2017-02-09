@@ -232,7 +232,6 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
 
-
             return RedirectToAction("FindAddress", addressModel);
         }
 
