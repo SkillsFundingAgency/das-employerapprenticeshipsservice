@@ -38,11 +38,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILogger _logger;
         private readonly ICommitmentStatusCalculator _statusCalculator;
 
-        private readonly Func<int, string> _addSSurfix = i => i > 1 ? "s" : "";
-
-        readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
-
-        readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
+        private readonly Func<int, string> _addPluralizationSuffix = i => i > 1 ? "s" : "";
+        private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
+        private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
 
         public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ICommitmentStatusCalculator statusCalculator, ILogger logger)
         {
@@ -571,7 +569,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public async Task<OrchestratorResponse<CommitmentListViewModel>> GetAllWaitingToBeSent(string hashedAccountId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Info($"Getting your cohorts waiting ro be sent for Account: {accountId}");
+            _logger.Info($"Getting your cohorts waiting to be sent for Account: {accountId}");
 
             return await CheckUserAuthorization(async () =>
                 {
@@ -586,7 +584,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
-                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are waiting to be sent:",
+                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are waiting to be sent:",
                         }
                     };
 
@@ -611,7 +609,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         PageTitle = "Approve cohorts",
                         PageId = "ready-for-approval",
                         PageHeading = "Approve cohorts",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that need your approval:",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that need your approval:",
 
                     }
                 };
@@ -637,7 +635,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         PageTitle = "Ready for review",
                         PageId = "ready-for-review",
                         PageHeading = "Ready for review",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are ready for review:",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are ready for review:",
 
                     }
                 };
@@ -670,7 +668,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         PageTitle = "With the provider",
                         PageId = "with-the-provider",
                         PageHeading = "With the provider",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addSSurfix(commitments.ToList().Count)} that are with the provider:"
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are with the provider:"
                     }
                 };
 
@@ -875,7 +873,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem commitment, Func<CommitmentListItem, Task<string>> latestMessageFunc)
         {
-            var message = latestMessageFunc.Invoke(commitment);
+            var messageTask = latestMessageFunc.Invoke(commitment);
 
             return new CommitmentListItemViewModel
             {
@@ -885,7 +883,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderName = commitment.ProviderName,
                 Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
                 ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly,
-                LatestMessage = await message
+                LatestMessage = await messageTask
             };
         }
 
