@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Web.ViewModels.Organisation
+﻿using System.Text;
+
+namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     public class AddressViewModel : ViewModelBase
     {
@@ -14,7 +16,28 @@
 
         public override string ToString()
         {
-            return $"{AddressFirstLine}, {AddressSecondLine}, {TownOrCity}, {County} {Postcode}";
+            var addressBuilder = new StringBuilder();
+
+            addressBuilder.Append(AddressFirstLine);
+
+            if (!string.IsNullOrEmpty(AddressSecondLine))
+            {
+                addressBuilder.Append($", {AddressSecondLine}");
+            }
+
+            if (!string.IsNullOrEmpty(TownOrCity))
+            {
+                addressBuilder.Append($", {TownOrCity}");
+            }
+
+            if (!string.IsNullOrEmpty(County))
+            {
+                addressBuilder.Append($", {County}");
+            }
+            
+            addressBuilder.Append($" {Postcode}");
+
+            return addressBuilder.ToString();
         }
     }
 }
