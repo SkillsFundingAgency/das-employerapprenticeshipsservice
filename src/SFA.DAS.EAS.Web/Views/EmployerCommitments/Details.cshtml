@@ -31,7 +31,7 @@
     </div>
     <div class="column-one-third total-cost">
         <div class="">
-            <h2 class="bold-xlarge">&pound;@Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("C0")</h2>
+            <h2 class="bold-xlarge">&pound;@Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0")</h2>
             <p class="heading-small">Total cost</p>
         </div>
     </div>
@@ -115,7 +115,7 @@
                     @foreach (var trainingGroup in Model.Data.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
                     {
                         var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
-                        var groupTitle = String.Format($"{trainingGroup.Count()} - {groupName}");
+                        var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
                         var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
 
                         <div class="group-header">
