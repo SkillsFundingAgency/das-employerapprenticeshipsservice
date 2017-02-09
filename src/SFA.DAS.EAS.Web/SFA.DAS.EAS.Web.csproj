@@ -415,7 +415,7 @@
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
-    <Compile Include="Models\DeleteApprenticeshipConfirmationViewModel.cs" />
+    <Compile Include="ViewModels\DeleteApprenticeshipConfirmationViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
     <Compile Include="ViewModels\PublicSectorOrganisationSearchResultsViewModel.cs" />
@@ -975,9 +975,7 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

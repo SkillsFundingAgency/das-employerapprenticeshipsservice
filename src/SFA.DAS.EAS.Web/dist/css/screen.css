@@ -3596,6 +3596,7 @@ span.helpText {
 .tableResponsive td {
   font-size: 16px;
 }
+
 #review-cohorts {
   color: #fff;
   margin: 30px 0;
@@ -3641,7 +3642,6 @@ span.helpText {
     width: 31%;
   }
 }
-
 
 .js-enabled .clickable {
   cursor: pointer;
@@ -3728,4 +3728,28 @@ span.helpText {
     margin-top: 5px;
     word-wrap: break-word;
   }
+}
+
+#edit-apprentice .delete-button {
+  background-color: #b10e1e;
+  float: right;
+  margin: 15px 0;
+}
+
+@media (min-width: 641px) {
+  #edit-apprentice .delete-button {
+    margin: auto;
+  }
+}
+
+#confirm-delete .heading-large {
+  margin-bottom: 0;
+}
+
+#confirm-delete .heading-small {
+  margin-top: 0;
+}
+
+#confirm-delete .secondary-text {
+  color: #6f777b;
 }

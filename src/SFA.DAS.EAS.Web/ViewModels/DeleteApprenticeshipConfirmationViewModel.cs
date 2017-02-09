@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Attributes;
 using SFA.DAS.EAS.Web.Validators;
 
-namespace SFA.DAS.EAS.Web.Models
+namespace SFA.DAS.EAS.Web.ViewModels
 {
     [Validator(typeof(DeleteApprenticeshipConfirmationViewModelValidator))]
     public class DeleteApprenticeshipConfirmationViewModel
