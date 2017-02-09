@@ -1,0 +1,50 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
+@{
+    ViewBag.Title = "Select address";
+    ViewBag.Section = "employer-account-organisations";
+    ViewBag.PageID = "select-organisation-address";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Find organisation address</h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+      
+        <ul>
+            @foreach (var address in Model.Data.Addresses)
+            {
+                var url = Url.Action("UpdateOrganisationAddress", "EmployerAccountOrganisation", new
+                {
+                    @Model.Data.OrganisationName,
+                    @Model.Data.OrganisationReferenceNumber,
+                    @Model.Data.OrganisationType,
+                    @Model.Data.PublicSectorDataSource,
+                    @Model.Data.OrganisationStatus
+                });
+
+                url += $"&Address.{nameof(address.AddressFirstLine)}={ address.AddressFirstLine}";
+                url += $"&Address.{nameof(address.AddressSecondLine)}={ address.AddressSecondLine}";
+                url += $"&Address.{nameof(address.TownOrCity)}={ address.TownOrCity}";
+                url += $"&Address.{nameof(address.County)}={ address.County}";
+                url += $"&Address.{nameof(address.Postcode)}={ address.Postcode}";
+
+                <li>
+                    <a href="@url">
+                        @address.ToString()
+                    </a>
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

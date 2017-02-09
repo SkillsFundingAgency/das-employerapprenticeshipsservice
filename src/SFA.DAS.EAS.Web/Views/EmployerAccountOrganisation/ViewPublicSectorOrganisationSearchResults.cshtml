@@ -15,7 +15,7 @@
 
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
-            <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
+            @*<input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />*@
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
             <div class="search-field">
                 <fieldset class="search-input">
@@ -37,15 +37,13 @@
                     if (!result.AddedToAccount)
                     {
                         <li>
-                            <a href="@Url.Action("UpdateOrganisationAddress", new
-                                    {
-                                        OrganisationName = result.Name,
-                                        OrganisationType = OrganisationType.PublicBodies,
-                                        OrganisationReferenceNumber = result.ReferenceNumber,
-                                        OrganisationDateOfInception = result.DateOfInception,
-                                        PublicSectorDataSource = result.PublicSectorDataSource,
-                                        OrganisationStatus = "active"
-                                    })">
+                            <a href="@Url.Action("FindAddress", "EmployerAccountOrganisation", new
+                                         {
+                                             OrganisationName = result.Name,
+                                             OrganisationType = OrganisationType.PublicBodies,
+                                             PublicSectorDataSource = result.PublicSectorDataSource,
+                                             OrganisationStatus = result.Status
+                                         })">
                                 @result.Name
                             </a>
                         </li>

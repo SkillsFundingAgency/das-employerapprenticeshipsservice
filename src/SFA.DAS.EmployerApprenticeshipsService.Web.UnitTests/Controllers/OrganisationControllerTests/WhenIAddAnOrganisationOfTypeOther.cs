@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -12,7 +8,6 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
@@ -25,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
         private Mock<IMapper> _mapper;
+        private OrchestratorResponse<OrganisationDetailsViewModel> _validationResponse;
 
         [SetUp]
         public void Arrange()
@@ -35,17 +31,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _userWhiteList = new Mock<IUserWhiteList>();
             _mapper = new Mock<IMapper>();
 
-            _orchestrator.Setup(x => x.ValidateLegalEntityName(It.IsAny<OrganisationDetailsViewModel>()))
-                .ReturnsAsync(new OrchestratorResponse<OrganisationDetailsViewModel>
-                {
-                    Data = new OrganisationDetailsViewModel(),
-                    Status = HttpStatusCode.OK
-                });
+            _validationResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel(),
+                Status = HttpStatusCode.OK
+            };
 
-            _orchestrator.Setup(x =>
-                    x.CreateAddOrganisationAddressViewModelFromOrganisationDetails(
-                        It.IsAny<OrganisationDetailsViewModel>()))
-                .Returns(new OrchestratorResponse<AddOrganisationAddressViewModel>());
+            _orchestrator.Setup(x => x.ValidateLegalEntityName(It.IsAny<OrganisationDetailsViewModel>()))
+                .ReturnsAsync(_validationResponse);
+
+            _mapper.Setup(x => x.Map<FindOrganisationAddressViewModel>(It.IsAny<OrganisationDetailsViewModel>()))
+                    .Returns(new FindOrganisationAddressViewModel());
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,
@@ -78,8 +74,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             await _controller.AddOtherOrganisationDetails(model);
 
             //Assert
-            _orchestrator.Verify(x => x.CreateAddOrganisationAddressViewModelFromOrganisationDetails(
-                It.IsAny<OrganisationDetailsViewModel>()), Times.Once);
+            _mapper.Verify(x => x.Map<FindOrganisationAddressViewModel>(_validationResponse.Data), Times.Once);
         }
 
         [Test]
@@ -92,9 +87,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             var result = await _controller.AddOtherOrganisationDetails(model);
 
             //Assert
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            Assert.AreEqual("AddOrganisationAddress", viewResult.ViewName);
+            var redirectResult = result as RedirectToRouteResult;
+            Assert.IsNotNull(redirectResult);
+            Assert.AreEqual("FindAddress", redirectResult?.RouteValues["Action"]);
         }
 
         [Test]
@@ -116,7 +111,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             //Assert
             var viewResult = result as ViewResult;
             Assert.IsNotNull(viewResult);
-            Assert.AreEqual("", viewResult.ViewName);
+            Assert.AreEqual("AddOtherOrganisationDetails", viewResult?.ViewName);
         }
 
 

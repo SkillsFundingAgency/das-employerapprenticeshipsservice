@@ -107,7 +107,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 case OrganisationType.Other:
 
-                    response = new OrchestratorResponse<OrganisationDetailsViewModel>()
+                    response = new OrchestratorResponse<OrganisationDetailsViewModel>
                     {
                         Data = new OrganisationDetailsViewModel()
                     };
@@ -125,14 +125,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 if (string.IsNullOrWhiteSpace(address))
                 {
-                    var addressViewModel = _mapper.Map<AddOrganisationAddressViewModel>(response.Data);
+                    var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
 
-                    var addressResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
+                    var addressResponse = new OrchestratorResponse<FindOrganisationAddressViewModel>
                     {
                         Data = addressViewModel
                     };
 
-                    return View("AddOrganisationAddress", addressResponse);
+                    return View("FindAddress", addressResponse);
                 }
 
                 CreateOrganisationCookieData(response);
@@ -183,12 +183,34 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             model.Type = OrganisationType.Other;
 
-            var addressModel = _mapper.Map<AddOrganisationAddressViewModel>(response.Data);
+            var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
 
 
-            return RedirectToAction("AddOrganisationAddress", addressModel);
+            return RedirectToAction("FindAddress", addressModel);
         }
 
+        [HttpGet]
+        [Route("address/find")]
+        public ActionResult FindAddress(FindOrganisationAddressViewModel request)
+        {
+            var response = new OrchestratorResponse<FindOrganisationAddressViewModel>
+            {
+                Data = request,
+                Status = HttpStatusCode.OK
+            };
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [Route("address/select")]
+        public async Task<ActionResult> SelectAddress(FindOrganisationAddressViewModel request)
+        {
+            var response = await _orchestrator.GetAddressesFromPostcode(request);
+
+            return View(response);
+        }
+        
         [HttpGet]
         [Route("address/update")]
         public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)

@@ -26,6 +26,9 @@ namespace SFA.DAS.EAS.Web.Mapping
                 .ForMember(dest => dest.TownOrCity, opt => opt.MapFrom(src => src.TownOrCity))
                 .ForMember(dest => dest.County, opt => opt.MapFrom(src => src.County))
                 .ForMember(dest => dest.Postcode, opt => opt.MapFrom(src => src.PostCode));
+
+            CreateMap<OrganisationDetailsViewModel, AddOrganisationAddressViewModel>()
+                .ForMember(dest => dest.Address, opt => opt.Ignore());
         }
     }
 }

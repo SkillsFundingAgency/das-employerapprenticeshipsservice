@@ -223,13 +223,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
 
-            if (response.Status == HttpStatusCode.OK)
+            if (response.Status == HttpStatusCode.BadRequest)
             {
-                var addressResponse = _orchestrator.CreateAddOrganisationAddressViewModelFromOrganisationDetails(model);
-                return View("AddOrganisationAddress", addressResponse);
+                return View("AddOtherOrganisationDetails", response);
             }
 
-            return View(response);
+            model.Type = OrganisationType.Other;
+
+            var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
+
+
+            return RedirectToAction("FindAddress", addressModel);
         }
 
         [HttpPost]
