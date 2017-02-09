@@ -14,42 +14,50 @@
             <h1 class="heading-xlarge">Your apprentices</h1>
         </div>
 
-    <table class="tableResponsive manage-all-apprentices">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date of birth</th>
-            <th>Status</th>
-            <th></th>
-
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var apprenticeship in Model.Data.Apprenticeships)
+        @if (!Model.Data.Apprenticeships.Any())
         {
-            <tr>
-                <td>
-                    @apprenticeship.FirstName @apprenticeship.LastName &nbsp;
-                </td>
-                <td>
-                    @if (apprenticeship.DateOfBirth != null)
-                    {
-                        @apprenticeship.DateOfBirth.Value.ToGdsFormat()
-                    } &nbsp;
-                </td>
-                <td>
-                    @apprenticeship.Status &nbsp;
-                </td>
-                <td>
-                    <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"
-                       title="View  @apprenticeship.FirstName @apprenticeship.LastName"
-                       aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
-                </td>
-            </tr>
+            <div class="panel panel-border-wide alert-default">
+                <p>You don’t have any requests in progress.</p>
+            </div>
         }
-        </tbody>
-    </table>
+        else
+        {
+            <table class="tableResponsive manage-all-apprentices">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of birth</th>
+                    <th>Status</th>
+                    <th></th>
 
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var apprenticeship in Model.Data.Apprenticeships)
+                {
+                    <tr>
+                        <td>
+                            @apprenticeship.FirstName @apprenticeship.LastName &nbsp;
+                        </td>
+                        <td>
+                            @if (apprenticeship.DateOfBirth != null)
+                            {
+                                @apprenticeship.DateOfBirth.Value.ToGdsFormat()
+                            } &nbsp;
+                        </td>
+                        <td>
+                            @apprenticeship.Status &nbsp;
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"
+                               title="View  @apprenticeship.FirstName @apprenticeship.LastName"
+                               aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
     </div>
 </div>
 
