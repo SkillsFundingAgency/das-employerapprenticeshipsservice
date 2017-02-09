@@ -1,6 +1,4 @@
-﻿@using Newtonsoft.Json
-@using SFA.DAS.EAS.Domain.Models.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
 @{
     ViewBag.Title = "Select address";
     ViewBag.Section = "organisations";
@@ -13,32 +11,39 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-      
-        <ul>
-            @foreach (var address in Model.Data.Addresses)
-            {
-                var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+        
+        @if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
+        {
+            <p>No addresses found for the postcode @(Model?.Data?.Postcode) </p>
+        }
+        else
+        {
+            <ul>
+                @foreach (var address in Model.Data.Addresses)
                 {
-                    @Model.Data.OrganisationName,
-                    @Model.Data.OrganisationReferenceNumber,
-                    @Model.Data.OrganisationType,
-                    @Model.Data.PublicSectorDataSource,
-                    @Model.Data.OrganisationStatus
-                });
+                    var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+                    {
+                        @Model.Data.OrganisationName,
+                        @Model.Data.OrganisationReferenceNumber,
+                        @Model.Data.OrganisationType,
+                        @Model.Data.PublicSectorDataSource,
+                        @Model.Data.OrganisationStatus
+                    });
 
-                url += $"&Address.{nameof(address.AddressFirstLine)}={ address.AddressFirstLine}";
-                url += $"&Address.{nameof(address.AddressSecondLine)}={ address.AddressSecondLine}";
-                url += $"&Address.{nameof(address.TownOrCity)}={ address.TownOrCity}";
-                url += $"&Address.{nameof(address.County)}={ address.County}";
-                url += $"&Address.{nameof(address.Postcode)}={ address.Postcode}";
+                    url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
+                    url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
+                    url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
+                    url += $"&Address.{nameof(address.County)}={address.County}";
+                    url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
 
-                <li>
-                    <a href="@url">
-                        @address.ToString()
-                    </a>
-                </li>
-            }
-        </ul>
+                    <li>
+                        <a href="@url">
+                            @address.ToString()
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
 
     </div>
 </div>

@@ -483,7 +483,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest {Postcode = request.Postcode});
 
-            var addressViewModels = addresses.Addresses.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
+            var addressViewModels = addresses?.Addresses?.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
 
             var viewModel = new SelectOrganisationAddressViewModel
             {
