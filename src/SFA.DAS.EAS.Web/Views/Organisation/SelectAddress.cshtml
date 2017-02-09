@@ -11,38 +11,61 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        
-        @if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
-        {
-            <p>No addresses found for the postcode @(Model?.Data?.Postcode) </p>
-        }
-        else
-        {
-            <ul>
-                @foreach (var address in Model.Data.Addresses)
-                {
-                    var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+            @Html.AntiForgeryToken()
+            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
+                <label for="Postcode">
+                    <span class="form-label-bold">Postcode</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.PostcodeError))
                     {
-                        @Model.Data.OrganisationName,
-                        @Model.Data.OrganisationReferenceNumber,
-                        @Model.Data.OrganisationType,
-                        @Model.Data.PublicSectorDataSource,
-                        @Model.Data.OrganisationStatus
-                    });
+                        <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
+                    }
+                </label>
+                <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
+                       @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
+            </div>
+            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
+            <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />
+            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
+            <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
+            <input class="button" type="submit" value="Continue" />
+        </form> 
+        
+        @if (Model.Status == HttpStatusCode.OK)
+        {
+             if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
+             {
+                 <p>No addresses found for the postcode @(Model?.Data?.Postcode) </p>
+             }
+             else
+             {
+                 <ul>
+                     @foreach (var address in Model.Data.Addresses)
+                     {
+                         var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+                         {
+                             @Model.Data.OrganisationName,
+                             @Model.Data.OrganisationReferenceNumber,
+                             @Model.Data.OrganisationType,
+                             @Model.Data.PublicSectorDataSource,
+                             @Model.Data.OrganisationStatus
+                         });
 
-                    url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
-                    url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
-                    url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
-                    url += $"&Address.{nameof(address.County)}={address.County}";
-                    url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
+                         url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
+                         url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
+                         url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
+                         url += $"&Address.{nameof(address.County)}={address.County}";
+                         url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
 
-                    <li>
-                        <a href="@url">
-                            @address.ToString()
-                        </a>
-                    </li>
-                }
-            </ul>
+                         <li>
+                             <a href="@url">
+                                 @address.ToString()
+                             </a>
+                         </li>
+                     }
+                 </ul>
+             }
         }
 
     </div>

@@ -43,7 +43,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieService cookieService) : base(mediator)
+        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieService cookieService)
+            : base(mediator)
         {
             _mediator = mediator;
             _logger = logger;
@@ -57,21 +58,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
-	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-	            if (accountEntities.Entites.LegalEntityList.Any(x =>
+                if (accountEntities.Entites.LegalEntityList.Any(x =>
                     (!string.IsNullOrWhiteSpace(x.Code)
-                    && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
+                     && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
                 {
-	                var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-	                {
-	                    Data = new OrganisationDetailsViewModel(),
-	                    Status = HttpStatusCode.Conflict
-	                };
-	                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
-	                return errorResponse;
-	            }
-			}
+                    var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
+                    {
+                        Data = new OrganisationDetailsViewModel(),
+                        Status = HttpStatusCode.Conflict
+                    };
+                    errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
+                    return errorResponse;
+                }
+            }
 
             var response = await _mediator.SendAsync(new GetEmployerInformationRequest
             {
@@ -98,7 +99,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
-                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company must be active, under administration or in a voluntary arrangement";
+                errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] =
+                    "Company must be active, under administration or in a voluntary arrangement";
                 return errorResponse;
             }
 
@@ -114,7 +116,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Type = OrganisationType.CompaniesHouse,
                     ReferenceNumber = response.CompanyNumber,
                     Name = response.CompanyName,
-                    DateOfInception = response.DateOfIncorporation.Equals(DateTime.MinValue) ? (DateTime?)null : response.DateOfIncorporation,
+                    DateOfInception =
+                        response.DateOfIncorporation.Equals(DateTime.MinValue)
+                            ? (DateTime?) null
+                            : response.DateOfIncorporation,
                     Address = address,
                     Status = response.CompanyStatus
                 }
@@ -154,7 +159,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = x.Name,
                 Status = string.Empty,
                 Type = OrganisationType.PublicBodies,
-                PublicSectorDataSource = (short)x.Source
+                PublicSectorDataSource = (short) x.Source
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -167,9 +172,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         e => e.Name.Equals(viewModel.Name, StringComparison.CurrentCultureIgnoreCase));
                 }
 
-                
+
             }
-                
+
 
             var pagedResponse = new PagedResponse<OrganisationDetailsViewModel>
             {
@@ -193,24 +198,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCharityByRegistrationNumber(
             string registrationNumber, string hashedLegalEntityId, string userIdClaim)
         {
-		
-			if (!string.IsNullOrEmpty(hashedLegalEntityId))
-            {
-	            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-	            if (accountEntities.Entites.LegalEntityList.Any(
-	                x =>(!String.IsNullOrWhiteSpace(x.Code) && x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
-	                && x.Source == (short)OrganisationType.Charities))
-	            {
-	                var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-	                {
-	                    Data = new OrganisationDetailsViewModel(),
-	                    Status = HttpStatusCode.Conflict
-	                };
-	                conflictResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
-	                return conflictResponse;
-	            }
-			}
+            if (!string.IsNullOrEmpty(hashedLegalEntityId))
+            {
+                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+
+                if (accountEntities.Entites.LegalEntityList.Any(
+                    x =>
+                        (!String.IsNullOrWhiteSpace(x.Code) &&
+                         x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
+                        && x.Source == (short) OrganisationType.Charities))
+                {
+                    var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
+                    {
+                        Data = new OrganisationDetailsViewModel(),
+                        Status = HttpStatusCode.Conflict
+                    };
+                    conflictResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
+                    return conflictResponse;
+                }
+            }
 
             int charityRegistrationNumber;
             if (!int.TryParse(registrationNumber.Trim(), out charityRegistrationNumber))
@@ -259,7 +266,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.BadRequest
                 };
-                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity must have registered status";
+                notFoundResponse.Data.ErrorDictionary["CharityRegistrationNumber"] =
+                    "Charity must have registered status";
                 return notFoundResponse;
             }
 
@@ -288,7 +296,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = userRole.UserRole.Equals(Role.Owner) ? HttpStatusCode.OK : HttpStatusCode.Unauthorized
             };
         }
-        
+
         private async Task<GetAccountLegalEntitiesResponse> GetAccountLegalEntities(string hashedLegalEntityId,
             string userIdClaim)
         {
@@ -359,7 +367,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(
+            string hashedAccountId)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -372,7 +381,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(
+            OrganisationDetailsViewModel request)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -449,7 +459,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual OrchestratorResponse<AddOrganisationAddressViewModel> CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
+        public virtual OrchestratorResponse<AddOrganisationAddressViewModel>
+            CreateAddOrganisationAddressViewModelFromOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var result = new OrchestratorResponse<AddOrganisationAddressViewModel>
             {
@@ -465,7 +476,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
-            var cookie = (string)_cookieService.Get(context, CookieName);
+            var cookie = (string) _cookieService.Get(context, CookieName);
 
             if (string.IsNullOrEmpty(cookie))
                 return null;
@@ -479,15 +490,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService.Create(context, CookieName, json, 365);
         }
 
-        public async  Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(FindOrganisationAddressViewModel request)
+        public async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(
+            FindOrganisationAddressViewModel request)
         {
-            var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest {Postcode = request.Postcode});
-
-            var addressViewModels = addresses?.Addresses?.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
-
             var viewModel = new SelectOrganisationAddressViewModel
             {
-                Addresses = addressViewModels,
                 Postcode = request.Postcode,
                 OrganisationName = request.OrganisationName,
                 OrganisationDateOfInception = request.OrganisationDateOfInception,
@@ -498,11 +505,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 PublicSectorDataSource = request.PublicSectorDataSource
             };
 
-            return new OrchestratorResponse<SelectOrganisationAddressViewModel>
+            try
             {
-                Data = viewModel,
-                Status = HttpStatusCode.OK
-            };
+                var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest {Postcode = request.Postcode});
+
+                viewModel.Addresses = addresses?.Addresses?.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
+
+                return new OrchestratorResponse<SelectOrganisationAddressViewModel>
+                {
+                    Data = viewModel,
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                viewModel.ErrorDictionary = e.ErrorMessages;
+
+                return new OrchestratorResponse<SelectOrganisationAddressViewModel>
+                {
+                    Data = viewModel,
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e
+                };
+            }
         }
 
         private static string BuildAddressString(GetEmployerInformationResponse response)

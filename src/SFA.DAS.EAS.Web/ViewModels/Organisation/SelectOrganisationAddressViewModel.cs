@@ -6,6 +6,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
     {
         public string Postcode { get; set; }
 
+        public string PostcodeError => GetErrorMessage(nameof(Postcode));
+
         public ICollection<AddressViewModel> Addresses { get; set; }
     }
 }
