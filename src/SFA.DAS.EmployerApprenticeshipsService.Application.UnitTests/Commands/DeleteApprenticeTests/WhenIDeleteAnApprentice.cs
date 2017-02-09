@@ -46,9 +46,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             _commitmentsService.Verify(x => x.DeleteEmployerApprenticeship(It.Is<long>(l=> l==command.AccountId), It.Is<long>(l=>l == command.ApprenticeshipId)), Times.Once);
         }
 
-
         [Test]
-        public async Task ThenIShouldGetAInvalidRequestExceptionIfValidationFails()
+        public void ThenIShouldGetAInvalidRequestExceptionIfValidationFails()
         {
             //Arrange
             var command = new DeleteApprenticeshipCommand();
@@ -67,6 +66,5 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             //Act + Assert
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
         }
-
     }
 }
