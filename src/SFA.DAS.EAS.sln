@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A009A248-48A7-4CD5-BF80-8EBD092D6FD4}"
 	ProjectSection(SolutionItems) = preProject
 		Build.fsx = Build.fsx
+		CustomTargets.fsx = CustomTargets.fsx
+		DefaultTargets.fsx = DefaultTargets.fsx
 		RunBuild.bat = RunBuild.bat
 		VSTSConfig.ps1 = VSTSConfig.ps1
 	EndProjectSection
