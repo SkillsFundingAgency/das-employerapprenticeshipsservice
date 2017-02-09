@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
+using Newtonsoft.Json;
+
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -19,6 +22,8 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerCommitmentsController : BaseController
     {
         private readonly EmployerCommitmentsOrchestrator _employerCommitmentsOrchestrator;
+
+        private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
 
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
@@ -44,12 +49,53 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("cohorts")]
-        public async Task<ActionResult> Cohorts(string hashedAccountId)
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("YourCohorts")]
+        public async Task<ActionResult> YourCohorts(string hashedAccountId)
         {
-            var model = await _employerCommitmentsOrchestrator.GetAll(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("WaitingToBeSent")]
+        public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForApproval")]
+        public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("ReadyForReview")]
+        public async Task<ActionResult> ReadyForReview(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
+            return View("RequestList", model);
+        }
+
+        [HttpGet]
+        [Route("WithProvider")]
+        public async Task<ActionResult> WithProvider(string hashedAccountId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return View("RequestList", model);
         }
 
         [HttpGet]
@@ -279,27 +325,46 @@ namespace SFA.DAS.EAS.Web.Controllers
                     new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.SaveStatus });
             }
 
-            if (viewModel.SaveStatus.IsApproveWithoutSend())
+            if (viewModel.SaveStatus.IsFinalApproval())
             {
                 var userDisplayName = OwinWrapper.GetClaimValue(DasClaimTypes.DisplayName);
                 var userEmail = OwinWrapper.GetClaimValue(DasClaimTypes.Email);
                 var userId = OwinWrapper.GetClaimValue(@"sub");
-
                 await _employerCommitmentsOrchestrator.ApproveCommitment(viewModel.HashedAccountId, userId, userDisplayName, userEmail, viewModel.HashedCommitmentId, viewModel.SaveStatus);
+
+                return RedirectToAction("Approved",
+                    new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
-            return RedirectToAction("Cohorts", new { hashedAccountId = viewModel.HashedAccountId });
+            var flashmessage = new FlashMessageViewModel
+            {
+                Headline = "Details saved but not send",
+                Severity = FlashMessageSeverityLevel.Info
+            };
+
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            return RedirectToAction("YourCohorts", new { hashedAccountId = viewModel.HashedAccountId });
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        [Route("{hashedCommitmentId}/CohortApproved")]
+        public async Task<ActionResult> Approved(string hashedAccountId, string hashedCommitmentId)
         {
-            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
 
-            return View("SubmitCommitmentEntry", response);
+            var model = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(
+                hashedAccountId,
+                hashedCommitmentId,
+                OwinWrapper.GetClaimValue(@"sub"));
+
+            var currentStatusCohortAny = await _employerCommitmentsOrchestrator
+                .AnyCohortsForCurrentStatus(hashedAccountId, RequestStatus.ReadyForApproval);
+            model.Data.BackLink = currentStatusCohortAny
+                ? new LinkViewModel { Text = "Return to Approve cohorts", Url = Url.Action("ReadyForApproval", new { hashedAccountId }) }
+                : new LinkViewModel { Text = "Return to Your cohorts", Url = Url.Action("YourCohorts", new { hashedAccountId }) };
+
+            return View(model);
         }
+
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
@@ -322,7 +387,18 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             await _employerCommitmentsOrchestrator.SubmitCommitment(model, userId, userDisplayName, userEmail);
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, message = model.Message });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
+        }
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("Submit")]
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
+
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -336,27 +412,59 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var response = await _employerCommitmentsOrchestrator.CreateProviderAssignedCommitment(model, userId, userDisplayName, userEmail);
 
-            return RedirectToAction("AcknowledgementNew", new { response.Data, providerName = model.ProviderName, legalEntityName = model.LegalEntityName, message = model.Message });
+            return RedirectToAction("AcknowledgementNew", new { hashedAccountId = model.HashedAccountId, hashedCommitmentId = response.Data });
         }
 
         [HttpGet]
-        [Route("acknowledgement")]
-        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId, string providerName, string legalEntityName, string message)
+        [Route("{hashedCommitmentId}/NewCohortAcknowledgement")]
+        public async Task<ActionResult> AcknowledgementNew(string hashedAccountId, string hashedCommitmentId)
         {
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForNewCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, providerName, legalEntityName, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
-            // TODO: LWA - Is message in querystring a security issue?
             return View("Acknowledgement", response);
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/acknowledgement")]
-        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, string message)
+        [Route("{hashedCommitmentId}/Acknowledgement")]
+        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
         {
-            // TODO: LWA - Is message in querystring a security issue?
-            var response = await _employerCommitmentsOrchestrator.GetAcknowledgementModelForExistingCommitment(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, message);
+            var response = await _employerCommitmentsOrchestrator
+                .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+            var status = GetSessionRequestStatus();
+            var returnToCohortsList = 
+                   status != RequestStatus.None 
+                && await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(hashedAccountId, status);
+
+            var returnUrl = GetReturnUrl(status, hashedAccountId);
+            response.Data.BackLink = string.IsNullOrEmpty(returnUrl) || !returnToCohortsList
+                ? new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" }
+                : new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" };
 
             return View("Acknowledgement", response);
+        }
+
+        private RequestStatus GetSessionRequestStatus()
+        {
+            var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
+            Session[LastCohortPageSessionKey] = null;
+            return status;
+        }
+
+        private string GetReturnUrl(RequestStatus status, string hashedAccountId)
+        {
+            switch (status)
+            {
+                case RequestStatus.NewRequest:
+                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { hashedAccountId });
+                default:
+                    return string.Empty;
+            }
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
