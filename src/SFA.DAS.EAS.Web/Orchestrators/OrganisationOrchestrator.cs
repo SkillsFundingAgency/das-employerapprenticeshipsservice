@@ -422,7 +422,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Name = model.OrganisationName,
                         Address = response.Address,
                         DateOfInception = model.OrganisationDateOfInception,
-                        ReferenceNumber = model.OrganisationReferenceNumber,
+                        ReferenceNumber = model.OrganisationReferenceNumber ?? string.Empty,
                         Type = model.OrganisationType,
                         PublicSectorDataSource = model.PublicSectorDataSource,
                         Status = model.OrganisationStatus,

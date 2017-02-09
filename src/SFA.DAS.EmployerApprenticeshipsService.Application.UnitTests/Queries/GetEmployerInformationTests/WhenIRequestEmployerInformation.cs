@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
         {
             const string id = "QWERTYUIOP";
 
-            _employerService.Setup(x => x.GetInformation(id)).ReturnsAsync(null);
+            _employerService.Setup(x => x.GetInformation(id)).ReturnsAsync(new EmployerInformation());
 
             var response = await _handler.Handle(new GetEmployerInformationRequest
             {

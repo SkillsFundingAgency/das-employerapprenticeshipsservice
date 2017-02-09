@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
     public class WhenICallTheHmrcServiceForAuthentication
     {
         private HmrcService _hmrcService;
-        private Mock<ILogger> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedBaseUrl = "http://hmrcbase.gov.uk/";
         private string ExpectedClientId = "654321";
@@ -39,15 +38,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     ClientSecret = ExpectedClientSecret
                 }
             };
-
-            _logger = new Mock<ILogger>();
+            
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
 
             _totpService = new Mock<ITotpService>();
             _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
 
-            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object, _totpService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _totpService.Object);
         }
 
         [Test]

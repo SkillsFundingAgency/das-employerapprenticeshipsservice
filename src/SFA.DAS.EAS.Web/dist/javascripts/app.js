@@ -116,3 +116,10 @@ $('ul#global-nav-links').collapsableNav();
 
 var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
 var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
+
+
+// cohorts bingo balls - clickable block
+$(".clickable").on('click touchstart', (function () {
+    window.location = $(this).find("a").attr("href");
+    return false;
+}));

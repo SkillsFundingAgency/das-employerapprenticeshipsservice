@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Validators
             RuleFor(r => r.DateOfBirth)
                 .Must(m => m?.DateTime != null);
 
-            RuleFor(r => r.NINumber).NotEmpty();
+            //RuleFor(r => r.NINumber).NotEmpty();
         }
     }
 }

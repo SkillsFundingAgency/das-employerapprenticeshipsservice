@@ -192,12 +192,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.20.0.21715, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.20.0.21715\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.19.0.21414, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.19.0.21414\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.20.0.21715, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.20.0.21715\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -401,6 +401,8 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
+    <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressModel.cs" />
@@ -410,7 +412,6 @@
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\CommitmentInformViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListItemViewModel.cs" />
-    <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
@@ -825,7 +826,6 @@
     <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerCommitments\Cohorts.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
     <Content Include="Views\EmployerCommitments\Details.cshtml" />
     <Content Include="Views\EmployerTeam\Review.cshtml" />
@@ -948,6 +948,9 @@
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
+    <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
+    <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
+    <Content Include="Views\EmployerCommitments\Approved.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
@@ -968,7 +971,9 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

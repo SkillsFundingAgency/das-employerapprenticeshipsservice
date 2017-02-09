@@ -35,7 +35,7 @@ select mainUpdate.* from
 	(
 	select 
 			x.AccountId,
-			GetDate() as DateCreated,
+			y.CreatedDate as DateCreated,
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,

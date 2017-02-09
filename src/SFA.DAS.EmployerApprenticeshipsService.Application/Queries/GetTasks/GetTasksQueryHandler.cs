@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Domain.Interfaces;
+
 using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTasks
 {
     public class GetTasksQueryHandler : IAsyncRequestHandler<GetTasksQueryRequest, GetTasksQueryResponse>
     {
-        private readonly IHashingService _hashingService;
         private readonly ITasksApi _tasksApi;
 
-        public GetTasksQueryHandler(ITasksApi tasksApi, IHashingService hashingService)
+        public GetTasksQueryHandler(ITasksApi tasksApi)
         {
             if (tasksApi == null)
                 throw new ArgumentNullException(nameof(tasksApi));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
 
             _tasksApi = tasksApi;
-            _hashingService = hashingService;
         }
 
         public async Task<GetTasksQueryResponse> Handle(GetTasksQueryRequest message)
         {
-            var assignee = $"EMPLOYER-{message.AccountId}";
+            var assigneePrfix = message.AssigneeEmployer ? "EMPLOYER" : "PROVIDER";
+            var assignee = $"{assigneePrfix}-{message.AccountId}";
 
             var tasks = await _tasksApi.GetTasks(assignee);
 
