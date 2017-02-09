@@ -1389,9 +1389,7 @@ textarea {
   line-height: 1.3157894737;
   width: 100%;
   padding: 5px 4px 4px;
-  color: inherit;
-  background-color: transparent;
-  border: 2px solid;
+  border: 2px solid #0b0c0c;
   width: 50%;
 }
 
@@ -3164,6 +3162,15 @@ span.helpText {
   margin-top: 1.875em;
 }
 
+#apprentice-details #empty-alert-top {
+  margin-top: 30px;
+}
+
+#apprentice-details .finishEditingBtn {
+  float: none;
+  margin-bottom: 20px;
+}
+
 .form-group #StartDate_Month,
 .form-group #EndDate_Month {
   width: 40px;
@@ -3177,6 +3184,38 @@ span.helpText {
 .tableResponsive td {
   font-size: 16px;
 }
+#review-cohorts {
+  color: #fff;
+  margin: 30px 0;
+}
+
+#review-cohorts .all-apps {
+  background: #2e3391;
+  padding: 20px;
+  margin: 20px 0;
+  margin: auto;
+  width: 31%;
+}
+
+#review-cohorts .incomplete-apps {
+  background: #8e2a8d;
+  padding: 20px;
+  margin-bottom: 20px;
+  margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
+}
+
+#review-cohorts .total-cost {
+  background: #d03a84;
+  padding: 20px;
+  margin-bottom: 30px;
+  margin: auto;
+  margin-left: 3.3333%;
+  width: 31%;
+}
+
+
 
 .js-enabled .clickable {
   cursor: pointer;
@@ -3253,3 +3292,4 @@ span.helpText {
     word-wrap: break-word;
   }
 }
+

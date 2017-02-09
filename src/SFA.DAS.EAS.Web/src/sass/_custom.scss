@@ -37,20 +37,16 @@
     .form-label-bold{
 	    color:$error-colour;
     }
-
 }
 
-.cant-approve{ 
-    
+.cant-approve{     
     .panel{
 	    border-color:$error-colour;
-	    color:$error-colour;
-        
+	    color:$error-colour;     
         p{
             font-weight:bold;
             font-size:19px;
         }
-
         }
 }
 
@@ -59,26 +55,64 @@
         margin-top:4.5em;
         @include media(tablet) {margin-top:1.875em;}
     }
-
+    #empty-alert-top{margin-top:30px;}
+    .finishEditingBtn{
+        float:none;
+        margin-bottom:20px;
+    }
 }
-
 
 .form-group {
     #StartDate_Month,
     #EndDate_Month{
         width:40px;
-    }
-    
+    }   
     #StartDate_Year,
     #EndDate_Year{
         width:60px;
     }
 }
-
 .tableResponsive{
-     td{font-size:16px;}
-    
+     td{font-size:16px;}   
 }
+
+//review cohorts page styles
+#review-cohorts{
+    color:#fff;
+    margin:30px 0;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;       
+         @include media(tablet) {
+            margin:auto;
+            width:31%;
+            
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;     
+        @include media(tablet) {
+            margin:auto;            
+            margin-left:3.3333%;
+            width:31%;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;      
+        @include media(tablet) {
+            margin:auto;
+            margin-left:3.3333%;
+             width:31%;
+            }
+    }
+
+}
+
 
 //cohors summary block styles
 .js-enabled{

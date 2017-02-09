@@ -6,6 +6,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public string ApprenticeName { get; set; }
 
+        public string TrainingCode { get; set; }
+
         public string TrainingName { get; set; }
 
         public DateTime? StartDate { get; set; }
