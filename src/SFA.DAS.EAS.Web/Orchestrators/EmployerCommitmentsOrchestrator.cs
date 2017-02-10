@@ -21,8 +21,10 @@ using SFA.DAS.EAS.Web.Exceptions;
 using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
+using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
@@ -760,6 +762,58 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                        }
                                    };
                     }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                await AssertCommitmentStatus(commitmentId, accountId);
+
+                return new OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>
+                {
+                    Data = new DeleteApprenticeshipConfirmationViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        HashedApprenticeshipId = hashedApprenticeshipId,
+                        ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                        DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
+        {
+            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
         }
 
         private static string CreateReference()

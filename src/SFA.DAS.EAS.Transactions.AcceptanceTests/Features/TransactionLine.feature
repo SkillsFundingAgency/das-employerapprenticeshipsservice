@@ -20,13 +20,14 @@ Scenario: Transaction History levy declarations with multiple schemes
 		| 123/ABC     | 1100       | 16-17        | 12            | 1                |
 	Then the balance should be 2310 on the screen
 
-Scenario: Transaction History levy declarations over Payroll_year
-	Given I have an account
-	When I have the following submissions
-		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
-		| 323/ABC     | 1000       | 16-17        | 12            | 1                |
-		| 323/ABC     | 100        | 17-18        | 01            | 1                |
-	Then the balance should be 1210 on the screen
+@explicit
+#Scenario: Transaction History levy declarations over Payroll_year
+#	Given I have an account
+#	When I have the following submissions
+#		| Paye_scheme | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction |
+#		| 323/ABC     | 1000       | 16-17        | 12            | 1                |
+#		| 323/ABC     | 100        | 17-18        | 01            | 1                |
+#	Then the balance should be 1210 on the screen
 
 Scenario: Transaction History levy declarations and Payments
 	Given I have an account
