@@ -2,23 +2,23 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
 {
     [TestFixture]
     public class WhenIDeleteAnApprentice
     {
-        private Mock<ICommitmentsService> _commitmentsService;
+        private Mock<ICommitmentsApi> _commitmentsService;
         private Mock<IValidator<DeleteApprenticeshipCommand>> _validator;
         private DeleteApprenticeshipCommandHandler _handler;
 
         [SetUp]
         public void Arrange()
         {
-            _commitmentsService = new Mock<ICommitmentsService>();
+            _commitmentsService = new Mock<ICommitmentsApi>();
             _commitmentsService.Setup(x => x.DeleteEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
                 .Returns(Task.FromResult<object>(null));
 

@@ -200,7 +200,6 @@
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\ICache.cs" />
-    <Compile Include="Interfaces\ICommitmentsService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IEventPublisher.cs" />
