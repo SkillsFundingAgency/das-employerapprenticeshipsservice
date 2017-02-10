@@ -95,10 +95,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         public void ThenTheCodeIsDefaultedToEmptyStringIfNull()
         {
             //Arrange
-            _model.OrganisationReferenceNumber = null;
+            _viewModel.OrganisationReferenceNumber = null;
 
             //Act
-            var actual = _orchestrator.AddOrganisationAddress(_model);
+            var actual = _orchestrator.AddOrganisationAddress(_viewModel);
 
             //Assert
             Assert.AreEqual("",actual.Data.ReferenceNumber);

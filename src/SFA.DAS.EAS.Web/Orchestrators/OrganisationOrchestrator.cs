@@ -434,10 +434,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Name = viewModel.OrganisationName,
                         Address = response.Address,
                         DateOfInception = viewModel.OrganisationDateOfInception,
-                        ReferenceNumber = viewModel.OrganisationReferenceNumber,
+                        ReferenceNumber = viewModel.OrganisationReferenceNumber ?? string.Empty,
                         Type = viewModel.OrganisationType,
                         PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                        Status = viewModel.OrganisationStatus
+                        Status = viewModel.OrganisationStatus,
                         Sector = viewModel.Sector
                     }
                 };
