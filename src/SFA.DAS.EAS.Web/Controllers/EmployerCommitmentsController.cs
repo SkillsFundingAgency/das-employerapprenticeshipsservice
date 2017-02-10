@@ -223,6 +223,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+                model.FlashMessage = flashMessage;
+            }
+
             ViewBag.HashedAccountId = hashedAccountId;
 
             return View(model);
@@ -471,6 +477,50 @@ namespace SFA.DAS.EAS.Web.Controllers
                 default:
                     return string.Empty;
             }
+        }
+
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
+        public async Task<ActionResult> DeleteApprenticeshipConfirmation(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
+        public async Task<ActionResult> DeleteApprenticeshipConfirmation(DeleteApprenticeshipConfirmationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse =
+                    await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(viewModel.HashedAccountId,
+                        OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId,
+                        viewModel.HashedApprenticeshipId);
+
+                return View(errorResponse);
+            }
+
+            if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
+            {
+                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel);
+
+                var flashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Okay,
+                    Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted")
+                };
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
+
+                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId});
+            }
+
+            return RedirectToAction("EditApprenticeship",
+                new {viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId});
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)

@@ -415,6 +415,7 @@
     <Compile Include="ViewModels\CommitmentViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\ConfirmProviderViewModel.cs" />
+    <Compile Include="ViewModels\DeleteApprenticeshipConfirmationViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ApprenticeshipDetailsViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ManageApprenticeshipsViewModel.cs" />
     <Compile Include="ViewModels\PublicSectorOrganisationSearchResultsViewModel.cs" />
@@ -485,6 +486,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
+    <Compile Include="Validators\DeleteApprenticeshipConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
@@ -524,6 +526,7 @@
     <Content Include="dist\images\gov.uk_logotype_crown.svg" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert.png" />
     <Content Include="dist\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="dist\images\icon-green-tick.png" />
     <Content Include="dist\images\icon-important-2x.png" />
     <Content Include="dist\images\icon-important.png" />
     <Content Include="dist\images\icon-pointer-2x.png" />
@@ -949,6 +952,7 @@
     <Content Include="Views\EmployerManageApprentices\ListAll.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Details.cshtml" />
     <Content Include="Views\EmployerCommitments\YourCohorts.cshtml" />
+    <Content Include="Views\EmployerCommitments\DeleteApprenticeshipConfirmation.cshtml" />
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
   </ItemGroup>
@@ -971,9 +975,7 @@
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
