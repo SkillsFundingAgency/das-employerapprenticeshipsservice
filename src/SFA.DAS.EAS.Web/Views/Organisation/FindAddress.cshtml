@@ -7,10 +7,6 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Find organisation address</h1>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-full">
         <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
             @Html.AntiForgeryToken()
             <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "error" : "")">
@@ -29,7 +25,7 @@
             <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
             <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
-            <input class="button" type="submit" value="Continue" />
+            <input class="button" type="submit" value="Find UK address" />
         </form> 
     </div>
 </div>
