@@ -1,0 +1,90 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.DeleteCommitmentViewModel>
+
+@{
+    ViewBag.Title = "Confirm Delete Cohort";
+    ViewBag.PageId = "confirm-delete-cohort";
+}
+
+<div class="grid-row" id="confirm-delete">
+    <div class="column-two-thirds">
+
+        <form action="@Url.Action("DeleteCohort")" method="POST">
+            @Html.AntiForgeryToken()
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+
+            <h1 class="heading-xlarge">Confirm cohort deletion</h1>
+            <h2 class="heading-large">You are about to delete the following cohort:</h2>
+
+            <table>
+                <tr>
+                    <th>Employer</th>
+                    <td>@Model.Data.Provider</td>
+                </tr>
+                <tr>
+                    <th>Cohort reference</th>
+                    <td>@Model.Data.HashedCommitmentId</td>
+                </tr>
+                <tr>
+                    <th>Number of apprentices</th>
+                    <td>@Model.Data.NumberOfApprenticeships</td>
+                </tr>
+                <tr>
+                    <th>Apprenticeships</th>
+                    @if (!Model.Data.ProgramSummaries.Any())
+                    {
+                        <td>0</td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Model.Data.ProgramSummaries.First()
+                        </td>
+                    }
+                </tr>
+                @foreach (var programSummary in Model.Data.ProgramSummaries.Skip(1))
+                {
+                    <tr>
+                        <th></th>
+                        <td>@programSummary</td>
+                    </tr>
+
+                }
+            </table>
+
+            <h2 class="heading-medium">
+                Are you sure you want to delete this entire cohort and all the apprentices in it?
+            </h2>
+
+        <div class="form-error-group form-group @Html.AddClassIfPropertyInError("DeleteConfirmed", "error")">
+                <div>
+                    @Html.ValidationMessageFor(m => m.Data.DeleteConfirmed, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Data.DeleteConfirmed) })
+                </div>
+                <fieldset>
+                    <legend class="visually-hidden">
+                        Are you sure you want to delete this entire cohort and all the apprentices in it?
+                    </legend>
+
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.DeleteConfirmed)-True">
+                        @Html.RadioButton("DeleteConfirmed", true, Model.Data.DeleteConfirmed == false, new { @id = Html.IdFor(m => m.Data.DeleteConfirmed) + "-True" })
+                        Yes, delete cohort
+                    </label>
+                    <label class="block-label selection-button-radio" for="@Html.IdFor(m => m.Data.DeleteConfirmed)-False">
+                        @Html.RadioButton("DeleteConfirmed", false, Model.Data.DeleteConfirmed == true, new { @id = Html.IdFor(m => m.Data.DeleteConfirmed) + "-False" })
+                        No, don't delete cohort
+                    </label>
+                </fieldset>
+            </div>
+            <button type="submit" class="button">Continue</button>
+        </form>
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", "EmployerCommitments", new { Model.Data.HashedAccountId, Model.Data.HashedCommitmentId })" aria-label="Back to Cohort" class="back-link">
+            Back to Cohort
+        </a>
+    </div>
+}

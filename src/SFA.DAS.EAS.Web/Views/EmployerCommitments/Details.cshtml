@@ -181,6 +181,8 @@
     </div>
 </div>
 
+<a class="button delete-button" href="@Url.Action("DeleteCohort")" aria-label="Cancel">Delete</a>
+
 @functions
 {
     public string FormatCost(decimal? cost)
@@ -206,6 +208,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
+        <a href="@Model.Data.BackLinkUrl" aria-label="Back" class="back-link">Back</a>
     </div>
 }

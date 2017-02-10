@@ -728,6 +728,39 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<DeleteCommitmentViewModel>> GetDeleteCommitmentModel(string hashedAccountId, string hashedCommitmentId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                        {
+                            AccountId = accountId,
+                            CommitmentId = commitmentId
+                        });
+
+                        Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
+                        var programSummary = commitmentData.Commitment.Apprenticeships
+                                .GroupBy(m => m.TrainingName) 
+                                .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
+                                .ToList();
+
+                        return new OrchestratorResponse<DeleteCommitmentViewModel>
+                                   {
+                                       Data = new DeleteCommitmentViewModel
+                                                  {
+                                                       HashedAccountId = hashedAccountId,
+                                                       HashedCommitmentId = hashedCommitmentId,
+                                                       Provider = commitmentData.Commitment.ProviderName,
+                                                       NumberOfApprenticeships = commitmentData.Commitment.Apprenticeships.Count,
+                                                       ProgramSummaries = programSummary
+                                       }
+                                   };
+                    }, hashedAccountId, externalUserId);
+        }
 
         private static string CreateReference()
         {

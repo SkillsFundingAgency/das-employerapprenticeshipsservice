@@ -222,10 +222,57 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
             var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
-
+            model.Data.BackLinkUrl = GetReturnToListUrl(hashedAccountId);
             ViewBag.HashedAccountId = hashedAccountId;
 
             return View(model);
+        }
+
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(string hashedAccountId, string hashedCommitmentId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetDeleteCommitmentModel(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var model = await _employerCommitmentsOrchestrator
+                    .GetDeleteCommitmentModel(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(model);
+            }
+
+            if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
+            {
+                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId } );
+            }
+
+            // ToDo: Delete
+
+            // ToDo: Message styling and message on list page?
+            var flashmessage = new FlashMessageViewModel
+            {
+                Headline = "Cohort deleted",
+                Severity = FlashMessageSeverityLevel.Success
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+            var anyCohortWithCurrentStatus = 
+                await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetSessionRequestStatus());
+
+            if(!anyCohortWithCurrentStatus)
+                return RedirectToAction("YourCohorts", new { viewModel.HashedAccountId });
+
+            return Redirect(GetReturnToListUrl(viewModel.HashedAccountId));
+
         }
 
         [HttpGet]
@@ -454,7 +501,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private RequestStatus GetSessionRequestStatus()
         {
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
-            Session[LastCohortPageSessionKey] = null;
             return status;
         }
 
@@ -495,6 +541,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             response.Data.Apprenticeship = apprenticeship;
 
             return View("EditApprenticeshipEntry", response);
+        }
+
+        private string GetReturnToListUrl(string hashedAccountId)
+        {
+            switch (GetSessionRequestStatus())
+            {
+                case RequestStatus.WithProviderForApproval:
+                case RequestStatus.SentForReview:
+                    return Url.Action("WithProvider", new { hashedAccountId });
+                case RequestStatus.NewRequest:
+                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { hashedAccountId });
+                default:
+                    return Url.Action("YourCohorts", new { hashedAccountId });
+            }
         }
 
         protected override void OnException(ExceptionContext filterContext)
