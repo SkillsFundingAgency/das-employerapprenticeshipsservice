@@ -6,7 +6,8 @@
 	@AccountId BIGINT,
 	@LevyAllowanceForYear DECIMAL(18, 4),
 	@PayrollYear NVARCHAR(10),
-	@PayrollMonth TINYINT
+	@PayrollMonth TINYINT,
+	@CreatedDate DATETIME
 AS
 	
 
@@ -19,7 +20,8 @@ INSERT INTO [employer_financial].[LevyDeclaration]
 		AccountId,
 		LevyAllowanceForYear,
 		PayrollYear,
-		PayrollMonth
+		PayrollMonth,
+		CreatedDate
 	) 
 VALUES 
 	(
@@ -30,5 +32,6 @@ VALUES
 		@AccountId,
 		@LevyAllowanceForYear,
 		@PayrollYear,
-		@PayrollMonth
+		@PayrollMonth,
+		@CreatedDate
 	);

@@ -47,5 +47,27 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 
             Assert.IsFalse(result.IsValid());
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void WhenUserDisplayNameIsNotSetIsInvalid(string value)
+        {
+            _validCommand.UserDisplayName = value;
+            var result = _validator.Validate(_validCommand);
+
+            Assert.IsFalse(result.IsValid());
+        }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        public void WhenUserEmailAddressIsNotSetIsInvalid(string value)
+        {
+            _validCommand.UserEmailAddress = value;
+            var result = _validator.Validate(_validCommand);
+
+            Assert.IsFalse(result.IsValid());
+        }
     }
 }

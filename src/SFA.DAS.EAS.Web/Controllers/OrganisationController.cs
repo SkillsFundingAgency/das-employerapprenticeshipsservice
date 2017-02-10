@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
     public class OrganisationController : BaseController
     {
@@ -254,7 +255,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit, string sector)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -269,7 +270,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = (short)organisationType,
-                PublicSectorDataSource = publicSectorDataSource
+                PublicSectorDataSource = publicSectorDataSource,
+                Sector = sector
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

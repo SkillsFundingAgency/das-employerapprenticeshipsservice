@@ -37,20 +37,16 @@
     .form-label-bold{
 	    color:$error-colour;
     }
-
 }
 
-.cant-approve{ 
-    
+.cant-approve{     
     .panel{
 	    border-color:$error-colour;
-	    color:$error-colour;
-        
+	    color:$error-colour;     
         p{
             font-weight:bold;
             font-size:19px;
         }
-
         }
 }
 
@@ -59,23 +55,158 @@
         margin-top:4.5em;
         @include media(tablet) {margin-top:1.875em;}
     }
-
+    #empty-alert-top{margin-top:30px;}
+    .finishEditingBtn{
+        float:none;
+        margin-bottom:20px;
+    }
 }
-
 
 .form-group {
     #StartDate_Month,
     #EndDate_Month{
         width:40px;
-    }
-    
+    }   
     #StartDate_Year,
     #EndDate_Year{
         width:60px;
     }
 }
-
 .tableResponsive{
-     td{font-size:16px;}
+     td{font-size:16px;}   
+}
+
+//review cohorts page styles
+#review-cohorts{
+    color:#fff;
+    margin:30px 0;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;       
+         @include media(tablet) {
+            margin:auto;
+            width:31%;
+            
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;     
+        @include media(tablet) {
+            margin:auto;            
+            margin-left:3.3333%;
+            width:31%;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;      
+        @include media(tablet) {
+            margin:auto;
+            margin-left:3.3333%;
+             width:31%;
+            }
+    }
+
+}
+
+
+//cohors summary block styles
+.js-enabled{
+    .clickable{cursor:pointer;}
+}
+#cohorts-landing-page{
+  .bingo-background{
+            background:#2e358b;
+            color:#fff; 
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            
+              @include media(tablet) {
+                    min-height:160px;
+                    width:48%;
+                    padding: 0 15px;
+              }
+              h2{margin-top:20px;
+                 a{
+                     text-decoration:none;
+                     color:#fff;
+                 }
+              }
+              .heading-small{margin-bottom:20px;}
+        }
+ 
+  .block-one, .block-two{
+       @include media(tablet) {
+            margin-bottom:30px;
+            }
+  }
+
+  .block-one,.block-three{
+       @include media(tablet) {
+      margin-right:2%;
+      }
+  }
+  .block-two, .block-four{
+     @include media(tablet) {
+      margin-left:2%;
+      }
+  }
+}
+
+
+
     
+//all mobile media query breakpoints
+//==================================
+@media only screen and (max-device-width: 640px),
+only screen and (max-device-width: 667px),
+only screen and (max-width: 480px) {  
+.manage-all-apprentices{
+  td:nth-of-type(1):before {
+        content: "Name";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Date of birth";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Satus";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+    }
+
+.to-be-sent-list{
+     td:nth-of-type(1):before {
+        content: "Employer";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Cohort reference";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Last message";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+
+
+
+}
+
+
 }

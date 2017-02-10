@@ -75,7 +75,7 @@
                     </td>
                 </tr>
             </table>
-            <form method="POST" action="@Url.Action("LegalAgreement", "EmployerAccount")">
+            <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <button type="submit" class="button" id="continue">These details are correct</button>

@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Web
+﻿@using System.Text.RegularExpressions
+@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels
 
@@ -11,10 +12,30 @@
     
 <div class="grid-row">
     <div class="column-full">
-        <h1 class="heading-xlarge">Add apprentices</h1>
+        <h1 class="heading-xlarge">Review your cohort</h1>
     </div>
 </div>
-  
+
+<div class="grid-row" id="review-cohorts">
+    <div class="column-one-third all-apps">
+        <div class="">
+            <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count</h2>
+            <p class="heading-small">@PluraliseApprentice(Model.Data.Apprenticeships.Count)</p>
+        </div>
+    </div>
+    <div class="column-one-third incomplete-apps">
+        <div class="">
+            <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count(x => !x.CanBeApproved)</h2>
+            <p class="heading-small">@PluraliseIncompleteRecords(Model.Data.Apprenticeships.Count(x => !x.CanBeApproved))</p>
+        </div>
+    </div>
+    <div class="column-one-third total-cost">
+        <div class="">
+            <h2 class="bold-xlarge">&pound;@Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0")</h2>
+            <p class="heading-small">Total cost</p>
+        </div>
+    </div>
+</div>
 
 <div class="grid-row">
     <div class="column-one-half employer-details">
@@ -24,7 +45,7 @@
 
        
     <div class="column-one-half employer-details">
-            <p class="strong">Instructions:</p>
+            <p class="strong">Note:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
@@ -39,9 +60,10 @@
             <div class="column-full">
                 <div class="emptyStateButton">
                     <hr class="hr-top">
-                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
                     <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
-                    <hr class="hr-bottom">
+                    <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
+                    
+                    @*<hr class="hr-bottom">*@
                 </div>
             </div>
         </div>
@@ -55,7 +77,23 @@
 
                 return $"{apprenticeships.Count} Apprentices";
             }
+
+            public string PluraliseApprentice(int count)
+            {
+                return count == 1 ? "Apprentice" : "Apprentices";
+            }
+
+            public string PluraliseIncompleteRecords(int count)
+            {
+                return count == 1 ? "Incomplete record" : "Incomplete records";
+            }
+
+            private string GetClickableClass(int requestsCount)
+            {
+                return requestsCount > 0 ? "clickable" : "";
+            }
         }
+
 
         @if (!Model.Data.HasApprenticeships)
         {
@@ -70,53 +108,74 @@
         }
         else
         {
+
             <div class="grid-row">
                 <div class="column-full">
-                    <p class="heading-medium apprentice-count-heading">@GetApprenticesCountText(Model.Data.Apprenticeships)</p>
-                    <table class="tableResponsive viewCommitment">
-                        <thead>
-                            <tr>
-                                <th scope="col">Apprentice</th>
-                                <th scope="col">Training course</th>
-                                <th scope="col">Training dates</th>
-                                <th scope="col" colspan="2">Cost</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var apprenticeship in Model.Data.Apprenticeships)
+                    @foreach (var trainingGroup in Model.Data.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
+                    {
+                        var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
+                        var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
+                        var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
+
+                        <div class="group-header">
+
+                            <p class="heading-medium">@groupTitle</p>
+                            @if (!String.IsNullOrEmpty(trainingCode))
                             {
-                                <tr>
-                                    <td>
-                                        @GetValueOrDefault(apprenticeship.ApprenticeName)
-                                    </td>
-                                    <td>
-                                        @GetValueOrDefault(apprenticeship.TrainingName)
-                                    </td>
-                                    <td>
-                                        @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
-                                        {
-                                            <span>
-                                                @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span>&ndash;</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        @GetValueOrDefault(FormatCost(apprenticeship.Cost))
-                                    </td>
-                                    <td>
-                                        <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit details</a>
-                                    </td>
-                                </tr>
+                                <p>Training code: @trainingCode</p>
                             }
-                        </tbody>
-                    </table>
+
+                        </div>
+
+                        <table class="tableResponsive viewCommitment">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Apprentice</th>
+                                    <th scope="col">Training course</th>
+                                    <th scope="col">Training dates</th>
+                                    <th scope="col" colspan="2">Cost</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var apprenticeship in trainingGroup.OrderBy(a => a.CanBeApproved))
+                                {
+                                    <tr>
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.ApprenticeName)
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(apprenticeship.TrainingName)
+                                        </td>
+                                        <td>
+                                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                            {
+                                                <span>
+                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="missing">&ndash;</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    }
+
                 </div>
             </div>
+
         }
 
     </div>
@@ -140,9 +199,10 @@
     }
     else
     {
-        <span>@Html.Raw("&ndash;")</span>
+        <span class="missing">@Html.Raw("&ndash;")</span>
     }
 }
+
 
 @section breadcrumb {
     <div class="breadcrumbs">

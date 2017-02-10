@@ -159,7 +159,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Name = x.Name,
                 Status = string.Empty,
                 Type = OrganisationType.PublicBodies,
-                PublicSectorDataSource = (short) x.Source
+                PublicSectorDataSource = (short)x.Source,
+                Sector = x.Sector
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -332,7 +333,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Status = EmployerAgreementStatus.Pending,
                             TemplateRef = response.Template.Ref,
                             TemplateText = response.Template.Text,
-                            LegalEntityStatus = request.LegalEntityStatus
+                            LegalEntityStatus = request.LegalEntityStatus,
+                            Sector = request.Sector
                         }
                     },
                     Status = HttpStatusCode.BadRequest
@@ -350,7 +352,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     DateOfIncorporation = request.IncorporatedDate,
                     CompanyStatus = request.LegalEntityStatus,
                     Source = request.Source,
-                    PublicSectorDataSource = request.PublicSectorDataSource
+                    PublicSectorDataSource = request.PublicSectorDataSource,
+                    Sector = request.Sector
                 },
                 SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
                 SignedDate = request.SignedDate,
@@ -435,6 +438,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Type = viewModel.OrganisationType,
                         PublicSectorDataSource = viewModel.PublicSectorDataSource,
                         Status = viewModel.OrganisationStatus
+                        Sector = viewModel.Sector
                     }
                 };
             }

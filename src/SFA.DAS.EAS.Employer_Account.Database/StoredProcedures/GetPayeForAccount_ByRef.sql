@@ -2,7 +2,7 @@
 	@HashedAccountId NVARCHAR(100),
 	@Ref NVARCHAR(16)
 AS
-Select 
+Select TOP 1
 	paye.Ref,
     paye.Name,
 	ah.AddedDate,
@@ -11,3 +11,4 @@ from employer_account.Paye paye
 INNER JOIN employer_account.AccountHistory ah ON ah.PayeRef = paye.Ref
 INNER JOIN employer_account.account a ON a.Id = ah.AccountId
 WHERE a.HashedId = @HashedAccountId AND paye.Ref = @Ref
+ORDER BY ah.Id DESC

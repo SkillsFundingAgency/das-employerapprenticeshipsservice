@@ -63,8 +63,8 @@ namespace SFA.DAS.EAS.Web
 
             var urlHelper = new UrlHelper();
 
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/Home/HandlePasswordChanged")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/Home/HandleEmailChanged")}";
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/service/password/change")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
 
             app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
             {

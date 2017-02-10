@@ -138,8 +138,8 @@
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.20127, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.20127\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.21673, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.21673\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Simonbu11.Otp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -220,7 +220,6 @@
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\EventPublisher.cs" />
-    <Compile Include="Services\ManagedCompanyLookupService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\HashingService.cs" />

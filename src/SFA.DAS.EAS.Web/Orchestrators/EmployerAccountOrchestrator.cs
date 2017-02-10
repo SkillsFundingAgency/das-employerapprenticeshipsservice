@@ -56,7 +56,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     RefreshToken = viewModel.RefreshToken,  
                     OrganisationStatus = viewModel.OrganisationStatus,
                     EmployerRefName = viewModel.EmployerRefName,
-                    PublicSectorDataSource = viewModel.PublicSectorDataSource
+                    PublicSectorDataSource = viewModel.PublicSectorDataSource,
+                    Sector = viewModel.Sector
                 });
 
                 CookieService.Delete(context, CookieName);
@@ -103,7 +104,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 EmployerRefName = enteredData.EmployerRefName,
                 EmpRefNotFound = enteredData.EmpRefNotFound,
                 OrganisationStatus = enteredData.OrganisationStatus,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource
+                PublicSectorDataSource = enteredData.PublicSectorDataSource,
+                Sector = enteredData.Sector
             };
 
             return new OrchestratorResponse<SummaryViewModel>
