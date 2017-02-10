@@ -15,12 +15,12 @@
             if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
             {
                  
-                noAddressesFound = $"No addresses found for the postcode {Model.Data.Postcode}";
+                noAddressesFound = $"No address found for the postcode {Model.Data.Postcode}";
               
             }
             else
             {
-                <p>Select your address from the list</p>
+                <h2 class="heading-medium">Select your address:</h2>
                 <ol class="search-results">
                     @foreach (var address in Model.Data.Addresses)
                     {
@@ -47,7 +47,7 @@
                     }
                 </ol>
                 <hr />
-                <p>Or search again for your address.</p>
+                <h2 class="heading-medium">Search again</h2>
             }
         }
 
@@ -70,7 +70,7 @@
             <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
             <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
-            <input class="button" type="submit" value="Find UK address" />
+            <input class="button" type="submit" value="Find address" />
         </form>
 
         
