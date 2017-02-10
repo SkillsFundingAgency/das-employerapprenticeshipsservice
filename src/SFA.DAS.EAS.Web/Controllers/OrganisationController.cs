@@ -164,6 +164,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("address/select")]
         public async Task<ActionResult> SelectAddress(FindOrganisationAddressViewModel request)
         {
@@ -219,6 +220,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("custom/add")]
         public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {

@@ -506,7 +506,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 OrganisationReferenceNumber = request.OrganisationReferenceNumber,
                 OrganisationStatus = request.OrganisationStatus,
                 OrganisationType = request.OrganisationType,
-                PublicSectorDataSource = request.PublicSectorDataSource
+                PublicSectorDataSource = request.PublicSectorDataSource,
+                Sector = request.Sector
             };
 
             try

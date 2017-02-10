@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
@@ -14,6 +13,7 @@ using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
+    [Authorize]
     [RoutePrefix("accounts/organisations")]
     public class EmployerAccountOrganisationController : BaseController
     {
@@ -171,6 +171,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("custom/add")]
         public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
@@ -202,6 +203,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("address/select")]
         public async Task<ActionResult> SelectAddress(FindOrganisationAddressViewModel request)
         {

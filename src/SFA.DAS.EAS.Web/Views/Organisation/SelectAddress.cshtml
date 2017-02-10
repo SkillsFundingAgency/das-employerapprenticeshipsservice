@@ -14,22 +14,24 @@
             if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
             {
 
-                noAddressesFound = $"No address found for the postcode {Model.Data.Postcode}";
+                noAddressesFound = $"No addresses found for the postcode {Model.Data.Postcode}";
 
             }
             else
             {
-                <h2 class="heading-medium">Select your address:</h2>
+                <p>Select your address from the list</p>
                 <ol class="search-results">
                     @foreach (var address in Model.Data.Addresses)
                     {
                         var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
                         {
-                            @Model.Data.OrganisationName,
-                            @Model.Data.OrganisationReferenceNumber,
-                            @Model.Data.OrganisationType,
-                            @Model.Data.PublicSectorDataSource,
-                            @Model.Data.OrganisationStatus
+                            Model.Data.OrganisationName,
+                            Model.Data.OrganisationReferenceNumber,
+                            Model.Data.OrganisationType,
+                            Model.Data.PublicSectorDataSource,
+                            Model.Data.OrganisationStatus,
+                            Model.Data.Sector,
+                            Model.Data.OrganisationDateOfInception
                         });
 
                         url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
@@ -46,7 +48,7 @@
                     }
                 </ol>
                 <hr />
-                <h2 class="heading-medium">Search again</h2>
+                <p>Or search again for your address.</p>
             }
         }
         <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
@@ -66,8 +68,9 @@
             <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />
             <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
-            <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
-            <input class="button" type="submit" value="Find address" />
+            <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource"/>
+            <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
+            <input class="button" type="submit" value="Find UK address" />
         </form> 
         
     </div>

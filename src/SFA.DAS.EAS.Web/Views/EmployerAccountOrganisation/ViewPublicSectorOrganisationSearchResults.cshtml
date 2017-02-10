@@ -37,16 +37,16 @@
                     if (!result.AddedToAccount)
                     {
                         <li>
-                            <a href="@Url.Action("UpdateOrganisationAddress", new
-                                    {
-                                        OrganisationName = result.Name,
-                                        OrganisationType = OrganisationType.PublicBodies,
-                                        OrganisationReferenceNumber = result.ReferenceNumber,
-                                        OrganisationDateOfInception = result.DateOfInception,
-                                        PublicSectorDataSource = result.PublicSectorDataSource,
-                                        OrganisationStatus = "active",
-					Sector = result.Sector
-                                    })">
+                            <a href="@Url.Action("FindAddress", "EmployerAccountOrganisation", new
+                                     {
+                                         OrganisationName = result.Name,
+                                         OrganisationType = OrganisationType.PublicBodies,
+                                         OrganisationReferenceNumber = result.ReferenceNumber,
+                                         OrganisationDateOfInception = result.DateOfInception,
+                                         PublicSectorDataSource = result.PublicSectorDataSource,
+                                         OrganisationStatus = result.Status,
+                                         Sector = result.Sector
+                                     })">
                                 @result.Name
                             </a>
                         </li>
