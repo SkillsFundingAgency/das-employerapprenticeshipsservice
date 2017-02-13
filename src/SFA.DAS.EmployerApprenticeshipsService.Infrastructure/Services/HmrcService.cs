@@ -61,9 +61,20 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<LevyDeclarations> GetLevyDeclarations(string empRef)
         {
+            return await GetLevyDeclarations(empRef, null);
+        }
+
+        public async Task<LevyDeclarations> GetLevyDeclarations(string empRef,DateTime? fromDate)
+        {
             var authToken = await GetOgdAuthenticationToken();
 
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
+
+            if (fromDate.HasValue)
+            {
+                url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
+            }
+
             return await _httpClientWrapper.Get<LevyDeclarations>(authToken.AccessToken, url);
         }
 

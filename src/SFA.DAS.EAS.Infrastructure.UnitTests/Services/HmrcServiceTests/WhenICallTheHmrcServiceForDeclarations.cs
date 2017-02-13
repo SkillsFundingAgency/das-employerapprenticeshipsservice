@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using Moq;
 using Newtonsoft.Json;
@@ -21,13 +22,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedTotpToken = "789654321AGFVD";
         private const string ExpectedAuthToken = "JGHF12345";
         private const string ExpectedOgdClientId = "123AOK564";
+        private const string EmpRef = "111/ABC";
 
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<ITotpService> _totpService;
-
-
+        
         [SetUp]
         public void Arrange()
         {
@@ -52,26 +53,37 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _totpService.Object);
         }
-
         
-
         [Test]
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
-            //Assign
-            const string empRef = "111/ABC";
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
+            //Arrange
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations";
             
             var levyDeclarations = new LevyDeclarations();
             _httpClientWrapper.Setup(x => x.Get<LevyDeclarations>(It.IsAny<string>(), expectedApiUrl))
                 .ReturnsAsync(levyDeclarations);
 
             //Act
-            var result = await _hmrcService.GetLevyDeclarations(empRef);
+            var result = await _hmrcService.GetLevyDeclarations(EmpRef);
 
             //Assert
             _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
             Assert.AreEqual(levyDeclarations, result);
+        }
+
+        [Test]
+        public async Task ThenTheDateFromIsAddedToTheRequestIfPopulated()
+        {
+            //Arrange
+            var expectedDate = new DateTime(2017,04,29);
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-29";
+
+            //Act
+            await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
+
+            //Assert
+            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
         }
     }
 }
