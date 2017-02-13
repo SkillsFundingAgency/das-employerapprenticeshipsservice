@@ -164,6 +164,15 @@
   }
 }
 
+//delete cohort
+#apprentice-details{
+     .delete-button{
+        background-color:$error-colour;
+        float:right;
+        margin:15px 0;
+        @include media(tablet){margin:auto;}
+        }
+}
 
 
     

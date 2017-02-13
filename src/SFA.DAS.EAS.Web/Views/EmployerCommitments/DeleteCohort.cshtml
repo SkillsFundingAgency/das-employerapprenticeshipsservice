@@ -14,30 +14,30 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <h1 class="heading-xlarge">Confirm cohort deletion</h1>
-            <h2 class="heading-large">You are about to delete the following cohort:</h2>
+            <p>You are about to delete the following cohort:</p>
 
-            <table>
+            <table id="delete-cohort-summary">
                 <tr>
-                    <th>Employer</th>
-                    <td>@Model.Data.Provider</td>
+                    <td>Employer</td>
+                    <td class="strong">@Model.Data.Provider</td>
                 </tr>
                 <tr>
-                    <th>Cohort reference</th>
-                    <td>@Model.Data.HashedCommitmentId</td>
+                    <td>Cohort reference</td>
+                    <td class="strong">@Model.Data.HashedCommitmentId</td>
                 </tr>
                 <tr>
-                    <th>Number of apprentices</th>
-                    <td>@Model.Data.NumberOfApprenticeships</td>
+                    <td>Number of apprentices</td>
+                    <td class="strong">@Model.Data.NumberOfApprenticeships</td>
                 </tr>
                 <tr>
-                    <th>Apprenticeships</th>
+                    <td>Apprenticeships</td>
                     @if (!Model.Data.ProgramSummaries.Any())
                     {
-                        <td>0</td>
+                        <td class="strong">0</td>
                     }
                     else
                     {
-                        <td>
+                        <td class="strong">
                             @Model.Data.ProgramSummaries.First()
                         </td>
                     }
@@ -45,8 +45,8 @@
                 @foreach (var programSummary in Model.Data.ProgramSummaries.Skip(1))
                 {
                     <tr>
-                        <th></th>
-                        <td>@programSummary</td>
+                        <td></td>
+                        <td class="strong">@programSummary</td>
                     </tr>
 
                 }

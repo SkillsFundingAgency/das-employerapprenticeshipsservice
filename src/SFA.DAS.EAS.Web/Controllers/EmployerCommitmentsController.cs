@@ -268,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             var flashmessage = new FlashMessageViewModel
             {
                 Headline = "Cohort deleted",
-                Severity = FlashMessageSeverityLevel.Success
+                Severity = FlashMessageSeverityLevel.Okay
             };
             TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
 

@@ -3264,6 +3264,13 @@ span.helpText {
   margin-left: 2%;
 }
 
+#apprentice-details .delete-button {
+  background-color: #b10e1e;
+  float: right;
+  margin: 15px 0;
+  margin: auto;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .manage-all-apprentices td:nth-of-type(1):before {
     content: "Name";

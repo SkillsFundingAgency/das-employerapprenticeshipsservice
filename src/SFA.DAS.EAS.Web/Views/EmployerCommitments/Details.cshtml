@@ -4,7 +4,7 @@
 @using SFA.DAS.EAS.Web.ViewModels
 
 @{
-    ViewBag.Title = "Add apprentices";
+    ViewBag.Title = "Review your cohort";
     ViewBag.PageID = "apprentice-details";
 }
 
@@ -164,7 +164,7 @@
                                             @GetValueOrDefault(FormatCost(apprenticeship.Cost))
                                         </td>
                                         <td>
-                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit details</a>
+                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
                                         </td>
                                     </tr>
                                 }
