@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
+using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Web.Extensions;
@@ -762,6 +763,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                        }
                                    };
                     }, hashedAccountId, externalUserId);
+        }
+
+        public async Task DeleteCommitment(string hashedAccountId, string hashedCommitmentId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Deleting commitment {hashedCommitmentId} Account: {accountId}, CommitmentId: {commitmentId}");
+
+            await _mediator.SendAsync(new DeleteCommitmentCommand
+            {
+                AccountId = accountId,
+                CommitmentId = commitmentId
+            });
         }
 
         public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)

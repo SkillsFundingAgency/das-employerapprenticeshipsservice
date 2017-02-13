@@ -55,11 +55,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
-            {
-                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
-            }
-
+            SetFlashMessageOnModel(model);
             return View(model);
         }
 
@@ -68,6 +64,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
             return View("RequestList", model);
         }
@@ -77,6 +74,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
             return View("RequestList", model);
         }
@@ -86,6 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForReview(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
             return View("RequestList", model);
         }
@@ -223,12 +222,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
             model.Data.BackLinkUrl = GetReturnToListUrl(hashedAccountId);
-
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
-            {
-                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
-                model.FlashMessage = flashMessage;
-            }
+            SetFlashMessageOnModel(model);
 
             ViewBag.HashedAccountId = hashedAccountId;
 
@@ -262,12 +256,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId } );
             }
 
-            // ToDo: Delete
+            await _employerCommitmentsOrchestrator
+                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"));
 
-            // ToDo: Message styling and message on list page?
             var flashmessage = new FlashMessageViewModel
             {
-                Headline = "Cohort deleted",
+                Message = "Cohort deleted",
                 Severity = FlashMessageSeverityLevel.Okay
             };
             TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
@@ -618,6 +612,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 filterContext.ExceptionHandled = true;
                 filterContext.Result = RedirectToAction("Index", "Error");
+            }
+        }
+
+        private void SetFlashMessageOnModel<T>(OrchestratorResponse<T> model)
+        {
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+                model.FlashMessage = flashMessage;
             }
         }
     }

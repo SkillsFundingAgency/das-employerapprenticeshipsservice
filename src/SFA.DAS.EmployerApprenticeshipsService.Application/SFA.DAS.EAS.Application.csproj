@@ -190,6 +190,9 @@
     <Compile Include="Commands\DeleteApprentice\DeleteApprenticeshipCommand.cs" />
     <Compile Include="Commands\DeleteApprentice\DeleteApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\DeleteApprentice\DeleteApprenticeshipCommandValidator.cs" />
+    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommand.cs" />
+    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandHandler.cs" />
+    <Compile Include="Commands\DeleteCommitment\DeleteCommitmentCommandValidator.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommand.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteInvitation\DeleteInvitationCommandValidator.cs" />
