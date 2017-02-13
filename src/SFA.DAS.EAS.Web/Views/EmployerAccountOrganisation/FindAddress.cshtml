@@ -18,8 +18,21 @@
                         <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError</span>
                     }
                 </label>
-                <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
-                       @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
+                
+                <span>
+                    <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
+                           @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
+            
+                    <a href="@Url.Action("AddOrganisationAddress", new
+                             {
+                                 Model.Data.OrganisationName,
+                                 Model.Data.OrganisationReferenceNumber,
+                                 Model.Data.OrganisationDateOfInception,
+                                 Model.Data.OrganisationType,
+                                 Model.Data.PublicSectorDataSource,
+                                 Model.Data.Sector
+                             })">Enter Address Manually</a>
+                </span>
             </div>
             <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
             <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />

@@ -231,6 +231,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("address/update")]
         public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)
         {
+            if (request.Address == null)
+            {
+                request.Address = new AddressViewModel();
+            }
+
             var response = new OrchestratorResponse<AddOrganisationAddressViewModel>
             {
                 Data = request,
