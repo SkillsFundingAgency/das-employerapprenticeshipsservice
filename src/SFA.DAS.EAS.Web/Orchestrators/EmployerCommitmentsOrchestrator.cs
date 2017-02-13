@@ -772,11 +772,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             _logger.Info($"Deleting commitment {hashedCommitmentId} Account: {accountId}, CommitmentId: {commitmentId}");
 
-            await _mediator.SendAsync(new DeleteCommitmentCommand
+            await CheckUserAuthorization(async () =>
             {
-                AccountId = accountId,
-                CommitmentId = commitmentId
-            });
+                await _mediator.SendAsync(new DeleteCommitmentCommand
+                {
+                    AccountId = accountId,
+                    CommitmentId = commitmentId
+                });
+            }, hashedAccountId, externalUserId);
         }
 
         public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
