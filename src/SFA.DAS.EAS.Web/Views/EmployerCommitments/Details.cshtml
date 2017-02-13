@@ -18,19 +18,19 @@
 
 <div class="grid-row" id="review-cohorts">
     <div class="column-one-third all-apps">
-        <div class="">
+        <div>
             <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count</h2>
             <p class="heading-small">@PluraliseApprentice(Model.Data.Apprenticeships.Count)</p>
         </div>
     </div>
     <div class="column-one-third incomplete-apps">
-        <div class="">
+        <div>
             <h2 class="bold-xlarge">@Model.Data.Apprenticeships.Count(x => !x.CanBeApproved)</h2>
             <p class="heading-small">@PluraliseIncompleteRecords(Model.Data.Apprenticeships.Count(x => !x.CanBeApproved))</p>
         </div>
     </div>
     <div class="column-one-third total-cost">
-        <div class="">
+        <div>
             <h2 class="bold-xlarge">&pound;@Model.Data.Apprenticeships.Sum(x => x.Cost ?? 0).ToString("N0")</h2>
             <p class="heading-small">Total cost</p>
         </div>
