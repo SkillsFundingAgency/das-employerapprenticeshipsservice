@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using AutoMapper.Configuration.Conventions;
 using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration
