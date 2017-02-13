@@ -58,7 +58,7 @@
 
         <div class="form-error-group form-group @Html.AddClassIfPropertyInError("DeleteConfirmed", "error")">
                 <div>
-                    @Html.ValidationMessageFor(m => m.Data.DeleteConfirmed, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.Data.DeleteConfirmed) })
+                    @Html.ValidationMessage("DeleteConfirmed", "Please choose an option", new { id = "error-message-" + "DeleteConfirmed" })
                 </div>
                 <fieldset>
                     <legend class="visually-hidden">
