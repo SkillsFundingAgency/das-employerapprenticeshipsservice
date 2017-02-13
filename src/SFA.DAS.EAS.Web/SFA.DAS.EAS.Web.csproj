@@ -401,7 +401,9 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
+    <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
@@ -955,6 +957,7 @@
     <Content Include="Views\EmployerCommitments\DeleteApprenticeshipConfirmation.cshtml" />
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
+    <Content Include="Views\EmployerCommitments\DeleteCohort.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

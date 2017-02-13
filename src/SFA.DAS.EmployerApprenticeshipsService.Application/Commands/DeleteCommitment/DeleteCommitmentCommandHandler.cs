@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
+
 using MediatR;
+
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.EAS.Application.Validation;
 
-namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
+namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
 {
-    public sealed class DeleteApprenticeshipCommandHandler : AsyncRequestHandler<DeleteApprenticeshipCommand>
+    public class DeleteCommitmentCommandHandler : AsyncRequestHandler<DeleteCommitmentCommand>
     {
-        private readonly ICommitmentsApi _commitmentsService;
-        private readonly IValidator<DeleteApprenticeshipCommand> _validator;
+        private readonly IValidator<DeleteCommitmentCommand> _validator;
 
-        public DeleteApprenticeshipCommandHandler(
-            ICommitmentsApi commitmentsApi, 
-            IValidator<DeleteApprenticeshipCommand> validator
-            )
+        private readonly ICommitmentsApi _commitmentsService;
+
+        public DeleteCommitmentCommandHandler(ICommitmentsApi commitmentsApi, IValidator<DeleteCommitmentCommand> validator)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
             _commitmentsService = commitmentsApi;
         }
 
-        protected override async Task HandleCore(DeleteApprenticeshipCommand message)
+        protected override async Task HandleCore(DeleteCommitmentCommand message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            await _commitmentsService.DeleteEmployerApprenticeship(message.AccountId, message.ApprenticeshipId);
+            await _commitmentsService.DeleteEmployerCommitment(message.AccountId, message.CommitmentId);
         }
     }
 }
