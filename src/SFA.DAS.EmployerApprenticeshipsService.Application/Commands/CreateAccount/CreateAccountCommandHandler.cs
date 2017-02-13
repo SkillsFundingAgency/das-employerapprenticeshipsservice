@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
         private readonly IEventPublisher _eventPublisher;
-        
+
         public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IEventPublisher eventPublisher)
         {
             _accountRepository = accountRepository;
@@ -51,13 +51,18 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
             var emprefs = message.PayeReference.Split(',');
 
-            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken,message.OrganisationStatus,message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
+            if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
+            {
+                message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
+            }
+
+            var returnValue = await _accountRepository.CreateAccount(user.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, emprefs[0], message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector);
 
             var hashedAccountId = _hashingService.HashValue(returnValue.AccountId);
             await _accountRepository.SetHashedId(hashedAccountId, returnValue.AccountId);
 
             await AddPayeSchemes(message, emprefs, returnValue);
-            
+
             await RefreshLevy(returnValue);
 
             await NotifyAccountCreated(hashedAccountId);
