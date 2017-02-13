@@ -494,7 +494,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _cookieService.Create(context, CookieName, json, 365);
         }
 
-        public async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(
+        public virtual async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(
             FindOrganisationAddressViewModel request)
         {
             var viewModel = new SelectOrganisationAddressViewModel

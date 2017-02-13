@@ -29,6 +29,9 @@ namespace SFA.DAS.EAS.Web.Mapping
 
             CreateMap<OrganisationDetailsViewModel, AddOrganisationAddressViewModel>()
                 .ForMember(dest => dest.Address, opt => opt.Ignore());
+
+            CreateMap<FindOrganisationAddressViewModel, AddOrganisationAddressViewModel>()
+                .ForAllMembers(m => m.AllowNull());
         }
     }
 }

@@ -209,6 +209,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _orchestrator.GetAddressesFromPostcode(request);
 
+            if (response?.Data?.Addresses != null && response.Data.Addresses.Count == 1)
+            {
+                var viewModel = _mapper.Map<AddOrganisationAddressViewModel>(request);
+
+                viewModel.Address = response.Data.Addresses.Single();
+
+                var addressResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
+                {
+                    Data = viewModel,
+                    Status = HttpStatusCode.OK
+                };
+
+                return View("AddOrganisationAddress", addressResponse);
+            }
+
             return View(response);
         }
         
