@@ -16,5 +16,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<DateTime> GetLastEnglishFractionUpdate();
         Task<HmrcTokenResponse> GetOgdAuthenticationToken();
         Task<LevyDeclarations> GetLevyDeclarations(string empRef,DateTime? fromDate);
+        Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate);
     }
 }

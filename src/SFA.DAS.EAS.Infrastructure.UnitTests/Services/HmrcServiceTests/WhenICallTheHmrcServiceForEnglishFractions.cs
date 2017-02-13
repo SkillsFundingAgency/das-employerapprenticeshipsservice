@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using Moq;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedTotpToken = "789654321AGFVD";
         private const string ExpectedAuthToken = "GFRT567";
         private const string ExpectedOgdClientId = "123AOK564";
+        private const string EmpRef = "111/ABC";
 
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -52,20 +54,32 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         [Test]
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
-            //Assign
-            const string empRef = "111/ABC";
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
+            //Arrange
+            
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/fractions";
 
             var englishFractions = new EnglishFractionDeclarations();
             _httpClientWrapper.Setup(x => x.Get<EnglishFractionDeclarations>(It.IsAny<string>(), expectedApiUrl))
                 .ReturnsAsync(englishFractions);
 
             //Act
-            var result = await _hmrcService.GetEnglishFractions(empRef);
+            var result = await _hmrcService.GetEnglishFractions(EmpRef);
 
             //Assert
             _httpClientWrapper.Verify(x => x.Get<EnglishFractionDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
             Assert.AreEqual(englishFractions, result);
+        }
+
+        [Test]
+        public async Task ThenTheFractionsAreFilterByTheDateRangeWhenPassed()
+        {
+            //Arrange
+            var expectedDate = new DateTime(2017, 04, 29);
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/fractions?fromDate=2017-04-29";
+
+            //Act
+            await _hmrcService.GetEnglishFractions(EmpRef, expectedDate);
+            _httpClientWrapper.Verify(x => x.Get<EnglishFractionDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
         }
     }
 }

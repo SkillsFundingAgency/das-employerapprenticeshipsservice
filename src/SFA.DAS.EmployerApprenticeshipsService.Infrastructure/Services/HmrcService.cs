@@ -80,9 +80,20 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef)
         {
+            return await GetEnglishFractions(empRef, null);
+        }
+
+        public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
+        {
             var authToken = await GetOgdAuthenticationToken();
 
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
+
+            if (fromDate.HasValue)
+            {
+                url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
+            }
+
             return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken.AccessToken, url);
         }
 
