@@ -746,7 +746,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         });
 
                         Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
-                        var programSummary = commitmentData.Commitment.Apprenticeships
+                        var programmeSummary = commitmentData.Commitment.Apprenticeships
                                 .GroupBy(m => m.TrainingName) 
                                 .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
                                 .ToList();
@@ -757,9 +757,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                                   {
                                                        HashedAccountId = hashedAccountId,
                                                        HashedCommitmentId = hashedCommitmentId,
-                                                       Provider = commitmentData.Commitment.ProviderName,
+                                                       ProviderName = commitmentData.Commitment.ProviderName,
                                                        NumberOfApprenticeships = commitmentData.Commitment.Apprenticeships.Count,
-                                                       ProgramSummaries = programSummary
+                                                       ProgrammeSummaries = programmeSummary
                                        }
                                    };
                     }, hashedAccountId, externalUserId);

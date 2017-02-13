@@ -19,7 +19,7 @@
             <table id="delete-cohort-summary">
                 <tr>
                     <td>Employer</td>
-                    <td class="strong">@Model.Data.Provider</td>
+                    <td class="strong">@Model.Data.ProviderName</td>
                 </tr>
                 <tr>
                     <td>Cohort reference</td>
@@ -31,18 +31,18 @@
                 </tr>
                 <tr>
                     <td>Apprenticeships</td>
-                    @if (!Model.Data.ProgramSummaries.Any())
+                    @if (!Model.Data.ProgrammeSummaries.Any())
                     {
                         <td class="strong">0</td>
                     }
                     else
                     {
                         <td class="strong">
-                            @Model.Data.ProgramSummaries.First()
+                            @Model.Data.ProgrammeSummaries.First()
                         </td>
                     }
                 </tr>
-                @foreach (var programSummary in Model.Data.ProgramSummaries.Skip(1))
+                @foreach (var programSummary in Model.Data.ProgrammeSummaries.Skip(1))
                 {
                     <tr>
                         <td></td>

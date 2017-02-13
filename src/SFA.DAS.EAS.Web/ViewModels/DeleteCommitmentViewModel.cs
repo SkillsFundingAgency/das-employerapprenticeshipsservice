@@ -11,11 +11,11 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public string HashedCommitmentId { get; set; }
 
-        public string Provider { get; set; }
+        public string ProviderName { get; set; }
 
         public int NumberOfApprenticeships { get; set; }
 
-        public List<string> ProgramSummaries { get; set; }
+        public List<string> ProgrammeSummaries { get; set; }
 
         public bool? DeleteConfirmed { get; set; }
     }

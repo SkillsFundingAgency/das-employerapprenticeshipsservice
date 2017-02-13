@@ -264,6 +264,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Message = "Cohort deleted",
                 Severity = FlashMessageSeverityLevel.Okay
             };
+
             TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
 
             var anyCohortWithCurrentStatus = 
