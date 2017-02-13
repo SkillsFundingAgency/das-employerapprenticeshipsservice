@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
@@ -33,17 +34,22 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         {
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
+            if (string.IsNullOrEmpty(message.LegalEntity.Code))
+            {
+                message.LegalEntity.Code = Guid.NewGuid().ToString();
+            }
+
             var agreementView = await _accountRepository.CreateLegalEntity(
-                owner.AccountId, 
-                message.LegalEntity, 
-                message.SignAgreement, 
+                owner.AccountId,
+                message.LegalEntity,
+                message.SignAgreement,
                 message.SignedDate,
                 owner.UserId);
-            
+
             await CreateAuditEntries(owner, agreementView);
 
             await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
-            
+
             return new CreateLegalEntityCommandResponse
             {
                 AgreementView = agreementView

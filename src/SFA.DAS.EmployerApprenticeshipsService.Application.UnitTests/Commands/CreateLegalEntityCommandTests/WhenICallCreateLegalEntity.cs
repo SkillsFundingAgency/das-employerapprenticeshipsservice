@@ -134,5 +134,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                     c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.Id.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement"))));
         }
+
+        [Test]
+        public async Task ThenThenAnOrganisationCodeIsGeneratedIfOneIsNotSupplied()
+        {
+            //Act
+            await _commandHandler.Handle(_command);
+
+            //Assert
+            _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code)), It.IsAny<bool>(), It.IsAny<DateTime>(), It.IsAny<long>()), Times.Once);
+        }
     }
 }
