@@ -265,6 +265,7 @@
     <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailByEmpRefQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailResposne.cs" />
     <Compile Include="Queries\AccountTransactions\GetEnglishFrationDetail\GetEnglishFractionDetailValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetLastLevyDeclaration\GetLastLevyDeclarationValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQuery.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQueryValidator.cs" />
