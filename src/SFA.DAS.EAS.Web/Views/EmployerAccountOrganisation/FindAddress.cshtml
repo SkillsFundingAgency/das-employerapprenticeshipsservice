@@ -23,15 +23,7 @@
                     <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
                            @(!string.IsNullOrEmpty(Model.Data.PostcodeError) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
             
-                    <a href="@Url.Action("AddOrganisationAddress", new
-                             {
-                                 Model.Data.OrganisationName,
-                                 Model.Data.OrganisationReferenceNumber,
-                                 Model.Data.OrganisationDateOfInception,
-                                 Model.Data.OrganisationType,
-                                 Model.Data.PublicSectorDataSource,
-                                 Model.Data.Sector
-                             })">Enter Address Manually</a>
+                    
                 </span>
             </div>
             <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
@@ -40,8 +32,20 @@
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
             <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource" />
             <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
-	    <input class="button" type="submit" value="Find address" />
+            <div class="form-group">
+                <input class="button" type="submit" value="Find address" />
+                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                             {
+                                 Model.Data.OrganisationName,
+                                 Model.Data.OrganisationReferenceNumber,
+                                 Model.Data.OrganisationDateOfInception,
+                                 Model.Data.OrganisationType,
+                                 Model.Data.PublicSectorDataSource,
+                                 Model.Data.Sector
+                             })">Enter address manually</a>
+            </div>
         </form> 
+        <p></p>
     </div>
 </div>
 
