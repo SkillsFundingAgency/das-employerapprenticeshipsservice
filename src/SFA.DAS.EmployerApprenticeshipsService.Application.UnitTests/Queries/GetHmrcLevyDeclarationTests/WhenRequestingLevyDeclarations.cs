@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcLevyDeclarationTests
         {
             //Arrange
             var expectedDate = new DateTime(2017, 01, 20);
-            _mediator.Setup(x => x.SendAsync(It.Is<GetLastLevyDeclarationQuery>(c=>c.EmpRef.Equals(ExpectedEmpRef)))).ReturnsAsync(new GetLastLevyDeclarationResponse { Transaction = new DasDeclaration {Date = expectedDate} });
+            _mediator.Setup(x => x.SendAsync(It.Is<GetLastLevyDeclarationQuery>(c=>c.EmpRef.Equals(ExpectedEmpRef)))).ReturnsAsync(new GetLastLevyDeclarationResponse { Transaction = new DasDeclaration {SubmissionDate = expectedDate} });
 
             //Act
             await _getHMRCLevyDeclarationQueryHandler.Handle(new GetHMRCLevyDeclarationQuery { EmpRef = ExpectedEmpRef });

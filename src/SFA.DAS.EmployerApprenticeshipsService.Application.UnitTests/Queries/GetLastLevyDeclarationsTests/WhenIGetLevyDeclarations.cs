@@ -45,14 +45,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLastLevyDeclarationsTests
         {
             //Arrange
             var expectedDate = new DateTime(2016, 01, 29);
-            _dasLevyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpref)).ReturnsAsync(new DasDeclaration { Date = expectedDate });
+            _dasLevyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpref)).ReturnsAsync(new DasDeclaration { SubmissionDate = expectedDate });
 
             //Act
             var actual = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.IsNotNull(actual.Transaction);
-            Assert.AreEqual(expectedDate, actual.Transaction.Date);
+            Assert.AreEqual(expectedDate, actual.Transaction.SubmissionDate);
         }
         
     }

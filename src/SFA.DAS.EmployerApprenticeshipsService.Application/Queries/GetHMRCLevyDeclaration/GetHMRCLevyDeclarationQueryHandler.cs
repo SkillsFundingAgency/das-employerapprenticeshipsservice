@@ -32,9 +32,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration
             var existingDeclaration = await _mediator.SendAsync(new GetLastLevyDeclarationQuery {EmpRef = message.EmpRef});
 
             DateTime? dateFrom = null;
-            if (existingDeclaration?.Transaction?.Date != null && existingDeclaration.Transaction.Date != DateTime.MinValue)
+            if (existingDeclaration?.Transaction?.SubmissionDate != null && existingDeclaration.Transaction.SubmissionDate != DateTime.MinValue)
             {
-                dateFrom = existingDeclaration.Transaction?.Date.AddDays(-1);
+                dateFrom = existingDeclaration.Transaction?.SubmissionDate.AddDays(-1);
             }
 
             var declarations = await _hmrcService.GetLevyDeclarations(message.EmpRef, dateFrom);
