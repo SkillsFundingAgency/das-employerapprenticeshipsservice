@@ -23,11 +23,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetLastLevyDeclarationQuery>()))
-                     .ReturnsAsync(new GetAccountLevyDeclationTransactionsByDateRangeResponse
+                     .ReturnsAsync(new GetLastLevyDeclarationResponse()
                      {
-                         Transactions = new List<TransactionLine>
+                        Transaction = new DasDeclaration()
                         {
-                            new LevyDeclarationTransactionLine()
+                            
                         }
                      });
 
