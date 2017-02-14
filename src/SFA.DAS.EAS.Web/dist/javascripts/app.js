@@ -119,6 +119,9 @@ sfa.forms = {
         forms.on('submit', function (e) {
             var button = $(this).find('.button');
             button.attr('disabled', 'disabled');
+            setTimeout(function () {
+                button.removeAttr('disabled');
+            }, 5000);
         });
     }
 }
