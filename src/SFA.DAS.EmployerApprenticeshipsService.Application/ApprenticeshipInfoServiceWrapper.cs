@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
@@ -67,13 +68,22 @@ namespace SFA.DAS.EAS.Application
             try
             {
                 var api = new ProviderApiClient(_configuration.BaseUrl);
-                var providersView = MapFrom(api.Get(ukPrn));
+                var response = api.Get(ukPrn);
+                var providersView = MapFrom(response);
 
                 return providersView;
             }
             catch (HttpRequestException)
             {
                 return null;
+            }
+            catch (Apprenticeships.Api.Types.Exceptions.EntityNotFoundException)
+            {
+                return new ProvidersView
+                {
+                    CreatedDate = DateTime.UtcNow,
+                    Providers = new List<Provider>()
+                };
             }
         }
 
