@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Web.Validators
             RuleFor(x => x.LegalEntityCode).NotEmpty();
             RuleFor(x => x.ProviderId)
                 .NotEmpty().WithMessage("Enter a valid UK Provider Reference Number")
-                .Matches("^[0-9]{8}$").WithMessage("Enter a valid UK Provider Reference Number");
+                .Matches("^[0-9]{8}[\\s]*$").WithMessage("Enter a valid UK Provider Reference Number");
         }
     }
 }

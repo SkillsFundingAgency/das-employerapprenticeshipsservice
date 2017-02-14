@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         {
                             var dasDeclaration = new DasDeclaration
                             {
-                                Date = DateTime.Parse(declaration.SubmissionTime),
+                                SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
                                 Id = declaration.Id,
                                 PayrollMonth = declaration.PayrollPeriod?.Month,
                                 PayrollYear = declaration.PayrollPeriod?.Year,

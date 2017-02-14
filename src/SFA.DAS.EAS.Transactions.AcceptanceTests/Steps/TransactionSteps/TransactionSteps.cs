@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     PayrollYear = tableRow["Payroll_Year"],
                     PayrollMonth = Convert.ToInt16(tableRow["Payroll_Month"]),
                     LevyAllowanceForFullYear = 15000,
-                    Date = DateTime.Now,
+                    SubmissionDate = DateTime.Now,
                     Id = lineCount.ToString()
                 };
                 lineCount++;
