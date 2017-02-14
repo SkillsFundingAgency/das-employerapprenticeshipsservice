@@ -958,6 +958,7 @@
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
     <Content Include="Views\EmployerCommitments\DeleteCohort.cshtml" />
+    <Content Include="Views\Error\InvalidState.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

@@ -420,15 +420,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/submit")]
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            try
-            {
-                var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
-                return View("SubmitCommitmentEntry", response);
-            }
-            catch (InvalidStateException)
-            {
-                return RedirectToAction("Index", "EmployerCommitments");
-            }
+            var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -612,7 +605,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (filterContext.Exception is InvalidStateException)
             {
                 filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("Index", "Error");
+                filterContext.Result = RedirectToAction("InvalidState", "Error");
             }
         }
 

@@ -39,5 +39,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.NotFound;
             return View();
         }
+
+        public ActionResult InvalidState()
+        {
+            return View("InvalidState");
+        }
     }
 }
