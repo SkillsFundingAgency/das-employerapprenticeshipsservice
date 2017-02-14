@@ -235,6 +235,7 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />

@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Web.ViewModels
+﻿namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     public class SelectEmployerViewModel
     {

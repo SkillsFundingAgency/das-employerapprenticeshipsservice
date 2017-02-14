@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using FluentValidation;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Validators
 {
