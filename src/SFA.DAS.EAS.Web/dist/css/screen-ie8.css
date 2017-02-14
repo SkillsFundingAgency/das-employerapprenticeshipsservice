@@ -1891,7 +1891,7 @@ table.top-border {
   left: auto;
   width: inherit;
   height: inherit;
-  cursor: inherit;
+  cursor: text;
   opacity: 1;
 }
 
