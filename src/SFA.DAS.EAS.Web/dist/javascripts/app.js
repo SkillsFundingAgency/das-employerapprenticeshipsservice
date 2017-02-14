@@ -1,5 +1,5 @@
 var sfa = sfa || {};
-    
+
 sfa.homePage = {
     init: function () {
         this.startButton();
@@ -47,7 +47,6 @@ sfa.navigation = {
     init: function () {
         this.setupMenus(this.elems.userNav);
         this.setupEvents(this.elems.userNav);
-        //this.linkSettings();
     },
     setupMenus: function (menu) {
        menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
@@ -80,7 +79,7 @@ sfa.navigation = {
             // Open menu
             this.closeAllOpenMenus();         
             $li.addClass("open");
-            subMenu.removeClass("js-hidden").attr("aria-hidden", "false").find('a').eq(0).focus();
+            subMenu.removeClass("js-hidden").attr("aria-hidden", "false");
         }
     },
     closeAllOpenMenus: function () {
