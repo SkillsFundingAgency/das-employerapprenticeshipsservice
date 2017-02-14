@@ -55,11 +55,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
-            {
-                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
-            }
-
+            SetFlashMessageOnModel(model);
             return View(model);
         }
 
@@ -68,6 +64,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.NewRequest;
             return View("RequestList", model);
         }
@@ -77,6 +74,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForApproval;
             return View("RequestList", model);
         }
@@ -86,6 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> ReadyForReview(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            SetFlashMessageOnModel(model);
             Session[LastCohortPageSessionKey] = RequestStatus.ReadyForReview;
             return View("RequestList", model);
         }
@@ -222,10 +221,60 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> Details(string hashedAccountId, string hashedCommitmentId)
         {
             var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+            model.Data.BackLinkUrl = GetReturnToListUrl(hashedAccountId);
+            SetFlashMessageOnModel(model);
 
             ViewBag.HashedAccountId = hashedAccountId;
 
             return View(model);
+        }
+
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(string hashedAccountId, string hashedCommitmentId)
+        {
+            var model = await _employerCommitmentsOrchestrator.GetDeleteCommitmentModel(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/details/delete")]
+        public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var model = await _employerCommitmentsOrchestrator
+                    .GetDeleteCommitmentModel(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(model);
+            }
+
+            if (viewModel.DeleteConfirmed == null || !viewModel.DeleteConfirmed.Value)
+            {
+                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId } );
+            }
+
+            await _employerCommitmentsOrchestrator
+                .DeleteCommitment(viewModel.HashedAccountId, viewModel.HashedCommitmentId, OwinWrapper.GetClaimValue("sub"));
+
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = "Cohort deleted",
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+            var anyCohortWithCurrentStatus = 
+                await _employerCommitmentsOrchestrator.AnyCohortsForCurrentStatus(viewModel.HashedAccountId, GetSessionRequestStatus());
+
+            if(!anyCohortWithCurrentStatus)
+                return RedirectToAction("YourCohorts", new { viewModel.HashedAccountId });
+
+            return Redirect(GetReturnToListUrl(viewModel.HashedAccountId));
+
         }
 
         [HttpGet]
@@ -454,7 +503,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private RequestStatus GetSessionRequestStatus()
         {
             var status = (RequestStatus?)Session[LastCohortPageSessionKey] ?? RequestStatus.None;
-            Session[LastCohortPageSessionKey] = null;
             return status;
         }
 
@@ -471,6 +519,50 @@ namespace SFA.DAS.EAS.Web.Controllers
                 default:
                     return string.Empty;
             }
+        }
+
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
+        public async Task<ActionResult> DeleteApprenticeshipConfirmation(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var response = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedCommitmentId}/Apprenticeships/{hashedApprenticeshipId}/Delete")]
+        public async Task<ActionResult> DeleteApprenticeshipConfirmation(DeleteApprenticeshipConfirmationViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errorResponse =
+                    await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(viewModel.HashedAccountId,
+                        OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId,
+                        viewModel.HashedApprenticeshipId);
+
+                return View(errorResponse);
+            }
+
+            if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
+            {
+                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel);
+
+                var flashMessage = new FlashMessageViewModel
+                {
+                    Severity = FlashMessageSeverityLevel.Okay,
+                    Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted")
+                };
+                TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
+
+                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId});
+            }
+
+            return RedirectToAction("EditApprenticeship",
+                new {viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId});
         }
 
         private void AddErrorsToModelState(InvalidRequestException ex)
@@ -497,12 +589,39 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("EditApprenticeshipEntry", response);
         }
 
+        private string GetReturnToListUrl(string hashedAccountId)
+        {
+            switch (GetSessionRequestStatus())
+            {
+                case RequestStatus.WithProviderForApproval:
+                case RequestStatus.SentForReview:
+                    return Url.Action("WithProvider", new { hashedAccountId });
+                case RequestStatus.NewRequest:
+                    return Url.Action("WaitingToBeSent", new { hashedAccountId });
+                case RequestStatus.ReadyForReview:
+                    return Url.Action("ReadyForReview", new { hashedAccountId });
+                case RequestStatus.ReadyForApproval:
+                    return Url.Action("ReadyForApproval", new { hashedAccountId });
+                default:
+                    return Url.Action("YourCohorts", new { hashedAccountId });
+            }
+        }
+
         protected override void OnException(ExceptionContext filterContext)
         {
             if (filterContext.Exception is InvalidStateException)
             {
                 filterContext.ExceptionHandled = true;
                 filterContext.Result = RedirectToAction("Index", "Error");
+            }
+        }
+
+        private void SetFlashMessageOnModel<T>(OrchestratorResponse<T> model)
+        {
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                var flashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+                model.FlashMessage = flashMessage;
             }
         }
     }

@@ -36,6 +36,9 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.Factories;
+using SFA.DAS.EAS.Infrastructure.Interfaces.REST;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Events.Api.Client.Configuration;
@@ -83,6 +86,15 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             RegisterMediator();
 
             RegisterAuditService();
+
+            RegisterPostCodeAnywhereService();
+        }
+
+        private void RegisterPostCodeAnywhereService()
+        {
+            For<IAddressLookupService>().Use<AddressLookupService>();
+            For<IRestClientFactory>().Use<RestClientFactory>();
+            For<IRestServiceFactory>().Use<RestServiceFactory>();
         }
 
         private void RegisterAuditService()

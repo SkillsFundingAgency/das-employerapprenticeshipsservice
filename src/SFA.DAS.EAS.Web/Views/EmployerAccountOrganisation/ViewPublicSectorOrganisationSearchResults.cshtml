@@ -1,6 +1,6 @@
 @using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Organisation
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.PublicSectorOrganisationSearchResultsViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.PublicSectorOrganisationSearchResultsViewModel>
 @{ViewBag.PageID = "page-extra-public-sector-organisation-search-results"; }
 @{
     ViewBag.Title = "Public Sector Orgainsation Search Results";
@@ -15,7 +15,7 @@
 
         <form action="@Url.Action("AddOrganisation")" method="POST">
             @Html.AntiForgeryToken()
-            <input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />
+            @*<input type="hidden" id="hashedAccountId" name="hashedAccountId" value="@Model.Data.HashedAccountId" />*@
             <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
             <div class="search-field">
                 <fieldset class="search-input">
@@ -37,16 +37,16 @@
                     if (!result.AddedToAccount)
                     {
                         <li>
-                            <a href="@Url.Action("UpdateOrganisationAddress", new
-                                    {
-                                        OrganisationName = result.Name,
-                                        OrganisationType = OrganisationType.PublicBodies,
-                                        OrganisationReferenceNumber = result.ReferenceNumber,
-                                        OrganisationDateOfInception = result.DateOfInception,
-                                        PublicSectorDataSource = result.PublicSectorDataSource,
-                                        OrganisationStatus = "active",
-                                        Sector = result.Sector
-                                    })">
+                            <a href="@Url.Action("FindAddress", "EmployerAccountOrganisation", new
+                                     {
+                                         OrganisationName = result.Name,
+                                         OrganisationType = OrganisationType.PublicBodies,
+                                         OrganisationReferenceNumber = result.ReferenceNumber,
+                                         OrganisationDateOfInception = result.DateOfInception,
+                                         PublicSectorDataSource = result.PublicSectorDataSource,
+                                         OrganisationStatus = result.Status,
+                                         Sector = result.Sector
+                                     })">
                                 @result.Name
                             </a>
                         </li>
