@@ -65,6 +65,8 @@ table.top-border {
         &.last {
             margin-bottom: 20px;
         }
+        width: 100%;
+        box-sizing:border-box;
     }
     .search-form {
         display: none;

@@ -1920,6 +1920,8 @@ table.top-border {
 
 .org-type-search section {
   padding-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .org-type-search section.last {
