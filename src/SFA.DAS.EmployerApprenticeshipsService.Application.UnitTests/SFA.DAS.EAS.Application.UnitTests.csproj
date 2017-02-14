@@ -177,6 +177,7 @@
     <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
+    <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />
     <Compile Include="Events\ProcessPaymentTests\WhenIProcessPaymentData.cs" />
     <Compile Include="FakeTimeProvider.cs" />

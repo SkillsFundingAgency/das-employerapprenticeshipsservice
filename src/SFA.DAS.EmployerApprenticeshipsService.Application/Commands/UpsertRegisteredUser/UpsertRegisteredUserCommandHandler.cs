@@ -26,26 +26,13 @@ namespace SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            var user = await _userRepository.GetByUserRef(message.UserRef);
-
-            if (user == null)
+            await _userRepository.Upsert(new User
             {
-                await _userRepository.Create(new User
-                {
-                    Email = message.EmailAddress,
-                    FirstName = message.FirstName,
-                    LastName = message.LastName,
-                    UserRef = message.UserRef
-                });
-            }
-            else
-            {
-                user.Email = message.EmailAddress;
-                user.FirstName = message.FirstName;
-                user.LastName = message.LastName;
-
-                await _userRepository.Update(user);
-            }
+                UserRef = message.UserRef,
+                Email = message.EmailAddress,
+                FirstName = message.FirstName,
+                LastName = message.LastName
+            });
         }
     }
 }
