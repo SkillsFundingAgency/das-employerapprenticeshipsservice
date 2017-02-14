@@ -8,7 +8,6 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
@@ -81,7 +80,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
                 },
                 new FractionCalculation
                 {
-                    CalculatedAt = DateTime.Now.ToShortDateString(),
+                    CalculatedAt = DateTime.Today.ToShortDateString(),
                     Fractions = new List<Fraction>
                     {
                         new Fraction {Region = "England", Value = "0.6"}
@@ -101,7 +100,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
                 .ReturnsAsync(_existingFractions);
 
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -117,7 +116,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 
             //Assert
             _englishFractionRepository.Verify(x => x.GetAllEmployerFractions(_employerReference), Times.Once);
-            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference), Times.Once);
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()), Times.Once);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
                 It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[2])),
@@ -141,7 +140,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
                 .ReturnsAsync(_existingFractions);
 
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -178,7 +177,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
                 .ReturnsAsync(_existingFractions);
 
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -208,7 +207,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             //Arrange
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
                 .ReturnsAsync(_existingFractions);
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -265,7 +264,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
         public async Task ThenIfThereIsANewEnglishFractionCalculationAndTheFractionExistsThenItIsRetrievedFromHmrc()
         {
             //Arrange
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -280,14 +279,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             });
 
             //Assert
-            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference), Times.Once);
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()), Times.Once);
         }
 
         [Test]
         public async Task ThenIfThereIsNotANewEnglishFractionCalculationAndTheFractionDoesNotExistThenItIsRetrievedFromHmrc()
         {
             //Arrange
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -302,7 +301,33 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
             });
 
             //Assert
-            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference), Times.Once);
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfThereAreFractionsAndTheFlagIsSetToUpdateThenTheDateIsPassedAsAFilterParameter()
+        {
+            //Arrange
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference,It.IsAny<DateTime?>()))
+                .ReturnsAsync(new EnglishFractionDeclarations
+                {
+                    Empref = _employerReference,
+                    FractionCalculations = _fractionCalculations
+                });
+            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
+                .ReturnsAsync(_existingFractions);
+
+            //Act
+            await _handler.Handle(new UpdateEnglishFractionsCommand
+            {
+                EmployerReference = _employerReference,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016, 01, 01), UpdateRequired = true }
+            });
+
+            //Assert
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference,DateTime.Today.AddDays(-11)), Times.Once);
+            
+
         }
 
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)

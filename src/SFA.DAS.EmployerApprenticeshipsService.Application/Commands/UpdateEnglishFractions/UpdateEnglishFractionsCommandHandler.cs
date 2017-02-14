@@ -35,7 +35,15 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
                 return;
             }
 
-            var fractionCalculations = await _hmrcService.GetEnglishFractions(message.EmployerReference);
+            DateTime? dateFrom = null;
+            if (existingFractions?.OrderByDescending(x=>x.DateCalculated).FirstOrDefault()?.DateCalculated != null 
+                && existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated != DateTime.MinValue)
+            {
+                dateFrom = existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated.AddDays(-1);
+            }
+
+
+            var fractionCalculations = await _hmrcService.GetEnglishFractions(message.EmployerReference, dateFrom);
 
             var hmrcFractions = fractionCalculations.FractionCalculations.SelectMany(calculations =>
             {
