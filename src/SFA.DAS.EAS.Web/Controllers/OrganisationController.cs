@@ -215,7 +215,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (response.Status == HttpStatusCode.BadRequest)
             {
-                request.ErrorDictionary = response.Data.ErrorDictionary;
+                request.Address = request.Address ?? new AddressViewModel();
+                request.Address.ErrorDictionary = response.Data.ErrorDictionary;
 
                 var errorResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
                 {
