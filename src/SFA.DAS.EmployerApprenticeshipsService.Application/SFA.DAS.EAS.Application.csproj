@@ -404,6 +404,10 @@
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseResponse.cs" />
     <Compile Include="Queries\GetPayeSchemeInUse\GetPayeSchemeInUseValidator.cs" />
+    <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressHandler.cs" />
+    <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressRequest.cs" />
+    <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressResponse.cs" />
+    <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressValidator.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />

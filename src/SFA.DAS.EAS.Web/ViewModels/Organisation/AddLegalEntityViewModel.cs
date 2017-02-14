@@ -2,7 +2,7 @@
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Validators;
 
-namespace SFA.DAS.EAS.Web.ViewModels
+namespace SFA.DAS.EAS.Web.ViewModels.Organisation
 {
     [Validator(typeof(AddLegalEntityViewModelValidator))]
     public class AddLegalEntityViewModel: ViewModelBase

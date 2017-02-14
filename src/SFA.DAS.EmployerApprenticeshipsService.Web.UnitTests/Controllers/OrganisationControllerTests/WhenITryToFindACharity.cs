@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 {
@@ -87,7 +88,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("AddOrganisationAddress", result.ViewName);
+            Assert.AreEqual("FindAddress", result.ViewName);
         }
 
         [Test]

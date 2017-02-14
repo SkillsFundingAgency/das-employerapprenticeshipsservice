@@ -4,12 +4,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -119,14 +119,14 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                 if (string.IsNullOrWhiteSpace(address))
                 {
-                    var addressViewModel = _mapper.Map<AddOrganisationAddressModel>(response.Data);
+                    var addressViewModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
 
-                    var addressResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                    var addressResponse = new OrchestratorResponse<FindOrganisationAddressViewModel>
                     {
                         Data = addressViewModel
                     };
 
-                    return View("AddOrganisationAddress", addressResponse);
+                    return View("FindAddress", addressResponse);
                 }
 
                 return View("ConfirmOrganisationDetails", response);
@@ -151,10 +151,53 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("address/update")]
-        public ActionResult AddOrganisationAddress(AddOrganisationAddressModel request)
+        [Route("address/find")]
+        public ActionResult FindAddress(FindOrganisationAddressViewModel request)
         {
-            var response = new OrchestratorResponse<AddOrganisationAddressModel>
+            var response = new OrchestratorResponse<FindOrganisationAddressViewModel>
+            {
+                Data = request,
+                Status = HttpStatusCode.OK
+            };
+
+            return View(response);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("address/select")]
+        public async Task<ActionResult> SelectAddress(FindOrganisationAddressViewModel request)
+        {
+            var response = await _orchestrator.GetAddressesFromPostcode(request);
+            
+            if (response?.Data?.Addresses != null && response.Data.Addresses.Count == 1)
+            {
+                var viewModel = _mapper.Map<AddOrganisationAddressViewModel>(request);
+
+                viewModel.Address = response.Data.Addresses.Single();
+
+                var addressResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
+                {
+                    Data = viewModel,
+                    Status = HttpStatusCode.OK
+                };
+
+                return View("AddOrganisationAddress", addressResponse);
+            }
+
+            return View(response);
+        }
+
+        [HttpGet]
+        [Route("address/update")]
+        public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)
+        {
+            if (request.Address == null)
+            {
+                request.Address = new AddressViewModel();
+            }
+
+            var response = new OrchestratorResponse<AddOrganisationAddressViewModel>
             {
                 Data = request,
                 Status = HttpStatusCode.OK
@@ -166,15 +209,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("address/update")]
-        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressModel request)
+        public ActionResult UpdateOrganisationAddress(AddOrganisationAddressViewModel request)
         {
             var response = _orchestrator.AddOrganisationAddress(request);
 
             if (response.Status == HttpStatusCode.BadRequest)
             {
-                request.ErrorDictionary = response.Data.ErrorDictionary;
+                request.Address = request.Address ?? new AddressViewModel();
+                request.Address.ErrorDictionary = response.Data.ErrorDictionary;
 
-                var errorResponse = new OrchestratorResponse<AddOrganisationAddressModel>
+                var errorResponse = new OrchestratorResponse<AddOrganisationAddressViewModel>
                 {
                     Data = request,
                     Status = HttpStatusCode.BadRequest,
@@ -197,18 +241,22 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("custom/add")]
         public async Task<ActionResult> AddOtherOrganisationDetails(OrganisationDetailsViewModel model)
         {
             var response = await _orchestrator.ValidateLegalEntityName(model);
 
-            if (response.Status == HttpStatusCode.OK)
+            if (response.Status == HttpStatusCode.BadRequest)
             {
-                var addressResponse = _orchestrator.CreateAddOrganisationAddressViewModelFromOrganisationDetails(model);
-                return View("AddOrganisationAddress", addressResponse);
+                return View("AddOtherOrganisationDetails", response);
             }
 
-            return View(response);
+            model.Type = OrganisationType.Other;
+
+            var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
+
+            return RedirectToAction("FindAddress", addressModel);
         }
 
         [HttpPost]
@@ -216,7 +264,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("legalAgreement")]
         public ActionResult OrganisationLegalAgreement(string hashedAccountId, OrganisationDetailsViewModel model)
         {
-            var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>()
+            var viewModel = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
                 Data = model,
                 Status = HttpStatusCode.OK
@@ -224,8 +272,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(viewModel);
         }
-
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm")]
@@ -293,6 +340,5 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _orchestrator.GetCharityByRegistrationNumber(charityRegNo, hashedAccountId, userIdClaim);
             return response;
         }
-
     }
 }
