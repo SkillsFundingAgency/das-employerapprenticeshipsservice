@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -10,72 +9,51 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLastLevyDeclarationsTests
 {
-    public class WhenIGetLevyDeclarations
+    public class WhenIGetLevyDeclarations : QueryBaseTest<GetLastLevyDeclarationQueryHandler, GetLastLevyDeclarationQuery, GetLastLevyDeclarationResponse>
     {
-        private GetLastLevyDeclarationRequestHandler _handler;
-        private Mock<IValidator<GetLastLevyDeclarationRequest>> _validator;
         private Mock<IDasLevyRepository> _dasLevyRepository;
-        
+        private const string ExpectedEmpref = "45TGB";
+
+        public override GetLastLevyDeclarationQuery Query { get; set; }
+        public override GetLastLevyDeclarationQueryHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetLastLevyDeclarationQuery>> RequestValidator { get; set; }
+
         [SetUp]
         public void Arrange()
         {
-            _validator = new Mock<IValidator<GetLastLevyDeclarationRequest>>();
-            _validator.Setup(x => x.Validate(It.IsAny<GetLastLevyDeclarationRequest>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
-
-            _dasLevyRepository = new Mock<IDasLevyRepository>();
+            SetUp();
             
-            _handler = new GetLastLevyDeclarationRequestHandler(_validator.Object, _dasLevyRepository.Object);
-        }
+            _dasLevyRepository = new Mock<IDasLevyRepository>();
 
+            Query = new GetLastLevyDeclarationQuery { EmpRef = ExpectedEmpref };
+
+            RequestHandler = new GetLastLevyDeclarationQueryHandler(RequestValidator.Object, _dasLevyRepository.Object);
+        }
+        
         [Test]
-        public async Task ThenTheValidatorIsCalledToMakeSureTheRequestIsValid()
+        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await _handler.Handle(new GetLastLevyDeclarationRequest());
+            await RequestHandler.Handle(Query);
 
             //Assert
-            _validator.Verify(x=>x.Validate(It.IsAny<GetLastLevyDeclarationRequest>()),Times.Once);
-
+            _dasLevyRepository.Verify(x => x.GetLastSubmissionForScheme(ExpectedEmpref));
         }
 
         [Test]
-        public void ThenAnInvalidRequestExceptionIsThrownIfTheRequestIsNotValid()
+        public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _validator.Setup(x => x.Validate(It.IsAny<GetLastLevyDeclarationRequest>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
-
-            //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new GetLastLevyDeclarationRequest()));
-
-        }
-
-        [Test]
-        public async Task ThenIfTheRequestIsValidTheRepositoryIsCalledWithThePassedParameter()
-        {
-            //Arrange
-            var expectedEmpref = "45TGB";
-
-            //Act
-            await _handler.Handle(new GetLastLevyDeclarationRequest {Empref = expectedEmpref});
-
-            //Assert
-            _dasLevyRepository.Verify(x=>x.GetLastSubmissionForScheme(expectedEmpref));
-        }
-
-        [Test]
-        public async Task ThenIfTheRequestIsValidThenTheDataIsReturnedInTheResponse()
-        {
-            //Arrange
-            var expectedEmpref = "45TGB";
             var expectedDate = new DateTime(2016, 01, 29);
-            _dasLevyRepository.Setup(x => x.GetLastSubmissionForScheme(expectedEmpref)).ReturnsAsync(new DasDeclaration {Date = expectedDate});
+            _dasLevyRepository.Setup(x => x.GetLastSubmissionForScheme(ExpectedEmpref)).ReturnsAsync(new DasDeclaration { Date = expectedDate });
 
             //Act
-            var actual = await _handler.Handle(new GetLastLevyDeclarationRequest { Empref = expectedEmpref });
+            var actual = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.IsNotNull(actual.Transaction);
             Assert.AreEqual(expectedDate, actual.Transaction.Date);
         }
+        
     }
 }

@@ -3,21 +3,21 @@ using SFA.DAS.EAS.Application.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration
 {
-    public class GetLastLevyDeclarationValidator : IValidator<GetLastLevyDeclarationRequest>
+    public class GetLastLevyDeclarationValidator : IValidator<GetLastLevyDeclarationQuery>
     {
-        public ValidationResult Validate(GetLastLevyDeclarationRequest item)
+        public ValidationResult Validate(GetLastLevyDeclarationQuery item)
         {
             var validationResult = new ValidationResult();
 
-            if (string.IsNullOrEmpty(item.Empref))
+            if (string.IsNullOrEmpty(item.EmpRef))
             {
-                validationResult.AddError(nameof(item.Empref));
+                validationResult.AddError(nameof(item.EmpRef));
             }
 
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetLastLevyDeclarationRequest item)
+        public Task<ValidationResult> ValidateAsync(GetLastLevyDeclarationQuery item)
         {
             throw new System.NotImplementedException();
         }

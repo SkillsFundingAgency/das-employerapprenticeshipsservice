@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLastLevyDeclarationsTests
         public void ThenTheRequestIsValidWhenAllFieldsArePopulated()
         {
             //Arrange
-            var actual = _validator.Validate(new GetLastLevyDeclarationRequest {Empref = "asdasd"});
+            var actual = _validator.Validate(new GetLastLevyDeclarationQuery {EmpRef = "asdasd"});
 
             //Act
             Assert.IsTrue(actual.IsValid());
@@ -32,11 +32,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLastLevyDeclarationsTests
         public void ThenTheRequestIsNotValidWhenTheFieldsArentPopulatedAndTheErrorDictionaryIsPopulated()
         {
             //Arrange
-            var actual = _validator.Validate(new GetLastLevyDeclarationRequest());
+            var actual = _validator.Validate(new GetLastLevyDeclarationQuery());
 
             //Act
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("Empref", "Empref has not been supplied"), actual.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("EmpRef", "EmpRef has not been supplied"), actual.ValidationDictionary );
         }
     }
 }

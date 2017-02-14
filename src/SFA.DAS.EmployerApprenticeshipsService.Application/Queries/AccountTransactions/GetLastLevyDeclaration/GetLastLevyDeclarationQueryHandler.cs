@@ -5,18 +5,18 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration
 {
-    public class GetLastLevyDeclarationRequestHandler : IAsyncRequestHandler<GetLastLevyDeclarationRequest, GetLastLevyDeclarationResponse>
+    public class GetLastLevyDeclarationQueryHandler : IAsyncRequestHandler<GetLastLevyDeclarationQuery, GetLastLevyDeclarationResponse>
     {
-        private readonly IValidator<GetLastLevyDeclarationRequest> _validator;
+        private readonly IValidator<GetLastLevyDeclarationQuery> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
         
-        public GetLastLevyDeclarationRequestHandler(IValidator<GetLastLevyDeclarationRequest> validator, IDasLevyRepository dasLevyRepository)
+        public GetLastLevyDeclarationQueryHandler(IValidator<GetLastLevyDeclarationQuery> validator, IDasLevyRepository dasLevyRepository)
         {
             _validator = validator;
             _dasLevyRepository = dasLevyRepository;
         }
 
-        public async Task<GetLastLevyDeclarationResponse> Handle(GetLastLevyDeclarationRequest message)
+        public async Task<GetLastLevyDeclarationResponse> Handle(GetLastLevyDeclarationQuery message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclara
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var result = await _dasLevyRepository.GetLastSubmissionForScheme(message.Empref);
+            var result = await _dasLevyRepository.GetLastSubmissionForScheme(message.EmpRef);
             
             return new GetLastLevyDeclarationResponse {Transaction = result };
         }
