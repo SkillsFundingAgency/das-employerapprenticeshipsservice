@@ -134,8 +134,6 @@ namespace SFA.DAS.EAS.Web
 
             Task.Run(async () =>
             {
-
-
                 await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
             }).Wait();
 

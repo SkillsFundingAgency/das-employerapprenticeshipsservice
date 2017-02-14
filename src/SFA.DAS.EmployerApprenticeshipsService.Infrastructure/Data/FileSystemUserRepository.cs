@@ -55,6 +55,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             throw new NotImplementedException();
 
         }
+        public async Task Upsert(User user)
+        {
+            throw new NotImplementedException();
+
+        }
 
         public async Task<Users> GetAllUsers()
         {
