@@ -18,5 +18,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LatestMessage { get; set; }
         public bool HasApprenticeships { get; set; }
         public IList<ApprenticeshipListItemViewModel> Apprenticeships { get; set; }
+
+        public string BackLinkUrl { get; set; }
     }
 }

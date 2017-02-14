@@ -158,6 +158,8 @@
     <Compile Include="Commands\CreateNewPeriodEndTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
     <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Commands\DeleteApprenticeTests\WhenIDeleteAnApprentice.cs" />
+    <Compile Include="Commands\DeleteApprenticeTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIValidateTheCommand.cs" />

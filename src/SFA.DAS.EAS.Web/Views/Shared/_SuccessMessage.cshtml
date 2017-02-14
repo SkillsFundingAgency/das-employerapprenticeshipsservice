@@ -19,7 +19,16 @@
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
                 {
-                    <p>@Html.Raw(viewModel.FlashMessage.Message)</p>
+                    if (viewModel.FlashMessage.Severity == FlashMessageSeverityLevel.Okay)
+                    {
+                        <p><i class="icon-green-tick"></i>
+                        @Html.Raw(viewModel.FlashMessage.Message)</p>
+                    }
+                    else
+                    {
+                        <p>@Html.Raw(viewModel.FlashMessage.Message)</p>
+                    }
+
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
                 {

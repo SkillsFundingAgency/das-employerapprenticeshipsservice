@@ -21,8 +21,11 @@ using SFA.DAS.EAS.Web.Exceptions;
 using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
+using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
+using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
@@ -728,6 +731,108 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<DeleteCommitmentViewModel>> GetDeleteCommitmentModel(string hashedAccountId, string hashedCommitmentId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var commitmentData = await _mediator.SendAsync(new GetCommitmentQueryRequest
+                        {
+                            AccountId = accountId,
+                            CommitmentId = commitmentId
+                        });
+
+                        Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
+                        var programmeSummary = commitmentData.Commitment.Apprenticeships
+                                .GroupBy(m => m.TrainingName) 
+                                .Select(m => $"{m.Count()} {textOrDefault(m.Key)}")
+                                .ToList();
+
+                        return new OrchestratorResponse<DeleteCommitmentViewModel>
+                                   {
+                                       Data = new DeleteCommitmentViewModel
+                                                  {
+                                                       HashedAccountId = hashedAccountId,
+                                                       HashedCommitmentId = hashedCommitmentId,
+                                                       ProviderName = commitmentData.Commitment.ProviderName,
+                                                       NumberOfApprenticeships = commitmentData.Commitment.Apprenticeships.Count,
+                                                       ProgrammeSummaries = programmeSummary
+                                       }
+                                   };
+                    }, hashedAccountId, externalUserId);
+        }
+
+        public async Task DeleteCommitment(string hashedAccountId, string hashedCommitmentId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            _logger.Info($"Deleting commitment {hashedCommitmentId} Account: {accountId}, CommitmentId: {commitmentId}");
+
+            await CheckUserAuthorization(async () =>
+            {
+                await _mediator.SendAsync(new DeleteCommitmentCommand
+                {
+                    AccountId = accountId,
+                    CommitmentId = commitmentId
+                });
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>> GetDeleteApprenticeshipViewModel(string hashedAccountId, string externalUserId, string hashedCommitmentId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var commitmentId = _hashingService.DecodeValue(hashedCommitmentId);
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                await AssertCommitmentStatus(commitmentId, accountId);
+
+                return new OrchestratorResponse<DeleteApprenticeshipConfirmationViewModel>
+                {
+                    Data = new DeleteApprenticeshipConfirmationViewModel
+                    {
+                        HashedAccountId = hashedAccountId,
+                        HashedCommitmentId = hashedCommitmentId,
+                        HashedApprenticeshipId = hashedApprenticeshipId,
+                        ApprenticeshipName = apprenticeship.Apprenticeship.ApprenticeshipName,
+                        DateOfBirth = apprenticeship.Apprenticeship.DateOfBirth.HasValue ? apprenticeship.Apprenticeship.DateOfBirth.Value.ToGdsFormat() : string.Empty
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+
+        }
+
+        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
+        {
+            var accountId = _hashingService.DecodeValue(model.HashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
+
+            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            await _mediator.SendAsync(new DeleteApprenticeshipCommand
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+            return apprenticeship.Apprenticeship.ApprenticeshipName;
+        }
 
         private static string CreateReference()
         {

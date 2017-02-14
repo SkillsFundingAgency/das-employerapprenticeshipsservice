@@ -64,3 +64,8 @@ BEGIN
 		ADD [CreatedDate] DATETIME NOT NULL DEFAULT GETDATE()
 	END
 END
+
+IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_account' AND TABLE_NAME='LegalEntity')
+BEGIN
+	UPDATE [employer_account].[LegalEntity] SET Code=LOWER(NEWID()) WHERE Code IS NULL OR Code = ''
+END
