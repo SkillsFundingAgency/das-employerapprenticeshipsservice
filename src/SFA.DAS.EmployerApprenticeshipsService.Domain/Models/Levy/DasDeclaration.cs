@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
 
         public decimal LevyDueYtd { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime SubmissionDate { get; set; }
         public string SubmissionType { get; set; }
         public decimal LevyAllowanceForFullYear { get; set; }
         public string PayrollYear { get; set; }

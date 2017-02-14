@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 
@@ -9,11 +11,13 @@ namespace SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration
     {
         private readonly IValidator<GetHMRCLevyDeclarationQuery> _validator;
         private readonly IHmrcService _hmrcService;
+        private readonly IMediator _mediator;
 
-        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, IHmrcService hmrcService)
+        public GetHMRCLevyDeclarationQueryHandler(IValidator<GetHMRCLevyDeclarationQuery> validator, IHmrcService hmrcService, IMediator mediator)
         {
             _validator = validator;
             _hmrcService = hmrcService;
+            _mediator = mediator;
         }
 
         public async Task<GetHMRCLevyDeclarationResponse> Handle(GetHMRCLevyDeclarationQuery message)
@@ -25,7 +29,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetHMRCLevyDeclaration
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var declarations = await _hmrcService.GetLevyDeclarations(message.EmpRef);
+            var existingDeclaration = await _mediator.SendAsync(new GetLastLevyDeclarationQuery {EmpRef = message.EmpRef});
+
+            DateTime? dateFrom = null;
+            if (existingDeclaration?.Transaction?.SubmissionDate != null && existingDeclaration.Transaction.SubmissionDate != DateTime.MinValue)
+            {
+                dateFrom = existingDeclaration.Transaction?.SubmissionDate.AddDays(-1);
+            }
+
+            var declarations = await _hmrcService.GetLevyDeclarations(message.EmpRef, dateFrom);
             
             var getLevyDeclarationResponse = new GetHMRCLevyDeclarationResponse
             {

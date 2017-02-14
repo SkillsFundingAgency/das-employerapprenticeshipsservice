@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
             bool sendLevyDataChanged = false;
             foreach (var employerLevyData in message.EmployerLevyData)
             {
-                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations.OrderBy(c=>c.Date))
+                foreach (var dasDeclaration in employerLevyData.Declarations.Declarations.OrderBy(c=>c.SubmissionDate))
                 {
                     var declaration = await _dasLevyRepository.GetEmployerDeclaration(dasDeclaration.Id, employerLevyData.EmpRef);
 

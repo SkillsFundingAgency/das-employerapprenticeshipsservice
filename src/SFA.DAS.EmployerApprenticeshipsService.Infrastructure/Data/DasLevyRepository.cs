@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@EmpRef", empRef, DbType.String);
                 parameters.Add("@PayrollYear", dasDeclaration.PayrollYear, DbType.String);
                 parameters.Add("@PayrollMonth", dasDeclaration.PayrollMonth, DbType.Int16);
-                parameters.Add("@SubmissionDate", dasDeclaration.Date, DbType.DateTime);
+                parameters.Add("@SubmissionDate", dasDeclaration.SubmissionDate, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
                 parameters.Add("@CreatedDate", DateTime.UtcNow, DbType.DateTime);
                 
