@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 using NLog;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -40,9 +41,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View();
         }
 
-        public ActionResult InvalidState()
+        [Route("InvalidState/{hashedAccountId}")]
+        public ActionResult InvalidState(string hashedAccountId)
         {
-            return View("InvalidState");
+            var vm = new InvalidStateViewModel
+            {
+                HashedAccountId = hashedAccountId
+            };
+
+            return View(vm);
         }
     }
 }

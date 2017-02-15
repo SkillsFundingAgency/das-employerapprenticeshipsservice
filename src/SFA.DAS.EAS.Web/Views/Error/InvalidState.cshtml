@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SFA.DAS.EAS.Web.ViewModels.InvalidStateViewModel
+@{
     ViewBag.Title = "Invalid state";
     ViewBag.PageId = "invalid-state";
     ViewBag.HideNav = "false";
@@ -10,14 +11,15 @@
 
             <div class="hgroup">
                 <h1 class="heading-xlarge">
-                    There's been an error
+                    Page not available
                 </h1>
             </div>
 
             <div class="inner">
                 <p>
-                    Sorry, there seems to be an error with this page.  Please refresh your browser or
-                    <a href="@Url.Action("Index", "Home")">go back to the homepage</a>.
+                    This page is no longer available - any changes you've made up to this point have been saved.
+                    <br/><br/>
+                    <a href="@Url.Action("Index", "EmployerTeam", new { hashedAccountId = @Model.HashedAccountId })">Return to the homepage</a>.
                 </p>
             </div>
         </div>

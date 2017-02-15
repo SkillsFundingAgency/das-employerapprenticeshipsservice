@@ -604,8 +604,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (filterContext.Exception is InvalidStateException)
             {
+                var hashedAccountId = filterContext.RouteData.Values["hashedAccountId"];
+
                 filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("InvalidState", "Error");
+                filterContext.Result = RedirectToAction("InvalidState", "Error", new { hashedAccountId });
             }
         }
 
