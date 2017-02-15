@@ -65,6 +65,8 @@ table.top-border {
         &.last {
             margin-bottom: 20px;
         }
+        width: 100%;
+        box-sizing:border-box;
     }
     .search-form {
         display: none;
@@ -76,7 +78,7 @@ table.top-border {
             left: auto;
             width: inherit;
             height: inherit;
-            cursor: inherit;
+            cursor: text;
             opacity: 1;
         }
     }

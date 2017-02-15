@@ -573,7 +573,6 @@ p {
   color: #0b0c0c;
   text-decoration: none;
   border-bottom: 1px solid #0b0c0c;
-  background: url("/public/images/icon-arrow-left.png") no-repeat 0 4px;
 }
 
 .link-back:link, .link-back:visited, .link-back:hover, .link-back:active {
@@ -1916,6 +1915,8 @@ table.top-border {
 
 .org-type-search section {
   padding-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .org-type-search section.last {
@@ -1934,7 +1935,7 @@ table.top-border {
   left: auto;
   width: inherit;
   height: inherit;
-  cursor: inherit;
+  cursor: text;
   opacity: 1;
 }
 
