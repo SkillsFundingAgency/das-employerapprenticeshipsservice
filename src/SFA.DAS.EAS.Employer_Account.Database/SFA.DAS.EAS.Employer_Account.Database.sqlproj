@@ -111,6 +111,7 @@
     <Build Include="StoredProcedures\CreateInvitation.sql" />
     <Build Include="StoredProcedures\GetLegalEntity_ById.sql" />
     <Build Include="StoredProcedures\GetPayeForAccount_ByRef.sql" />
+    <Build Include="StoredProcedures\UpsertUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

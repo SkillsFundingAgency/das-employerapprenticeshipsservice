@@ -2274,6 +2274,8 @@ table.top-border {
 
 .org-type-search section {
   padding-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .org-type-search section.last {
@@ -2292,7 +2294,7 @@ table.top-border {
   left: auto;
   width: inherit;
   height: inherit;
-  cursor: inherit;
+  cursor: text;
   opacity: 1;
 }
 

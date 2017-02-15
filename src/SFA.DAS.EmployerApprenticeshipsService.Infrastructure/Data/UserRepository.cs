@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        
+
         public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@userRef", new Guid(id), DbType.Guid);
-                
+
                 var res = await c.QueryAsync<User>(
                     sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE PireanKey = @userRef",
                     param: parameters,
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task Create(User user)
         {
-            var result = await WithConnection(async c =>
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -80,12 +80,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            Console.WriteLine(result);
         }
 
         public async Task Update(User user)
         {
-            var result = await WithConnection(async c =>
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -97,7 +96,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            Console.WriteLine(result);
+        }
+
+        public async Task Upsert(User user)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", user.Email, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<Users> GetAllUsers()

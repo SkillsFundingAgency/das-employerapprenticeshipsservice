@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<User> GetByEmailAddress(string emailAddress);
         Task Create(User registerUser);
         Task Update(User user);
+        Task Upsert(User user);
         Task<Users> GetAllUsers();
     }
 }
