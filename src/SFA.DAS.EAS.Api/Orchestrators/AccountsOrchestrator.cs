@@ -25,14 +25,14 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             _mediator = mediator;
             _logger = logger;
         }
-        
+
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all account balances.");
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() {ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber});
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery() { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
                 AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
@@ -42,11 +42,11 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             accountsResult.Accounts.ForEach(account =>
             {
-                var accountBalance = transactionResult.Accounts.SingleOrDefault(c=>c.AccountId==account.Id);
+                var accountBalance = transactionResult.Accounts.SingleOrDefault(c => c.AccountId == account.Id);
                 data.Add(new AccountWithBalanceViewModel { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = accountBalance?.Balance ?? 0 });
             });
 
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() {Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() {Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1} };
+            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
         }
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string hashedAccountId)
@@ -118,7 +118,11 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                 Address = legalEntityResult.LegalEntity.Address,
                 Code = legalEntityResult.LegalEntity.Code,
                 Status = legalEntityResult.LegalEntity.Status,
-                Sector = legalEntityResult.LegalEntity.Sector
+                Sector = legalEntityResult.LegalEntity.Sector,
+
+                AgreementStatus = (EmployerAgreementStatus)((int)legalEntityResult.LegalEntity.AgreementStatus),
+                AgreementSignedByName = legalEntityResult.LegalEntity.AgreementSignedByName,
+                AgreementSignedDate = legalEntityResult.LegalEntity.AgreementSignedDate
             };
 
             return legalEntityViewModel;
