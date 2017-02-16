@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         Signed = 2,
         [Description("Expired")]
         Expired = 3,
-        [Description("Superceded")]
+        [Description("Superseded")]
         Superceded = 4
     }
 }
