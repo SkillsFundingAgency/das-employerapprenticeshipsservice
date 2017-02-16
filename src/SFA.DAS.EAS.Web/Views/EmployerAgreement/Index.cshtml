@@ -31,11 +31,6 @@
         <p>Add each organisation that will make an agreement with a training provider for apprenticeship training.</p>
         <p>There is no restriction on the number of <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank" rel="external">connected organisations</a> you can add.</p>
         
-        <div class="panel alert-default">
-            <p>From May 2017, you’ll be asked to accept the Skills Funding Agency (SFA) agreement for each of your organisations that will make an agreement with a training provider to spend apprenticeship funds. </p>
-            <p>This agreement gives you the authority to access the funds in your account to manage your apprenticeships. You must agree to all the terms and conditions in this agreement and the funding rules, before funds can be used to pay for apprentices.</p>
-            <p><a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending" target="_blank">Read the <abbr title="Skills Funding Agency">SFA</abbr> agreement</a> - we'll tell you when it's ready to be accepted.</p>
-        </div>
         <table>
             <thead>
             <tr>
@@ -62,7 +57,7 @@
                         </td>
                         <td>
                             <a href="@Url.Action("View", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">View</a>
-                            <a href="@Url.Action("Sign", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">Sign</a>
+                            <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">Sign agreement</a>
                         </td>
                     </tr>
                 }
