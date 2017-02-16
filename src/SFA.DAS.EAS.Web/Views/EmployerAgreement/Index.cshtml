@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Extensions
+@using SFA.DAS.EAS.Domain.Models.EmployerAgreement
 @using SFA.DAS.EAS.Web;
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementListViewModel>
@@ -37,17 +38,32 @@
         </div>
         <table>
             <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                </tr>
+            <tr>
+                <th scope="col">Organisation</th>
+                <th scope="col">Agreement</th>           
+                <th scope="col">Spending Status</th>
+                <th scope="col"></th>
             </thead>
             <tbody>
 
                 @foreach (var employerAgreement in Model.Data.EmployerAgreements)
-            {
+                {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        
+
+                        <td>@employerAgreement.SignedByName
+                        @if (employerAgreement.SignedDate.HasValue)
+                        {
+                            @:Signed Date: @employerAgreement.SignedDate.Value.ToString("dd/M/yyyy")
+                        }
+                        </td>
+                        <td>
+                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending Enabled" : "Spending Disabled")
+                        </td>
+                        <td>
+                            <a href="@Url.Action("View", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">View</a>
+                            <a href="@Url.Action("Sign", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">Sign</a>
+                        </td>
                     </tr>
                 }
             </tbody>
