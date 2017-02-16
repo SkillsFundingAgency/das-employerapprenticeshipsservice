@@ -404,6 +404,7 @@
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
+    <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -966,6 +967,7 @@
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
     <Content Include="Views\EmployerCommitments\DeleteCohort.cshtml" />
+    <Content Include="Views\Error\InvalidState.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

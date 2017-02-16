@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("YourCohorts")]
+        [Route("cohorts")]
         public async Task<ActionResult> YourCohorts(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetYourCohorts(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -60,7 +60,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WaitingToBeSent")]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("cohorts/new")]
         public async Task<ActionResult> WaitingToBeSent(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWaitingToBeSent(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -70,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForApproval")]
+        [Route("cohorts/approve")]
         public async Task<ActionResult> ReadyForApproval(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForApproval(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -80,7 +81,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ReadyForReview")]
+        [Route("cohorts/review")]
         public async Task<ActionResult> ReadyForReview(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllReadyForReview(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -90,7 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("WithProvider")]
+        [Route("cohorts/provider")]
         public async Task<ActionResult> WithProvider(string hashedAccountId)
         {
             var model = await _employerCommitmentsOrchestrator.GetAllWithProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -439,15 +440,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/submit")]
         public async Task<ActionResult> SubmitExistingCommitment(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
-            try
-            {
-                var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
-                return View("SubmitCommitmentEntry", response);
-            }
-            catch (InvalidStateException)
-            {
-                return RedirectToAction("Index", "EmployerCommitments");
-            }
+            var response = await _employerCommitmentsOrchestrator.GetSubmitCommitmentModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, saveStatus);
+            return View("SubmitCommitmentEntry", response);
         }
 
         [HttpPost]
@@ -640,8 +634,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (filterContext.Exception is InvalidStateException)
             {
+                var hashedAccountId = filterContext.RouteData.Values["hashedAccountId"];
+
                 filterContext.ExceptionHandled = true;
-                filterContext.Result = RedirectToAction("Index", "Error");
+                filterContext.Result = RedirectToAction("InvalidState", "Error", new { hashedAccountId });
             }
         }
 
