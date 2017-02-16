@@ -162,7 +162,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedCommitmentId}/confirmProvider/create")]
+        [Route("confirmProvider/create")]
         public ActionResult ConfirmProvider(string hashedAccountId)
         {
             return RedirectToAction("Inform", new { hashedAccountId });
