@@ -11,6 +11,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         [Description("Expired")]
         Expired = 3,
         [Description("Superseded")]
-        Superceded = 4
+        Superseded = 4
     }
 }
