@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Domain.Data.Entities.Account
 {
@@ -13,5 +14,9 @@ namespace SFA.DAS.EAS.Domain.Data.Entities.Account
         public string Source { get; set; }
         public string PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
+
+        public EmployerAgreementStatus AgreementStatus { get; set; }
+        public string AgreementSignedByName { get; set; }
+        public DateTime? AgreementSignedDate { get; set; }
     }
 }

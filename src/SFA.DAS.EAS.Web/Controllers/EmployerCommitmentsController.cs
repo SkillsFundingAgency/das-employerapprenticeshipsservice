@@ -134,6 +134,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("provider/create")]
         public async Task<ActionResult> SearchProvider(string hashedAccountId, string legalEntityCode, string cohortRef)
         {
+            if (string.IsNullOrWhiteSpace(legalEntityCode) || string.IsNullOrWhiteSpace(cohortRef))
+            {
+                return RedirectToAction("Inform", new {hashedAccountId});
+            }
+
             var response = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, cohortRef);
 
             return View(response);
@@ -154,6 +159,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
 
             return View(response);
+        }
+
+        [HttpGet]
+        [Route("confirmProvider/create")]
+        public ActionResult ConfirmProvider(string hashedAccountId)
+        {
+            return RedirectToAction("Inform", new { hashedAccountId });
         }
 
         [HttpPost]
@@ -181,8 +193,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("choosePath/create")]
-        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef)
+        public async Task<ActionResult> ChoosePath(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef)
         {
+            if (string.IsNullOrWhiteSpace(legalEntityCode)
+                || string.IsNullOrWhiteSpace(providerId)
+                || string.IsNullOrWhiteSpace(cohortRef))
+            {
+                return RedirectToAction("Inform", new { hashedAccountId });
+            }
+
             var model = await _employerCommitmentsOrchestrator.CreateSummary(hashedAccountId, legalEntityCode, providerId, cohortRef, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
@@ -190,7 +209,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("create")]
+        [Route("choosePath/create")]
         public async Task<ActionResult> CreateCommitment(CreateCommitmentViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -448,10 +467,20 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("Submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
         {
+            if (string.IsNullOrWhiteSpace(legalEntityCode)
+                || string.IsNullOrWhiteSpace(legalEntityName)
+                || string.IsNullOrWhiteSpace(providerId)
+                || string.IsNullOrWhiteSpace(providerName)
+                || string.IsNullOrWhiteSpace(cohortRef)
+                || !saveStatus.HasValue)
+            {
+                return RedirectToAction("Inform", new { hashedAccountId });
+            }
+
             var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
-                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus);
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus.Value);
 
             return View("SubmitCommitmentEntry", response);
         }
