@@ -47,28 +47,36 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
 		[HttpGet]
-		[Route("agreements/{agreementid}/view")]
-        public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
+		[Route("agreements/{agreementId}/view")]
+        public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            
             return View(agreement);
         }
 
         [HttpGet]
-        [Route("agreements/{agreementid}/about-your-agreement")]
+        [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
             var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(agreement);
         }
-        
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/sign-your-agreement")]
+        public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
+        {
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(agreement);
+        }
+
         [HttpPost]
         [Route("agreements/{agreementid}/sign")]
-		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
         {
             if (understood == nameof(understood))
             {
@@ -80,24 +88,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
                     return RedirectToAction("Index", new { hashedAccountId });
                 }
-
-                return View("DeadView", response);
             }
 
             TempData["notunderstood"] = true;
-           
-            return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
-        }
-        
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("agreements/new/view")]
-        public async Task<ActionResult> ViewEntityAgreement(string hashedAccountId, string name, string code, string address, 
-            DateTime incorporated)
-        {
-            var response = await _orchestrator.Create(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
 
-            return View(response);
+            return RedirectToAction("SignAgreement", new { agreementId = agreementid, hashedAccountId });
         }
+
     }
 }

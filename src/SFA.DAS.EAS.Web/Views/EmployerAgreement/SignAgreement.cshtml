@@ -1,20 +1,19 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
-
+    
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your organisations and agreements</h1>
+        <h1 class="heading-xlarge">Sign your organisation agreement</h1>
     </div>
 </div>
 
 <div class="grid-row">
     <div class="column-two-thirds">
         <p>@Model.Data.EmployerAgreement.LegalEntityName</p>
-        <p>About your SFA Agreement.</p>
+        <p>Sign your SFA Agreement.</p>
     </div>
-    <form method="get" action="@Url.Action("SignAgreement","EmployerAgreement")">
+    <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
         @Html.AntiForgeryToken()
-
-
-        <input class="button action-add" type="submit" value="Contine to your agreement"/>
+        
+        <input class="button action-add" type="submit" value="Sign" />
     </form>
 </div>
