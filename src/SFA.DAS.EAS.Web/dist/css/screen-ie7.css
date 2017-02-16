@@ -2764,6 +2764,10 @@ tr.total td {
   font-weight: 600;
 }
 
+.agreement {
+  overflow: hidden;
+}
+
 .agreement header {
   font-weight: 400;
   text-transform: none;
@@ -2853,6 +2857,29 @@ tr.total td {
   font-size: 24px;
   margin-top: 30px;
   font-weight: bold;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.agreement .agreement-contents h2 .number {
+  font-size: 60px;
+  line-height: 1;
+  position: absolute;
+  left: -33%;
+  width: 33%;
+  font-size: 80px;
+  padding-left: 5%;
+  width: 28%;
+}
+
+.agreement .agreement-contents h3 {
+  font-weight: bold;
+  color: #6f777b;
+  font-size: 24px;
+  line-height: 1;
+  position: absolute;
+  margin-left: -60px;
+  padding-top: 5px;
 }
 
 .validation-summary-valid,
