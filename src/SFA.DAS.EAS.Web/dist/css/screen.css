@@ -3716,6 +3716,11 @@ span.helpText {
   padding-left: 50px;
 }
 
+.grey-background {
+  background: #dee0e2;
+  padding: 20px 20px 10px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .manage-all-apprentices td:nth-of-type(1):before {
     content: "Name";
