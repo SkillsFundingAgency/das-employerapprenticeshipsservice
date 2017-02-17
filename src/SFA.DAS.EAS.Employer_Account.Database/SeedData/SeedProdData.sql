@@ -52,58 +52,6 @@ END
 SET IDENTITY_INSERT  [employer_account].[Role] OFF
 
 
--- EmployerAgreement Status
-SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] ON 
-IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 1
-	AND Name = 'Pending'))
-BEGIN 
-	INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-	VALUES(1, 'Pending') 
-END 
-ELSE 
-BEGIN 
-	UPDATE [employer_account].[EmployerAgreementStatus] 
-	SET Name = 'Pending'
-	WHERE Id = 1
-END 
-IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 2
-	AND Name = 'Signed'))
-BEGIN 
-	INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-	VALUES(2, 'Signed') 
-END 
-ELSE 
-BEGIN 
-	UPDATE [employer_account].[EmployerAgreementStatus] 
-	SET Name = 'Signed'
-	WHERE Id = 2
-END 
-IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 3
-	AND Name = 'Expired'))
-BEGIN 
-	INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-	VALUES(3, 'Expired') 
-END 
-ELSE 
-BEGIN 
-	UPDATE [employer_account].[EmployerAgreementStatus] 
-	SET Name = 'Expired'
-	WHERE Id = 3
-END 
-IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 4
-	AND Name = 'Superceded'))
-BEGIN 
-	INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-	VALUES(4, 'Superceded') 
-END 
-ELSE 
-BEGIN 
-	UPDATE [employer_account].[EmployerAgreementStatus] 
-	SET Name = 'Superceded'
-	WHERE Id = 4
-END 
-SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] OFF
-
 
 -- EmployerAgreement Template
 IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = 1
