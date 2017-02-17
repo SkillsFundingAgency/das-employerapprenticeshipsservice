@@ -92,7 +92,6 @@
     <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
     <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
-    <Build Include="StoredProcedures\ReleaseEmployerAgreementTemplate.sql" />
     <Build Include="Schemas\Employer_Account.sql" />
     <Build Include="Tables\Account.sql" />
     <Build Include="Tables\User.sql" />

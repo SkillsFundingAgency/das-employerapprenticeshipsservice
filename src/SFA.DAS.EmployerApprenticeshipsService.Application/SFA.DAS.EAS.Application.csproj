@@ -210,9 +210,6 @@
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandHandler.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommand.cs" />
     <Compile Include="Commands\RefreshEmployerLevyData\RefreshEmployerLevyDataCommandValidator.cs" />
-    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommand.cs" />
-    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandHandler.cs" />
-    <Compile Include="Commands\ReleaseEmployerAgreementTemplate\ReleaseEmployerAgreementTemplateCommandValidator.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommand.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandHandler.cs" />
     <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandValidator.cs" />

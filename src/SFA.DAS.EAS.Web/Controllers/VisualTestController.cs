@@ -175,8 +175,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 SignedByName = "Bojack Horseman",
                 SignedDate = new DateTime(2016, 8, 12),
                 Status = EmployerAgreementStatus.Pending,
-                TemplateId = 3,
-                TemplateText = "The good old template"
+                TemplateId = 3
             };
 
             var employerAgreementViewModel = new EmployerAgreementViewModel()
