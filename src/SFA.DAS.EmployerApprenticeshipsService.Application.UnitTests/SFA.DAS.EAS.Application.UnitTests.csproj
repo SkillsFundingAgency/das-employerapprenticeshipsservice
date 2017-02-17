@@ -173,6 +173,7 @@
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
+    <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
