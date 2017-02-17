@@ -93,23 +93,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task ReleaseEmployerAgreementTemplate(int templateId)
-        {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@templateId", templateId, DbType.Int32);
-
-                var trans = c.BeginTransaction();
-                var result = await c.ExecuteAsync(
-                    sql: "[employer_account].[ReleaseEmployerAgreementTemplate]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure, transaction: trans);
-                trans.Commit();
-                return result;
-            });
-        }
-
         public async Task<EmployerAgreementTemplate> GetEmployerAgreementTemplate(int templateId)
         {
             var result = await WithConnection(async c =>

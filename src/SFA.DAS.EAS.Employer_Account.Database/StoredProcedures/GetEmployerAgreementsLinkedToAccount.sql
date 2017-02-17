@@ -9,7 +9,7 @@ BEGIN
 		ea.LegalEntityId, 
 		le.Name AS LegalEntityName,
 		ea.TemplateId,
-		eat.Ref AS TemplateRef
+		eat.PartialViewName AS TemplatePartialViewName
 	FROM [employer_account].[LegalEntity] le
 		JOIN [employer_account].[EmployerAgreement] ea
 			ON ea.LegalEntityId = le.Id

@@ -14,7 +14,7 @@ BEGIN
 		le.Name AS LegalEntityName,
 		le.RegisteredAddress AS LegalEntityRegisteredAddress,
 		ea.TemplateId,
-		eat.[Text] AS TemplateText
+		eat.PartialViewName AS TemplatePartialViewName
 	FROM [employer_account].[LegalEntity] le
 		JOIN [employer_account].[EmployerAgreement] ea
 			ON ea.LegalEntityId = le.Id

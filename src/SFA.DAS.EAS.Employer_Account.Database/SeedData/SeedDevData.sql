@@ -99,8 +99,8 @@ BEGIN
 END  
 
 
-IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE [Ref] = 'SFA Employer Agreement V1.0BETA'))
+IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE PartialViewName = '_Agreement_V1'))
 BEGIN 
-	INSERT INTO [employer_account].[EmployerAgreementTemplate]( [Text], CreatedDate, Ref, ReleasedDate) 
-	VALUES('<p> 1 Introduction </p>', GETDATE(), 'SFA Employer Agreement V1.0BETA', GETDATE()) 
+	INSERT INTO [employer_account].[EmployerAgreementTemplate]( PartialViewName, CreatedDate) 
+	VALUES('_Agreement_V1', GETDATE()) 
 END 

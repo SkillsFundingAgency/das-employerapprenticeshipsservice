@@ -152,8 +152,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LegalEntityAddress = viewModel.OrganisationAddress,
                     LegalEntityInceptionDate = viewModel.OrganisationDateOfInception,
                     Status = EmployerAgreementStatus.Pending,
-                    TemplateRef = templateResponse.Template.Ref,
-                    TemplateText = templateResponse.Template.Text
+                    TemplatePartialViewName = templateResponse.Template.PartialViewName
                 }
             };
 
