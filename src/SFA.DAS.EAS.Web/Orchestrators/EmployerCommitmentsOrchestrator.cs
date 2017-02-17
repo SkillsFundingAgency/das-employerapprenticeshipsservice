@@ -25,6 +25,8 @@ using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
@@ -379,6 +381,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(response.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(response.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
+                /* todo */
+
+                //Dan changing this request to accept AccountId and LegalEntityId instead of Code
+                //will give back any pending assignments
+                //var response2 = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+                //{
+                //    LegalEntityCode = response.Commitment.LegalEntityId
+                //});
+
+                var hasSigned = false;
+
+                /* */
+
+
                 return new OrchestratorResponse<FinishEditingViewModel>
                 {
                     Data = new FinishEditingViewModel
@@ -388,7 +404,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         NotReadyForApproval = !response.Commitment.CanBeApproved,
                         ApprovalState = GetApprovalState(response.Commitment),
                         HasApprenticeships = response.Commitment.Apprenticeships.Any(),
-                        InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved)
+                        InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
+                        HasSignedTheAgreement = hasSigned
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -1122,6 +1139,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
             return data.Any();
+        }
+
+        public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
+        {
+            return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
+            {
+                Data = new LegalEntitySignedAgreementViewModel
+                {
+                    HashedAccountId = hashedAccountId,
+                    LegalEntityCode = legalEntityCode,
+                    CohortRef = cohortRef,
+                    HasSignedAgreement = false //todo
+                }
+            };
         }
     }
 }

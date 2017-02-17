@@ -128,7 +128,25 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("SelectLegalEntity", response);
             }
 
-            return RedirectToAction("SearchProvider", selectedLegalEntity);
+            //todo
+            //check if agreement is signed for legal entity
+            //if so, continue on
+            //otherwise redirect
+            //return RedirectToAction("AgreementNotSigned", new { hashedAccountId, selectedLegalEntity.LegalEntityCode });
+            //get from orchestrator the last agreement status
+
+            var agreement = await _employerCommitmentsOrchestrator.GetLegalEntitySignedAgreementViewModel(hashedAccountId,
+                selectedLegalEntity.LegalEntityCode, selectedLegalEntity.CohortRef);
+
+            if (agreement.Data.HasSignedAgreement)
+            {
+                return RedirectToAction("SearchProvider", selectedLegalEntity);
+            }
+            else
+            {
+                return RedirectToAction("AgreementNotSigned", agreement.Data);
+            }
+            
         }
 
         [HttpGet]
@@ -295,6 +313,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return Redirect(GetReturnToListUrl(viewModel.HashedAccountId));
 
+        }
+
+        [HttpGet]
+        [Route("{legalEntityCode}/AgreementNotSigned")]
+        public async Task<ActionResult> AgreementNotSigned(LegalEntitySignedAgreementViewModel viewModel)
+        {
+            return View(viewModel);
         }
 
         [HttpGet]

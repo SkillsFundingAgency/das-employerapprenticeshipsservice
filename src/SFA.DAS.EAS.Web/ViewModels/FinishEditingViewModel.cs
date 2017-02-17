@@ -23,6 +23,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public bool NotReadyForApproval { get;  set; }
 
         public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
+
+        public bool HasSignedTheAgreement { get; set; }
     }
 
     public enum ApprovalState
