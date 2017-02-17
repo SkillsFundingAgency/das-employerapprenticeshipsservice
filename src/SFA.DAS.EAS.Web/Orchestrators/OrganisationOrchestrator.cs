@@ -312,35 +312,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
             CreateNewLegalEntityViewModel request)
         {
-            if (request.SignedAgreement && !request.UserIsAuthorisedToSign)
-            {
-                var response = await _mediator.SendAsync(new GetLatestEmployerAgreementTemplateRequest
-                {
-                    HashedAccountId = request.HashedAccountId,
-                    UserId = request.ExternalUserId
-                });
-
-                return new OrchestratorResponse<EmployerAgreementViewModel>
-                {
-                    Data = new EmployerAgreementViewModel
-                    {
-                        EmployerAgreement = new EmployerAgreementView
-                        {
-                            LegalEntityName = request.Name,
-                            LegalEntityCode = request.Code,
-                            LegalEntityAddress = request.Address,
-                            LegalEntityInceptionDate = request.IncorporatedDate,
-                            Status = EmployerAgreementStatus.Pending,
-                            TemplateRef = response.Template.Ref,
-                            TemplateText = response.Template.Text,
-                            LegalEntityStatus = request.LegalEntityStatus,
-                            Sector = request.Sector
-                        }
-                    },
-                    Status = HttpStatusCode.BadRequest
-                };
-            }
-
             var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,
@@ -355,8 +326,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     PublicSectorDataSource = request.PublicSectorDataSource,
                     Sector = request.Sector
                 },
-                SignAgreement = request.UserIsAuthorisedToSign && request.SignedAgreement,
-                SignedDate = request.SignedDate,
                 ExternalUserId = request.ExternalUserId
             });
 

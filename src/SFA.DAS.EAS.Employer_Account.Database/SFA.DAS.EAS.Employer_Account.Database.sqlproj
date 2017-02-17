@@ -83,7 +83,6 @@
     <Build Include="Tables\EmployerAgreementTemplate.sql" />
     <Build Include="Tables\EmployerAgreement.sql" />
     <Build Include="Tables\AccountEmployerAgreement.sql" />
-    <Build Include="Tables\EmployerAgreementStatus.sql" />
     <Build Include="StoredProcedures\GetLegalEntitiesLinkedToAccount.sql" />
     <Build Include="StoredProcedures\AddPayeToAccount.sql" />
     <Build Include="StoredProcedures\CreateLegalEntity.sql" />
