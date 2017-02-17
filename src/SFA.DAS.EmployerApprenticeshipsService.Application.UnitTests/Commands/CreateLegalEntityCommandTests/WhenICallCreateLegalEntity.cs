@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
                                  .ReturnsAsync(_owner);
 
-            _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity, _command.SignAgreement, _command.SignedDate, _owner.UserId))
+            _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity))
                               .ReturnsAsync(_agreementView);
 
             _eventPublisher = new Mock<IEventPublisher>();
@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             await _commandHandler.Handle(_command);
 
             //Assert
-            _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code)), It.IsAny<bool>(), It.IsAny<DateTime>(), It.IsAny<long>()), Times.Once);
+            _accountRepository.Verify(r => r.CreateLegalEntity(It.IsAny<long>(), It.Is<LegalEntity>(le => !string.IsNullOrEmpty(le.Code))), Times.Once);
         }
     }
 }
