@@ -93,5 +93,21 @@
                 padding-top: 5px;
             }
         }
+        ol li {
+            font-weight: normal;
+        }
+        li .list {
+            padding-left: 30px;
+        }
+        .list.letters {
+            li {
+                list-style: lower-alpha;
+            }
+        }
+        .list.roman {
+            li {
+                list-style: lower-roman;
+            }
+        }
     }
 }

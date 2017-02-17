@@ -3340,6 +3340,22 @@ tr.total td {
   }
 }
 
+.agreement .agreement-contents ol li {
+  font-weight: normal;
+}
+
+.agreement .agreement-contents li .list {
+  padding-left: 30px;
+}
+
+.agreement .agreement-contents .list.letters li {
+  list-style: lower-alpha;
+}
+
+.agreement .agreement-contents .list.roman li {
+  list-style: lower-roman;
+}
+
 .validation-summary-valid,
 .form-group .field-validation-valid {
   display: none;
