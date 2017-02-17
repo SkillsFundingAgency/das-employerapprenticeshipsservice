@@ -128,13 +128,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("SelectLegalEntity", response);
             }
 
-            //todo
-            //check if agreement is signed for legal entity
-            //if so, continue on
-            //otherwise redirect
-            //return RedirectToAction("AgreementNotSigned", new { hashedAccountId, selectedLegalEntity.LegalEntityCode });
-            //get from orchestrator the last agreement status
-
             var agreement = await _employerCommitmentsOrchestrator.GetLegalEntitySignedAgreementViewModel(hashedAccountId,
                 selectedLegalEntity.LegalEntityCode, selectedLegalEntity.CohortRef);
 

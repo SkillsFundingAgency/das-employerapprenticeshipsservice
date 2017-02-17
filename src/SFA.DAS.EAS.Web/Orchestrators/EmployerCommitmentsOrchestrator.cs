@@ -381,19 +381,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(response.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(response.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-                /* todo */
+                var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+                {
+                    AccountId = accountId,
+                    LegalEntityCode = response.Commitment.LegalEntityId
+                });
 
-                //Dan changing this request to accept AccountId and LegalEntityId instead of Code
-                //will give back any pending assignments
-                //var response2 = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
-                //{
-                //    LegalEntityCode = response.Commitment.LegalEntityId
-                //});
-
-                var hasSigned = false;
-
-                /* */
-
+                var hasSigned = agreementResponse.EmployerAgreement == null;
 
                 return new OrchestratorResponse<FinishEditingViewModel>
                 {
@@ -1143,6 +1137,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
         {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            
+            var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            {
+                AccountId = accountId,
+                LegalEntityCode = legalEntityCode
+            });
+
+            var hasSigned = agreementResponse.EmployerAgreement == null;
+
             return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
             {
                 Data = new LegalEntitySignedAgreementViewModel
@@ -1150,7 +1154,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     LegalEntityCode = legalEntityCode,
                     CohortRef = cohortRef,
-                    HasSignedAgreement = false //todo
+                    HasSignedAgreement = hasSigned
                 }
             };
         }
