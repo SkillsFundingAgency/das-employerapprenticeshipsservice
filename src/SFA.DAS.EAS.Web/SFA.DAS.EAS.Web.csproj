@@ -543,6 +543,12 @@
     <Content Include="dist\images\icon-search-2x.png" />
     <Content Include="dist\images\icon-search.png" />
     <Content Include="dist\images\opengraph-image.png" />
+    <Content Include="dist\images\org_crest_13px.png" />
+    <Content Include="dist\images\org_crest_13px_x2.png" />
+    <Content Include="dist\images\org_crest_18px.png" />
+    <Content Include="dist\images\org_crest_18px_x2.png" />
+    <Content Include="dist\images\org_crest_27px.png" />
+    <Content Include="dist\images\org_crest_27px_x2.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />

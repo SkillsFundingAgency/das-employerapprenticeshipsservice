@@ -2362,6 +2362,26 @@ a#link-settings:focus {
   display: none;
 }
 
+.sfa-logo {
+  border-left: 2px solid #003a69;
+  padding-top: 20px;
+  padding-left: 6px;
+  background: url(/dist/images/org_crest_13px.png) no-repeat 5px 0;
+  padding-top: 30px;
+  padding-left: 7px;
+  background: url(/dist/images/org_crest_18px.png) no-repeat 5px 0;
+  padding-top: 45px;
+  padding-left: 10px;
+  background: url(/dist/images/org_crest_27px.png) no-repeat 10px 0;
+}
+
+.organisation-logo {
+  position: relative;
+  line-height: 1.1em;
+  top: 3px;
+  display: block;
+}
+
 .govuk-box-highlight {
   padding: 1.8em 15px 1.5em;
   margin-bottom: 0;
