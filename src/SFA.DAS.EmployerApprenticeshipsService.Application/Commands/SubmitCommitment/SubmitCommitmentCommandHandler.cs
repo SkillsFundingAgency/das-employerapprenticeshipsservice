@@ -1,8 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Application.Commands.SendNotification;
+using SFA.DAS.EAS.Application.Queries.GetProvider;
+using SFA.DAS.EAS.Application.Queries.GetProviderEmailQuery;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
@@ -13,13 +20,25 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
     {
         private readonly ICommitmentsApi _commitmentApi;
         private readonly ITasksApi _tasksApi;
+
+        private readonly IMediator _mediator;
+
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+
         private readonly SubmitCommitmentCommandValidator _validator;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentApi, ITasksApi tasksApi)
+        public SubmitCommitmentCommandHandler(
+            ICommitmentsApi commitmentApi, 
+            ITasksApi tasksApi,
+            IMediator mediator,
+            EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _commitmentApi = commitmentApi;
-            _validator = new SubmitCommitmentCommandValidator();
             _tasksApi = tasksApi;
+            _mediator = mediator;
+            _configuration = configuration;
+
+            _validator = new SubmitCommitmentCommandValidator();
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
@@ -44,6 +63,37 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
             if (message.CreateTask)
                 await CreateTask(message, commitment);
+
+            if (message.LastAction != LastAction.None)
+            {
+                var response = await _mediator.SendAsync(
+                    new GetProviderEmailQueryRequest { ProviderId = commitment.ProviderId.GetValueOrDefault() } );
+
+                foreach (var email in response.Emails)
+                {
+                    var notificationCommand = BuildNotificationCommand(email, message.HashedCommitmentId, message.LastAction);
+                    await _mediator.SendAsync(notificationCommand);
+                }
+            }
+        }
+
+        private SendNotificationCommand BuildNotificationCommand(string email, string hashedCommitmentId, LastAction action)
+        {
+            return new SendNotificationCommand
+            {
+                Email = new Email
+                {
+                    RecipientsAddress = email,
+                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
+                    ReplyToAddress = "noreply@sfa.gov.uk",
+                    Subject = "x",
+                    SystemId = "x",
+                    Tokens = new Dictionary<string, string> {
+                        { "type", action == LastAction.Approve ? "approval" : "review" },
+                        { "cohort_reference", hashedCommitmentId }
+                    }
+                }
+            };
         }
 
         private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)

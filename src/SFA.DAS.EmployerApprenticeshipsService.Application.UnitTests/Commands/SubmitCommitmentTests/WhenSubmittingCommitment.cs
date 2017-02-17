@@ -1,9 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+using MediatR;
+
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
+using SFA.DAS.EAS.Application.Queries.GetProviderEmailQuery;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
@@ -16,6 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         private Mock<ICommitmentsApi> _mockCommitmentApi;
         private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommand _validCommand;
+        private Mock<IMediator> _mockMediator;
 
         [SetUp]
         public void Setup()
@@ -27,7 +35,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L, EmployerAccountId = 12L });
             _mockTasksApi = new Mock<ITasksApi>();
 
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object);
+            _mockMediator = new Mock<IMediator>();
+            _mockMediator
+                .Setup(m => m.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()))
+                .ReturnsAsync(new GetProviderEmailQueryResponse());
+            var config = new EmployerApprenticeshipsServiceConfiguration
+                             {
+                                 EmailTemplates = new List<EmailTemplateConfigurationItem>
+                                                      {
+                                                          new EmailTemplateConfigurationItem
+                                                              {
+                                                                  TemplateType = EmailTemplateType.CommitmentNotification,
+                                                                  Key = "this-is-a-key"
+                                                              }
+                                                      }
+                             };
+
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockMediator.Object, config);
         }
 
         [Test]
@@ -36,6 +60,46 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             await _handler.Handle(_validCommand);
 
             _mockCommitmentApi.Verify(x => x.PatchEmployerCommitment(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<CommitmentSubmission>()));
+        }
+
+        [Test]
+        public async Task NotCallGetProviderEmailQueryRequest()
+        {
+            _validCommand.LastAction = LastAction.None;
+            await _handler.Handle(_validCommand);
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()), Times.Never);
+        }
+
+        [Test]
+        public async Task NotShouldCallSendNotificationCommand()
+        {
+            _validCommand.LastAction = LastAction.None;
+            await _handler.Handle(_validCommand);
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<SendNotificationCommand>()), Times.Never);
+        }
+
+        [Test]
+        public async Task CallGetProviderEmailQueryRequest()
+        {
+            _validCommand.LastAction = LastAction.Amend;
+            await _handler.Handle(_validCommand);
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()), Times.Once);
+        }
+
+        [Test]
+        public async Task ShouldCallSendNotificationCommand()
+        {
+            _validCommand.LastAction = LastAction.Amend;
+            _mockMediator
+                .Setup(m => m.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()))
+                .ReturnsAsync(new GetProviderEmailQueryResponse { Emails = new List<string> { "test@email.com", "test2@email.com" } });
+
+            await _handler.Handle(_validCommand);
+
+            _mockMediator.Verify(x => x.SendAsync(It.IsAny<SendNotificationCommand>()), Times.Exactly(2));
         }
 
         [Test]

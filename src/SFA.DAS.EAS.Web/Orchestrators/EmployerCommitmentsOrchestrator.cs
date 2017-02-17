@@ -410,6 +410,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     EmployerAccountId = accountId,
                     CommitmentId = commitmentId,
+                    HashedCommitmentId = hashedAccountId,
                     Message = string.Empty,
                     LastAction = lastAction,
                     UserDisplayName = userDisplayName,
@@ -492,6 +493,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         EmployerAccountId = _hashingService.DecodeValue(model.HashedAccountId),
                         CommitmentId = commitmentId,
+                        HashedCommitmentId = model.HashedCommitmentId,
                         Message = model.Message,
                         LastAction = lastAction,
                         UserDisplayName = userDisplayName,

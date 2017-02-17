@@ -412,6 +412,9 @@
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressRequest.cs" />
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressResponse.cs" />
     <Compile Include="Queries\GetPostcodeAddress\GetPostcodeAddressValidator.cs" />
+    <Compile Include="Queries\GetProviderEmailQuery\GetProviderEmailQueryHandler.cs" />
+    <Compile Include="Queries\GetProviderEmailQuery\GetProviderEmailQueryRequest.cs" />
+    <Compile Include="Queries\GetProviderEmailQuery\GetProviderEmailQueryResponse.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryHandler.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryRequest.cs" />
     <Compile Include="Queries\GetProviders\GetProvidersQueryResponse.cs" />
