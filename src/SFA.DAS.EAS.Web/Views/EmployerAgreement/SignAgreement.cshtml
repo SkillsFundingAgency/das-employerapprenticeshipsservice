@@ -1,21 +1,59 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
-    
-<div class="grid-row header-index">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Sign your organisation agreement</h1>
+@{
+    ViewBag.PageID = "agreement-sign";
+    ViewBag.Title = "Agreement";
+    ViewBag.Section = "organisations";
+}  
+
+<div class="grid-row" id="publication-banner">
+    <div class="column-third">
+        <div class="logo">
+            <h1>
+                <span class="organisation-logo">
+                    <span>Skills Funding <br>
+                            Agency</span>
+                </span>
+            </h1>
+        </div>
     </div>
+  
 </div>
 
 @Html.Partial("_Agreement_v1")
-
+<hr />
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>@Model.Data.EmployerAgreement.LegalEntityName</p>
-        <p>Sign your SFA Agreement.</p>
+        <h2 class="heading-large">Accept this agreement</h2>
+        <table>
+            <tr>
+                <th scope="row">Accepted by:</th>
+                <td>{NAME}</td>
+            </tr>
+            <tr>
+                <th scope="row">On behalf of:</th>
+                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+            </tr>
+            <tr>
+                <th scope="row">Address:</th>
+                <td>{ADDRESS}</td>
+            </tr>
+            <tr>
+                <th scope="row">Accepted on:</th>
+                <td>{DATE}</td>
+            </tr>
+
+        </table>
+        <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
+            @Html.AntiForgeryToken()
+            <input class="button" type="submit" value="Accept and finish" />
+        </form>
     </div>
-    <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
-        @Html.AntiForgeryToken()
-        
-        <input class="button action-add" type="submit" value="Sign" />
-    </form>
 </div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}
