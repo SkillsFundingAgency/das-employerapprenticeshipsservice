@@ -172,7 +172,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     SignedDate = signedDate
                 });
 
-                return new OrchestratorResponse();
+                return new OrchestratorResponse
+                {
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse
+                {
+                    Exception = ex,
+                    Status = HttpStatusCode.BadRequest
+                };
             }
             catch (Exception)
             {

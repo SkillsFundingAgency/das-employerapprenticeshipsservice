@@ -28,7 +28,7 @@
         <table>
             <tr>
                 <th scope="row">Accepted by:</th>
-                <td>{NAME}</td>
+                <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
                 <th scope="row">On behalf of:</th>
@@ -36,11 +36,11 @@
             </tr>
             <tr>
                 <th scope="row">Address:</th>
-                <td>{ADDRESS}</td>
+                <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
             </tr>
             <tr>
                 <th scope="row">Accepted on:</th>
-                <td>{DATE}</td>
+                <td>@DateTime.Today</td>
             </tr>
 
         </table>

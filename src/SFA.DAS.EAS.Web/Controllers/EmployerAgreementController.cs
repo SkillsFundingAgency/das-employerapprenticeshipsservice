@@ -74,25 +74,25 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("agreements/{agreementid}/sign")]
+        [Route("agreements/{agreementId}/sign")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
+        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-            if (understood == nameof(understood))
+            
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.UtcNow);
+
+            if (response.Status == HttpStatusCode.OK)
             {
-                var response = await _orchestrator.SignAgreement(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
+                TempData["agreementSigned"] = "true";
 
-                if (response.Status == HttpStatusCode.OK)
-                {
-                    TempData["agreementSigned"] = legalEntityName;
-
-                    return RedirectToAction("Index", new { hashedAccountId });
-                }
+                return RedirectToAction("Index", new { hashedAccountId });
             }
 
-            TempData["notunderstood"] = true;
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            agreement.Exception = response.Exception;
+            agreement.Status = response.Status;
 
-            return RedirectToAction("SignAgreement", new { agreementId = agreementid, hashedAccountId });
+            return View("SignAgreement", agreement);
         }
 
     }
