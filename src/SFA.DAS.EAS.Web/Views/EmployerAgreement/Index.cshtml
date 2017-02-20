@@ -5,7 +5,7 @@
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementListViewModel>
 @{
-    ViewBag.PageID = "organisations-agreements-home"; 
+    ViewBag.PageID = "organisations-agreements-home";
     ViewBag.Title = "Organisations";
     ViewBag.Section = "organisations";
 
@@ -30,14 +30,17 @@
     <div class="column-two-thirds">
         <p>Add each organisation that will make an agreement with a training provider for apprenticeship training.</p>
         <p>There is no restriction on the number of <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank" rel="external">connected organisations</a> you can add.</p>
-        
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
         <table>
             <thead>
-            <tr>
-                <th scope="col">Organisation</th>
-                <th scope="col">Agreement</th>           
-                <th scope="col">Spending Status</th>
-                <th scope="col"></th>
+                <tr>
+                    <th scope="col">Organisation</th>
+                    <th scope="col">Agreement</th>
+                    <th scope="col">Spending status</th>
+                    <th scope="col"><span class="vh">Action</span></th>
             </thead>
             <tbody>
 
@@ -46,25 +49,39 @@
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
 
-                        <td>@employerAgreement.SignedByName
-                        @if (employerAgreement.SignedDate.HasValue)
-                        {
-                            @:Signed Date: @employerAgreement.SignedDate.Value.ToString("dd/M/yyyy")
-                        }
+                        <td>
+                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed) {
+                                <p>Signed by @employerAgreement.SignedByName</p>
+                                @if (employerAgreement.SignedDate.HasValue)
+                                {
+                                    <p>Signed on: @employerAgreement.SignedDate.Value.ToString("dd/M/yyyy")</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>Agreement not signed</p>
+                                <p>SFA agreement needs to be signed</p>
+                            }
                         </td>
                         <td>
-                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending Enabled" : "Spending Disabled")
+                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
                         </td>
                         <td>
-                            <a href="@Url.Action("View", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">View</a>
-                            <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">Sign agreement</a>
+                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
+                            {
+                                <a href="@Url.Action("View", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                            }
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        
+
 
     </div>
 </div>
