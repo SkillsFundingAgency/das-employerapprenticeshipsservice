@@ -34,7 +34,7 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        <table>
+        <table class="organisations">
             <thead>
                 <tr>
                     <th scope="col">Organisation</th>
@@ -48,25 +48,24 @@
                 {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-
                         <td>
                             @if (employerAgreement.Status == EmployerAgreementStatus.Signed) {
-                                <p>Signed by @employerAgreement.SignedByName</p>
-                                @if (employerAgreement.SignedDate.HasValue)
+                                @: Signed by @employerAgreement.SignedByName
+                                if (employerAgreement.SignedDate.HasValue)
                                 {
-                                    <p>Signed on: @employerAgreement.SignedDate.Value.ToString("dd/M/yyyy")</p>
+                                    <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
                                 }
                             }
                             else
                             {
-                                <p>Agreement not signed</p>
-                                <p>SFA agreement needs to be signed</p>
+                                @: Agreement not signed
+                                <span class="secondary-text">SFA agreement needs to be signed</span>
                             }
                         </td>
                         <td>
                             @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
                         </td>
-                        <td>
+                        <td class="link-right">
                             @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
                             {
                                 <a href="@Url.Action("View", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>

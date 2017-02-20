@@ -38,8 +38,11 @@ dl.inline {
     }
 }
 
-.account-id {
+
+.account-id, 
+.secondary-text {
     @include core-16;
     display: block;
     color: $secondary-text-colour;
+    margin: 0;
 }

@@ -2186,7 +2186,8 @@ dl.inline dd {
   }
 }
 
-.account-id {
+.account-id,
+.secondary-text {
   font-family: "nta", Arial, sans-serif;
   font-weight: 400;
   text-transform: none;
@@ -2194,10 +2195,12 @@ dl.inline dd {
   line-height: 1.1428571429;
   display: block;
   color: #6f777b;
+  margin: 0;
 }
 
 @media (min-width: 641px) {
-  .account-id {
+  .account-id,
+  .secondary-text {
     font-size: 16px;
     line-height: 1.25;
   }
@@ -3152,6 +3155,14 @@ tr.total td {
   -ms-word-break: break-all;
   word-break: break-all;
   word-break: break-word;
+}
+
+table.organisations td {
+  width: 30%;
+}
+
+table.organisations td + td + td {
+  width: 20%;
 }
 
 .panel p {
