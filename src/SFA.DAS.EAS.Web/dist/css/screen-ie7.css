@@ -3273,7 +3273,48 @@ span.helpText {
   padding-left: 50px;
 }
 
+.funding-cap-notification {
+  background: #dee0e2;
+  padding: 20px 20px 10px;
+}
+
+.funding-cap-notification .heading-medium {
+  margin-top: 10px;
+}
+
+.bubble-arrow {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid #dee0e2;
+  content: "";
+  float: right;
+  margin-right: 75px;
+}
+
+.funding-cap-alert {
+  border-bottom: 5px solid #6f777b;
+}
+
+.funding-cap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  #apprentice-details .tableResponsive {
+    margin-top: 30px;
+  }
+  #apprentice-details .tableResponsive .funding-cap-alert {
+    border-bottom: 5px solid #6f777b;
+    background: #dee0e2;
+  }
+  #apprentice-details .tableResponsive .funding-cap-alert a {
+    text-decoration: none;
+    color: #0b0c0c;
+  }
+  .bubble-arrow {
+    display: none;
+  }
   .manage-all-apprentices td:nth-of-type(1):before {
     content: "Name";
     font-weight: normal;

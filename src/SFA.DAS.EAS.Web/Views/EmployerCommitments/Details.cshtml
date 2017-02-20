@@ -9,7 +9,7 @@
 }
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CommitmentDetailsViewModel>
-    
+<div id="">    
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Review your cohort</h1>
@@ -128,6 +128,15 @@
 
                         </div>
 
+                        <div class="funding-cap-notification" id="max-funding">
+                            <p class="heading-medium">1 @groupTitle apprenticeships above funding band [NB that if there’s only one apprentice affected, this text will need to say 1 apprenticeship]</p>
+                            <p>The costs are above the £2,000 <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018" target="_blank">maximum value of the funding band</a> for this apprenticeship. You'll need to pay the difference directly to the training provider - this can't be funded from your account.</p>
+                           
+                        </div>
+                        <i class="bubble-arrow"></i>
+
+
+
                         <table class="tableResponsive viewCommitment">
                             <thead>
                                 <tr>
@@ -160,8 +169,8 @@
                                                 <span class="missing">&ndash;</span>
                                             }
                                         </td>
-                                        <td>
-                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
+                                        <td class="funding-cap-alert">
+                                            <a href="#max-funding" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
                                         </td>
                                         <td>
                                             <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
