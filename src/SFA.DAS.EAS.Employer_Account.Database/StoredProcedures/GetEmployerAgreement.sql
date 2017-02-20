@@ -6,13 +6,15 @@ BEGIN
 
 	SELECT ea.Id,
 		aea.AccountId,
+		acc.HashedId as HashedAccountId,
 		ea.StatusId AS [Status],
 		ea.LegalEntityId, 
 		ea.SignedByName,
 		ea.SignedDate,
 		ea.ExpiredDate,
 		le.Name AS LegalEntityName,
-		le.RegisteredAddress AS LegalEntityRegisteredAddress,
+		le.RegisteredAddress AS LegalEntityAddress,
+		le.Code AS LegalEntityCode,
 		ea.TemplateId,
 		eat.PartialViewName AS TemplatePartialViewName
 	FROM [employer_account].[LegalEntity] le
@@ -22,5 +24,7 @@ BEGIN
 			ON aea.[EmployerAgreementId] = ea.Id
 		JOIN [employer_account].[EmployerAgreementTemplate] eat
 			ON eat.Id = ea.TemplateId
+		join [employer_account].Account acc
+			on	acc.Id = aea.AccountId
 	WHERE ea.Id = @agreementId
 END
