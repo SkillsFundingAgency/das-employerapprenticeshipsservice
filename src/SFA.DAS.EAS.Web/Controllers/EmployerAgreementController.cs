@@ -40,6 +40,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                     Headline = "Agreement signed",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                TempData.Remove("agreementSigned");
             }
 
             return View(model);
