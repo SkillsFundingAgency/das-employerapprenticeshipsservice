@@ -132,7 +132,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-            catch (Exception)
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Data = new EmployerAgreementViewModel(),
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException ex)
             {
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
