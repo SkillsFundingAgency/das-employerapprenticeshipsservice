@@ -36,7 +36,7 @@ BEGIN
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 	
 	INSERT INTO [employer_account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 

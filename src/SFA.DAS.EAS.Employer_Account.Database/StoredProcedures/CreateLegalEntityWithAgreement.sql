@@ -20,7 +20,7 @@ BEGIN
 	@companyNumber,@companyName,@companyAddress,
 	@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
 
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
 	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
 END
