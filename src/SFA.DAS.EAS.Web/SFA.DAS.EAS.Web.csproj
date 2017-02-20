@@ -975,6 +975,7 @@
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
+    <Content Include="Views\EmployerAgreement\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

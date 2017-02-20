@@ -56,7 +56,7 @@
                             @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending Enabled" : "Spending Disabled")
                         </td>
                         <td>
-                            <a href="@Url.Action("View", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">View</a>
+                            <a href="@Url.Action("Details", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">View</a>
                             <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})">Sign agreement</a>
                         </td>
                     </tr>

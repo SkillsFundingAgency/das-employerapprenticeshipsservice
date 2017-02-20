@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 
@@ -34,8 +35,16 @@ namespace SFA.DAS.EAS.Web.Extensions
             {
                 return MvcHtmlString.Empty;
             }
-            
+
             return new MvcHtmlString(errorClass);
+        }
+
+        public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper helper, string commaSeperatedAddress)
+        {
+            var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => $"<p>{line.Trim()}</p>")
+                .Aggregate((x, y) => x + y);
+            return new MvcHtmlString(htmlAddress);
         }
     }
 }

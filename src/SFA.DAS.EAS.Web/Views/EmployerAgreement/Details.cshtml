@@ -1,0 +1,51 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
+@{
+    ViewBag.PageID = "organisations-agreements-details";
+    ViewBag.Title = "Employer agreement";
+    ViewBag.Section = "organisations";
+}
+
+<p>@Model.Data.EmployerAgreement.LegalEntityName</p>
+<h2>Your SFA agreement</h2>
+<p>This agreement allows you to spend funds for <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong></p>
+
+<div>Parties</div>
+<div>
+    <p><strong>Skills Funding Agency</strong></p>
+    <p>Cheylesmore House</p>
+    <p>Quinton Road</p>
+    <p>Coventry</p>
+    <p>CV1 2TW</p>
+</div>
+<div>
+    <p><strong>@Model.Data.EmployerAgreement.LegalEntityName</strong></p>
+    @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
+</div>
+
+<div>Document</div>
+<div>
+    <a href="@Url.Action("View", "EmployerAgreement")">Your SFA agreement</a>
+</div>
+
+<hr />
+
+<h3>This agreement has been accepted</h3>
+<table>
+    <tr>
+        <th>Accepted by:</th>
+        <td>@Model.Data.EmployerAgreement.SignedByName</td>
+    </tr>
+    <tr>
+        <th>On behalf of:</th>
+        <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+    </tr>
+    <tr>
+        <th>Address:</th>
+        <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
+    </tr>
+    <tr>
+        <th>Accepted on:</th>
+        <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
+    </tr>
+</table>
