@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Application.Commands.SignEmployerAgreement
 
             if (agreement.Status == EmployerAgreementStatus.Signed ||
                 agreement.Status == EmployerAgreementStatus.Expired ||
-                agreement.Status == EmployerAgreementStatus.Superceded)
+                agreement.Status == EmployerAgreementStatus.Superseded)
             {
                 validationResult.AddError(nameof(agreement.Status),$"Agreement status is {agreement.Status}");
                 return validationResult;
