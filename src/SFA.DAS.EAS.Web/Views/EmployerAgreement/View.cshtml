@@ -8,8 +8,11 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
-        <h1 class="heading-xlarge">Your SFA agreement</h1>
+        
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+            Your SFA agreement
+        </h1>
     </div>
 </div>
 <div class="grid-row">
@@ -25,7 +28,7 @@
             </tr>
             <tr>
                 <th>Address:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
+                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
             <tr>
                 <th>Accepted on:</th>
@@ -34,17 +37,29 @@
         </table>
     </div>
 </div>
-<div class="grid-row">
-    <div>
-        @Html.Partial(Model.Data.EmployerAgreement.TemplatePartialViewName)
+<div class="grid-row" id="publication-banner">
+    <div class="column-third">
+        <div class="sfa-logo">
+            <h1>
+                <span class="organisation-logo">
+                    <span>
+                        Skills Funding <br>
+                        Agency
+                    </span>
+                </span>
+            </h1>
+        </div>
     </div>
 </div>
+
+@Html.Partial(Model.Data.EmployerAgreement.TemplatePartialViewName)
+
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
             <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
-            <li>Employer agreement</li>
+            <li>Your SFA agreement</li>
         </ol>
     </div>
 }

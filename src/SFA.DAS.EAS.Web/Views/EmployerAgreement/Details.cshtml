@@ -82,8 +82,12 @@
     </div>
 </div>
 
-        @section breadcrumb {
-            <div class="breadcrumbs">
-                <a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations and agreements</a>
-            </div>
-        }
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
+            <li>Your SFA agreement</li>
+        </ol>
+    </div>
+}
