@@ -745,6 +745,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             CommitmentId = commitmentId
                         });
 
+                        AssertCommitmentStatus(commitmentData.Commitment, EditStatus.EmployerOnly);
+                        AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
+
                         Func<string, string> textOrDefault = txt => !string.IsNullOrEmpty(txt) ? txt : "without training course details";
                         var programmeSummary = commitmentData.Commitment.Apprenticeships
                                 .GroupBy(m => m.TrainingName) 
