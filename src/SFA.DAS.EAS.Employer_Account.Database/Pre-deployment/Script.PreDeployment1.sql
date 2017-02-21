@@ -70,7 +70,7 @@ BEGIN
 	UPDATE [employer_account].[LegalEntity] SET Code=LOWER(NEWID()) WHERE Code IS NULL OR Code = ''
 END
 
-IF EXISTS(SELECT 1 FROM sys.key_constraints WHERE [name]='FK_EmployerAgreement_Template')
+IF EXISTS(SELECT 1 FROM information_schema.table_constraints WHERE constraint_name='FK_EmployerAgreement_Template')
 BEGIN
 	ALTER TABLE [employer_account].[EmployerAgreement]
 	DROP CONSTRAINT [FK_EmployerAgreement_Template]
