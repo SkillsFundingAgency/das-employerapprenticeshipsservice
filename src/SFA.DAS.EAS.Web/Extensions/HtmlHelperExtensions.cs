@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.Extensions
         public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper helper, string commaSeperatedAddress)
         {
             var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => $"<p>{line.Trim()}</p>")
+                .Select(line => $"{line.Trim()}<br/>")
                 .Aggregate((x, y) => x + y);
             return new MvcHtmlString(htmlAddress);
         }
