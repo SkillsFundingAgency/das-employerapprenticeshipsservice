@@ -3,12 +3,14 @@ using System.Linq;
 
 using MediatR;
 using Newtonsoft.Json;
+
+using NLog;
+
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
-using SFA.DAS.EAS.Application.Queries.GetProvider;
-using SFA.DAS.EAS.Application.Queries.GetProviderEmailQuery;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
@@ -25,18 +27,26 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
+        private readonly IProviderEmailLookupService _providerEmailLookupService;
+
+        private readonly ILogger _logger;
+
         private readonly SubmitCommitmentCommandValidator _validator;
 
         public SubmitCommitmentCommandHandler(
             ICommitmentsApi commitmentApi, 
             ITasksApi tasksApi,
             IMediator mediator,
-            EmployerApprenticeshipsServiceConfiguration configuration)
+            EmployerApprenticeshipsServiceConfiguration configuration,
+            IProviderEmailLookupService providerEmailLookupService,
+            ILogger logger)
         {
             _commitmentApi = commitmentApi;
             _tasksApi = tasksApi;
             _mediator = mediator;
             _configuration = configuration;
+            _providerEmailLookupService = providerEmailLookupService;
+            _logger = logger;
 
             _validator = new SubmitCommitmentCommandValidator();
         }
@@ -64,15 +74,18 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (message.CreateTask)
                 await CreateTask(message, commitment);
 
+            _logger.Info($"Submit commitment");
             if (message.LastAction != LastAction.None)
             {
-                var response = await _mediator.SendAsync(
-                    new GetProviderEmailQueryRequest { ProviderId = commitment.ProviderId.GetValueOrDefault() } );
-
-                foreach (var email in response.Emails)
+                if (_configuration.CommitmentNotification.SendEmail)
                 {
-                    var notificationCommand = BuildNotificationCommand(email, message.HashedCommitmentId, message.LastAction);
-                    await _mediator.SendAsync(notificationCommand);
+                    var emails = await _providerEmailLookupService.GetEmailsAsync(commitment.ProviderId.GetValueOrDefault());
+                    foreach (var email in emails)
+                    {
+                        _logger.Info($"Sending email to {email}");
+                        var notificationCommand = BuildNotificationCommand(email, message.HashedCommitmentId, message.LastAction);
+                        await _mediator.SendAsync(notificationCommand);
+                    }
                 }
             }
         }

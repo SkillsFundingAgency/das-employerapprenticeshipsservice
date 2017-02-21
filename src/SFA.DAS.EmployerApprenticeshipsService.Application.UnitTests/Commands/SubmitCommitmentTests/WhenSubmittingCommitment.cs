@@ -4,13 +4,16 @@ using System.Threading.Tasks;
 using MediatR;
 
 using Moq;
+
+using NLog;
+
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
-using SFA.DAS.EAS.Application.Queries.GetProviderEmailQuery;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Tasks.Api.Client;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
@@ -24,6 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommand _validCommand;
         private Mock<IMediator> _mockMediator;
+        private Mock<IProviderEmailLookupService> _mockEmailLookup;
 
         [SetUp]
         public void Setup()
@@ -36,9 +40,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockTasksApi = new Mock<ITasksApi>();
 
             _mockMediator = new Mock<IMediator>();
-            _mockMediator
-                .Setup(m => m.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()))
-                .ReturnsAsync(new GetProviderEmailQueryResponse());
             var config = new EmployerApprenticeshipsServiceConfiguration
                              {
                                  EmailTemplates = new List<EmailTemplateConfigurationItem>
@@ -48,10 +49,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
                                                                   TemplateType = EmailTemplateType.CommitmentNotification,
                                                                   Key = "this-is-a-key"
                                                               }
-                                                      }
+                                                      },
+                                 CommitmentNotification = new CommitmentNotificationConfiguration { SendEmail = true }
                              };
-
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockMediator.Object, config);
+            _mockEmailLookup = new Mock<IProviderEmailLookupService>();
+            _mockEmailLookup.Setup(m => m.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILogger>());
         }
 
         [Test]
@@ -68,7 +71,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _validCommand.LastAction = LastAction.None;
             await _handler.Handle(_validCommand);
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()), Times.Never);
+
+            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Never);
         }
 
         [Test]
@@ -86,16 +90,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _validCommand.LastAction = LastAction.Amend;
             await _handler.Handle(_validCommand);
 
-            _mockMediator.Verify(x => x.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()), Times.Once);
+            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Once);
         }
 
         [Test]
         public async Task ShouldCallSendNotificationCommand()
         {
             _validCommand.LastAction = LastAction.Amend;
-            _mockMediator
-                .Setup(m => m.SendAsync(It.IsAny<GetProviderEmailQueryRequest>()))
-                .ReturnsAsync(new GetProviderEmailQueryResponse { Emails = new List<string> { "test@email.com", "test2@email.com" } });
+            _mockEmailLookup
+                .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
+                .ReturnsAsync(new List<string> { "test@email.com", "test2@email.com" });
 
             await _handler.Handle(_validCommand);
 
@@ -137,3 +141,4 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         }
     }
 }
+

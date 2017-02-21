@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     {
         Task<string> SendMessage<T>(T content, string url);
         Task<T> Get<T>(string authToken, string url);
+        Task<string> GetString(string url);
         string BaseUrl { get; set; }
         List<MediaTypeWithQualityHeaderValue> MediaTypeWithQualityHeaderValueList { get; set; }
         string AuthScheme { get; set; }
