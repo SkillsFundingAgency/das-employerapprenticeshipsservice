@@ -70,7 +70,7 @@ BEGIN
 	UPDATE [employer_account].[LegalEntity] SET Code=LOWER(NEWID()) WHERE Code IS NULL OR Code = ''
 END
 
-IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_account' AND TABLE_NAME='EmployerAgreementTemplates')
+IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_account' AND TABLE_NAME='EmployerAgreementTemplate')
 BEGIN
 	DELETE FROM [employer_account].[EmployerAgreementTemplate]
 END
