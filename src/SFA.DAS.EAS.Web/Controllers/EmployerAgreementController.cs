@@ -38,57 +38,63 @@ namespace SFA.DAS.EAS.Web.Controllers
                 model.FlashMessage = new FlashMessageViewModel
                 {
                     Headline = "Agreement signed",
-                    Message = $"You've signed the agreement for {TempData["agreementSigned"]}",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                TempData.Remove("agreementSigned");
             }
 
             return View(model);
         }
         
 		[HttpGet]
-		[Route("agreements/{agreementid}/view")]
-        public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
+		[Route("agreements/{agreementId}/view")]
+        public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
+        {
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            
+            return View(agreement);
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/about-your-agreement")]
+        public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
             var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
+            return View(agreement);
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/sign-your-agreement")]
+        public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
+        {
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(agreement);
         }
-        
+
         [HttpPost]
-        [Route("agreements/{agreementid}/sign")]
-		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
+        [Route("agreements/{agreementId}/sign")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-            if (understood == nameof(understood))
+            
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.UtcNow);
+
+            if (response.Status == HttpStatusCode.OK)
             {
-                var response = await _orchestrator.SignAgreement(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
+                TempData["agreementSigned"] = "true";
 
-                if (response.Status == HttpStatusCode.OK)
-                {
-                    TempData["agreementSigned"] = legalEntityName;
-
-                    return RedirectToAction("Index", new { hashedAccountId });
-                }
-
-                return View("DeadView", response);
+                return RedirectToAction("Index", new { hashedAccountId });
             }
 
-            TempData["notunderstood"] = true;
-           
-            return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
-        }
-        
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("agreements/new/view")]
-        public async Task<ActionResult> ViewEntityAgreement(string hashedAccountId, string name, string code, string address, 
-            DateTime incorporated)
-        {
-            var response = await _orchestrator.Create(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            agreement.Exception = response.Exception;
+            agreement.Status = response.Status;
 
-            return View(response);
+            return View("SignAgreement", agreement);
         }
+
     }
 }

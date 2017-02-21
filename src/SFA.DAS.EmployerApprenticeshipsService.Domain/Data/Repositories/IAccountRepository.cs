@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
         Task RemovePayeFromAccount(long accountId, string payeRef);
-        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity, bool signAgreement, DateTime signedDate, long signedById);
+        Task<EmployerAgreementView> CreateLegalEntity(long accountId, LegalEntity legalEntity);
         Task AddPayeToAccount(Paye payeScheme);
         Task<List<EmployerAgreementView>> GetEmployerAgreementsLinkedToAccount(long accountId);
         Task SetHashedId(string hashedId, long accountId);

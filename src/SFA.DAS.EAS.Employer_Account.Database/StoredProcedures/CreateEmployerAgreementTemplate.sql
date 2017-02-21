@@ -1,10 +1,9 @@
 ﻿CREATE PROCEDURE [employer_account].[CreateEmployerAgreementTemplate]
-	@ref NVARCHAR(50),
-	@text NVARCHAR(MAX)
+	@PartialViewName NVARCHAR(50)
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [employer_account].[EmployerAgreementTemplate]([Text], CreatedDate, Ref) 
-	VALUES (@text, GETDATE(), @ref);
+	INSERT INTO [employer_account].[EmployerAgreementTemplate](PartialViewName, CreatedDate) 
+	VALUES (@PartialViewName, GETDATE());
 END

@@ -99,7 +99,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         }
 
         public async Task<EmployerAgreementView> CreateLegalEntity(
-            long accountId, LegalEntity legalEntity, bool signAgreement, DateTime signedDate, long signedById) 
+            long accountId, LegalEntity legalEntity) 
         {
             return await WithConnection(async c =>
             {
@@ -109,11 +109,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@companyName", legalEntity.Name, DbType.String);
                 parameters.Add("@CompanyAddress", legalEntity.RegisteredAddress, DbType.String);
                 parameters.Add("@CompanyDateOfIncorporation", legalEntity.DateOfIncorporation, DbType.DateTime);
-                parameters.Add("@signAgreement", signAgreement, DbType.Boolean);
-                parameters.Add("@signedDate", signedDate, DbType.DateTime);
-                parameters.Add("@signedById", signedById, DbType.Int64);
-                parameters.Add("@legalEntityId", signedById, DbType.Int64, ParameterDirection.Output);
-                parameters.Add("@employerAgreementId", signedById, DbType.Int64, ParameterDirection.Output);
+                parameters.Add("@legalEntityId", null, DbType.Int64, ParameterDirection.Output);
+                parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output);
                 parameters.Add("@status", legalEntity.CompanyStatus, DbType.String);
                 parameters.Add("@source", legalEntity.Source, DbType.Int16);
                 parameters.Add("@publicSectorDataSource", legalEntity.PublicSectorDataSource, DbType.Int16);
