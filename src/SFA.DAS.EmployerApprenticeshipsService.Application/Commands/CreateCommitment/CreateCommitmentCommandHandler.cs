@@ -69,18 +69,30 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                 await CreateTask(request, commitment.Id);
             }
 
-            var hashedCommitmentId = _hashingService.HashValue(commitment.Id);
-            if (_configuration.CommitmentNotification.SendEmail)
-            {
-                var emails = await _providerEmailLookupService.GetEmailsAsync(request.Commitment.ProviderId.GetValueOrDefault());
-                foreach (var email in emails)
-                {
-                    var notificationCommand = BuildNotificationCommand(email, hashedCommitmentId);
-                    await _mediator.SendAsync(notificationCommand);
-                }
-            }
+            await SendNotification(commitment);
 
             return new CreateCommitmentCommandResponse { CommitmentId = commitment.Id };
+        }
+
+        private async Task SendNotification(Commitment commitment)
+        {
+            var hashedCommitmentId = _hashingService.HashValue(commitment.Id);
+            var emails = await
+                _providerEmailLookupService.GetEmailsAsync(
+                    commitment.ProviderId.GetValueOrDefault(),
+                    commitment.ProviderLastUpdateInfo?.EmailAddress ?? string.Empty);
+
+            _logger.Info($"{emails.Count} provider found email address/es");
+            if (!_configuration.CommitmentNotification.SendEmail) return;
+
+            foreach (var email in emails)
+            {
+                _logger.Info($"Sending email to {email}");
+                var notificationCommand = BuildNotificationCommand(
+                    email,
+                    hashedCommitmentId);
+                await _mediator.SendAsync(notificationCommand);
+            }
         }
 
         private SendNotificationCommand BuildNotificationCommand(string email, string hashedCommitmentId)

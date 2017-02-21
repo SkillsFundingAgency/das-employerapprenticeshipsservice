@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
                                  CommitmentNotification = new CommitmentNotificationConfiguration { SendEmail = true }
                              };
             _mockEmailLookup = new Mock<IProviderEmailLookupService>();
-            _mockEmailLookup.Setup(m => m.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
+            _mockEmailLookup.Setup(m => m.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new List<string>());
             _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILogger>());
         }
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             await _handler.Handle(_validCommand);
 
 
-            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _validCommand.LastAction = LastAction.Amend;
             await _handler.Handle(_validCommand);
 
-            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>()), Times.Once);
+            _mockEmailLookup.Verify(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         {
             _validCommand.LastAction = LastAction.Amend;
             _mockEmailLookup
-                .Setup(x => x.GetEmailsAsync(It.IsAny<long>()))
+                .Setup(x => x.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<string> { "test@email.com", "test2@email.com" });
 
             await _handler.Handle(_validCommand);

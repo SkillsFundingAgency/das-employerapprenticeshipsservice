@@ -32,19 +32,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _configuration = employerConfiguration.CommitmentNotification;
         }
 
-        public async Task<List<string>> GetEmailsAsync(long providerId)
+        public async Task<List<string>> GetEmailsAsync(long providerId, string lastUpdateEmail)
         {
-            // Check if using a test email address.
+            List<string> addresses;
             if (!_configuration.UseProviderEmail)
             {
                 _logger.Info($"Getting provider test email (${string.Join(", ", _configuration.ProviderTestEmails)})");
                 return _configuration.ProviderTestEmails;
             }
 
-            List<string> addresses;
-            // *0o* Check in database..*0o*
-            if (GetLatestEditUser(providerId, out addresses))
-                return addresses;
+            if (!string.IsNullOrEmpty(lastUpdateEmail))
+                return new List<string> { lastUpdateEmail };
 
             addresses = await _idamsEmailServiceWrapper.GetEmailsAsync(providerId);
             if (addresses.Any())
@@ -61,12 +59,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 _logger.Warn($"Could not find any email adresses for provider: {providerId}");
 
             return addresses;
-        }
-
-        private bool GetLatestEditUser(long providerId, out List<string> addresses)
-        {
-            addresses = new List<string>();
-            return false;
         }
 
         private bool GetProviderAddresses(long providerId, out List<string> addresses)

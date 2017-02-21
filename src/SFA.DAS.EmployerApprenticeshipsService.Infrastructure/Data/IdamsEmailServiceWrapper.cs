@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json.Linq;
@@ -54,25 +53,5 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             }
             return new List<string>();
         }
-
-
-        //protected async Task<string> GetString(string url)
-        //{
-        //    using (var client = new HttpClient())
-        //    {
-        //        try
-        //        {
-        //            var response = await client.GetAsync(url);
-        //            response.EnsureSuccessStatusCode();
-
-        //            return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : string.Empty;
-        //        }
-        //        catch (Exception exception)
-        //        {
-        //            _logger.Error(exception, $"unable to read url {url}");
-        //            return string.Empty;
-        //        }
-        //    }
-        //}
     }
 }
