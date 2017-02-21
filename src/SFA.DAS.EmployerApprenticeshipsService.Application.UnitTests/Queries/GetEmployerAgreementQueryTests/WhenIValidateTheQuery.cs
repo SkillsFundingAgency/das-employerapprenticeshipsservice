@@ -3,7 +3,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTests
@@ -13,6 +15,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         private GetEmployerAgreementQueryValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
         private GetEmployerAgreementRequest _query;
+        private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
+        private Mock<IHashingService> _hashingService;
+        private const long ExpectedAgreementId = 912790137;
 
         [SetUp]
         public void Arrange()
@@ -25,9 +30,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
+            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(_query.HashedAgreementId)).Returns(ExpectedAgreementId);
+
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
 
-            _validator = new GetEmployerAgreementQueryValidator(_membershipRepository.Object);
+            _validator = new GetEmployerAgreementQueryValidator(_membershipRepository.Object, _employerAgreementRepository.Object, _hashingService.Object);
         }
 
         [Test]
@@ -57,9 +66,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         [TestCase(Role.Transactor)]
         [TestCase(Role.Viewer)]
         [TestCase(Role.None)]
-        public async Task ThenIfTheUserIsNotAnOwnerOnTheAccountAnUnauthorizedErrorIsReturned(Role role)
+        public async Task ThenIfTheUserIsNotAnOwnerOnTheAccountAndItIsNotSignedAnUnauthorizedErrorIsReturned(Role role)
         {
             //Arrange
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
+                {
+                    HashedAccountId = _query.HashedAccountId,
+                    Status = EmployerAgreementStatus.Pending
+                });
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {RoleId = (short)role});
 
             //Act
@@ -68,6 +82,28 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
             //Assert
             Assert.IsTrue(result.IsUnauthorized);
         }
+
+        [TestCase(Role.Transactor)]
+        [TestCase(Role.Viewer)]
+        [TestCase(Role.Owner)]
+        [TestCase(Role.None)]
+        public async Task ThenIfTheAgreementIsSignedThenAnyoneCanViewIt(Role role)
+        {
+            //Arrange
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
+            {
+                HashedAccountId = _query.HashedAccountId,
+                Status = EmployerAgreementStatus.Signed
+            });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)role });
+
+            //Act
+            var result = await _validator.ValidateAsync(_query);
+
+            //Assert
+            Assert.IsFalse(result.IsUnauthorized);
+        }
+
         [Test]
         public async Task ThenIfAllFieldsArePopulatedAndTheMemberIsPartOfTheAccountThenTheRequestIsValid()
         {
