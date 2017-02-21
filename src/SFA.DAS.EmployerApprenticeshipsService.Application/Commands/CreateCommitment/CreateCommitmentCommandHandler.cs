@@ -69,7 +69,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                 await CreateTask(request, commitment.Id);
             }
 
-            await SendNotification(commitment);
+            if(request.SendCreatedEmail)
+                await SendNotification(commitment);
 
             return new CreateCommitmentCommandResponse { CommitmentId = commitment.Id };
         }

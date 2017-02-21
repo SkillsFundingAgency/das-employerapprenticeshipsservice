@@ -34,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
             }
             try
             {
+                //_logger.Info($"---- === ||| -->     {message.Email.RecipientsAddress}    <-- ||| === ----");
                 await _notificationsApi.SendEmail(message.Email);
             }
             catch (Exception ex)

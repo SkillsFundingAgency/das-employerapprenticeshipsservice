@@ -255,14 +255,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderName = model.ProviderName,
                         CommitmentStatus = CommitmentStatus.Active,
                         EditStatus = EditStatus.ProviderOnly,
-                        EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail }
-                    }
+                        EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail },
+                    },
+                    SendCreatedEmail = false // ToDo: Turn to true when we have template for created
                 });
 
                 return new OrchestratorResponse<string>
                 {
                     Data = _hashingService.HashValue(response.CommitmentId)
                 };
+                
             }, model.HashedAccountId, externalUserId);
         }
 
