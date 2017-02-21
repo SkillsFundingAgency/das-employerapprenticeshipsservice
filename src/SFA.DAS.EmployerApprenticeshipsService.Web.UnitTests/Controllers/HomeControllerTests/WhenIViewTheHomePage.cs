@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SignInUserViewModel = SFA.DAS.EAS.Web.ViewModels.SignInUserViewModel;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
@@ -28,6 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
 
             _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("false");
 
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _homeOrchestrator.Setup(x => x.GetUsers()).ReturnsAsync(new SignInUserViewModel());
@@ -60,6 +62,32 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             _homeOrchestrator.Verify(x=>x.GetUserAccounts(It.IsAny<string>()),Times.Never);
+        }
+
+        [Test]
+        public async Task ThenIfMyAccountIsAuthenticatedButNotActivated()
+        {
+            //Arrange
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(
+                new EmployerApprenticeshipsServiceConfiguration
+                {
+                    ApprenticeshipInfoService = new ApprenticeshipInfoServiceConfiguration
+                    {
+                        BaseUrl="http://test.local"
+                    },
+                    Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity" ,AccountActivationUrl = "/confirm"}
+                });
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("true");
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualRedirect = actual as RedirectResult;
+            Assert.IsNotNull(actualRedirect);
+            Assert.AreEqual("http://test.local/confirm", actualRedirect.Url);
         }
 
         [Test]
