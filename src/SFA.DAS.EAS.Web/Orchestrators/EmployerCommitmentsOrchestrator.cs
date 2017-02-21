@@ -720,7 +720,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HasApprenticeships = apprenticships.Count > 0,
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
-                    LatestMessage = await messageTask
+                    LatestMessage = await messageTask,
+                    TrainingProgrammes = await GetTrainingProgrammes()
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -1024,6 +1025,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 ApprenticeName = apprenticeship.ApprenticeshipName,
+                ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
                 TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,

@@ -1,5 +1,4 @@
-﻿@using System.Text.RegularExpressions
-@using SFA.DAS.EAS.Web
+﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels
 
@@ -8,8 +7,9 @@
     ViewBag.PageID = "apprentice-details";
 }
 
-@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.CommitmentDetailsViewModel>
-<div id="">    
+@model OrchestratorResponse<CommitmentDetailsViewModel>
+
+<div id="cohort-details">    
 <div class="grid-row">
     <div class="column-full">
         <h1 class="heading-xlarge">Review your cohort</h1>
@@ -117,6 +117,8 @@
                         var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
                         var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
                         var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
+                        var course = Model.Data.TrainingProgrammes.FirstOrDefault(x => x.Id == trainingCode);
+                        var numberOverFundingLimit = course == null? 0 : trainingGroup.Count(x => x.Cost > course.MaxFunding);
 
                         <div class="group-header">
 
@@ -128,55 +130,81 @@
 
                         </div>
 
-                        <div class="funding-cap-notification" id="max-funding">
-                            <p class="heading-medium">1 @groupTitle apprenticeships above funding band [NB that if there’s only one apprentice affected, this text will need to say 1 apprenticeship]</p>
-                            <p>The costs are above the £2,000 <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018" target="_blank">maximum value of the funding band</a> for this apprenticeship. You'll need to pay the difference directly to the training provider - this can't be funded from your account.</p>
-                           
-                        </div>
-                        <i class="bubble-arrow"></i>
+                        if (numberOverFundingLimit > 0)
+                        {
+                            <div class="funding-cap-notification" id="max-funding-group-@trainingGroup.Key">
+                                <p class="heading-medium">
+                                    @($"{numberOverFundingLimit} {course.Title} {PluraliseApprentice(numberOverFundingLimit).ToLower()} above funding band maximum")
+                                </p>
+                                <p>
+                                    The costs are above the £@course.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                </p>
 
+                            </div>
+                            <i class="bubble-arrow"></i>
+                        }
 
 
                         <table class="tableResponsive viewCommitment">
                             <thead>
-                                <tr>
-                                    <th scope="col">Apprentice</th>
-                                    <th scope="col">Training course</th>
-                                    <th scope="col">Training dates</th>
-                                    <th scope="col" colspan="2">Cost</th>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Date of birth</th>
+                                <th scope="col">Training dates</th>
+                                <th scope="col" colspan="2">Cost</th>
 
-                                </tr>
+                            </tr>
                             </thead>
                             <tbody>
-                                @foreach (var apprenticeship in trainingGroup.OrderBy(a => a.CanBeApproved))
-                                {
-                                    <tr>
-                                        <td>
-                                            @GetValueOrDefault(apprenticeship.ApprenticeName)
-                                        </td>
-                                        <td>
-                                            @GetValueOrDefault(apprenticeship.TrainingName)
-                                        </td>
-                                        <td>
-                                            @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
-                                            {
-                                                <span>
-                                                    @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
-                                                </span>
-                                            }
-                                            else
-                                            {
-                                                <span class="missing">&ndash;</span>
-                                            }
-                                        </td>
+                            @foreach (var apprenticeship in trainingGroup.OrderBy(a => a.CanBeApproved))
+                            {
+                                <tr>
+                                    <td>
+                                        @GetValueOrDefault(apprenticeship.ApprenticeName)
+                                    </td>
+                                    <td>
+                                        @if (apprenticeship.ApprenticeDateOfBirth.HasValue)
+                                        {
+                                            <span>
+                                                @apprenticeship.ApprenticeDateOfBirth.Value.ToGdsFormatWithoutDay()
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="missing">&ndash;</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (apprenticeship.StartDate != null && apprenticeship.EndDate != null)
+                                        {
+                                            <span>
+                                                @apprenticeship.StartDate.Value.ToGdsFormatWithoutDay() to @apprenticeship.EndDate.Value.ToGdsFormatWithoutDay()
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="missing">&ndash;</span>
+                                        }
+                                    </td>
+                                        
+                                    @if (course!=null && apprenticeship.Cost.HasValue && apprenticeship.Cost > course.MaxFunding)
+                                    {
                                         <td class="funding-cap-alert">
-                                            <a href="#max-funding" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
+                                            <a href="#max-funding-group-@trainingGroup.Key" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
                                         </td>
+                                    }
+                                    else
+                                    {
                                         <td>
-                                            <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
+                                            @GetValueOrDefault(FormatCost(apprenticeship.Cost))
                                         </td>
-                                    </tr>
-                                }
+                                    }
+                                                                                        
+                                    <td>
+                                        <a href="@Url.Action("EditApprenticeship", new { hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })" aria-label="Edit @apprenticeship.ApprenticeName">Edit</a>
+                                    </td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
 
@@ -188,6 +216,7 @@
         }
 
     </div>
+</div>
 </div>
 
 <a class="button delete-button" href="@Url.Action("DeleteCohort")" aria-label="Delete cohort">Delete cohort</a>

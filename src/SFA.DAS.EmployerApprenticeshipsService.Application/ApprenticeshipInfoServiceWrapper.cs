@@ -105,7 +105,8 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
@@ -142,7 +143,8 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
