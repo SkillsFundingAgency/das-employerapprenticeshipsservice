@@ -99,16 +99,24 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
+            var authToken = await GetOgdAuthenticationToken();
             const string url = "apprenticeship-levy/fraction-calculation-date";
-            return await _httpClientWrapper.Get<DateTime>(_configuration.Hmrc.ServerToken, url);
+            return await _httpClientWrapper.Get<DateTime>(authToken.AccessToken, url);
         }
 
         public async Task<HmrcTokenResponse> GetOgdAuthenticationToken()
         {
             var code = _totpService.GetCode();
-            var url = $"oauth/token?client_secret={code}&client_id={_configuration.Hmrc.OgdClientId}&grant_type=client_credentials&scopes=read:apprenticeship-levy";
-
-            var response = await _httpClientWrapper.SendMessage("", url);
+            var url = "oauth/token";
+            var content = new 
+            {
+                client_secret= code,
+                client_id = _configuration.Hmrc.OgdClientId,
+                grant_type = "client_credentials",
+                scopes = "read:apprenticeship - levy"
+            };
+            
+            var response = await _httpClientWrapper.SendMessage(content, url);
 
             return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
         }
