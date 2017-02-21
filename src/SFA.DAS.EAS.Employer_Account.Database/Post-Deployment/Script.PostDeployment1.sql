@@ -37,6 +37,3 @@ SELECT LegalEntityId, AccountId, @TemplateId, 1 FROM @AccountEntity
 
 INSERT INTO [employer_account].[AccountEmployerAgreement]
 SELECT AccountId, Id FROM [employer_account].[EmployerAgreement]
-
-ALTER TABLE [employer_account].[EmployerAgreement]
-ADD CONSTRAINT [FK_EmployerAgreement_Template] FOREIGN KEY ([TemplateId]) REFERENCES [employer_account].[EmployerAgreementTemplate]([Id])
