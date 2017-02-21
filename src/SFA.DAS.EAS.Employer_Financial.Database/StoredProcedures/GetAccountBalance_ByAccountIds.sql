@@ -2,9 +2,11 @@
 	@accountIds [employer_financial].[AccountIds] Readonly
 AS
 	select 
-		AccountId,
+		tl.AccountId,
 		Sum(Amount) Balance 
 	from 
-		[employer_financial].TransactionLine 
-	Group by AccountId
+		[employer_financial].TransactionLine tl
+	inner join 
+		@accountIds acc on acc.AccountId = tl.AccountId
+	Group by tl.AccountId
 
