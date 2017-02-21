@@ -1,5 +1,6 @@
 ﻿Feature: Agreements
-	In order to 
+	In order to allow spending on my account
+	I want to be able to sign an SFA agreement against a legal entity connected to my account
 
 @mytag
 Scenario Outline: Sign Agreements
@@ -8,11 +9,7 @@ Scenario Outline: Sign Agreements
 	Then Agreement Status is "<status>"
 Examples: 
 | accountRole | status     |
-| Owner       | signed     |
-| Transactor  | not_signed |
-| Viewer      | not_signed |
+| Owner       | Signed     |
+| Transactor  | Pending	   |
+| Viewer      | Pending	   |
 
-@mytag
-Scenario: Check Aknowledgement
-Given I am an account "Owner"
-And I have not checked aknowledgement
