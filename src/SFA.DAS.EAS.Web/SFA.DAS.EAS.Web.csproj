@@ -550,6 +550,7 @@
     <Content Include="dist\images\org_crest_18px_x2.png" />
     <Content Include="dist\images\org_crest_27px.png" />
     <Content Include="dist\images\org_crest_27px_x2.png" />
+    <Content Include="dist\images\pub-cover-html.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />
@@ -975,6 +976,7 @@
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
+    <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\Error\InvalidState.cshtml" />
   </ItemGroup>
   <ItemGroup>

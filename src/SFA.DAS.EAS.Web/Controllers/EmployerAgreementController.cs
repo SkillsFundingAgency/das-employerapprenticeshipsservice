@@ -46,8 +46,17 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             return View(model);
         }
-        
-		[HttpGet]
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/details")]
+        public async Task<ActionResult> Details(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
+        {
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(agreement);
+        }
+
+        [HttpGet]
 		[Route("agreements/{agreementId}/view")]
         public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {

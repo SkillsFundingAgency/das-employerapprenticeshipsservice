@@ -1,0 +1,93 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
+@{
+    ViewBag.PageID = "organisations-agreements-details";
+    ViewBag.Title = "Employer agreement";
+    ViewBag.Section = "organisations";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+            Your SFA agreement
+        </h1>
+        <p>This agreement allows you to spend funds for <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong>.</p>
+
+    </div>
+</div>
+<div class="grid-row agreement-parties">
+    <div class="column-one-third">
+        <h2 class="heading-medium section-heading">Parties</h2>
+    </div>
+    <div class="column-two-thirds">
+        <address class="party">
+            <strong>Skills Funding Agency</strong><br />
+            Cheylesmore House<br />
+            Quinton Road<br />
+            Coventry<br />
+            CV1 2TW
+        </address>
+        <address class="party">
+            <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong><br />
+            @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
+        </address>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-one-third">
+        <h2 class="heading-medium section-heading">Document</h2>
+    </div>
+    <div class="column-two-thirds">
+        <div class="signed-agreement">
+            <section class="attachment embedded">
+                <div class="attachment-thumb">
+                    <a aria-hidden="true" class="thumbnail" href="@Url.Action("View", "EmployerAgreement")"><img alt="" src="/dist/images/pub-cover-html.png"></a>
+                </div>
+                <div class="attachment-details">
+                    <h2 class="title"><a href="@Url.Action("View", "EmployerAgreement")">Your SFA agreement</a></h2>
+                    <p class="metadata">
+                        <span class="type">HTML</span>
+                    </p>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h3 class="heading-medium">This agreement has been accepted</h3>
+        <table>
+            <tr>
+                <th scope="row">Accepted by:</th>
+                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+            </tr>
+            <tr>
+                <th scope="row">On behalf of:</th>
+                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+            </tr>
+            <tr>
+                <th scope="row">Address:</th>
+                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
+            </tr>
+            <tr>
+                <th scope="row">Accepted on:</th>
+                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
+            <li>Your SFA agreement</li>
+        </ol>
+    </div>
+}
