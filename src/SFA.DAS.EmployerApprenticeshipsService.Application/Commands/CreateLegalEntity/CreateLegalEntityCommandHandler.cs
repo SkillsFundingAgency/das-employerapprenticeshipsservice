@@ -41,10 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             var agreementView = await _accountRepository.CreateLegalEntity(
                 owner.AccountId,
-                message.LegalEntity,
-                message.SignAgreement,
-                message.SignedDate,
-                owner.UserId);
+                message.LegalEntity);
 
             await CreateAuditEntries(owner, agreementView);
 

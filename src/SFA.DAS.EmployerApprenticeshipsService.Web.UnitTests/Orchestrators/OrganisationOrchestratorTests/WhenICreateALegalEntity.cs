@@ -51,8 +51,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                 Address = "1, Test Street",
                 IncorporatedDate = DateTime.Now.AddYears(-20),
                 ExternalUserId = "2",
-                SignedAgreement = true,
-                UserIsAuthorisedToSign = true,
                 LegalEntityStatus = "active"
             };
 
@@ -83,8 +81,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             command.LegalEntity.Code.Equals(request.Code) &&
             command.LegalEntity.RegisteredAddress.Equals(request.Address) &&
             command.LegalEntity.DateOfIncorporation.Equals(request.IncorporatedDate) &&
-            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus) &&
-            command.SignAgreement.Equals(request.SignedAgreement))));
+            command.LegalEntity.CompanyStatus.Equals(request.LegalEntityStatus))));
         }
 
         [TestCase(Role.Owner, HttpStatusCode.OK)]

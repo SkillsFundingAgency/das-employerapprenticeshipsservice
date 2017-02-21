@@ -404,6 +404,7 @@
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
+    <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -543,6 +544,12 @@
     <Content Include="dist\images\icon-search-2x.png" />
     <Content Include="dist\images\icon-search.png" />
     <Content Include="dist\images\opengraph-image.png" />
+    <Content Include="dist\images\org_crest_13px.png" />
+    <Content Include="dist\images\org_crest_13px_x2.png" />
+    <Content Include="dist\images\org_crest_18px.png" />
+    <Content Include="dist\images\org_crest_18px_x2.png" />
+    <Content Include="dist\images\org_crest_27px.png" />
+    <Content Include="dist\images\org_crest_27px_x2.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
     <Content Include="dist\javascripts\app.js" />
@@ -832,7 +839,6 @@
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
-    <Content Include="Views\Shared\DeadView.cshtml" />
     <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectLegalEntity.cshtml" />
@@ -840,7 +846,6 @@
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
-    <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
@@ -966,6 +971,11 @@
     <Content Include="Views\EmployerCommitments\RequestList.cshtml" />
     <Content Include="Views\EmployerCommitments\Approved.cshtml" />
     <Content Include="Views\EmployerCommitments\DeleteCohort.cshtml" />
+    <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
+    <Content Include="src\sass\_agreement.scss" />
+    <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
+    <Content Include="Views\Error\InvalidState.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

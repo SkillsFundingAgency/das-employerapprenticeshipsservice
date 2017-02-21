@@ -16,14 +16,5 @@ BEGIN
 		StatusId = 2 
 	WHERE Id = @agreementId;
 
-	--mark previous agreement as superceded
-	SELECT @legalEntityId = LegalEntityId
-	FROM [employer_account].[EmployerAgreement]
-	WHERE Id = @agreementId;
-
-	UPDATE [employer_account].[EmployerAgreement] 
-	SET StatusId = 4
-	WHERE LegalEntityId = @legalEntityId
-		AND Id <> @agreementId
-		AND StatusId <> 4;
+	
 END

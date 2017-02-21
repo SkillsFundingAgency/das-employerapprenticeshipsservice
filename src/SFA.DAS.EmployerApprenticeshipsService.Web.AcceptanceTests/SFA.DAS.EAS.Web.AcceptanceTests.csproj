@@ -209,6 +209,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\AddPayeScheme\AddPayeSchemeSteps.cs" />
+    <Compile Include="Steps\AgreementSteps\AgreementSteps.cs" />
     <Compile Include="Steps\CommonSteps\AccountCreationSteps.cs" />
     <Compile Include="Steps\CommonSteps\GlobalTestSteps.cs" />
     <Compile Include="Steps\InviteMember\InviteMemberSteps.cs" />
@@ -260,9 +261,7 @@
       <Name>SFA.DAS.EAS.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Steps\AgreementSteps\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>

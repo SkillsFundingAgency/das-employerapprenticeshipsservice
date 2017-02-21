@@ -37,7 +37,7 @@
                     <td>
                         @if (commitment.ShowViewLink)
                         {
-                            <a href="@Url.Action("Details", new { Model.Data.AccountHashId, commitment.HashedCommitmentId })" title="View cohort" aria-label="View cohort">View</a>
+                            <a href="@Url.Action("Details", new { commitment.HashedCommitmentId })" title="View cohort" aria-label="View cohort">View</a>
                         }
                     </td>
                 </tr>
