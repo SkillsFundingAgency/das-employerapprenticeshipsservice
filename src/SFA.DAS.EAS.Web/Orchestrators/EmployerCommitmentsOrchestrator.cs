@@ -150,7 +150,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return CheckUserAuthorization(async () =>
             {
-                var providers = await ProviderSearch(providerId);
+                var provider = await ProviderSearch(providerId);
 
                 return new OrchestratorResponse<ConfirmProviderViewModel>
                 {
@@ -159,21 +159,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedAccountId,
                         LegalEntityCode = legalEntityCode,
                         ProviderId = providerId,
-                        Providers = providers,
+                        Provider = provider,
                         CohortRef = cohortRef,
                     }
                 };
             }, hashedAccountId, externalUserId);
         }
 
-        private async Task<IList<Provider>> ProviderSearch(int providerId)
+        private async Task<Provider> ProviderSearch(int providerId)
         {
             var response =  await _mediator.SendAsync(new GetProviderQueryRequest
             {
                 ProviderId = providerId
             });
 
-            return response?.ProvidersView?.Providers;
+            return response?.ProvidersView?.Provider;
         }
 
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef, string externalUserId)
@@ -183,8 +183,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-                var providers = await ProviderSearch(int.Parse(providerId));
-                var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
+                var provider = await ProviderSearch(int.Parse(providerId));
 
                 var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
                 var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
