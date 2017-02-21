@@ -404,6 +404,7 @@
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
+    <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddLegalEntityViewModel.cs" />
@@ -846,7 +847,6 @@
     <Content Include="Views\EmployerTeam\Review.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
-    <Content Include="Views\EmployerAgreement\ViewEntityAgreement.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\EmployerCommitments\SubmitCommitmentEntry.cshtml" />
     <Content Include="Views\EmployerCommitments\Inform.cshtml" />
@@ -977,6 +977,7 @@
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
+    <Content Include="Views\Error\InvalidState.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

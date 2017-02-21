@@ -1810,7 +1810,8 @@ dl.inline dd {
   padding-bottom: .5em;
 }
 
-.account-id {
+.account-id,
+.secondary-text {
   font-family: "nta", Arial, sans-serif;
   font-weight: 400;
   text-transform: none;
@@ -1820,6 +1821,7 @@ dl.inline dd {
   line-height: 1.25;
   display: block;
   color: #6f777b;
+  margin: 0;
 }
 
 main, .header-inner {
@@ -2700,6 +2702,14 @@ tr.total td {
 .table-address {
   max-width: 300px;
   display: inline-block;
+}
+
+table.organisations td {
+  width: 30%;
+}
+
+table.organisations td + td + td {
+  width: 20%;
 }
 
 .panel p {

@@ -38,9 +38,10 @@ namespace SFA.DAS.EAS.Web.Controllers
                 model.FlashMessage = new FlashMessageViewModel
                 {
                     Headline = "Agreement signed",
-                    Message = $"You've signed the agreement for {TempData["agreementSigned"]}",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                TempData.Remove("agreementSigned");
             }
 
             return View(model);

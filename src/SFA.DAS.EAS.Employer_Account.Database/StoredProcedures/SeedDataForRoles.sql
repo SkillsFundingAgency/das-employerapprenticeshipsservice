@@ -40,33 +40,6 @@ BEGIN
 	END 
 	SET IDENTITY_INSERT  [employer_account].[Role] OFF
 
-	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] ON 
-	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 1
-		AND Name = 'Pending'))
-	BEGIN 
-		INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-		VALUES(1, 'Pending') 
-	END 
-	ELSE 
-	BEGIN 
-		UPDATE [employer_account].[EmployerAgreementStatus] 
-		SET Name = 'Pending'
-		WHERE Id = 1
-	END 
-	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 2
-		AND Name = 'Signed'))
-	BEGIN 
-		INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-		VALUES(2, 'Signed') 
-	END 
-	ELSE 
-	BEGIN 
-		UPDATE [employer_account].[EmployerAgreementStatus] 
-		SET Name = 'Signed'
-		WHERE Id = 2
-	END 
-	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] OFF
-
 	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] ON 
 	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = 1))
 	BEGIN 

@@ -295,30 +295,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                response.Status = HttpStatusCode.OK;
-
-                TempData["userNotAuthorised"] = "true";
-
-                return View("ViewEntityAgreement", "EmployerAgreement", response);
-            }
-
+            
             TempData["extraCompanyAdded"] = "true";
-
-
+            
             TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-            //if (request.SignedAgreement)
-            //{
-            //    TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-            //}
-            //else
-            //{
-            //    TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-            //    TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-            //}
-
+            
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
         

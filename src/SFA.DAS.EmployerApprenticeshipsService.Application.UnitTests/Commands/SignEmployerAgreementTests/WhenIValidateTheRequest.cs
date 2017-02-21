@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 
         [TestCase(EmployerAgreementStatus.Signed)]
         [TestCase(EmployerAgreementStatus.Expired)]
-        [TestCase(EmployerAgreementStatus.Superceded)]
+        [TestCase(EmployerAgreementStatus.Superseded)]
         public async Task ThenIfTheAgreementIsAlreadySignedThenTheRequestIsNotValid(EmployerAgreementStatus employerAgreementStatus)
         {
             //Arrange

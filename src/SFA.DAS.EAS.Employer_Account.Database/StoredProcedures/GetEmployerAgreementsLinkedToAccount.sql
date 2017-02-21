@@ -11,7 +11,8 @@ BEGIN
 	le.Name AS LegalEntityName,
 	ea.TemplateId,
 	eat.PartialViewName AS TemplatePartialViewName,
-	ea.SignedByName
+	ea.SignedByName,
+	ea.SignedDate
 	FROM [employer_account].[LegalEntity] le
 	JOIN [employer_account].[EmployerAgreement] ea ON ea.LegalEntityId = le.Id
 	JOIN [employer_account].[AccountEmployerAgreement] aea ON aea.[EmployerAgreementId] = ea.Id
