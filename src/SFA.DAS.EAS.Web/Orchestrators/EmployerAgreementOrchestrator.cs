@@ -67,8 +67,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         LegalEntityAddress = address,
                         LegalEntityInceptionDate = incorporatedDate,
                         Status = EmployerAgreementStatus.Pending,
-                        TemplateRef = templateResponse.Template.Ref,
-                        TemplateText = templateResponse.Template.Text
+                        TemplatePartialViewName = templateResponse.Template.PartialViewName
                     }
                 };
             }
@@ -133,7 +132,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-            catch (Exception)
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Data = new EmployerAgreementViewModel(),
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException ex)
             {
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
@@ -173,7 +181,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     SignedDate = signedDate
                 });
 
-                return new OrchestratorResponse();
+                return new OrchestratorResponse
+                {
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse
+                {
+                    Exception = ex,
+                    Status = HttpStatusCode.BadRequest
+                };
             }
             catch (Exception)
             {

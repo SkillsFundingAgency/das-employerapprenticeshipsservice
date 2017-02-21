@@ -75,37 +75,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
-        public async Task SignAgreement(long agreementId, long signedById, string signedByName, DateTime signedDate)
+        public async Task SignAgreement(SignEmployerAgreement agreement)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@agreementId", agreementId, DbType.Int64);
-                parameters.Add("@signedById", signedById, DbType.Int64);
-                parameters.Add("@signedByName", signedByName, DbType.String);
-                parameters.Add("@signedDate", signedDate, DbType.DateTime);
-
+                parameters.Add("@agreementId", agreement.AgreementId, DbType.Int64);
+                parameters.Add("@signedById", agreement.SignedById, DbType.Int64);
+                parameters.Add("@signedByName", agreement.SignedByName, DbType.String);
+                parameters.Add("@signedDate", agreement.SignedDate, DbType.DateTime);
+                
                 var result = await c.ExecuteAsync(
                     sql: "[employer_account].[SignEmployerAgreement]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
-                return result;
-            });
-        }
-
-        public async Task ReleaseEmployerAgreementTemplate(int templateId)
-        {
-            await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@templateId", templateId, DbType.Int32);
-
-                var trans = c.BeginTransaction();
-                var result = await c.ExecuteAsync(
-                    sql: "[employer_account].[ReleaseEmployerAgreementTemplate]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure, transaction: trans);
-                trans.Commit();
                 return result;
             });
         }

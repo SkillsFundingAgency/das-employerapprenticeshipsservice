@@ -48,3 +48,12 @@ tr.total {
     word-break: break-all;
     word-break: break-word;
 }
+
+table.organisations {
+    td {
+        width: 30%;
+    }
+    td + td + td {
+        width: 20%;
+    }
+}
