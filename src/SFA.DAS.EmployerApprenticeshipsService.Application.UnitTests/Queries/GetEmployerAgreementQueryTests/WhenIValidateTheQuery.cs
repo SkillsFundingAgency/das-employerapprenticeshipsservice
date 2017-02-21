@@ -105,6 +105,40 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementQueryTes
         }
 
         [Test]
+        public async Task ThenIfTheAgreementIsNotConnectedToTheAccountTheRequestIsNotAuthorized()
+        {
+
+            //Arrange
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
+            {
+                HashedAccountId = "YUH78",
+                Status = EmployerAgreementStatus.Signed
+            });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner});
+
+            //Act
+            var result = await _validator.ValidateAsync(_query);
+
+            //Assert
+            Assert.IsTrue(result.IsUnauthorized);
+        }
+
+        [Test]
+        public async Task ThenIfThereIsNoAgreementTheValidationResultIsReturned()
+        {
+            //Arrange
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(null);
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
+
+            //Act
+            var result = await _validator.ValidateAsync(_query);
+
+            //Assert
+            Assert.IsFalse(result.IsUnauthorized);
+            Assert.IsTrue(result.IsValid());
+        }
+
+        [Test]
         public async Task ThenIfAllFieldsArePopulatedAndTheMemberIsPartOfTheAccountThenTheRequestIsValid()
         {
             

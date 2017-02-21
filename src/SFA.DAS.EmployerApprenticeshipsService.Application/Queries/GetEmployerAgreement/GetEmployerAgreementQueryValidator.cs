@@ -61,16 +61,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(_hashingService.DecodeValue(item.HashedAgreementId));
 
-            if (agreement.HashedAccountId != item.HashedAccountId)
+            if (agreement == null)
             {
-                validationResult.IsUnauthorized = true;
                 return validationResult;
-            }    
+            }
 
-            if (agreement.Status != EmployerAgreementStatus.Signed && caller.RoleId != (int)Role.Owner)
+            if (agreement.HashedAccountId != item.HashedAccountId || (agreement.Status != EmployerAgreementStatus.Signed && caller.RoleId != (int)Role.Owner))
             {
                 validationResult.IsUnauthorized = true;
-            }
+            }    
             
             return validationResult;
         }
