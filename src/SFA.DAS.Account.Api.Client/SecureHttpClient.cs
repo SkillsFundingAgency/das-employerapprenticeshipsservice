@@ -8,9 +8,9 @@ namespace SFA.DAS.EAS.Account.Api.Client
 {
     internal class SecureHttpClient
     {
-        private readonly AccountApiConfiguration _configuration;
+        private readonly IAccountApiConfiguration _configuration;
 
-        public SecureHttpClient(AccountApiConfiguration configuration)
+        public SecureHttpClient(IAccountApiConfiguration configuration)
         {
             _configuration = configuration;
         }
