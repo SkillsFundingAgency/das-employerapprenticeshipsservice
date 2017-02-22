@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -16,13 +17,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
-        private readonly ITotpService _totpService;
+        private readonly ITokenServiceApiClient _tokenServiceApiClient;
 
-        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITotpService totpService)
+
+        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
-            _totpService = totpService;
+            _tokenServiceApiClient = tokenServiceApiClient;
+
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
             _httpClientWrapper.MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue> {new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json")};
@@ -66,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<LevyDeclarations> GetLevyDeclarations(string empRef,DateTime? fromDate)
         {
-            var authToken = await GetOgdAuthenticationToken();
+            var accessToken = await GetOgdAccessToken();
 
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
 
@@ -75,7 +78,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
             }
 
-            return await _httpClientWrapper.Get<LevyDeclarations>(authToken.AccessToken, url);
+            return await _httpClientWrapper.Get<LevyDeclarations>(accessToken, url);
         }
 
         public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef)
@@ -85,7 +88,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
         {
-            var authToken = await GetOgdAuthenticationToken();
+            var accessToken = await GetOgdAccessToken();
 
             var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/fractions";
 
@@ -94,31 +97,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
             }
 
-            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(authToken.AccessToken, url);
+            return await _httpClientWrapper.Get<EnglishFractionDeclarations>(accessToken, url);
         }
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
-            var authToken = await GetOgdAuthenticationToken();
+            var accessToken = await GetOgdAccessToken();
+
             const string url = "apprenticeship-levy/fraction-calculation-date";
-            return await _httpClientWrapper.Get<DateTime>(authToken.AccessToken, url);
+            return await _httpClientWrapper.Get<DateTime>(accessToken, url);
         }
 
-        public async Task<HmrcTokenResponse> GetOgdAuthenticationToken()
+        public async Task<string> GetOgdAccessToken()
         {
-            var code = _totpService.GetCode();
-            var url = "oauth/token";
-            var content = new 
-            {
-                client_secret= code,
-                client_id = _configuration.Hmrc.OgdClientId,
-                grant_type = "client_credentials",
-                scopes = "read:apprenticeship - levy"
-            };
-            
-            var response = await _httpClientWrapper.SendMessage(content, url);
-
-            return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
+            var accessToken = await _tokenServiceApiClient.GetPrivilegedAccessTokenAsync();
+            return accessToken.AccessCode;
         }
     }
 }

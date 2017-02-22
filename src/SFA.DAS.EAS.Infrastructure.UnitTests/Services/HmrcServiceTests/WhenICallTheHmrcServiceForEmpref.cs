@@ -7,6 +7,8 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.TokenService.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -17,12 +19,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private string ExpectedScope = "emp_ref";
         private string ExpectedClientSecret = "my_secret";
         private string ExpectedName = "My Company Name";
-        private const string ExpectedTotpToken = "789654321AGFVD";
+        private const string ExpectedAuthToken = "789654321AGFVD";
 
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
-        private Mock<ITotpService> _totpService;
+        private Mock<ITokenServiceApiClient> _tokenService;
 
         [SetUp]
         public void Arrange()
@@ -41,10 +43,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.Get<EmpRefLevyInformation>(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new EmpRefLevyInformation { Employer = new Employer {Name= new Name {EmprefAssociatedName = ExpectedName} }, Links = new Links() });
 
-            _totpService = new Mock<ITotpService>();
-            _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
+            _tokenService = new Mock<ITokenServiceApiClient>();
+            _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _totpService.Object);
+            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object);
         }
 
         [Test]

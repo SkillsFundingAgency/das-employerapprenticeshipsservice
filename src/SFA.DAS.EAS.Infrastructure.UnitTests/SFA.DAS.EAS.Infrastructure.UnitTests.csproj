@@ -137,7 +137,6 @@
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefDiscovery.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEnglishFractions.cs" />
     <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
-    <Compile Include="Services\TotpServiceTests\WhenICreateACode.cs" />
     <Compile Include="Services\WhiteListTests\WhenIGetUserWhiteList.cs" />
   </ItemGroup>
   <ItemGroup>

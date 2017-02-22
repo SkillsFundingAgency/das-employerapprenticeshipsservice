@@ -240,7 +240,6 @@
     <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
-    <Compile Include="Services\TotpService.cs" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
