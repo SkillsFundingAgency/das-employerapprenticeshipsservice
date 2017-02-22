@@ -1,10 +1,11 @@
 ﻿@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Extensions
+@using SFA.DAS.EAS.Domain.Models.EmployerAgreement
 @using SFA.DAS.EAS.Web;
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementListViewModel>
 @{
-    ViewBag.PageID = "organisations-agreements-home"; 
+    ViewBag.PageID = "organisations-agreements-home";
     ViewBag.Title = "Organisations";
     ViewBag.Section = "organisations";
 
@@ -17,7 +18,7 @@
 
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your organisations</h1>
+        <h1 class="heading-xlarge">Your organisations and agreements</h1>
     </div>
     <div class="column-one-third">
         <form action="@Url.Action("AddOrganisation", "Organisation")" method="GET">
@@ -29,31 +30,57 @@
     <div class="column-two-thirds">
         <p>Add each organisation that will make an agreement with a training provider for apprenticeship training.</p>
         <p>There is no restriction on the number of <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank" rel="external">connected organisations</a> you can add.</p>
-        
-        <div class="panel alert-default">
-            <p>From May 2017, you’ll be asked to accept the Skills Funding Agency (SFA) agreement for each of your organisations that will make an agreement with a training provider to spend apprenticeship funds. </p>
-            <p>This agreement gives you the authority to access the funds in your account to manage your apprenticeships. You must agree to all the terms and conditions in this agreement and the funding rules, before funds can be used to pay for apprentices.</p>
-            <p><a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending" target="_blank">Read the <abbr title="Skills Funding Agency">SFA</abbr> agreement</a> - we'll tell you when it's ready to be accepted.</p>
-        </div>
-        <table>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+        <table class="organisations">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                </tr>
+                    <th scope="col">Organisation</th>
+                    <th scope="col">Agreement</th>
+                    <th scope="col">Spending status</th>
+                    <th scope="col"><span class="vh">Action</span></th>
             </thead>
             <tbody>
 
                 @foreach (var employerAgreement in Model.Data.EmployerAgreements)
-            {
+                {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        
+                        <td>
+                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed) {
+                                @: Signed by @employerAgreement.SignedByName
+                                if (employerAgreement.SignedDate.HasValue)
+                                {
+                                    <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
+                                }
+                            }
+                            else
+                            {
+                                @: Agreement not signed
+                                <span class="secondary-text">SFA agreement needs to be signed</span>
+                            }
+                        </td>
+                        <td>
+                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
+                        </td>
+                        <td class="link-right">
+                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
+                            {
+                                <a href="@Url.Action("Details", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
 
-        
+
 
     </div>
 </div>
@@ -61,7 +88,7 @@
     <div class="breadcrumbs">
         <ol role="navigation">
             <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
-            <li>Your organisations</li>
+            <li>Your organisations and agreements</li>
         </ol>
     </div>
 }

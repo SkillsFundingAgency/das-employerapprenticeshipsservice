@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         public async Task ThenIAmRedirectedToEmployerAgreementViewIfSuccessful()
         {
             //Act
-            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null, "","") as RedirectToRouteResult;
+            var result = await _controller.Confirm("", "", "", "", null, "", OrganisationType.Other, 1, null) as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);

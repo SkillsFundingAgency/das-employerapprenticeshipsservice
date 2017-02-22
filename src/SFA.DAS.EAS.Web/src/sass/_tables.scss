@@ -48,3 +48,17 @@ tr.total {
     word-break: break-all;
     word-break: break-word;
 }
+
+.table-address {
+    max-width: 300px;
+    display: inline-block;
+}
+
+table.organisations {
+    td {
+        width: 30%;
+    }
+    td + td + td {
+        width: 20%;
+    }
+}

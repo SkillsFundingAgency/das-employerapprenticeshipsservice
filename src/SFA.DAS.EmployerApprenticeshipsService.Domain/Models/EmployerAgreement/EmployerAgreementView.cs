@@ -17,8 +17,7 @@ namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
         public string LegalEntityAddress { get; set; }
         public DateTime? LegalEntityInceptionDate { get; set; }
         public int TemplateId { get; set; }
-        public string TemplateText { get; set; }
-        public string TemplateRef { get; set; }
+        public string TemplatePartialViewName { get; set; }
         public string HashedAgreementId { get; set; }
         public string LegalEntityStatus { get; set; }
         public string Sector { get; set; }

@@ -278,7 +278,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("confirm")]
         public async Task<ActionResult> Confirm(
             string hashedAccountId, string name, string code, string address, DateTime? incorporated,
-            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, bool? userIsAuthorisedToSign, string submit, string sector)
+            string legalEntityStatus, OrganisationType organisationType, short? publicSectorDataSource, string sector)
         {
             var request = new CreateNewLegalEntityViewModel
             {
@@ -287,9 +287,6 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Code = code,
                 Address = address,
                 IncorporatedDate = incorporated,
-                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
-                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-                SignedDate = DateTime.Now,
                 ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = (short)organisationType,
@@ -298,28 +295,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                response.Status = HttpStatusCode.OK;
-
-                TempData["userNotAuthorised"] = "true";
-
-                return View("ViewEntityAgreement", "EmployerAgreement", response);
-            }
-
+            
             TempData["extraCompanyAdded"] = "true";
-
-            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-            }
-            else
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-            }
-
+            
+            TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
+            
             return RedirectToAction("Index", "EmployerAgreement", new { hashedAccountId });
         }
         

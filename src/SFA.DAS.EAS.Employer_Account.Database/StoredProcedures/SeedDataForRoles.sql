@@ -40,45 +40,16 @@ BEGIN
 	END 
 	SET IDENTITY_INSERT  [employer_account].[Role] OFF
 
-	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] ON 
-	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 1
-		AND Name = 'Pending'))
-	BEGIN 
-		INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-		VALUES(1, 'Pending') 
-	END 
-	ELSE 
-	BEGIN 
-		UPDATE [employer_account].[EmployerAgreementStatus] 
-		SET Name = 'Pending'
-		WHERE Id = 1
-	END 
-	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementStatus] WHERE Id = 2
-		AND Name = 'Signed'))
-	BEGIN 
-		INSERT INTO [employer_account].[EmployerAgreementStatus](Id, Name) 
-		VALUES(2, 'Signed') 
-	END 
-	ELSE 
-	BEGIN 
-		UPDATE [employer_account].[EmployerAgreementStatus] 
-		SET Name = 'Signed'
-		WHERE Id = 2
-	END 
-	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementStatus] OFF
-
 	SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] ON 
-	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = 1
-		AND [Text] = 'I am a template'))
+	IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = 1))
 	BEGIN 
-		INSERT INTO [employer_account].[EmployerAgreementTemplate](Id, [Text], CreatedDate, Ref) 
-		VALUES(1, 'I am a template', GETDATE(), 'T/1') 
+		INSERT INTO [employer_account].[EmployerAgreementTemplate](Id, PartialViewName, CreatedDate) 
+		VALUES(1, '_Agreement_V1', GETDATE()) 
 	END 
 	ELSE 
 	BEGIN 
 		UPDATE [employer_account].[EmployerAgreementTemplate] 
-		SET [Text] = 'I am a template',
-			Ref = 'T/1',
+		SET PartialViewName = '_Agreement_V1',
 			CreatedDate = GETDATE()
 		WHERE Id = 1
 	END 

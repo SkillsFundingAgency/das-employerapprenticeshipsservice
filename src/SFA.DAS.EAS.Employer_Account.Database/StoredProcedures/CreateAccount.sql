@@ -36,12 +36,7 @@ BEGIN
 		SELECT @legalEntityId = SCOPE_IDENTITY();	
 	END
 	
-	DECLARE @templateId INT;
-
-	SELECT TOP 1 @templateId = Id FROM [employer_account].[EmployerAgreementTemplate] ORDER BY Id ASC;
-
-	INSERT INTO [employer_account].[EmployerAgreement](LegalEntityId, TemplateId, StatusId) VALUES (@legalEntityId, @templateId, 2);
-	SELECT @employerAgreementId = SCOPE_IDENTITY();
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 	
 	INSERT INTO [employer_account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
