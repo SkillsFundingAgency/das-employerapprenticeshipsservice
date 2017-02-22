@@ -62,38 +62,9 @@
                     <hr class="hr-top">
                     <a class="button finishEditingBtn" href="@Url.Action("FinishedEditing")" aria-label="@finishEditingText">@finishEditingText</a>
                     <a href="@Url.Action("CreateApprenticeshipEntry")" class="button button-secondary" aria-label="Add an apprentice">Add an apprentice</a>
-                    
-                    @*<hr class="hr-bottom">*@
                 </div>
             </div>
         </div>
-
-        @functions {
-
-            public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
-            {
-                if (apprenticeships.Count == 1)
-                    return "1 Apprentice";
-
-                return $"{apprenticeships.Count} Apprentices";
-            }
-
-            public string PluraliseApprentice(int count)
-            {
-                return count == 1 ? "Apprentice" : "Apprentices";
-            }
-
-            public string PluraliseIncompleteRecords(int count)
-            {
-                return count == 1 ? "Incomplete record" : "Incomplete records";
-            }
-
-            private string GetClickableClass(int requestsCount)
-            {
-                return requestsCount > 0 ? "clickable" : "";
-            }
-        }
-
 
         @if (!Model.Data.HasApprenticeships)
         {
@@ -112,38 +83,33 @@
             <div class="grid-row">
                 <div class="column-full">
 
-                    @foreach (var trainingGroup in Model.Data.Apprenticeships.OrderBy(g => g.TrainingName).GroupBy(g => g.TrainingCode))
+                    @foreach (var group in Model.Data.ApprenticeshipGroups)
                     {
-                        var groupName = String.IsNullOrEmpty(trainingGroup.Key) ? "No training course" : @trainingGroup.First().TrainingName;
-                        var groupTitle = String.Format($"{trainingGroup.Count()} x {groupName}");
-                        var trainingCode = String.IsNullOrEmpty(trainingGroup.Key) ? String.Empty : @trainingGroup.First().TrainingCode;
-                        var course = Model.Data.TrainingProgrammes.FirstOrDefault(x => x.Id == trainingCode);
-                        var numberOverFundingLimit = course == null? 0 : trainingGroup.Count(x => x.Cost > course.MaxFunding);
+                        var groupTitle = string.Format($"{group.Apprenticeships.Count()} x {group.GroupName}");
 
                         <div class="group-header">
 
                             <p class="heading-medium">@groupTitle</p>
-                            @if (!String.IsNullOrEmpty(trainingCode))
+                            @if (group.TrainingProgramme != null)
                             {
-                                <p>Training code: @trainingCode</p>
+                                <p>Training code: @group.TrainingProgramme.Id</p>
                             }
 
                         </div>
 
-                        if (numberOverFundingLimit > 0)
+                        if (group.ShowFundingLimitWarning)
                         {
-                            <div class="funding-cap-notification" id="max-funding-group-@trainingGroup.Key">
+                            <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
                                 <p class="heading-medium">
-                                    @($"{numberOverFundingLimit} {course.Title} {PluraliseApprentice(numberOverFundingLimit).ToLower()} above funding band maximum")
+                                    @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
                                 <p>
-                                    The costs are above the £@course.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
+                                    The costs are above the £@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to ask the employer to pay the difference directly to you - this can't be funded from their account.
                                 </p>
 
                             </div>
                             <i class="bubble-arrow"></i>
                         }
-
 
                         <table class="tableResponsive viewCommitment">
                             <thead>
@@ -152,11 +118,10 @@
                                 <th scope="col">Date of birth</th>
                                 <th scope="col">Training dates</th>
                                 <th scope="col" colspan="2">Cost</th>
-
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var apprenticeship in trainingGroup.OrderBy(a => a.CanBeApproved))
+                            @foreach (var apprenticeship in group.Apprenticeships.OrderBy(a => a.CanBeApproved))
                             {
                                 <tr>
                                     <td>
@@ -187,10 +152,10 @@
                                         }
                                     </td>
                                         
-                                    @if (course!=null && apprenticeship.Cost.HasValue && apprenticeship.Cost > course.MaxFunding)
+                                    @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding)
                                     {
                                         <td class="funding-cap-alert">
-                                            <a href="#max-funding-group-@trainingGroup.Key" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@trainingGroup.Key" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
+                                            <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
                                         </td>
                                     }
                                     else
@@ -223,6 +188,30 @@
 
 @functions
 {
+
+    public string GetApprenticesCountText(IList<ApprenticeshipListItemViewModel> apprenticeships)
+    {
+        if (apprenticeships.Count == 1)
+            return "1 Apprentice";
+
+        return $"{apprenticeships.Count} Apprentices";
+    }
+
+    public string PluraliseApprentice(int count)
+    {
+        return count == 1 ? "Apprentice" : "Apprentices";
+    }
+
+    public string PluraliseIncompleteRecords(int count)
+    {
+        return count == 1 ? "Incomplete record" : "Incomplete records";
+    }
+
+    private string GetClickableClass(int requestsCount)
+    {
+        return requestsCount > 0 ? "clickable" : "";
+    }
+
     public string FormatCost(decimal? cost)
     {
         if (!cost.HasValue)

@@ -710,6 +710,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var messageTask = GetLatestMessageFromProvider(data.Commitment);
                 var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
+                var trainingProgrammes = await GetTrainingProgrammes();
+
+                var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
+                foreach (var group in apprenticships.OrderBy(x=> x.TrainingName).GroupBy(x => x.TrainingCode))
+                {
+                    apprenticeshipGroups.Add(new ApprenticeshipListItemGroupViewModel
+                    {
+                        Apprenticeships = group.OrderBy(x => x.CanBeApproved).ToList(),
+                        TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key)
+                    });
+                }
+
                 var viewModel = new CommitmentDetailsViewModel
                 {
                     HashedId = _hashingService.HashValue(data.Commitment.Id),
@@ -721,7 +733,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                     LatestMessage = await messageTask,
-                    TrainingProgrammes = await GetTrainingProgrammes()
+                    ApprenticeshipGroups = apprenticeshipGroups
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
