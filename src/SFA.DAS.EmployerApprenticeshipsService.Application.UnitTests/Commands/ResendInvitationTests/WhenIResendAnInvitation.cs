@@ -28,8 +28,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
         private Mock<IMediator> _mediator;
         private EmployerApprenticeshipsServiceConfiguration _config;
         private ResendInvitationCommand _command;
+        private Mock<IUserRepository> _userRepository;
         private const int ExpectedAccountId = 14546;
         private const string ExpectedHashedId = "145AVF46";
+        private const string ExpectedExistingUserEmail = "registered@test.local";
 
         [SetUp]
         public void Setup()
@@ -48,13 +50,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                 RoleId = (int)Role.Owner,
                 HashedAccountId = ExpectedHashedId
             };
+            _userRepository = new Mock<IUserRepository>();
+            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User { Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString() });
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(owner.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(owner);
             _invitationRepository = new Mock<IInvitationRepository>();
             _mediator = new Mock<IMediator>();
-            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem> {new EmailTemplateConfigurationItem {Key = "123456", TemplateType= EmailTemplateType.Invitation,TemplateName = "Invitation"} } };
-            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config);
+            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem>
+            {
+                new EmailTemplateConfigurationItem {Key = "123456", TemplateType= EmailTemplateType.Invitation,TemplateName = "Invitation"},
+                new EmailTemplateConfigurationItem
+                {
+                    Key = "654321", TemplateType = EmailTemplateType.InvitationExistingUser, TemplateName = "InvitationExistingUser"
+                }
+            }, };
+            _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config, _userRepository.Object);
         }
 
         [TearDown]
@@ -190,6 +201,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(InvitationStatus.Pending.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("ExpiryDate") && y.NewValue.Equals(DateTimeProvider.Current.UtcNow.Date.AddDays(8).ToString())) != null
                     )));
+        }
+
+
+        [Test]
+        public async Task ThenADifferentEmailIsSentIfTheEmailIsAlreadyRegisteredInTheSystem()
+        {
+            //Arrange
+            _command.Email = ExpectedExistingUserEmail;
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+                                                                                  && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                                  && c.Email.SystemId.Equals("x")
+                                                                                  && c.Email.TemplateId.Equals("654321")
+                                                                                  && c.Email.Subject.Equals("x"))));
         }
 
     }
