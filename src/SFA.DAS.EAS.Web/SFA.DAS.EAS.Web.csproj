@@ -248,7 +248,8 @@
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="
+                        t, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -410,6 +411,7 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
+    <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
@@ -987,6 +989,7 @@
     <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\Error\InvalidState.cshtml" />
+    <Content Include="Views\EmployerCommitments\AgreementNotSigned.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
