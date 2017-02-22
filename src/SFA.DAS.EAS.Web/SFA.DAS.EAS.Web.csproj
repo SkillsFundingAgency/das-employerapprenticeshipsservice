@@ -418,6 +418,7 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
+    <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
@@ -995,6 +996,7 @@
     <Content Include="Views\EmployerAgreement\_Agreement_v1.cshtml" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\Error\InvalidState.cshtml" />
+    <Content Include="Views\EmployerCommitments\AgreementNotSigned.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

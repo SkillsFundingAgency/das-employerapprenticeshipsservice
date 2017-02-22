@@ -180,7 +180,9 @@
     <Compile Include="Orchestrators\EmployerAccountTransactionOrchestratorTests\WhenIGetPaymentDetails.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenICreateAnAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenDeletingApprenticeship.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingtLegalEntitySignedAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingDeleteApprenticeshipConfirmation.cs" />
+    <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingFinishEditing.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenIAddAnOrganisationAddress.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntity.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityOfOtherType.cs" />
