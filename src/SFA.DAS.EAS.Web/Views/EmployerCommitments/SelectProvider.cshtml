@@ -15,7 +15,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
 
-        @if (Model.Data.Providers != null && Model.Data.Providers.Count > 0)
+        @if (Model.Data.Provider != null)
         { 
             <form action="@Url.Action("ConfirmProvider")" method="POST">
                 @Html.AntiForgeryToken()
@@ -24,7 +24,7 @@
                 <h1 class="heading-xlarge">Confirm training provider</h1>
                 <p class="">UK Provider Reference Number <span style="font-weight:700">'@Model.Data.ProviderId'</span> matches:</p>
 
-                <h2 class="heading-large" style="margin-bottom:0;">@Model.Data.Providers[0].ProviderName</h2>
+                <h2 class="heading-large" style="margin-bottom:0;">@Model.Data.Provider.ProviderName</h2>
                 <h3 class="heading-small" style="margin-top:0px; color:#6F777B">UKPRN: @Model.Data.ProviderId</h3>
 
                 <fieldset class="spacerConfirmProvider" role="radiogroup" aria-required="true">
@@ -36,7 +36,7 @@
                         </div>
                         <label class="block-label selection-button-radio" for="Confirmation-True">
                             @Html.RadioButton("Confirmation", "True", new { id = "Confirmation-True" })
-                            Yes, use @Model.Data.Providers[0].ProviderName
+                            Yes, use @Model.Data.Provider.ProviderName
                         </label>
                         <label class="block-label selection-button-radio" for="Confirmation-False">
                             @Html.RadioButton("Confirmation", "False", new { id = "Confirmation-False" })

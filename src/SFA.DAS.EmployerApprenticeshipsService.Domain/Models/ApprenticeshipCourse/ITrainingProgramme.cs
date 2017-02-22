@@ -6,5 +6,6 @@
         string Title { get; set; }
 
         int Level { get; set; }
+        int MaxFunding { get; set; }
     }
 }
