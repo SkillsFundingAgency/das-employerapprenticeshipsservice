@@ -123,8 +123,16 @@ sfa.forms = {
                 button.removeAttr('disabled');
             }, 5000);
         });
+    },
+    removeDisabledAttr: function () {
+        var btns = $('form').not('.has-client-side-validation').find('.button');
+        btns.removeAttr('disabled');
     }
 }
+
+window.onunload = function () {
+    sfa.forms.removeDisabledAttr();
+};
 
 sfa.forms.init();
 sfa.navigation.init();
