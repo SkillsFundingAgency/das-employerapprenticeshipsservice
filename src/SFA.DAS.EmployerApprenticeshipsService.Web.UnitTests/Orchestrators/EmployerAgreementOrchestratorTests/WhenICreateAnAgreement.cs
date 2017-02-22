@@ -40,10 +40,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             var latestTemplate = new EmployerAgreementTemplate
             {
                 Id = 1,
-                Ref = "12345",
-                Text = "Test template",
-                CreatedDate = DateTime.Now.AddDays(-20),
-                ReleasedDate = DateTime.Now.AddDays(-2)
+                PartialViewName = "12345",
+                CreatedDate = DateTime.Now.AddDays(-20)
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestEmployerAgreementTemplateRequest>()))
@@ -58,8 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             //Assert
             Assert.AreEqual(entityName, response.Data.EmployerAgreement.LegalEntityName);
             Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityAddress);
-            Assert.AreEqual(latestTemplate.Text, response.Data.EmployerAgreement.TemplateText);
-            Assert.AreEqual(latestTemplate.Ref, response.Data.EmployerAgreement.TemplateRef);
+            Assert.AreEqual(latestTemplate.PartialViewName, response.Data.EmployerAgreement.TemplatePartialViewName);
             Assert.AreEqual(EmployerAgreementStatus.Pending, response.Data.EmployerAgreement.Status);
             Assert.AreEqual(entityRef, response.Data.EmployerAgreement.LegalEntityCode);
             Assert.AreEqual(incorporatedDate, response.Data.EmployerAgreement.LegalEntityInceptionDate);

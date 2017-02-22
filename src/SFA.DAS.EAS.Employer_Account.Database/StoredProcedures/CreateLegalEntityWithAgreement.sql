@@ -4,9 +4,6 @@
 	@companyName NVARCHAR(255),
 	@companyAddress NVARCHAR(255),
 	@companyDateOfIncorporation DATETIME,
-	@signAgreement BIT,
-	@signedDate DATETIME,
-	@signedById BIGINT,
 	@status VARCHAR(50),
 	@source TINYINT,
 	@publicSectorDataSource TINYINT,
@@ -23,15 +20,7 @@ BEGIN
 	@companyNumber,@companyName,@companyAddress,
 	@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
 
-	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @employerAgreementId OUTPUT
+	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
 	EXEC [employer_account].[CreateAccountEmployerAgreement] @accountId, @employerAgreementId	
-
-	IF (@signAgreement = 1) 	
-	BEGIN	
-		SELECT @firstName = FirstName, @lastName = LastName FROM [employer_account].[User] WHERE Id = @signedById
-		SELECT @signedByName =  @firstName + ' ' + @lastName
-		
-		EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @signedById, @signedByName, @signedDate
-	END	
 END

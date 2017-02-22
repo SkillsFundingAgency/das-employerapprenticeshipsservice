@@ -158,7 +158,6 @@
     <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACharity.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIAddAnOrganisationOfTypeOther.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenITryToFindACompany.cs" />
-    <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIViewMyNewLegalEntityAgreement.cs" />
     <Compile Include="Controllers\EmployerAgreementControllerTests\WhenIAddAnLegalEntityToAnAccount.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
     <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />

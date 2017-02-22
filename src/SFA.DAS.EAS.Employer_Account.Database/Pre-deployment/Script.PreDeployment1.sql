@@ -69,3 +69,15 @@ IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_a
 BEGIN
 	UPDATE [employer_account].[LegalEntity] SET Code=LOWER(NEWID()) WHERE Code IS NULL OR Code = ''
 END
+
+IF EXISTS(SELECT 1 FROM information_schema.table_constraints WHERE constraint_name='FK_EmployerAgreement_Template')
+BEGIN
+	ALTER TABLE [employer_account].[EmployerAgreement]
+	DROP CONSTRAINT [FK_EmployerAgreement_Template]
+END
+GO
+
+IF EXISTS(Select 1 from INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='employer_account' AND TABLE_NAME='EmployerAgreementTemplate')
+BEGIN
+	DELETE FROM [employer_account].[EmployerAgreementTemplate]
+END
