@@ -9,9 +9,7 @@ using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -29,13 +27,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
         private Mock<IMediator> _mediator;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IValidator<CreateInvitationCommand>> _validator;
+        private Mock<IUserRepository> _userRepository;
         private const long ExpectedAccountId = 545641561;
         private const long ExpectedUserId = 521465;
         private const long ExpectedInvitationId = 1231234;
         private const string ExpectedExternalUserId = "someid";
         private const string ExpectedHashedId = "aaa415ss1";
         private const string ExpectedCallerEmail = "test.user@test.local";
-
+        private const string ExpectedExistingUserEmail = "registered@test.local";
 
         [SetUp]
         public void Setup()
@@ -47,14 +46,26 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(new MembershipView { AccountId = ExpectedAccountId, UserId = ExpectedUserId });
 
+            _userRepository = new Mock<IUserRepository>();
+            _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString()});
+
             _mediator = new Mock<IMediator>();
 
-            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> { new EmailTemplateConfigurationItem { Key = "123456", TemplateType = EmailTemplateType.Invitation, TemplateName = "Invitation" } } };
+            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> {
+                new EmailTemplateConfigurationItem
+                {
+                    Key = "123456", TemplateType = EmailTemplateType.Invitation, TemplateName = "Invitation"
+                },
+                new EmailTemplateConfigurationItem
+                {
+                    Key = "654321", TemplateType = EmailTemplateType.InvitationExistingUser, TemplateName = "InvitationExistingUser"
+                } }
+            };
 
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
 
-            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object);
+            _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object);
             _command = new CreateInvitationCommand
             {
                 HashedAccountId = ExpectedHashedId,
@@ -127,6 +138,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.TemplateId.Equals("123456")
+                                                                                  && c.Email.Subject.Equals("x"))));
+        }
+
+        [Test]
+        public async Task ThenADifferentEmailIsSentIfTheEmailIsAlreadyRegisteredInTheSystem()
+        {
+            //Arrange
+            _command.Email = ExpectedExistingUserEmail;
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
+                                                                                  && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
+                                                                                  && c.Email.SystemId.Equals("x")
+                                                                                  && c.Email.TemplateId.Equals("654321")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
 
