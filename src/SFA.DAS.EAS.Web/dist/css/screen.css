@@ -4004,6 +4004,14 @@ span.helpText {
   padding-left: 50px;
 }
 
+#agreement-not-signed .notice {
+  margin: 60px 0;
+}
+
+#agreement-not-signed .notice .icon-important {
+  background-image: url("/dist/images/icon-important.png");
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .manage-all-apprentices td:nth-of-type(1):before {
     content: "Name";

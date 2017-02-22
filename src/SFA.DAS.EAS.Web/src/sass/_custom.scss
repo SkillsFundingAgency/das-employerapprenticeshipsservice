@@ -183,6 +183,16 @@
             }
         } 
 }
+
+
+#agreement-not-signed{
+    .notice{
+        margin:60px 0;
+        .icon-important{background-image: url('/dist/images/icon-important.png');}
+    }
+}
+
+
     
 //all mobile media query breakpoints
 //==================================
