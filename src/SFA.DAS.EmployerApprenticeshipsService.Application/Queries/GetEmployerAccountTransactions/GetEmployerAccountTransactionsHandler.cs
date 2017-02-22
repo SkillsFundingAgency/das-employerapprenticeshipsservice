@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     	var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(
                         Convert.ToInt32(paymentTransaction.UkPrn));
 
-                    	transaction.Description = $"Payment to provider {providerName.Providers[0].ProviderName}";
+                    	transaction.Description = $"Payment to provider {providerName.Provider.ProviderName}";
                     }
                     catch (Exception ex)
                     {

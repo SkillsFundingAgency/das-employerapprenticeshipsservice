@@ -105,7 +105,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Providers = new List<Provider> {_provider}
+                    Provider = _provider
                 });
 
             _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(false))

@@ -35,10 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView
             {
                 CreatedDate = DateTime.Now,
-                Providers = new List<Provider>
-                {
-                    _provider
-                }
+                Provider = _provider
             });
 
             Query = new GetApprenticeshipDetailsQuery
@@ -74,7 +71,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView
             {
                 CreatedDate = DateTime.Now,
-                Providers = new List<Provider>()
+                Provider = new Provider()
             });
 
             //Act

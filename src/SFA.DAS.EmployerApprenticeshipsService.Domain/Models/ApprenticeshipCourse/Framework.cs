@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse
         public int ProgrammeType { get; set; }
         public string Title { get; set; }
         public Duration Duration { get; set; }
+        public int MaxFunding { get; set; }
     }
 }
