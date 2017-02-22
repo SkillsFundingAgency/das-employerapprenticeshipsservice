@@ -15,6 +15,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
     [TestFixture]
     public class WhenGettingtLegalEntitySignedAgreement
     {
+
+
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<IHashingService> _hashingService;
