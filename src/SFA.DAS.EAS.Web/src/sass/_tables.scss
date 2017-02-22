@@ -49,6 +49,11 @@ tr.total {
     word-break: break-word;
 }
 
+.table-address {
+    max-width: 300px;
+    display: inline-block;
+}
+
 table.organisations {
     td {
         width: 30%;
