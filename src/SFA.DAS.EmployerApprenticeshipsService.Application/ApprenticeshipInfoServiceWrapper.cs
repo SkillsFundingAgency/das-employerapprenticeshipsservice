@@ -67,11 +67,9 @@ namespace SFA.DAS.EAS.Application
         {
             try
             {
-                var api = new ProviderApiClient(_configuration.BaseUrl);
-                var response = api.Get(ukPrn);
-                var providersView = MapFrom(response);
-
-                return providersView;
+                var api = new Providers.Api.Client.ProviderApiClient(_configuration.BaseUrl);
+                var providers = api.Get(ukPrn);
+                return MapFrom(providers);
             }
             catch (HttpRequestException)
             {
@@ -82,7 +80,7 @@ namespace SFA.DAS.EAS.Application
                 return new ProvidersView
                 {
                     CreatedDate = DateTime.UtcNow,
-                    Providers = new List<Provider>()
+                    Provider = new Provider()
                 };
             }
         }
@@ -107,24 +105,25 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
 
-        private static ProvidersView MapFrom(IEnumerable<Apprenticeships.Api.Types.Provider> providers)
+        private static ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
         {
             return new ProvidersView
             {
                 CreatedDate = DateTime.UtcNow,
-                Providers = providers.Select(x => new Provider
+                Provider = new Provider()
                 {
-                    Ukprn = x.Ukprn,
-                    ProviderName = x.ProviderName,
-                    Email = x.Email,
-                    Phone = x.Phone,
-                    NationalProvider = x.NationalProvider
-                }).ToList()
+                    Ukprn = provider.Ukprn,
+                    ProviderName = provider.ProviderName,
+                    Email = provider.Email,
+                    Phone = provider.Phone,
+                    NationalProvider = provider.NationalProvider
+                }
             };
         }
 
@@ -144,7 +143,8 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }

@@ -150,7 +150,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return CheckUserAuthorization(async () =>
             {
-                var providers = await ProviderSearch(providerId);
+                var provider = await ProviderSearch(providerId);
 
                 return new OrchestratorResponse<ConfirmProviderViewModel>
                 {
@@ -159,21 +159,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedAccountId,
                         LegalEntityCode = legalEntityCode,
                         ProviderId = providerId,
-                        Providers = providers,
+                        Provider = provider,
                         CohortRef = cohortRef,
                     }
                 };
             }, hashedAccountId, externalUserId);
         }
 
-        private async Task<IList<Provider>> ProviderSearch(int providerId)
+        private async Task<Provider> ProviderSearch(int providerId)
         {
             var response =  await _mediator.SendAsync(new GetProviderQueryRequest
             {
                 ProviderId = providerId
             });
 
-            return response?.ProvidersView?.Providers;
+            return response?.ProvidersView?.Provider;
         }
 
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef, string externalUserId)
@@ -183,8 +183,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
             {
-                var providers = await ProviderSearch(int.Parse(providerId));
-                var provider = providers.Single(x => x.Ukprn == int.Parse(providerId));
+                var provider = await ProviderSearch(int.Parse(providerId));
 
                 var legalEntities = await GetActiveLegalEntities(hashedAccountId, externalUserId);
                 var legalEntity = legalEntities.Entites.LegalEntityList.Single(x => x.Code.Equals(legalEntityCode, StringComparison.InvariantCultureIgnoreCase));
@@ -711,6 +710,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var messageTask = GetLatestMessageFromProvider(data.Commitment);
                 var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
+                var trainingProgrammes = await GetTrainingProgrammes();
+
+                var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
+                foreach (var group in apprenticships.OrderBy(x=> x.TrainingName).GroupBy(x => x.TrainingCode))
+                {
+                    apprenticeshipGroups.Add(new ApprenticeshipListItemGroupViewModel
+                    {
+                        Apprenticeships = group.OrderBy(x => x.CanBeApproved).ToList(),
+                        TrainingProgramme = trainingProgrammes.FirstOrDefault(x => x.Id == group.Key)
+                    });
+                }
+
                 var viewModel = new CommitmentDetailsViewModel
                 {
                     HashedId = _hashingService.HashValue(data.Commitment.Id),
@@ -721,7 +732,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HasApprenticeships = apprenticships.Count > 0,
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
-                    LatestMessage = await messageTask
+                    LatestMessage = await messageTask,
+                    ApprenticeshipGroups = apprenticeshipGroups
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -1025,6 +1037,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
                 ApprenticeName = apprenticeship.ApprenticeshipName,
+                ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
                 TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,

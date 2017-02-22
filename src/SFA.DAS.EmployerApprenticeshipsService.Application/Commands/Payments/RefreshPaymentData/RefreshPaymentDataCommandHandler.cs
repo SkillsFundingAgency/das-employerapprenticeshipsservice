@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 
                 var providerId = Convert.ToInt32(payment.Ukprn);
                 var providerView = _apprenticeshipInfoService.GetProvider(providerId);
-                var providerName = providerView?.Providers?.FirstOrDefault()?.ProviderName;
+                var providerName = providerView?.Provider?.ProviderName;
 
                 string courseName;
 

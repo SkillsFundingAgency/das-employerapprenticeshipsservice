@@ -5,6 +5,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
     public sealed class ApprenticeshipListItemViewModel
     {
         public string ApprenticeName { get; set; }
+        public DateTime? ApprenticeDateOfBirth { get; set; }
 
         public string TrainingCode { get; set; }
 

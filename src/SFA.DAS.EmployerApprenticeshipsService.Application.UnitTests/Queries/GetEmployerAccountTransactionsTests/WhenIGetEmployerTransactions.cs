@@ -121,7 +121,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                     }
                 };
             _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
-            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Providers = new List<Provider> {new Provider {ProviderName = "test"}}});
+            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Provider {ProviderName = "test"}});
 
             //Act
             await RequestHandler.Handle(_request);

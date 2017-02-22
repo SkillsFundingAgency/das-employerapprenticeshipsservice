@@ -180,6 +180,10 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
       <Private>True</Private>
@@ -242,6 +246,10 @@
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.18229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.18229\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.21673, Culture=neutral, processorArchitecture=MSIL">
@@ -402,6 +410,7 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
+    <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
