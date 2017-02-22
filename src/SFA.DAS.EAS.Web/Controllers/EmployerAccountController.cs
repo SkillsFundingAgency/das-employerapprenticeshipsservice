@@ -130,6 +130,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        [Route("create")]
+        public ActionResult Create()
+        {
+            return RedirectToAction("Summary");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("create")]
