@@ -168,6 +168,15 @@
                     @Html.TextBox("EmployerRef", Model.Data.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
                 </div>
 
+                <div class="form-group">
+                    <hr />
+                    <div class="grey-background">
+                        <p class="form-label-bold">End-point assessments</p>
+                        <p>At the end of each apprenticeship standard, an apprentice's knowledge, skills and behaviours are assessed by an independent end-point assessment organisation. Before the final gateway stage of the apprenticeship, we'll ask you to tell us which <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a> you've chosen for this apprentice.</p>
+                        <p>Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.</p>
+                    </div>
+                </div>
+
                 @Html.Hidden("ULN", Model.Data.Apprenticeship.ULN)
                 @Html.Hidden("AgreementStatus", Model.Data.Apprenticeship.AgreementStatus)
                 @Html.Hidden("ProviderRef", Model.Data.Apprenticeship.ProviderRef)
