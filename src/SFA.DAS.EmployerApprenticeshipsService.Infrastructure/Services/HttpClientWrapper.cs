@@ -56,13 +56,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthScheme,authToken);
                     
-                    if (MediaTypeWithQualityHeaderValueList.Any())
-                    {
-                        foreach (var mediaTypeWithQualityHeaderValue in MediaTypeWithQualityHeaderValueList)
-                        {
-                            httpClient.DefaultRequestHeaders.Accept.Add(mediaTypeWithQualityHeaderValue);
-                        }
-                    }
                     var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
 
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
@@ -76,6 +69,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return default(T);
         }
 
+        public async Task<string> GetString(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+
+                    return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : string.Empty;
+                }
+                catch (Exception exception)
+                {
+                    _logger.Error(exception, $"unable to read url {url}");
+                    return string.Empty;
+                }
+            }
+        }
+
         private HttpClient CreateHttpClient()
         {
             if (string.IsNullOrEmpty(BaseUrl))
@@ -83,10 +95,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 throw new ArgumentNullException(nameof(BaseUrl));
             }
 
-            return new HttpClient
+            var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl)
+                
             };
+
+            if (MediaTypeWithQualityHeaderValueList.Any())
+            {
+                foreach (var mediaTypeWithQualityHeaderValue in MediaTypeWithQualityHeaderValueList)
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(mediaTypeWithQualityHeaderValue);
+                }
+            }
+
+            return httpClient;
         }
     }
 }

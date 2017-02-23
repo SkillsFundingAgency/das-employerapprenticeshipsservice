@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDetails
             {
                 var provider = _apprenticeshipInfoService.GetProvider(message.ProviderId);
 
-                var providerName = provider?.Providers?.FirstOrDefault()?.Name ?? "Unknown provider";
+                var providerName = provider?.Provider?.Name ?? "Unknown provider";
 
                 return new GetApprenticeshipDetailsResponse
                 {

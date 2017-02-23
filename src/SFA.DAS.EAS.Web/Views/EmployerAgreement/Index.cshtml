@@ -68,7 +68,7 @@
                         <td class="link-right">
                             @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
                             {
-                                <a href="#" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
+                                <a href="@Url.Action("Details", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
                             }
                             else
                             {

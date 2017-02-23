@@ -6,23 +6,60 @@
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
 @{ViewBag.Title = "Employer agreement";}
 
-
 <div class="grid-row">
-                <div class="column-two-thirds">
+    <div class="column-two-thirds">
+        
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+            Your SFA agreement
+        </h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <table>
+            <tr>
+                <th>Accepted by:</th>
+                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+            </tr>
+            <tr>
+                <th>On behalf of:</th>
+                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+            </tr>
+            <tr>
+                <th>Address:</th>
+                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
+            </tr>
+            <tr>
+                <th>Accepted on:</th>
+                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="grid-row" id="publication-banner">
+    <div class="column-third">
+        <div class="sfa-logo">
+            <h1>
+                <span class="organisation-logo">
+                    <span>
+                        Skills Funding <br>
+                        Agency
+                    </span>
+                </span>
+            </h1>
+        </div>
+    </div>
+</div>
 
-                    <h1 class="heading-xlarge">Employer agreement</h1>
-                    <h2 class="heading-large">@Model.Data.EmployerAgreement.LegalEntityName</h2>
-                    <h3>@Model.Data.EmployerAgreement.LegalEntityAddress</h3>
-                    <p>@Html.Raw(Model.Data.EmployerAgreement.TemplatePartialViewName)</p>
+@Html.Partial(Model.Data.EmployerAgreement.TemplatePartialViewName)
 
-                </div>
-            </div>
-            @section breadcrumb {
-                <div class="breadcrumbs">
-                    <ol role="navigation">
-                        <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-                        <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
-                        <li>Employer agreement</li>
-                    </ol>
-                </div>
-            }
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
+            <li>Your SFA agreement</li>
+        </ol>
+    </div>
+}

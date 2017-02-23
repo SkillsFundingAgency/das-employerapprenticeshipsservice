@@ -45,6 +45,11 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 
             var fractionCalculations = await _hmrcService.GetEnglishFractions(message.EmployerReference, dateFrom);
 
+            if (fractionCalculations.FractionCalculations == null)
+            {
+                return;
+            }
+
             var hmrcFractions = fractionCalculations.FractionCalculations.SelectMany(calculations =>
             {
                 var fractions = new List<DasEnglishFraction>();

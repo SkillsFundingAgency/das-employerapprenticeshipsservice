@@ -8,6 +8,7 @@ BEGIN
 	ea.Id,
 	ea.StatusId AS [Status],
 	ea.LegalEntityId, 
+	le.Code as LegalEntityCode,
 	le.Name AS LegalEntityName,
 	ea.TemplateId,
 	eat.PartialViewName AS TemplatePartialViewName,

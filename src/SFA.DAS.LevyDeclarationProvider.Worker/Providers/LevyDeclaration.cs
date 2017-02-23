@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                     var employerData = new EmployerLevyData();
 
-                    if (levyDeclarationQueryResult?.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
                     {
 
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)

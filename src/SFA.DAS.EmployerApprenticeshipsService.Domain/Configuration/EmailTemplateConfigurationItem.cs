@@ -6,7 +6,8 @@ namespace SFA.DAS.EAS.Domain.Configuration
     public enum EmailTemplateType
     {
         None,
-        Invitation
+        Invitation,
+        CommitmentNotification
     }
 
     public class EmailTemplateConfigurationItem

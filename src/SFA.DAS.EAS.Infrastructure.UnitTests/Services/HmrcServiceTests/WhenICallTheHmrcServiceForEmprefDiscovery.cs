@@ -7,6 +7,8 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.TokenService.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -17,12 +19,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private string ExpectedClientId = "654321";
         private string ExpectedScope = "emp_ref";
         private string ExpectedClientSecret = "my_secret";
-        private const string ExpectedTotpToken = "789654321AGFVD";
-
-        private Mock<ITotpService> _totpService;
+        private const string ExpectedAuthToken = "789654321AGFVD";
+        
         private HmrcService _hmrcService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
+        private Mock<ITokenServiceApiClient> _tokenService;
 
         [SetUp]
         public void Arrange()
@@ -41,10 +43,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _httpClientWrapper.Setup(x => x.Get<EmprefDiscovery>(It.IsAny<string>(), "apprenticeship-levy/")).ReturnsAsync(new EmprefDiscovery {Emprefs = new List<string> {ExpectedEmpref} });
 
-            _totpService = new Mock<ITotpService>();
-            _totpService.Setup(x => x.GetCode(It.IsAny<string>())).Returns(ExpectedTotpToken);
+            _tokenService = new Mock<ITokenServiceApiClient>();
+            _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _totpService.Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object);
         }
 
         [Test]
