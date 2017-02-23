@@ -57,14 +57,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
             _membershipRepository.Setup(x => x.GetCaller(owner.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(owner);
             _invitationRepository = new Mock<IInvitationRepository>();
             _mediator = new Mock<IMediator>();
-            _config = new EmployerApprenticeshipsServiceConfiguration {EmailTemplates = new List<EmailTemplateConfigurationItem>
-            {
-                new EmailTemplateConfigurationItem {Key = "123456", TemplateType= EmailTemplateType.Invitation,TemplateName = "Invitation"},
-                new EmailTemplateConfigurationItem
-                {
-                    Key = "654321", TemplateType = EmailTemplateType.InvitationExistingUser, TemplateName = "InvitationExistingUser"
-                }
-            }, };
+
+            _config= new EmployerApprenticeshipsServiceConfiguration();
+
             _handler = new ResendInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _config, _userRepository.Object);
         }
 
@@ -178,7 +173,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.Subject.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("123456"))));
+                                                                                  && c.Email.TemplateId.Equals("Invitation"))));
         }
 
         [Test]
@@ -225,7 +220,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("654321")
+                                                                                  && c.Email.TemplateId.Equals("InvitationExistingUser")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
 

@@ -108,15 +108,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 }
             });
 
-            var templateId = existingUser?.UserRef != null 
-                    ? _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.InvitationExistingUser)).Key
-                    : _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.Invitation)).Key;
             await _mediator.SendAsync(new SendNotificationCommand
             {
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = templateId,
+                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "Invitation",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

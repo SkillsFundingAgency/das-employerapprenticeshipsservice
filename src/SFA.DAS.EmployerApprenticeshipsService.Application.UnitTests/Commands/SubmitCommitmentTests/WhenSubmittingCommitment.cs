@@ -42,14 +42,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockMediator = new Mock<IMediator>();
             var config = new EmployerApprenticeshipsServiceConfiguration
                              {
-                                 EmailTemplates = new List<EmailTemplateConfigurationItem>
-                                                      {
-                                                          new EmailTemplateConfigurationItem
-                                                              {
-                                                                  TemplateType = EmailTemplateType.CommitmentNotification,
-                                                                  Key = "this-is-a-key"
-                                                              }
-                                                      },
                                  CommitmentNotification = new CommitmentNotificationConfiguration { SendEmail = true }
                              };
             _mockEmailLookup = new Mock<IProviderEmailLookupService>();

@@ -165,7 +165,6 @@
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
-    <Compile Include="Configuration\EmailTemplateConfigurationItem.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
     <Compile Include="Configuration\HmrcConfiguration.cs" />
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />

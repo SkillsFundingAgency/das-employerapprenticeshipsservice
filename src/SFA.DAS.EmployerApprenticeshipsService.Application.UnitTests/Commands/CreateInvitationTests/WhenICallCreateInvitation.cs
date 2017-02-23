@@ -50,20 +50,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _userRepository.Setup(x => x.GetByEmailAddress(ExpectedExistingUserEmail)).ReturnsAsync(new User {Email = ExpectedExistingUserEmail, UserRef = Guid.NewGuid().ToString()});
 
             _mediator = new Mock<IMediator>();
-
-            _configuration = new EmployerApprenticeshipsServiceConfiguration { EmailTemplates = new List<EmailTemplateConfigurationItem> {
-                new EmailTemplateConfigurationItem
-                {
-                    Key = "123456", TemplateType = EmailTemplateType.Invitation, TemplateName = "Invitation"
-                },
-                new EmailTemplateConfigurationItem
-                {
-                    Key = "654321", TemplateType = EmailTemplateType.InvitationExistingUser, TemplateName = "InvitationExistingUser"
-                } }
-            };
-
+            
             _validator = new Mock<IValidator<CreateInvitationCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateInvitationCommand>())).ReturnsAsync(new ValidationResult());
+
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _handler = new CreateInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _mediator.Object, _configuration, _validator.Object, _userRepository.Object);
             _command = new CreateInvitationCommand
@@ -137,7 +128,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("123456")
+                                                                                  && c.Email.TemplateId.Equals("Invitation")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
 
@@ -154,7 +145,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedExistingUserEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("654321")
+                                                                                  && c.Email.TemplateId.Equals("InvitationExistingUser")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
 
