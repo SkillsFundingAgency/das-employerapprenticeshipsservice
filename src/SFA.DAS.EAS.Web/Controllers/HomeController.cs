@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -55,8 +56,18 @@ namespace SFA.DAS.EAS.Web.Controllers
                         Headline = (string)TempData["successMessage"]
                     };
                 }
+                if (accounts.Data.Accounts.AccountList.Count > 1)
+                {
+                    return View(accounts);
+                }
+                if (accounts.Data.Accounts.AccountList.Count == 1)
+                {
+                    var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
+                    return RedirectToAction("Index", "EmployerTeam", new { HashedAccountId = account.HashedId });
 
-                return View(accounts);
+                }
+                return View("SetupAccount");
+
             }
 
             var model = new
@@ -66,6 +77,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             };
 
             return View("ServiceStartPage", model);
+        }
+
+        [AuthoriseActiveUser]
+        [HttpGet]
+        [Route("accounts")]
+        public async Task<ActionResult> ViewAccounts()
+        {
+
+            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue("sub"));
+
+            return View("Index",accounts);
         }
 
         [HttpGet]
