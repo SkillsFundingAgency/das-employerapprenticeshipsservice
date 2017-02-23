@@ -1,84 +1,84 @@
-﻿using System;
-using FluentValidation;
+﻿using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EAS.Web.Validators.Messages;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Validators
 {
-    using System.Linq;
-    using System.Text.RegularExpressions;
-
-    public class ApprenticeshipViewModelValidator : AbstractValidator<ApprenticeshipViewModel>
+    public class ApprenticeshipViewModelValidator :ApprenticeshipCoreValidator
     {
-        public ApprenticeshipViewModelValidator()
+        public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText(), new CurrentDateTime())
+        { } // The default is used by the MVC model binding
+
+        public ApprenticeshipViewModelValidator(WebApprenticeshipValidationText validationText, ICurrentDateTime currentDateTime) : base(validationText, currentDateTime)
         {
-            var yesterday = DateTime.Now.AddDays(-1);
-            Func<string, int, bool> lengthLessThan = (str, length) => (str?.Length ?? 0) <= length;
-            Func<string, int, bool> haveNumberOfDigitsFewerThan = (str, length) => { return (str?.Count(char.IsDigit) ?? 0) < length; };
-
-            RuleFor(x => x.FirstName)
-                .NotEmpty().WithMessage("First name must be entered")
-                .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a first name that's no longer than 100 characters");
-
-            RuleFor(x => x.LastName)
-                .NotEmpty().WithMessage("Last name must be entered")
-                .Must(m => lengthLessThan(m, 100)).WithMessage("You must enter a last name that's no longer than 100 characters");
-
-            //RuleFor(x => x.NINumber)
-            //    .Matches(@"^[abceghj-prstw-z][abceghj-nprstw-z]\d{6}[abcd]$", RegexOptions.IgnoreCase)
-            //    .WithMessage("Enter a valid national insurance number");
-
-            RuleFor(r => r.StartDate)
-                .Must(ValidDateValue).Unless(m => m.StartDate == null).WithMessage("Enter a valid start date");
-
-            RuleFor(r => r.EndDate)
-                .Must(ValidDateValue).Unless(m => m.EndDate == null).WithMessage("Enter a valid training end date")
-                .Must(BeGreaterThanStartDate).WithMessage("The end date must be later than the start date");
-
-            RuleFor(r => r.DateOfBirth)
-                .Must(ValidateDateOfBirth).Unless(m => m.DateOfBirth == null).WithMessage("Enter a valid date of birth")
-                .Must(m => _checkIfNotNull(m?.DateTime, m?.DateTime < yesterday)).WithMessage("The date of birth must be in the past");
-
-            RuleFor(x => x.Cost)
-                .Matches("^$|^([1-9]{1}([0-9]{1,2})?)+(,[0-9]{3})*$|^[1-9]{1}[0-9]*$").When(m => haveNumberOfDigitsFewerThan(m.Cost, 7)).WithMessage("Enter the total agreed training cost")
-                .Must(m => haveNumberOfDigitsFewerThan(m, 7)).WithMessage("The cost must be 6 numbers or fewer, for example 25000");
-
-            RuleFor(x => x.EmployerRef)
-                .Must(m => lengthLessThan(m, 20)).WithMessage("The reference must be 20 characters or fewer");
         }
 
-        private bool BeGreaterThanStartDate(ApprenticeshipViewModel viewModel, DateTimeViewModel date)
+        protected override void ValidateUln()
         {
-            if (viewModel.StartDate?.DateTime == null || viewModel.EndDate?.DateTime == null) return true;
-
-            return viewModel.StartDate.DateTime < viewModel.EndDate.DateTime;
-        }
-
-        private readonly Func<DateTime?, bool, bool> _checkIfNotNull = (dt, b) => dt == null || b;
-
-        private bool ValidateDateOfBirth(DateTimeViewModel date)
-        {
-            if (date.DateTime == null)
+            When(x => !string.IsNullOrEmpty(x.ULN), () =>
             {
-                if (!date.Day.HasValue && !date.Month.HasValue && !date.Year.HasValue) return true;
-                return false;
-            }
-
-            if (!date.Day.HasValue || !date.Month.HasValue || !date.Year.HasValue) return false;
-
-            return true;
+                base.ValidateUln();
+            });
         }
 
-        private bool ValidDateValue(DateTimeViewModel date)
+        protected override void ValidateTraining()
         {
-            if (date.DateTime == null)
+            When(x => !string.IsNullOrEmpty(x.TrainingCode), () =>
             {
-                if (!date.Day.HasValue && !date.Month.HasValue && !date.Year.HasValue) return true;
-                return false;
-            }
+                base.ValidateTraining();
+            });
+        }
 
-            if (!date.Month.HasValue || !date.Year.HasValue) return false;
+        protected override void ValidateDateOfBirth()
+        {
+            When(x => HasAnyValuesSet(x.DateOfBirth), () =>
+            {
+                base.ValidateDateOfBirth();
+            });
+        }
 
-            return true;
+        protected override void ValidateStartDate()
+        {
+            When(x => HasYearOrMonthValueSet(x.StartDate), () =>
+            {
+                base.ValidateStartDate();
+            });
+
+        }
+
+        protected override void ValidateEndDate()
+        {
+            When(x => HasYearOrMonthValueSet(x.EndDate), () =>
+            {
+                base.ValidateEndDate();
+            });
+        }
+
+        protected override void ValidateCost()
+        {
+            When(x => !string.IsNullOrEmpty(x.Cost), () =>
+            {
+                base.ValidateCost();
+            });
+        }
+
+        private bool HasYearOrMonthValueSet(DateTimeViewModel date)
+        {
+            if (date == null) return false;
+
+            if (date.Day.HasValue || date.Month.HasValue || date.Year.HasValue) return true;
+
+            return false;
+        }
+
+        private bool HasAnyValuesSet(DateTimeViewModel dateOfBirth)
+        {
+            if (dateOfBirth == null) return false;
+
+            if (dateOfBirth.Day.HasValue || dateOfBirth.Month.HasValue || dateOfBirth.Year.HasValue) return true;
+
+            return false;
         }
     }
 }

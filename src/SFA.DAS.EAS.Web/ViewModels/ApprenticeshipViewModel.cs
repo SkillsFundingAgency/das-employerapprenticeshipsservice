@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public TrainingType TrainingType { get; set; }
 
-        public string TrainingId { get; set; }
+        public string TrainingCode { get; set; }
         public string TrainingName { get; set; }
         public string Cost { get; set; }
 

@@ -207,7 +207,6 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
     <Compile Include="Validators\WhenValidatingAddLegalEntityViewModel.cs" />
     <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
-    <Compile Include="Validators\WhenValidatingApprenticeshipViewModelForApproval.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
