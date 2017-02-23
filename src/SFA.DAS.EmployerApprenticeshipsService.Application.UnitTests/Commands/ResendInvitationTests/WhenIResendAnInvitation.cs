@@ -209,7 +209,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
         {
             //Arrange
             _command.Email = ExpectedExistingUserEmail;
-
+            var invitation = new Invitation
+            {
+                Id = 1,
+                Email = ExpectedExistingUserEmail,
+                AccountId = 1,
+                ExpiryDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
+            };
+            _invitationRepository.Setup(x => x.Get(ExpectedAccountId, _command.Email)).ReturnsAsync(invitation);
+            
             //Act
             await _handler.Handle(_command);
 
