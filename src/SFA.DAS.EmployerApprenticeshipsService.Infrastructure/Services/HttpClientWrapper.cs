@@ -56,13 +56,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthScheme,authToken);
                     
-                    if (MediaTypeWithQualityHeaderValueList.Any())
-                    {
-                        foreach (var mediaTypeWithQualityHeaderValue in MediaTypeWithQualityHeaderValueList)
-                        {
-                            httpClient.DefaultRequestHeaders.Accept.Add(mediaTypeWithQualityHeaderValue);
-                        }
-                    }
                     var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
 
                     return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
@@ -102,10 +95,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 throw new ArgumentNullException(nameof(BaseUrl));
             }
 
-            return new HttpClient
+            var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl)
+                
             };
+
+            if (MediaTypeWithQualityHeaderValueList.Any())
+            {
+                foreach (var mediaTypeWithQualityHeaderValue in MediaTypeWithQualityHeaderValueList)
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(mediaTypeWithQualityHeaderValue);
+                }
+            }
+
+            return httpClient;
         }
     }
 }

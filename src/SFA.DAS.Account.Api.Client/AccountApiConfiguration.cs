@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Account.Api.Client
 {
-    public class AccountApiConfiguration
+    public class AccountApiConfiguration : IAccountApiConfiguration
     {
         /// <summary>
         /// The base url (schema, server, port and application path as appropriate)

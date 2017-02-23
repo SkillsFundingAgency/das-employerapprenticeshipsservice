@@ -29,6 +29,7 @@
     <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:image" content="/dist/images/opengraph-image.png">
+    <meta name="msapplication-config" content="none" />
     <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
     <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 7]><link href="@Styles.Url("~/bundles/screenie7")" media="screen" rel="stylesheet" /><![endif]-->
@@ -154,7 +155,7 @@
                     <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                     <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                     <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
-                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
                     <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>
                 </ul>
             </nav>

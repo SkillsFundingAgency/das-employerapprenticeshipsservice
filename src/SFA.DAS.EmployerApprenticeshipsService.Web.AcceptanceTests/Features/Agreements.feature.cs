@@ -31,7 +31,8 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Agreements", "\tIn order to ", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Agreements", "\tIn order to allow spending on my account\r\n\tI want to be able to sign an SFA agre" +
+                    "ement against a legal entity connected to my account", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -66,9 +67,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Sign Agreements")]
         [NUnit.Framework.CategoryAttribute("mytag")]
-        [NUnit.Framework.TestCaseAttribute("Owner", "signed", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("Transactor", "not_signed", new string[0])]
-        [NUnit.Framework.TestCaseAttribute("Viewer", "not_signed", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Owner", "Signed", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Transactor", "Pending", new string[0])]
+        [NUnit.Framework.TestCaseAttribute("Viewer", "Pending", new string[0])]
         public virtual void SignAgreements(string accountRole, string status, string[] exampleTags)
         {
             string[] @__tags = new string[] {
@@ -78,31 +79,14 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Sign Agreements", @__tags);
-#line 5
-this.ScenarioSetup(scenarioInfo);
 #line 6
- testRunner.Given(string.Format("I am an account \"{0}\"", accountRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 7
- testRunner.When("I sign Agreement", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 8
- testRunner.Then(string.Format("Agreement Status is \"{0}\"", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Check Aknowledgement")]
-        [NUnit.Framework.CategoryAttribute("mytag")]
-        public virtual void CheckAknowledgement()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Check Aknowledgement", new string[] {
-                        "mytag"});
-#line 16
 this.ScenarioSetup(scenarioInfo);
-#line 17
-testRunner.Given("I am an account \"Owner\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 18
-testRunner.And("I have not checked aknowledgement", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 7
+ testRunner.Given(string.Format("I am an account \"{0}\"", accountRole), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 8
+ testRunner.When("I sign Agreement", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 9
+ testRunner.Then(string.Format("Agreement Status is \"{0}\"", status), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

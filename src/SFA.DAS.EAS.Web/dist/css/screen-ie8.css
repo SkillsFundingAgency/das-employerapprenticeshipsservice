@@ -1810,7 +1810,8 @@ dl.inline dd {
   padding-bottom: .5em;
 }
 
-.account-id {
+.account-id,
+.secondary-text {
   font-family: "nta", Arial, sans-serif;
   font-weight: 400;
   text-transform: none;
@@ -1820,6 +1821,7 @@ dl.inline dd {
   line-height: 1.25;
   display: block;
   color: #6f777b;
+  margin: 0;
 }
 
 main, .header-inner {
@@ -2315,6 +2317,26 @@ a#link-settings:focus {
   display: none;
 }
 
+.sfa-logo {
+  border-left: 2px solid #003a69;
+  padding-top: 20px;
+  padding-left: 6px;
+  background: url(/dist/images/org_crest_13px.png) no-repeat 5px 0;
+  padding-top: 30px;
+  padding-left: 7px;
+  background: url(/dist/images/org_crest_18px.png) no-repeat 5px 0;
+  padding-top: 45px;
+  padding-left: 10px;
+  background: url(/dist/images/org_crest_27px.png) no-repeat 10px 0;
+}
+
+.organisation-logo {
+  position: relative;
+  line-height: 1.1em;
+  top: 3px;
+  display: block;
+}
+
 .govuk-box-highlight {
   padding: 1.8em 15px 1.5em;
   margin-bottom: 0;
@@ -2677,6 +2699,19 @@ tr.total td {
   word-break: break-word;
 }
 
+.table-address {
+  max-width: 300px;
+  display: inline-block;
+}
+
+table.organisations td {
+  width: 30%;
+}
+
+table.organisations td + td + td {
+  width: 20%;
+}
+
 .panel p {
   font-size: 14px;
   font-size: 16px;
@@ -2715,6 +2750,185 @@ tr.total td {
 
 .panel-warning p {
   font-weight: 600;
+}
+
+.agreement {
+  overflow: hidden;
+}
+
+.agreement header {
+  font-weight: 400;
+  text-transform: none;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3157894737;
+  color: #fff;
+  background: #005ea5;
+  padding: 30px 30px 10px;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  margin-bottom: 60px;
+}
+
+.agreement header .context {
+  margin-bottom: 10px;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.25;
+  margin-top: 45px;
+}
+
+.agreement header h1 {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 32px;
+  line-height: 1.09375;
+  font-size: 48px;
+  line-height: 1.0416666667;
+  margin-bottom: 15px;
+  margin-bottom: 45px;
+}
+
+.agreement header h2 {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3157894737;
+}
+
+.agreement header nav {
+  margin-bottom: 30px;
+}
+
+.agreement header ol {
+  padding-left: 30px;
+}
+
+.agreement .headings {
+  margin-bottom: 30px;
+}
+
+.agreement ol li {
+  list-style: decimal;
+  font-weight: bold;
+}
+
+.agreement ol a {
+  font-weight: normal;
+  color: white;
+  text-decoration: none;
+}
+
+.agreement ol a:hover, .agreement ol a:focus, .agreement ol a:active {
+  text-decoration: underline;
+}
+
+.agreement .agreement-contents {
+  width: 75%;
+  float: right;
+}
+
+.agreement .agreement-contents h2 {
+  font-size: 24px;
+  margin-top: 30px;
+  font-weight: bold;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.agreement .agreement-contents h2 .number {
+  font-size: 60px;
+  line-height: 1;
+  position: absolute;
+  left: -33%;
+  width: 33%;
+  font-size: 80px;
+  padding-left: 5%;
+  width: 28%;
+}
+
+.agreement .agreement-contents h3 {
+  font-weight: bold;
+  color: #6f777b;
+  font-size: 24px;
+  line-height: 1;
+  position: absolute;
+  margin-left: -60px;
+  padding-top: 5px;
+}
+
+.agreement .agreement-contents ol li {
+  font-weight: normal;
+}
+
+.agreement .agreement-contents li .list {
+  padding-left: 30px;
+}
+
+.agreement .agreement-contents .list.letters li {
+  list-style: lower-alpha;
+}
+
+.agreement .agreement-contents .list.roman li {
+  list-style: lower-roman;
+}
+
+.agreement-parties address.party {
+  margin-top: 45px;
+  margin-bottom: 45px;
+}
+
+.signed-agreement .attachment {
+  position: relative;
+  margin: 0;
+  padding: 15px 0 0 129px;
+}
+
+.signed-agreement .attachment .attachment-thumb {
+  position: relative;
+  float: left;
+  margin-top: 5px;
+  margin-left: -124px;
+  padding-bottom: 15px;
+}
+
+.signed-agreement .attachment .attachment-thumb img {
+  display: block;
+  width: 99px;
+  height: 140px;
+  background: #fff;
+  outline: 5px solid rgba(11, 12, 12, 0.1);
+  -webkit-box-shadow: 0 2px 2px rgba(11, 12, 12, 0.4);
+  -moz-box-shadow: 0 2px 2px rgba(11, 12, 12, 0.4);
+  box-shadow: 0 2px 2px rgba(11, 12, 12, 0.4);
+}
+
+.signed-agreement .attachment .attachment-details h2 {
+  text-transform: none;
+  font-size: 20px;
+  line-height: 1.1;
+  margin: 0;
+  font-size: 27px;
+}
+
+.signed-agreement .attachment .attachment-details .metadata {
+  text-transform: none;
+  font-size: 12px;
+  line-height: 1.25;
+  margin: 10px 0;
+  font-size: 14px;
 }
 
 .validation-summary-valid,
@@ -3226,7 +3440,56 @@ span.helpText {
   padding-left: 50px;
 }
 
+#agreement-not-signed .notice {
+  margin: 60px 0;
+}
+
+#agreement-not-signed .notice .icon-important {
+  background-image: url("/dist/images/icon-important.png");
+}
+
+.funding-cap-notification {
+  background: #dee0e2;
+  padding: 20px 20px 10px;
+}
+
+.funding-cap-notification .heading-medium {
+  margin-top: 10px;
+}
+
+.bubble-arrow {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid #dee0e2;
+  content: "";
+  float: right;
+  margin-right: 75px;
+}
+
+.funding-cap-alert {
+  border-bottom: 5px solid #6f777b;
+}
+
+.funding-cap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+  #apprentice-details .tableResponsive {
+    margin-top: 30px;
+  }
+  #apprentice-details .tableResponsive .funding-cap-alert {
+    border-bottom: 5px solid #6f777b;
+    background: #dee0e2;
+  }
+  #apprentice-details .tableResponsive .funding-cap-alert a {
+    text-decoration: none;
+    color: #0b0c0c;
+  }
+  .bubble-arrow {
+    display: none;
+  }
   .manage-all-apprentices td:nth-of-type(1):before {
     content: "Name";
     font-weight: normal;

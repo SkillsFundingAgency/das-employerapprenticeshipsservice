@@ -134,6 +134,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -169,7 +170,6 @@
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\ReleaseEmployerAgreementTemplateTests\WhenIReleaseAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
@@ -180,6 +180,7 @@
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
+    <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
@@ -205,6 +206,8 @@
     <Compile Include="Queries\GetApprenticeshipDetails\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIGetEmployerAgreements.cs" />
+    <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />

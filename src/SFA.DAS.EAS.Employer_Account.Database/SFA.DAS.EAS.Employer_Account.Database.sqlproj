@@ -24,6 +24,7 @@
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
     <DefaultSchema>employer_account</DefaultSchema>
+    <IsEncryptionOn>True</IsEncryptionOn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -64,6 +65,7 @@
     <Folder Include="Tables" />
     <Folder Include="Schemas" />
     <Folder Include="Pre-deployment" />
+    <Folder Include="Post-Deployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -83,7 +85,6 @@
     <Build Include="Tables\EmployerAgreementTemplate.sql" />
     <Build Include="Tables\EmployerAgreement.sql" />
     <Build Include="Tables\AccountEmployerAgreement.sql" />
-    <Build Include="Tables\EmployerAgreementStatus.sql" />
     <Build Include="StoredProcedures\GetLegalEntitiesLinkedToAccount.sql" />
     <Build Include="StoredProcedures\AddPayeToAccount.sql" />
     <Build Include="StoredProcedures\CreateLegalEntity.sql" />
@@ -93,7 +94,6 @@
     <Build Include="StoredProcedures\CreateEmployerAgreementTemplate.sql" />
     <Build Include="StoredProcedures\GetEmployerAgreement.sql" />
     <Build Include="StoredProcedures\SignEmployerAgreement.sql" />
-    <Build Include="StoredProcedures\ReleaseEmployerAgreementTemplate.sql" />
     <Build Include="Schemas\Employer_Account.sql" />
     <Build Include="Tables\Account.sql" />
     <Build Include="Tables\User.sql" />
@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\PostDeploymentRules.sql" />
+    <None Include="Post-Deployment\Script.PostDeployment1.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Pre-deployment\Script.PreDeployment1.sql" />

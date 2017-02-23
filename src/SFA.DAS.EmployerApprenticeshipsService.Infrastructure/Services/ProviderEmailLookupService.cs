@@ -65,10 +65,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             addresses = new List<string>();
             var providers = _apprenticeshipInfoService.GetProvider((int)providerId);
-            if (!string.IsNullOrEmpty(providers?.Providers?.FirstOrDefault()?.Email))
+            if (!string.IsNullOrEmpty(providers?.Provider?.Email))
             {
                 _logger.Info($"Getting email from apprenticeship provider service");
-                addresses = new List<string> { providers?.Providers?.FirstOrDefault()?.Email };
+                addresses = new List<string> { providers?.Provider?.Email };
             }
             return addresses.Any();
         }

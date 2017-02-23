@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -32,6 +33,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             var userId = OwinWrapper.GetClaimValue("sub");
             if (!string.IsNullOrWhiteSpace(userId))
             {
+
+                var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
+                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                }
+
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
                 if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
