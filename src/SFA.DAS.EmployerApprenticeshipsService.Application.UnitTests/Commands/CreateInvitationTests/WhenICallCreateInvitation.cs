@@ -128,7 +128,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateInvitationTests
             _mediator.Verify(x => x.SendAsync(It.Is<SendNotificationCommand>(c => c.Email.RecipientsAddress.Equals(ExpectedCallerEmail)
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("Invitation")
+                                                                                  && c.Email.TemplateId.Equals("InvitationNewUser")
                                                                                   && c.Email.Subject.Equals("x"))));
         }
 

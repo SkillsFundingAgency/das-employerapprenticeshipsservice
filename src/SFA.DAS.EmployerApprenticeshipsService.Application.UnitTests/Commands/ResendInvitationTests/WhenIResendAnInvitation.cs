@@ -173,7 +173,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ResendInvitationTests
                                                                                   && c.Email.ReplyToAddress.Equals("noreply@sfa.gov.uk")
                                                                                   && c.Email.SystemId.Equals("x")
                                                                                   && c.Email.Subject.Equals("x")
-                                                                                  && c.Email.TemplateId.Equals("Invitation"))));
+                                                                                  && c.Email.TemplateId.Equals("InvitationNewUser"))));
         }
 
         [Test]
