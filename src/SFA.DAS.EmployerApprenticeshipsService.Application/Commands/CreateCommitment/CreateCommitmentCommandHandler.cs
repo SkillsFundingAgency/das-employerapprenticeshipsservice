@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                 Email = new Email
                 {
                     RecipientsAddress = email,
-                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
+                    TemplateId = "CommitmentNotification",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = $"<new Cohort created> {hashedCommitmentId}",
                     SystemId = "x",
