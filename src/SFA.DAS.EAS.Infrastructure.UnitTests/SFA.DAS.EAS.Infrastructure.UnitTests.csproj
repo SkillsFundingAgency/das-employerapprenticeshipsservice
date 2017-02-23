@@ -38,6 +38,14 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
@@ -113,6 +121,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\IdamsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuditServiceTests\WhenISendAnAuditMessage.cs" />
@@ -136,6 +145,7 @@
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmpref.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefDiscovery.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEnglishFractions.cs" />
+    <Compile Include="Services\ProviderEmailLookupService\ProviderEmailLookupServiceTests.cs" />
     <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
     <Compile Include="Services\WhiteListTests\WhenIGetUserWhiteList.cs" />
   </ItemGroup>

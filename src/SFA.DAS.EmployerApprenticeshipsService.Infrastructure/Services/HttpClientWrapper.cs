@@ -69,6 +69,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return default(T);
         }
 
+        public async Task<string> GetString(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                try
+                {
+                    var response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+
+                    return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : string.Empty;
+                }
+                catch (Exception exception)
+                {
+                    _logger.Error(exception, $"unable to read url {url}");
+                    return string.Empty;
+                }
+            }
+        }
+
         private HttpClient CreateHttpClient()
         {
             if (string.IsNullOrEmpty(BaseUrl))
