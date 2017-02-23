@@ -191,10 +191,10 @@
     }
 }
  
-.grey-background{
+.grey-background,
+.funding-cap-notification{
     background:$panel-colour;
-    padding:20px 20px 10px;
-   
+    padding:20px 20px 10px;  
     .heading-medium{margin-top:10px;}  
 }
 .bubble-arrow{    
