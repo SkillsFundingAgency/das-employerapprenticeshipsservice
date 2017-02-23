@@ -1,8 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using MediatR;
 using Newtonsoft.Json;
+
+using NLog;
+
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.EAS.Application.Commands.SendNotification;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.Tasks.Api.Client;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
@@ -13,13 +22,33 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
     {
         private readonly ICommitmentsApi _commitmentApi;
         private readonly ITasksApi _tasksApi;
+
+        private readonly IMediator _mediator;
+
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+
+        private readonly IProviderEmailLookupService _providerEmailLookupService;
+
+        private readonly ILogger _logger;
+
         private readonly SubmitCommitmentCommandValidator _validator;
 
-        public SubmitCommitmentCommandHandler(ICommitmentsApi commitmentApi, ITasksApi tasksApi)
+        public SubmitCommitmentCommandHandler(
+            ICommitmentsApi commitmentApi, 
+            ITasksApi tasksApi,
+            IMediator mediator,
+            EmployerApprenticeshipsServiceConfiguration configuration,
+            IProviderEmailLookupService providerEmailLookupService,
+            ILogger logger)
         {
             _commitmentApi = commitmentApi;
-            _validator = new SubmitCommitmentCommandValidator();
             _tasksApi = tasksApi;
+            _mediator = mediator;
+            _configuration = configuration;
+            _providerEmailLookupService = providerEmailLookupService;
+            _logger = logger;
+
+            _validator = new SubmitCommitmentCommandValidator();
         }
 
         protected override async Task HandleCore(SubmitCommitmentCommand message)
@@ -44,6 +73,51 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
             if (message.CreateTask)
                 await CreateTask(message, commitment);
+
+            if (message.LastAction != LastAction.None)
+            {
+                await SendNotification(commitment, message);
+            }
+            _logger.Info("Submit commitment");
+        }
+
+        private async Task SendNotification(Commitment commitment, SubmitCommitmentCommand message)
+        {
+            if (!_configuration.CommitmentNotification.SendEmail) return;
+
+            var emails = await 
+                _providerEmailLookupService.GetEmailsAsync(
+                    commitment.ProviderId.GetValueOrDefault(),
+                    commitment.ProviderLastUpdateInfo?.EmailAddress ?? string.Empty);
+
+            foreach (var email in emails)
+            {
+                _logger.Info($"Sending email to {email}");
+                var notificationCommand = BuildNotificationCommand(
+                    email,
+                    message.HashedCommitmentId,
+                    message.LastAction);
+                await _mediator.SendAsync(notificationCommand);
+            }
+        }
+
+        private SendNotificationCommand BuildNotificationCommand(string email, string hashedCommitmentId, LastAction action)
+        {
+            return new SendNotificationCommand
+            {
+                Email = new Email
+                {
+                    RecipientsAddress = email,
+                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
+                    ReplyToAddress = "noreply@sfa.gov.uk",
+                    Subject = "x",
+                    SystemId = "x",
+                    Tokens = new Dictionary<string, string> {
+                        { "type", action == LastAction.Approve ? "approval" : "review" },
+                        { "cohort_reference", hashedCommitmentId }
+                    }
+                }
+            };
         }
 
         private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)

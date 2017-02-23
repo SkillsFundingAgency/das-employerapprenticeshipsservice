@@ -7,15 +7,15 @@ namespace SFA.DAS.EAS.Account.Api.Client
 {
     public class AccountApiClient : IAccountApiClient
     {
-        private readonly AccountApiConfiguration _configuration;
+        private readonly IAccountApiConfiguration _configuration;
         private readonly SecureHttpClient _httpClient;
 
-        public AccountApiClient(AccountApiConfiguration configuration)
+        public AccountApiClient(IAccountApiConfiguration configuration)
         {
             _configuration = configuration;
             _httpClient = new SecureHttpClient(configuration);
         }
-        internal AccountApiClient(AccountApiConfiguration configuration, SecureHttpClient httpClient)
+        internal AccountApiClient(IAccountApiConfiguration configuration, SecureHttpClient httpClient)
         {
             _configuration = configuration;
             _httpClient = httpClient;

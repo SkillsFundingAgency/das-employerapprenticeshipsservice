@@ -10,7 +10,7 @@ SELECT
 	ld.SubmissionDate AS SubmissionDate,
 	ld.SubmissionId AS SubmissionId,
 	ld.LevyDueYTD AS LevyDueYTD,
-	t.Amount AS EnglishFraction,
+	isnull(t.Amount,1) AS EnglishFraction,
 	w.amount as TopUpPercentage,
 	ld.PayrollYear as PayrollYear,
 	ld.PayrollMonth as PayrollMonth,

@@ -7,7 +7,8 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         None,
         Invitation,
-        InvitationExistingUser
+        InvitationExistingUser,
+        CommitmentNotification
     }
 
     public class EmailTemplateConfigurationItem

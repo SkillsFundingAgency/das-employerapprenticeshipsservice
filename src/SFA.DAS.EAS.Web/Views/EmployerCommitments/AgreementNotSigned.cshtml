@@ -1,0 +1,24 @@
+﻿@model SFA.DAS.EAS.Web.ViewModels.LegalEntitySignedAgreementViewModel
+@{
+    ViewBag.Title = "Agreement not signed";
+    ViewBag.PageId = "agreement-not-signed";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Agreement not signed</h1>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+
+            <strong class="bold-small">
+                You must sign your employer agreement with
+                the Skills Funding Agency before you can approve cohorts.
+            </strong>
+
+        </div>
+        <p><a class="button" href="@Url.Action("Index", "EmployerAgreement")" aria-label="Review your agreement">Review your agreement</a>
+        <p><a href="@Url.Action("SearchProvider", new {Model.HashedAccountId, Model.LegalEntityCode, Model.CohortRef})">Continue to cohort</a></p>
+    </div>
+</div>
