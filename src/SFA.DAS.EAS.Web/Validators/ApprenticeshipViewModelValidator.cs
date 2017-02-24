@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Validators
 {
-    public class ApprenticeshipViewModelValidator :ApprenticeshipCoreValidator
+    public class ApprenticeshipViewModelValidator : ApprenticeshipCoreValidator
     {
         public ApprenticeshipViewModelValidator() : this(new WebApprenticeshipValidationText(), new CurrentDateTime())
         { } // The default is used by the MVC model binding

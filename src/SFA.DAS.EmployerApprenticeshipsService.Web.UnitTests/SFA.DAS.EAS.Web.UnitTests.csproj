@@ -205,8 +205,16 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\ApprenticeshipValidationTestBase.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingCost.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingDateOfBirth.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingFirstName.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingLastName.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingEmployerReference.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingTrainingCode.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingTrainingDates.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingUln.cs" />
     <Compile Include="Validators\WhenValidatingAddLegalEntityViewModel.cs" />
-    <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

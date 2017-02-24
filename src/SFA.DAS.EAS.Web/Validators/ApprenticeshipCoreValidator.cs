@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Validators
         {
             RuleFor(x => x.EmployerRef)
                 .Must(m => LengthLessThanFunc(m, 21))
-                    .When(x => !string.IsNullOrEmpty(x.ProviderRef)).WithMessage(_validationText.EmployerRef01.Text).WithErrorCode(_validationText.EmployerRef01.ErrorCode);
+                    .When(x => !string.IsNullOrEmpty(x.EmployerRef)).WithMessage(_validationText.EmployerRef01.Text).WithErrorCode(_validationText.EmployerRef01.ErrorCode);
         }
 
         private bool WillApprenticeBeAtLeast15AtStartOfTraining(ApprenticeshipViewModel model, DateTimeViewModel dob)
