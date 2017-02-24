@@ -33,26 +33,31 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public async Task<OrchestratorResponse<Account>> GetAccount(
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(
             string accountId, string externalUserId)
         {
             try
             {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
 
-                return new OrchestratorResponse<Account>
+                var viewModel = new AccountDashboardViewModel
+                {
+                    Account = accountResponse.Account
+                };
+
+                return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
-                    Data = response.Account
+                    Data = viewModel
                 };
             }
             catch (Exception ex)
             {
-                return new OrchestratorResponse<Account>
+                return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
                     Exception = ex

@@ -418,6 +418,7 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
+    <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
