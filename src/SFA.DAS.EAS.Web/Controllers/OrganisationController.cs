@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
@@ -19,17 +20,20 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
         public OrganisationController(
             IOwinWrapper owinWrapper, 
             OrganisationOrchestrator orchestrator,
             IFeatureToggle featureToggle, 
             IUserWhiteList userWhiteList,
-            IMapper mapper) 
+            IMapper mapper,
+            ILogger logger) 
             :base(owinWrapper, featureToggle, userWhiteList)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -66,50 +70,60 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             OrchestratorResponse<OrganisationDetailsViewModel> response;
-
-            switch (model.OrganisationType)
+            var stopwatch = new System.Diagnostics.Stopwatch();
+            try
             {
-                case OrganisationType.Charities:
-                    response = await FindCharity(model.CharityRegistrationNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-                    break;
-                case OrganisationType.CompaniesHouse:
-                    response = await FindCompany(model.CompaniesHouseNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                stopwatch.Start();
 
-                    break;
-                case OrganisationType.PublicBodies:
-                    var searchResponse = await FindPublicSectorOrganisation(model.PublicBodyName, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                switch (model.OrganisationType)
+                {
+                    case OrganisationType.Charities:
+                        response = await FindCharity(model.CharityRegistrationNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+                        break;
+                    case OrganisationType.CompaniesHouse:
+                        response = await FindCompany(model.CompaniesHouseNumber, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-                    if (searchResponse.Status == HttpStatusCode.OK)
-                    {
-                        if (searchResponse.Data.Results.Data.Count != 1 ||
-                            searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                        break;
+                    case OrganisationType.PublicBodies:
+                        var searchResponse = await FindPublicSectorOrganisation(model.PublicBodyName, model.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+                        if (searchResponse.Status == HttpStatusCode.OK)
                         {
-                            return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                            if (searchResponse.Data.Results.Data.Count != 1 ||
+                                searchResponse.Data.Results.Data.All(x => x.AddedToAccount))
+                            {
+                                return View("ViewPublicSectorOrganisationSearchResults", searchResponse);
+                            }
+
+                            response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                            {
+                                Data = searchResponse.Data.Results.Data.FirstOrDefault(),
+                                Status = searchResponse.Status
+                            };
+                        }
+                        else
+                        {
+                            response = new OrchestratorResponse<OrganisationDetailsViewModel>
+                            {
+                                Data = new OrganisationDetailsViewModel(),
+                                Status = searchResponse.Status
+                            };
+                            response.Data.ErrorDictionary = searchResponse.Data.ErrorDictionary;
                         }
 
-                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
-                        {
-                            Data = searchResponse.Data.Results.Data.FirstOrDefault(),
-                            Status = searchResponse.Status
-                        };
-                    }
-                    else
-                    {
-                        response = new OrchestratorResponse<OrganisationDetailsViewModel>
-                        {
-                            Data = new OrganisationDetailsViewModel(),
-                            Status = searchResponse.Status
-                        };
-                        response.Data.ErrorDictionary = searchResponse.Data.ErrorDictionary;
-                    }
+                        break;
 
-                    break;
-
-                case OrganisationType.Other:
-                    return RedirectToAction("AddOtherOrganisationDetails", "Organisation", new { model.HashedAccountId });
+                    case OrganisationType.Other:
+                        return RedirectToAction("AddOtherOrganisationDetails", "Organisation", new { model.HashedAccountId });
                     
-                default:
-                    throw new NotImplementedException("Org Type Not Implemented");
+                    default:
+                        throw new NotImplementedException("Org Type Not Implemented");
+                }
+            }
+            finally
+            {
+                stopwatch.Stop();
+                _logger.Info($"Company Search for {model.OrganisationType} took {stopwatch.ElapsedMilliseconds * 1000d}s");
             }
 
             if (response.Status == HttpStatusCode.OK)
