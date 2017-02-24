@@ -66,13 +66,16 @@
             </div>
         </div>
     <div class="column-one-third">
-
-        <section>
-            <div class="panel alert-default">
-                <h3 class="heading-medium">Notice</h3>
-                <p>There is an SFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with SFA</a> in order to release your funds so that you can pay your training provider.</p>
-            </div>
-        </section>
+        @if (Model.Data.RequiresAgreementSigning)
+        {
+            <section>
+                <div class="panel alert-default">
+                    <h3 class="heading-medium">Notice</h3>
+                    <p>There is an SFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with SFA</a> in order to release your funds so that you can pay your training provider.
+                    </p>
+                </div>
+            </section>
+        }
     </div>
 </div>
 
