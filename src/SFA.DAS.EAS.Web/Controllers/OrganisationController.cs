@@ -70,6 +70,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             OrchestratorResponse<OrganisationDetailsViewModel> response;
+
+            //TODO this can be removed once we determine which is slow in prod
             var stopwatch = new System.Diagnostics.Stopwatch();
             try
             {
