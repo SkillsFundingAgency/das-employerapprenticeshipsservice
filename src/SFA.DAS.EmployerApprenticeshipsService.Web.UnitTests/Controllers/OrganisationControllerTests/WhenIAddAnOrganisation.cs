@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
         private Mock<IMapper> _mapper;
+        private Mock<ILogger> _logger;
 
         [SetUp]
         public void Arrange()
@@ -47,12 +49,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                         It.IsAny<OrganisationDetailsViewModel>()))
                 .Returns(new OrchestratorResponse<AddOrganisationAddressViewModel>());
 
+            _logger = new Mock<ILogger>();
+
             _controller = new OrganisationController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 _featureToggle.Object,
                 _userWhiteList.Object,
-                _mapper.Object);
+                _mapper.Object,
+                _logger.Object);
         }
 
         [Test]
