@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using NLog;
 
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Models;
 
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         private readonly IHttpClientWrapper _httpClientWrapper;
 
         public IdamsEmailServiceWrapper(
-            ILogger logger, 
+            ILogger logger,
             EmployerApprenticeshipsServiceConfiguration configuration,
             IHttpClientWrapper httpClient)
         {
@@ -34,7 +35,17 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public virtual async Task<List<string>> GetEmailsAsync(long ukprn)
         {
             var url = string.Format(_configuration.CommitmentNotification.IdamsListUsersUrl, ukprn);
-            var result = await _httpClientWrapper.GetString(url);
+            string result;
+
+            try
+            {
+                result = await _httpClientWrapper.GetString(url);
+            }
+            catch (Exception ex)
+            {
+                _logger.Warn(ex, $"Error calling {url} - {ex.Message}");
+                result = string.Empty;
+            }
 
             try
             {

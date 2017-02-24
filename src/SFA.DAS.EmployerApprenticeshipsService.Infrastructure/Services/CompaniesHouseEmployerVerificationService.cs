@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Employer;
+using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -14,26 +16,32 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly ILogger _logger;
         private readonly IHttpClientWrapper _httpClientWrapper;
+        private readonly ExecutionPolicy _executionPolicy;
 
-        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger, IHttpClientWrapper httpClientWrapper)
+        public CompaniesHouseEmployerVerificationService(EmployerApprenticeshipsServiceConfiguration configuration, ILogger logger, IHttpClientWrapper httpClientWrapper,
+            [RequiredPolicy(CompaniesHouseExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             _configuration = configuration;
             _logger = logger;
             _httpClientWrapper = httpClientWrapper;
+            _executionPolicy = executionPolicy;
             _httpClientWrapper.AuthScheme = "Basic";
             _httpClientWrapper.BaseUrl = _configuration.CompaniesHouse.BaseUrl;
         }
 
         public async Task<EmployerInformation> GetInformation(string id)
         {
-            _logger.Info($"GetInformation({id})");
+            return await _executionPolicy.ExecuteAsync(async () =>
+            {
+                _logger.Info($"GetInformation({id})");
 
-            id = id?.ToUpper();
+                id = id?.ToUpper();
 
-            var result = await _httpClientWrapper.Get<EmployerInformation>(
-                $"{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey))}",
-                $"{_configuration.CompaniesHouse.BaseUrl}/company/{id}");
-            return result;
+                var result = await _httpClientWrapper.Get<EmployerInformation>(
+                    $"{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey))}",
+                    $"{_configuration.CompaniesHouse.BaseUrl}/company/{id}");
+                return result;
+            });
         }
     }
 }
