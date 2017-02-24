@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -19,13 +20,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
+        private readonly ExecutionPolicy _executionPolicy;
 
 
-        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient)
+        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient,
+            [RequiredPolicy(HmrcExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
             _tokenServiceApiClient = tokenServiceApiClient;
+            _executionPolicy = executionPolicy;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
@@ -40,48 +44,36 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode)
         {
-            var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
-
-            var url = $"oauth/token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
-
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
+                var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
+
+                var url = $"oauth/token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
+
                 var response = await _httpClientWrapper.SendMessage("", url);
 
                 return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
-            }
-            catch
-            {
-                return null;
-            }
+            });
         }
 
         public async Task<EmpRefLevyInformation> GetEmprefInformation(string authToken, string empRef)
         {
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}";
 
                 return await _httpClientWrapper.Get<EmpRefLevyInformation>(authToken, url);
-            }
-            catch
-            {
-                return null;
-            }
+            });
         }
 
         public async Task<string> DiscoverEmpref(string authToken)
         {
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var json = await _httpClientWrapper.Get<EmprefDiscovery>(authToken, "apprenticeship-levy/");
 
                 return json.Emprefs.SingleOrDefault();
-            }
-            catch
-            {
-                return null;
-            }
+            });
         }
 
         public async Task<LevyDeclarations> GetLevyDeclarations(string empRef)
@@ -91,7 +83,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<LevyDeclarations> GetLevyDeclarations(string empRef, DateTime? fromDate)
         {
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var accessToken = await GetOgdAccessToken();
 
@@ -103,11 +95,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
 
                 return await _httpClientWrapper.Get<LevyDeclarations>(accessToken, url);
-            }
-            catch
-            {
-                return null;
-            }
+            });
         }
 
         public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef)
@@ -117,7 +105,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
         {
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var accessToken = await GetOgdAccessToken();
 
@@ -129,26 +117,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 }
 
                 return await _httpClientWrapper.Get<EnglishFractionDeclarations>(accessToken, url);
-            }
-            catch
-            {
-                return null;
-            }
+            });
         }
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
-            try
+            return await _executionPolicy.ExecuteAsync(async () =>
             {
                 var accessToken = await GetOgdAccessToken();
 
                 const string url = "apprenticeship-levy/fraction-calculation-date";
                 return await _httpClientWrapper.Get<DateTime>(accessToken, url);
-            }
-            catch
-            {
-                return default(DateTime);
-            }
+            });
         }
 
         public async Task<string> GetOgdAccessToken()
