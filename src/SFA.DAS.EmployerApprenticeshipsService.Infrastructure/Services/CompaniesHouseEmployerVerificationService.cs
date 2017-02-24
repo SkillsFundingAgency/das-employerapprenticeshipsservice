@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Employer;
 
@@ -26,14 +27,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<EmployerInformation> GetInformation(string id)
         {
-            _logger.Info($"GetInformation({id})");
+            try
+            {
+                _logger.Info($"GetInformation({id})");
 
-            id = id?.ToUpper();
+                id = id?.ToUpper();
 
-            var result = await _httpClientWrapper.Get<EmployerInformation>(
-                $"{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey))}",
-                $"{_configuration.CompaniesHouse.BaseUrl}/company/{id}");
-            return result;
+                var result = await _httpClientWrapper.Get<EmployerInformation>(
+                    $"{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey))}",
+                    $"{_configuration.CompaniesHouse.BaseUrl}/company/{id}");
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
