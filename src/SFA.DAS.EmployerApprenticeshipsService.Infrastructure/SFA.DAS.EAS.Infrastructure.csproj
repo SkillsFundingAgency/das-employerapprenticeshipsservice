@@ -90,6 +90,10 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Polly, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.0.6\lib\net45\Polly.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
@@ -212,6 +216,11 @@
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
+    <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
+    <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Models\UserResponse.cs" />
     <Compile Include="DependencyResolution\ConfigurationPolicy.cs" />
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
