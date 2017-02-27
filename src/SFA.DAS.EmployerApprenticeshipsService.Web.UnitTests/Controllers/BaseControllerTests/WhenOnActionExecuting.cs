@@ -12,6 +12,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 {
     public class WhenOnActionExecuting : ControllerTestBase
     {
+        private const string UserEmail = "user.one@unit.tests";
+
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IUserWhiteList> _userWhiteList;
@@ -22,16 +24,22 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         {
             base.Arrange();
 
-            _featureToggle = new Mock<IFeatureToggle>();
             _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper.Setup(x => x.GetClaimValue("email"))
+                .Returns(UserEmail);
+
+            _featureToggle = new Mock<IFeatureToggle>();
+            _featureToggle.Setup(x => x.GetFeatures())
+                .Returns(new FeatureToggleLookup { Data = new List<FeatureToggleItem>() });
+
             _userWhiteList = new Mock<IUserWhiteList>();
-            _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup {Data = new List<FeatureToggleItem>()});
+
 
             var routes = new RouteData();
             routes.Values["action"] = "TestView";
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
-            
+
             _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _userWhiteList.Object)
             {
                 ControllerContext = _controllerContext.Object
@@ -39,152 +47,107 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         }
 
         [Test]
-        public void ThenTheFeatureIsCheckedToSeeIfEnabled()
+        public void ThenItShouldExecuteActionIfNotInFeatureToggles()
         {
-            //Act
-            Invoke(() => _controller.TestView());
-            
-            //Assert
-            _featureToggle.Verify(x=>x.GetFeatures(),Times.Once);
+            // Act
+            var actual = Invoke(() => _controller.TestView());
+
+            // Assert
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOf<ContentResult>(actual);
         }
 
-        [TestCase("Test","*",false)]
-        [TestCase("Test","TestView",false)]
-        [TestCase("TEST","TESTVIEW",false)]
-        [TestCase("Test","TestV",true)]
-        [TestCase("T","TestView",true)]
-        public void ThenTheFeatureNotEnabledViewIsReturnedIfItMatches(string controllerName,string actionName,bool enabled)
+        [TestCase("user\\.one@unit\\.tests")]
+        [TestCase("USER\\.ONE@UNIT\\.TESTS")]
+        [TestCase(".*@unit\\.tests")]
+        public void ThenItShouldExecuteActionIfToggleEnabledAndUserInWhiteList(string whitelistPattern)
         {
-            //Arrange
-            _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup { Data = new List<FeatureToggleItem>
-            {
-                new FeatureToggleItem
+            // Arrange
+            _featureToggle.Setup(x => x.GetFeatures())
+                .Returns(new FeatureToggleLookup
                 {
-                    Controller = controllerName,
-                    Action = actionName
-                }
-            } });
+                    Data = new List<FeatureToggleItem>
+                    {
+                        new FeatureToggleItem
+                        {
+                            Controller = "Test",
+                            Action = "TestView",
+                            WhiteList = new[] { whitelistPattern }
+                        }
+                    }
+                });
+            // Act
+            var actual = Invoke(() => _controller.TestView());
 
-            //Act
-            var result = Invoke(() => _controller.TestView());
-
-            //Assert
-            if (enabled)
-            {
-                Assert.IsAssignableFrom<ContentResult>(result);
-            }
-            else
-            {
-                Assert.IsAssignableFrom<ViewResult>(result);
-                var viewResult = result as ViewResult;
-                Assert.IsNotNull(viewResult);
-                Assert.AreEqual("FeatureNotEnabled",viewResult.ViewName);
-            }
+            // Assert
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOf<ContentResult>(actual);
         }
 
         [Test]
-        public void ThenMultipleActionsAreHandledInAController()
+        public void ThenItShouldReturnFeatureNotEnabledIfToggleEnabledWithNoWhiteList()
         {
-            //Arrange
-            _featureToggle.Setup(x => x.GetFeatures()).Returns(new FeatureToggleLookup
-            {
-                Data = new List<FeatureToggleItem>
-            {
-                new FeatureToggleItem
+            // Arrange
+            _featureToggle.Setup(x => x.GetFeatures())
+                .Returns(new FeatureToggleLookup
                 {
-                    Controller = "Test",
-                    Action = "TestView1"
-                },
-                new FeatureToggleItem
+                    Data = new List<FeatureToggleItem>
+                    {
+                        new FeatureToggleItem
+                        {
+                            Controller = "Test",
+                            Action = "TestView",
+                            WhiteList = new string[0]
+                        }
+                    }
+                });
+
+            // Act
+            var actual = Invoke(() => _controller.TestView());
+
+            // Assert
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOf<ViewResult>(actual);
+            Assert.AreEqual("FeatureNotEnabled", ((ViewResult)actual).ViewName);
+        }
+
+        [Test]
+        public void ThenItShouldReturnFeatureNotEnabledIfToggleEnabledButUserNotOnWhiteList()
+        {
+            // Arrange
+            _featureToggle.Setup(x => x.GetFeatures())
+                .Returns(new FeatureToggleLookup
                 {
-                    Controller = "Test",
-                    Action = "TestView"
-                }
-            }
-            });
+                    Data = new List<FeatureToggleItem>
+                    {
+                        new FeatureToggleItem
+                        {
+                            Controller = "Test",
+                            Action = "TestView",
+                            WhiteList = new[] { "different.user@somewhere.else" }
+                        }
+                    }
+                });
 
-            //Act
-            var result = Invoke(() => _controller.TestView());
+            // Act
+            var actual = Invoke(() => _controller.TestView());
 
-            Assert.IsAssignableFrom<ViewResult>(result);
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            Assert.AreEqual("FeatureNotEnabled", viewResult.ViewName);
+            // Assert
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOf<ViewResult>(actual);
+            Assert.AreEqual("FeatureNotEnabled", ((ViewResult)actual).ViewName);
         }
 
-        [Test]
-        public void ThenWhenThereAreNoFeatureTogglesDefinedTheNormalViewIsReturned()
-        {
-            //Arrange
-            _featureToggle.Setup(x => x.GetFeatures()).Returns((FeatureToggleLookup)null);
-
-            //Act
-            var result = Invoke(() => _controller.TestView());
-
-            //Assert
-            Assert.IsAssignableFrom<ContentResult>(result);
-        }
-
-        [Test]
-        public void ThenShouldNotDirectToUserNotAllowedPageIfUserIsOnWhiteList()
-        {
-            //Assign
-            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(true);
-            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
-
-            //Act
-            var result = Invoke(() => _controller.SecureTestView());
-
-            //Assert
-            Assert.IsAssignableFrom<ContentResult>(result);
-        }
-
-        [Test]
-        public void ThenShouldDirectToUserNotAllowedPageIfUserIsNotOnWhiteList()
-        {
-            //Assign
-            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
-            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
-
-            //Act
-            var result = Invoke(() => _controller.SecureTestView());
-
-            //Assert
-            Assert.IsAssignableFrom<ViewResult>(result);
-            var viewResult = result as ViewResult;
-            Assert.IsNotNull(viewResult);
-            Assert.AreEqual("UserNotAllowed", viewResult.ViewName);
-        }
-
-        [Test]
-        public void ThenShouldNoDirectToUserNotAllowedPageIfPublicWebPage()
-        {
-            //Assign
-            _userWhiteList.Setup(x => x.IsEmailOnWhiteList(It.IsAny<string>())).Returns(false);
-            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns("test@test.com");
-
-            //Act
-            var result = Invoke(() => _controller.TestView());
-
-            //Assert
-            Assert.IsAssignableFrom<ContentResult>(result);
-        }
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList) 
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList)
                 : base(owinWrapper, featureToggle, userWhiteList)
             {
 
             }
 
             public ActionResult TestView()
-            {
-                return new ContentResult();
-            }
-
-            [Authorize]
-            public ActionResult SecureTestView()
             {
                 return new ContentResult();
             }

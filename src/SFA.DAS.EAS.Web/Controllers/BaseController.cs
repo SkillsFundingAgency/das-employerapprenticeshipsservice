@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -24,22 +26,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (!CheckFeatureIsEnabled())
+            if (!CanAccessFeature())
             {
                 filterContext.Result = base.View("FeatureNotEnabled", null, null);
-            }
-            if (filterContext.ActionDescriptor.IsDefined (typeof(AuthorizeAttribute), true) || (filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AuthorizeAttribute), true)) && !filterContext.ActionDescriptor.ControllerDescriptor.IsDefined(typeof(AllowAnonymousAttribute), true))
-            {
-                // Check for authorization
-                var userEmail = OwinWrapper.GetClaimValue("email");
-
-                if (!string.IsNullOrEmpty(userEmail))
-                {
-                    if (!_userWhiteList.IsEmailOnWhiteList(userEmail))
-                    {
-                        filterContext.Result = base.View("UserNotAllowed", null, null);
-                    }
-                }
             }
         }
 
@@ -83,7 +72,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             return base.View(@"GenericError", masterName, orchestratorResponse);
         }
 
-        private bool CheckFeatureIsEnabled()
+
+        private bool CanAccessFeature()
         {
             var features = _featureToggle.GetFeatures();
             if (features?.Data == null)
@@ -92,11 +82,27 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
+            var controllerToggles = features.Data.Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)).ToArray();
+            if (!controllerToggles.Any())
+            {
+                return true;
+            }
+
             var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            var actionToggle = controllerToggles.Where(t => t.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase) || t.Action == "*")
+                                                 .OrderByDescending(t => t.Action) // Should put action = * last as specific action toggle should win
+                                                 .FirstOrDefault();
+            return actionToggle == null || IsUserInToggleWhiteList(actionToggle);
+        }
+        private bool IsUserInToggleWhiteList(FeatureToggleItem toggle)
+        {
+            if (toggle.WhiteList == null || toggle.WhiteList.Length == 0)
+            {
+                return false;
+            }
 
-            var featureToggleItems = features.Data.Where(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase));
-
-            return featureToggleItems.All(featureToggleItem => featureToggleItem.Action != "*" && !actionName.Equals(featureToggleItem.Action, StringComparison.CurrentCultureIgnoreCase));
+            var userEmail = OwinWrapper.GetClaimValue("email");
+            return toggle.WhiteList.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase));
         }
 
         protected FlashMessageViewModel GetHomePageSucessMessage()
