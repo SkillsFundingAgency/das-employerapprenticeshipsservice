@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Authentication;
@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -28,10 +29,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
-            _invitationOrchestrator = new Mock<InvitationOrchestrator>(Mediator.Object, Logger.Object);
+            _invitationOrchestrator = new Mock<InvitationOrchestrator>();
+
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object, _configuration);
         }
 
         [Test]
@@ -52,9 +55,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("my_user_id");
-            _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
-
+            
             //Act
             var actual = _controller.Invite();
 
@@ -71,13 +72,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("TEST");
-
             _invitationOrchestrator.Setup(x => x.GetInvitation(It.Is<string>(i => i == "123")))
                 .ReturnsAsync(new OrchestratorResponse<InvitationView> { Data = new InvitationView()});
-
-
-            _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+            
 
             //Act
             var actual = await _controller.View("123");
