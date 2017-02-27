@@ -166,7 +166,6 @@
     <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
     <Compile Include="Controllers\InvitationControllerTests\WhenViewingInvitations.cs" />
     <Compile Include="Controllers\OrganisationControllerTests\WhenIGoToAddOrganisationPage.cs" />
-    <Compile Include="Infrastructure\Config\WhenTransformingConfigFiles.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingLogging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingMessaging.cs" />
     <Compile Include="Infrastructure\StructureMapRegistrationTests\WhenAddingValidators.cs" />
