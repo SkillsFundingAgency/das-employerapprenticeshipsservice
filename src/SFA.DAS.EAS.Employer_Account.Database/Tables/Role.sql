@@ -1,5 +1,0 @@
-﻿CREATE TABLE [employer_account].[Role]
-(
-	[Id] TINYINT NOT NULL PRIMARY KEY IDENTITY, 
-    [Name] NVARCHAR(50) NOT NULL
-)

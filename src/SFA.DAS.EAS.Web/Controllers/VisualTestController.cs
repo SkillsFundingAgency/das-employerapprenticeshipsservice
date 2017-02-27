@@ -51,8 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ExpiryDate = new DateTime(2017, 1, 1),
                 ExternalUserId = Guid.NewGuid(),
                 InternalUserId = 123,
-                RoleId = 213,
-                RoleName = "Owner"
+                RoleId = 213
             };
             var aggregationLine = new TransactionLine
             {
