@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
     {
         private List<string> _configFiles;
         private string[] _allowedConfigValues;
+        private string[] _excludedSettingNames;
 
         [SetUp]
         public void Arrange()
@@ -18,6 +19,7 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
             var extensions = new[] {".config", ".cscfg"};
             var excludedPaths = new[] { "obj", "bin", "vs", "package", "tool", "test" };
 
+            _excludedSettingNames = new[] { "webpages:Version", "LogLevel", "idaAudience", "idaTenant", "TokenCertificateThumbprint" };
             _allowedConfigValues = new[] { "UseDevelopmentStorage=true", "LOCAL", "true", "false", "localhost", "Endpoint=sb://[your namespace].servicebus.windows.net;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=[your secret]" };
 
             var path = new FileInfo(Assembly.GetCallingAssembly().Location).Directory.Parent.Parent.Parent;
@@ -31,8 +33,6 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
         [Test]
         public void ThenTheCloudConfigurationValuesAreCheckedForSecrets()
         {
-            var excludedSettingNames = new[] { "LogLevel", "idaAudience", "idaTenant", "TokenCertificateThumbprint" };
-
             foreach (var configFile in _configFiles.Where(x=>Path.GetExtension(x).Equals(".cscfg")))
             {
                 var xmlConfig = XDocument.Load(configFile);
@@ -45,13 +45,13 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
                 {
 
                     if (_allowedConfigValues.Any(c=> setting.Attribute("value").Value.Contains(c))
-                        || excludedSettingNames.Any(c => setting.Attribute("name").Value.Contains(c))
+                        || _excludedSettingNames.Any(c => setting.Attribute("name").Value.Contains(c))
                         || string.IsNullOrEmpty(setting.Attribute("value").Value))
                     {
                         continue;
                     }
 
-                    Assert.IsTrue(setting.Attribute("value").Value.Contains("__"),$"The setting {setting.Attribute("name")} has a invalid value {setting.Attribute("value")}");
+                    Assert.IsTrue(setting.Attribute("value").Value.Contains("__"),$"The setting {setting.Attribute("name")} has a invalid value {setting.Attribute("value")} in {configFile}");
                 }
 
             }
@@ -60,8 +60,6 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
         [Test]
         public void ThenTheConfigurationValuesAreCheckedForSecrets()
         {
-            var excludedSettingNames = new[] { "webpages:Version", "LogLevel" };
-
             foreach (var configFile in _configFiles.Where(x => Path.GetExtension(x).Equals(".config")))
             {
                 var xmlConfig = XDocument.Load(configFile);
@@ -77,7 +75,7 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
                 foreach (var setting in settings)
                 {
                     if (_allowedConfigValues.Any(c => setting.Attribute("value").Value.Contains(c))
-                        || excludedSettingNames.Any(c => setting.Attribute("key").Value.Contains(c))
+                        || _excludedSettingNames.Any(c => setting.Attribute("key").Value.Contains(c))
                         || string.IsNullOrEmpty(setting.Attribute("value").Value))
                     {
                         continue;
