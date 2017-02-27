@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class InvitationController : BaseController
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
-        private readonly string _userIdClaim;
+        
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
@@ -27,13 +27,13 @@ namespace SFA.DAS.EAS.Web.Controllers
                 throw new ArgumentNullException(nameof(invitationOrchestrator));
             _invitationOrchestrator = invitationOrchestrator;
             _configuration = configuration;
-            _userIdClaim = OwinWrapper.GetClaimValue("sub");
+            
         }
 
         [Route("invite")]
         public ActionResult Invite()
         {
-            if (string.IsNullOrEmpty(_userIdClaim))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
             {
                 return View();
             }
@@ -46,12 +46,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route]
         public async Task<ActionResult> All()
         {
-            if (string.IsNullOrEmpty(_userIdClaim))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
             {
                 return RedirectToAction("Index", "Home");
             }
 
-            var model = await _invitationOrchestrator.GetAllInvitationsForUser(_userIdClaim);
+            var model = await _invitationOrchestrator.GetAllInvitationsForUser(OwinWrapper.GetClaimValue("sub"));
 
             return View(model);
         }
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> View(string invitationId)
         {
-            if (string.IsNullOrEmpty(_userIdClaim))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -77,7 +77,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
         {
-            if (string.IsNullOrEmpty(_userIdClaim))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -89,7 +89,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, _userIdClaim);
+            await _invitationOrchestrator.AcceptInvitation(invitationItem.Id, OwinWrapper.GetClaimValue("sub"));
             
             TempData["successHeader"] = "Invitation accepted";
             TempData["successMessage"] = $"You can now access the {invitationItem.AccountName} account";
@@ -103,12 +103,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)
         {
-            if (string.IsNullOrEmpty(_userIdClaim))
+            if (string.IsNullOrEmpty(OwinWrapper.GetClaimValue("sub")))
             {
                 return RedirectToAction("Index", "Home");     
             }
 
-            await _invitationOrchestrator.CreateInvitation(model, _userIdClaim);
+            await _invitationOrchestrator.CreateInvitation(model, OwinWrapper.GetClaimValue("sub"));
 
             return RedirectToAction("Index", "Home");
         }

@@ -19,6 +19,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
 
+        protected InvitationOrchestrator()
+        {
+            
+        }
+
         public InvitationOrchestrator(IMediator mediator, ILogger logger)
         {
             if (mediator == null)

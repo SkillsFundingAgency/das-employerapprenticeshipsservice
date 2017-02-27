@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Authentication;
@@ -18,6 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IUserWhiteList> _userWhiteList;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -28,7 +30,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
 
-            _invitationOrchestrator = new Mock<InvitationOrchestrator>(Mediator.Object, Logger.Object);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
+
+            _invitationOrchestrator = new Mock<InvitationOrchestrator>();
 
 
         }
@@ -56,7 +60,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult<object>(null));
 
-            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object);
+            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object, _configuration);
 
             //Act
             await _controller.Accept(invitationId, invitation);
