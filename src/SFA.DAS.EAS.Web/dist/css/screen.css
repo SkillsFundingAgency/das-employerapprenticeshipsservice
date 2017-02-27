@@ -4012,11 +4012,13 @@ span.helpText {
   background-image: url("/dist/images/icon-important.png");
 }
 
+.grey-background,
 .funding-cap-notification {
   background: #dee0e2;
   padding: 20px 20px 10px;
 }
 
+.grey-background .heading-medium,
 .funding-cap-notification .heading-medium {
   margin-top: 10px;
 }

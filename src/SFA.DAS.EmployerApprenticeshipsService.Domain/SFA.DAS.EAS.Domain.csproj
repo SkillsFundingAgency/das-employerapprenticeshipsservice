@@ -149,6 +149,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Http\HttpException.cs" />
+    <Compile Include="Http\ResourceNotFoundException.cs" />
+    <Compile Include="Http\ServiceUnavailableException.cs" />
+    <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IProviderEmailLookupService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
@@ -222,7 +226,7 @@
     <Compile Include="Interfaces\IFeatureToggle.cs" />
     <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
-    <Compile Include="Interfaces\IHttpClientWrapper.cs" />
+    <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
