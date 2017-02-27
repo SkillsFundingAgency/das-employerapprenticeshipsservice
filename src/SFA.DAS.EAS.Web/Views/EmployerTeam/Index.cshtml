@@ -1,9 +1,9 @@
 ﻿@using SFA.DAS.EAS.Web
 
-@model OrchestratorResponse<SFA.DAS.EAS.Domain.Data.Entities.Account.Account>
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.AccountDashboardViewModel>
 
 @{
-    ViewBag.Title = Model.Data.Name;
+    ViewBag.Title = Model.Data.Account.Name;
     ViewBag.Section = "home";
     ViewBag.PageID = "page-company-homepage";
 
@@ -15,7 +15,7 @@
 }
 
 
-<h1 class="heading-xlarge heading-dashboard" id="company-Name">@Model.Data.Name</h1>
+<h1 class="heading-xlarge heading-dashboard" id="company-Name">@Model.Data.Account.Name</h1>
 
 <div class="grid-row page-dashboard">
     <div class="column-two-thirds">
@@ -66,14 +66,16 @@
             </div>
         </div>
     <div class="column-one-third">
-
-        <section>
-            <div class="panel alert-default">
-                <h3 class="heading-medium">Notice</h3>
-                <p><a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending" target="_blank">Read the <abbr title="Skills Funding Agency">SFA</abbr> agreement</a> - from May 2017, SFA will ask you to accept this agreement in order to spend apprenticeship funds.</p>
-            </div>
-            
-        </section>
+        @if (Model.Data.RequiresAgreementSigning)
+        {
+            <section>
+                <div class="panel alert-default">
+                    <h3 class="heading-medium">Notice</h3>
+                    <p>There is an SFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with SFA</a> in order to release your funds so that you can pay your training provider.
+                    </p>
+                </div>
+            </section>
+        }
     </div>
 </div>
 
