@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public string Name { get; set; }
         public string Email { get; set; }
         public int RoleId { get; set; }
-        public string RoleName { get; set; }
         public long AccountId { get; set; }
         public string AccountName { get; set; }
         public DateTime ExpiryDate { get; set; }
