@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -16,14 +17,16 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly InvitationOrchestrator _invitationOrchestrator;
         private readonly string _userIdClaim;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
+            IFeatureToggle featureToggle, IUserWhiteList userWhiteList, EmployerApprenticeshipsServiceConfiguration configuration) 
             : base(owinWrapper, featureToggle, userWhiteList)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));
             _invitationOrchestrator = invitationOrchestrator;
+            _configuration = configuration;
             _userIdClaim = OwinWrapper.GetClaimValue("sub");
         }
 
@@ -110,6 +113,24 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-     
+        [HttpGet]
+        [Route("register-and-accept")]
+        public ActionResult AcceptInvitationNewUser()
+        {
+            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
+            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            var c = new Constants(_configuration.Identity);
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/invitations/all");
+        }
+
+
+        [HttpGet]
+        [Route("accept")]
+        public ActionResult AcceptInvitationExistingUser()
+        {
+            return RedirectToAction("All");
+        }
+
+
     }
 }
