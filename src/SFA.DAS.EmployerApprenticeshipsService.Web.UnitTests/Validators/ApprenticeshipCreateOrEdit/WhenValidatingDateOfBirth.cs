@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators.ApprenticeshipCreateOrEdit
             var result = Validator.Validate(ValidModel);
 
             result.IsValid.Should().BeFalse();
-            result.Errors[0].ErrorMessage.Should().Be("The apprentice must be at least 15 years old at the start of the programme");
+            result.Errors[0].ErrorMessage.Should().Be("The apprentice must be at least 15 years old at the start of their training");
         }
     }
 }
