@@ -12,6 +12,7 @@ Post-Deployment Script Template
 
 
 -- EmployerAgreement Template
+SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] ON
 IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = 1))
 	BEGIN 
 		INSERT INTO [employer_account].[EmployerAgreementTemplate](Id, PartialViewName, CreatedDate) 
@@ -24,3 +25,4 @@ IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHER
 			CreatedDate = GETDATE()
 		WHERE Id = 1
 	END
+SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] OFF

@@ -57,8 +57,11 @@ BEGIN
 END  
 
 
+-- Template seed
+SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] ON
 IF (NOT EXISTS(SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE PartialViewName = '_Agreement_V1'))
 BEGIN 
 	INSERT INTO [employer_account].[EmployerAgreementTemplate]( PartialViewName, CreatedDate) 
 	VALUES('_Agreement_V1', GETDATE()) 
 END 
+SET IDENTITY_INSERT  [employer_account].[EmployerAgreementTemplate] OFF
