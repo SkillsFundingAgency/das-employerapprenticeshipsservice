@@ -70,6 +70,9 @@ table.top-border {
     }
     .search-form {
         display: none;
+        @include ie-lte(8) {
+            display: block;
+        }
         clear: both;
         margin-left: -50px;
         input[type='text'] {

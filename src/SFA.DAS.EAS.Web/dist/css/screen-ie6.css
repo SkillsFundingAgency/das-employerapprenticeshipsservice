@@ -1931,6 +1931,7 @@ table.top-border {
 
 .org-type-search .search-form {
   display: none;
+  display: block;
   clear: both;
   margin-left: -50px;
 }
