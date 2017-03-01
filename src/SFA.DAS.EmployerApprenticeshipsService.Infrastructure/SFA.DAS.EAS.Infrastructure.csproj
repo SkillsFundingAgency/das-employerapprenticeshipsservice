@@ -220,6 +220,7 @@
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\IdamsExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
     <Compile Include="Models\UserResponse.cs" />

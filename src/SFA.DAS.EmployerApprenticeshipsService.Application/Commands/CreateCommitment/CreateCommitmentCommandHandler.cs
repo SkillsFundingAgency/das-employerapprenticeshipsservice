@@ -63,15 +63,14 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         {
             // TODO: This needs to return just the Id
             var commitmentRequest = new CommitmentRequest { Commitment = request.Commitment, UserId = request.UserId };
-            var commitment = await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, commitmentRequest);
+            var commitmentId = (await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, commitmentRequest)).Id;
+            var commitment = await _commitmentApi.GetEmployerCommitment(request.Commitment.EmployerAccountId, commitmentId);
 
             if (request.Commitment.CommitmentStatus == CommitmentStatus.Active)
             {
                 await CreateTask(request, commitment.Id);
-            }
-
-            if(request.SendCreatedEmail)
                 await SendNotification(commitment);
+            }
 
             return new CreateCommitmentCommandResponse { CommitmentId = commitment.Id };
         }
@@ -90,27 +89,26 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
             foreach (var email in emails)
             {
                 _logger.Info($"Sending email to {email}");
-                var notificationCommand = BuildNotificationCommand(
-                    email,
-                    hashedCommitmentId);
+                var notificationCommand = BuildNotificationCommand(email, commitment);
                 await _mediator.SendAsync(notificationCommand);
             }
         }
 
-        private SendNotificationCommand BuildNotificationCommand(string email, string hashedCommitmentId)
+        private SendNotificationCommand BuildNotificationCommand(string emailAddress, Commitment commitment)
         {
             return new SendNotificationCommand
             {
                 Email = new Email
                 {
-                    RecipientsAddress = email,
-                    TemplateId = "CommitmentNotification",
+                    RecipientsAddress = emailAddress,
+                    TemplateId = "CreateCommitmentNotification",
                     ReplyToAddress = "noreply@sfa.gov.uk",
-                    Subject = $"<new Cohort created> {hashedCommitmentId}",
+                    Subject = $"<new Cohort created> {commitment.Reference}",
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
-                        { "type", "review" },
-                        { "cohort_reference", hashedCommitmentId }
+                        { "cohort_reference", commitment.Reference },
+                        { "employer_name", commitment.LegalEntityName },
+                        { "ukprn", commitment.ProviderId.ToString() }
                     }
                 }
             };

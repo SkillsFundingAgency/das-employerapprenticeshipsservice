@@ -259,9 +259,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         EditStatus = EditStatus.ProviderOnly,
                         EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail },
                     },
-                    UserId = externalUserId,
-                    SendCreatedEmail = false // ToDo: Turn to true when we have template for created
-                    
+                    UserId = externalUserId
                 });
 
                 return new OrchestratorResponse<string>

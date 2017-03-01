@@ -49,6 +49,10 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
                 .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
                 .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
         private void AddMediatrRegistrations()
