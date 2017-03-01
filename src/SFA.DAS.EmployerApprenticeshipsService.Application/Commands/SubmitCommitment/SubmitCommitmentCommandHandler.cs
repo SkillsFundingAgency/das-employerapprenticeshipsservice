@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 Email = new Email
                 {
                     RecipientsAddress = email,
-                    TemplateId = "CommitmentNotification",
+                    TemplateId = "ProviderCommitmentNotification",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
