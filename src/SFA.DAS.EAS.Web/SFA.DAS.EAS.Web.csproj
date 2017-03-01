@@ -400,7 +400,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
-    <Compile Include="Controllers\VisualTestController.cs" Condition=" '$(Configuration)' == 'Debug' " />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -591,19 +590,11 @@
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="App_Data\Users\user_data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="ApplicationInsights.config" />
     <Content Include="App_Data\LOCAL_SFA.DAS.EmployerApprenticeshipsService_1.0.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Providers\provider_data.json" />
-    <Content Include="App_Data\Standards\standards.json" />
     <Content Include="App_Data\Features\features_data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="App_Data\WhiteList\user_white_list.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AppInit.cmd">
@@ -837,11 +828,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\LevyDeclarationDetail.cshtml" />
-    <Content Include="Views\Home\FakeUserSignIn.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
     <Content Include="Views\Invitation\View.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
-    <Content Include="Views\VisualTest\Index.cshtml" Condition=" '$(Configuration)' == 'Debug' " />
     <Content Include="Views\EmployerTeam\Invite.cshtml" />
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\Remove.cshtml" />
@@ -855,7 +844,6 @@
     <Content Include="Views\Shared\GenericError.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
-    <Content Include="Views\VisualTest\Notification.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\Add.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
