@@ -16,7 +16,7 @@
       "ClaimsBaseUrl": "http://das/employer/identity/claims/",
       "Id": "id",
       "GivenName": "given_name",
-      "FamilyName": "family_name",
+      "FaimlyName": "family_name",
       "Email": "email_address",
       "DisplayName": "display_name"
     },
