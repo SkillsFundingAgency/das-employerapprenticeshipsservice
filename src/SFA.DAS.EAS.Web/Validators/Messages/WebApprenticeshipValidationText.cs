@@ -27,16 +27,16 @@ namespace SFA.DAS.EAS.Web.Validators.Messages
             new ValidationMessage("The apprentice must be at least 15 years old at the start of their training", "DateOfBirth_02");
 
         public ValidationMessage LearnStartDate01 =>
-            new ValidationMessage("The Learning start date is not valid", "LearnStartDate_01");
+            new ValidationMessage("The start date is not valid", "LearnStartDate_01");
         public ValidationMessage LearnStartDate02 =>
-            new ValidationMessage("The start date must not be earlier than 1 May 2017", "LearnStartDate_02");
+            new ValidationMessage("The start date must not be earlier than May 2017", "LearnStartDate_02");
 
         public ValidationMessage LearnPlanEndDate01 =>
-            new ValidationMessage("The Learning planned end date is not valid", "LearnPlanEndDate_01");
+            new ValidationMessage("The end date is not valid ", "LearnPlanEndDate_01");
         public ValidationMessage LearnPlanEndDate02 =>
-            new ValidationMessage("The Learning planned end date must not be on or before the Learning start date", "LearnPlanEndDate_02");
+            new ValidationMessage("The end date must not be on or before the start date", "LearnPlanEndDate_02");
         public ValidationMessage LearnPlanEndDate03 =>
-            new ValidationMessage("The Learning planned end date must not be in the past", "LearnPlanEndDate_03");
+            new ValidationMessage("The end date must not be in the past", "LearnPlanEndDate_03");
 
         public ValidationMessage TrainingPrice01 =>
             new ValidationMessage("Enter the total agreed training cost", "TrainingPrice_01");
