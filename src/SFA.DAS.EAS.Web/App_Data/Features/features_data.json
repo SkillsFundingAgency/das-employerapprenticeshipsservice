@@ -2,27 +2,33 @@
   "Data": [
     {
       "Controller": "EmployerAgreement",
-      "Action": "Add"
+      "Action": "Add",
+      "WhiteList": [] 
     },
     {
       "Controller": "EmployerCommitments",
-      "Action": "*"
+      "Action": "*",
+      "WhiteList": [".*@valtech.co.uk"]
     },
     {
       "Controller": "EmployerTeam",
-      "Action": "Invite"
+      "Action": "Invite",
+      "WhiteList": [".*"]
     },
     {
       "Controller": "EmployerAccountPaye",
-      "Action": "Add"
+      "Action": "Add",
+      "WhiteList": []
     },
     {
       "Controller": "EmployerAccountPaye",
-      "Action": "Remove"
+      "Action": "Remove",
+      "WhiteList": []
     },
     {
       "Controller": "EmployerAccountPaye",
-      "Action": "Details"
+      "Action": "Details",
+      "WhiteList": []
     }
   ]
 }

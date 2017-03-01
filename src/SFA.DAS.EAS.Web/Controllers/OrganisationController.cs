@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             finally
             {
                 stopwatch.Stop();
-                _logger.Info($"Company Search for {model.OrganisationType} took {stopwatch.ElapsedMilliseconds * 1000d}s");
+                _logger.Info($"Company Search for {model.OrganisationType} took {stopwatch.ElapsedMilliseconds / 1000d}s");
             }
 
             if (response.Status == HttpStatusCode.OK)
