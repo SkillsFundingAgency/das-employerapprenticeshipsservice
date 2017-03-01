@@ -83,12 +83,14 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         private async Task SendNotification(Commitment commitment, SubmitCommitmentCommand message)
         {
-            if (!_configuration.CommitmentNotification.SendEmail) return;
-
             var emails = await 
                 _providerEmailLookupService.GetEmailsAsync(
                     commitment.ProviderId.GetValueOrDefault(),
                     commitment.ProviderLastUpdateInfo?.EmailAddress ?? string.Empty);
+
+            _logger.Info($"{emails.Count} provider found email address/es");
+
+            if (!_configuration.CommitmentNotification.SendEmail) return;
 
             foreach (var email in emails)
             {
@@ -108,7 +110,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 Email = new Email
                 {
                     RecipientsAddress = email,
-                    TemplateId = "CommitmentNotification",
+                    TemplateId = "ProviderCommitmentNotification",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

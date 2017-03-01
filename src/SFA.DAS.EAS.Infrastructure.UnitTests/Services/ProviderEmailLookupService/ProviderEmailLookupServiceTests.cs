@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupService
 {
@@ -41,8 +42,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
         public void SetUp()
         {
             _mockIdamsService = new Mock<IdamsEmailServiceWrapper>
-                (Mock.Of<ILogger>(), _config, Mock.Of<IHttpClientWrapper>());
+                (Mock.Of<ILogger>(), _config, Mock.Of<IHttpClientWrapper>(), Mock.Of<ExecutionPolicy>());
             _mockIdamsService.Setup(m => m.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
+            _mockIdamsService.Setup(m => m.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string>());
 
             _mockApprenticeshipService = new Mock<IApprenticeshipInfoServiceWrapper>();
             _sut = new Infrastructure.Services.ProviderEmailLookupService(
@@ -61,6 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
             var result = await _sut.GetEmailsAsync(123456L, string.Empty);
             result.Count.Should().Be(0);
             _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Once);
             _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Once);
         }
 
@@ -74,6 +77,46 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
             result[0].Should().Be("test@email.uk");
             result[1].Should().Be("test2@email.uk");
             _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public async Task WhenUsingAEmailFromLastUpdate()
+        {
+            _config.CommitmentNotification.UseProviderEmail = true;
+
+            var result = await _sut.GetEmailsAsync(123456L, "lastUpdateProvider@email.uk");
+            result.Count.Should().Be(1);
+            result[0].Should().Be("lastUpdateProvider@email.uk");
+            _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public async Task WhenAddressInIdamsForDasUser()
+        {
+            _config.CommitmentNotification.UseProviderEmail = true;
+            _mockIdamsService.Setup(m => m.GetEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string> { "idams@email.uk" });
+            var result = await _sut.GetEmailsAsync(123456L, string.Empty);
+            result.Count.Should().Be(1);
+            result[0].Should().Be("idams@email.uk");
+            _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Never);
+            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Never);
+        }
+
+        [Test]
+        public async Task WhenAddressInIdamsForSuperUser()
+        {
+            _config.CommitmentNotification.UseProviderEmail = true;
+            _mockIdamsService.Setup(m => m.GetSuperUserEmailsAsync(It.IsAny<long>())).ReturnsAsync(new List<string> { "idamsSuperUser@email.uk" });
+            var result = await _sut.GetEmailsAsync(123456L, string.Empty);
+            result.Count.Should().Be(1);
+            result[0].Should().Be("idamsSuperUser@email.uk");
+            _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Once);
             _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Never);
         }
 
@@ -93,19 +136,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
             result.Count.Should().Be(1);
             result[0].Should().Be("provider@email.uk");
             _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
+            _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Once);
             _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Once);
-        }
-
-        [Test]
-        public async Task WhenUsingAEmailFromLastUpdate()
-        {
-            _config.CommitmentNotification.UseProviderEmail = true;
-
-            var result = await _sut.GetEmailsAsync(123456L, "lastUpdateProvider@email.uk");
-            result.Count.Should().Be(1);
-            result[0].Should().Be("lastUpdateProvider@email.uk");
-            _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Never);
-            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Never);
         }
     }
 }
