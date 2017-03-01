@@ -56,11 +56,16 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             try
             {
-                var userReponses =
-                    JObject.Parse(jsonResult)
-                        .SelectToken("result")
-                        .ToObject<IEnumerable<UserResponse>>();
-                return userReponses.SelectMany(m => m.Emails).ToList();
+                var result = JObject.Parse(jsonResult).SelectToken("result");
+
+                if (result.Type == JTokenType.Array)
+                {
+                    var items = result.ToObject<IEnumerable<UserResponse>>();
+                    return items.SelectMany(m => m.Emails).ToList();
+                }
+
+                var item = result.ToObject<UserResponse>();
+                return item?.Emails ?? new List<string>(0);
             }
             catch (Exception exception)
             {
