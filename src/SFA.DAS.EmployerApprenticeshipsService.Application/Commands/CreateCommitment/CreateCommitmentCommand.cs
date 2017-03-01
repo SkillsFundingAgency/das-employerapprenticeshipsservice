@@ -9,5 +9,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         public string Message { get; set; }
 
         public bool SendCreatedEmail { get; set; }
+
+        public string UserId { get; set; }
     }
 }

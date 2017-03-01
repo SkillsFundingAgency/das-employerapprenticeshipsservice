@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 
 namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
 {
@@ -11,5 +6,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
     {
         public long AccountId { get; set; }
         public long ApprenticeshipId { get; set; }
+
+        public string UserId { get; set; }
     }
 }

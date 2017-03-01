@@ -62,7 +62,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand request)
         {
             // TODO: This needs to return just the Id
-            var commitment = await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, request.Commitment);
+            var commitmentRequest = new CommitmentRequest { Commitment = request.Commitment, UserId = request.UserId };
+            var commitment = await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, commitmentRequest);
 
             if (request.Commitment.CommitmentStatus == CommitmentStatus.Active)
             {

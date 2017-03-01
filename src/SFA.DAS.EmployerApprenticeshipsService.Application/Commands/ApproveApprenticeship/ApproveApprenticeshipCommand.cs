@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
         public long ApprenticeshipId { get; set; }
         public long CommitmentId { get; set; }
         public long EmployerAccountId { get; set; }
-        public string Message { get; set; }
+
+        public string UserId { get; set; }
     }
 }

@@ -81,6 +81,7 @@ namespace SFA.DAS.EAS.Solution.UnitTests.ConfigTests
                         continue;
                     }
 
+
                     Assert.IsTrue(setting.Attribute("value").Value.Contains("__"), $"The setting {setting.Attribute("key")} has a invalid value {setting.Attribute("value")} in {configFile}");
                 }
             }

@@ -66,7 +66,8 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             var submission = new CommitmentSubmission
             {
                 Action = message.LastAction,
-                LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress }
+                LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress },
+                UserId = message.UserId
             };
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, submission);

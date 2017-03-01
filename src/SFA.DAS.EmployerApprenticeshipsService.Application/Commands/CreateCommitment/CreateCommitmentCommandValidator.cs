@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
@@ -48,6 +49,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 
             if (string.IsNullOrWhiteSpace(command.Commitment.EmployerLastUpdateInfo.EmailAddress))
                 result.AddError(nameof(command.Commitment.EmployerLastUpdateInfo.EmailAddress), $"{nameof(command.Commitment.EmployerLastUpdateInfo.EmailAddress)} must have a value.");
+
+            if(command.UserId == null)
+                result.AddError(nameof(command.UserId), $"{nameof(command.UserId)} must have a value.");
 
             return result;
         }

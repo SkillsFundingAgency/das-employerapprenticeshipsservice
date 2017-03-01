@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            await _commitmentsService.DeleteEmployerApprenticeship(message.AccountId, message.ApprenticeshipId);
+            await _commitmentsService.DeleteEmployerApprenticeship(message.AccountId, message.ApprenticeshipId, message.UserId);
         }
     }
 }

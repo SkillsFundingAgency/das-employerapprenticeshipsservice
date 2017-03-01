@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            await _commitmentsService.DeleteEmployerCommitment(message.AccountId, message.CommitmentId);
+            await _commitmentsService.DeleteEmployerCommitment(message.AccountId, message.CommitmentId, message.UserId);
         }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
@@ -22,6 +19,9 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
             {
                 result.AddError("AccountId", "No AccountId supplied");
             }
+
+            if (string.IsNullOrEmpty(item.UserId))
+                result.AddError(nameof(item.UserId), $"{nameof(item.UserId)} connot be null or empty.");
 
             return result;
         }

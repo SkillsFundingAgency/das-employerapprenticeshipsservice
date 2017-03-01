@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
         public void Arrange()
         {
             _commitmentsService = new Mock<ICommitmentsApi>();
-            _commitmentsService.Setup(x => x.DeleteEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
+            _commitmentsService.Setup(x => x.DeleteEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult<object>(null));
 
             _validator = new Mock<IValidator<DeleteApprenticeshipCommand>>();
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             await _handler.Handle(command);
 
             //Assert
-            _commitmentsService.Verify(x => x.DeleteEmployerApprenticeship(It.Is<long>(l=> l==command.AccountId), It.Is<long>(l=>l == command.ApprenticeshipId)), Times.Once);
+            _commitmentsService.Verify(x => x.DeleteEmployerApprenticeship(It.Is<long>(l=> l==command.AccountId), It.Is<long>(l=>l == command.ApprenticeshipId), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
