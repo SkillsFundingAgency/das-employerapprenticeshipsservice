@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipComman
         [SetUp]
         public void Setup()
         {
-            _validCommand = new ApproveApprenticeshipCommand { EmployerAccountId = 12L, CommitmentId = 2L, ApprenticeshipId = 4L };
+            _validCommand = new ApproveApprenticeshipCommand
+                { EmployerAccountId = 12L, CommitmentId = 2L, ApprenticeshipId = 4L, UserId = "externalUserId"};
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
@@ -40,5 +41,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipComman
 
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
         }
+
+        [Test]
+        public void ThenValidationErrorsShouldThrowAnExceptionWhenUserIdMissing()
+        {
+            _validCommand.UserId = string.Empty;
+
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
+        }
+
     }
 }

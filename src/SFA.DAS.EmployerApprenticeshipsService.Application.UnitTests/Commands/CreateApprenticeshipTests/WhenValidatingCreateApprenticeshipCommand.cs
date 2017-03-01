@@ -44,9 +44,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateApprenticeshipTests
         [Test]
         public void OnlyValidCommitmentIdAndAccountIdNeedsToBePopulated()
         {
-            var command = new CreateApprenticeshipCommand { AccountId = 123, Apprenticeship = new Apprenticeship { CommitmentId = 321 } };
+            var command = new CreateApprenticeshipCommand
+                { AccountId = 123, Apprenticeship = new Apprenticeship { CommitmentId = 321 }, UserId = "externalUserId"};
 
             Assert.DoesNotThrowAsync(() => _handler.Handle(command));
+        }
+
+        [Test]
+        public void ThenValidationErrorsShouldThrowAnExceptionWhenUserIdMissing()
+        {
+            var command = new CreateApprenticeshipCommand
+                { AccountId = 123, Apprenticeship = new Apprenticeship { CommitmentId = 321 }, UserId = string.Empty };
+
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
         }
     }
 }
