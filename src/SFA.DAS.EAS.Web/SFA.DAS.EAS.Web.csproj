@@ -416,7 +416,11 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
+    <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
+    <Compile Include="Validators\Messages\ValidationMessage.cs" />
+    <Compile Include="Validators\Messages\WebApprenticeshipValidationText.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
@@ -510,7 +514,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\AddLegalEntityViewModelValidator.cs" />
-    <Compile Include="Validators\ApprenticeshipViewModelApproveValidator.cs" />
     <Compile Include="Validators\DeleteApprenticeshipConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />

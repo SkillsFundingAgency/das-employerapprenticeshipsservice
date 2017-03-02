@@ -436,7 +436,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LastAction = lastAction,
                     UserDisplayName = userDisplayName,
                     UserEmailAddress = userEmail,
-                    CreateTask = saveStatus != SaveStatus.Approve
+                    CreateTask = saveStatus != SaveStatus.Approve,
+                    UserId = externalUserId
                 });
             }, hashedAccountId, externalUserId);
         }
@@ -1050,7 +1051,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
                 ULN = apprenticeship.ULN,
                 TrainingType = apprenticeship.TrainingType,
-                TrainingId = apprenticeship.TrainingCode,
+                TrainingCode = apprenticeship.TrainingCode,
                 TrainingName = apprenticeship.TrainingName,
                 Cost = NullableDecimalToString(apprenticeship.Cost),
                 StartDate = new DateTimeViewModel(apprenticeship.StartDate),
@@ -1101,11 +1102,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 EmployerRef = viewModel.EmployerRef
             };
 
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingId))
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
             {
-                var training = await GetTrainingProgramme(viewModel.TrainingId);
+                var training = await GetTrainingProgramme(viewModel.TrainingCode);
                 apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.TrainingId;
+                apprenticeship.TrainingCode = viewModel.TrainingCode;
                 apprenticeship.TrainingName = training.Title;
             }
 

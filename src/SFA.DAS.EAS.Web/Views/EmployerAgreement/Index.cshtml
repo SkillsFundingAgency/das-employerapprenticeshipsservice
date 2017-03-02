@@ -38,9 +38,9 @@
             <thead>
                 <tr>
                     <th scope="col">Organisation</th>
-                    @*<th scope="col">Agreement</th>
+                    <th scope="col">Agreement</th>
                     <th scope="col">Spending status</th>
-                    <th scope="col"><span class="vh">Action</span></th>*@
+                    <th scope="col"><span class="vh">Action</span></th>
             </thead>
             <tbody>
 
@@ -48,7 +48,7 @@
                 {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        @*<td>
+                        <td>
                             @if (employerAgreement.Status == EmployerAgreementStatus.Signed) {
                                 @: Signed by @employerAgreement.SignedByName
                                 if (employerAgreement.SignedDate.HasValue)
@@ -74,7 +74,7 @@
                             {
                                 <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
                             }
-                        </td>*@
+                        </td>
                     </tr>
                 }
             </tbody>

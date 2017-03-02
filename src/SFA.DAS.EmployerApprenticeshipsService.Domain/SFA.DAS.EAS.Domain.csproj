@@ -149,6 +149,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Http\ResourceNotFoundException.cs" />
     <Compile Include="Http\ServiceUnavailableException.cs" />
