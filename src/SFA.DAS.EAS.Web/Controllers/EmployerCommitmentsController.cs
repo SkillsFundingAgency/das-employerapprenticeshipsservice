@@ -243,7 +243,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return RedirectToAction("SubmitNewCommitment",
-                new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef, saveStatus = SaveStatus.Save });
+                new { hashedAccountId = viewModel.HashedAccountId, legalEntityCode = viewModel.LegalEntityCode, legalEntityName = viewModel.LegalEntityName, legalEntityAddress = viewModel.LegalEntityAddress, legalEntitySource = viewModel.LegalEntitySource, providerId = viewModel.ProviderId, providerName = viewModel.ProviderName, cohortRef = viewModel.CohortRef, saveStatus = SaveStatus.Save });
         }
 
         [HttpGet]
@@ -479,20 +479,21 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("Submit")]
-        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
+        public async Task<ActionResult> SubmitNewCommitment(string hashedAccountId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef, SaveStatus? saveStatus)
         {
             if (string.IsNullOrWhiteSpace(legalEntityCode)
                 || string.IsNullOrWhiteSpace(legalEntityName)
                 || string.IsNullOrWhiteSpace(providerId)
                 || string.IsNullOrWhiteSpace(providerName)
                 || string.IsNullOrWhiteSpace(cohortRef)
+                || string.IsNullOrWhiteSpace(legalEntityAddress)
                 || !saveStatus.HasValue)
             {
                 return RedirectToAction("Inform", new { hashedAccountId });
             }
 
             var response = await _employerCommitmentsOrchestrator.GetSubmitNewCommitmentModel
-                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, providerId, providerName, cohortRef, saveStatus.Value);
+                (hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), legalEntityCode, legalEntityName, legalEntityAddress, legalEntitySource, providerId, providerName, cohortRef, saveStatus.Value);
 
             return View("SubmitCommitmentEntry", response);
         }
