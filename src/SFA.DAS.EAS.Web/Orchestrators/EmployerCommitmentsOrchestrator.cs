@@ -225,7 +225,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CommitmentStatus = CommitmentStatus.New,
                         EditStatus = EditStatus.EmployerOnly,
                         EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail }
-                    }
+                    },
+                    UserId = externalUserId
                 });
 
                 return new OrchestratorResponse<string>
@@ -257,7 +258,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CommitmentStatus = CommitmentStatus.Active,
                         EditStatus = EditStatus.ProviderOnly,
                         EmployerLastUpdateInfo = new LastUpdateInfo { Name = userDisplayName, EmailAddress = userEmail },
-                    }
+                    },
+                    UserId = externalUserId
                 });
 
                 return new OrchestratorResponse<string>
@@ -308,7 +310,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateApprenticeshipCommand
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                    Apprenticeship = await MapFrom(apprenticeship)
+                    Apprenticeship = await MapFrom(apprenticeship),
+                    UserId = externalUserId
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
         }
@@ -359,7 +362,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
                     AccountId = accountId,
-                    Apprenticeship = await MapFrom(apprenticeship)
+                    Apprenticeship = await MapFrom(apprenticeship),
+                    UserId = externalUserId
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
         }
@@ -426,7 +430,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LastAction = lastAction,
                     UserDisplayName = userDisplayName,
                     UserEmailAddress = userEmail,
-                    CreateTask = saveStatus != SaveStatus.Approve
+                    CreateTask = saveStatus != SaveStatus.Approve,
+                    UserId = externalUserId
                 });
             }, hashedAccountId, externalUserId);
         }
@@ -509,7 +514,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         LastAction = lastAction,
                         UserDisplayName = userDisplayName,
                         UserEmailAddress = userEmail,
-                        CreateTask = model.SaveStatus != SaveStatus.Approve
+                        CreateTask = model.SaveStatus != SaveStatus.Approve,
+                        UserId = externalUserId
                     });
                 }
             }, model.HashedAccountId, externalUserId);
@@ -806,7 +812,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new DeleteCommitmentCommand
                 {
                     AccountId = accountId,
-                    CommitmentId = commitmentId
+                    CommitmentId = commitmentId,
+                    UserId = externalUserId
                 });
             }, hashedAccountId, externalUserId);
         }
@@ -843,24 +850,27 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public async Task<string> DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model)
+        public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(model.HashedApprenticeshipId);
 
-            var apprenticeship = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
-            {
-                AccountId = accountId,
-                ApprenticeshipId = apprenticeshipId
-            });
+            await CheckUserAuthorization(async () =>
+                    {
+                        await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                        {
+                            AccountId = accountId,
+                            ApprenticeshipId = apprenticeshipId
+                        });
 
-            await _mediator.SendAsync(new DeleteApprenticeshipCommand
-            {
-                AccountId = accountId,
-                ApprenticeshipId = apprenticeshipId
-            });
+                        await _mediator.SendAsync(new DeleteApprenticeshipCommand
+                        {
+                            AccountId = accountId,
+                            ApprenticeshipId = apprenticeshipId,
+                            UserId = externalUser
+                        });
 
-            return apprenticeship.Apprenticeship.ApprenticeshipName;
+                    }, model.HashedAccountId, externalUser);
         }
 
         private static string CreateReference()

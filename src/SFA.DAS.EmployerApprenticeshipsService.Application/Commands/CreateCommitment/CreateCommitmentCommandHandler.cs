@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
@@ -62,7 +61,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand request)
         {
             // TODO: This needs to return just the Id
-            var commitmentId = (await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, request.Commitment)).Id;
+            var commitmentRequest = new CommitmentRequest { Commitment = request.Commitment, UserId = request.UserId };
+            var commitmentId = (await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, commitmentRequest)).Id;
             var commitment = await _commitmentApi.GetEmployerCommitment(request.Commitment.EmployerAccountId, commitmentId);
 
             if (request.Commitment.CommitmentStatus == CommitmentStatus.Active)

@@ -58,42 +58,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             _mediator.Setup(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>())).ReturnsAsync(new Unit());
 
             //Act
-            await _employerCommitmentOrchestrator.DeleteApprenticeship(model);
+            await _employerCommitmentOrchestrator.DeleteApprenticeship(model, "externalUserId");
 
             //Assert
             _mediator.Verify(x=> x.SendAsync(It.Is<DeleteApprenticeshipCommand>(c=> c.AccountId == 123L && c.ApprenticeshipId == 456L)), Times.Once);
-        }
-
-        [Test]
-        public async Task ShouldReturnTheApprenticeshipName()
-        {
-            //Arrange
-            var model = new DeleteApprenticeshipConfirmationViewModel
-            {
-                HashedAccountId = "ABC123",
-                HashedCommitmentId = "ABC321",
-                HashedApprenticeshipId = "ABC456"
-            };
-
-            var expected = new Apprenticeship
-            {
-                FirstName = "John",
-                LastName = "Smith"
-            };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
-                .ReturnsAsync(new GetApprenticeshipQueryResponse
-                {
-                    Apprenticeship = expected
-                });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<DeleteApprenticeshipCommand>())).ReturnsAsync(new Unit());
-
-            //Act
-            var result = await _employerCommitmentOrchestrator.DeleteApprenticeship(model);
-
-            //Assert
-            Assert.AreEqual(expected.ApprenticeshipName, result);
         }
     }
 }

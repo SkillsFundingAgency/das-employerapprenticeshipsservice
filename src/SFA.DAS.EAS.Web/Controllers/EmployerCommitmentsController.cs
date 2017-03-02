@@ -590,7 +590,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (viewModel.DeleteConfirmed.HasValue && viewModel.DeleteConfirmed.Value)
             {
-                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel);
+                await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
                 var flashMessage = new FlashMessageViewModel
                 {

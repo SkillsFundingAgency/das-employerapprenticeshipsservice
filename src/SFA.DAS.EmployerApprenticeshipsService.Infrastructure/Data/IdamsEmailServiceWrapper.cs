@@ -50,6 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             _logger.Info($"Getting 'super user' emails for provider {ukprn}");
             var result = GetString(url);
             return ParseIdamsResult(await result, ukprn);
+            
         }
 
         private List<string> ParseIdamsResult(string jsonResult, long ukprn)
@@ -81,12 +82,18 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         private async Task<string> GetString(string url)
         {
             var result = string.Empty;
-
-            await _executionPolicy.ExecuteAsync(
-                async () =>
-                    {
-                        result = await _httpClientWrapper.GetString(url);
-                    });
+            try
+            {
+                await _executionPolicy.ExecuteAsync(
+                    async () =>
+                        {
+                            result = await _httpClientWrapper.GetString(url);
+                        });
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Error getting idams emails");
+            }
             return result;
         }
     }
