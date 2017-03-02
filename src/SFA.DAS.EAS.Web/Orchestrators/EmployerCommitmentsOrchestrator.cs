@@ -430,7 +430,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LastAction = lastAction,
                     UserDisplayName = userDisplayName,
                     UserEmailAddress = userEmail,
-                    CreateTask = saveStatus != SaveStatus.Approve
+                    CreateTask = saveStatus != SaveStatus.Approve,
+                    UserId = externalUserId
                 });
             }, hashedAccountId, externalUserId);
         }
