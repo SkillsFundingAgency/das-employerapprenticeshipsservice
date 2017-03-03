@@ -29,13 +29,13 @@ namespace SFA.DAS.EAS.Domain.Configuration
 
         public List<string> ProviderTestEmails { get; set; }
 
-        public string ProviderTestEmail { get; set; }
-
         public string IdamsListUsersUrl { get; set; }
 
         public string DasUserRoleId { get; set; }
 
         public string SuperUserRoleId { get; set; }
+
+        public string ClientToken { get; set; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration

@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.DasUserRoleId, ukprn);
             _logger.Info($"Getting 'DAS' emails for provider {ukprn}");
-            var result = await GetString(url);
+            var result = await GetString(url, _configuration.ClientToken);
             return ParseIdamsResult(result, ukprn);
         }
 
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             var url = string.Format(_configuration.IdamsListUsersUrl, _configuration.SuperUserRoleId, ukprn);
             _logger.Info($"Getting 'super user' emails for provider {ukprn}");
-            var result = GetString(url);
+            var result = GetString(url, _configuration.ClientToken);
             return ParseIdamsResult(await result, ukprn);
             
         }
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return new List<string>();
         }
 
-        private async Task<string> GetString(string url)
+        private async Task<string> GetString(string url, string accessToken)
         {
             var result = string.Empty;
             try
@@ -87,7 +87,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 await _executionPolicy.ExecuteAsync(
                     async () =>
                         {
-                            result = await _httpClientWrapper.GetString(url);
+                            _httpClientWrapper.AuthScheme = "Bearer";
+                            result = await _httpClientWrapper.GetString(url, accessToken);
                         });
             }
             catch (Exception ex)
@@ -98,3 +99,4 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         }
     }
 }
+
