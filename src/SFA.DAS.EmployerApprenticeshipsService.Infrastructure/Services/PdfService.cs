@@ -56,6 +56,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             return streamOutput;
         }
+
+        public async Task<MemoryStream> SubsituteValuesForPdf(string fileName)
+        {
+            var returnValue = await SubsituteValuesForPdf(fileName, new Dictionary<string, string>());
+            return returnValue;
+        }
     }
 
  
