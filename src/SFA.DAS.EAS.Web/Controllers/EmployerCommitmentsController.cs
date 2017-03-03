@@ -425,7 +425,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var flashmessage = new FlashMessageViewModel
             {
-                Headline = "Details saved but not send",
+                Headline = "Details saved but not sent",
                 Severity = FlashMessageSeverityLevel.Info
             };
 
