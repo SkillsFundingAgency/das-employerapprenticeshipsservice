@@ -21,12 +21,11 @@ using SFA.DAS.EAS.Web.Exceptions;
 using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
+
 using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
@@ -36,7 +35,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public sealed class EmployerCommitmentsOrchestrator
+    public sealed class EmployerCommitmentsOrchestrator : CommitmentsBaseOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
@@ -47,7 +46,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
         private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
 
-        public EmployerCommitmentsOrchestrator(IMediator mediator, IHashingService hashingService, ICommitmentStatusCalculator statusCalculator, ILogger logger)
+        public EmployerCommitmentsOrchestrator(
+            IMediator mediator, 
+            IHashingService hashingService, 
+            ICommitmentStatusCalculator statusCalculator, 
+            ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -581,8 +584,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                    WithProviderCount = commitmentStatuses.Count(m => 
                                         m == RequestStatus.WithProviderForApproval 
                                      || m == RequestStatus.SentToProvider
-                                     || m == RequestStatus.SentForReview),
-                    }
+                                     || m == RequestStatus.SentForReview)
+                                }
                 }; 
                         
             }, hashedAccountId, externalUserId);
@@ -876,78 +879,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private static string CreateReference()
         {
             return Guid.NewGuid().ToString().ToUpper();
-        }
-
-        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                return await code.Invoke();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
-
-                return new OrchestratorResponse<T>
-                {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = exception
-                };
-            }
-        }
-
-        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<OrchestratorResponse<T>> code, string hashedAccountId, string externalUserId) where T : class
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                return code.Invoke();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
-
-                return new OrchestratorResponse<T>
-                {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = exception
-                };
-            }
-        }
-
-        private async Task CheckUserAuthorization(Func<Task> code, string hashedAccountId, string externalUserId)
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                await code.Invoke();
-            }
-            catch (UnauthorizedAccessException)
-            {
-                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
-            }
-        }
-
-        private void LogUnauthorizedUserAttempt(string hashedAccountId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
         }
 
         private static ApprovalState GetApprovalState(Commitment commitment)
