@@ -42,6 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmployerAgreementStatus.cs" />
+    <Compile Include="Events\AccountCreatedEvent.cs" />
+    <Compile Include="Events\AccountRenamedEvent.cs" />
+    <Compile Include="Events\LegalEntityCreatedEvent.cs" />
+    <Compile Include="Events\PayeSchemeAddedEvent.cs" />
+    <Compile Include="Events\PayeSchemeRemovedEvent.cs" />
     <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="LegalEntityViewModel.cs" />
