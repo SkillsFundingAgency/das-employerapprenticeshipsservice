@@ -38,6 +38,9 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public string LegalEntityName { get; set; }
 
+        public string LegalEntityAddress { get; set; }
+        public short LegalEntitySource { get; set; }
+
         [Required]
         public long ProviderId { get; set; }
 

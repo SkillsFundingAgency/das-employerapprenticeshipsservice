@@ -197,6 +197,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedAccountId,
                         LegalEntityCode = legalEntityCode,
                         LegalEntityName = legalEntity.Name,
+                        LegalEntityAddress = legalEntity.RegisteredAddress,
+                        LegalEntitySource = legalEntity.Source,
                         ProviderId = provider.Ukprn,
                         ProviderName = provider.ProviderName,
                         CohortRef = cohortRef
@@ -220,6 +222,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         EmployerAccountId = accountId,
                         LegalEntityId = model.LegalEntityCode,
                         LegalEntityName = model.LegalEntityName,
+                        LegalEntityAddress = model.LegalEntityAddress,
+                        LegalEntityOrganisationType = (OrganisationType) model.LegalEntitySource,
                         ProviderId = model.ProviderId,
                         ProviderName = model.ProviderName,
                         CommitmentStatus = CommitmentStatus.New,
@@ -253,6 +257,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         EmployerAccountId = accountId,
                         LegalEntityId = model.LegalEntityCode,
                         LegalEntityName = model.LegalEntityName,
+                        LegalEntityAddress = model.LegalEntityAddress,
+                        LegalEntityOrganisationType = (OrganisationType)model.LegalEntitySource,
                         ProviderId = long.Parse(model.ProviderId),
                         ProviderName = model.ProviderName,
                         CommitmentStatus = CommitmentStatus.Active,
@@ -436,7 +442,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        public async Task<OrchestratorResponse<SubmitCommitmentViewModel>> GetSubmitNewCommitmentModel(string hashedAccountId, string externalUserId, string legalEntityCode, string legalEntityName, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
+        public async Task<OrchestratorResponse<SubmitCommitmentViewModel>> GetSubmitNewCommitmentModel(string hashedAccountId, string externalUserId, string legalEntityCode, string legalEntityName, string legalEntityAddress, short legalEntitySource, string providerId, string providerName, string cohortRef, SaveStatus saveStatus)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             _logger.Info($"Getting Submit New Commitment ViewModel, Account: {accountId}");
@@ -450,6 +456,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedAccountId = hashedAccountId,
                         LegalEntityCode = legalEntityCode,
                         LegalEntityName = legalEntityName,
+                        LegalEntityAddress = legalEntityAddress,
+                        LegalEntitySource = legalEntitySource,
                         ProviderId = long.Parse(providerId),
                         ProviderName = providerName,
                         CohortRef = cohortRef,
