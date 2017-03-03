@@ -10,7 +10,6 @@
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY], 
-    CONSTRAINT [FK_Invitation_Role] FOREIGN KEY ([RoleId]) REFERENCES [employer_account].[Role]([Id]),
     CONSTRAINT [FK_Invitation_Account] FOREIGN KEY ([AccountId]) REFERENCES [employer_account].[Account]([Id])
 ) ON [PRIMARY]
 

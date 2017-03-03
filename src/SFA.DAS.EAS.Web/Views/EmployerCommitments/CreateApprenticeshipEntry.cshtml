@@ -82,12 +82,12 @@
 
                 <div class="form-group">
                     <hr />
-                    <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
-                    <select name="TrainingId" id="TrainingId" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
+                    <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+                    <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
                         <option value="">Please select</option>
                         @foreach (var apprenticeshipProduct in Model.Data.ApprenticeshipProgrammes)
                         {
-                            <option value="@apprenticeshipProduct.Id" @if (apprenticeshipProduct.Id == Model.Data.Apprenticeship.TrainingId) { @Html.Raw("selected")  }>
+                            <option value="@apprenticeshipProduct.Id" @if (apprenticeshipProduct.Id == Model.Data.Apprenticeship.TrainingCode) { @Html.Raw("selected")  }>
                                 @apprenticeshipProduct.Title
                             </option>
                         }

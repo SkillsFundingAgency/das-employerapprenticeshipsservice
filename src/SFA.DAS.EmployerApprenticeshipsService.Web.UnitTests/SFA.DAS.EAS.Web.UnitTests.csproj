@@ -78,8 +78,8 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.20.0.21715, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.20.0.21715\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.28.0.24319, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.28.0.24319\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
@@ -103,6 +103,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -204,9 +205,16 @@
     <Compile Include="StatusCalculator\WhenEditStatusIsWithEmployer.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithBoth.cs" />
     <Compile Include="StatusCalculator\WhenEditStatusIsWithProvider.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\ApprenticeshipValidationTestBase.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingCost.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingDateOfBirth.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingFirstName.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingLastName.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingEmployerReference.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingTrainingCode.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingTrainingDates.cs" />
+    <Compile Include="Validators\ApprenticeshipCreateOrEdit\WhenValidatingUln.cs" />
     <Compile Include="Validators\WhenValidatingAddLegalEntityViewModel.cs" />
-    <Compile Include="Validators\WhenValidatingApprenticeshipViewModel.cs" />
-    <Compile Include="Validators\WhenValidatingApprenticeshipViewModelForApproval.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

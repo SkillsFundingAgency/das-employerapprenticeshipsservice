@@ -127,7 +127,6 @@
     <Build Include="Tables\Invitation.sql" />
     <Build Include="Tables\Membership.sql" />
     <Build Include="Tables\Paye.sql" />
-    <Build Include="Tables\Role.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="SeedData\PostDeploymentRules.sql" />

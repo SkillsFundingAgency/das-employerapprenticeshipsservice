@@ -7,5 +7,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
     {
         public long AccountId { get; set; }
         public Apprenticeship Apprenticeship { get; set; }
+
+        public string UserId { get; set; }
     }
 }

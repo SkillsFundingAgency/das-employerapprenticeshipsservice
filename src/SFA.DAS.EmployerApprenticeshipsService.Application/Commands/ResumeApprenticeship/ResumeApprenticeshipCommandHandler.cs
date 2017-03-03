@@ -1,4 +1,7 @@
 ﻿using MediatR;
+
+using NLog.LayoutRenderers;
+
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Types;
 using Task = System.Threading.Tasks.Task;
@@ -25,7 +28,8 @@ namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
 
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
 
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, PaymentStatus.Active);
+            var apprenticeshipSubmission = new ApprenticeshipSubmission { PaymentStatus = PaymentStatus.Active, UserId = message.UserId };
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, apprenticeshipSubmission);
         }
     }
 }

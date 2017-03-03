@@ -22,6 +22,9 @@ namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
             if (command.ApprenticeshipId <= 0)
                 result.AddError(nameof(command.CommitmentId), $"{nameof(command.ApprenticeshipId)} has an invalid value.");
 
+            if (string.IsNullOrEmpty(command.UserId))
+                result.AddError(nameof(command.UserId), $"{nameof(command.UserId)} connot be null or empty.");
+
             return result;
         }
 
