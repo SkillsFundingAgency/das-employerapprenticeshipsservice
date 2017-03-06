@@ -121,7 +121,7 @@ sfa.forms = {
             button.attr('disabled', 'disabled');
             setTimeout(function () {
                 button.removeAttr('disabled');
-            }, 5000);
+            }, 20000);
         });
     },
     removeDisabledAttr: function () {

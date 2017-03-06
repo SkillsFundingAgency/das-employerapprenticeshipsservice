@@ -49,14 +49,17 @@ using StructureMap.Graph;
 using StructureMap.TypeRules;
 using IConfiguration = SFA.DAS.EAS.Domain.Interfaces.IConfiguration;
 
-namespace SFA.DAS.EAS.Web.DependencyResolution {
-    
-    public class DefaultRegistry : Registry {
+namespace SFA.DAS.EAS.Web.DependencyResolution
+{
+
+    public class DefaultRegistry : Registry
+    {
         private string _test;
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private const string ServiceNamespace = "SFA.DAS";
-        
-        public DefaultRegistry() {
+
+        public DefaultRegistry()
+        {
 
             Scan(
                 scan =>
@@ -67,7 +70,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
                 });
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
-            
+
             var config = this.GetConfiguration();
 
             For<IUserRepository>().Use<UserRepository>();
@@ -88,6 +91,23 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             RegisterAuditService();
 
             RegisterPostCodeAnywhereService();
+
+            RegisterExecutionPolicies();
+        }
+
+        private void RegisterExecutionPolicies()
+        {
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
         private void RegisterPostCodeAnywhereService()
@@ -132,11 +152,11 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
 
                 mappingProfiles.AddRange(profiles);
             }
-            
-            var config  = new MapperConfiguration(cfg =>
-            {
-                mappingProfiles.ForEach(cfg.AddProfile);
-            });
+
+            var config = new MapperConfiguration(cfg =>
+           {
+               mappingProfiles.ForEach(cfg.AddProfile);
+           });
 
             var mapper = config.CreateMapper();
 
@@ -185,7 +205,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
             For<MultiInstanceFactory>().Use<MultiInstanceFactory>(ctx => t => ctx.GetAllInstances(t));
             For<IMediator>().Use<Mediator>();
         }
-        
+
         private void PopulateSystemDetails(string envName)
         {
             SystemDetailsViewModel.EnvironmentName = envName;

@@ -60,7 +60,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.DeleteApprenticeTests
             var command = new DeleteApprenticeshipCommand
             {
                 AccountId = 1,
-                ApprenticeshipId = 1
+                ApprenticeshipId = 1,
+                UserId = "externalUserId"
             };
 
             //Act

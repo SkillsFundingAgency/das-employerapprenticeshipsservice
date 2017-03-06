@@ -16,8 +16,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
-		public List<EmailTemplateConfigurationItem> EmailTemplates { get; set; }
-        public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
+		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }
 
         public CommitmentNotificationConfiguration CommitmentNotification { get; set; }
     }
@@ -30,9 +29,13 @@ namespace SFA.DAS.EAS.Domain.Configuration
 
         public List<string> ProviderTestEmails { get; set; }
 
-        public string ProviderTestEmail { get; set; }
-
         public string IdamsListUsersUrl { get; set; }
+
+        public string DasUserRoleId { get; set; }
+
+        public string SuperUserRoleId { get; set; }
+
+        public string ClientToken { get; set; }
     }
 
     public class ApprenticeshipInfoServiceConfiguration : IApprenticeshipInfoServiceConfiguration

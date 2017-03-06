@@ -16,6 +16,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
             if (item.Apprenticeship.CommitmentId <= 0)
                 validationResult.AddError(nameof(item.Apprenticeship.CommitmentId), $"Specified Commitment is invalid.");
 
+            if (string.IsNullOrEmpty(item.UserId))
+                validationResult.AddError(nameof(item.UserId), $"{nameof(item.UserId)} connot be null or empty.");
+
             return validationResult;
         }
 

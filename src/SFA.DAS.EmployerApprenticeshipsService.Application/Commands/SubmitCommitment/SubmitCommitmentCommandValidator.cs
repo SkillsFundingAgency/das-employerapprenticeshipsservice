@@ -25,6 +25,9 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             if (string.IsNullOrWhiteSpace(command.UserEmailAddress))
                 result.AddError(nameof(command.UserEmailAddress), $"{nameof(command.UserEmailAddress)} must have a value.");
 
+            if (string.IsNullOrWhiteSpace(command.UserId))
+                result.AddError(nameof(command.UserId), $"{nameof(command.UserId)} cannot be null or empty.");
+
             return result;
         }
 

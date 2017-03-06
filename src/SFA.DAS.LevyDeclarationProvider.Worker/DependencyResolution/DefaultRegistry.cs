@@ -33,9 +33,26 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
 
             For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
 
+            RegisterExecutionPolicies();
+
             RegisterMapper();
 
             AddMediatrRegistrations();
+        }
+
+        private void RegisterExecutionPolicies()
+        {
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
         private void AddMediatrRegistrations()

@@ -12,7 +12,7 @@
         <p class="">
             If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.
         </p>
-        @if (!string.IsNullOrWhiteSpace(Model.RedirectUrl))
+        @if (!string.IsNullOrWhiteSpace(Model?.RedirectUrl))
         {
             <a class="button" href="@Model.RedirectUrl">@Model.FlashMessage.RedirectButtonMessage</a>
 

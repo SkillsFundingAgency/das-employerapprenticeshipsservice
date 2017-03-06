@@ -31,6 +31,9 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
                 result.AddError("AccountId", "No AccountId supplied");
             }
 
+            if (string.IsNullOrEmpty(item.UserId))
+                result.AddError(nameof(item.UserId), $"{nameof(item.UserId)} cannot be null or empty");
+
             return result;
         }
     }

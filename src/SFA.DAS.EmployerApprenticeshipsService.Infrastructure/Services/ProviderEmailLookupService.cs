@@ -48,9 +48,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             if (addresses.Any())
                 return addresses;
 
-
-            // *0o* Take address from super user *0o*
-            // ToDo: ?
+            addresses = await _idamsEmailServiceWrapper.GetSuperUserEmailsAsync(providerId);
+            if (addresses.Any())
+                return addresses;
 
             if (GetProviderAddresses(providerId, out addresses))
                 return addresses;

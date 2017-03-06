@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
-    [RoutePrefix("accounts/{hashedaccountId}/apprentices/manage")]
+    [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
     public class EmployerManageApprenticesController : BaseController
     {
         private readonly EmployerManageApprenticeshipsOrchestrator _orchestrator;
@@ -30,19 +31,33 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
-        public async Task<ActionResult> ListAll(string hashedaccountId)
+        public async Task<ActionResult> ListAll(string hashedAccountId)
         {
-            var model = await _orchestrator.GetApprenticeships(hashedaccountId, OwinWrapper.GetClaimValue(@"sub"));
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var model = await _orchestrator
+                .GetApprenticeships(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
         }
 
         [HttpGet]
         [Route("{hashedApprenticeshipId}/details")]
-        public async Task<ActionResult> Details(string hashedaccountId, string hashedApprenticeshipId)
+        public async Task<ActionResult> Details(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetApprenticeship(hashedaccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var model = await _orchestrator
+                .GetApprenticeship(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             return View(model);
+        }
+
+        private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
+        {
+            return await _orchestrator
+                .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
         }
     }
 }

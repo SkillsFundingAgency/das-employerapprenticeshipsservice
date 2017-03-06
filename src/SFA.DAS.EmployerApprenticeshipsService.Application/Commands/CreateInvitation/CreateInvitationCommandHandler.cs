@@ -7,9 +7,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
@@ -25,8 +23,9 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
         private readonly IMediator _mediator;
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         private readonly IValidator<CreateInvitationCommand> _validator;
+        private readonly IUserRepository _userRepository;
 
-        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator)
+        public CreateInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IValidator<CreateInvitationCommand> validator, IUserRepository userRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -37,6 +36,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
             _validator = validator;
+            _userRepository = userRepository;
         }
 
         protected override async Task HandleCore(CreateInvitationCommand message)
@@ -85,6 +85,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 invitationId = existingInvitation.Id;
             }
 
+            var existingUser = await _userRepository.GetByEmailAddress(message.Email);
+
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
@@ -111,7 +113,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateInvitation
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.Invitation)).Key,
+                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

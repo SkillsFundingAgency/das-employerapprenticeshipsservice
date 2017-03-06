@@ -24,9 +24,10 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
+        private readonly IUserRepository _userRepository;
         private readonly ResendInvitationCommandValidator _validator;
 
-        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IUserRepository userRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -40,6 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            _userRepository = userRepository;
             _validator = new ResendInvitationCommandValidator();
         }
 
@@ -69,6 +71,8 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             
             await _invitationRepository.Resend(existing);
 
+            var existingUser = await _userRepository.GetByEmailAddress(message.Email);
+
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
@@ -84,13 +88,13 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
                     AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
                 }
             });
-
+            
             await _mediator.SendAsync(new SendNotificationCommand
             {
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateType.Equals(EmailTemplateType.Invitation)).Key,
+                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

@@ -187,14 +187,17 @@
 #agreement-not-signed{
     .notice{
         margin:60px 0;
-        .icon-important{background-image: url('/dist/images/icon-important.png');}
+        .icon-important{
+            background-image: url('/dist/images/icon-important.png');
+            top:13%;
+        }
     }
 }
  
-.grey-background{
+.grey-background,
+.funding-cap-notification{
     background:$panel-colour;
-    padding:20px 20px 10px;
-   
+    padding:20px 20px 10px;  
     .heading-medium{margin-top:10px;}  
 }
 .bubble-arrow{    

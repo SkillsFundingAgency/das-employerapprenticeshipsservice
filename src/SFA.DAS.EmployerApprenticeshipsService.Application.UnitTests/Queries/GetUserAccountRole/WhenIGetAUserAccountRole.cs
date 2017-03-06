@@ -31,8 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             _membershipView = new MembershipView
             {
                 AccountId = 2,
-                UserId = long.Parse(ExternalUserId),
-                RoleName = Role.Owner.ToString()
+                UserId = long.Parse(ExternalUserId)
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();

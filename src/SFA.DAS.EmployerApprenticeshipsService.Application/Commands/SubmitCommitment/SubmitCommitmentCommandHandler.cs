@@ -66,7 +66,8 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             var submission = new CommitmentSubmission
             {
                 Action = message.LastAction,
-                LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress }
+                LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress },
+                UserId = message.UserId
             };
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, submission);
@@ -83,12 +84,14 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         private async Task SendNotification(Commitment commitment, SubmitCommitmentCommand message)
         {
-            if (!_configuration.CommitmentNotification.SendEmail) return;
-
             var emails = await 
                 _providerEmailLookupService.GetEmailsAsync(
                     commitment.ProviderId.GetValueOrDefault(),
                     commitment.ProviderLastUpdateInfo?.EmailAddress ?? string.Empty);
+
+            _logger.Info($"{emails.Count} provider found email address/es");
+
+            if (!_configuration.CommitmentNotification.SendEmail) return;
 
             foreach (var email in emails)
             {
@@ -108,7 +111,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 Email = new Email
                 {
                     RecipientsAddress = email,
-                    TemplateId = _configuration.EmailTemplates.Single(c => c.TemplateType.Equals(EmailTemplateType.CommitmentNotification)).Key,
+                    TemplateId = "ProviderCommitmentNotification",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

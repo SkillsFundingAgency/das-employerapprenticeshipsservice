@@ -18,5 +18,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
         public LastAction LastAction { get; set; }
         public string UserDisplayName { get; set; }
         public string UserEmailAddress { get; set; }
+
+        public string UserId { get; set; }
     }
 }

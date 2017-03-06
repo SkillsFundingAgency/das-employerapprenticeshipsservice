@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
         [SetUp]
         public void Setup()
         {
-            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, UserDisplayName = "Test User", UserEmailAddress = "test@test.com" };
+            _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, UserDisplayName = "Test User", UserEmailAddress = "test@test.com", UserId = "externalUserId"};
 
             _mockCommitmentApi = new Mock<ICommitmentsApi>();
 
@@ -42,14 +42,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockMediator = new Mock<IMediator>();
             var config = new EmployerApprenticeshipsServiceConfiguration
                              {
-                                 EmailTemplates = new List<EmailTemplateConfigurationItem>
-                                                      {
-                                                          new EmailTemplateConfigurationItem
-                                                              {
-                                                                  TemplateType = EmailTemplateType.CommitmentNotification,
-                                                                  Key = "this-is-a-key"
-                                                              }
-                                                      },
                                  CommitmentNotification = new CommitmentNotificationConfiguration { SendEmail = true }
                              };
             _mockEmailLookup = new Mock<IProviderEmailLookupService>();

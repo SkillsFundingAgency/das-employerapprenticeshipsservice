@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         public string AuthScheme { get; set; }
         public string BaseUrl { get; set; }
-        public  List<MediaTypeWithQualityHeaderValue> MediaTypeWithQualityHeaderValueList { get; set; }
+        public List<MediaTypeWithQualityHeaderValue> MediaTypeWithQualityHeaderValueList { get; set; }
         private readonly ILogger _logger;
 
         public HttpClientWrapper(ILogger logger)
@@ -26,65 +27,47 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<string> SendMessage<T>(T content, string url)
         {
-            try
+            using (var httpClient = CreateHttpClient())
             {
-                using (var httpClient = CreateHttpClient())
+                var serializeObject = JsonConvert.SerializeObject(content);
+                var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url)
                 {
+                    Content = new StringContent(serializeObject, Encoding.UTF8, "application/json")
+                });
+                EnsureSuccessfulResponse(response);
 
-                    var serializeObject = JsonConvert.SerializeObject(content);
-                    var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url)
-                    {
-                        Content = new StringContent(serializeObject, Encoding.UTF8, "application/json")
-                    });
-
-                    return await response.Content.ReadAsStringAsync();
-                }
+                return await response.Content.ReadAsStringAsync();
             }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
-
-            return null;
         }
 
         public async Task<T> Get<T>(string authToken, string url)
         {
-            try
+            using (var httpClient = CreateHttpClient())
             {
-                using (var httpClient = CreateHttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthScheme,authToken);
-                    
-                    var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(AuthScheme, authToken);
 
-                    return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex);
-            }
+                var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, url));
+                EnsureSuccessfulResponse(response);
 
-            return default(T);
+                return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync());
+            }
         }
 
-        public async Task<string> GetString(string url)
+        public async Task<string> GetString(string url, string accessToken)
         {
             using (var client = new HttpClient())
             {
-                try
+                if (!string.IsNullOrEmpty(accessToken))
                 {
-                    var response = await client.GetAsync(url);
-                    response.EnsureSuccessStatusCode();
+                    var authScheme = !string.IsNullOrEmpty(AuthScheme) 
+                        ? AuthScheme : "Bearer";
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authScheme, accessToken);
+                }
 
-                    return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : string.Empty;
-                }
-                catch (Exception exception)
-                {
-                    _logger.Error(exception, $"unable to read url {url}");
-                    return string.Empty;
-                }
+                var response = await client.GetAsync(url);
+                EnsureSuccessfulResponse(response);
+
+                return response.Content.ReadAsStringAsync().Result;
             }
         }
 
@@ -98,7 +81,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl)
-                
+
             };
 
             if (MediaTypeWithQualityHeaderValueList.Any())
@@ -110,6 +93,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return httpClient;
+        }
+
+        private void EnsureSuccessfulResponse(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
+            switch ((int)response.StatusCode)
+            {
+                case 404:
+                    throw new ResourceNotFoundException(response.RequestMessage.RequestUri.ToString());
+                case 429:
+                    throw new TooManyRequestsException();
+                case 500:
+                    throw new ServiceUnavailableException();
+                default:
+                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
+            }
         }
     }
 }

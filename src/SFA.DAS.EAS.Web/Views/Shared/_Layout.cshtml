@@ -119,7 +119,7 @@
                                 <ul role="menu">
                                     @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
                                     {
-                                    <li><a href="@Url.Action("Index", "Home")" role="menuitem">Switch account</a></li>
+                                    <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
                                     <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
                                     }
                                     <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>

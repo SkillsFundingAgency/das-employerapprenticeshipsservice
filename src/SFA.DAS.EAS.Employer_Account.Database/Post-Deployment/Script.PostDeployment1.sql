@@ -37,3 +37,13 @@ SELECT LegalEntityId, AccountId, @TemplateId, 1 FROM @AccountEntity
 
 INSERT INTO [employer_account].[AccountEmployerAgreement]
 SELECT AccountId, Id FROM [employer_account].[EmployerAgreement]
+
+
+
+--------------------------------------------------------------------------------------
+-- Drop role table
+--------------------------------------------------------------------------------------
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='Role' AND TABLE_SCHEMA='employer_account')
+	BEGIN
+		DROP TABLE [employer_account].[Role]
+	END

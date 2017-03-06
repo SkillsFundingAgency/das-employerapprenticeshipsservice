@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Models.Employer;
 using SFA.DAS.EAS.Infrastructure.Services;
 
@@ -40,20 +38,22 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.CompaniesHouseEmployerVe
             _httpClientWrapper.Setup(
                 x => x.Get<EmployerInformation>(Convert.ToBase64String(Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey)),
                                                 $"{_configuration.CompaniesHouse.BaseUrl}/company/{ExpectedCompanyId}"))
-                              .ReturnsAsync(new EmployerInformation ());
+                              .ReturnsAsync(new EmployerInformation());
 
-            _companiesHouseEmployerVerificationService = new CompaniesHouseEmployerVerificationService(_configuration, _logger.Object, _httpClientWrapper.Object);
+
+
+            _companiesHouseEmployerVerificationService = new CompaniesHouseEmployerVerificationService(_configuration, _logger.Object, _httpClientWrapper.Object, new NoopExecutionPolicy());
         }
 
         [Test]
         public async Task ThenTheCorrectUrlIsUsedFromConfiguration()
         {
             //Act
-            var actual  = await _companiesHouseEmployerVerificationService.GetInformation(ExpectedCompanyId);
+            var actual = await _companiesHouseEmployerVerificationService.GetInformation(ExpectedCompanyId);
 
             //Assert
             Assert.IsNotNull(actual);
-            _httpClientWrapper.Verify(x=>x.Get<EmployerInformation>(Convert.ToBase64String(Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey)),$"{_configuration.CompaniesHouse.BaseUrl}/company/{ExpectedCompanyId}"), Times.Once);
+            _httpClientWrapper.Verify(x => x.Get<EmployerInformation>(Convert.ToBase64String(Encoding.UTF8.GetBytes(_configuration.CompaniesHouse.ApiKey)), $"{_configuration.CompaniesHouse.BaseUrl}/company/{ExpectedCompanyId}"), Times.Once);
         }
 
 

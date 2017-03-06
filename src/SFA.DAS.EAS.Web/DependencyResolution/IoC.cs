@@ -20,11 +20,14 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Web.DependencyResolution {
-    public static class IoC {
+namespace SFA.DAS.EAS.Web.DependencyResolution
+{
+    public static class IoC
+    {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
 
-        public static IContainer Initialize() {
+        public static IContainer Initialize()
+        {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
@@ -35,6 +38,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution {
                 c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
             });
         }

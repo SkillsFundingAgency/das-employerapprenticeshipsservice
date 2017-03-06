@@ -4010,14 +4010,17 @@ span.helpText {
 
 #agreement-not-signed .notice .icon-important {
   background-image: url("/dist/images/icon-important.png");
+  top: 13%;
 }
 
-.grey-background {
+.grey-background,
+.funding-cap-notification {
   background: #dee0e2;
   padding: 20px 20px 10px;
 }
 
-.grey-background .heading-medium {
+.grey-background .heading-medium,
+.funding-cap-notification .heading-medium {
   margin-top: 10px;
 }
 

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
 {
@@ -25,7 +26,12 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _commitmentsApi.UpdateEmployerApprenticeship(message.AccountId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, message.Apprenticeship);
+            await _commitmentsApi.UpdateEmployerApprenticeship(message.AccountId, message.Apprenticeship.CommitmentId, message.Apprenticeship.Id, 
+                new ApprenticeshipRequest
+                    {
+                        Apprenticeship = message.Apprenticeship,
+                        UserId = message.UserId
+                });
         }
     }
 }

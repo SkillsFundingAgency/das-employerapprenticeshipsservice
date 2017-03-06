@@ -1,6 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-
-using SFA.DAS.EAS.Web.Enums;
+﻿using SFA.DAS.EAS.Web.Enums;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {
@@ -13,6 +11,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public string LegalEntityCode { get; set; }
         public string LegalEntityName { get; set; }
+        public string LegalEntityAddress { get; set; }
+        public short LegalEntitySource { get; set; }
         public string ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string CohortRef { get; set; }
