@@ -50,16 +50,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<T> GetModelFromBlobStorage<T>(string containerName, string blobName)
         {
-            var blobData = await GetBlobDataFromAzure(containerName, blobName);
-
-            if (blobData == null)
+            using (var blobData = await GetBlobDataFromAzure(containerName, blobName))
             {
-                return default(T);
-            }
-
-            using (var stream = new MemoryStream(blobData.ToArray()))
-            {
-                using (var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(blobData))
                 {
                     var jsonContent = reader.ReadToEnd();
 
@@ -83,12 +76,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 var blob = container.GetBlobReference(blobName);
 
-                using (var stream = new MemoryStream())
-                {
-                    await blob.DownloadRangeToStreamAsync(stream, 0, null);
-
-                    return stream;
-                }
+                var stream = new MemoryStream();
+                
+                await blob.DownloadRangeToStreamAsync(stream, 0, null);
+                
+                return stream;
+                
             }
             catch (StorageException e)
             {

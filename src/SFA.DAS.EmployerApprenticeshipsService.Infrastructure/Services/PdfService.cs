@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
@@ -19,13 +20,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             Logger = logger;
         }
 
+        public async Task<MemoryStream> SubsituteValuesForPdf(string fileName)
+        {
+            var returnValue = await SubsituteValuesForPdf(fileName, new Dictionary<string, string>());
+            return returnValue;
+        }
+
         public async Task<MemoryStream> SubsituteValuesForPdf(string fileName, Dictionary<string,string> valuesToSubsitute )
         {
             var pdfStream = await GetBlobDataFromAzure(ConfigurationName, fileName);
-
-            var licenseStream = await GetBlobDataFromAzure(ConfigurationName, "Aspose.Total.lic");
-            var license = new License();
-            license.SetLicense(licenseStream);
+            
+            await SetPdfLicense();
 
             var pdfDocument = new Document(pdfStream);
 
@@ -57,10 +62,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return streamOutput;
         }
 
-        public async Task<MemoryStream> SubsituteValuesForPdf(string fileName)
+        private async Task SetPdfLicense()
         {
-            var returnValue = await SubsituteValuesForPdf(fileName, new Dictionary<string, string>());
-            return returnValue;
+            using (var licenseStream = await GetBlobDataFromAzure(ConfigurationName, "Aspose.Total.lic"))
+            {
+                var license = new License();
+                licenseStream.Position = 0;
+                license.SetLicense(licenseStream);
+            }
         }
     }
 
