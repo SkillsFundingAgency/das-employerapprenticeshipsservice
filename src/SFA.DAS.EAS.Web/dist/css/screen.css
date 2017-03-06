@@ -4042,6 +4042,10 @@ span.helpText {
   color: #0b0c0c;
 }
 
+#add-provider-reference .ukprn-help {
+  margin-bottom: 30px;
+}
+
 #service-help {
   margin-top: 30px;
 }
