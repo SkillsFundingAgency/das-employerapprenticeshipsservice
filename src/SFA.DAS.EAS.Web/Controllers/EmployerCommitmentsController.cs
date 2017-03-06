@@ -13,6 +13,8 @@ using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.EAS.Web.Validators;
+using FluentValidation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -170,7 +172,24 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var response = await _employerCommitmentsOrchestrator.GetProvider(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel);
 
+            if (response.Data.Provider == null)
+            {
+                var defaultViewModel = await _employerCommitmentsOrchestrator.GetProviderSearch(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.LegalEntityCode, viewModel.CohortRef);
+                defaultViewModel.Data.NotFound = true;
+
+                RevalidateModel(defaultViewModel);
+
+                return View("SearchProvider", defaultViewModel);
+            }
+
             return View(response);
+        }
+
+        private void RevalidateModel(OrchestratorResponse<SelectProviderViewModel> defaultViewModel)
+        {
+            var validator = new SelectProviderViewModelValidator();
+            var results = validator.Validate(defaultViewModel.Data);
+            results.AddToModelState(ModelState, null);
         }
 
         [HttpGet]

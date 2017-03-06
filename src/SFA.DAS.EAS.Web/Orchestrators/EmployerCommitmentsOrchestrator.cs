@@ -175,7 +175,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 ProviderId = providerId
             });
 
-            return response?.ProvidersView?.Provider;
+            return response.ProvidersView?.Provider;
         }
 
         public async Task<OrchestratorResponse<CreateCommitmentViewModel>> CreateSummary(string hashedAccountId, string legalEntityCode, string providerId, string cohortRef, string externalUserId)
