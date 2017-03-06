@@ -3447,6 +3447,7 @@ span.helpText {
 
 #agreement-not-signed .notice .icon-important {
   background-image: url("/dist/images/icon-important.png");
+  top: 13%;
 }
 
 .grey-background,

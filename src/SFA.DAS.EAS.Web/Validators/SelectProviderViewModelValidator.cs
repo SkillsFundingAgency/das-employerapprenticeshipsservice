@@ -15,8 +15,8 @@ namespace SFA.DAS.EAS.Web.Validators
                 .WithMessage("Check UK Provider Reference Number");
 
             RuleFor(x => x.ProviderId)
-                .NotEmpty().WithMessage("Enter a valid UK Provider Reference Number")
-                .Matches("^[0-9]{8}[\\s]*$").WithMessage("Enter a valid UK Provider Reference Number")
+                .NotEmpty().WithMessage("Check UK Provider Reference Number")
+                .Matches("^[0-9]{8}[\\s]*$").WithMessage("Check UK Provider Reference Number")
                 .When(x => x.NotFound == false); 
         }
     }
