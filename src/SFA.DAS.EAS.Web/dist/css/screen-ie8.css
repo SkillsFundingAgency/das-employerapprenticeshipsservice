@@ -3479,6 +3479,10 @@ span.helpText {
   color: #0b0c0c;
 }
 
+#add-provider-reference .ukprn-help {
+  margin-bottom: 30px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
