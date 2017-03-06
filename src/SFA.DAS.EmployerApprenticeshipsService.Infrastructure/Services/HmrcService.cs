@@ -46,11 +46,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             return await _executionPolicy.ExecuteAsync(async () =>
             {
-                var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
+                var requestParams = new
+                {
+                    client_secret = _configuration.Hmrc.ClientSecret,
+                    client_id = _configuration.Hmrc.ClientId,
+                    grant_type = "authorization_code",
+                    redirect_uri = redirectUrl,
+                    code = accessCode
+                };
 
-                var url = $"oauth/token?client_secret={_configuration.Hmrc.ClientSecret}&client_id={_configuration.Hmrc.ClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={accessCode}";
-
-                var response = await _httpClientWrapper.SendMessage("", url);
+                var response = await _httpClientWrapper.SendMessage(requestParams, "oauth/token");
 
                 return JsonConvert.DeserializeObject<HmrcTokenResponse>(response);
             });

@@ -23,7 +23,7 @@
             <div class="form-group @Html.AddClassIfPropertyInError("LegalEntityCode", "error")">
                 <fieldset>
                     <legend>
-                        <span class="form-label-bold">Choose the organisation your apprentices will be employed through:</span>
+                        <span class="form-label-bold">Choose the organisation that employs the apprentices you'd like to add- this should be the organisation named on the contract for service, if relevant:</span>
                         @Html.ValidationMessage("LegalEntityCode", "Please choose an option", new { id = "error-message-LegalEntityCode" })
                     </legend>
   
@@ -35,6 +35,20 @@
                         </label>
                     }
                </fieldset>
+                <details id="service-help">
+                    <summary><span class="summary">What is a contract for services?</span></summary>
+                    <div class="panel panel-border-narrow">
+                        <p>
+                           A contract for services is a formal agreement between a buyer and a supplier.
+                        </p>
+
+                        <p>
+                           In this case, the contract is between the organisation that's buying apprenticeship training for their apprentices and the training provider that's training the apprentices.
+                        </p>
+                        <p>If you're an employer-provider, for exmample, you won't need a contract for servies as your organisation is both the buyer and the supplier.</p>
+                    </div>
+                </details>
+
             </div>
             @Html.Hidden("CohortRef", Model.Data.CohortRef)
             <button type="submit" class="button">Continue</button>
