@@ -3495,7 +3495,7 @@ span.helpText {
   padding-left: 50px;
 }
 
-.grey-background {
+#agreement-not-signed .notice {
   margin: 60px 0;
 }
 
@@ -3503,12 +3503,12 @@ span.helpText {
   background-image: url("/dist/images/icon-important.png");
 }
 
-.funding-cap-notification {
+.grey-background {
   background: #dee0e2;
   padding: 20px 20px 10px;
 }
 
-.funding-cap-notification .heading-medium {
+.grey-background .heading-medium {
   margin-top: 10px;
 }
 
@@ -3528,6 +3528,10 @@ span.helpText {
 .funding-cap-alert a {
   text-decoration: none;
   color: #0b0c0c;
+}
+
+#service-help {
+  margin-top: 30px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
