@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
@@ -215,6 +216,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string agreementName)
+        {
+            var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest {AgreementFileName = agreementName });
 
+            return new OrchestratorResponse<EmployerAgreementPdfViewModel> {Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream } };
+        }
     }
 }

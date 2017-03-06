@@ -18,6 +18,9 @@
     </div>
 </div>
 
+<a href="@Url.Action("GetPdfAgreement","EmployerAgreement",new {agreementName=Model.Data.EmployerAgreement.TemplatePartialViewName})" target="_blank">Download Pdf Agreement</a>
+
+
 @Html.Partial("_Agreement_v1")
 
 <hr />
