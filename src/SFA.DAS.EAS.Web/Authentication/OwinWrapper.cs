@@ -23,7 +23,6 @@ namespace SFA.DAS.EAS.Web.Authentication
         {
             _configuration = configuration;
             _owinContext = HttpContext.Current.GetOwinContext();
-           
         }
 
         public void SignInUser(string id, string displayName, string email)
