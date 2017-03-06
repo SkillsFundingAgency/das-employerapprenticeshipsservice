@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementPdfTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _pdfService.Verify(x=>x.SubsituteValuesForPdf(Query.AgreementFileName));
+            _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{Query.AgreementFileName}.pdf"));
         }
 
         [Test]

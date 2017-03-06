@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var file = await _pdfService.SubsituteValuesForPdf(message.AgreementFileName);
+            var file = await _pdfService.SubsituteValuesForPdf($"{message.AgreementFileName}.pdf");
 
 
             return new GetEmployerAgreementPdfResponse {FileStream = file};
