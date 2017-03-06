@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 using MediatR;
-
 using NLog;
 
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public sealed class EmployerManageApprenticeshipsOrchestrator
+    public sealed class EmployerManageApprenticeshipsOrchestrator : CommitmentsBaseOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
@@ -26,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
-            ILogger logger)
+            ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -60,7 +57,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                         Apprenticeships = apprenticeships
                                     };
 
-                return new OrchestratorResponse<ManageApprenticeshipsViewModel> { Data = model };
+                return new OrchestratorResponse<ManageApprenticeshipsViewModel>
+                           {
+                               Data = model
+                           };
 
             }, hashedAccountId, externalUserId);
         }
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
                                {
-                                   Data = MapFrom(data.Apprenticeship)
+                                   Data = MapFrom(data.Apprenticeship)                                 
                                };
                 }, hashedAccountId, externalUserId);
         }
@@ -98,30 +98,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Status = MapPaymentStatus(apprenticeship.PaymentStatus),
                 ProviderName = string.Empty
             };
-        }
-
-        private async Task<OrchestratorResponse<T>> CheckUserAuthorization<T>(Func<Task<OrchestratorResponse<T>>> code, string hashedAccountId, string externalUserId) where T : class
-        {
-            try
-            {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
-                return await code.Invoke();
-            }
-            catch (UnauthorizedAccessException exception)
-            {
-                LogUnauthorizedUserAttempt(hashedAccountId, externalUserId);
-
-                return new OrchestratorResponse<T>
-                {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = exception
-                };
-            }
         }
 
         private string MapPaymentStatus(PaymentStatus paymentStatus)

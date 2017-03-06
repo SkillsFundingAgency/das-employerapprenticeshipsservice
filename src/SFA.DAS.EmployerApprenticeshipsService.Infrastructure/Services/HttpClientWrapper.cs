@@ -53,10 +53,17 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
         }
 
-        public async Task<string> GetString(string url)
+        public async Task<string> GetString(string url, string accessToken)
         {
             using (var client = new HttpClient())
             {
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    var authScheme = !string.IsNullOrEmpty(AuthScheme) 
+                        ? AuthScheme : "Bearer";
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authScheme, accessToken);
+                }
+
                 var response = await client.GetAsync(url);
                 EnsureSuccessfulResponse(response);
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
@@ -17,12 +18,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly IUserWhiteList _userWhiteList;
         protected IOwinWrapper OwinWrapper;
 
-        public BaseController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
+        public BaseController(
+            IOwinWrapper owinWrapper, 
+            IFeatureToggle featureToggle, 
+            IUserWhiteList userWhiteList)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
             _userWhiteList = userWhiteList;
         }
+
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {

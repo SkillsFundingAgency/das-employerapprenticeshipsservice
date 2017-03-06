@@ -19,6 +19,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
     [Validator(typeof(SelectProviderViewModelValidator))]
     public sealed class SelectProviderViewModel
     {
+        public bool NotFound { get; set; } // Set when search yields no result
+
         public string LegalEntityCode { get; set; }
 
         public string ProviderId { get; set; }
@@ -37,6 +39,9 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LegalEntityCode { get; set; }
 
         public string LegalEntityName { get; set; }
+
+        public string LegalEntityAddress { get; set; }
+        public short LegalEntitySource { get; set; }
 
         [Required]
         public long ProviderId { get; set; }

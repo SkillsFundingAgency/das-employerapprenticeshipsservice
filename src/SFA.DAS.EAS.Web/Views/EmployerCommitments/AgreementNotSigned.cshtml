@@ -13,12 +13,13 @@
             </i>
 
             <strong class="bold-small">
-                You must sign your employer agreement with
-                the Skills Funding Agency before you can approve cohorts.
+               You must have a signed agreement with the Skills Funding Agency before you can approve cohorts - this needs to be done by an account owner.
+                <br /><br />
+                If you're not the account owner, you can find out who is by visiting the <a href="@Url.Action("ViewTeam", "EmployerTeam")">Your team</a> area of your account.
             </strong>
 
         </div>
         <p><a class="button" href="@Url.Action("Index", "EmployerAgreement")" aria-label="Review your agreement">Review your agreement</a>
-        <p><a href="@Url.Action("SearchProvider", new {Model.HashedAccountId, Model.LegalEntityCode, Model.CohortRef})">Continue to cohort</a></p>
+        <p><a href="@Url.Action("SearchProvider", new {Model.HashedAccountId, Model.LegalEntityCode, Model.CohortRef})">Continue anyway</a></p>
     </div>
 </div>

@@ -4010,6 +4010,7 @@ span.helpText {
 
 #agreement-not-signed .notice .icon-important {
   background-image: url("/dist/images/icon-important.png");
+  top: 13%;
 }
 
 .grey-background,
@@ -4039,6 +4040,10 @@ span.helpText {
 .funding-cap-alert a {
   text-decoration: none;
   color: #0b0c0c;
+}
+
+#service-help {
+  margin-top: 30px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

@@ -8,6 +8,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string HashedCommitmentId { get; set; }
         public string LegalEntityCode { get; set; }
         public string LegalEntityName { get; set; }
+        public string LegalEntityAddress { get; set; }
+        public short LegalEntitySource { get; set; }
         public long ProviderId { get; set; }
         public string ProviderName { get; set; }
         public string CohortRef { get; set; }
