@@ -25,7 +25,7 @@
                 @Html.LabelFor(m => m.Data.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
                 @Html.ValidationMessage("ProviderId", "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-ProviderId" })
-                @Html.ValidationMessage("NotFound", "Please enter an 8-digit UK Provider Reference Number", new { id = "error-message-NotFound" })
+                @Html.ValidationMessage("NotFound", "Number not recognised. Check the number you've entered is correct or contact your training provider for help.", new { id = "error-message-NotFound" })
            
                 @Html.TextBox("ProviderId", Model.Data.ProviderId, new { @class = "form-control trainingProvider", aria_required = "true", aria_labelledby = "ProviderId" })
             </div>

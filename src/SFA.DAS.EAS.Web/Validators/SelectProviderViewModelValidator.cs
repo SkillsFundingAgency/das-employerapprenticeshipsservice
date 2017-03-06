@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.Validators
             RuleFor(x => x.LegalEntityCode).NotEmpty();
 
             RuleFor(x => x.NotFound).Cascade(CascadeMode.StopOnFirstFailure).Equal(false)
-                .WithMessage("Training Provider not found");
+                .WithMessage("Check UK Provider Reference Number");
 
             RuleFor(x => x.ProviderId)
                 .NotEmpty().WithMessage("Enter a valid UK Provider Reference Number")
