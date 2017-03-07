@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -13,6 +14,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
         private Mock<ICacheProvider> _cacheProvider;
         private FeatureToggleService _featureToggleService;
         private Mock<FeatureToggleService> _mockFeatureToggleFileBasedService;
+        private Mock<ILogger> _logger;
 
         [SetUp]
         public void Arrange()
@@ -22,7 +24,9 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.FeatureToggleFileBasedSe
                 .Returns(null)
                 .Returns(new FeatureToggleLookup());
 
-            _mockFeatureToggleFileBasedService = new Mock<FeatureToggleService>(_cacheProvider.Object);
+            _logger = new Mock<ILogger>();
+
+            _mockFeatureToggleFileBasedService = new Mock<FeatureToggleService>(_cacheProvider.Object, _logger.Object);
             _mockFeatureToggleFileBasedService.Setup(x => x.GetDataFromStorage()).Returns(new FeatureToggleLookup());
             _mockFeatureToggleFileBasedService.Setup(x => x.GetFeatures()).CallBase();
             _featureToggleService = _mockFeatureToggleFileBasedService.Object;
