@@ -38,11 +38,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         public async Task ThenWhenIGetTheAgreementTheMediatorIsCalledWithTheCorrectParameters()
         {
             //Act
-            await _orchestrator.GetPdfEmployerAgreement("agreement");
+            await _orchestrator.GetPdfEmployerAgreement("ACC456","AGB123","User1");
 
             //Assert
             _mediator.Verify(
-                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.AgreementFileName.Equals("agreement"))));
+                x => x.SendAsync(It.Is<GetEmployerAgreementPdfRequest>(c => c.HashedAccountId.Equals("ACC456") && c.UserId.Equals("User1") && c.HashedLegalAgreementId.Equals("AGB123"))));
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.GetPdfEmployerAgreement("");
+            var actual = await _orchestrator.GetPdfEmployerAgreement("","","");
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);

@@ -217,13 +217,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string agreementName)
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
         {
             var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
             try
             {
-                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest { AgreementFileName = agreementName });
+                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest {
+                    HashedAccountId = hashedAccountId,
+                    HashedLegalAgreementId = agreementId,
+                    UserId = userId
+                });
 
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
             }

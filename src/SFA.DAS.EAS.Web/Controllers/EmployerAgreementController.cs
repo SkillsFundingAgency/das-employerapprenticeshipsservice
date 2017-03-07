@@ -107,11 +107,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("agreements/{agreementId}/agreement-pdf/{agreementName}")]
-        public async Task<FileStreamResult> GetPdfAgreement(string agreementId, string hashedAccountId, string agreementName)
+        [Route("agreements/{agreementId}/agreement-pdf")]
+        public async Task<FileStreamResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(agreementName);
+            var stream = await _orchestrator.GetPdfEmployerAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue("sub"));
 
             if (stream.Data.PdfStream == null)
             {
