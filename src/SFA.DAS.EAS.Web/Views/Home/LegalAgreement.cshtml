@@ -1,0 +1,81 @@
+﻿@model bool
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Legal Agreement Template</title>
+    <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" />
+    <link href="~/dist/css/govuk-template-print.css" media="print" rel="stylesheet" />
+    <link href="~/dist/css/fonts.css" media="all" rel="stylesheet" />
+    <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
+    
+
+</head>
+<body>
+
+    
+
+    <header role="banner" id="global-header" class="with-proposition">
+        
+    </header>
+
+    
+    <main role="main" id="content">
+
+        @if (Model)
+        {
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    <table>
+                        <tr>
+                            <th>Accepted by:</th>
+                            <td>__SignedByName__</td>
+                        </tr>
+                        <tr>
+                            <th>On behalf of:</th>
+                            <td>__LegalEntityName__</td>
+                        </tr>
+                        <tr>
+                            <th>Address:</th>
+                            <td><span class="table-address">__LegalEntityAddress__</span></td>
+                        </tr>
+                        <tr>
+                            <th>Accepted on:</th>
+                            <td>__SignedDate__</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <div class="grid-row" id="publication-banner">
+            <div class="column-third">
+                <div class="sfa-logo">
+                    <h1>
+                        <span class="organisation-logo">
+                            <span>
+                                Skills Funding <br>
+                                Agency
+                            </span>
+                        </span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("_Agreement_V1")
+
+
+    </main>
+
+    <footer class="group js-footer" id="footer" role="contentinfo">
+        
+    </footer>
+    
+
+</body>
+</html>
