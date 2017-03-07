@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             foreach (var key in valuesToSubsitute)
             {
 
-                var textFragmentAbsorber = new TextFragmentAbsorber(key.Key)
+                var textFragmentAbsorber = new TextFragmentAbsorber($"__{key.Key}__")
                 {
                     TextSearchOptions = new TextSearchOptions(true)
                 };
