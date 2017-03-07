@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
 
             _pdfService = new Mock<IPdfService>();
             _pdfService.Setup(
-                x => x.SubsituteValuesForPdf(ExpectedLegalAgreementTemplateName, It.IsAny<Dictionary<string, string>>()))
+                x => x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}.pdf", It.IsAny<Dictionary<string, string>>()))
                 .ReturnsAsync(new MemoryStream());
 
             _hashingService = new Mock<IHashingService>();
@@ -55,6 +55,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
                     LegalEntityName = ExpectedLegalEntityName,
                     LegalEntityAddress = ExpectedLegalEntityAddress
                 });
+
+            Query = new GetSignedEmployerAgreementPdfRequest
+            {
+                HashedAccountId = "1234RFV",
+                HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
+                UserId = "12345RFV"
+            };
 
             RequestHandler = new GetSignedEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, _employerAgreementRepository.Object, _hashingService.Object);
 
@@ -75,17 +82,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
             //Act
-            await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
-                {
-                    HashedAccountId = "1234RFV",
-                    HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
-                    UserId = "12345RFV"
-                });
+            await RequestHandler.Handle(Query);
 
             //Assert
             _hashingService.Verify(x=>x.DecodeValue(ExpectedHashedLegalAgreementId), Times.Once);
             _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(ExpectedLegalAgreementId), Times.Once);
-            _pdfService.Verify(x=>x.SubsituteValuesForPdf(ExpectedLegalAgreementTemplateName,It.Is<Dictionary<string,string>>(
+            _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}.pdf",It.Is<Dictionary<string,string>>(
                                                                                                 c=>c.ContainsValue(ExpectedSignedByName) 
                                                                                             && c.ContainsValue(ExpectedLegalEntityName) 
                                                                                             && c.ContainsValue(_expectedSignedDate.ToLongDateString()) 
@@ -103,12 +105,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
                 .ReturnsAsync(new EmployerAgreementView { Status = status });
 
             //Act Assert
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
-            {
-                HashedAccountId = "1234RFV",
-                HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
-                UserId = "12345RFV"
-            }));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
 
             
         }
@@ -117,12 +114,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act
-            var actual = await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
-            {
-                HashedAccountId = "1234RFV",
-                HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
-                UserId = "12345RFV"
-            });
+            var actual = await RequestHandler.Handle(Query);
 
             //Assert
             Assert.IsNotNull(actual.FileStream);

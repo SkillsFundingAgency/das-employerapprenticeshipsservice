@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
+using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -218,9 +219,64 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string agreementName)
         {
-            var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest {AgreementFileName = agreementName });
+            var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
-            return new OrchestratorResponse<EmployerAgreementPdfViewModel> {Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream } };
+            try
+            {
+                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest { AgreementFileName = agreementName });
+
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                pdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
+
+            }
+            
+            return pdfEmployerAgreement;
+        }
+
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>>  GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        {
+
+            var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
+
+            try
+            {
+                var result =
+                    await
+                        _mediator.SendAsync(new GetSignedEmployerAgreementPdfRequest
+                        {
+                            HashedAccountId = hashedAccountId,
+                            HashedLegalAgreementId = agreementId,
+                            UserId = userId
+                        });
+
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
+
+                return signedPdfEmployerAgreement;
+            }
+            catch (InvalidRequestException ex)
+            {
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.BadRequest;
+                signedPdfEmployerAgreement.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
+            }
+
+            return signedPdfEmployerAgreement;
+
         }
     }
 }

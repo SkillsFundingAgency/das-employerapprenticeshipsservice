@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
             };
 
 
-            var pdfStream = await _pdfService.SubsituteValuesForPdf(legalAgreement.TemplatePartialViewName, substituteValues);
+            var pdfStream = await _pdfService.SubsituteValuesForPdf($"{legalAgreement.TemplatePartialViewName}.pdf", substituteValues);
 
             return new GetSignedEmployerAgreementPdfResponse {FileStream = pdfStream };
         }

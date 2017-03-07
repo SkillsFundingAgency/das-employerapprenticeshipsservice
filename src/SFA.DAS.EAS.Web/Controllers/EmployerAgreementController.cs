@@ -116,5 +116,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
         }
 
+        [HttpGet]
+        [Route("agreements/{agreementId}/signed-agreement-pdf")]
+        public async Task<FileStreamResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
+        {
+
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
+
+            return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
+        }
     }
 }
