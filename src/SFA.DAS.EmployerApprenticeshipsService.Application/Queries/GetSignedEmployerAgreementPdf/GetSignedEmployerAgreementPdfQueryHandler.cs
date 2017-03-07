@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
                 throw new UnauthorizedAccessException();
             }
 
-            var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalEntityId);
+            var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
             var legalAgreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 

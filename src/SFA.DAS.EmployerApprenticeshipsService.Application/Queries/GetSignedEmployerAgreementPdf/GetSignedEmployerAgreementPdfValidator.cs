@@ -29,9 +29,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
                 validationResult.AddError(nameof(item.HashedAccountId));
             }
 
-            if (string.IsNullOrEmpty(item.HashedLegalEntityId))
+            if (string.IsNullOrEmpty(item.HashedLegalAgreementId))
             {
-                validationResult.AddError(nameof(item.HashedLegalEntityId));
+                validationResult.AddError(nameof(item.HashedLegalAgreementId));
             }
 
             if (string.IsNullOrEmpty(item.UserId))

@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
     {
         public string HashedAccountId { get; set; }
         public string UserId { get; set; }
-        public string HashedLegalEntityId { get; set; }
+        public string HashedLegalAgreementId { get; set; }
     }
 }

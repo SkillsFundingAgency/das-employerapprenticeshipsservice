@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
                 {
                     HashedAccountId = "1234RFV",
-                    HashedLegalEntityId = ExpectedHashedLegalAgreementId,
+                    HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
                     UserId = "12345RFV"
                 });
 
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
             {
                 HashedAccountId = "1234RFV",
-                HashedLegalEntityId = ExpectedHashedLegalAgreementId,
+                HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
                 UserId = "12345RFV"
             }));
 
@@ -120,7 +120,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             var actual = await RequestHandler.Handle(new GetSignedEmployerAgreementPdfRequest
             {
                 HashedAccountId = "1234RFV",
-                HashedLegalEntityId = ExpectedHashedLegalAgreementId,
+                HashedLegalAgreementId = ExpectedHashedLegalAgreementId,
                 UserId = "12345RFV"
             });
 

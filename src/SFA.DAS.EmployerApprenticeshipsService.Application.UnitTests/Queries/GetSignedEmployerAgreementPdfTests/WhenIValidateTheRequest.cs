@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {
                 HashedAccountId = ExpectedHashedAccountId,
                 UserId = ExpectedUserId,
-                HashedLegalEntityId = "1234RFV"
+                HashedLegalAgreementId = "1234RFV"
             });
 
             //Assert
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedLegalEntityId", "HashedLegalEntityId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), actual.ValidationDictionary);
             _membershipRepository.Verify(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
         public async Task ThenIfTheUserIsNotAnOwnerThenTheUnAuhtorizedFlagIsSet()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {HashedAccountId = "123", UserId = "123", HashedLegalEntityId="123RFV"});
+            var actual = await _validator.ValidateAsync(new GetSignedEmployerAgreementPdfRequest {HashedAccountId = "123", UserId = "123", HashedLegalAgreementId="123RFV"});
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
