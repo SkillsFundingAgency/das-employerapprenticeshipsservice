@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
 
             _pdfService = new Mock<IPdfService>();
             _pdfService.Setup(
-                x => x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}.pdf", It.IsAny<Dictionary<string, string>>()))
+                x => x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf", It.IsAny<Dictionary<string, string>>()))
                 .ReturnsAsync(new MemoryStream());
 
             _hashingService = new Mock<IHashingService>();
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             //Assert
             _hashingService.Verify(x=>x.DecodeValue(ExpectedHashedLegalAgreementId), Times.Once);
             _employerAgreementRepository.Verify(x => x.GetEmployerAgreement(ExpectedLegalAgreementId), Times.Once);
-            _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}.pdf",It.Is<Dictionary<string,string>>(
+            _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf",It.Is<Dictionary<string,string>>(
                                                                                                 c=>c.ContainsValue(ExpectedSignedByName) 
                                                                                             && c.ContainsValue(ExpectedLegalEntityName) 
                                                                                             && c.ContainsValue(_expectedSignedDate.ToLongDateString()) 
