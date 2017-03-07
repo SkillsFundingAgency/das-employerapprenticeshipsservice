@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 
@@ -326,6 +325,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedCommitmentId}/details/delete")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteCohort(DeleteCommitmentViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -364,7 +364,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{legalEntityCode}/AgreementNotSigned")]
-        public async Task<ActionResult> AgreementNotSigned(LegalEntitySignedAgreementViewModel viewModel)
+        public ActionResult AgreementNotSigned(LegalEntitySignedAgreementViewModel viewModel)
         {
             return View(viewModel);
         }
