@@ -113,6 +113,11 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var stream = await _orchestrator.GetPdfEmployerAgreement(agreementName);
 
+            if (stream.Data.PdfStream == null)
+            {
+                return null;//TODO
+            }
+
             return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
         }
 
@@ -122,6 +127,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
 
             var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
+
+            if (stream.Data.PdfStream == null)
+            {
+                return null;//TODO
+            }
 
             return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
         }
