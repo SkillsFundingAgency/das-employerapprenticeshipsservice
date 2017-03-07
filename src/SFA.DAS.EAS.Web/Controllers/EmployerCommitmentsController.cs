@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Configuration;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 
@@ -16,6 +15,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EAS.Web.Validators;
 using FluentValidation.Mvc;
+using FluentValidation;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -184,7 +184,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("provider/create")]
-        public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] SelectProviderViewModel viewModel)
+        public async Task<ActionResult> SelectProvider(string hashedAccountId, [System.Web.Http.FromUri] [CustomizeValidator(RuleSet = "Request")] SelectProviderViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -211,7 +211,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private void RevalidateModel(OrchestratorResponse<SelectProviderViewModel> defaultViewModel)
         {
             var validator = new SelectProviderViewModelValidator();
-            var results = validator.Validate(defaultViewModel.Data);
+            var results = validator.Validate(defaultViewModel.Data, ruleSet: "SearchResult");
+            
             results.AddToModelState(ModelState, null);
         }
 

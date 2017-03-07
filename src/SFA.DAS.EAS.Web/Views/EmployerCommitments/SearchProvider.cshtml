@@ -21,7 +21,7 @@
 
             @Html.AntiForgeryToken()
             
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("ProviderId", "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("ProviderId", "error") @Html.AddClassIfPropertyInError("NotFound", "error")">
                 @Html.LabelFor(m => m.Data.ProviderId, "UK Provider Reference Number", new { @class = "form-label-bold" })
 
                 @Html.ValidationMessage("ProviderId", "Number not recognised. Check the number you've entered is correct or contact your training provider for help.", new { id = "error-message-ProviderId" })
