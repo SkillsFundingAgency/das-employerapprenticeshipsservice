@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="SFA.DAS.CloudService.API" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="SFA.DAS.EAS.Account.Api">
-    <Instances count="2" />
+    <Instances count="3" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
@@ -22,13 +22,13 @@
     <AddressAssignments>
       <InstanceAddress roleName="SFA.DAS.EAS.Account.Api">
         <Subnets>
-          <Subnet name="__subnet__" />
+          <Subnet name="__subnet2__" />
         </Subnets>
       </InstanceAddress>
     </AddressAssignments>
     <LoadBalancers>
       <LoadBalancer name="__ilbname2__">
-        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.120.157" />
+        <FrontendIPConfiguration type="private" subnet="__subnet2__" staticVirtualNetworkIPAddress="10.78.125.254" />
       </LoadBalancer>
     </LoadBalancers>
   </NetworkConfiguration>
