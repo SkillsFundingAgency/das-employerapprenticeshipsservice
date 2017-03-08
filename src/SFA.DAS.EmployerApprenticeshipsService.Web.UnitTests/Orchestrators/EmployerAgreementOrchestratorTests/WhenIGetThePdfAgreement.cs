@@ -9,6 +9,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Orchestrators;
 using InvalidRequestException = SFA.DAS.EAS.Application.InvalidRequestException;
 
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private EmployerAgreementOrchestrator _orchestrator;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -30,8 +32,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
                 .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
 
             _logger = new Mock<ILogger>();
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
         }
 
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -17,6 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -46,12 +49,17 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
                     }
                 });
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration ();
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _configuration);
         }
 
         [Test]
         public async Task ThenAnAgreementShouldNeedSigningIfTheUserIsAnOwnerOrTransactorAndThereAreUnsignedAgreements()
         {
+            //Arrange
+            ConfigurationManager.AppSettings["ShowAgreements"] = "true";
+
             // Act
             var actual = await _orchestrator.GetAccount(AccountId, UserId);
 

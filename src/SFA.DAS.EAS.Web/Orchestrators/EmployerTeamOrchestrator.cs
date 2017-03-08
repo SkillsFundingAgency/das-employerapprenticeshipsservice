@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -27,13 +28,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public EmployerTeamOrchestrator(IMediator mediator)
+        public EmployerTeamOrchestrator(IMediator mediator, EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(
@@ -47,22 +50,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+                
                 var showSigningNotice = false;
-                if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
+
+                if (_configuration.ShowAgreements())
                 {
-                    var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                    var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+                    if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
                     {
-                        HashedAccountId = accountId,
-                        ExternalUserId = externalUserId
-                    });
-                    showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
+                        var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                        {
+                            HashedAccountId = accountId,
+                            ExternalUserId = externalUserId
+                        });
+                        showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
+                    }
                 }
+
 
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
-                    RequiresAgreementSigning = showSigningNotice
+                    RequiresAgreementSigning = showSigningNotice,
+                    ShowAgreements = _configuration.ShowAgreements()
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

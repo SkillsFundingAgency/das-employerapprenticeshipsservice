@@ -19,6 +19,7 @@ using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -29,13 +30,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly ILogger _logger;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IMediator _mediator;
 
         protected EmployerAgreementOrchestrator()
         {
         }
 
-        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger): base(mediator)
+        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -43,6 +45,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             _mediator = mediator;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
@@ -101,7 +104,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new EmployerAgreementListViewModel
                     {
                         HashedAccountId = hashedId,
-                        EmployerAgreements = response.EmployerAgreements
+                        EmployerAgreements = response.EmployerAgreements,
+                        ShowAgreements = _configuration.ShowAgreements()
                     }
                 };
             }
