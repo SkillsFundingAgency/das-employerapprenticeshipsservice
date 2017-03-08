@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Application.Validation;
@@ -11,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
 {
     public class GetSignedEmployerAgreementPdfQueryHandler : IAsyncRequestHandler<GetSignedEmployerAgreementPdfRequest, GetSignedEmployerAgreementPdfResponse>
     {
-        
+
         private readonly IValidator<GetSignedEmployerAgreementPdfRequest> _validator;
         private readonly IPdfService _pdfService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -46,21 +47,32 @@ namespace SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf
 
             if (legalAgreement.Status != EmployerAgreementStatus.Signed || !legalAgreement.SignedDate.HasValue)
             {
-                throw new InvalidRequestException(new Dictionary<string, string> {{nameof(legalAgreement.Status), "The agreement has not been signed."}});
+                throw new InvalidRequestException(new Dictionary<string, string> { { nameof(legalAgreement.Status), "The agreement has not been signed." } });
             }
 
             var substituteValues = new Dictionary<string, string>
             {
                 {nameof(legalAgreement.SignedByName), legalAgreement.SignedByName},
                 {nameof(legalAgreement.SignedDate), legalAgreement.SignedDate.Value.ToLongDateString()},
-                {nameof(legalAgreement.LegalEntityAddress), legalAgreement.LegalEntityAddress},
                 {nameof(legalAgreement.LegalEntityName), legalAgreement.LegalEntityName}
             };
 
-
+            var addressElements = legalAgreement.LegalEntityAddress.Split(',').ToList();
+            
+            for (var i = 0; i < 5; i++)
+            {
+                var addressLine = "";
+                if (addressElements.Count > i)
+                {
+                    addressLine= addressElements[i];
+                }
+                
+                substituteValues.Add($"{nameof(legalAgreement.LegalEntityAddress)}_{i}", addressLine.Trim());
+            }
+            
             var pdfStream = await _pdfService.SubsituteValuesForPdf($"{legalAgreement.TemplatePartialViewName}_Sub.pdf", substituteValues);
 
-            return new GetSignedEmployerAgreementPdfResponse {FileStream = pdfStream };
+            return new GetSignedEmployerAgreementPdfResponse { FileStream = pdfStream };
         }
     }
 }

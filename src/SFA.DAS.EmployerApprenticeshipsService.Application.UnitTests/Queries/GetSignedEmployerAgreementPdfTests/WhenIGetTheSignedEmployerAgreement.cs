@@ -95,6 +95,37 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetSignedEmployerAgreementPd
             
         }
 
+        [Test]
+        public async Task ThenTheAddressIsAlwaysPopulatedForFiveLines()
+        {
+            //Arrange
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedLegalAgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Signed,
+                    TemplatePartialViewName = ExpectedLegalAgreementTemplateName,
+                    SignedByName = ExpectedSignedByName,
+                    SignedDate = _expectedSignedDate,
+                    LegalEntityName = ExpectedLegalEntityName,
+                    LegalEntityAddress = "Test1,Test"
+                });
+
+            //Act
+            await RequestHandler.Handle(Query);
+
+            //Assert
+            _pdfService.Verify(
+                x =>
+                    x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf",
+                        It.Is<Dictionary<string, string>>(
+                            c => c.ContainsKey("LegalEntityAddress_0")
+                            && c.ContainsKey("LegalEntityAddress_1")
+                            && c.ContainsKey("LegalEntityAddress_2")
+                            && c.ContainsKey("LegalEntityAddress_3")
+                            && c.ContainsKey("LegalEntityAddress_4")
+                            )));
+        }
+
         [TestCase(EmployerAgreementStatus.Pending)]
         [TestCase(EmployerAgreementStatus.Expired)]
         [TestCase(EmployerAgreementStatus.Superseded)]
