@@ -2936,7 +2936,28 @@ table.organisations td + td + td {
 #publication-banner .download {
   margin-top: 15px;
   display: inline-block;
+}
+
+#publication-banner {
+  display: table;
+  width: 100%;
+  margin-left: 0;
+}
+
+#publication-banner .column-third {
+  padding-left: 0;
+}
+
+#publication-banner .column-third,
+#publication-banner .column-two-thirds {
+  display: table-cell;
+  float: none;
+}
+
+#publication-banner .column-two-thirds {
+  vertical-align: bottom;
   text-align: right;
+  padding-right: 0;
 }
 
 .agreement-parties address.party {

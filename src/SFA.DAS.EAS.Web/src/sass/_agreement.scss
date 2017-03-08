@@ -115,8 +115,27 @@
     .download {
         margin-top: 15px;
         display: inline-block;
-        @include media(tablet) {
+    }
+
+}
+
+@include media(tablet) {
+    #publication-banner {
+        display: table;
+        width: 100%;
+        margin-left: 0;
+        .column-third {
+            padding-left: 0;
+        }
+        .column-third, 
+        .column-two-thirds {
+            display: table-cell;
+            float: none;
+        }
+        .column-two-thirds {
+            vertical-align: bottom;
             text-align: right;
+            padding-right: 0;
         }
     }
 }
