@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -51,6 +52,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementPdfTests
 
             //Assert
             _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedAgreementFileName}.pdf"));
+        }
+
+        [Test]
+        public void ThenWhenTheValidationReturnsNotAuthorizedThenAnUnauthoriedAccessExceptionIsThrown()
+        {
+            //Arrange
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementPdfRequest>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
+
+            //Act Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
         }
 
         [Test]

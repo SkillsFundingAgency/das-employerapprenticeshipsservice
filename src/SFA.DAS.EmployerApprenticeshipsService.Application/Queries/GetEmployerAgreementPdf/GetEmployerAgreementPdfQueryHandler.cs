@@ -34,6 +34,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             var employerAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(employerAgreementId);
