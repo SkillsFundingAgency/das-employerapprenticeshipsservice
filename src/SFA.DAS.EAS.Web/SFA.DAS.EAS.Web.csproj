@@ -866,7 +866,7 @@
     <Content Include="Views\EmployerCommitments\SearchProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\ChoosePath.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
-    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\Shared\ValidationSummary.cshtml" />
     <Content Include="Views\EmployerCommitments\SelectProvider.cshtml" />
     <Content Include="Views\EmployerCommitments\Index.cshtml" />

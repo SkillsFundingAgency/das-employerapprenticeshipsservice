@@ -223,19 +223,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             try
             {
-                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest {
+                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest
+                {
                     HashedAccountId = hashedAccountId,
                     HashedLegalAgreementId = agreementId,
                     UserId = userId
                 });
 
-                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel { PdfStream = result.FileStream };
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
             }
             catch (UnauthorizedAccessException ex)
             {
                 pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
                 pdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
-
+            }
+            catch (Exception ex)
+            {
+                pdfEmployerAgreement.Exception = ex;
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                pdfEmployerAgreement.Status = HttpStatusCode.NotFound;
             }
             
             return pdfEmployerAgreement;
@@ -277,6 +283,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
                 signedPdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
+            }
+            catch (Exception ex)
+            {
+                signedPdfEmployerAgreement.Exception = ex;
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.NotFound;
             }
 
             return signedPdfEmployerAgreement;

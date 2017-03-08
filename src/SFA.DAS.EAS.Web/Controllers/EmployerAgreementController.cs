@@ -108,14 +108,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
-        public async Task<FileStreamResult> GetPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
 
-            var stream = await _orchestrator.GetPdfEmployerAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue("sub"));
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue("sub"));
 
             if (stream.Data.PdfStream == null)
             {
-                return null;//TODO
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
             }
 
             return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
@@ -123,14 +124,15 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("agreements/{agreementId}/signed-agreement-pdf")]
-        public async Task<FileStreamResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
 
             var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
 
             if (stream.Data.PdfStream == null)
             {
-                return null;//TODO
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
             }
 
             return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
