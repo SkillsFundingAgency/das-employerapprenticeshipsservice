@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 
-using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -17,23 +17,27 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly IHashingService _hashingService;
-
+        private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
 
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
+            IApprenticeshipMapper apprenticeshipMapper,
             ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             if (hashingService == null)
                 throw new ArgumentNullException(nameof(hashingService));
+            if (apprenticeshipMapper == null)
+                throw new ArgumentNullException(nameof(apprenticeshipMapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
+            _apprenticeshipMapper = apprenticeshipMapper;
             _logger = logger;
         }
 
@@ -48,7 +52,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var apprenticeships = data.Apprenticeships
                         .OrderBy(m => m.ApprenticeshipName)
-                        .Select(MapFrom)
+                        .Select(_apprenticeshipMapper.MapFrom)
                         .ToList();
 
                     var model = new ManageApprenticeshipsViewModel
@@ -75,56 +79,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(async () =>
                 {
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
-
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
                                {
-                                   Data = MapFrom(data.Apprenticeship)                                 
+                                   Data = _apprenticeshipMapper.MapFrom(data.Apprenticeship)
                                };
                 }, hashedAccountId, externalUserId);
-        }
-
-        private ApprenticeshipDetailsViewModel MapFrom(Apprenticeship apprenticeship)
-        {
-            return new ApprenticeshipDetailsViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                FirstName = apprenticeship.FirstName,
-                LastName = apprenticeship.LastName,
-                DateOfBirth = apprenticeship.DateOfBirth,
-                StartDate = apprenticeship.StartDate,
-                EndDate = apprenticeship.EndDate,
-                TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost,
-                Status = MapPaymentStatus(apprenticeship.PaymentStatus),
-                ProviderName = string.Empty
-            };
-        }
-
-        private string MapPaymentStatus(PaymentStatus paymentStatus)
-        {
-            switch (paymentStatus)
-            {
-                case PaymentStatus.PendingApproval:
-                    return "Approval needed";
-                case PaymentStatus.Active:
-                    return "On programme";
-                case PaymentStatus.Paused:
-                    return "Paused";
-                case PaymentStatus.Withdrawn:
-                    return "Stopped";
-                case PaymentStatus.Completed:
-                    return "Completed";
-                case PaymentStatus.Deleted:
-                    return "Deleted";
-                default:
-                    return string.Empty;
-            }
-        }
-
-        private void LogUnauthorizedUserAttempt(string hashedAccountId, string externalUserId)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            _logger.Warn($"User not associated to account. UserId:{externalUserId} AccountId:{accountId}");
         }
     }
 }
