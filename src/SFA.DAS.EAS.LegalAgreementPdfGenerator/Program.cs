@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
                         options.PageInfo.IsLandscape = false;
 
                         // Save output as PDF format
-                        var legalAgreementSubPdf = withSubFields ? @".\_Agreement_v1_Sub.pdf" : @".\_Agreement_v1.pdf";
+                        var legalAgreementSubPdf = withSubFields ? @".\_Agreement_V1_Sub.pdf" : @".\_Agreement_V1.pdf";
                         pdfDocument.Save(legalAgreementSubPdf);
                     }
                         
