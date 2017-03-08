@@ -9,29 +9,20 @@
 <head>
     <meta charset="utf-8" />
     <title>Legal Agreement Template</title>
-    <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" />
-    <link href="~/dist/css/govuk-template-print.css" media="print" rel="stylesheet" />
+
     <link href="~/dist/css/fonts.css" media="all" rel="stylesheet" />
     <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
-    
 
 </head>
-<body>
+<body id="layout-agreement">
 
-    
-
-    <header role="banner" id="global-header" class="with-proposition">
-        
-    </header>
-
-    
     <main role="main" id="content">
 
         @if (Model)
         {
             <div class="grid-row">
-                <div class="column-two-thirds">
-                    <table>
+                <div class="column-full">
+                    <table class="sign-agreement">
                         <tr>
                             <th>Accepted by:</th>
                             <td>__SignedByName__</td>

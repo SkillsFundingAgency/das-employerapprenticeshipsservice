@@ -111,6 +111,16 @@
     }
 }
 
+#publication-banner {
+    .download {
+        margin-top: 15px;
+        display: inline-block;
+        @include media(tablet) {
+            text-align: right;
+        }
+    }
+}
+
 .agreement-parties {
     address.party {
         @include media(tablet) {
@@ -162,5 +172,55 @@
                 }
             }
         }
+    }
+}
+
+/* PDF */
+#layout-agreement {
+    margin: 0;
+    background: white;
+    color: black;
+    #content {
+        margin: 0;
+    }
+    .agreement {
+        header {
+            background: none;
+            padding: 0;
+            margin: 0;
+        }
+        #contents {
+            display: none;
+        }
+        p.updated {
+            margin-bottom: 0;
+        }
+  
+        .headings {
+            margin: 0;
+            border: 5px solid $govuk-blue;
+            padding: 20px;
+            margin: 30px 0;
+            background: white;
+            color: black;
+        }
+        
+    }
+    table.sign-agreement {
+        th {
+            width: 30%;
+        }
+        td {
+            width: 70%;
+        }
+        span.table-address {
+            display: inline-block;
+            max-width: 100%;
+            min-height: 125px;
+            word-wrap: break-word;
+        }
+    }
+    .back-to-contents {
+        display: none;
     }
 }
