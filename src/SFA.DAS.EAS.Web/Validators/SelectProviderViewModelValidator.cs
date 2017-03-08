@@ -7,17 +7,19 @@ namespace SFA.DAS.EAS.Web.Validators
     {
         public SelectProviderViewModelValidator()
         {
-            CascadeMode = CascadeMode.StopOnFirstFailure;
+            RuleSet("Request", () =>
+            {
+                RuleFor(x => x.LegalEntityCode).NotEmpty();
 
-            RuleFor(x => x.LegalEntityCode).NotEmpty();
+                RuleFor(x => x.ProviderId)
+                    .NotEmpty().WithMessage("Check UK Provider Reference Number")
+                    .Matches("^[0-9]{8}[\\s]*$").WithMessage("Check UK Provider Reference Number"); ;
+            });
 
-            RuleFor(x => x.NotFound).Cascade(CascadeMode.StopOnFirstFailure).Equal(false)
-                .WithMessage("Check UK Provider Reference Number");
-
-            RuleFor(x => x.ProviderId)
-                .NotEmpty().WithMessage("Check UK Provider Reference Number")
-                .Matches("^[0-9]{8}[\\s]*$").WithMessage("Check UK Provider Reference Number")
-                .When(x => x.NotFound == false); 
+            RuleSet("SearchResult", () =>
+            {
+                RuleFor(x => x.NotFound).Equal(false).WithMessage("Check UK Provider Reference Number");
+            });
         }
     }
 }

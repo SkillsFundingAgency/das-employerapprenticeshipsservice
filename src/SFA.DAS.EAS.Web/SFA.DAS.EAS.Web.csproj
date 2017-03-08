@@ -417,6 +417,8 @@
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Orchestrators\CommitmentsBaseOrchestrator.cs" />
+    <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
     <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
