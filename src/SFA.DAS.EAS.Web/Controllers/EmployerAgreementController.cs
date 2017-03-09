@@ -106,5 +106,36 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("SignAgreement", agreement);
         }
 
+        [HttpGet]
+        [Route("agreements/{agreementId}/agreement-pdf")]
+        public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
+        {
+
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue("sub"));
+
+            if (stream.Data.PdfStream == null)
+            {
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
+            }
+
+            return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/signed-agreement-pdf")]
+        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
+        {
+
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
+
+            if (stream.Data.PdfStream == null)
+            {
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
+            }
+
+            return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
+        }
     }
 }

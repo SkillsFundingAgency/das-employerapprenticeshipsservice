@@ -6,6 +6,7 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         private EmployerAgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -23,7 +25,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration(); 
+
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
         }
 
         [Test]

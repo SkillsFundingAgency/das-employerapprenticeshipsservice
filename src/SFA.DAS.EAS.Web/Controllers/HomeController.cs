@@ -243,5 +243,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return RedirectToAction("NotFound", "Error", new { path });
         }
+
+
+#if DEBUG
+        [Route("CreateLegalAgreement/{showSubFields}")]
+        public ActionResult ShowLegalAgreement(bool showSubFields)
+        {
+            return View("LegalAgreement", showSubFields);
+        }
+#endif
     }
 }

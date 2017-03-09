@@ -74,6 +74,11 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return base.View(@"AccessDenied", masterName, orchestratorResponse);
             }
 
+            if (orchestratorResponse.Status == HttpStatusCode.NotFound)
+            {
+                return base.View("NotFound");
+            }
+
             return base.View(@"GenericError", masterName, orchestratorResponse);
         }
 

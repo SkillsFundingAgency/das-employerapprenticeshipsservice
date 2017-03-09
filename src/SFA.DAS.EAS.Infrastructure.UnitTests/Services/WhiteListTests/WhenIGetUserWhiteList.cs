@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -13,12 +14,14 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.WhiteListTests
         private Mock<UserWhiteListService> _mockUserWhiteList;
         private UserWhiteListService _userWhiteList;
         private UserWhiteListLookUp _lookup;
+        private Mock<ILogger> _logger;
 
         [SetUp]
         public void Arrange()
         {
             _cacheProvider = new Mock<ICacheProvider>();
-            _mockUserWhiteList = new Mock<UserWhiteListService>(_cacheProvider.Object);
+            _logger = new Mock<ILogger>();
+            _mockUserWhiteList = new Mock<UserWhiteListService>(_cacheProvider.Object,_logger.Object);
             _userWhiteList = _mockUserWhiteList.Object;
 
             _lookup = new UserWhiteListLookUp

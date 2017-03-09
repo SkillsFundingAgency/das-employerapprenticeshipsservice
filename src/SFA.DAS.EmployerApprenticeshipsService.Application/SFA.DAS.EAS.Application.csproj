@@ -327,6 +327,10 @@
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsQueryValidator.cs" />
     <Compile Include="Queries\FindEmployerAccountLevyDeclarationTransactions\FindEmployerAccountLevyDeclarationTransactionsResponse.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfQueryHandler.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfRequest.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfResponse.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryValidator.cs" />
     <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
     <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
@@ -425,6 +429,10 @@
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationQuery.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrganisationResponse.cs" />
     <Compile Include="Queries\GetPublicSectorOrganisation\GetPublicSectorOrgainsationValidator.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfQueryHandler.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />

@@ -8,5 +8,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public long AccountId { get; set; }
         public List<EmployerAgreementView> EmployerAgreements { get; set; }
         public string HashedAccountId { get; set; }
+        public bool ShowAgreements { get; set; }
     }
 }

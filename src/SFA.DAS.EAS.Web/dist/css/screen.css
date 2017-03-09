@@ -3401,6 +3401,32 @@ table.organisations td + td + td {
   list-style: lower-roman;
 }
 
+#publication-banner .download {
+  margin-top: 15px;
+  display: inline-block;
+}
+
+@media (min-width: 641px) {
+  #publication-banner {
+    display: table;
+    width: 100%;
+    margin-left: 0;
+  }
+  #publication-banner .column-third {
+    padding-left: 0;
+  }
+  #publication-banner .column-third,
+  #publication-banner .column-two-thirds {
+    display: table-cell;
+    float: none;
+  }
+  #publication-banner .column-two-thirds {
+    vertical-align: bottom;
+    text-align: right;
+    padding-right: 0;
+  }
+}
+
 @media (min-width: 641px) {
   .agreement-parties address.party {
     margin-top: 45px;
@@ -3457,6 +3483,59 @@ table.organisations td + td + td {
   .signed-agreement .attachment .attachment-details .metadata {
     font-size: 14px;
   }
+}
+
+/* PDF */
+#layout-agreement {
+  margin: 0;
+  background: white;
+  color: black;
+}
+
+#layout-agreement #content {
+  margin: 0;
+}
+
+#layout-agreement .agreement header {
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+#layout-agreement .agreement #contents {
+  display: none;
+}
+
+#layout-agreement .agreement p.updated {
+  margin-bottom: 0;
+}
+
+#layout-agreement .agreement .headings {
+  margin: 0;
+  border: 5px solid #005ea5;
+  padding: 20px;
+  margin: 30px 0;
+  background: white;
+  color: black;
+}
+
+#layout-agreement table.sign-agreement th {
+  width: 30%;
+}
+
+#layout-agreement table.sign-agreement td {
+  width: 70%;
+}
+
+#layout-agreement table.sign-agreement span.table-address {
+  display: inline-block;
+  max-width: 100%;
+  min-height: 125px;
+  word-wrap: break-word;
+}
+
+#layout-agreement .back-to-contents {
+  display: none;
 }
 
 .validation-summary-valid,

@@ -6,5 +6,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public Account Account { get; set; }
         public bool RequiresAgreementSigning { get; set; }
+        public bool ShowAgreements { get; set; }
     }
 }
