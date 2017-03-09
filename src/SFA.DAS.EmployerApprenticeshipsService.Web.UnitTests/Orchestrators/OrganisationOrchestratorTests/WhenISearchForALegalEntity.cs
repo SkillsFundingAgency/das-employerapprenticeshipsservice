@@ -204,5 +204,32 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             Assert.AreEqual(OrganisationType.PublicBodies, actual.Data.Results.Data.First().Type);
            
         }
+
+        [Test]
+        public async Task ThenTheStatusWillBeSetToConflictWhenTheLegalEntityHasAlreadyBeenAddedAndTheCharityHasLeadingAndTrailingWhitespace()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
+                .ReturnsAsync(new GetAccountLegalEntitiesResponse
+                {
+                    Entites = new LegalEntities
+                    {
+                        LegalEntityList = new List<LegalEntity>
+                    {
+                        new LegalEntity
+                        {
+                            Code="12345",
+                            Source = (short)OrganisationType.CompaniesHouse
+                        }
+                    }
+                    }
+                });
+
+            //Act
+            var actual = await _orchestrator.GetLimitedCompanyByRegistrationNumber(" 12345 ", "123", string.Empty);
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Conflict, actual.Status);
+        }
     }
 }
