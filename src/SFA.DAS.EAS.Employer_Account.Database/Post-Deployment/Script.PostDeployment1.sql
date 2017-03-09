@@ -47,3 +47,35 @@ IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME='Role' AND T
 	BEGIN
 		DROP TABLE [employer_account].[Role]
 	END
+
+
+--------------------------------------------------------------------------------------
+-- Remove references to duplicate legal entities on agreements
+--------------------------------------------------------------------------------------
+DECLARE @legalEntityIds as Table
+(
+	LegalEntityID  BIGINT,
+	Code  nVarchar(50)
+)
+insert into @legalEntityIds (LegalEntityId,code)
+select Min(id),code as id from employer_account.legalentity
+group by code
+having count(1) > 1
+
+
+DECLARE @legalEntityDuplicateIds as Table
+(
+	LegalEntityIDKeep  BIGINT,
+	LegalEntityIDRemove  BIGINT,
+	Code  nVarchar(50)
+)
+
+insert into @legalEntityDuplicateIds
+select LegalEntityId as LEToKeep,le.Id as LEToRemove, le.code 
+from @legalEntityIds dervx
+inner join employer_account.legalentity le on le.code = dervx.code and dervx.LegalEntityID <> le.id
+
+update employer_account.employeragreement SET legalentityID = derv.legalentityidkeep
+from employer_account.employeragreement ea
+inner join @legalEntityDuplicateIds derv on derv.LegalEntityIDRemove = ea.LegalEntityId
+inner join employer_Account.LegalEntity le on le.id = ea.LegalEntityId
