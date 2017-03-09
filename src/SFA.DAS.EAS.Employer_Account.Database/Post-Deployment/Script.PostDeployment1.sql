@@ -79,3 +79,7 @@ update employer_account.employeragreement SET legalentityID = derv.legalentityid
 from employer_account.employeragreement ea
 inner join @legalEntityDuplicateIds derv on derv.LegalEntityIDRemove = ea.LegalEntityId
 inner join employer_Account.LegalEntity le on le.id = ea.LegalEntityId
+
+delete from employer_account.LegalEntity
+where id not in
+(select LegalEntityId from employer_account.employeragreement)
