@@ -58,19 +58,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
-                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+                var result = await CheckLegalEntityIsNotAddedToAccount(hashedLegalEntityId, userIdClaim, companiesHouseNumber, OrganisationType.CompaniesHouse);
 
-                if (accountEntities.Entites.LegalEntityList.Any(x =>
-                    (!string.IsNullOrWhiteSpace(x.Code)
-                     && x.Code.Equals(companiesHouseNumber, StringComparison.CurrentCultureIgnoreCase))))
+                if (result != null)
                 {
-                    var errorResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                    {
-                        Data = new OrganisationDetailsViewModel(),
-                        Status = HttpStatusCode.Conflict
-                    };
-                    errorResponse.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
-                    return errorResponse;
+                    result.Data.ErrorDictionary["CompaniesHouseNumber"] = "Company already added";
+                    return result;
                 }
             }
 
@@ -202,22 +195,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!string.IsNullOrEmpty(hashedLegalEntityId))
             {
-                var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-                if (accountEntities.Entites.LegalEntityList.Any(
-                    x =>
-                        (!String.IsNullOrWhiteSpace(x.Code) &&
-                         x.Code.Equals(registrationNumber, StringComparison.CurrentCultureIgnoreCase))
-                        && x.Source == (short) OrganisationType.Charities))
+                var result = await CheckLegalEntityIsNotAddedToAccount(hashedLegalEntityId, userIdClaim, registrationNumber, OrganisationType.Charities);
+
+                if (result != null)
                 {
-                    var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
-                    {
-                        Data = new OrganisationDetailsViewModel(),
-                        Status = HttpStatusCode.Conflict
-                    };
-                    conflictResponse.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
-                    return conflictResponse;
+                    result.Data.ErrorDictionary["CharityRegistrationNumber"] = "Charity already added";
+                    return result;
                 }
+                
             }
 
             int charityRegistrationNumber;
@@ -536,6 +522,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             return addressBuilder.ToString();
+        }
+
+        public async Task<OrchestratorResponse<OrganisationDetailsViewModel>> CheckLegalEntityIsNotAddedToAccount(string hashedLegalEntityId, string userIdClaim, string legalEntityCode, OrganisationType organisationType)
+        {
+            var accountEntities = await GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
+
+            if (accountEntities.Entites.LegalEntityList.Any(
+                x =>
+                    (!string.IsNullOrWhiteSpace(x.Code.Trim()) &&
+                     x.Code.Equals(legalEntityCode.Trim(), StringComparison.CurrentCultureIgnoreCase))
+                    && x.Source == (short)organisationType))
+            {
+                var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
+                {
+                    Data = new OrganisationDetailsViewModel(),
+                    Status = HttpStatusCode.Conflict
+                };
+                
+                return conflictResponse;
+            }
+
+            return null;
         }
     }
 }
