@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             base.SetUp();
 
             _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new Account());
+            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new Domain.Data.Entities.Account.Account());
 
             RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object);
             Query = new GetEmployerAccountHashedQuery {HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId};

@@ -4,12 +4,13 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
-using SFA.DAS.EAS.Application.Commands.CreateAccountEvent;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 {
@@ -20,16 +21,26 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
         private readonly IValidator<RenameEmployerAccountCommand> _validator;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IGenericEventFactory _genericEventFactory;
+        private readonly IAccountEventFactory _accountEventFactory;
 
-        public RenameEmployerAccountCommandHandler(IEmployerAccountRepository accountRepository, IMembershipRepository membershipRepository, IValidator<RenameEmployerAccountCommand> validator, IHashingService hashingService, IMediator mediator, IEventPublisher eventPublisher)
+
+        public RenameEmployerAccountCommandHandler(
+            IEmployerAccountRepository accountRepository, 
+            IMembershipRepository membershipRepository, 
+            IValidator<RenameEmployerAccountCommand> validator, 
+            IHashingService hashingService, 
+            IMediator mediator, 
+            IGenericEventFactory genericEventFactory,
+            IAccountEventFactory accountEventFactory)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _validator = validator;
             _hashingService = hashingService;
             _mediator = mediator;
-            _eventPublisher = eventPublisher;
+            _genericEventFactory = genericEventFactory;
+            _accountEventFactory = accountEventFactory;
         }
 
         protected override async Task HandleCore(RenameEmployerAccountCommand message)
@@ -59,7 +70,11 @@ namespace SFA.DAS.EAS.Application.Commands.RenameEmployerAccount
 
         private async Task NotifyAccountRenamed(string hashedAccountId)
         {
-            await _eventPublisher.PublishAccountRenamedEvent(hashedAccountId);
+            var accountEvent = _accountEventFactory.CreateAccountRenamedEvent(hashedAccountId);
+
+            var genericEvent = _genericEventFactory.Create(accountEvent);
+
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task AddAuditEntry(string ownerEmail, long accountId, string name)

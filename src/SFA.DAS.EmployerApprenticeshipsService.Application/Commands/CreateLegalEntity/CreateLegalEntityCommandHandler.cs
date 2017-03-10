@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Extensions;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
@@ -20,14 +19,22 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
         private readonly IAccountRepository _accountRepository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IGenericEventFactory _genericEventFactory;
+        private readonly ILegalEntityEventFactory _legalEntityEventFactory;
 
-        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository, IMembershipRepository membershipRepository, IMediator mediator, IEventPublisher eventPublisher)
+
+        public CreateLegalEntityCommandHandler(
+            IAccountRepository accountRepository, 
+            IMembershipRepository membershipRepository, 
+            IMediator mediator, 
+            IGenericEventFactory genericEventFactory,
+            ILegalEntityEventFactory legalEntityEventFactory)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
             _mediator = mediator;
-            _eventPublisher = eventPublisher;
+            _genericEventFactory = genericEventFactory;
+            _legalEntityEventFactory = legalEntityEventFactory;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -55,7 +62,12 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private async Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)
         {
-            await _eventPublisher.PublishLegalEntityCreatedEvent(hashedAccountId, legalEntityId);
+            var legalEntityEvent = _legalEntityEventFactory.CreateLegalEntityCreatedEvent(
+                                            hashedAccountId, legalEntityId);
+
+            var genericEvent = _genericEventFactory.Create(legalEntityEvent);
+
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)

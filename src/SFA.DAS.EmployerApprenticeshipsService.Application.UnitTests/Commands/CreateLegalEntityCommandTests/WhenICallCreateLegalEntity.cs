@@ -6,13 +6,12 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -21,11 +20,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IMediator> _mediator;
-        private Mock<IEventPublisher> _eventPublisher;
+        private Mock<IGenericEventFactory> _genericEventFactory;
         private CreateLegalEntityCommandHandler _commandHandler;
         private CreateLegalEntityCommand _command;
         private MembershipView _owner;
         private EmployerAgreementView _agreementView;
+        private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
 
         [SetUp]
         public void Arrange()
@@ -70,9 +70,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _accountRepository.Setup(x => x.CreateLegalEntity(_owner.AccountId, _command.LegalEntity))
                               .ReturnsAsync(_agreementView);
 
-            _eventPublisher = new Mock<IEventPublisher>();
+            _genericEventFactory = new Mock<IGenericEventFactory>();
+            _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
 
-            _commandHandler = new CreateLegalEntityCommandHandler(_accountRepository.Object, _membershipRepository.Object, _mediator.Object, _eventPublisher.Object);
+            _commandHandler = new CreateLegalEntityCommandHandler(
+                _accountRepository.Object, 
+                _membershipRepository.Object, 
+                _mediator.Object, 
+                _genericEventFactory.Object,
+                _legalEntityEventFactory.Object);
         }
 
         [Test]
@@ -83,7 +89,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             //Assert
             Assert.AreSame(_agreementView, result.AgreementView);
-            _eventPublisher.Verify(x => x.PublishLegalEntityCreatedEvent(_command.HashedAccountId, _agreementView.LegalEntityId));
         }
 
         [Test]
