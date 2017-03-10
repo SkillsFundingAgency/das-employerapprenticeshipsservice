@@ -2186,6 +2186,10 @@ dl.inline dd {
   }
 }
 
+.page-dashboard h2 {
+  margin-bottom: 0;
+}
+
 .account-id,
 .secondary-text {
   font-family: "nta", Arial, sans-serif;
