@@ -98,26 +98,26 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                 _logger.Info($"Sending email to {email}");
                 var notificationCommand = BuildNotificationCommand(
                     email,
-                    message.HashedCommitmentId,
+                    commitment,
                     message.LastAction);
                 await _mediator.SendAsync(notificationCommand);
             }
         }
 
-        private SendNotificationCommand BuildNotificationCommand(string email, string hashedCommitmentId, LastAction action)
+        private SendNotificationCommand BuildNotificationCommand(string email, Commitment commitment, LastAction action)
         {
             return new SendNotificationCommand
             {
                 Email = new Email
                 {
                     RecipientsAddress = email,
-                    TemplateId = "ProviderCommitmentNotification",
+                    TemplateId = commitment.AgreementStatus == AgreementStatus.NotAgreed ? "ProviderCommitmentNotification" : "ProviderCohortApproved",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",
                     Tokens = new Dictionary<string, string> {
                         { "type", action == LastAction.Approve ? "approval" : "review" },
-                        { "cohort_reference", hashedCommitmentId }
+                        { "cohort_reference", commitment.Reference }
                     }
                 }
             };
