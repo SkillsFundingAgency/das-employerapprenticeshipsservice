@@ -996,6 +996,9 @@
     <Content Include="Views\Home\SetupAccount.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\Edit.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ViewChange.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
