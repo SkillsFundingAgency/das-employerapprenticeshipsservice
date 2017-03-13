@@ -34,19 +34,18 @@
                                     <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
                                 </td>
                                 <td class="numeric">
-                            @if (fraction.Amount == 1)
-                            {
-                                <span>100%</span>
-                            }
-                            else if (fraction.Amount == 0)
-                            {
-                                <span>0%</span>
-                            }
-                            else
-                            {
-                            <span>@fraction.Amount.ToString("P3")</span>
-                            }
-                            
+                                    @if (fraction.Amount == 1)
+                                    {
+                                        <span>100%</span>
+                                    }
+                                    else if (fraction.Amount == 0)
+                                    {
+                                        <span>0%</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@fraction.Amount.ToString("P3")</span>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -58,7 +57,7 @@
                                 <span>@Model.Data.EmpRefAdded.ToString("dd MMM yy")</span>
                             </td>
                             <td class="numeric">
-                                <span>100.000%</span>
+                                <span>100%</span>
                             </td>
                         </tr>
                     }
