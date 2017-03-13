@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public string HashedId { get; set; }
                     
-        public List<PayeView> PayeSchemes { get; set; }   
+        public List<PayeView> PayeSchemes { get; set; }
+        public bool ShowHistory { get; set; }
     }
 }
