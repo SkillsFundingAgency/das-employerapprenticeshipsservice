@@ -5,3 +5,4 @@ select
 	* 
 from [employer_financial].EnglishFraction
 where EmpRef = @empref
+order by DateCalculated desc
