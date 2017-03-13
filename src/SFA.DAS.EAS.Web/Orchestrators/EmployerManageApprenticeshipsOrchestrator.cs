@@ -10,6 +10,11 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.EAS.Web.ViewModels;
+using AutoMapper;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using System.Collections.Generic;
+using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -19,12 +24,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
             IApprenticeshipMapper apprenticeshipMapper,
-            ILogger logger) : base(mediator, hashingService, logger)
+            ILogger logger,
+            IMapper mapper) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -34,11 +41,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (mapper == null)
+                throw new ArgumentNullException(nameof(mapper));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
@@ -52,7 +62,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var apprenticeships = data.Apprenticeships
                         .OrderBy(m => m.ApprenticeshipName)
-                        .Select(_apprenticeshipMapper.MapFrom)
+                        .Select(_apprenticeshipMapper.MapToApprenticeshipDetailsViewModel)
                         .ToList();
 
                     var model = new ManageApprenticeshipsViewModel
@@ -81,9 +91,48 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
                                {
-                                   Data = _apprenticeshipMapper.MapFrom(data.Apprenticeship)
+                                   Data = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship)
                                };
                 }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetApprenticeshipForEdit(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting Approved Apprenticeship for Editing, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
+
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                var apprenticeship = _mapper.Map<ApprenticeshipViewModel>(data.Apprenticeship);
+
+                apprenticeship.HashedAccountId = hashedAccountId;
+
+                return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
+                {
+                    Data = new ExtendedApprenticeshipViewModel
+                    {
+                        Apprenticeship = apprenticeship,
+                        ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
+
+            return programmes.TrainingProgrammes;
         }
     }
 }

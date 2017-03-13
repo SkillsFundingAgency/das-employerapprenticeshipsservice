@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.StartsWith("SFA.DAS.EAS"));
 
             var mappingProfiles = new List<Profile>();
-
+            
             foreach (var assembly in assemblies)
             {
                 var profiles = Assembly.Load(assembly.FullName).GetTypes()

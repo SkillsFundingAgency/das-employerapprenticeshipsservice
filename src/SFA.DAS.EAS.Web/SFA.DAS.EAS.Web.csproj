@@ -418,7 +418,9 @@
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Orchestrators\CommitmentsBaseOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\CommitmentMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\ICommitmentMapper.cs" />
     <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
@@ -999,6 +1001,7 @@
     <Content Include="Views\EmployerManageApprentices\Edit.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ViewChange.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
+    <Content Include="Views\Shared\EditApprenticeship.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

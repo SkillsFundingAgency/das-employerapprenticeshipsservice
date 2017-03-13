@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using AutoMapper;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
@@ -23,15 +24,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         private Mock<IMediator> _mockMediator;
 
         private Mock<ICurrentDateTime> _mockDateTime;
+        private Mock<IMapper> _mockMapper;
 
         [SetUp]
         public void SetUp()
         {
             _mockMediator = new Mock<IMediator>();
             _mockDateTime = new Mock<ICurrentDateTime>();
-            _mockApprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object);
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, Mock.Of<ILogger>());
+            _mockApprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
+            _mockMapper = new Mock<IMapper>();
+
+            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, Mock.Of<ILogger>(), _mockMapper.Object);
         }
 
         [TestCase(8, 5, arg3: 10)]
