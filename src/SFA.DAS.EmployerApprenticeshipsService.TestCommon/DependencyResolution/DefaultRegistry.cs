@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
             For<ICache>().Use<InMemoryCache>();
-            For<IEventsApi>().Use(eventApi.Object);
+            For<IEventsApi>().Use(() => eventApi.Object);
 
             AddMediatrRegistrations();
 
