@@ -62,9 +62,23 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("AccessDenied");
 
             var model = await _orchestrator
-                .GetApprenticeship(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                .GetApprenticeshipForEdit(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/confirm", Name = "ConfirmApprenticeChanges")]
+        public ActionResult ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
+        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            return View();
         }
 
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)

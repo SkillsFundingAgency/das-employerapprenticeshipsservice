@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ApprenticeshipDetailsViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ExtendedApprenticeshipViewModel>
 
 @{
     ViewBag.Title = "Apprentice detail";
@@ -7,10 +7,9 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div class="hgroup">
-            <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
+        <div>
+            <a href="@Url.RouteUrl("ConfirmApprenticeChanges")">Confirm Changes</a>
         </div>
-
         @Html.Partial("EditApprenticeship", Model.Data)
 
     </div>

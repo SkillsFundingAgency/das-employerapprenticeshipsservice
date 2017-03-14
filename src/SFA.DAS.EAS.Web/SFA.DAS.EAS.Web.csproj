@@ -999,7 +999,7 @@
     <Content Include="Views\Home\LegalAgreement.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\EmployerManageApprentices\Edit.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\ViewChange.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ViewChanges.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
   </ItemGroup>

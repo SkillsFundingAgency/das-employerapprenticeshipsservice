@@ -24,14 +24,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
 
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
             IApprenticeshipMapper apprenticeshipMapper,
-            ILogger logger,
-            IMapper mapper) : base(mediator, hashingService, logger)
+            ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -41,14 +39,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
-            if (mapper == null)
-                throw new ArgumentNullException(nameof(mapper));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
             _logger = logger;
-            _mapper = mapper;
         }
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
@@ -113,7 +108,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId
                 });
 
-                var apprenticeship = _mapper.Map<ApprenticeshipViewModel>(data.Apprenticeship);
+                var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
 
                 apprenticeship.HashedAccountId = hashedAccountId;
 
