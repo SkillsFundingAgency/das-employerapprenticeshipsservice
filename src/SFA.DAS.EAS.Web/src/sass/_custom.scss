@@ -226,6 +226,17 @@
     margin-top:30px;
 }
 
+// safari on mac icon bug on input fields fix
+body {
+    input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  }
+}
+
   
 //all mobile media query breakpoints
 //==================================

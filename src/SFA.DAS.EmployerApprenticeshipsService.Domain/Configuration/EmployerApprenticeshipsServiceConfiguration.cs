@@ -25,6 +25,15 @@ namespace SFA.DAS.EAS.Domain.Configuration
             return false;
         }
 
+        public bool ShowPayeHistory()
+        {
+            if (CloudConfigurationManager.GetSetting("ShowPayeHistory") != null)
+            {
+                return Convert.ToBoolean(CloudConfigurationManager.GetSetting("ShowPayeHistory"));
+            }
+
+            return false;
+        }
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }

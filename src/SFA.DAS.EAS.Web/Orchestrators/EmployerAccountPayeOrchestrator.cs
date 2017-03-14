@@ -42,7 +42,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new EmployerAccountPayeListViewModel
                 {
                     HashedId = hashedAccountId,
-                    PayeSchemes = response.PayeSchemes
+                    PayeSchemes = response.PayeSchemes,
+                    ShowHistory = Configuration.ShowPayeHistory()
                 }
             };
         }
@@ -209,7 +210,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     EmpRef = empRef,
                     UserId = userId
                 });
-                response.Data = new PayeSchemeDetailViewModel {Fractions = result.Fractions, EmpRef = result.EmpRef, EmpRefAdded = result.EmpRefAddedDate};
+                response.Data = new PayeSchemeDetailViewModel
+                {
+                    Fractions = result.Fractions,
+                    EmpRef = result.EmpRef,
+                    EmpRefAdded = result.EmpRefAddedDate,
+                    ShowHistory = Configuration.ShowPayeHistory()
+                };
                 return response;
             }
             catch (UnauthorizedAccessException )
