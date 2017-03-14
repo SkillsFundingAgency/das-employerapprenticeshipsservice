@@ -14,7 +14,6 @@ AS
 	DELETE FROM [employer_account].[Paye];
 	DELETE FROM [employer_account].[LegalEntity];
 	DELETE FROM [employer_account].[AccountHistory]
-	DELETE FROM [employer_account].[Account];
-	DELETE FROM [employer_account].[Role];
+	DELETE FROM [employer_account].[Account];	
 	DELETE FROM [employer_account].[EmployerAgreementTemplate];
 RETURN 0
