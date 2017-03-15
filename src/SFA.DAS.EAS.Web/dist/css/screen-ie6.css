@@ -3267,6 +3267,10 @@ span.helpText {
   border-color: #0b0c0c transparent;
 }
 
+#app-status td {
+  border-top: 1px solid #bfc1c3;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .select2-container--default {
     width: 100% !important;

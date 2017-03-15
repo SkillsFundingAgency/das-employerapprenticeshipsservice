@@ -3,6 +3,7 @@
 
 @model ExtendedApprenticeshipViewModel
 
+
 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("FirstName", "error")">
     @Html.Label("FirstName", "First name", new { @class = "form-label form-label-bold" })
     @Html.ValidationMessage("FirstName", new { id = "error-message-FirstName" })

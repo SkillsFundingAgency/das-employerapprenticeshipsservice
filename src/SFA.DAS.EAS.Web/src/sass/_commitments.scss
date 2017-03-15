@@ -173,6 +173,14 @@ span.helpText {
     border-color: $black transparent;
 }
 
+#app-status{
+    td{
+        border-top:1px solid $border-colour;
+    }
+}
+
+
+
 
 //all mobile media query breakpoints
 //==================================
@@ -320,4 +328,7 @@ only screen and (max-width: 480px) {
         font-weight: normal;
         margin-top: 5px;
     }
+
+
+
 } // mobile view ends
