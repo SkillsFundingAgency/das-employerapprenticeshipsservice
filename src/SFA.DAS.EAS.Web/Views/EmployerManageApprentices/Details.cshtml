@@ -7,107 +7,119 @@
 }
 
 <div>
-    <span>Remove this!!!</span>
-    <div><a href="@Url.RouteUrl("EditApprovedApprentice")">Edit the apprentice</a></div>
+ 
     <div><a href="@Url.RouteUrl("ViewPendingChanges")">View pending changes</a></div>
 </div>
 
 <div class="grid-row">
     <div class="column-two-thirds">
        <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
-       
-        <!--static html-->
-        <table id="app-status">
-            <thead>
-                <tr>
-                    <th colspan="3" class="visually-hidden">Apprentice Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Status</td>
-                    <td>@Model.Data.Status</td>
-                    <td><a href="#">Edit status</a></td>
-                </tr>              
-            </tbody>
-        </table>
+            
+            <div class="panel panel-border-wide alert-default">
+                <p>There are changes to this apprentice's details that you need to review.  Until you've reviewed the changes, you'll only be able to edit the apprentice's status. </p>
+                <p><a href="#">Review changes</a></p>
+            </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">Overview</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Training provider</td>
-                    <td>Hackney Skills Solutions Ltd</td>
-                </tr>
-                <tr>
-                    <td>Cohort reference</td>
-                    <td>98HXGFD</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="panel panel-border-wide">
+            <p>
+                There are changes to this apprentice's details that are waiting for approval by the training provider.  You can continue to edit this apprentice if you need to.
+            <p><a href="#">View changes</a></p>
+            </p>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2">Apprentice</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Name</td>
-                    <td>@Model.Data.FirstName @Model.Data.LastName</td>
-                </tr>
-                <tr>
-                    <td>Date of birth</td>
-                    <td>
-                        @if (Model.Data.DateOfBirth.HasValue)
-                        {
-                            @Model.Data.DateOfBirth.Value.ToGdsFormat()
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>Apprenticeship training course </td>
-                    <td>@Model.Data.TrainingName </td>
-                </tr>
-                <tr>
-                    <td>End-point assessor </td>
-                    <td>Pham assessments Ltd </td>
-                </tr>
-                <tr>
-                    <td>Training start date </td>
-                    <td>
-                        @if (@Model.Data.StartDate.HasValue)
-                        {
-                            @Model.Data.StartDate.Value.ToGdsFormat()
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>Training end date </td>
-                    <td>
-                        @if (Model.Data.EndDate.HasValue)
-                        {
-                            @Model.Data.EndDate.Value.ToGdsFormat()
-                        } 
-                    </td>
-                </tr>
-                <tr>
-                    <td>Total cost of training </td>
-                    <td>@FormatCost(Model.Data.Cost) </td>
-                </tr>
-                <tr>
-                    <td>Reference </td>
-                    <td>Banbury site </td>
-                </tr>
-            </tbody>
-        </table>
-        <!--END static html-->
-    </div>
+
+            <!--static html-->
+            <table id="app-status">
+                <thead>
+                    <tr>
+                        <th colspan="3" class="visually-hidden">Apprentice Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Status</td>
+                        <td>@Model.Data.Status</td>
+                        <td><a href="@Url.RouteUrl("EditApprovedApprentice")">Edit status</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Overview</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Training provider</td>
+                        <td>Hackney Skills Solutions Ltd</td>
+                    </tr>
+                    <tr>
+                        <td>Cohort reference</td>
+                        <td>98HXGFD</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="2">Apprentice</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>@Model.Data.FirstName @Model.Data.LastName</td>
+                    </tr>
+                    <tr>
+                        <td>Date of birth</td>
+                        <td>
+                            @if (Model.Data.DateOfBirth.HasValue)
+                            {
+                                @Model.Data.DateOfBirth.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Apprenticeship training course </td>
+                        <td>@Model.Data.TrainingName </td>
+                    </tr>
+                    <tr>
+                        <td>End-point assessor </td>
+                        <td>Pham assessments Ltd </td>
+                    </tr>
+                    <tr>
+                        <td>Training start date </td>
+                        <td>
+                            @if (@Model.Data.StartDate.HasValue)
+                            {
+                                @Model.Data.StartDate.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Training end date </td>
+                        <td>
+                            @if (Model.Data.EndDate.HasValue)
+                            {
+                                @Model.Data.EndDate.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total cost of training </td>
+                        <td>@FormatCost(Model.Data.Cost) </td>
+                    </tr>
+                    <tr>
+                        <td>Reference </td>
+                        <td>Banbury site </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!--END static html-->
+        </div>
 
     <div class="column-one-thirds">
 
