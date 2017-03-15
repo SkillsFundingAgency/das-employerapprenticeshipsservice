@@ -1,8 +1,6 @@
-﻿using SFA.DAS.Events.Api.Types;
-
-namespace SFA.DAS.EAS.Account.Api.Types.Events
+﻿namespace SFA.DAS.EAS.Account.Api.Types.Events.Account
 {
-    public class PayeSchemeAddedEvent : IEventView
+    public class AccountRenamedEvent : IEventView
     {
         public long Id { get; set; }
         public string Event { get; set; }

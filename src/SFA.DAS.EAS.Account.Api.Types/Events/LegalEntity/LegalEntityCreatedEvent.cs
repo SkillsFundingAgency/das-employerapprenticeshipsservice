@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Events.Api.Types;
-
-namespace SFA.DAS.EAS.Account.Api.Types.Events
+﻿namespace SFA.DAS.EAS.Account.Api.Types.Events.LegalEntity
 {
     public class LegalEntityCreatedEvent : IEventView
     {
