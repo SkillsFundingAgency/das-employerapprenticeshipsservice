@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme
+﻿using SFA.DAS.Events.Api.Types;
+
+namespace SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme
 {
     public class PayeSchemeRemovedEvent : IEventView
     {

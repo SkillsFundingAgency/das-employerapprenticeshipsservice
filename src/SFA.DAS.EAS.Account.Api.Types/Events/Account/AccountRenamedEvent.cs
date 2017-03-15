@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EAS.Account.Api.Types.Events.Account
+﻿using SFA.DAS.Events.Api.Types;
+
+namespace SFA.DAS.EAS.Account.Api.Types.Events.Account
 {
     public class AccountRenamedEvent : IEventView
     {
