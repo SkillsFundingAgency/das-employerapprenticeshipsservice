@@ -39,7 +39,7 @@
                     <tr>
                         <td>Status</td>
                         <td>@Model.Data.Status</td>
-                        <td><a href="@Url.RouteUrl("EditApprovedApprentice")">Edit status</a></td>
+                        <td><a href="#">Edit status</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -65,7 +65,10 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="2">Apprentice</th>
+                        <th colspan="2">
+                            Apprentice
+                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
