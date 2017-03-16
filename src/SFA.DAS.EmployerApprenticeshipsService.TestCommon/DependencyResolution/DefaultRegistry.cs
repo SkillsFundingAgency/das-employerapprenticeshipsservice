@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
     public class DefaultRegistry : Registry
     {
 
-        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieService> cookieServiceMock)
+        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieService> cookieServiceMock, Mock<IEventsApi> eventApi)
         {
             Scan(scan =>
             {
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 
             For<ICache>().Use<InMemoryCache>();
-			For<IEventsApi>().Use<EventsApi>().SelectConstructor(() => new EventsApi(null));
+            For<IEventsApi>().Use(() => eventApi.Object);
 
             AddMediatrRegistrations();
 

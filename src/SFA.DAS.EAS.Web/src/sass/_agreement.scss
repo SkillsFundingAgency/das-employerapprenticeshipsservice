@@ -111,6 +111,35 @@
     }
 }
 
+#publication-banner {
+    .download {
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+}
+
+@include media(tablet) {
+    #publication-banner {
+        display: table;
+        width: 100%;
+        margin-left: 0;
+        .column-third {
+            padding-left: 0;
+        }
+        .column-third, 
+        .column-two-thirds {
+            display: table-cell;
+            float: none;
+        }
+        .column-two-thirds {
+            vertical-align: bottom;
+            text-align: right;
+            padding-right: 0;
+        }
+    }
+}
+
 .agreement-parties {
     address.party {
         @include media(tablet) {
@@ -162,5 +191,91 @@
                 }
             }
         }
+    }
+}
+
+/* PDF */
+#layout-agreement {
+    * {
+        overflow: visible;
+    }
+    margin: 0;
+    background: white;
+    color: black;
+    .grid-row {
+        margin: 0;
+    }
+    .column-full {
+        padding: 0;
+    }
+    #content {
+        margin: 0;
+    }
+    .agreement {
+        header {
+            background: none;
+            padding: 0;
+            margin: 0;
+        }
+        #contents {
+            display: none;
+        }
+        p.updated {
+            margin-bottom: 0;
+        }
+  
+        .headings {
+            margin: 0;
+            border: 5px solid $govuk-blue;
+            padding: 20px;
+            margin: 30px 0;
+            background: white;
+            color: black;
+        }
+
+        .agreement-contents { 
+           padding-left: 50px;
+           h2 {
+               clear: left;
+               border-top: 1px solid white;
+               margin-left: -45px;
+               padding-left: 45px;
+               .number {
+                   display: inline-block;
+                   width: 35px;
+                   margin-left: -40px;
+               }
+           }
+           h3 {
+                margin: 0 0 0 -40px;
+                position: relative;
+                bottom: -20px;
+                color: black;
+           }
+           h2, p {
+               margin: 0 0 10px;
+           }
+           h2 {
+               margin-left: -45px;
+           }
+        }
+        
+    }
+    table.sign-agreement {
+        th {
+            width: 30%;
+        }
+        td {
+            width: 70%;
+        }
+        span.table-address {
+            display: inline-block;
+            max-width: 100%;
+            min-height: 125px;
+            word-wrap: break-word;
+        }
+    }
+    .back-to-contents {
+        display: none;
     }
 }

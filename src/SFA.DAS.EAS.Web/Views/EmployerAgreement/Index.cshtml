@@ -37,10 +37,14 @@
         <table class="organisations">
             <thead>
                 <tr>
-                    <th scope="col">Organisation</th>
-                    <th scope="col">Agreement</th>
-                    <th scope="col">Spending status</th>
-                    <th scope="col"><span class="vh">Action</span></th>
+                <th scope="col">Organisation</th>
+                    @if (Model.Data.ShowAgreements)
+                    {
+                        <th scope="col">Agreement</th>
+                        <th scope="col">Spending status</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    }
+                    
             </thead>
             <tbody>
 
@@ -48,33 +52,37 @@
                 {
                     <tr>
                         <td>@employerAgreement.LegalEntityName</td>
-                        <td>
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed) {
-                                @: Signed by @employerAgreement.SignedByName
-                                if (employerAgreement.SignedDate.HasValue)
+                        @if (Model.Data.ShowAgreements)
+                        {
+                            <td>
+                                @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
                                 {
-                                    <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
+                                    @: Signed by @employerAgreement.SignedByName
+                                    if (employerAgreement.SignedDate.HasValue)
+                                    {
+                                        <span class="secondary-text">Signed on: @employerAgreement.SignedDate.Value.ToString("dd/MM/yyyy")</span>
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                @: Agreement not signed
-                                <span class="secondary-text">SFA agreement needs to be signed</span>
-                            }
-                        </td>
-                        <td>
-                            @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
-                        </td>
-                        <td class="link-right">
-                            @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
-                            {
-                                <a href="@Url.Action("Details", "EmployerAgreement",new {agreementid=employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
-                            }
-                            else
-                            {
-                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.HashedAgreementId })" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
-                            }
-                        </td>
+                                else
+                                {
+                                    @: Agreement not signed
+                                    <span class="secondary-text">SFA agreement needs to be signed</span>
+                                }
+                            </td>
+                            <td>
+                                @(employerAgreement.Status == EmployerAgreementStatus.Signed ? "Spending enabled" : "Spending disabled")
+                            </td>
+                            <td class="link-right">
+                                @if (employerAgreement.Status == EmployerAgreementStatus.Signed)
+                                {
+                                    <a href="@Url.Action("Details", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View <span class="vh">agreement for @employerAgreement.LegalEntityName</span></a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                                }
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>

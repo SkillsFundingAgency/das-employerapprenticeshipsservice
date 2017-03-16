@@ -12,11 +12,14 @@ using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreement;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
+using SFA.DAS.EAS.Application.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -27,13 +30,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class EmployerAgreementOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly ILogger _logger;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         private readonly IMediator _mediator;
 
         protected EmployerAgreementOrchestrator()
         {
         }
 
-        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger): base(mediator)
+        public EmployerAgreementOrchestrator(IMediator mediator, ILogger logger, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -41,6 +45,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(logger));
             _mediator = mediator;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> Create(
@@ -99,7 +104,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new EmployerAgreementListViewModel
                     {
                         HashedAccountId = hashedId,
-                        EmployerAgreements = response.EmployerAgreements
+                        EmployerAgreements = response.EmployerAgreements,
+                        ShowAgreements = _configuration.ShowAgreements()
                     }
                 };
             }
@@ -215,6 +221,82 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        {
+            var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
 
+            try
+            {
+                var result = await _mediator.SendAsync(new GetEmployerAgreementPdfRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    HashedLegalAgreementId = agreementId,
+                    UserId = userId
+                });
+
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                pdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
+            }
+            catch (Exception ex)
+            {
+                pdfEmployerAgreement.Exception = ex;
+                pdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                pdfEmployerAgreement.Status = HttpStatusCode.NotFound;
+            }
+            
+            return pdfEmployerAgreement;
+        }
+
+        public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>>  GetSignedPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
+        {
+
+            var signedPdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
+
+            try
+            {
+                var result =
+                    await
+                        _mediator.SendAsync(new GetSignedEmployerAgreementPdfRequest
+                        {
+                            HashedAccountId = hashedAccountId,
+                            HashedLegalAgreementId = agreementId,
+                            UserId = userId
+                        });
+
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel {PdfStream = result.FileStream};
+
+                return signedPdfEmployerAgreement;
+            }
+            catch (InvalidRequestException ex)
+            {
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.BadRequest;
+                signedPdfEmployerAgreement.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = ex.ErrorMessages,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.Unauthorized;
+            }
+            catch (Exception ex)
+            {
+                signedPdfEmployerAgreement.Exception = ex;
+                signedPdfEmployerAgreement.Data = new EmployerAgreementPdfViewModel();
+                signedPdfEmployerAgreement.Status = HttpStatusCode.NotFound;
+            }
+
+            return signedPdfEmployerAgreement;
+
+        }
     }
 }

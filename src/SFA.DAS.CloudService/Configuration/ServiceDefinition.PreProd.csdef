@@ -24,6 +24,8 @@
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
       <Setting name="TokenCertificateThumbprint"/>
+      <Setting name="ShowAgreements" />
+      <Setting name="ShowPayeHistory" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-eas-ilb"/>

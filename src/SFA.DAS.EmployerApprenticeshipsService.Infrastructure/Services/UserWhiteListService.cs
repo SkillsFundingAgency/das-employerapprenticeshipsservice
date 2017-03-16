@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.WhileList;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -11,10 +12,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     {
         private readonly ICacheProvider _cacheProvider;
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.WhiteList";
+        public sealed override ILogger Logger { get; set; }
 
-        public UserWhiteListService(ICacheProvider cacheProvider)
+        public UserWhiteListService(ICacheProvider cacheProvider,ILogger logger)
         {
             _cacheProvider = cacheProvider;
+            Logger = logger;
         }
         
         public bool IsEmailOnWhiteList(string email)

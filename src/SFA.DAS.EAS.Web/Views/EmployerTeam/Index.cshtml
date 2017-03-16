@@ -20,69 +20,79 @@
 <div class="grid-row page-dashboard">
     <div class="column-two-thirds">
      
-            <div class="grid-row">
-                <div class="column-half">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("ViewTeam")">Your team</a>
-                    </h2>
-                    <p>Control what your team can do and invite new team members.</p>
-                </div>
-                <div class="column-half ">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
-                    </h2>
-                    <p>View transactions and forecast your funds.</p>
-                </div>
+        <div class="grid-row">
+            <div class="column-half">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("ViewTeam")">Your team</a>
+                </h2>
+                <p>Control what your team can do and invite new team members.</p>
+
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
+                </h2>
+                <p>Add your organisations that will make agreements with training providers.</p>
+
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "EmployerCommitments")">Apprentices</a>
+                </h2>
+                <p>Update the status of your apprentices, or recruit new ones.</p>
 
             </div>
-            <div class="grid-row">
-                <div class="column-half ">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
-                    </h2>
-                    <p>Add your organisations that will make agreements with training providers.</p>
-                </div>
-                <div class="column-half">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
-                    </h2>
-                    <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
-                </div>
+            <div class="column-half">
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
+                </h2>
+                <p>View transactions and forecast your funds.</p>
+   
+                <h2 class="heading-medium">
+                    <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
+                </h2>
+                <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
+          
+                <h2 class="heading-medium">
+                    <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
+                </h2>
+                <p>Search for training providers, training frameworks and end-point assessors.</p>
+
             </div>
-            <div class="grid-row">
-                <div class="column-half ">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerCommitments")">Apprentices</a>
-                    </h2>
-                    <p>Update the status of your apprentices, or recruit new ones.</p>
-                </div>
-                <div class="column-full">
-                    <div class="panel panel-filled">
-                        <h3 class="heading-medium">Help us improve this service</h3>
-                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
-                        <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
-                    </div>
+
+        </div>
+   
+           
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="panel panel-filled">
+                    <h3 class="heading-medium">Help us improve this service</h3>
+                    <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+                    <p><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
                 </div>
             </div>
         </div>
+        </div>
     <div class="column-one-third">
-        @if (Model.Data.RequiresAgreementSigning)
+        @if (Model.Data.ShowAgreements)
+        {
+            if (Model.Data.RequiresAgreementSigning)
+            {
+                <section>
+                    <div class="panel alert-default">
+                        <h3 class="heading-medium">Notice</h3>
+                        <p>
+                            There is an SFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with SFA</a> in order to release your funds so that you can pay your training provider.
+                        </p>
+                    </div>
+                </section>
+            }
+        }
+        else
         {
             <section>
                 <div class="panel alert-default">
                     <h3 class="heading-medium">Notice</h3>
-                    <p>There is an SFA agreement that needs to be signed by the authorised person. You must <a href="@Url.Action("Index", "EmployerAgreement")">sign the agreement with SFA</a> in order to release your funds so that you can pay your training provider.
-                    </p>
+                    <p><a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending" target="_blank">Read the <abbr title="Skills Funding Agency">SFA</abbr> agreement</a> - from May 2017, SFA will ask you to accept this agreement in order to spend apprenticeship funds.</p>
                 </div>
             </section>
         }
-        @*<section>
-            <div class="panel alert-default">
-                <h3 class="heading-medium">Notice</h3>
-                <p><a href="https://www.gov.uk/government/publications/apprenticeship-funding-legal-agreement-to-enable-spending" target="_blank">Read the <abbr title="Skills Funding Agency">SFA</abbr> agreement</a> - from May 2017, SFA will ask you to accept this agreement in order to spend apprenticeship funds.</p>
-            </div>
-        </section>*@
-        
     </div>
 </div>
 

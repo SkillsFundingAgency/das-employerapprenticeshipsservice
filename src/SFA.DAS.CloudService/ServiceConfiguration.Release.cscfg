@@ -13,6 +13,8 @@
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
+      <Setting name="ShowAgreements" value="false" />
+      <Setting name="ShowPayeHistory" value="false" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="BF55F64F778FC5F4E4EEBAE6493E37464B3E2AD7" thumbprintAlgorithm="sha1" />

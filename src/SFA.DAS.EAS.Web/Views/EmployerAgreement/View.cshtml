@@ -8,13 +8,14 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        
+
         <h1 class="heading-xlarge">
             <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
             Your SFA agreement
         </h1>
     </div>
 </div>
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <table>
@@ -49,6 +50,9 @@
                 </span>
             </h1>
         </div>
+    </div>
+    <div class="column-two-thirds">
+        <a href="@Url.Action("GetSignedPdfAgreement", "EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
     </div>
 </div>
 

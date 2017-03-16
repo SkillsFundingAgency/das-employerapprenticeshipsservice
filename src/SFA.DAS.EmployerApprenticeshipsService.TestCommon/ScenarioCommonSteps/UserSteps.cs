@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -22,14 +23,16 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<ICookieService> _cookieService;
+        private Mock<IEventsApi> _eventsApi;
 
         public UserSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieService>();
+            _eventsApi = new Mock<IEventsApi>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
         }
 
         public void UpsertUser(UserViewModel userView)
