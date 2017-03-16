@@ -2,6 +2,7 @@
 	@HashedId VARCHAR(100)
 AS
 Select 
+	acc.Id AS AccountId,
 	acc.HashedId,
 	acc.Name,
 	acc.CreatedDate,
