@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Domain.Interfaces
 {
-    public interface IEventPublisher
+    public interface IGenericEventFactory
     {
         Task PublishAccountCreatedEvent(string hashedAccountId);
         Task PublishAccountRenamedEvent(string hashedAccountId);

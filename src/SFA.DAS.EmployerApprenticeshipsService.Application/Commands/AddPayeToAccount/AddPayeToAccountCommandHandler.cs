@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Account.Api.Types.Events;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
@@ -14,6 +17,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 {
@@ -27,16 +31,25 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
         private readonly IMessagePublisher _messagePublisher;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IGenericEventFactory _genericEventFactory;
+        private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
 
-        public AddPayeToAccountCommandHandler(IValidator<AddPayeToAccountCommand> validator, IAccountRepository accountRepository, IMessagePublisher messagePublisher, IHashingService hashingService, IMediator mediator, IEventPublisher eventPublisher)
+        public AddPayeToAccountCommandHandler(
+            IValidator<AddPayeToAccountCommand> validator, 
+            IAccountRepository accountRepository, 
+            IMessagePublisher messagePublisher, 
+            IHashingService hashingService, 
+            IMediator mediator, 
+            IGenericEventFactory genericEventFactory,
+            IPayeSchemeEventFactory payeSchemeEventFactory)
         {
             _validator = validator;
             _accountRepository = accountRepository;
             _messagePublisher = messagePublisher;
             _hashingService = hashingService;
             _mediator = mediator;
-            _eventPublisher = eventPublisher;
+            _genericEventFactory = genericEventFactory;
+            _payeSchemeEventFactory = payeSchemeEventFactory;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
@@ -80,7 +93,11 @@ namespace SFA.DAS.EAS.Application.Commands.AddPayeToAccount
 
         private async Task NotifyPayeSchemeAdded(string hashedAccountId, string payeRef)
         {
-            await _eventPublisher.PublishPayeSchemeAddedEvent(hashedAccountId, payeRef);
+            var payeEvent = _payeSchemeEventFactory.CreatePayeSchemeAddedEvent(hashedAccountId, payeRef);
+
+            var genericEvent = _genericEventFactory.Create(payeEvent);
+
+            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
         }
 
         private async Task RefreshLevy(long accountId)

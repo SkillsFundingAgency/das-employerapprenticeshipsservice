@@ -9,6 +9,7 @@ using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -23,17 +24,15 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         private static int _exceptionCount;
         private static int _unauthorizedCount;
 
-
-
-
         [BeforeFeature]
         public static void Arrange()
         {
             var messagePublisher = new Mock<IMessagePublisher>();
             var owinWrapper = new Mock<IOwinWrapper>();
             var cookieService = new Mock<ICookieService>();
+            var eventsApi = new Mock<IEventsApi>();
 
-            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService);
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi);
         }
 
         [AfterFeature]

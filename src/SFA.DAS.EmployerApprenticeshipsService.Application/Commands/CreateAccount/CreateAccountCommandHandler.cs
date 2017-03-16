@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Attributes;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -15,6 +16,7 @@ using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Messaging;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 {
@@ -30,9 +32,18 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IGenericEventFactory _genericEventFactory;
+        private readonly IAccountEventFactory _accountEventFactory;
 
-        public CreateAccountCommandHandler(IAccountRepository accountRepository, IUserRepository userRepository, IMessagePublisher messagePublisher, IMediator mediator, IValidator<CreateAccountCommand> validator, IHashingService hashingService, IEventPublisher eventPublisher)
+        public CreateAccountCommandHandler(
+            IAccountRepository accountRepository, 
+            IUserRepository userRepository, 
+            IMessagePublisher messagePublisher, 
+            IMediator mediator, 
+            IValidator<CreateAccountCommand> validator, 
+            IHashingService hashingService, 
+            IGenericEventFactory genericEventFactory,
+            IAccountEventFactory accountEventFactory)
         {
             _accountRepository = accountRepository;
             _userRepository = userRepository;
@@ -40,7 +51,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _mediator = mediator;
             _validator = validator;
             _hashingService = hashingService;
-            _eventPublisher = eventPublisher;
+            _genericEventFactory = genericEventFactory;
+            _accountEventFactory = accountEventFactory;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -77,7 +89,11 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private async Task NotifyAccountCreated(string hashedAccountId)
         {
-            await _eventPublisher.PublishAccountCreatedEvent(hashedAccountId);
+            var accountEvent = _accountEventFactory.CreateAccountCreatedEvent(hashedAccountId);
+
+            var genericEvent = _genericEventFactory.Create(accountEvent);
+
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task AddPayeSchemes(CreateAccountCommand message, string[] emprefs, CreateAccountResult returnValue)

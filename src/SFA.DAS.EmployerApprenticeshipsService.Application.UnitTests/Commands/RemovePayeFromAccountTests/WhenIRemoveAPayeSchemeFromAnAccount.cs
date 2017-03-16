@@ -5,12 +5,16 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Types.Events;
 using SFA.DAS.EAS.Application.Commands.AuditCommand;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using IGenericEventFactory = SFA.DAS.EAS.Application.Factories.IGenericEventFactory;
+
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
 {
@@ -21,7 +25,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IHashingService> _hashingService;
         private Mock<IMediator> _mediator;
-        private Mock<IEventPublisher> _eventPublisher;
+        private Mock<IGenericEventFactory> _genericEventFactory;
+        private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
 
         [SetUp]
         public void Arrange()
@@ -34,9 +39,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             _hashingService = new Mock<IHashingService>();
 
             _mediator = new Mock<IMediator>();
-            _eventPublisher = new Mock<IEventPublisher>();
+            _genericEventFactory = new Mock<IGenericEventFactory>();
+            _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
-            _handler = new RemovePayeFromAccountCommandHandler(_mediator.Object, _validator.Object, _accountRepository.Object, _hashingService.Object, _eventPublisher.Object);
+            _handler = new RemovePayeFromAccountCommandHandler(
+                _mediator.Object, 
+                _validator.Object,
+                _accountRepository.Object, 
+                _hashingService.Object,
+                _genericEventFactory.Object,
+                _payeSchemeEventFactory.Object);
         }
 
         [Test]
@@ -108,7 +120,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemovePayeFromAccountTests
             await _handler.Handle(command);
 
             //Assert
-            _eventPublisher.Verify(x => x.PublishPayeSchemeAddedEvent(command.HashedAccountId, command.PayeRef));
+            _payeSchemeEventFactory.Verify(x => x.CreatePayeSchemeRemovedEvent(command.HashedAccountId, command.PayeRef));
+            _genericEventFactory.Verify(x => x.Create(It.IsAny<PayeSchemeRemovedEvent>()), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()));
         }
 
         [Test]

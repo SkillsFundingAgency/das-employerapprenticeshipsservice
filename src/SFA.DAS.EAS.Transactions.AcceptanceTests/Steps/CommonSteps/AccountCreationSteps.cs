@@ -14,6 +14,7 @@ using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -30,18 +31,20 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
 
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
+        private Mock<IEventsApi> _eventsApi;
 
         public AccountCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieService>();
+            _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
 
             _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
 
             _container.Inject(_validator.Object);
         }
