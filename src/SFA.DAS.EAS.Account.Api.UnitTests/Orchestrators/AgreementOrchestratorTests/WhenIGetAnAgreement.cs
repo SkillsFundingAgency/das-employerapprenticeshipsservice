@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
         public async Task ThenARequestShouldBeCreatedAndItsResponseReturned()
         {
             //Arrange
-            var hashedAgreementId = "ABC123";
+            const string hashedAgreementId = "ABC123";
 
             //Act
             var result = await _orchestrator.GetAgreement(hashedAgreementId);
