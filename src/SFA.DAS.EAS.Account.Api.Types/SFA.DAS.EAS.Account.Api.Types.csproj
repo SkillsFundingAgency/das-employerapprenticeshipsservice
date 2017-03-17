@@ -31,8 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.13.0.21450, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.13.0.21450\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -46,11 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EmployerAgreementStatus.cs" />
-    <Compile Include="Events\AccountCreatedEvent.cs" />
-    <Compile Include="Events\AccountRenamedEvent.cs" />
-    <Compile Include="Events\LegalEntityCreatedEvent.cs" />
-    <Compile Include="Events\PayeSchemeAddedEvent.cs" />
-    <Compile Include="Events\PayeSchemeRemovedEvent.cs" />
+    <Compile Include="Events\Account\AccountCreatedEvent.cs" />
+    <Compile Include="Events\Account\AccountRenamedEvent.cs" />
+    <Compile Include="Events\Agreement\AgreementSignedEvent.cs" />
+    <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
+    <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
+    <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
     <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="LegalEntityViewModel.cs" />
@@ -65,6 +66,7 @@
     <None Include="packages.config" />
     <None Include="SFA.DAS.Account.Api.Types.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

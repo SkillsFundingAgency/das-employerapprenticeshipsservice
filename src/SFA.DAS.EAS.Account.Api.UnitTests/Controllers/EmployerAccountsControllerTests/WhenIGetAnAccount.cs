@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 Account = new AccountDetail
                     {
                         HashedId = hashedAccountId,
+                        AccountId = 123,
                         Name = "Test",
                         OwnerEmail = "test@email.com",
                         CreatedDate = DateTime.Now.AddYears(-1),
@@ -47,6 +48,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             model?.Content.Should().NotBeNull();
             
             model.Content.DasAccountId.Should().Be(hashedAccountId);
+            model.Content.HashedAccountId.Should().Be(hashedAccountId);
+            model.Content.AccountId.Should().Be(accountResponse.Account.AccountId);
             model.Content.DasAccountName.Should().Be(accountResponse.Account.Name);
             model.Content.DateRegistered.Should().Be(accountResponse.Account.CreatedDate);
             model.Content.OwnerEmail.Should().Be(accountResponse.Account.OwnerEmail);

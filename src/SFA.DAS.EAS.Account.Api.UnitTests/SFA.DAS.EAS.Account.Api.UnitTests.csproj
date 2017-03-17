@@ -89,6 +89,7 @@
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\AccountLegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
