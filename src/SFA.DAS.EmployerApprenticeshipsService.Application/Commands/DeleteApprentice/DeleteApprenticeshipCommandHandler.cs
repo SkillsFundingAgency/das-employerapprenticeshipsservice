@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Validation;
 
@@ -9,11 +10,11 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteApprentice
 {
     public sealed class DeleteApprenticeshipCommandHandler : AsyncRequestHandler<DeleteApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentsService;
+        private readonly IEmployerCommitmentApi _commitmentsService;
         private readonly IValidator<DeleteApprenticeshipCommand> _validator;
 
         public DeleteApprenticeshipCommandHandler(
-            ICommitmentsApi commitmentsApi, 
+            IEmployerCommitmentApi commitmentsApi, 
             IValidator<DeleteApprenticeshipCommand> validator
             )
         {

@@ -4,7 +4,7 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
+
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
@@ -13,13 +13,17 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Tasks.Api.Client;
 using FluentAssertions;
 
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
 {
     [TestFixture]
     public sealed class WhenSubmittingCommitment
     {
         private SubmitCommitmentCommandHandler _handler;
-        private Mock<ICommitmentsApi> _mockCommitmentApi;
+        private Mock<IEmployerCommitmentApi> _mockCommitmentApi;
         private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommand _validCommand;
         private Mock<IMediator> _mockMediator;
@@ -37,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
                 AgreementStatus = AgreementStatus.NotAgreed
             };
 
-            _mockCommitmentApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(_repositoryCommitment);
 

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
-using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
+
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {

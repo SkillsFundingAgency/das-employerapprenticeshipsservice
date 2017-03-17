@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.EAS.Application.Commands.ApproveApprenticeship;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipCommandTests
@@ -11,7 +14,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipComman
     public sealed class WhenApprovingApprenticeship
     {
         private ApproveApprenticeshipCommandHandler _handler;
-        private Mock<ICommitmentsApi> _mockCommitmentApi;
+        private Mock<IEmployerCommitmentApi> _mockCommitmentApi;
         private ApproveApprenticeshipCommand _validCommand;
 
         [SetUp]
@@ -20,7 +23,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipComman
             _validCommand = new ApproveApprenticeshipCommand
                 { EmployerAccountId = 12L, CommitmentId = 2L, ApprenticeshipId = 4L, UserId = "externalUserId"};
 
-            _mockCommitmentApi = new Mock<ICommitmentsApi>();
+            _mockCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
             _handler = new ApproveApprenticeshipCommandHandler(_mockCommitmentApi.Object);
         }

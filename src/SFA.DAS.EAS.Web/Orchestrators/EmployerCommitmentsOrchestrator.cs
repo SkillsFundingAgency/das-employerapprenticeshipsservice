@@ -22,10 +22,17 @@ using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
+using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
 using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
 using SFA.DAS.EAS.Application.Queries.GetFrameworks;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
@@ -346,12 +353,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 apprenticeship.HashedAccountId = hashedAccountId;
 
+                var overlaps = await _mediator.SendAsync(
+                    new GetOverlappingApprenticeshipsQueryRequest
+                        {
+                            Apprenticeship = new[] { data.Apprenticeship }
+                        });
+
                 return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
                 {
                     Data = new ExtendedApprenticeshipViewModel
                     {
                         Apprenticeship = apprenticeship,
                         ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                        ValidationErrors = MapOverlappingErrors(overlaps)
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -861,6 +875,49 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
+
+        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
+            return data.Any();
+        }
+
+        public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            {
+                AccountId = accountId,
+                LegalEntityCode = legalEntityCode
+            });
+
+            var hasSigned = agreementResponse.EmployerAgreement == null;
+
+            return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
+            {
+                Data = new LegalEntitySignedAgreementViewModel
+                {
+                    HashedAccountId = hashedAccountId,
+                    LegalEntityCode = legalEntityCode,
+                    CohortRef = cohortRef,
+                    HasSignedAgreement = hasSigned
+                }
+            };
+        }
+
+        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
+                });
+
+            return MapOverlappingErrors(overlappingErrors);
+        }
+
         public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
@@ -1093,35 +1150,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
 
-        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
-            return data.Any();
-        }
+            var dict = new Dictionary<string, string>();
+            const string StartText = "The start date is not valid";
+            const string EndText = "The end date is not valid";
 
-        public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            
-            var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            const string StartDateKey = "StartDateOverlap";
+            const string EndDateKey = "EndDateOverlap";
+
+
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
             {
-                AccountId = accountId,
-                LegalEntityCode = legalEntityCode
-            });
-
-            var hasSigned = agreementResponse.EmployerAgreement == null;
-
-            return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
-            {
-                Data = new LegalEntitySignedAgreementViewModel
+                switch (item.ValidationFailReason)
                 {
-                    HashedAccountId = hashedAccountId,
-                    LegalEntityCode = legalEntityCode,
-                    CohortRef = cohortRef,
-                    HasSignedAgreement = hasSigned
+                    case ValidationFailReason.OverlappingStartDate:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        break;
+                    case ValidationFailReason.OverlappingEndDate:
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateEmbrace:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateWithin:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
                 }
-            };
+            }
+            return dict;
         }
     }
 }
