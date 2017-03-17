@@ -29,7 +29,8 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 
             _expectedAccount = new AccountDetailViewModel
             {
-                DasAccountId = "1",
+                AccountId = 123,
+                HashedAccountId = "1",
                 DasAccountName = "Account 1",
                 DateRegistered = DateTime.Now.AddYears(-1),
                 OwnerEmail = "test@email.com",

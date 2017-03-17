@@ -132,7 +132,8 @@ namespace SFA.DAS.EAS.Api.Orchestrators
         {
             var accountDetailViewModel = new AccountDetailViewModel
             {
-                DasAccountId = accountResult.Account.HashedId,
+                AccountId = accountResult.Account.AccountId,
+                HashedAccountId = accountResult.Account.HashedId,
                 DateRegistered = accountResult.Account.CreatedDate,
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
