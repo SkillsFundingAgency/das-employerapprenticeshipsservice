@@ -1,18 +1,71 @@
-﻿
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Enums
+@using SFA.DAS.EAS.Web.Extensions
+
+
 @{
-    Layout = null;
+    ViewBag.Title = "Confirm changes";
+    ViewBag.PageID = "confirm-edited-changes";
 }
 
-<!DOCTYPE html>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Confirm changes</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>ConfirmChanges</title>
-</head>
-<body>
-    <div> 
-        <h1>Confirm Changes</h1>
+        <table class="edited-changes">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Current</th>
+                    <th>Changed to</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Name </td>
+                    <td>Richard Staines </td>
+                    <td class="changed-item">Stanley James </td>
+                </tr>
+                <tr>
+                    <td>Date of birth </td>
+                    <td>28 February 1997 </td>
+                    <td class="changed-item">1 March 1995 </td>
+                </tr>             
+            </tbody>
+        </table>
+
+        <h1 class="heading-medium">Do you want to make these changes?</h1>
+
+        <form>
+            <div class="form-group">
+                <fieldset>
+                    <legend class="visually-hidden">Do you want to make these changes?</legend>
+
+                    <label class="block-label selection-button-radio" for="radio-1">
+                        <input id="radio-1" type="radio" name="radio-group" value="yes change">
+                        Yes, change these details
+                    </label>
+                    <label class="block-label selection-button-radio" for="radio-2">
+                        <input id="radio-2" type="radio" name="radio-group" value="no change">
+                        No, don't change these details
+                    </label>
+                </fieldset>
+            </div>
+        </form>
+        
+        <button type="submit" class="button" aria-label="Finish">Finish</button>
+
+        <div class="column-one-thirds">
+
+        </div>
+
     </div>
-</body>
-</html>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+    </div>
+}

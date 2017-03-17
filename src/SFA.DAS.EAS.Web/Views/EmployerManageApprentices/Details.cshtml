@@ -6,13 +6,17 @@
     ViewBag.PageId = "apprentices-detail";
 }
 
-<div>
- 
-    <div><a href="@Url.RouteUrl("ViewPendingChanges")">View pending changes</a></div>
-</div>
 
 <div class="grid-row">
     <div class="column-two-thirds">
+
+        <div class="panel panel-border-wide alert-default flash-alert">
+            <p>
+                <i class="icon-green-tick"></i>
+               You suggested changes to the record for @Model.Data.FirstName @Model.Data.LastName. Your training provider needs to approve these changes.
+            </p>
+        </div>
+
        <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
             
             <div class="panel panel-border-wide alert-default">
@@ -23,12 +27,12 @@
         <div class="panel panel-border-wide">
             <p>
                 There are changes to this apprentice's details that are waiting for approval by the training provider.  You can continue to edit this apprentice if you need to.
-            <p><a href="#">View changes</a></p>
+            <p><a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a></p>
             </p>
         </div>
 
 
-            <!--static html-->
+          
             <table id="app-status">
                 <thead>
                     <tr>
@@ -121,7 +125,7 @@
                     </tr>
                 </tbody>
             </table>
-            <!--END static html-->
+    
         </div>
 
     <div class="column-one-thirds">
