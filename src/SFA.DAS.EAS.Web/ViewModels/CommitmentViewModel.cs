@@ -22,5 +22,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public IList<ApprenticeshipListItemGroupViewModel> ApprenticeshipGroups { get; set; }
 
         public string BackLinkUrl { get; set; }
+
+        public bool HasOverlappingErrors { get; set; }
     }
 }

@@ -753,8 +753,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
                 var messageTask = GetLatestMessageFromProvider(data.Commitment);
-                var apprenticships = data.Commitment.Apprenticeships?.Select(MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
+                var overlappingApprenticeships = await _mediator.SendAsync(
+                   new GetOverlappingApprenticeshipsQueryRequest
+                   {
+                       Apprenticeship = data.Commitment.Apprenticeships
+                   });
+
+                var apprenticships = data.Commitment.Apprenticeships?.Select(
+                    a => MapToApprenticeshipListItem(a, overlappingApprenticeships)).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
                 var trainingProgrammes = await GetTrainingProgrammes();
 
                 var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
@@ -778,7 +785,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                     LatestMessage = await messageTask,
-                    ApprenticeshipGroups = apprenticeshipGroups
+                    ApprenticeshipGroups = apprenticeshipGroups,
+                    HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError)
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -1051,7 +1059,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship)
+        private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship, GetOverlappingApprenticeshipsQueryResponse overlappingApprenticeships)
         {
             return new ApprenticeshipListItemViewModel
             {
@@ -1063,7 +1071,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Cost = apprenticeship.Cost,
                 StartDate = apprenticeship.StartDate,
                 EndDate = apprenticeship.EndDate,
-                CanBeApproved = apprenticeship.CanBeApproved
+                CanBeApproved = apprenticeship.CanBeApproved,
+                OverlappingApprenticeships = overlappingApprenticeships.GetOverlappingApprenticeships(apprenticeship.ULN)
             };
         }
 
