@@ -19,19 +19,16 @@
             {
                 <div class="panel panel-border-wide alert-default">
                     <p class="heading-medium">You can't approve this cohort until: </p>
-                    <ul class="list list-bullet">
-                        <li>There's a signed apprenticeship agreement with the Skills Funding Agency</li>
-                        <li>All apprentice records are complete</li>
-                        <li>There are no overlapping training dates for your apprentices</li>
-                        @*<li>
-                            You've signed an <a href="@Url.Action("Index", "EmployerAgreement")" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
-                        </li>
-                        <li>
-                            All <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">apprentice records</a> are complete
-                        </li>
-                        <li>
-                            There are no <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">overlapping training dates</a> for your apprentices
-                        </li>*@
+                    <ul class="list list-bullet">                   
+                      <li>
+                        You've signed an <a href="@Url.Action("Index", "EmployerAgreement")" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
+                    </li>
+                    <li>
+                        All <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">apprentice records</a> are complete
+                    </li>
+                    <li>
+                        There are no <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">overlapping training dates</a> for your apprentices
+                    </li>
                     </ul>
                 </div>
             }
