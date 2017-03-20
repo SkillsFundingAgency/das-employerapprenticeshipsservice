@@ -416,6 +416,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var hasSigned = agreementResponse.EmployerAgreement == null;
 
+                var overlaps = await _mediator.SendAsync(
+                    new GetOverlappingApprenticeshipsQueryRequest
+                    {
+                        Apprenticeship = response.Commitment.Apprenticeships
+                    });
+
                 return new OrchestratorResponse<FinishEditingViewModel>
                 {
                     Data = new FinishEditingViewModel
@@ -426,7 +432,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ApprovalState = GetApprovalState(response.Commitment),
                         HasApprenticeships = response.Commitment.Apprenticeships.Any(),
                         InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
-                        HasSignedTheAgreement = hasSigned
+                        HasSignedTheAgreement = hasSigned,
+                        HasOverlappingErrors = overlaps.Overlaps.Any()
                     }
                 };
             }, hashedAccountId, externalUserId);
