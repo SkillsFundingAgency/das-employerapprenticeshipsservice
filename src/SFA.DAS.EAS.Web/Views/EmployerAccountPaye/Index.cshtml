@@ -77,6 +77,11 @@
                     }
                 </tbody>
             </table>
+
+            if (Model.Data.ShowHistory)
+            {
+                @Html.Partial("_WhatIsEnglishPercentage")
+            }
         }
         else
         {
