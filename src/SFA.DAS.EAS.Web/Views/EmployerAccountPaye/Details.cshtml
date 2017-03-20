@@ -64,13 +64,16 @@
 
                 </tbody>
             </table>
+
+            @Html.Partial("_WhatIsEnglishPercentage")
+
         }
-        
+
     </div>
     <div class="column-one-third">
         <a aria-label="Remove PAYE scheme @Model.Data.EmpRef"
                title="Remove PAYE scheme @Model.Data.EmpRef"
-               href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="button action-add">Remove scheme</a>
+               href="@Url.Action("Remove", new {empRef = Model.Data.EmpRef.FormatPayeForUrl()})" class="button action-add">Remove PAYE scheme</a>
     </div>
 </div>
 
