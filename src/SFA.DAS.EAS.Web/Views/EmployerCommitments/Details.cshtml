@@ -115,7 +115,7 @@
                         }
                         else if (group.ShowFundingLimitWarning && !Model.Data.HasOverlappingErrors)
                         {
-                            <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
+                            <div class="funding-cap-alert grey-background" id="max-funding-group-@group.GroupId">
                                 <p class="heading-medium">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
@@ -124,7 +124,7 @@
                                 </p>
 
                             </div>
-                            <i class="bubble-arrow"></i>
+                            <i class="bubble-arrow"></i>                        
                         }
 
                         <table class="tableResponsive viewCommitment">
@@ -184,7 +184,7 @@
                                         
                                     @if (group.TrainingProgramme != null && apprenticeship.Cost.HasValue && apprenticeship.Cost > group.TrainingProgramme.MaxFunding && !Model.Data.HasOverlappingErrors)
                                     {
-                                        <td class="funding-cap-alert">
+                                        <td class="funding-cap-alert-td">
                                             <a href="#max-funding-group-@group.GroupId" aria-label="Cost is above the maximum funding band" aria-describedby="max-funding-group-@group.GroupId" title="Cost is above the maximum funding band"> @GetValueOrDefault(FormatCost(apprenticeship.Cost))</a>
                                         </td>
                                     }

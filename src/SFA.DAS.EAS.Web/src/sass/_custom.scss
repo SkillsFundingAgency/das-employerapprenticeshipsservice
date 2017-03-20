@@ -208,14 +208,29 @@
     float: right;
     margin-right: 75px;
     }
+.overlap-arrow{    
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid $panel-colour;
+    content: "";
+    float: right;
+    margin-right:180px;
+    @include media(tablet) {margin-right: 320px;} 
+    }
 .funding-cap-alert{
-    border-bottom:5px solid $secondary-text-colour;
+    border-left:10px solid $govuk-blue;
           a{
                 text-decoration:none;
                 color:$text-colour;
             }    
 }
-
+.funding-cap-alert-td{
+     border-bottom:5px solid $govuk-blue;
+      a{
+                text-decoration:none;
+                color:$text-colour;
+            }    
+}
 #add-provider-reference{
     .ukprn-help{
         margin-bottom:30px;
@@ -237,6 +252,19 @@ body {
   }
 }
 
+#apprentice-details{
+    .overlap-notification{
+        border-left:10px solid $red;
+    }
+}
+
+.overlap-alert{
+      border-bottom: 5px solid $red;
+    a{
+        text-decoration:none;
+        color:$text-colour;
+    }
+}
   
 //all mobile media query breakpoints
 //==================================
@@ -247,18 +275,30 @@ only screen and (max-width: 480px) {
 #apprentice-details {
     .tableResponsive{
         margin-top:30px;
-        .funding-cap-alert{
-            border-bottom:5px solid $secondary-text-colour;
-            background:$panel-colour;
-              a{
-                text-decoration:none;
-                color:$text-colour;
-            }          
-        }
+        .funding-cap-alert-td
+            {
+                border-left:10px solid $govuk-blue;
+                background:#fff;
+                  a{
+                    text-decoration:none;
+                    color:$text-colour;
+                     cursor:pointer;
+                }          
+            }
+        .overlap-alert
+             {
+                border-left:10px solid $error-colour;
+                background:#fff;
+                  a{
+                    text-decoration:none;
+                    color:$text-colour;
+                    cursor:pointer;
+                }          
+              }
     }
 }  
 
-.bubble-arrow {display:none;}
+.bubble-arrow,.overlap-arrow {display:none;} 
       
 .manage-all-apprentices{
   td:nth-of-type(1):before {
