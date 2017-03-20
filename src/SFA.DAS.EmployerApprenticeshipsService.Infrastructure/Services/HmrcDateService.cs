@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class HmrcDateService
+    public class HmrcDateService : IHmrcDateService
     {
         public bool IsSubmissionDateInPayrollYear(string payrollYear, DateTime submissionDate)
         {

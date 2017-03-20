@@ -154,6 +154,7 @@
     <Compile Include="Http\ResourceNotFoundException.cs" />
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
+    <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Interfaces\IProviderEmailLookupService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
