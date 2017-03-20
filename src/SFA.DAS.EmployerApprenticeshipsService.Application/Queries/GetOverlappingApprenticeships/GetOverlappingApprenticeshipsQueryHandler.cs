@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships
                        !string.IsNullOrEmpty(m.ULN))
                 .ToList();
 
-
             if (!apprenticeships.Any())
             {
                 return new GetOverlappingApprenticeshipsQueryResponse
@@ -42,13 +41,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships
             return new GetOverlappingApprenticeshipsQueryResponse
                        {
                            Overlaps = await _validationApi
-                                                .ValidateOverlapping(apprenticeships.Select(arg => new ApprenticeshipOverlapValidationRequest
-                                                                                                       {
-                                                                                                           ApprenticeshipId = arg.Id,
-                                                                                                           Uln = arg.ULN,
-                                                                                                           StartDate = arg.StartDate.Value,
-                                                                                                           EndDate = arg.EndDate.Value
-                                                                                                       }))
+                                                .ValidateOverlapping(apprenticeships.Select(arg => 
+                                                    new ApprenticeshipOverlapValidationRequest
+                                                    {
+                                                        ApprenticeshipId = arg.Id,
+                                                        Uln = arg.ULN,
+                                                        StartDate = arg.StartDate.Value,
+                                                        EndDate = arg.EndDate.Value
+                                                    }))
                        };
         }
     }
