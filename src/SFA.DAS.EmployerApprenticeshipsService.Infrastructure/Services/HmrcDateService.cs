@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -16,7 +12,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return submissionDate >= startDate && submissionDate <= endDate;
         }
         
-        public bool IsSubmissionAdjustment(string payrollYear, DateTime submissionDate)
+        public bool IsSubmissionEndOfYearAdjustment(string payrollYear, DateTime submissionDate)
         {
             DateTime endDate;
             GetDateRange(payrollYear, out endDate);
