@@ -254,7 +254,6 @@
     <Compile Include="Services\HashingService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
-    <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
     <Compile Include="Services\PdfService.cs" />
     <Compile Include="Services\ProviderEmailLookupService.cs" />
     <Compile Include="Services\ReferenceDataService.cs" />

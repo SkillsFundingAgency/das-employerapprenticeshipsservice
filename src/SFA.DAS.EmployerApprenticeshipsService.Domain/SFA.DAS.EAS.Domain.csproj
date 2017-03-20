@@ -229,7 +229,6 @@
     <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
-    <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
