@@ -12,7 +12,29 @@
 <div id="cohort-details">
     <div class="grid-row">
 
+    @if (Model.Data.HasOverlappingErrors)
+    {
         @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+    }
+    else if (Model.Data.FundingCapWarnings.Any())
+    {
+        <div class="validation-summary-max-funding">
+            <h1 id="warning-summary" class="heading-medium warning-summary-heading">
+                Warnings for your attention
+            </h1>
+            <p>Review the following details:</p>
+            <ul class="max-funding-summary-list">
+                @foreach (var warning in Model.Data.FundingCapWarnings)
+                {
+                    <li>
+                        <a href="#max-funding-group-@warning.Key" data-focuses="max-funding-group-@warning.Key">
+                            @warning.Value
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
 
         <div class="column-full">
             <h1 class="heading-xlarge">Review your cohort</h1>

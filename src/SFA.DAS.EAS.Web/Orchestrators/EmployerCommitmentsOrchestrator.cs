@@ -40,6 +40,8 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Web.Enums;
 using SFA.DAS.EAS.Web.ViewModels;
 
+using WebGrease.Css.Extensions;
+
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public sealed class EmployerCommitmentsOrchestrator : CommitmentsBaseOrchestrator
@@ -781,6 +783,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     });
                 }
 
+                var warnings = new Dictionary<string, string>();
+                apprenticeshipGroups
+                    .Where(m => m.ShowFundingLimitWarning)
+                    .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
+
                 var viewModel = new CommitmentDetailsViewModel
                 {
                     HashedId = _hashingService.HashValue(data.Commitment.Id),
@@ -793,7 +800,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                     LatestMessage = await messageTask,
                     ApprenticeshipGroups = apprenticeshipGroups,
-                    HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError)
+                    HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError),
+                    FundingCapWarnings = warnings
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
