@@ -134,6 +134,7 @@
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />
     <Compile Include="Services\FeatureToggleFileBasedServiceTests\WhenIGetDisabledFeatures.cs" />
+    <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallHmrcServiceForLastEnglishFractionUpdateDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForAuthentication.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForDeclarations.cs" />
