@@ -259,8 +259,10 @@
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
+    <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
     <Compile Include="Factories\IAccountEventFactory.cs" />
+    <Compile Include="Factories\IEmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\IGenericEventFactory.cs" />
     <Compile Include="Factories\ILegalEntityEventFactory.cs" />
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />

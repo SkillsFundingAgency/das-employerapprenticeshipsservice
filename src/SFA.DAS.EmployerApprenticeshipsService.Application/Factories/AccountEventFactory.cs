@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events;
+﻿using SFA.DAS.EAS.Account.Api.Types.Events.Account;
 
 namespace SFA.DAS.EAS.Application.Factories
 {
