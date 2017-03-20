@@ -265,6 +265,14 @@ body {
         color:$text-colour;
     }
 }
+#finish-editing{
+    .alert-default{
+        border-color:$purple;
+        .heading-medium{
+            font-size:24px;
+        }
+    }
+}
   
 //all mobile media query breakpoints
 //==================================

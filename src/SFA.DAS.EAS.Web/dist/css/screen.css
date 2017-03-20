@@ -4222,6 +4222,14 @@ body input::-webkit-contacts-auto-fill-button {
   color: #0b0c0c;
 }
 
+#finish-editing .alert-default {
+  border-color: #2e358b;
+}
+
+#finish-editing .alert-default .heading-medium {
+  font-size: 24px;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
