@@ -114,6 +114,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", empRef, DbType.String);
+                parameters.Add("@payrollYear", payrollYear, DbType.String);
+                parameters.Add("@payrollMonth", payrollMonth, DbType.Int32);
+
+                return await c.QueryAsync<DasDeclaration>(
+                    sql: "[employer_financial].[GetLevyDeclaration_ByEmpRefPayrollMonthPayrollYear]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
+
         public async Task ProcessDeclarations()
         {
             await WithConnection(async c => await c.ExecuteAsync(
