@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 using MediatR;
 
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAllApprenticeships
 {
     public class GetAllApprenticeshipsHandler : IAsyncRequestHandler<GetAllApprenticeshipsRequest, GetAllApprenticeshipsResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IEmployerCommitmentApi _commitmentsApi;
 
-        public GetAllApprenticeshipsHandler(ICommitmentsApi commitmentsApi)
+        public GetAllApprenticeshipsHandler(IEmployerCommitmentApi commitmentsApi)
         {
             _commitmentsApi = commitmentsApi;
         }

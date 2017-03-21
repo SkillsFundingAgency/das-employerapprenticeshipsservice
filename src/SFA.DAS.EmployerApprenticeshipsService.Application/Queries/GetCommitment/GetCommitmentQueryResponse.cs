@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Commitments.Api.Types;
+﻿using SFA.DAS.Commitments.Api.Types.Commitment;
 
 namespace SFA.DAS.EAS.Application.Queries.GetCommitment
 {

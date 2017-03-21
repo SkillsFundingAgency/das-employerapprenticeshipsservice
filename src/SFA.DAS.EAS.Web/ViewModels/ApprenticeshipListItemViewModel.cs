@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using SFA.DAS.Commitments.Api.Types.Validation;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {
@@ -20,5 +23,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string HashedApprenticeshipId { get; set; }
 
         public bool CanBeApproved { get; set; }
+
+        public IEnumerable<OverlappingApprenticeship> OverlappingApprenticeships { get; set; }
     }
 }

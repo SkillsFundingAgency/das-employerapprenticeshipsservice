@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.EAS.Application.Commands.CreateCommitment;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateCommitmentTests

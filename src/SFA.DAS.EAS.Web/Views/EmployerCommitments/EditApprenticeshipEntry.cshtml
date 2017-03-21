@@ -8,8 +8,6 @@
 }
 
 @section pageSpecificJS {
-    @*@Scripts.Render("~/bundles/jqueryvalcustom");*@
-
     @Scripts.Render("~/bundles/apprentice")
 }
 
@@ -94,7 +92,7 @@
 
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("StartDate", "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("StartDate", "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error") ">
                 <hr />
                 <fieldset>
                     <legend>
@@ -103,6 +101,10 @@
                     </legend>
                     <div class="form-date">
                             @Html.ValidationMessage("StartDate", new { id = "error-message-StartDate", @class = "error-message" })
+                            @Html.ValidationMessage("StartDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                                new { id = "error-message-StartDateOverlap", @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="StartDate.Month">
                                 <span class="form-label-bold">Month</span>
@@ -119,7 +121,7 @@
                 </fieldset>
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("EndDate", "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("EndDate", "error") @Html.AddClassIfPropertyInError("EndDateOverlap", "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected training finish date</span>
@@ -127,6 +129,10 @@
                     </legend>
                     <div class="form-date">
                         @Html.ValidationMessage("EndDate", new { id = "error-message-EndDate" , @class = "error-message" })
+                        @Html.ValidationMessage("EndDateOverlap",
+                            "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                            new { id = "error-message-EndDateOverlap", @class = "error-message" })
                         <div class="form-group form-group-month">
                             <label for="EndDate.Month">
                                 <span class="form-label-bold">Month</span>

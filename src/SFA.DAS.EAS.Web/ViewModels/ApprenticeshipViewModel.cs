@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.ViewModels

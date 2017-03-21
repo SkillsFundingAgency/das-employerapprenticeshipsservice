@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Validation;
 
@@ -13,9 +14,9 @@ namespace SFA.DAS.EAS.Application.Commands.DeleteCommitment
     {
         private readonly IValidator<DeleteCommitmentCommand> _validator;
 
-        private readonly ICommitmentsApi _commitmentsService;
+        private readonly IEmployerCommitmentApi _commitmentsService;
 
-        public DeleteCommitmentCommandHandler(ICommitmentsApi commitmentsApi, IValidator<DeleteCommitmentCommand> validator)
+        public DeleteCommitmentCommandHandler(IEmployerCommitmentApi commitmentsApi, IValidator<DeleteCommitmentCommand> validator)
         {
             if (validator == null)
                 throw new ArgumentNullException(nameof(validator));

@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
-using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
+
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {
@@ -52,6 +51,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
                         CommitmentStatus = CommitmentStatus.Active
                     }
                 });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+                .ReturnsAsync(
+                    new GetOverlappingApprenticeshipsQueryResponse { Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>() });
 
             _employerCommitmentOrchestrator = new EmployerCommitmentsOrchestrator(_mediator.Object,
                 _hashingService.Object, _calculator.Object, _logger.Object);
