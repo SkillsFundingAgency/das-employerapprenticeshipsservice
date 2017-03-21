@@ -72,7 +72,7 @@
             <div class="grid-row" id="empty-alert-top">
                 <div class="column-full">
                     <div class="panel panel-border-wide alert-default">
-                        <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                        <p>You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a></p>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@
                         if (group.ShowFundingLimitWarning)
                         {
                             <div class="funding-cap-notification" id="max-funding-group-@group.GroupId">
-                                <p class="heading-medium">
+                                <p class="heading-small">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
                                 <p>

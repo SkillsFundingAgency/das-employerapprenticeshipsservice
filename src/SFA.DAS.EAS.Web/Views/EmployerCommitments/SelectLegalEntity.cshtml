@@ -23,7 +23,7 @@
             <div class="form-group @Html.AddClassIfPropertyInError("LegalEntityCode", "error")">
                 <fieldset>
                     <legend>
-                        <span class="form-label-bold">Choose the organisation that employs the apprentices you'd like to add- this should be the organisation named on the contract for service, if relevant:</span>
+                        <span class="form-label-bold">Which organisation is named on the contract with the training provider for the apprentices you’d like to add?</span>
                         @Html.ValidationMessage("LegalEntityCode", "Please choose an option", new { id = "error-message-LegalEntityCode" })
                     </legend>
   

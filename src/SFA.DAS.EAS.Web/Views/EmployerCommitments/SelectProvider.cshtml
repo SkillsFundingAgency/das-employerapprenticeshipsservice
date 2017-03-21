@@ -30,7 +30,7 @@
                 <fieldset class="spacerConfirmProvider" role="radiogroup" aria-required="true">
                     <legend class="visuallyhidden">Training provider</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("Confirmation", "error")">
-                        <label class="form-label-bold" for="">Will this training provider be training your apprentices?</label>
+                        <label class="form-label-bold" for="">Is this the main provider of the apprenticeship training?</label>
                         <div>
                             @Html.ValidationMessage("Confirmation", "Please choose an option", new { id = "error-message-Confirmation" })
                         </div>

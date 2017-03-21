@@ -19,10 +19,10 @@
 
             <div class="form-group">
            
-                <h1 class="heading-xlarge">Add an apprentice</h1>
+                <h1 class="heading-xlarge">Add apprentice details</h1>
                 <div class="panel panel-border-wide">
-                    <p>You must add the apprentice’s first and last names – fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
-                    <p>                        You'll only be able to approve the release of payments for this apprentice once all the fields have been completed - either by yourself or your training provider.</p>
+                    <p>You must add the apprentice’s first and last names - fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
+                    <p>You'll only be able to authorise payments for this apprentice once all the fields have been completed - either by yourself or your training provider.</p>
                 </div>
 
                 <hr />
@@ -83,6 +83,8 @@
                 <div class="form-group">
                     <hr />
                     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+                    <span class="form-hint">Start typing in the name of the course or choose an option from the list
+</span>
                     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
                         <option value="">Please select</option>
                         @foreach (var apprenticeshipProduct in Model.Data.ApprenticeshipProgrammes)
@@ -151,9 +153,9 @@
 
                     <hr/>
                     <label for="Cost">
-                        <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
-                        <span class="form-hint">For example, for £1,500 enter 1500</span>
-                        @Html.ValidationMessage("Cost", "Enter the cost in whole pounds", new { id = "error-message-Cost", @class = "error-message" })
+                        <span class="form-label-bold">Total agreed apprenticeship price (excluding VAT)</span>
+                        <span class="form-hint">Enter the price, including any end-point assessment costs, in whole pounds. For example, for £1,500 enter 1500.</span>
+                        @Html.ValidationMessage("Cost", "Enter the cost in whole pounds, without a £ symbol", new { id = "error-message-Cost", @class = "error-message" })
                     </label>
 
                     <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Data.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost" })
@@ -163,7 +165,7 @@
                 <div class="form-group @Html.AddClassIfPropertyInError("EmployerRef", "error")">
                     <hr />
                     @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
-                    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
+                    <span class="form-hint">Add a reference, such as employee number or location - this won’t be seen by the training provider</span>
                     @Html.ValidationMessage("EmployerRef", new { id = "error-message-EmployerRef" })
                     @Html.TextBox("EmployerRef", Model.Data.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
                 </div>
@@ -172,8 +174,10 @@
                     <hr />
                     <div class="grey-background">
                         <p class="form-label-bold">End-point assessments</p>
-                        <p>At the end of each apprenticeship standard, an apprentice's knowledge, skills and behaviours are assessed by an independent end-point assessment organisation. Before the final gateway stage of the apprenticeship, we'll ask you to tell us which <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a> you've chosen for this apprentice.</p>
-                        <p>Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.</p>
+                        <p>If you've chosen an apprenticeship standard, we'll ask you to confirm the <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window" rel="external">apprentice assessment organisation</a> for this apprentice. We'll do this before the end of the apprenticeship.</p>
+                        <p>
+                            Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.
+                        </p>
                     </div>
                 </div>
 
