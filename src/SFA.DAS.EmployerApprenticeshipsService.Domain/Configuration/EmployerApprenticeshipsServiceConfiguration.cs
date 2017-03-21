@@ -34,9 +34,12 @@ namespace SFA.DAS.EAS.Domain.Configuration
 
             return false;
         }
+
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
+        public EmployerApprenticeshipApiConfiguration EmployerApprenticeshipApi { get; set; }
+
         public string Hashstring { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
 		public PostcodeAnywhereConfiguration PostcodeAnywhere { get; set; }

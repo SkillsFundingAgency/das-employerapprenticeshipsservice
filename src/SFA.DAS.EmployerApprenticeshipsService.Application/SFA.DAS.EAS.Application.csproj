@@ -82,8 +82,8 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.EAS.Account.Api.Types, Version=1.0.0.24678, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.24678\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.EAS.Account.Api.Types, Version=1.0.0.26048, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.26048\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.17.0.24066, Culture=neutral, processorArchitecture=MSIL">
@@ -259,8 +259,10 @@
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
+    <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
     <Compile Include="Factories\IAccountEventFactory.cs" />
+    <Compile Include="Factories\IEmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\IGenericEventFactory.cs" />
     <Compile Include="Factories\ILegalEntityEventFactory.cs" />
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />

@@ -149,6 +149,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\EmployerApprenticeshipApiConfiguration.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Http\HttpException.cs" />
     <Compile Include="Http\ResourceNotFoundException.cs" />
@@ -221,7 +222,6 @@
     <Compile Include="Interfaces\ICache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IGenericEventFactory.cs" />
     <Compile Include="Interfaces\IConfiguration.cs" />
     <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
