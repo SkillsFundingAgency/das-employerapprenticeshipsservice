@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
             _hashingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
             _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId, 
-                _agreement.HashedAgreementId), Times.Once);
+                _command.HashedAgreementId), Times.Once);
             _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);
             _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()), Times.Once);
             
