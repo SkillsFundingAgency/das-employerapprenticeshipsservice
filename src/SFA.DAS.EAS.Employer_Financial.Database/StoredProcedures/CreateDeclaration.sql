@@ -7,7 +7,12 @@
 	@LevyAllowanceForYear DECIMAL(18, 4),
 	@PayrollYear NVARCHAR(10),
 	@PayrollMonth TINYINT,
-	@CreatedDate DATETIME
+	@CreatedDate DATETIME,
+	@DateCeased DATETIME = NULL,
+	@InactiveFrom DATETIME = NULL,
+	@InactiveTo DATETIME = NULL,
+	@EndOfYearAdjustment BIT,
+	@EndOfYearAdjustmentAmount DECIMAL(18,4)
 AS
 	
 
@@ -21,7 +26,12 @@ INSERT INTO [employer_financial].[LevyDeclaration]
 		LevyAllowanceForYear,
 		PayrollYear,
 		PayrollMonth,
-		CreatedDate
+		CreatedDate,
+		EndOfYearAdjustment,
+		EndOfYearAdjustmentAmount,
+		DateCeased,
+		InactiveFrom,
+		InactiveTo
 	) 
 VALUES 
 	(
@@ -33,5 +43,10 @@ VALUES
 		@LevyAllowanceForYear,
 		@PayrollYear,
 		@PayrollMonth,
-		@CreatedDate
+		@CreatedDate,
+		@EndOfYearAdjustment,
+		@EndOfYearAdjustmentAmount,
+		@DateCeased,
+		@InactiveFrom,
+		@InactiveTo
 	);

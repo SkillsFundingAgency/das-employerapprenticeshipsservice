@@ -154,6 +154,7 @@
     <Compile Include="Http\ResourceNotFoundException.cs" />
     <Compile Include="Http\ServiceUnavailableException.cs" />
     <Compile Include="Http\TooManyRequestsException.cs" />
+    <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Interfaces\IProviderEmailLookupService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
@@ -229,7 +230,6 @@
     <Compile Include="Interfaces\IHashingService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Http\IHttpClientWrapper.cs" />
-    <Compile Include="Interfaces\ILevyDeclarationService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Interfaces\IUserWhiteList.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
