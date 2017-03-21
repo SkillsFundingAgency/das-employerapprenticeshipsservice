@@ -19,11 +19,11 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         {
             //Arrange
             var payroll = "16-17";
-            var submissionDate = new DateTime(2017,05,01);
+            var submissionDate = new DateTime(2017, 05, 01);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionDateInPayrollYear(payroll,submissionDate);
-                
+            var actual = _hmrcDateService.IsSubmissionDateInPayrollYear(payroll, submissionDate);
+
 
             //Assert
             Assert.IsFalse(actual);
@@ -43,10 +43,24 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             Assert.IsTrue(actual);
         }
 
-        [TestCase("2016-04-30",false)]
-        [TestCase("2017-04-30",false)]
-        [TestCase("2017-05-01",true)]
-        [TestCase("2018-04-30",true)]
+        [Test]
+        public void ThenIftheSubmissionDateIsValidForAnAdjustmentAndMonthIsNotTwelveThenFalseIsReturned()
+        {
+            //Arrange
+            var payroll = "16-17";
+            var expectedDate = new DateTime(2018,04,30);
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionEndOfYearAdjustment(payroll, 11, expectedDate);
+
+            //Assert
+            Assert.IsFalse(actual);
+        }
+
+        [TestCase("2016-04-30", false)]
+        [TestCase("2017-04-30", false)]
+        [TestCase("2017-05-01", true)]
+        [TestCase("2018-04-30", true)]
         public void ThenIfTheSubmissionDateIsGreaterThanThePayrollYearThenTrueIsReturned(string submissionDate, bool expectedResult)
         {
             //Arrange
@@ -54,11 +68,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             var expectedDate = DateTime.Parse(submissionDate);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionEndOfYearAdjustment(payroll, expectedDate);
+            var actual = _hmrcDateService.IsSubmissionEndOfYearAdjustment(payroll, 12, expectedDate);
 
             //Assert
-            Assert.AreEqual(expectedResult,actual);
+            Assert.AreEqual(expectedResult, actual);
         }
-        
+
+
     }
 }

@@ -13,8 +13,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return submissionDate >= startDate && submissionDate <= endDate;
         }
         
-        public bool IsSubmissionEndOfYearAdjustment(string payrollYear, DateTime submissionDate)
+        public bool IsSubmissionEndOfYearAdjustment(string payrollYear, int payrollMonth, DateTime submissionDate)
         {
+            if (payrollMonth != 12)
+            {
+                return false;
+            }
+
             DateTime endDate;
             GetDateRange(payrollYear, out endDate);
 
