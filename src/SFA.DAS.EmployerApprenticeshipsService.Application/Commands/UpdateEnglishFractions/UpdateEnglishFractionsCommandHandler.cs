@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 
             foreach (var englishFraction in newFraction)
             {
-                await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
+                await _englishFractionRepository.CreateEmployerFraction(englishFraction, message.EmployerReference);
             }
             
         }
