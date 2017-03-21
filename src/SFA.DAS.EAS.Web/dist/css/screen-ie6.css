@@ -3718,6 +3718,14 @@ body input::-webkit-contacts-auto-fill-button {
   font-size: 24px;
 }
 
+.validation-summary-max-funding {
+  border-color: #2e358b;
+}
+
+.validation-summary-max-funding #warning-summary {
+  margin-top: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;

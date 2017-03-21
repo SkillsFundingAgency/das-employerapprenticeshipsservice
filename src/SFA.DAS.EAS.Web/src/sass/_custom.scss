@@ -273,6 +273,13 @@ body {
         }
     }
 }
+
+.validation-summary-max-funding{
+    border-color:$purple;
+    #warning-summary{
+        margin-top:0;
+    }
+ }
   
 //all mobile media query breakpoints
 //==================================
