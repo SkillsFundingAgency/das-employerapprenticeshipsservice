@@ -6,6 +6,5 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
-        public HmrcConfiguration Hmrc { get; set; }
     }
 }

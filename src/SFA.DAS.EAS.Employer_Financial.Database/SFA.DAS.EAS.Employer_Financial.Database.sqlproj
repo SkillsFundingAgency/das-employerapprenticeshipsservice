@@ -95,6 +95,7 @@
     <Build Include="Tables\PaymentMetaData.sql" />
     <Build Include="StoredProcedures\GetEnglishFraction_ByEmpRef.sql" />
     <Build Include="Tables\EnglishFractionCalculationDate.sql" />
+    <Build Include="StoredProcedures\GetLevyDeclaration_ByEmpRefPayrollMonthPayrollYear.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

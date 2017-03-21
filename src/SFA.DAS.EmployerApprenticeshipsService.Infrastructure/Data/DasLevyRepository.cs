@@ -59,6 +59,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@SubmissionDate", dasDeclaration.SubmissionDate, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
                 parameters.Add("@CreatedDate", DateTime.UtcNow, DbType.DateTime);
+                if (dasDeclaration.DateCeased.HasValue && dasDeclaration.DateCeased != DateTime.MinValue)
+                {
+                    parameters.Add("@DateCeased", dasDeclaration.DateCeased, DbType.DateTime);
+                }
+                if (dasDeclaration.InactiveFrom.HasValue && dasDeclaration.InactiveFrom != DateTime.MinValue)
+                {
+                    parameters.Add("@InactiveFrom", dasDeclaration.InactiveFrom, DbType.DateTime);
+                }
+                if (dasDeclaration.InactiveTo.HasValue && dasDeclaration.InactiveTo != DateTime.MinValue)
+                {
+                    parameters.Add("@InactiveTo", dasDeclaration.InactiveTo, DbType.DateTime);
+                }
+                
+                parameters.Add("@EndOfYearAdjustment", dasDeclaration.EndOfYearAdjustment,DbType.Boolean);
+                parameters.Add("@EndOfYearAdjustmentAmount", dasDeclaration.EndOfYearAdjustmentAmount, DbType.Decimal);
                 
                 return await c.ExecuteAsync(
                     sql: "[employer_financial].[CreateDeclaration]",
@@ -92,6 +107,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                 return await c.QueryAsync<DasDeclaration>(
                     sql: "[employer_financial].[GetLastLevyDeclarations_ByEmpRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.SingleOrDefault();
+        }
+
+        public async Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@empRef", empRef, DbType.String);
+                parameters.Add("@payrollYear", payrollYear, DbType.String);
+                parameters.Add("@payrollMonth", payrollMonth, DbType.Int32);
+
+                return await c.QueryAsync<DasDeclaration>(
+                    sql: "[employer_financial].[GetLevyDeclaration_ByEmpRefPayrollMonthPayrollYear]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });

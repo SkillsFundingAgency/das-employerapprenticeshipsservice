@@ -64,13 +64,21 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     PayrollYear = tableRow["Payroll_Year"],
                     PayrollMonth = Convert.ToInt16(tableRow["Payroll_Month"]),
                     LevyAllowanceForFullYear = 15000,
-                    SubmissionDate = DateTime.Now,
+                    SubmissionDate = DateTime.Parse(tableRow["SubmissionDate"]),
                     Id = lineCount.ToString()
                 };
                 lineCount++;
                 if (!emprefDictionary.ContainsKey(tableRow["Paye_scheme"]))
                 {
                     emprefDictionary.Add(tableRow["Paye_scheme"],Convert.ToDecimal(tableRow["English_Fraction"]));
+                }
+                if (tableRow.ContainsKey("EndOfYearAdjustment"))
+                {
+                    dasDeclaration.EndOfYearAdjustment = Convert.ToInt16(tableRow["EndOfYearAdjustment"]) == 1;
+                }
+                if (tableRow.ContainsKey("EndOfYearAdjustmentAmount"))
+                {
+                    dasDeclaration.EndOfYearAdjustmentAmount = Convert.ToDecimal(tableRow["EndOfYearAdjustmentAmount"]);
                 }
 
                 dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, tableRow["Paye_scheme"], accountId).Wait();
