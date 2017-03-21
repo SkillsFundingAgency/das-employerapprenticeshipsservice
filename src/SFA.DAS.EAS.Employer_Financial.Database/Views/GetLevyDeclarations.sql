@@ -2,7 +2,6 @@
 AS
 
 
-
 SELECT 
 	ld.Id AS Id,	
 	ld.AccountId as AccountId,
@@ -19,9 +18,11 @@ SELECT
 	when 
 		ld.SubmissionDate then 1 
 	else 0 end as LastSubmission,
-	ld.CreatedDate
+	ld.CreatedDate,
+	ld.EndOfYearAdjustment,
+	ld.EndOfYearAdjustmentAmount
 FROM [employer_financial].[LevyDeclaration] ld
-inner join
+left join
 (
 	select 
 		Max(submissionDate) submissionDate, 
@@ -30,8 +31,9 @@ inner join
 		PayrollMonth
 	FROM 
 		[employer_financial].LevyDeclaration 
+	WHERE EndOfYearAdjustment = 0
 	group by empRef,PayrollYear,PayrollMonth
-)x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear
+)x on x.empRef = ld.empRef and x.PayrollMonth = ld.PayrollMonth and x.PayrollYear = ld.PayrollYear AND ld.EndOfYearAdjustment = 0
 
 OUTER APPLY
 (

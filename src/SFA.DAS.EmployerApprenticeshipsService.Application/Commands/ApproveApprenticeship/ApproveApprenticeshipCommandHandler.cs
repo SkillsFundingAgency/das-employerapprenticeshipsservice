@@ -1,16 +1,18 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.ApproveApprenticeship
 {
     public sealed class ApproveApprenticeshipCommandHandler : AsyncRequestHandler<ApproveApprenticeshipCommand>
     {
-        private ICommitmentsApi _commitmentsApi;
+        private IEmployerCommitmentApi _commitmentsApi;
         private readonly ApproveApprenticeshipCommandValidator _validator;
 
-        public ApproveApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi)
+        public ApproveApprenticeshipCommandHandler(IEmployerCommitmentApi commitmentsApi)
         {
             _commitmentsApi = commitmentsApi;
             _validator = new ApproveApprenticeshipCommandValidator();

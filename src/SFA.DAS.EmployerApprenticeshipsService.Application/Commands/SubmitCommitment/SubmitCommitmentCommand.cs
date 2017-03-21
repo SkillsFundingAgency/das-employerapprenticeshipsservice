@@ -1,9 +1,9 @@
 ﻿using MediatR;
 
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+
 namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 {
-    using SFA.DAS.Commitments.Api.Types;
-
     public sealed class SubmitCommitmentCommand : IAsyncRequest
     {
         public long EmployerAccountId { get; set; }

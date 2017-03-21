@@ -32,5 +32,22 @@ namespace SFA.DAS.EAS.Web.ViewModels
                 return TrainingProgramme != null && Apprenticeships.Any(x => x.Cost > TrainingProgramme.MaxFunding);
             }
         }
+
+        public int OverlapErrorCount
+        {
+            get
+            {
+                return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Count();
+            }
+        }
+
+        public bool ShowOverlapError
+        {
+            get
+            {
+                return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Any();
+            }
+        }
+
     }
 }

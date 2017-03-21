@@ -20,7 +20,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public bool HasApprenticeships { get; set; }
         public IList<ApprenticeshipListItemViewModel> Apprenticeships { get; set; }
         public IList<ApprenticeshipListItemGroupViewModel> ApprenticeshipGroups { get; set; }
-
         public string BackLinkUrl { get; set; }
+        public bool HasOverlappingErrors { get; set; }
+        public Dictionary<string, string> FundingCapWarnings { get; set; }
     }
 }

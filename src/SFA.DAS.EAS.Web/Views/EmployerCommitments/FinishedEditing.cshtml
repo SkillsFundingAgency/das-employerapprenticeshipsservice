@@ -9,34 +9,32 @@
     ViewBag.PageID = "finish-editing";
 }
 
-@*@section pageSpecificJS {
-    @Scripts.Render("~/bundles/jqueryvalcustom")
-}*@
-
 <div class="grid-row">
     <div class="column-two-thirds">
         <form action="@Url.Action("FinishedEditing")" method="post">
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-            @if (!Model.Data.HasSignedTheAgreement)
+            @if (Model.Data.NotReadyForApproval || !Model.Data.HasSignedTheAgreement || Model.Data.HasOverlappingErrors)
             {
-                <div class="panel alert-default">
-                    <p>
-                       SFA agreement not signed - an account owner must <a href="@Url.Action("Index", "EmployerAgreement")" >review and sign the agreement</a> before you can approve this cohort.
-                    </p>
+                <div class="panel panel-border-wide alert-default">
+                    <p class="heading-medium">You can't approve this cohort until: </p>
+                    <ul class="list list-bullet">                   
+                      <li>
+                        You've signed an <a href="@Url.Action("Index", "EmployerAgreement")" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
+                    </li>
+                    <li>
+                        All <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">apprentice records</a> are complete
+                    </li>
+                    <li>
+                        There are no <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">overlapping training dates</a> for your apprentices
+                    </li>
+                    </ul>
                 </div>
             }
 
             <h1 class="heading-xlarge">Choose an option</h1>
 
-            @if (Model.Data.NotReadyForApproval)
-            {
-                <p>
-                    @Html.Raw(GetInvalidStateForApprovalMessage(Model.Data.HasApprenticeships, Model.Data.InvalidApprenticeshipCount))
-                </p>
-            }
-            
             <fieldset>
                 <legend class="visuallyhidden">Things to do next</legend>
                 <div class="form-error-group form-group @Html.AddClassIfPropertyInError("SaveStatus", "error")">

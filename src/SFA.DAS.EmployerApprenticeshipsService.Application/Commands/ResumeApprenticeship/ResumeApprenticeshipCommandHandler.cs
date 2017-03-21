@@ -1,19 +1,19 @@
 ﻿using MediatR;
 
-using NLog.LayoutRenderers;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
 {
     public sealed class ResumeApprenticeshipCommandHandler : AsyncRequestHandler<ResumeApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
         private readonly ResumeApprenticeshipCommandValidator _validator;
 
-        public ResumeApprenticeshipCommandHandler(ICommitmentsApi commitmentApi)
+        public ResumeApprenticeshipCommandHandler(IEmployerCommitmentApi commitmentApi)
         {
             _commitmentApi = commitmentApi;
             _validator = new ResumeApprenticeshipCommandValidator();

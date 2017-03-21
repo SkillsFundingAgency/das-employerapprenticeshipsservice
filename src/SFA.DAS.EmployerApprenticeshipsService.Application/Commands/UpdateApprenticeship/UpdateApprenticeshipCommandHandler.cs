@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
 {
     public class UpdateApprenticeshipCommandHandler : AsyncRequestHandler<UpdateApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IEmployerCommitmentApi _commitmentsApi;
         private readonly UpdateApprenticeshipCommandValidator _validator;
 
-        public UpdateApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi)
+        public UpdateApprenticeshipCommandHandler(IEmployerCommitmentApi commitmentsApi)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
