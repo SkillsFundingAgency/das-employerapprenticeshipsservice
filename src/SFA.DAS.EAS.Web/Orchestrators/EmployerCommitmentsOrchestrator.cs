@@ -16,21 +16,31 @@ using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
-using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.Tasks.Api.Types.Templates;
+using System.Net;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Web.Enums;
-using SFA.DAS.EAS.Web.Exceptions;
-using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.Tasks.Api.Types.Templates;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
+
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -355,12 +365,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 apprenticeship.HashedAccountId = hashedAccountId;
 
+                var overlaps = await _mediator.SendAsync(
+                    new GetOverlappingApprenticeshipsQueryRequest
+                        {
+                            Apprenticeship = new[] { data.Apprenticeship }
+                        });
+
                 return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
                 {
                     Data = new ExtendedApprenticeshipViewModel
                     {
                         Apprenticeship = apprenticeship,
                         ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                        ValidationErrors = MapOverlappingErrors(overlaps)
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -411,6 +428,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var hasSigned = agreementResponse.EmployerAgreement == null;
 
+                var overlaps = await _mediator.SendAsync(
+                    new GetOverlappingApprenticeshipsQueryRequest
+                    {
+                        Apprenticeship = response.Commitment.Apprenticeships
+                    });
+
                 return new OrchestratorResponse<FinishEditingViewModel>
                 {
                     Data = new FinishEditingViewModel
@@ -421,7 +444,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ApprovalState = GetApprovalState(response.Commitment),
                         HasApprenticeships = response.Commitment.Apprenticeships.Any(),
                         InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
-                        HasSignedTheAgreement = hasSigned
+                        HasSignedTheAgreement = hasSigned,
+                        HasOverlappingErrors = overlaps.Overlaps.Any()
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -748,7 +772,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
                 var messageTask = GetLatestMessageFromProvider(data.Commitment);
-                var apprenticships = data.Commitment.Apprenticeships?.Select(_apprenticeshipMapper.MapToApprenticeshipListItem).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
+
+                var overlappingApprenticeships = await _mediator.SendAsync(
+                   new GetOverlappingApprenticeshipsQueryRequest
+                   {
+                       Apprenticeship = data.Commitment.Apprenticeships
+                   });
+
+                var apprenticships = data.Commitment.Apprenticeships?.Select(
+                    a => MapToApprenticeshipListItem(a, overlappingApprenticeships)).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
 
                 var trainingProgrammes = await GetTrainingProgrammes();
 
@@ -762,6 +794,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     });
                 }
 
+                var warnings = new Dictionary<string, string>();
+                apprenticeshipGroups
+                    .Where(m => m.ShowFundingLimitWarning)
+                    .ForEach(group => warnings.Add(group.GroupId, $"Cost for {group.TrainingProgramme.Title}"));
+
                 var viewModel = new CommitmentDetailsViewModel
                 {
                     HashedId = _hashingService.HashValue(data.Commitment.Id),
@@ -773,7 +810,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
                     LatestMessage = await messageTask,
-                    ApprenticeshipGroups = apprenticeshipGroups
+                    ApprenticeshipGroups = apprenticeshipGroups,
+                    HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError),
+                    FundingCapWarnings = warnings
                 };
 
                 return new OrchestratorResponse<CommitmentDetailsViewModel>
@@ -870,6 +909,49 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
+
+        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
+            return data.Any();
+        }
+
+        public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            {
+                AccountId = accountId,
+                LegalEntityCode = legalEntityCode
+            });
+
+            var hasSigned = agreementResponse.EmployerAgreement == null;
+
+            return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
+            {
+                Data = new LegalEntitySignedAgreementViewModel
+                {
+                    HashedAccountId = hashedAccountId,
+                    LegalEntityCode = legalEntityCode,
+                    CohortRef = cohortRef,
+                    HasSignedAgreement = hasSigned
+                }
+            };
+        }
+
+        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
+                });
+
+            return MapOverlappingErrors(overlappingErrors);
+        }
+
         public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser)
         {
             var accountId = _hashingService.DecodeValue(model.HashedAccountId);
@@ -952,6 +1034,57 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
+        private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship, GetOverlappingApprenticeshipsQueryResponse overlappingApprenticeships)
+        {
+            return new ApprenticeshipListItemViewModel
+            {
+                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
+                ApprenticeName = apprenticeship.ApprenticeshipName,
+                ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
+                TrainingCode = apprenticeship.TrainingCode,
+                TrainingName = apprenticeship.TrainingName,
+                Cost = apprenticeship.Cost,
+                StartDate = apprenticeship.StartDate,
+                EndDate = apprenticeship.EndDate,
+                CanBeApproved = apprenticeship.CanBeApproved,
+                OverlappingApprenticeships = overlappingApprenticeships.GetOverlappingApprenticeships(apprenticeship.ULN)
+            };
+        }
+
+        private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
+        {
+            var apprenticeship = new Apprenticeship
+            {
+                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
+                Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
+                NINumber = viewModel.NINumber,
+                ULN = viewModel.ULN,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
+                ProviderRef = viewModel.ProviderRef,
+                EmployerRef = viewModel.EmployerRef
+            };
+
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            {
+                var training = await GetTrainingProgramme(viewModel.TrainingCode);
+                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                apprenticeship.TrainingCode = viewModel.TrainingCode;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
+        }
+
+        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
+        {
+            return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
+        }
+
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
@@ -990,35 +1123,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
         }
 
-        public async Task<bool> AnyCohortsForCurrentStatus(string hashedAccountId, RequestStatus requestStatusFromSession)
+        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            var data = (await GetAll(accountId, requestStatusFromSession)).ToList();
-            return data.Any();
-        }
+            var dict = new Dictionary<string, string>();
+            const string StartText = "The start date is not valid";
+            const string EndText = "The end date is not valid";
 
-        public async Task<OrchestratorResponse<LegalEntitySignedAgreementViewModel>> GetLegalEntitySignedAgreementViewModel(string hashedAccountId, string legalEntityCode, string cohortRef)
-        {
-            var accountId = _hashingService.DecodeValue(hashedAccountId);
-            
-            var agreementResponse = await _mediator.SendAsync(new GetLegalEntityAgreementRequest
+            const string StartDateKey = "StartDateOverlap";
+            const string EndDateKey = "EndDateOverlap";
+
+
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
             {
-                AccountId = accountId,
-                LegalEntityCode = legalEntityCode
-            });
-
-            var hasSigned = agreementResponse.EmployerAgreement == null;
-
-            return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
-            {
-                Data = new LegalEntitySignedAgreementViewModel
+                switch (item.ValidationFailReason)
                 {
-                    HashedAccountId = hashedAccountId,
-                    LegalEntityCode = legalEntityCode,
-                    CohortRef = cohortRef,
-                    HasSignedAgreement = hasSigned
+                    case ValidationFailReason.OverlappingStartDate:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        break;
+                    case ValidationFailReason.OverlappingEndDate:
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateEmbrace:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateWithin:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
                 }
-            };
+            }
+            return dict;
         }
     }
 }

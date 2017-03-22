@@ -25,6 +25,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public bool IsApproveAndSend => ApprovalState == ApprovalState.ApproveAndSend;
 
         public bool HasSignedTheAgreement { get; set; }
+
+        public bool HasOverlappingErrors { get; set; }
     }
 
     public enum ApprovalState

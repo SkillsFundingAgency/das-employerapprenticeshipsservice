@@ -1,5 +1,5 @@
-using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System.Threading.Tasks;
 

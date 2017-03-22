@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -304,6 +306,17 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("AccessDenied");
 
             var model = await _employerCommitmentsOrchestrator.GetCommitmentDetails(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+
+            var groupes = model.Data.ApprenticeshipGroups.Where(m => m.ShowOverlapError);
+            foreach (var groupe in groupes)
+            {
+                var errorMessage = groupe.TrainingProgramme?.Title != null
+                    ? $"{groupe.TrainingProgramme?.Title ?? ""} apprentices training dates"
+                    : "Apprentices training dates";
+
+                ModelState.AddModelError($"{groupe.GroupId}", errorMessage);
+            }
+
             model.Data.BackLinkUrl = GetReturnToListUrl(hashedAccountId);
             SetFlashMessageOnModel(model);
 
@@ -416,9 +429,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
-            var response = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
-
-            return View("EditApprenticeshipEntry", response);
+            var model = await _employerCommitmentsOrchestrator.GetApprenticeship(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
+            AddErrorsToModelState(model.Data.ValidationErrors);
+            return View("EditApprenticeshipEntry", model);
         }
 
         [HttpPost]
@@ -428,6 +441,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             try
             {
+                AddErrorsToModelState(await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship));
                 if (!ModelState.IsValid)
                 {
                     return await RedisplayEditApprenticeshipView(apprenticeship);
@@ -691,6 +705,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         private void AddErrorsToModelState(InvalidRequestException ex)
         {
             foreach (var error in ex.ErrorMessages)
+            {
+                ModelState.AddModelError(error.Key, error.Value);
+            }
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> dict)
+        {
+            foreach (var error in dict)
             {
                 ModelState.AddModelError(error.Key, error.Value);
             }

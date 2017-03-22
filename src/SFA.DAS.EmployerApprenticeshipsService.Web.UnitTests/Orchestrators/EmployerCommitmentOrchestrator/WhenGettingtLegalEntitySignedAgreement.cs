@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using System.Threading.Tasks;

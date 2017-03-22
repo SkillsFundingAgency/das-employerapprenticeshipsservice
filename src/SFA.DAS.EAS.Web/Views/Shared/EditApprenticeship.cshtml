@@ -65,7 +65,7 @@
 
 </div>
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("StartDate", "error")">
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("StartDate", "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error")">
     <hr />
 
     <span class="form-label-bold">Planned training start date</span>
@@ -73,6 +73,10 @@
 
     <div class="form-date">
         @Html.ValidationMessage("StartDate", new { id = "error-message-StartDate", @class = "error-message" })
+        @Html.ValidationMessage("StartDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                                new { id = "error-message-StartDateOverlap", @class = "error-message" })
         <div class="form-group form-group-month">
             <label for="StartDate.Month">
                 Month
@@ -91,13 +95,17 @@
 
 </div>
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("EndDate", "error")">
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("EndDate", "error") @Html.AddClassIfPropertyInError("EndDateOverlap", "error")">
 
     <span class="form-label-bold">Planned training finish date</span>
     <span class="form-hint">For example, 02 2019</span>
 
     <div class="form-date">
         @Html.ValidationMessage("EndDate", new { id = "error-message-EndDate", @class = "error-message" })
+        @Html.ValidationMessage("EndDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                                new { id = "error-message-EndDateOverlap", @class = "error-message" })
         <div class="form-group form-group-month">
             <label for="EndDate.Month">
                 Month

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers

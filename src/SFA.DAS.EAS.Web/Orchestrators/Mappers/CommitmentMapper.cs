@@ -1,8 +1,10 @@
-﻿using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Domain.Interfaces;
+﻿using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.ViewModels;
 using System;
 using System.Threading.Tasks;
+
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {

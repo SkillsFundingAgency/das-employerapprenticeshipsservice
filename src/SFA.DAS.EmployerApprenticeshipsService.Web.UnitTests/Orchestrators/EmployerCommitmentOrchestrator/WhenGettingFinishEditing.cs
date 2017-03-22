@@ -3,12 +3,73 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
+using Moq;
+using NLog;
+using NUnit.Framework;
+
+using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.Commitments.Api.Types.Commitment.Types;
+using SFA.DAS.Commitments.Api.Types.Validation;
+using SFA.DAS.EAS.Application.Queries.GetCommitment;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Web.Orchestrators;
+﻿using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {
     [TestFixture]
     public class WhenGettingFinishEditing : OrchestratorTestBase
     {
+        private Mock<IMediator> _mediator;
+        private Mock<ILogger> _logger;
+        private Mock<IHashingService> _hashingService;
+        private Mock<ICommitmentStatusCalculator> _calculator;
+
+        private EmployerCommitmentsOrchestrator _employerCommitmentOrchestrator;
+
+        [SetUp]
+        public void Arrange()
+        {
+            _mediator = new Mock<IMediator>();
+            _logger = new Mock<ILogger>();
+            _calculator = new Mock<ICommitmentStatusCalculator>();
+
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue("ABC123")).Returns(123L);
+            _hashingService.Setup(x => x.DecodeValue("ABC321")).Returns(321L);
+            _hashingService.Setup(x => x.DecodeValue("ABC456")).Returns(456L);
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
+                .ReturnsAsync(new GetCommitmentQueryResponse
+                {
+                    Commitment = new Commitment
+                    {
+                        Id = 123,
+                        LegalEntityId = "321",
+                        EditStatus = EditStatus.EmployerOnly,
+                        CommitmentStatus = CommitmentStatus.Active
+                    }
+                });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOverlappingApprenticeshipsQueryRequest>()))
+                .ReturnsAsync(
+                    new GetOverlappingApprenticeshipsQueryResponse { Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>() });
+
+            _employerCommitmentOrchestrator = new EmployerCommitmentsOrchestrator(
+                _mediator.Object,
+                _hashingService.Object, 
+                _calculator.Object, 
+                Mock.Of<IApprenticeshipMapper>(), 
+                Mock.Of<ICommitmentMapper>(), 
+                _logger.Object);
+        }
+
         [Test]
         public async Task ShouldCallMediatorToGetLegalEntityAgreementRequest()
         {
