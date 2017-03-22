@@ -2826,18 +2826,6 @@ table.organisations td + td + td {
   margin-bottom: 60px;
 }
 
-.agreement header .context {
-  margin-bottom: 10px;
-  font-family: "nta", Arial, sans-serif;
-  font-weight: 400;
-  text-transform: none;
-  font-size: 18px;
-  line-height: 1.2;
-  font-size: 24px;
-  line-height: 1.25;
-  margin-top: 45px;
-}
-
 .agreement header h1 {
   font-family: "nta", Arial, sans-serif;
   font-weight: 700;
@@ -2846,8 +2834,20 @@ table.organisations td + td + td {
   line-height: 1.09375;
   font-size: 48px;
   line-height: 1.0416666667;
-  margin-bottom: 15px;
-  margin-bottom: 45px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-top: 45px;
+}
+
+.agreement header .context {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.25;
+  line-height: 1.4em;
 }
 
 .agreement header h2 {
