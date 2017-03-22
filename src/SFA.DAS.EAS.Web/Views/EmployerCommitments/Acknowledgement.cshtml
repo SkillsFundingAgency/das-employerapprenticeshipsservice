@@ -10,7 +10,7 @@
     <div class="column-full">
         <div class="govuk-box-highlight green-box">
             <h1 class="heading-xlarge" id="changeHeadline">
-                Instructions sent
+                @Model.Data.Content.Title
             </h1>
         </div>
     </div>
@@ -52,7 +52,9 @@
 
 
         <h2 class="heading-medium">What happens next?</h2>
-        <p id="changeMainCopy">Your training provider will review your request and contact you as soon as possible - either with questions or to ask you to review the details they've added.</p>
+        <p id="changeMainCopy">
+            @Model.Data.Content.Text
+        </p>
 
         @if (!string.IsNullOrEmpty(Model.Data.BackLink?.Url))
         {

@@ -1111,7 +1111,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
 
             var hasSigned = agreementResponse.EmployerAgreement == null;
-
             return new OrchestratorResponse<LegalEntitySignedAgreementViewModel>
             {
                 Data = new LegalEntitySignedAgreementViewModel
@@ -1120,7 +1119,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LegalEntityCode = legalEntityCode,
                     CohortRef = cohortRef,
                     HasSignedAgreement = hasSigned,
-                    LegalEntityName = agreementResponse.EmployerAgreement.LegalEntityName
+                    LegalEntityName = agreementResponse?.EmployerAgreement?.LegalEntityName ?? string.Empty
                 }
             };
         }
