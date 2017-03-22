@@ -199,7 +199,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.BadRequest
                 };
             }
-            catch (Exception)
+            catch (UnauthorizedAccessException)
             {
                 return new OrchestratorResponse
                 {
