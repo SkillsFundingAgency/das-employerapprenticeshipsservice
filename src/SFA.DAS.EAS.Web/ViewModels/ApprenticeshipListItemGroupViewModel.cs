@@ -37,7 +37,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         {
             get
             {
-                return Apprenticeships.SelectMany(m => m.OverlappingApprenticeships).Count();
+                return Apprenticeships.Count(x=> x.OverlappingApprenticeships.Any());
             }
         }
 
