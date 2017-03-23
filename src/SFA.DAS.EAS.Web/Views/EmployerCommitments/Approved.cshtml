@@ -39,7 +39,8 @@
 
         <h2 class="heading-medium">What happens next?</h2>
         <p id="changeMainCopy">
-            Your cohort has been approved - your apprentices will appear in the Manage your apprentices area of your account.
+            Your cohort has been approved. To view or update apprentice details or stop payments for any apprentices in this cohort you will need to 
+            <a href="@Url.Action("ListAll" ,"EmployerManageApprentices")">manage your apprentices</a>
         </p>
 
         @if (!string.IsNullOrEmpty(Model.Data.BackLink?.Url))

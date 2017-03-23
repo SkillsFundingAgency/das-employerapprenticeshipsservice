@@ -13,6 +13,8 @@
         public string Message { get; set; }
 
         public LinkViewModel BackLink { get; set; }
+
+        public AcknowledgementContent Content { get; set; }
     }
 
     public class LinkViewModel
@@ -20,5 +22,12 @@
         public string Url { get; set; }
 
         public string  Text { get; set; }
+    }
+
+    public class AcknowledgementContent
+    {
+        public string Title { get; set; }
+
+        public string Text { get; set; }
     }
 }

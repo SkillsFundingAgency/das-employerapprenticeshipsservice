@@ -69,7 +69,7 @@
 
        
     <div class="column-one-half employer-details">
-            <p class="strong">Note:</p>
+            <p class="strong">Message:</p>
             <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
@@ -96,7 +96,7 @@
             <div class="grid-row" id="empty-alert-top">
                 <div class="column-full">
                     <div class="panel panel-border-wide alert-default">
-                        <p>You haven't added any apprentices yet. Use the options on this page to add apprentices.</p>
+                        <p>You haven’t added any apprentices yet - <a href="@Url.Action("CreateApprenticeshipEntry")"> add an apprentice </a></p>
                     </div>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                         if (group.ShowOverlapError)
                         {
                             <div class="overlap-notification grey-background" id="error-message-@group.GroupId">
-                                <p class="heading-medium">
+                                <p class="heading-small">
                                     @group.OverlapErrorCount @PluraliseApprentice(group.OverlapErrorCount).ToLower() with overlapping training dates
                                 </p>
                                 <p>
@@ -136,8 +136,8 @@
                         }
                         else if (group.ShowFundingLimitWarning && !Model.Data.HasOverlappingErrors)
                         {
-                            <div class="funding-cap-alert grey-background" id="max-funding-group-@group.GroupId">
-                                <p class="heading-medium">
+                            <div class="funding-cap-notification grey-background" id="max-funding-group-@group.GroupId">
+                                <p class="heading-small">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
                                 <p>

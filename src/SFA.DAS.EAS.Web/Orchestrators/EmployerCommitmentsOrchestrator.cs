@@ -640,7 +640,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
-                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are waiting to be sent:",
+                            PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} waiting to be sent to the training provider for review or approval.",
                         }
                     };
 
@@ -662,10 +662,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountHashId = hashedAccountId,
                         Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
-                        PageTitle = "Approve cohorts",
+                        PageTitle = "Cohorts for approval",
                         PageId = "ready-for-approval",
-                        PageHeading = "Approve cohorts",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that need your approval:",
+                        PageHeading = "Cohorts for approval",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} ready for your approval.",
 
                     }
                 };
@@ -688,10 +688,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountHashId = hashedAccountId,
                         Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
-                        PageTitle = "Ready for review",
+                        PageTitle = "Cohorts for review",
                         PageId = "ready-for-review",
-                        PageHeading = "Ready for review",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are ready for review:",
+                        PageHeading = "Cohorts for review",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} ready for review.",
 
                     }
                 };
@@ -721,10 +721,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountHashId = hashedAccountId,
                         Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromEmployerFunc))),
-                        PageTitle = "With the provider",
+                        PageTitle = "With training providers",
                         PageId = "with-the-provider",
-                        PageHeading = "With the provider",
-                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} that are with the provider:"
+                        PageHeading = "With training providers",
+                        PageHeading2 = $"You have <strong>{commitments.Count}</strong> cohort{_addPluralizationSuffix(commitments.ToList().Count)} with training providers for them to add apprentices, or review and approve details."
                     }
                 };
 
@@ -925,7 +925,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     LegalEntityCode = legalEntityCode,
                     CohortRef = cohortRef,
-                    HasSignedAgreement = hasSigned
+                    HasSignedAgreement = hasSigned,
+                    LegalEntityName = agreementResponse?.EmployerAgreement?.LegalEntityName ?? string.Empty
                 }
             };
         }
@@ -1182,7 +1183,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             const string StartDateKey = "StartDateOverlap";
             const string EndDateKey = "EndDateOverlap";
-
 
             foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
             {
