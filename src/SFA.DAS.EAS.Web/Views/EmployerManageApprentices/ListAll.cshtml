@@ -4,14 +4,14 @@
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ManageApprenticeshipsViewModel>
 
 @{
-    ViewBag.PageID = "manage-apprentices";
-    ViewBag.Title = "Manage apprentices";
+    ViewBag.PageID = "manage-all-apprentices";
+    ViewBag.Title = "Manage your apprentices";
 }
 
 <div class="grid-row">
     <div class="column-full">
         <div class="hgroup">
-            <h1 class="heading-xlarge">Your apprentices</h1>
+            <h1 class="heading-xlarge">Manage your apprentices</h1>
         </div>
 
         @if (!Model.Data.Apprenticeships.Any())
@@ -22,14 +22,14 @@
         }
         else
         {
-            <table class="tableResponsive manage-all-apprentices">
+            <table class="tableResponsive">
                 <thead>
                 <tr>
                     <th>Name</th>
                     <th>Date of birth</th>
-                    <th>Status</th>
+                    <th>Training status</th>
+                    <th>Record status</th>
                     <th></th>
-
                 </tr>
                 </thead>
                 <tbody>
@@ -47,6 +47,9 @@
                         </td>
                         <td>
                             @apprenticeship.Status &nbsp;
+                        </td>
+                        <td>
+                            <--changes pending-->
                         </td>
                         <td>
                             <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"

@@ -419,7 +419,9 @@
     <Compile Include="Mapping\OrganisationMapping.cs" />
     <Compile Include="Orchestrators\CommitmentsBaseOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\CommitmentMapper.cs" />
     <Compile Include="Orchestrators\Mappers\IApprenticeshipMapper.cs" />
+    <Compile Include="Orchestrators\Mappers\ICommitmentMapper.cs" />
     <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
@@ -997,6 +999,10 @@
     <Content Include="Views\Home\SetupAccount.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\Edit.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ViewChanges.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
+    <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,71 @@
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Enums
+@using SFA.DAS.EAS.Web.Extensions
+
+
+@{
+    ViewBag.Title = "View changes";
+    ViewBag.PageID = "view-changes";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">View changes</h1>
+
+        <table class="edited-changes">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Previous</th>
+                    <th>Changed to</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Training course </td>
+                    <td>Level 2: Aeronautics  </td>
+                    <td class="changed-item">Level 3: Aeronautical engineering </td>
+                </tr>
+                <tr>
+                    <td>Total cost </td>
+                    <td>&pound;6,555 </td>
+                    <td class="changed-item">&pound;7,000 </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h1 class="heading-medium">Do you want to undo these changes?</h1>
+
+        <form>
+            <div class="form-group">
+                <fieldset>
+                    <legend class="visually-hidden">Do you want to undo these changes?</legend>
+
+                    <label class="block-label selection-button-radio" for="radio-1">
+                        <input id="radio-1" type="radio" name="radio-group" value="undo">
+                        Yes, undo these changes
+                    </label>
+                    <label class="block-label selection-button-radio" for="radio-2">
+                        <input id="radio-2" type="radio" name="radio-group" value="keep changes">
+                        No, keep these changes
+                    </label>
+                </fieldset>
+            </div>
+        </form>
+
+        <button type="submit" class="button" aria-label="Continue">Continue</button>
+
+        <div class="column-one-thirds">
+
+        </div>
+
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+    </div>
+}

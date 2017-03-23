@@ -1,0 +1,40 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ExtendedApprenticeshipViewModel>
+
+@{
+    ViewBag.Title = "Apprentice detail";
+    ViewBag.PageId = "apprentices-detail";
+}
+
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/apprentice")
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div>
+            <a href="@Url.RouteUrl("ConfirmApprenticeChanges")">Confirm Changes</a>
+        </div>
+        @Html.Partial("EditApprenticeship", Model.Data)
+
+    </div>
+
+    <div class="column-one-thirds">
+
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+    </div>
+}
+
+@functions {
+    public string FormatCost(decimal? cost)
+    {
+        if (!cost.HasValue)
+            return string.Empty;
+
+        return $"£{cost.Value:n0}";
+    }
+}

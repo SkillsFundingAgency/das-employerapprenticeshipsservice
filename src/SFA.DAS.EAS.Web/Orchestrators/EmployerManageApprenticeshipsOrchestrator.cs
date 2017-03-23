@@ -10,6 +10,11 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using SFA.DAS.EAS.Web.ViewModels;
+using AutoMapper;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using System.Collections.Generic;
+using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -52,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var apprenticeships = data.Apprenticeships
                         .OrderBy(m => m.ApprenticeshipName)
-                        .Select(_apprenticeshipMapper.MapFrom)
+                        .Select(_apprenticeshipMapper.MapToApprenticeshipDetailsViewModel)
                         .ToList();
 
                     var model = new ManageApprenticeshipsViewModel
@@ -81,9 +86,48 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
                                {
-                                   Data = _apprenticeshipMapper.MapFrom(data.Apprenticeship)
+                                   Data = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship)
                                };
                 }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<ExtendedApprenticeshipViewModel>> GetApprenticeshipForEdit(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting Approved Apprenticeship for Editing, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
+
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId
+                });
+
+                var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
+
+                apprenticeship.HashedAccountId = hashedAccountId;
+
+                return new OrchestratorResponse<ExtendedApprenticeshipViewModel>
+                {
+                    Data = new ExtendedApprenticeshipViewModel
+                    {
+                        Apprenticeship = apprenticeship,
+                        ApprenticeshipProgrammes = await GetTrainingProgrammes(),
+                    }
+                };
+            }, hashedAccountId, externalUserId);
+        }
+
+        private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
+        {
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
+
+            return programmes.TrainingProgrammes;
         }
     }
 }

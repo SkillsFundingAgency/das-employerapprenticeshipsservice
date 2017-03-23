@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
+using Newtonsoft.Json;
 using NLog;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateCommitment;
+using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
+using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetCommitments;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
-using SFA.DAS.EAS.Application.Queries.GetStandards;
 using SFA.DAS.EAS.Application.Queries.GetTasks;
+using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Exceptions;
-using Newtonsoft.Json;
 using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 
@@ -27,18 +26,19 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
-using SFA.DAS.EAS.Application;
-using SFA.DAS.EAS.Application.Commands.DeleteApprentice;
-using SFA.DAS.EAS.Application.Commands.DeleteCommitment;
-using SFA.DAS.EAS.Application.Queries.GetFrameworks;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Web.Enums;
+using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using WebGrease.Css.Extensions;
 
@@ -54,11 +54,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly Func<int, string> _addPluralizationSuffix = i => i > 1 ? "s" : "";
         private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
         private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
+        private readonly IApprenticeshipMapper _apprenticeshipMapper;
+        private readonly ICommitmentMapper _commitmentMapper;
 
         public EmployerCommitmentsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService, 
-            ICommitmentStatusCalculator statusCalculator, 
+            ICommitmentStatusCalculator statusCalculator,
+            IApprenticeshipMapper apprenticeshipMapper,
+            ICommitmentMapper commitmentMapper,
             ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
@@ -67,12 +71,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(hashingService));
             if (statusCalculator == null)
                 throw new ArgumentNullException(nameof(statusCalculator));
+            if (apprenticeshipMapper == null)
+                throw new ArgumentNullException(nameof(apprenticeshipMapper));
+            if (commitmentMapper == null)
+                throw new ArgumentNullException(nameof(commitmentMapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _statusCalculator = statusCalculator;
+            _apprenticeshipMapper = apprenticeshipMapper;
+            _commitmentMapper = commitmentMapper;
             _logger = logger;
 
             _latestMessageFromProviderFunc = async item => await GetLatestMessageFromProvider(item.EmployerAccountId, item.Id);
@@ -328,7 +338,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new CreateApprenticeshipCommand
                 {
                     AccountId = _hashingService.DecodeValue(apprenticeship.HashedAccountId),
-                    Apprenticeship = await MapFrom(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
                     UserId = externalUserId
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
@@ -351,7 +361,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId
                 });
 
-                var apprenticeship = MapFrom(data.Apprenticeship);
+                var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
 
                 apprenticeship.HashedAccountId = hashedAccountId;
 
@@ -387,7 +397,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 await _mediator.SendAsync(new UpdateApprenticeshipCommand
                 {
                     AccountId = accountId,
-                    Apprenticeship = await MapFrom(apprenticeship),
+                    Apprenticeship = await _apprenticeshipMapper.MapFromAsync(apprenticeship),
                     UserId = externalUserId
                 });
             }, apprenticeship.HashedAccountId, externalUserId);
@@ -510,7 +520,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-                var commitment = MapFrom(data.Commitment);
+                var commitment = _commitmentMapper.MapToCommitmentViewModel(data.Commitment);
 
                 return new OrchestratorResponse<SubmitCommitmentViewModel>
                 {
@@ -636,7 +646,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Data = new CommitmentListViewModel
                         {
                             AccountHashId = hashedAccountId,
-                            Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
+                            Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
@@ -661,7 +671,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
+                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
                         PageTitle = "Approve cohorts",
                         PageId = "ready-for-approval",
                         PageHeading = "Approve cohorts",
@@ -687,7 +697,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromProviderFunc))),
+                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
                         PageTitle = "Ready for review",
                         PageId = "ready-for-review",
                         PageHeading = "Ready for review",
@@ -720,7 +730,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => MapFrom(m, _latestMessageFromEmployerFunc))),
+                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromEmployerFunc))),
                         PageTitle = "With the provider",
                         PageId = "with-the-provider",
                         PageHeading = "With the provider",
@@ -771,6 +781,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var apprenticships = data.Commitment.Apprenticeships?.Select(
                     a => MapToApprenticeshipListItem(a, overlappingApprenticeships)).ToList() ?? new List<ApprenticeshipListItemViewModel>(0);
+
                 var trainingProgrammes = await GetTrainingProgrammes();
 
                 var apprenticeshipGroups = new List<ApprenticeshipListItemGroupViewModel>();
@@ -1023,57 +1034,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        private CommitmentViewModel MapFrom(Commitment commitment)
-        {
-            return new CommitmentViewModel
-            {
-                HashedId = _hashingService.HashValue(commitment.Id),
-                Name = commitment.Reference,
-                LegalEntityName = commitment.LegalEntityName,
-                ProviderName = commitment.ProviderName
-            };
-        }
-
-        private async Task<CommitmentListItemViewModel> MapFrom(CommitmentListItem commitment, Func<CommitmentListItem, Task<string>> latestMessageFunc)
-        {
-            var messageTask = latestMessageFunc.Invoke(commitment);
-
-            return new CommitmentListItemViewModel
-            {
-                HashedCommitmentId = _hashingService.HashValue(commitment.Id),
-                Name = commitment.Reference,
-                LegalEntityName = commitment.LegalEntityName,
-                ProviderName = commitment.ProviderName,
-                Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
-                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly,
-                LatestMessage = await messageTask
-            };
-        }
-
-        private ApprenticeshipViewModel MapFrom(Apprenticeship apprenticeship)
-        {
-            return new ApprenticeshipViewModel
-            {
-                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
-                FirstName = apprenticeship.FirstName,
-                LastName = apprenticeship.LastName,
-                NINumber = apprenticeship.NINumber,
-                DateOfBirth = new DateTimeViewModel(apprenticeship.DateOfBirth?.Day, apprenticeship.DateOfBirth?.Month, apprenticeship.DateOfBirth?.Year),
-                ULN = apprenticeship.ULN,
-                TrainingType = apprenticeship.TrainingType,
-                TrainingCode = apprenticeship.TrainingCode,
-                TrainingName = apprenticeship.TrainingName,
-                Cost = NullableDecimalToString(apprenticeship.Cost),
-                StartDate = new DateTimeViewModel(apprenticeship.StartDate),
-                EndDate = new DateTimeViewModel(apprenticeship.EndDate),
-                PaymentStatus = apprenticeship.PaymentStatus,
-                AgreementStatus = apprenticeship.AgreementStatus,
-                ProviderRef = apprenticeship.ProviderRef,
-                EmployerRef = apprenticeship.EmployerRef
-            };
-        }
-
         private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship, GetOverlappingApprenticeshipsQueryResponse overlappingApprenticeships)
         {
             return new ApprenticeshipListItemViewModel
@@ -1089,11 +1049,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 CanBeApproved = apprenticeship.CanBeApproved,
                 OverlappingApprenticeships = overlappingApprenticeships.GetOverlappingApprenticeships(apprenticeship.ULN)
             };
-        }
-
-        private static string NullableDecimalToString(decimal? item)
-        {
-            return (item.HasValue) ? ((int)item).ToString() : "";
         }
 
         private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
@@ -1130,17 +1085,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
         }
 
-
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
-            var standardsTask = _mediator.SendAsync(new GetStandardsQueryRequest());
-            var frameworksTask = _mediator.SendAsync(new GetFrameworksQueryRequest());
+            var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
 
-            await Task.WhenAll(standardsTask, frameworksTask);
-
-            return standardsTask.Result.Standards.Union(frameworksTask.Result.Frameworks.Cast<ITrainingProgramme>())
-                .OrderBy(m => m.Title)
-                .ToList();
+            return programmes.TrainingProgrammes;
         }
 
         private static void AssertCommitmentStatus(
