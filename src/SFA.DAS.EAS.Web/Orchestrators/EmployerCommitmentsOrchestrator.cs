@@ -1087,7 +1087,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 StartDate = apprenticeship.StartDate,
                 EndDate = apprenticeship.EndDate,
                 CanBeApproved = apprenticeship.CanBeApproved,
-                OverlappingApprenticeships = overlappingApprenticeships.GetOverlappingApprenticeships(apprenticeship.ULN)
+                OverlappingApprenticeships = overlappingApprenticeships.GetOverlappingApprenticeships(apprenticeship.Id)
             };
         }
 
