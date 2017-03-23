@@ -7,6 +7,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
     {
         public ApprenticeshipViewModel Apprenticeship { get; set; }
         public List<ITrainingProgramme> ApprenticeshipProgrammes { get; set; }
+
+        public Dictionary<string, string> ValidationErrors { get; set; }
     }
 
     public sealed class ApprenticeshipProgramme

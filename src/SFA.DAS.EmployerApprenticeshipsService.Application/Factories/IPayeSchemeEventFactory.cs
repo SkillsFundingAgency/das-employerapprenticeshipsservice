@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events;
+﻿using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
 
 namespace SFA.DAS.EAS.Application.Factories
 {

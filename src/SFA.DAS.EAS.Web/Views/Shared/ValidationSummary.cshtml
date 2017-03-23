@@ -9,7 +9,7 @@
 
         @foreach (var stateItem in ViewContext.ViewData.ModelState)
         {
-            var elementId = ViewData.TemplateInfo.GetFullHtmlFieldId(stateItem.Key);
+            var elementId = ViewData.TemplateInfo.GetFullHtmlFieldId(stateItem.Key) ?? stateItem.Key;
 
             foreach (var error in stateItem.Value.Errors)
             {

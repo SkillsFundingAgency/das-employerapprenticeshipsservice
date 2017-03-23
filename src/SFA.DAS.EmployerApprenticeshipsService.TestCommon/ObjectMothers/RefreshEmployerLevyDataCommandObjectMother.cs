@@ -56,5 +56,38 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 
             return refreshEmployerLevyDataCommand;
         }
+
+        public static RefreshEmployerLevyDataCommand CreateEndOfYearAdjustment(string empRef, long accountId = 1)
+        {
+            var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
+            {
+                AccountId = accountId,
+                EmployerLevyData = new List<EmployerLevyData> {
+                    new EmployerLevyData
+                {
+                EmpRef = empRef,
+                Declarations = new DasDeclarations
+                {
+                    Declarations = new List<DasDeclaration>
+                    {
+                        new DasDeclaration
+                        {
+                            Id = "1",
+                            LevyDueYtd = 10,
+                            PayrollYear = "16-17",
+                            PayrollMonth = 12,
+                            SubmissionDate = new DateTime(2017,05,01)
+                        }
+                        
+                    }
+                }
+                }
+               }
+
+            };
+
+
+            return refreshEmployerLevyDataCommand;
+        }
     }
 }

@@ -2779,18 +2779,6 @@ table.organisations td + td + td {
   margin-bottom: 60px;
 }
 
-.agreement header .context {
-  margin-bottom: 10px;
-  font-family: "nta", Arial, sans-serif;
-  font-weight: 400;
-  text-transform: none;
-  font-size: 18px;
-  line-height: 1.2;
-  font-size: 24px;
-  line-height: 1.25;
-  margin-top: 45px;
-}
-
 .agreement header h1 {
   font-family: "nta", Arial, sans-serif;
   font-weight: 700;
@@ -2799,8 +2787,20 @@ table.organisations td + td + td {
   line-height: 1.09375;
   font-size: 48px;
   line-height: 1.0416666667;
-  margin-bottom: 15px;
-  margin-bottom: 45px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-top: 45px;
+}
+
+.agreement header .context {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.25;
+  line-height: 1.4em;
 }
 
 .agreement header h2 {
@@ -3598,11 +3598,30 @@ span.helpText {
   margin-right: 75px;
 }
 
+.overlap-arrow {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 25px solid #dee0e2;
+  content: "";
+  float: right;
+  margin-right: 180px;
+  margin-right: 320px;
+}
+
 .funding-cap-alert {
-  border-bottom: 5px solid #6f777b;
+  border-left: 10px solid #005ea5;
 }
 
 .funding-cap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+.funding-cap-alert-td {
+  border-bottom: 5px solid #005ea5;
+}
+
+.funding-cap-alert-td a {
   text-decoration: none;
   color: #0b0c0c;
 }
@@ -3623,19 +3642,58 @@ body input::-webkit-contacts-auto-fill-button {
   right: 0;
 }
 
+#apprentice-details .overlap-notification {
+  border-left: 10px solid #b10e1e;
+}
+
+.overlap-alert {
+  border-bottom: 5px solid #b10e1e;
+}
+
+.overlap-alert a {
+  text-decoration: none;
+  color: #0b0c0c;
+}
+
+#finish-editing .alert-default {
+  border-color: #2e358b;
+}
+
+#finish-editing .alert-default .heading-medium {
+  font-size: 24px;
+}
+
+.validation-summary-max-funding {
+  border-color: #2e358b;
+}
+
+.validation-summary-max-funding #warning-summary {
+  margin-top: 0;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   #apprentice-details .tableResponsive {
     margin-top: 30px;
   }
-  #apprentice-details .tableResponsive .funding-cap-alert {
-    border-bottom: 5px solid #6f777b;
-    background: #dee0e2;
+  #apprentice-details .tableResponsive .funding-cap-alert-td {
+    border-left: 10px solid #005ea5;
+    background: #fff;
   }
-  #apprentice-details .tableResponsive .funding-cap-alert a {
+  #apprentice-details .tableResponsive .funding-cap-alert-td a {
     text-decoration: none;
     color: #0b0c0c;
+    cursor: pointer;
   }
-  .bubble-arrow {
+  #apprentice-details .tableResponsive .overlap-alert {
+    border-left: 10px solid #b10e1e;
+    background: #fff;
+  }
+  #apprentice-details .tableResponsive .overlap-alert a {
+    text-decoration: none;
+    color: #0b0c0c;
+    cursor: pointer;
+  }
+  .bubble-arrow, .overlap-arrow {
     display: none;
   }
   .manage-all-apprentices td:nth-of-type(1):before {

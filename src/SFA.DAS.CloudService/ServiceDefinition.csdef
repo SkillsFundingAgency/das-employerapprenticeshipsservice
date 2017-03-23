@@ -49,6 +49,7 @@
       <Setting name="LoggingRedisConnectionString" />
       <Setting name="LoggingRedisKey" />
       <Setting name="DeclarationsEnabled" />
+      <Setting name="TokenServiceCertificateThumbprint" />
     </ConfigurationSettings>
     <LocalResources>
     </LocalResources>
