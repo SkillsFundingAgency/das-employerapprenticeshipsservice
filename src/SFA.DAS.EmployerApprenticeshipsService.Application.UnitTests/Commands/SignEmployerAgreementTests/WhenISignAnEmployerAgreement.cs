@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
+using SFA.DAS.EAS.Application.Factories;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -23,8 +27,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private MembershipView _owner;
         private Mock<IHashingService> _hashingService;
         private Mock<IValidator<SignEmployerAgreementCommand>> _validator;
+        private Mock<IEmployerAgreementEventFactory> _agreementEventFactory;
+        private Mock<IGenericEventFactory> _genericEventFactory;
+        private Mock<IMediator> _mediator;
+        private EmployerAgreementView _agreement;
+        private AgreementSignedEvent _agreementEvent;
 
         private const long AgreementId = 123433;
+        private const string HashedLegalEntityId = "2635JHG";
 
         [SetUp]
         public void Setup()
@@ -33,13 +43,42 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
             
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(AgreementId);
+            _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(HashedLegalEntityId);
 
             _validator = new Mock<IValidator<SignEmployerAgreementCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
 
+
+            _agreement = new EmployerAgreementView
+            {
+                HashedAgreementId = "124GHJG",
+                LegalEntityId = 56465
+            };
+
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
 
-            _handler = new SignEmployerAgreementCommandHandler(_membershipRepository.Object, _agreementRepository.Object, _hashingService.Object,_validator.Object);
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(It.IsAny<long>()))
+                                .ReturnsAsync(_agreement);
+
+            _agreementEventFactory = new Mock<IEmployerAgreementEventFactory>();
+
+            _agreementEvent = new AgreementSignedEvent();
+
+            _agreementEventFactory.Setup(
+                    x => x.CreateSignedEvent(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                          .Returns(_agreementEvent);
+
+            _genericEventFactory = new Mock<IGenericEventFactory>();
+            _mediator = new Mock<IMediator>();
+            
+            _handler = new SignEmployerAgreementCommandHandler(
+                _membershipRepository.Object, 
+                _agreementRepository.Object, 
+                _hashingService.Object, 
+                _validator.Object,
+                _agreementEventFactory.Object, 
+                _genericEventFactory.Object,
+                _mediator.Object);
 
             _command = new SignEmployerAgreementCommand
             {
@@ -110,6 +149,22 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
                                 && c.SignedById.Equals(_owner.UserId)
                                 && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
                                 )));
+        }
+
+        [Test]
+        public async Task ThenAnEventShouldBePublished()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
+            _hashingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
+            _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId, 
+                _command.HashedAgreementId), Times.Once);
+            _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()), Times.Once);
+            
         }
     }
 }

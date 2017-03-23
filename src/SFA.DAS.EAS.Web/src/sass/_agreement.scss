@@ -12,18 +12,21 @@
         @include media(tablet) {
             margin-bottom: 60px;
         }
-        .context {
-            margin-bottom: 10px;
-            @include core-24;
+        
+        h1 {
+            @include bold-48;
+            margin-top: 15px;
+            margin-bottom: 5px;
             @include media(tablet) {
                 margin-top: 45px;
             }
         }
-        h1 {
-            @include bold-48;
-            margin-bottom: 15px;
+        .context {
+          
+            @include core-24;
+            line-height: 1.4em;
             @include media(tablet) {
-                margin-bottom: 45px;
+               
             }
         }
         h2 {
