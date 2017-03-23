@@ -41,7 +41,7 @@
                     <div>
                         @Html.ValidationMessage("SaveStatus", "Please choose an option", new { id = "error-message-SaveStatus-SendAmend" })
                     </div>
-                    @if (!Model.Data.NotReadyForApproval && Model.Data.HasSignedTheAgreement)
+                    @if (!Model.Data.NotReadyForApproval && Model.Data.HasSignedTheAgreement && !Model.Data.HasOverlappingErrors)
                     {
                         if (Model.Data.IsApproveAndSend)
                         {
