@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Application.Factories
 {
     public interface IGenericEventFactory
     {
-        GenericEvent Create<T>(T value) where T : IEventView;
+        GenericEvent Create<T>(T value);
     }
 }

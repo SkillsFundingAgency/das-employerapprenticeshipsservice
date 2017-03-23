@@ -93,12 +93,12 @@
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents">
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.17.0.24066, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.17.0.24066\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client">
