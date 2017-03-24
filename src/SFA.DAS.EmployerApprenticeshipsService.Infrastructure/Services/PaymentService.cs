@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, string employerAccountId)
+        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
         {
             var payments = await GetPayments(periodEnd, employerAccountId);
 
@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 {
                     payment.ProviderName = provider.ProviderName;
 
-                    var apprenticeship = await GetApprenticeship(provider.Ukprn, payment.ApprenticeshipId);
+                    var apprenticeship = await GetApprenticeship(employerAccountId, payment.ApprenticeshipId);
 
                     if (apprenticeship != null)
                     {
@@ -106,13 +106,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return null;
         }
 
-        private async Task<ICollection<PaymentDetails>> GetPayments(string periodEnd, string employerAccountId)
+        private async Task<ICollection<PaymentDetails>> GetPayments(string periodEnd, long employerAccountId)
         {
             var paymentDetails = new List<PaymentDetails>();
 
             try
             {
-                var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId);
+                var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString());
 
                 if (payments == null)
                 {

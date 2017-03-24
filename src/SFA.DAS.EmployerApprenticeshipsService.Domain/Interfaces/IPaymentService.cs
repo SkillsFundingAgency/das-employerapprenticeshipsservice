@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IPaymentService
     {
-        Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, string employerAccountId);
+        Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId);
     }
 }

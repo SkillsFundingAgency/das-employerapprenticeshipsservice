@@ -99,11 +99,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             _provider = new Provider
             {
-                Name = "Test Provider"
+                ProviderName = "Test Provider"
             };
 
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
+            _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
                 .Returns(new ProvidersView
                 {
                     Provider = _provider
