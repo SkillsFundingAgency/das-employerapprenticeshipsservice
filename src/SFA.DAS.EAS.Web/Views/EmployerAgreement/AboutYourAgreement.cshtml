@@ -11,22 +11,16 @@
             <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
             About your SFA agreement
         </h1>
-        <p>To spend account funds on apprentices for an organisation, you need to accept the SFA agreement for that organisation.</p>
-        <p>As an employer you must:</p>
-        <ul class="list list-bullet">
-            <li> make sure that the person signing the agreement on behalf of your organisation has the authority to do so</li>
-            <li>agree that by using this service, your contracts are signed digitally and are legally binding</li>
-        </ul>
-        <p>By accepting the agreement you agree to:</p>
-        <ul class="list list-bullet">
-            <li>allow the SFA to pay account funds to your training providers</li>
-            <li>keep records according to specific record keeping requirements</li>
-            <li>participate in audits</li>
-            <li>the funding rules</li>
-        </ul>
-        <div class="panel panel-thin">
-            <p>Only account 'owners' can accept SFA agreements. If you're not sure who the owner is, you can <a href="@Url.Action("ViewTeam", "EmployerTeam")">check your team details.</a></p>
+
+        <p>This agreement creates a legal contract between <b>@Model.Data.EmployerAgreement.LegalEntityName</b> and the <b>Skills Funding Agency (SFA)</b>. It allows SFA to pay your training providers for apprenticeships.</p>
+        <p>You need to make sure you have authority from your organisation before you accept this agreement.</p>
+        
+        <div class="panel panel-border-wide panel-filled-purple">
+            <h2 class="heading-small">Only levy payers can use this service</h2>
+            <p>By continuing you confirm that your organisation, or its <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" rel="external" target="_blank">connected organisations</a>, submits or will submit apprenticeship levy payments to HMRC.</p>
+            <p>Your account could be suspended if you don't pay the apprenticeship levy.</p>
         </div>
+        
         <form method="get" action="@Url.Action("SignAgreement","EmployerAgreement")">
             @Html.AntiForgeryToken()
             <input class="button" type="submit" value="Continue to your agreement" />

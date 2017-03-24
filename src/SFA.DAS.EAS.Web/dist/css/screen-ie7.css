@@ -2777,6 +2777,12 @@ table.organisations td + td + td {
   background: #dee0e2;
 }
 
+.panel-filled-purple {
+  border-color: #2e358b;
+  background: #eaebf3;
+  margin-bottom: 30px;
+}
+
 .panel-warning {
   border-top: 10px solid #005ea5;
   padding-left: 50px;
