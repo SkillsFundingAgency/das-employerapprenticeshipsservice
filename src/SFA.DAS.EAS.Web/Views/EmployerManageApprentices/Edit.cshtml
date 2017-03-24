@@ -11,15 +11,26 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div>
-            <a href="@Url.RouteUrl("ConfirmApprenticeChanges")">Confirm Changes</a>
-        </div>
-        @Html.Partial("EditApprenticeship", Model.Data)
+        <form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <h1 class="heading-xlarge">Edit apprentice</h1>
+                <fieldset>
+                    <legend class="visuallyhidden">Edit apprentice</legend>
 
+                    @Html.Partial("EditApprenticeship", Model.Data)
+                </fieldset>
+            </div>
+
+            <button type="submit" class="button" aria-label="Add">Update details</button>
+            <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">
+                Cancel and return
+            </a>
+        </form>
     </div>
 
     <div class="column-one-thirds">
-
     </div>
 </div>
 
@@ -32,9 +43,7 @@
 @functions {
     public string FormatCost(decimal? cost)
     {
-        if (!cost.HasValue)
-            return string.Empty;
-
-        return $"£{cost.Value:n0}";
+        return !cost.HasValue ? string.Empty : $"£{cost.Value:n0}";
     }
+
 }

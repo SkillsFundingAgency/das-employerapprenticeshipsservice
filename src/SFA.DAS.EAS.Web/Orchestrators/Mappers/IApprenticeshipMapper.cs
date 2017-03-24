@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
         Task<Apprenticeship> MapFromAsync(ApprenticeshipViewModel viewModel);
         ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship);
         ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship);
-        ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship);
+        //ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship);
+        Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
     }
 }

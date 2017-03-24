@@ -123,6 +123,30 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<UpdateApprenticeshipViewModel>> GetConfirmChangesModel(string hashedAccountId, string hashedApprenticeshipId, string externalUserId, ApprenticeshipViewModel apprenticeship)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting.... ... ... ... ... ...: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+                {
+                    var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
+                    {
+                        AccountId = accountId,
+                        ApprenticeshipId = apprenticeshipId
+                    });
+
+                    var apprenticeships = _apprenticeshipMapper.CompareAndMapToApprenticeshipViewModel(data.Apprenticeship, apprenticeship);
+
+                    return new OrchestratorResponse<UpdateApprenticeshipViewModel>
+                               {
+                                   Data = await apprenticeships
+                    };
+                }, hashedAccountId, externalUserId);
+        }
+
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());

@@ -407,6 +407,7 @@
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Exceptions\InvalidStateExceptionFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
@@ -433,6 +434,7 @@
     <Compile Include="ViewModels\CommitmentListViewModel.cs" />
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\UpdateApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />

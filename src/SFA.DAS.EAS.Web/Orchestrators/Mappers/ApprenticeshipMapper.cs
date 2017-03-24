@@ -111,20 +111,61 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return apprenticeship;
         }
 
-        public ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship)
+        //public ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship)
+        //{
+        //    return new ApprenticeshipListItemViewModel
+        //    {
+        //        HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
+        //        ApprenticeName = apprenticeship.ApprenticeshipName,
+        //        ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
+        //        TrainingCode = apprenticeship.TrainingCode,
+        //        TrainingName = apprenticeship.TrainingName,
+        //        Cost = apprenticeship.Cost,
+        //        StartDate = apprenticeship.StartDate,
+        //        EndDate = apprenticeship.EndDate,
+        //        CanBeApproved = apprenticeship.CanBeApproved
+        //    };
+        //}
+
+        public async Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(
+            Apprenticeship original, ApprenticeshipViewModel edited)
         {
-            return new ApprenticeshipListItemViewModel
+            Func<string, string, string> changedOrNull = (a, edit) => 
+                a?.Trim() == edit?.Trim() ? null : edit;
+
+            // ToDo: The rest of the mapping
+            var model = new UpdateApprenticeshipViewModel
             {
-                HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                ApprenticeName = apprenticeship.ApprenticeshipName,
-                ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
-                TrainingCode = apprenticeship.TrainingCode,
-                TrainingName = apprenticeship.TrainingName,
-                Cost = apprenticeship.Cost,
-                StartDate = apprenticeship.StartDate,
-                EndDate = apprenticeship.EndDate,
-                CanBeApproved = apprenticeship.CanBeApproved
+                // HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
+                // HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
+                FirstName = changedOrNull(original.FirstName, edited.FirstName),
+                LastName = changedOrNull(original.LastName, edited.LastName),
+                DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
+                    ? null
+                    : edited.DateOfBirth,
+                // ULN = apprenticeship.ULN,
+                Cost = NullableDecimalToString(original.Cost) == edited.Cost 
+                    ? default(decimal?) 
+                    : string.IsNullOrEmpty(edited.Cost) ? 0m : decimal.Parse(edited.Cost),
+                StartDate =  original.StartDate == edited.StartDate.DateTime
+                  ? null
+                  : edited.StartDate,
+                EndDate = original.EndDate == edited.EndDate.DateTime 
+                    ? null
+                    : edited.EndDate,
+                EmployerRef = changedOrNull(original.EmployerRef, edited.EmployerRef),
+                OriginalApprenticeship = original
             };
+
+            if (!string.IsNullOrWhiteSpace(edited.TrainingCode) && original.TrainingCode != edited.TrainingCode)
+            {
+                var training = await GetTrainingProgramme(edited.TrainingCode);
+                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                model.TrainingCode = edited.TrainingCode;
+                model.TrainingName = training.Title;
+            }
+
+            return model;
         }
 
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)

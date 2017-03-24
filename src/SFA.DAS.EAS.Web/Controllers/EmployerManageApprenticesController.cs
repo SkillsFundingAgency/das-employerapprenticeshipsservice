@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -67,11 +68,28 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("{hashedApprenticeshipId}/changes/confirm", Name = "ConfirmApprenticeChanges")]
-        public ActionResult ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId)
+        public async Task<ActionResult> ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId, ApprenticeshipViewModel apprenticeship)
         {
-            return View();
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            // ToDo: Add overlapping errors to ModelState..
+            if (!ModelState.IsValid)
+                return await RedisplayEditApprenticeshipView(apprenticeship);
+
+            var model = await _orchestrator.GetConfirmChangesModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
+
+            return View(model);
+        }
+
+        private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship)
+        {
+            var response = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.HashedAccountId, apprenticeship.HashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
+            response.Data.Apprenticeship = apprenticeship;
+
+            return View("Edit", response);
         }
 
         [HttpGet]

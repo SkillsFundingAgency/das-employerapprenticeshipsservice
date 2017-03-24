@@ -1,8 +1,5 @@
-﻿@using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Enums
-@using SFA.DAS.EAS.Web.Extensions
-
-
+﻿@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.UpdateApprenticeshipViewModel>
 @{
     ViewBag.Title = "Confirm changes";
     ViewBag.PageID = "confirm-edited-changes";
@@ -18,20 +15,88 @@
                     <th></th>
                     <th>Current</th>
                     <th>Changed to</th>
-
                 </tr>
             </thead>
             <tbody>
+            @if (!string.IsNullOrEmpty(Model.Data.FirstName))
+            {
                 <tr>
-                    <td>Name </td>
-                    <td>Richard Staines </td>
-                    <td class="changed-item">Stanley James </td>
+                    <td>First name</td>
+                    <td>@Model.Data.OriginalApprenticeship.FirstName </td>
+                    <td class="changed-item">@Model.Data.FirstName</td>
                 </tr>
+            }
+            @if (!string.IsNullOrEmpty(Model.Data.LastName))
+            {
                 <tr>
-                    <td>Date of birth </td>
-                    <td>28 February 1997 </td>
-                    <td class="changed-item">1 March 1995 </td>
-                </tr>             
+                    <td>Last name</td>
+                    <td>@Model.Data.OriginalApprenticeship.LastName </td>
+                    <td class="changed-item">@Model.Data.LastName</td>
+                </tr>
+            }
+
+            @if (Model.Data.DateOfBirth?.DateTime != null)
+                        {
+                <tr>
+                    <td>Date of birth</td>
+                    <td>@Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat() </td>
+                    <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
+                </tr>
+            }
+
+            @if (Model.Data.TrainingName != null)
+            {
+                <tr>
+                    <td>Apprenticeship training course</td>
+                    <td>@Model.Data.OriginalApprenticeship.TrainingName </td>
+                    <td class="changed-item">@Model.Data.TrainingName</td>
+                </tr>
+            }
+
+            @if (Model.Data.StartDate?.DateTime != null)
+            {
+                <tr>
+                    <td>Planned training start date</td>
+                    <td>@Model.Data.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
+                    <td class="changed-item">@Model.Data.StartDate.DateTime.Value.ToGdsFormat()</td>
+                </tr>
+            }
+
+
+            @if (Model.Data.EndDate?.DateTime != null)
+                        {
+                <tr>
+                    <td>Planned training end date</td>
+                    <td>@Model.Data.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
+                    <td class="changed-item">@Model.Data.EndDate.DateTime.Value.ToGdsFormat()</td>
+                </tr>
+            }
+
+            @if (Model.Data.Cost != null)
+            {
+                <tr>
+                    <td>Cost</td>
+                    <td>@Model.Data.OriginalApprenticeship.Cost.FormatCost() </td>
+                    <td class="changed-item">@Model.Data.Cost.FormatCost() </td>
+                </tr>
+            }
+
+
+
+            @if (Model.Data.EmployerRef != null)
+                        {
+                <tr>
+                    <td>Reference</td>
+                    <td>@Model.Data.OriginalApprenticeship.EmployerRef</td>
+                    <td class="changed-item">@Model.Data.EmployerRef</td>
+                </tr>
+            }
+
+            @*<tr>
+                <td>Date of birth </td>
+                <td>28 February 1997 </td>
+                <td class="changed-item">1 March 1995 </td>
+            </tr>*@
             </tbody>
         </table>
 
