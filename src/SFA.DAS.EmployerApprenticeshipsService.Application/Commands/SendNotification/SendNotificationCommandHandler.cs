@@ -13,7 +13,10 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
         private readonly ILogger _logger;
         private readonly INotificationsApi _notificationsApi;
 
-        public SendNotificationCommandHandler(IValidator<SendNotificationCommand> validator, ILogger logger, INotificationsApi notificationsApi)
+        public SendNotificationCommandHandler(
+            IValidator<SendNotificationCommand> validator, 
+            ILogger logger, 
+            INotificationsApi notificationsApi)
         {
             _validator = validator;
             _logger = logger;
@@ -31,6 +34,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
             }
             try
             {
+                //_logger.Info($"---- === ||| -->     {message.Email.RecipientsAddress}    <-- ||| === ----");
                 await _notificationsApi.SendEmail(message.Email);
             }
             catch (Exception ex)

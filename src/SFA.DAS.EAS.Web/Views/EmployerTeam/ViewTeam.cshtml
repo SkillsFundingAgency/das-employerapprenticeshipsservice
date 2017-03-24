@@ -1,8 +1,9 @@
 ﻿@using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Domain.Models.AccountTeam
+@using SFA.DAS.EAS.Domain.Models.UserProfile
 @using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
 
-@model OrchestratorResponse<EmployerTeamMembersViewModel>
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerTeamMembersViewModel>
 
 @{
     ViewBag.PageID = "page-manage-team";
@@ -71,7 +72,7 @@
                         <th scope="col">Name</th>
                         <th scope="col">What they can do</th>
                         <th scope="col">Status</th>
-                        <th></th>
+                        <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,7 +87,6 @@
                             <td>@InvitationStatusStrings.ToString(teamMember.Status)</td>
                             <td class="link-right">
                                 <a aria-label="View details for @teamMember.Name"
-                                   title="View details for @teamMember.Name"
                                    href="@Url.Action("Review", new { email = teamMember.Email })">View<span class="vh"> details for @teamMember.Name</span></a>
                             </td>
                         </tr>
@@ -98,24 +98,11 @@
     </div>
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <section>
-            <div class="panel panel-filled">
-                <h2 class="heading-medium">Help us improve this section</h2>
-                <p>Take a 3 minute survey about managing team members so that we can improve the service.</p>
-                <p><a href="https://www.surveymonkey.co.uk/r/viewlevy" target="_blank" class="button">Take the survey <span class="vh">about your experience of managing team members</span></a></p>
-            </div>
-        </section>
-    </div>
-</div>
-
         @section breadcrumb {
             <div class="breadcrumbs">
                 <ol role="navigation">
-                    <li><a href="/">Your User Profile</a></li>
-                    <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-                    <li>Your Team</li>
+                    <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+                    <li>Your team</li>
                 </ol>
             </div>
         }

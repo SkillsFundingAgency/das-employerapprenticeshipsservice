@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using System.Web;
 using MediatR;
 using Moq;
+using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
 {
@@ -49,15 +50,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
                         c => c.AccessToken.Equals(model.AccessToken)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.CompanyName.Equals(model.CompanyName)
-                        && c.CompanyNumber.Equals(model.CompanyNumber)
-                        && c.CompanyRegisteredAddress.Equals(model.CompanyRegisteredAddress)
-                        && c.CompanyDateOfIncorporation.Equals(model.CompanyDateOfIncorporation)
-                        && c.CompanyStatus.Equals(model.CompanyStatus)
-                        && c.EmployerRef.Equals(model.EmployerRef)
+                        && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
+                        && c.OrganisationName.Equals(model.OrganisationName)
+                        && c.OrganisationReferenceNumber.Equals(model.OrganisationReferenceNumber)
+                        && c.OrganisationAddress.Equals(model.OrganisationAddress)
+                        && c.OrganisationDateOfInception.Equals(model.OrganisationDateOfInception)
+                        && c.OrganisationStatus.Equals(model.OrganisationStatus)
+                        && c.PayeReference.Equals(model.PayeReference)
                         && c.AccessToken.Equals(model.AccessToken)
                         && c.RefreshToken.Equals(model.RefreshToken)
+                        && c.EmployerRefName.Equals(model.EmployerRefName)
                     )));
         }
 
@@ -73,26 +75,60 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountViewModel(), It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
 
         }
-        
-        private static CreateAccountModel ArrangeModel()
+
+        [Test]
+        public async Task ThenTheSummaryViewRetrievesCookieData()
         {
-            return new CreateAccountModel
+            //Arrange
+            var employerAccountData = new EmployerAccountData
             {
-                CompanyName = "test",
+                OrganisationStatus = "Active",
+                OrganisationName = "Test Company",
+                OrganisationDateOfInception = DateTime.MaxValue,
+                OrganisationReferenceNumber = "ABC12345",
+                OrganisationRegisteredAddress = "My Address",
+                PayeReference = "123/abc",
+                EmpRefNotFound = true
+            };
+
+            _cookieService.Setup(x => x.Get(It.IsAny<HttpContextBase>(), It.IsAny<string>()))
+                .Returns(JsonConvert.SerializeObject(employerAccountData));
+
+            var context = new Mock<HttpContextBase>();
+
+            //Act
+            var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);
+
+            //Assert
+            Assert.AreEqual(employerAccountData.OrganisationName, model.Data.OrganisationName);
+            Assert.AreEqual(employerAccountData.OrganisationStatus, model.Data.OrganisationStatus);
+            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
+            Assert.AreEqual(employerAccountData.PayeReference, model.Data.PayeReference);
+            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.Data.EmpRefNotFound);
+
+        }
+
+
+        private static CreateAccountViewModel ArrangeModel()
+        {
+            return new CreateAccountViewModel
+            {
+                OrganisationName = "test",
                 UserId = Guid.NewGuid().ToString(),
-                EmployerRef = "123ADFC",
-                CompanyNumber = "12345",
-                CompanyDateOfIncorporation = new DateTime(2016, 10, 30),
-                CompanyRegisteredAddress = "My Address",
+                PayeReference = "123ADFC",
+                OrganisationReferenceNumber = "12345",
+                OrganisationDateOfInception = new DateTime(2016, 10, 30),
+                OrganisationAddress = "My Address",
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyStatus = "active"
+                OrganisationStatus = "active",
+                EmployerRefName = "Scheme 1"
             };
         }
     }

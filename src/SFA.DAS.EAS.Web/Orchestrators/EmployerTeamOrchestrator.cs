@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -8,6 +9,7 @@ using SFA.DAS.EAS.Application.Commands.CreateInvitation;
 using SFA.DAS.EAS.Application.Commands.DeleteInvitation;
 using SFA.DAS.EAS.Application.Commands.RemoveTeamMember;
 using SFA.DAS.EAS.Application.Commands.ResendInvitation;
+using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetInvitation;
@@ -15,42 +17,73 @@ using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Entities.Account;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class EmployerTeamOrchestrator: UserVerificationOrchestratorBase
+    public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public EmployerTeamOrchestrator(IMediator mediator):base(mediator)
+        public EmployerTeamOrchestrator(IMediator mediator, EmployerApprenticeshipsServiceConfiguration configuration)
+            : base(mediator)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _configuration = configuration;
         }
 
-        public async Task<OrchestratorResponse<Account>> GetAccount(
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(
             string accountId, string externalUserId)
         {
             try
             {
-                var response = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
                     UserId = externalUserId
                 });
 
-                return new OrchestratorResponse<Account>
+                
+                var showSigningNotice = false;
+
+                if (_configuration.ShowAgreements())
+                {
+                    var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+                    if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
+                    {
+                        var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                        {
+                            HashedAccountId = accountId,
+                            ExternalUserId = externalUserId
+                        });
+                        showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
+                    }
+                }
+
+
+                var viewModel = new AccountDashboardViewModel
+                {
+                    Account = accountResponse.Account,
+                    RequiresAgreementSigning = showSigningNotice,
+                    ShowAgreements = _configuration.ShowAgreements()
+                };
+
+                return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
-                    Data = response.Account
+                    Data = viewModel
                 };
             }
             catch (Exception ex)
             {
-                return new OrchestratorResponse<Account>
+                return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
                     Exception = ex
@@ -59,7 +92,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(
-            string hashedId, string userId, string userAdded="")
+            string hashedId, string userId, string userAdded = "")
         {
             try
             {
@@ -131,7 +164,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 return new OrchestratorResponse<EmployerTeamMembersViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    FlashMessage =  new FlashMessageViewModel
+                    FlashMessage = new FlashMessageViewModel
                     {
                         Headline = "Errors to fix",
                         Message = "Check the following details:",
@@ -150,7 +183,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
             }
 
-            
+
 
             return new OrchestratorResponse<EmployerTeamMembersViewModel>();
         }
@@ -235,7 +268,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (response.Status != HttpStatusCode.OK)
                 return response;
-            
+
             try
             {
                 await _mediator.SendAsync(new ResendInvitationCommand
@@ -277,7 +310,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             try
             {
-                var userResponse = await _mediator.SendAsync(new GetUserQuery {UserId = userId});
+                var userResponse = await _mediator.SendAsync(new GetUserQuery { UserId = userId });
 
                 if (userResponse?.User == null)
                 {
@@ -338,7 +371,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.Status = HttpStatusCode.Unauthorized;
                 response.Exception = e;
             }
-           
+
             return response;
         }
 

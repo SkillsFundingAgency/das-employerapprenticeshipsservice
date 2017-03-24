@@ -34,8 +34,22 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentAssertions.Core">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=2.28.3.860, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.28.3\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms, Version=2.28.3.860, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.2.28.3\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -58,20 +72,32 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.15.0.17420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.15.0.17420\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.7.0.16714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.7.0.16714\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.7.0.16714, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.7.0.16714\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.EAS.Account.Api.Types, Version=1.0.0.26048, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.26048\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.17.0.24066, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.17.0.24066\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -112,6 +138,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -124,8 +151,11 @@
     <Compile Include="Commands\AddPayeToAccountTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenValidatingTheApproveApprenticeshipCommand.cs" />
     <Compile Include="Commands\ApproveApprenticeshipCommandTests\WhenApprovingApprenticeship.cs" />
+    <Compile Include="Commands\AuditCommandTests\WhenIProcessTheCommand.cs" />
+    <Compile Include="Commands\AuditCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRoleTests\WhenICallChangeTeamMemberRole.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenICallCreateAccount.cs" />
+    <Compile Include="Commands\CreateAccountEventCommandTests\WhenICreateAnAccountEvent.cs" />
     <Compile Include="Commands\CreateApprenticeshipTests\WhenValidatingCreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateAccountCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateCommitmentTests\WhenValidatingTheCreateCommitmentCommand.cs" />
@@ -134,25 +164,34 @@
     <Compile Include="Commands\CreateEnglishFractionCalculationDateCommandTests\WhenIValidateTheCommand.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenICallCreateInvitation.cs" />
     <Compile Include="Commands\CreateInvitationTests\WhenIValidateCreateInvitation.cs" />
+    <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntity.cs" />
     <Compile Include="Commands\CreateNewPeriodEndTests\WhenICreateANewPeriodEnd.cs" />
     <Compile Include="Commands\CreateNewPeriodEndTests\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\CreateOrganisationAddressTests\WhenICreateAnAddress.cs" />
+    <Compile Include="Commands\CreateOrganisationAddressTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Commands\DeleteApprenticeTests\WhenIDeleteAnApprentice.cs" />
+    <Compile Include="Commands\DeleteApprenticeTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\DeleteInvitationTests\WhenICallDeleteInvitation.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIReceiveTheCommand.cs" />
     <Compile Include="Commands\RefreshPaymentDataTests\WhenIValidateTheCommand.cs" />
-    <Compile Include="Commands\ReleaseEmployerAgreementTemplateTests\WhenIReleaseAnEmployerAgreementTemplate.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIRemoveAPayeSchemeFromAnAccount.cs" />
     <Compile Include="Commands\RemovePayeFromAccountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenICallRemoveTeamMember.cs" />
     <Compile Include="Commands\RemoveTeamMember\WhenIValidateTheCommand.cs" />
+    <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenICallRenameAccount.cs" />
+    <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenIValidateTheRenameAccountCommand.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />
+    <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
+    <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />
     <Compile Include="Events\ProcessPaymentTests\WhenIProcessPaymentData.cs" />
+    <Compile Include="Factories\EmployerAgreementEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="FakeTimeProvider.cs" />
     <Compile Include="Commands\AcceptInvitationTests\WhenICallAcceptInvitation.cs" />
     <Compile Include="Commands\RefreshEmployerLevyDataTests\WhenIReceiveTheCommand.cs" />
@@ -170,6 +209,20 @@
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\WhenIGetApprenticeshipDetails.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
+    <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIGetTheEmployerAgreement.cs" />
+    <Compile Include="Queries\GetEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
+    <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIGetEmployerAgreements.cs" />
+    <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
+    <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetLegalEntityByIdTests\WhenIGetALegalEntity.cs" />
+    <Compile Include="Queries\GetLegalEntityByIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
@@ -189,6 +242,8 @@
     <Compile Include="Queries\GetLatestAccountAgreementTemplateTests\WhenIRequestTheLatestAgreementTemplate.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
+    <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
@@ -201,6 +256,11 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenRequestingLevyDeclarations.cs" />
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
+    <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
+    <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />
+    <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />

@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFractionsUpdateRequired
@@ -41,7 +42,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFractionsUpdateReq
         {
             //Assign
             var updateTime = DateTime.Now;
-            _hmrcService.Setup(x => x.GetEnglishFractions(It.IsAny<string>(), It.IsAny<string>()));
+            _hmrcService.Setup(x => x.GetEnglishFractions(It.IsAny<string>()));
             _hmrcService.Setup(x => x.GetLastEnglishFractionUpdate()).ReturnsAsync(updateTime);
             _englishFractionRepository.Setup(x => x.GetLastUpdateDate()).ReturnsAsync(updateTime);
 

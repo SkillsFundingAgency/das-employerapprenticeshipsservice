@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDetails;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
 {
@@ -34,10 +35,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView
             {
                 CreatedDate = DateTime.Now,
-                Providers = new List<Provider>
-                {
-                    _provider
-                }
+                Provider = _provider
             });
 
             Query = new GetApprenticeshipDetailsQuery
@@ -73,7 +71,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView
             {
                 CreatedDate = DateTime.Now,
-                Providers = new List<Provider>()
+                Provider = new Provider()
             });
 
             //Act

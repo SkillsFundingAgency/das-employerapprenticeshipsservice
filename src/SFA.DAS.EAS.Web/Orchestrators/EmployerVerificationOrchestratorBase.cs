@@ -10,15 +10,16 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayInformation;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public abstract class EmployerVerificationOrchestratorBase
     {
-
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
         protected readonly ICookieService CookieService;
@@ -114,38 +115,46 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<SelectEmployerViewModel>> GetCompanyDetails(SelectEmployerModel model)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> GetCompanyDetails(SelectEmployerViewModel viewModel)
         {
             var response = await Mediator.SendAsync(new GetEmployerInformationRequest
             {
-                Id = model.EmployerRef
+                Id = viewModel.EmployerRef
             });
 
             if (response == null)
             {
                 Logger.Warn("No response from SelectEmployerViewModel");
-                return new OrchestratorResponse<SelectEmployerViewModel>
+                return new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new SelectEmployerViewModel()
+                    Data = new OrganisationDetailsViewModel()
                 };
             }
 
-            Logger.Info($"Returning Data for {model.EmployerRef}");
+            Logger.Info($"Returning Data for {viewModel.EmployerRef}");
 
-            return new OrchestratorResponse<SelectEmployerViewModel>
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
             {
-                Data = new SelectEmployerViewModel
+                Data = new OrganisationDetailsViewModel
                 {
-                    CompanyNumber = response.CompanyNumber,
-                    CompanyName = response.CompanyName,
-                    DateOfIncorporation = response.DateOfIncorporation,
-                    RegisteredAddress = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
-                    CompanyStatus = response.CompanyStatus,
-                    HideBreadcrumb = model.HideBreadcrumb
+                    ReferenceNumber = response.CompanyNumber,
+                    Name = response.CompanyName,
+                    DateOfInception = response.DateOfIncorporation,
+                    Address = $"{response.AddressLine1}, {response.AddressLine2}, {response.AddressPostcode}",
+                    Status = response.CompanyStatus,
                 }
 
             };
+        }
+
+        public virtual async Task<GetUserAccountRoleResponse> GetUserAccountRole(string hashedAccountId, string externalUserId)
+        {
+            return await Mediator.SendAsync(new GetUserAccountRoleQuery
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = externalUserId
+            });
         }
     }
 }

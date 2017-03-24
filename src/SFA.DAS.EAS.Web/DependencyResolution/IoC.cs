@@ -21,19 +21,26 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
-namespace SFA.DAS.EAS.Web.DependencyResolution {
-    public static class IoC {
+namespace SFA.DAS.EAS.Web.DependencyResolution
+{
+    public static class IoC
+    {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
 
-        public static IContainer Initialize() {
+        public static IContainer Initialize()
+        {
             return new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<NotificationsApiClientConfiguration>($"{ServiceName}.Notifications"));
-                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
+                c.Policies.Add(new ConfigurationPolicy<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient"));
+                c.Policies.Add(new ConfigurationPolicy<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient"));
+                c.Policies.Add(new ConfigurationPolicy<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient"));
+				c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<EmployerApprenticeshipsServiceConfiguration>(ServiceName));
+                c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
             });
         }

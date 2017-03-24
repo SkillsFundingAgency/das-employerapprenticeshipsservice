@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
+@using SFA.DAS.EAS.Web.ViewModels
 
 @model dynamic 
 
@@ -7,9 +7,9 @@
     var viewModel = Model as OrchestratorResponse;
 }
 
-@if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage))
+@if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.Headline))
 {
-    <div class="grid-row">
+    <div class="grid-row error-summary-wrapper">
         <div class="column-full">
 
             <div class="@viewModel.FlashMessage.SeverityCssClass">
@@ -19,7 +19,16 @@
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
                 {
-                    <p>@Html.Raw(viewModel.FlashMessage.Message)</p>
+                    if (viewModel.FlashMessage.Severity == FlashMessageSeverityLevel.Okay)
+                    {
+                        <p><i class="icon-green-tick"></i>
+                        @Html.Raw(viewModel.FlashMessage.Message)</p>
+                    }
+                    else
+                    {
+                        <p>@Html.Raw(viewModel.FlashMessage.Message)</p>
+                    }
+
                 }
                 @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
                 {

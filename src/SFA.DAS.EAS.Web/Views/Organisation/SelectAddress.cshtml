@@ -1,0 +1,100 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.Organisation.SelectOrganisationAddressViewModel>
+@{
+    ViewBag.Title = "Select address";
+    ViewBag.Section = "organisations";
+    ViewBag.PageID = "select-organisation-address";
+    var noAddressesFound = string.Empty;
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Find organisation address</h1>
+        @if (Model.Status == HttpStatusCode.OK)
+        {
+
+            if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
+            {
+
+                noAddressesFound = $"No address found for the postcode {Model.Data.Postcode}";
+
+            }
+            else
+            {
+                <h2 class="heading-medium">Select your address:</h2>
+                <ol class="search-results">
+                    @foreach (var address in Model.Data.Addresses)
+                    {
+                        var url = Url.Action("UpdateOrganisationAddress", "Organisation", new
+                        {
+                            Model.Data.OrganisationName,
+                            Model.Data.OrganisationReferenceNumber,
+                            Model.Data.OrganisationType,
+                            Model.Data.PublicSectorDataSource,
+                            Model.Data.OrganisationStatus,
+                            Model.Data.Sector,
+                            Model.Data.OrganisationDateOfInception
+                        });
+
+                        url += $"&Address.{nameof(address.AddressFirstLine)}={address.AddressFirstLine}";
+                        url += $"&Address.{nameof(address.AddressSecondLine)}={address.AddressSecondLine}";
+                        url += $"&Address.{nameof(address.TownOrCity)}={address.TownOrCity}";
+                        url += $"&Address.{nameof(address.County)}={address.County}";
+                        url += $"&Address.{nameof(address.Postcode)}={address.Postcode}";
+
+                        <li>
+                            <a href="@url">
+                                @address.ToString()
+                            </a>
+                        </li>
+                    }
+                </ol>
+                <hr />
+                <h2 class="heading-medium">Search again</h2>
+            }
+        }
+        <form action="@Url.Action("SelectAddress")" method="POST" novalidate>
+            @Html.AntiForgeryToken()
+            <div class="form-group  @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "error" : "")">
+                <label for="Postcode">
+                    <span class="form-label-bold">Enter postcode</span>
+                    @if (!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound))
+                    {
+                        <span class="error-message" id="error-message-postcode">@Model.Data.PostcodeError @noAddressesFound</span>
+                    }
+                </label>
+                <span>
+                    <input type="text" id="Postcode" name="postcode" value="@Model.Data.Postcode" class="form-control" required="required" aria-required="true"
+                           @((!string.IsNullOrEmpty(Model.Data.PostcodeError) || !string.IsNullOrEmpty(noAddressesFound)) ? "aria-invalid=true aria-describedby=error-message-postcode" : "" ) />
+
+                    
+                </span>
+            </div>
+            <input type="hidden" id="organisationName" name="organisationName" value="@Model.Data.OrganisationName" />
+            <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@Model.Data.OrganisationReferenceNumber" />
+            <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@Model.Data.OrganisationDateOfInception" />
+            <input type="hidden" id="OrganisationType" name="OrganisationType" value="@Model.Data.OrganisationType" />
+            <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@Model.Data.PublicSectorDataSource"/>
+            <input type="hidden" id="Sector" name="Sector" value="@Model.Data.Sector" />
+            <div class="form-group">
+                <input class="button" type="submit" value="Find address" />
+                <a class="button-link" href="@Url.Action("AddOrganisationAddress", new
+                         {
+                             Model.Data.OrganisationName,
+                             Model.Data.OrganisationReferenceNumber,
+                             Model.Data.OrganisationDateOfInception,
+                             Model.Data.OrganisationType,
+                             Model.Data.PublicSectorDataSource,
+                             Model.Data.Sector
+                         })">Enter address manually</a>
+            </div>
+        </form> 
+        
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

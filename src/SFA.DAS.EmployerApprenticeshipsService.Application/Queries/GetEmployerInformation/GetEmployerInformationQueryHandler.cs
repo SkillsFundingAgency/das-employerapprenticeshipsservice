@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
         {
             var employer = await _employerVerificationService.GetInformation(message.Id);
 
-            if (employer == null)
+            if (employer?.CompanyNumber == null)
                 return null;
 
             return new GetEmployerInformationResponse
@@ -30,6 +30,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
                 DateOfIncorporation = employer.DateOfIncorporation,
                 AddressLine1 = employer.RegisteredAddress.Line1,
                 AddressLine2 = employer.RegisteredAddress.Line2,
+                TownOrCity = employer.RegisteredAddress.TownOrCity,
+                County = employer.RegisteredAddress.County,
                 AddressPostcode = employer.RegisteredAddress.PostCode,
                 CompanyStatus = employer.CompanyStatus
             };

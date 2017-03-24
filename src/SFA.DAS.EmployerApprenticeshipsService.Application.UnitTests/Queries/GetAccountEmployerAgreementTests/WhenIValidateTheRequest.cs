@@ -5,6 +5,8 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests
 {

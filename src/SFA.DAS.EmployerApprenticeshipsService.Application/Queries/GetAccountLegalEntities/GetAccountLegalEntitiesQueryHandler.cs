@@ -5,7 +5,9 @@ using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
 {
@@ -39,8 +41,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
 
             if (membership == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
-            if (membership.RoleId != (short)Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not an owner of this account" } });
 
             var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, message.SignedOnly);
 

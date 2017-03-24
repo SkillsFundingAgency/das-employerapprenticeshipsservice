@@ -5,10 +5,11 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -23,17 +24,15 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
         private static int _exceptionCount;
         private static int _unauthorizedCount;
 
-
-
-
         [BeforeFeature]
         public static void Arrange()
         {
             var messagePublisher = new Mock<IMessagePublisher>();
             var owinWrapper = new Mock<IOwinWrapper>();
             var cookieService = new Mock<ICookieService>();
+            var eventsApi = new Mock<IEventsApi>();
 
-            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService);
+            _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi);
         }
 
         [AfterFeature]
@@ -61,7 +60,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             var legalEntities = employerPayeOrchestrator.Get(hashedId, userId).Result;
             var scheme = legalEntities.Data.PayeSchemes.First();
 
-            var removeScheme = new RemovePayeScheme
+            var removeScheme = new RemovePayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 RemoveScheme = 2,
@@ -130,7 +129,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             _newLegalEntity = true;
             var employerPayeOrchestrator = _container.GetInstance<EmployerAccountPayeOrchestrator>();
 
-            var confirmNewPayeScheme = new ConfirmNewPayeScheme
+            var confirmNewPayeScheme = new ConfirmNewPayeSchemeViewModel
             {
                 HashedAccountId = hashedId,
                 PayeScheme = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
@@ -139,7 +138,11 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AddPayeScheme
             };
             try
             {
-                employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Wait();
+                var result = employerPayeOrchestrator.AddPayeSchemeToAccount(confirmNewPayeScheme, userId).Result;
+                if (result.Status == HttpStatusCode.Unauthorized)
+                {
+                    _exceptionCount++;
+                }
             }
             catch (Exception ex)
             {

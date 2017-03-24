@@ -1,16 +1,19 @@
 ﻿using MediatR;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
 {
     public sealed class PauseApprenticeshipCommandHandler : AsyncRequestHandler<PauseApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentApi;
+        private readonly IEmployerCommitmentApi _commitmentApi;
         private readonly PauseApprenticeshipCommandValidator _validator;
 
-        public PauseApprenticeshipCommandHandler(ICommitmentsApi commitmentApi)
+        public PauseApprenticeshipCommandHandler(IEmployerCommitmentApi commitmentApi)
         {
             _commitmentApi = commitmentApi;
             _validator = new PauseApprenticeshipCommandValidator();
@@ -25,7 +28,8 @@ namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
 
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
 
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, PaymentStatus.Paused);
+            var apprenticeshipSubmission = new ApprenticeshipSubmission { PaymentStatus = PaymentStatus.Paused, UserId = message.UserId };
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, apprenticeshipSubmission);
         }
     }
 }

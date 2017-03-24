@@ -2,45 +2,54 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreement
 {
-    //TODO add validator and unit tests
     public class GetEmployerAgreementQueryHandler : IAsyncRequestHandler<GetEmployerAgreementRequest, GetEmployerAgreementResponse>
     {
-        private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
+        private readonly IValidator<GetEmployerAgreementRequest> _validator;
+        private readonly IMembershipRepository _membershipRepository;
 
-        public GetEmployerAgreementQueryHandler(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+        public GetEmployerAgreementQueryHandler(IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IValidator<GetEmployerAgreementRequest> validator, IMembershipRepository membershipRepository)
         {
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
-            if (employerAgreementRepository == null)
-                throw new ArgumentNullException(nameof(employerAgreementRepository));
-            _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _validator = validator;
+            _membershipRepository = membershipRepository;
         }
 
         public async Task<GetEmployerAgreementResponse> Handle(GetEmployerAgreementRequest message)
         {
-            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+            var validationResult = await _validator.ValidateAsync(message);
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
 
-            if (caller == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });
-            if (caller.RoleId != (int)Role.Owner)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You must be an owner of this Account" } });
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
+            }
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(_hashingService.DecodeValue(message.HashedAgreementId));
 
             if (agreement == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement could not be found" } });
-            if (agreement.AccountId != caller.AccountId)
+            if (agreement.HashedAccountId != message.HashedAccountId)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement is not linked to this account" } });
+
+            if (agreement.Status != EmployerAgreementStatus.Signed)
+            {
+                var user = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+                agreement.SignedByName = $"{user.FirstName} {user.LastName}";
+            }
 
             return new GetEmployerAgreementResponse
             {

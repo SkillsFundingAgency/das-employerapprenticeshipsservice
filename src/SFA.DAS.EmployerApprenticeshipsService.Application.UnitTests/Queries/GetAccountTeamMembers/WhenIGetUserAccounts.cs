@@ -5,9 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
     {
         private Mock<IAccountTeamRepository> _accountTeamMembersRepository;
         private List<TeamMember> _teamMembers;
-        private Account _account;
+        private Domain.Data.Entities.Account.Account _account;
         private TeamMember _teamMember;
         public override GetAccountTeamMembersQuery Query { get; set; }
         public override GetAccountTeamMembersHandler RequestHandler { get; set; }
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTeamMembers
         {
             SetUp();
             _accountTeamMembersRepository = new Mock<IAccountTeamRepository>();
-            _account = new Account {Name = "Test", Id = 1};
+            _account = new Domain.Data.Entities.Account.Account {Name = "Test", Id = 1};
             _teamMember = new TeamMember
             {
                 Id = 1,

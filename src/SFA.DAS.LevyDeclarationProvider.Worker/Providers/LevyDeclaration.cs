@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Azure;
 using NLog;
 using SFA.DAS.EAS.Application.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData;
@@ -38,9 +39,15 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
         public async Task Handle()
         {
+    
             var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
             if (message?.Content != null)
             {
+                if (CloudConfigurationManager.GetSetting("DeclarationsEnabled").Equals("false",StringComparison.CurrentCultureIgnoreCase))
+                {
+                    await message.CompleteAsync();
+                    return;
+                }
                 var employerAccountId = message.Content.AccountId;
 
                 _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
@@ -54,39 +61,30 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                 var employerDataList = new List<EmployerLevyData>();
 
-                var updateEnglishFractionsRequired = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+                var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
                 foreach (var scheme in employerSchemesResult.SchemesList)
                 {
-                    if (updateEnglishFractionsRequired.UpdateRequired)
+                    
+                    await _mediator.SendAsync(new UpdateEnglishFractionsCommand
                     {
-                        await _mediator.SendAsync(new UpdateEnglishFractionsCommand
-                        {
-                            AuthToken = scheme.AccessToken,
-                            EmployerReference = scheme.Ref
-                        });
-                    }
+                        EmployerReference = scheme.Ref,
+                        EnglishFractionUpdateResponse = englishFractionUpdateResponse
+                    });
+                    
+                    
+                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { EmpRef = scheme.Ref });
 
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { AuthToken = scheme.AccessToken, EmpRef = scheme.Ref });
+                    var employerData = new EmployerLevyData();
 
-                    var employerData = new EmployerLevyData {Fractions = new DasEnglishFractions {Fractions = new List<DasEnglishFraction>()}, Declarations = new DasDeclarations {Declarations = new List<DasDeclaration>()} };
-
-                    if (levyDeclarationQueryResult?.Fractions != null && levyDeclarationQueryResult.LevyDeclarations != null)
+                    if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
                     {
-                        foreach (var fractionCalculation in levyDeclarationQueryResult.Fractions.FractionCalculations)
-                        {
-                            employerData.Fractions.Fractions.Add(new DasEnglishFraction
-                            {
-                                Amount = decimal.Parse(fractionCalculation.Fractions.Find(fr => fr.Region == "England").Value),
-                                DateCalculated = DateTime.Parse(fractionCalculation.CalculatedAt)
-                            });
-                        }
 
                         foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
                         {
                             var dasDeclaration = new DasDeclaration
                             {
-                                Date = DateTime.Parse(declaration.SubmissionTime),
+                                SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
                                 Id = declaration.Id,
                                 PayrollMonth = declaration.PayrollPeriod?.Month,
                                 PayrollYear = declaration.PayrollPeriod?.Year,
@@ -107,11 +105,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     }
                 }
 
-                if (updateEnglishFractionsRequired.UpdateRequired)
+                if (englishFractionUpdateResponse.UpdateRequired)
                 {
                     await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                     {
-                        DateCalculated = updateEnglishFractionsRequired.DateCalculated
+                        DateCalculated = englishFractionUpdateResponse.DateCalculated
                     });
                 }
 

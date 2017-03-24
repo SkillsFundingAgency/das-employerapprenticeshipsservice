@@ -9,8 +9,8 @@ using SFA.DAS.EAS.Application.Queries.GetInvitation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.ViewModels;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -18,6 +18,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+
+        protected InvitationOrchestrator()
+        {
+            
+        }
 
         public InvitationOrchestrator(IMediator mediator, ILogger logger)
         {
@@ -27,17 +32,22 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<InvitationView> GetInvitation(string id)
+        public virtual async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
             var response = await _mediator.SendAsync(new GetInvitationRequest
             {
                 Id = id
             });
 
-            return response.Invitation;
+            var result = new OrchestratorResponse<InvitationView>
+            {
+                Data = response.Invitation
+            };
+
+            return result;
         }
 
-        public async Task AcceptInvitation(long invitationId, string externalUserId)
+        public virtual async Task AcceptInvitation(long invitationId, string externalUserId)
         {
             await _mediator.SendAsync(new AcceptInvitationCommand
             {
@@ -66,7 +76,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public async Task<UserInvitationsViewModel> GetAllInvitationsForUser(string externalUserId)
+        public async Task<OrchestratorResponse<UserInvitationsViewModel>> GetAllInvitationsForUser(string externalUserId)
         {
             try
             {
@@ -80,9 +90,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                return new UserInvitationsViewModel {
-                    Invitations = response.Invitations,
-                    ShowBreadCrumbs = getUserAccountsQueryResponse.Accounts.AccountList.Count!=0 };
+                var result = new OrchestratorResponse<UserInvitationsViewModel>
+                {
+                    Data = new UserInvitationsViewModel
+                    {
+                        Invitations = response.Invitations,
+                        ShowBreadCrumbs = getUserAccountsQueryResponse.Accounts.AccountList.Count != 0
+                    }
+                };
+
+                return result;
             }
             catch (InvalidRequestException ex)
             {
@@ -90,7 +107,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 _logger.Info(ex);
             }
 
-            return null;
+            return new OrchestratorResponse<UserInvitationsViewModel>
+            {
+                Data = null
+            };
         }
     }
 }

@@ -12,6 +12,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHistoryTests
 {
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerEnglishFractionHi
             Query = new GetEmployerEnglishFractionQuery {EmpRef = ExpectedEmpRef};
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse {PayeScheme = new Scheme {AddedDate = _expectedAddedDate ,Ref = ExpectedEmpRef} });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse {PayeScheme = new PayeScheme {AddedDate = _expectedAddedDate ,Ref = ExpectedEmpRef} });
 
             RequestHandler = new GetEmployerEnglishFractionHandler(RequestValidator.Object, _dasLevyService.Object, _mediator.Object);
         }

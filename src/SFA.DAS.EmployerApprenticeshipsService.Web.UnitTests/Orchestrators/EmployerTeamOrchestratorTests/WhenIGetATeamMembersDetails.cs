@@ -6,6 +6,9 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -19,7 +22,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
         private GetMemberResponse _teamMemberResponse;
-       
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
+
         [SetUp]
         public void Arrange()
         {
@@ -32,7 +36,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
             };
 
             _mediator = new Mock<IMediator>();
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration();
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object,_configuration);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
                 .ReturnsAsync(_teamMemberResponse);

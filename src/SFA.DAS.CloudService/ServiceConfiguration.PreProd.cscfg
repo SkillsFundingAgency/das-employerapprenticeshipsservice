@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ServiceConfiguration serviceName="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="SFA.DAS.EAS.Web">
-    <Instances count="2" />
+    <Instances count="3" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
@@ -12,13 +12,16 @@
       <Setting name="RedisConnection" value="__RedisConnection__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
+      <Setting name="ShowAgreements" value="false" />
+      <Setting name="ShowPayeHistory" value="false" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="EDCEF8D64D09C1D1FEDFD534CACB55E0437CFAD3" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="SFA.DAS.EAS.LevyDeclarationProvider.Worker">
-    <Instances count="2" />
+    <Instances count="3" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
@@ -27,6 +30,8 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="DeclarationsEnabled" value="true" />
+      <Setting name="TokenServiceCertificateThumbprint" value="__TokenServiceCertificateThumbprint__" />
     </ConfigurationSettings>
     <Certificates>
     </Certificates>
@@ -65,7 +70,7 @@
     </AddressAssignments>
     <LoadBalancers>
       <LoadBalancer name="__ilbname__">
-        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.118.158" />
+        <FrontendIPConfiguration type="private" subnet="__subnet__" staticVirtualNetworkIPAddress="10.78.124.158" />
       </LoadBalancer>
     </LoadBalancers>
   </NetworkConfiguration>

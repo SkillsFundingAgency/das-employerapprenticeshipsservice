@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
 {
     public class CreateApprenticeshipCommandHandler : AsyncRequestHandler<CreateApprenticeshipCommand>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
+        private readonly IEmployerCommitmentApi _commitmentsApi;
         private readonly CreateApprenticeshipCommandValidator _validator;
 
-        public CreateApprenticeshipCommandHandler(ICommitmentsApi commitmentsApi)
+        public CreateApprenticeshipCommandHandler(IEmployerCommitmentApi commitmentsApi)
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
@@ -25,7 +27,8 @@ namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
             if (!validationResult.IsValid())
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
 
-            await _commitmentsApi.CreateEmployerApprenticeship(message.AccountId, message.Apprenticeship.CommitmentId, message.Apprenticeship);
+            var apprenticeshipRequest = new ApprenticeshipRequest { Apprenticeship = message.Apprenticeship, UserId = message.UserId };
+            await _commitmentsApi.CreateEmployerApprenticeship(message.AccountId, message.Apprenticeship.CommitmentId, apprenticeshipRequest);
         }
     }
 }

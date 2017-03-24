@@ -5,23 +5,28 @@ using Newtonsoft.Json;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.TokenService.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
     public class WhenICallTheHmrcServiceForAuthentication
     {
         private HmrcService _hmrcService;
-        private Mock<ILogger> _logger;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedBaseUrl = "http://hmrcbase.gov.uk/";
         private string ExpectedClientId = "654321";
+        private string ExpectedOgdClientId = "123456789";
         private string ExpectedScope = "emp_ref";
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private string ExpectedClientSecret = "my_secret";
-        
+        private const string ExpectedAccessCode = "789654321AGFVD";
+        private Mock<ITokenServiceApiClient> _tokenService;
+
         [SetUp]
         public void Arrange()
         {
@@ -31,16 +36,19 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                 {
                     BaseUrl = ExpectedBaseUrl,
                     ClientId = ExpectedClientId,
+                    OgdClientId = ExpectedOgdClientId,
                     Scope = ExpectedScope,
                     ClientSecret = ExpectedClientSecret
                 }
             };
-
-            _logger = new Mock<ILogger>();
+            
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
-            _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
+            _httpClientWrapper.Setup(x => x.SendMessage(It.IsAny<object>(), It.IsAny<string>())).ReturnsAsync(JsonConvert.SerializeObject(new HmrcTokenResponse()));
 
-            _hmrcService = new HmrcService(_logger.Object, _configuration, _httpClientWrapper.Object);
+            _tokenService = new Mock<ITokenServiceApiClient>();
+            _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAccessCode });
+
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy());
         }
 
         [Test]
@@ -61,17 +69,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public async Task ThenTheCodeIsExchangedForTheAccessToken()
         {
             //Arrange
-            var redirectUrl = "http://mytestUrl.to.redirectto?a=564kjg";
-            var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
             var code = "ghj567";
+            var redirectUrl = "http://mytestUrl.to.redirectto?a=564kjg";
+
 
             //Act
             var actual = await _hmrcService.GetAuthenticationToken(redirectUrl,code);
 
             //Assert
-            _httpClientWrapper.Verify(x => x.SendMessage("", $"oauth/token?client_secret={ExpectedClientSecret}&client_id={ExpectedClientId}&grant_type=authorization_code&redirect_uri={urlFriendlyRedirectUrl}&code={code}"), Times.Once);
+            _httpClientWrapper.Verify(x => x.SendMessage(It.IsAny<object>(), "oauth/token"), Times.Once);
             Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
 
         }
+        
     }
 }

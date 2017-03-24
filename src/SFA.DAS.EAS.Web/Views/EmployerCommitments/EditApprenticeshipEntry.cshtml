@@ -1,5 +1,6 @@
-﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.Models.ApprenticeshipViewModel
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Extensions
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ExtendedApprenticeshipViewModel>
 
 @{
     ViewBag.Title = "Edit an apprentice";
@@ -7,104 +8,80 @@
 }
 
 @section pageSpecificJS {
-    @*@Scripts.Render("~/bundles/jqueryvalcustom");*@
-
-    @Scripts.Render("~/bundles/apprentice");
+    @Scripts.Render("~/bundles/apprentice")
 }
-
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form method="POST" action="@Url.Action("EditApprenticeship")">
+        <form method="POST" action="@Url.Action("EditApprenticeship")" novalidate="novalidate">
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
-            @{ var validation = Html.ViewData["ApprovalWarningState"] as FluentValidation.Results.ValidationResult;
-                var cantApproveClass = validation != null && !validation.IsValid
-                  ? "cant-approve" : "";
-            }
-          
 
             <h1 class="heading-xlarge">Edit an apprentice</h1>
-            
-
             <div class="panel panel-border-wide">
-
-                @if (validation != null && !validation.IsValid)
-                {
-                    <p>
-                        You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
-
-                    </p>
-                }
-                else
-                {
-
-                    <p> You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
-
-                    </p>
-                }
-
-
+                <p>
+                    You’ll only be able to approve the release of your funds for this apprentice once all the fields have been completed – either by yourself or your training provider.
+                </p>
             </div>
  
             <hr />
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.FirstName, "error")">
-                @Html.LabelFor(m => m.FirstName, "First name", new { @class = "form-label form-label-bold" })
-                @Html.ValidationMessageFor(m => m.FirstName, null, new { id = "error-message-" + Html.IdFor(m => m.FirstName) })
-                @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control form-control-3-4" })
+            <div class="form-group @Html.AddClassIfPropertyInError("FirstName", "error")">
+                @Html.Label("FirstName", "First name", new { @class = "form-label form-label-bold" })
+                @Html.ValidationMessage("FirstName", new { id = "error-message-FirstName" })
+                @Html.TextBox("FirstName", Model.Data.Apprenticeship.FirstName, new { @class = "form-control form-control-3-4" })
 
             </div>
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.LastName, "error")">
-                @Html.LabelFor(m => m.LastName, "Last name", new { @class = "form-label form-label-bold" })
-                @Html.ValidationMessageFor(m => m.LastName, null, new { id = "error-message-" + Html.IdFor(m => m.LastName) })
-                @Html.TextBoxFor(m => m.LastName, new { @class = "form-control form-control-3-4" })
+            <div class="form-group @Html.AddClassIfPropertyInError("LastName", "error")">
+                @Html.Label("LastName", "Last name", new { @class = "form-label form-label-bold" })
+                @Html.ValidationMessage("LastName", new { id = "error-message-LastName" })
+                @Html.TextBox("LastName", Model.Data.Apprenticeship.LastName, new { @class = "form-control form-control-3-4" })
 
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.NINumber, "error")">
+            @*<div class="form-group @Html.AddClassIfPropertyInError("NINumber", "error")">
                 <hr />
-                @Html.LabelFor(m => m.NINumber, "National insurance number", new { @class = "form-label form-label-bold" })
-                @Html.ValidationMessageFor(m => m.NINumber, null, new { id = "error-message-" + Html.IdFor(m => m.NINumber) })
-                @Html.TextBoxFor(m => m.NINumber, new { @class = "form-control form-control-3-4" })
-            </div>
+                @Html.Label("NINumber", "National insurance number", new { @class = "form-label form-label-bold" })
+                @Html.ValidationMessage("NINumber", new { id = "error-message-NINumber" })
+                @Html.TextBox("NINumber", Model.Data.Apprenticeship.NINumber, new { @class = "form-control form-control-3-4" })
+            </div>*@
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.DateOfBirth, "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("DateOfBirth", "error")">
                 <hr />
                 <span class="form-label-bold">Date of birth</span>
                 <span class="form-hint">For example, 08 12 2001</span>
 
                 <div class="form-date">
-                    @Html.ValidationMessageFor(m => m.DateOfBirth, null, new { id = "error-message-" + Html.IdFor(m => m.DateOfBirth), @class = "error-message" })
+                    @Html.ValidationMessage("DateOfBirth", new { id = "error-message-DateOfBirth", @class = "error-message" })
                     <div class="form-group form-group-day">
-                        <label for="@Html.IdFor(m => m.DateOfBirth.Day)">
+                        <label for="DateOfBirth.Day">
                             Day
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = Html.IdFor(m => m.DateOfBirth.Day) })
+                        @Html.TextBox("DateOfBirth.Day", Model.Data.Apprenticeship.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Day" })
                     </div>
                     <div class="form-group form-group-month">
-                        <label for="@Html.IdFor(m => m.DateOfBirth.Month)">
+                        <label for="DateOfBirth.Month">
                             Month
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby =  Html.IdFor(m => m.DateOfBirth.Month) })
+                        @Html.TextBox("DateOfBirth.Month", Model.Data.Apprenticeship.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Month" })
                     </div>
                     <div class="form-group form-group-year">
-                        <label for="@Html.IdFor(m => m.DateOfBirth.Year)">
+                        <label for="DateOfBirth.Year">
                             Year
                         </label>
-                        @Html.TextBoxFor(m => m.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby =  Html.IdFor(m => m.DateOfBirth.Year) })
+                        @Html.TextBox("DateOfBirth.Year", Model.Data.Apprenticeship.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Year" })
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <hr />
-                <label class="form-label-bold" for="TrainingId">Apprenticeship training course</label>
-                <select name="TrainingId" id="TrainingId" class="form-control form-control-3-4 " aria-label="Apprenticeship training course">
+                <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+                <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4 " aria-label="Apprenticeship training course">
                     <option value="">Please select</option>
-                    @foreach (var apprenticeshipProduct in ViewBag.ApprenticeshipProducts)
+                    @foreach (var apprenticeshipProduct in Model.Data.ApprenticeshipProgrammes)
                     {
-                        <option value="@apprenticeshipProduct.Id" @if (apprenticeshipProduct.Id == Model.TrainingId)
+                        <option value="@apprenticeshipProduct.Id" @if (apprenticeshipProduct.Id == Model.Data.Apprenticeship.TrainingCode)
                                                      {
                                                          @Html.Raw("selected")
                                                      }>
@@ -115,7 +92,7 @@
 
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.StartDate, "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("StartDate", "error") @Html.AddClassIfPropertyInError("StartDateOverlap", "error") ">
                 <hr />
                 <fieldset>
                     <legend>
@@ -123,73 +100,91 @@
                         <span class="form-hint">For example, 09 2017</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.StartDate, null, new { id = "error-message-" + Html.IdFor(m => m.StartDate), @class = "error-message" })
+                            @Html.ValidationMessage("StartDate", new { id = "error-message-StartDate", @class = "error-message" })
+                            @Html.ValidationMessage("StartDateOverlap",
+                                "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                                new { id = "error-message-StartDateOverlap", @class = "error-message" })
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.StartDate.Month)">
+                            <label for="StartDate.Month">
                                 <span class="form-label-bold">Month</span>
                             </label>
-                            @Html.TextBoxFor(m => m.StartDate.Month, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.StartDate.Month) })
+                            @Html.TextBox("StartDate.Month", Model.Data.Apprenticeship.StartDate.Month, new { @class = "form-control", type = "number", aria_labelledby = "StartDate.Month" })
                         </div>
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.StartDate.Year)">
+                            <label for="StartDate.Year">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.StartDate.Year, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.StartDate.Year) })
+                            @Html.TextBox("StartDate.Year", Model.Data.Apprenticeship.StartDate.Year, new { @class = "form-control", type = "number", aria_labelledby = "StartDate.Year" })
                         </div>
                     </div>
                 </fieldset>
             </div>
 
-            <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.EndDate, "error")">
+            <div class="form-error-group form-group @Html.AddClassIfPropertyInError("EndDate", "error") @Html.AddClassIfPropertyInError("EndDateOverlap", "error")">
                 <fieldset>
                     <legend>
                         <span class="form-label-bold">Projected training finish date</span>
                         <span class="form-hint">For example, 02 2019</span>
                     </legend>
                     <div class="form-date">
-                        @Html.ValidationMessageFor(m => m.EndDate, null, new { id = "error-message-" + Html.IdFor(m => m.EndDate), @class = "error-message" })
+                        @Html.ValidationMessage("EndDate", new { id = "error-message-EndDate" , @class = "error-message" })
+                        @Html.ValidationMessage("EndDateOverlap",
+                            "The date overlaps with existing training dates for the same apprentice. " +
+                                "Please check the date - contact your training provider for help.",
+                            new { id = "error-message-EndDateOverlap", @class = "error-message" })
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.EndDate.Month)">
+                            <label for="EndDate.Month">
                                 <span class="form-label-bold">Month</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndDate.Month, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.EndDate.Month) })
+                            @Html.TextBox("EndDate.Month", Model.Data.Apprenticeship.EndDate.Month, new { @class = "form-control", type = "number", aria_labelledby = "EndDate.Month" })
                         </div>
                         <div class="form-group form-group-month">
-                            <label for="@Html.IdFor(m => m.EndDate.Year)">
+                            <label for="EndDate.Year">
                                 <span class="form-label-bold">Year</span>
                             </label>
-                            @Html.TextBoxFor(m => m.EndDate.Year, new { @class = "form-control", type = "text", aria_labelledby =  Html.IdFor(m => m.EndDate.Year) })
+                            @Html.TextBox("EndDate.Year", Model.Data.Apprenticeship.EndDate.Year, new { @class = "form-control", type = "number", aria_labelledby = "EndDate.Year" })
                         </div>
                     </div>
                 </fieldset>
 
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.Cost, "error")">
+            <div class="form-group @Html.AddClassIfPropertyInError("Cost", "error")">
                 <hr />
-                <label for="@Html.IdFor(m => m.Cost)">
+                <label for="Cost">
                     <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
                     <span class="form-hint">For example, for £1,500 enter 1500</span>
-                    @Html.ValidationMessageFor(m => m.Cost, "Enter the cost in whole pounds", new { id = "error-message-" + Html.IdFor(m => m.Cost), @class = "error-message" })
+                    @Html.ValidationMessage("Cost", "Enter the cost in whole pounds", new { id = "error-message-Cost", @class = "error-message" })
                 </label>
-                <span class="heading-small">£ </span>@Html.TextBoxFor(m => m.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby =  Html.IdFor(m => m.Cost) })
+                <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Data.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost" })
             </div>
 
-            <div class="form-group @Html.AddClassIfPropertyInError(x => x.EmployerRef, "error")">
+            <div class="form-group @Html.AddClassIfPropertyInError("EmployerRef", "error")">
                 <hr />
-                @Html.LabelFor(m => m.EmployerRef, "Reference (optional)", new { @class = "form-label-bold" })
+                @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
                 <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
-                @Html.ValidationMessageFor(m => m.EmployerRef, null, new { id = "error-message-" + Html.IdFor(m => m.EmployerRef) })
-                @Html.TextBoxFor(m => m.EmployerRef, new { @class = "form-control form-control-3-4" })
+                @Html.ValidationMessage("EmployerRef", new { id = "error-message-EmployerRef" })
+                @Html.TextBox("EmployerRef", Model.Data.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
             </div>
 
-            @Html.HiddenFor(m => m.ULN)
-            @Html.HiddenFor(m => m.AgreementStatus)
-            @Html.HiddenFor(m => m.ProviderRef)
+            <div class="form-group">
+                <hr />
+                <div class="grey-background">
+                    <p class="form-label-bold">End-point assessments</p>
+                    <p>At the end of each apprenticeship standard, an apprentice's knowledge, skills and behaviours are assessed by an independent end-point assessment organisation. Before the final gateway stage of the apprenticeship, we'll ask you to tell us which <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a> you've chosen for this apprentice.</p>
+                    <p>Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.</p>
+                </div>
+            </div>
 
+            @Html.Hidden("ULN", Model.Data.Apprenticeship.ULN)
+            @Html.Hidden("AgreementStatus", Model.Data.Apprenticeship.AgreementStatus)
+            @Html.Hidden("ProviderRef", Model.Data.Apprenticeship.ProviderRef)
 
             <button type="submit" class="button">Save</button>
-            <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+            <a class="button delete-button" href="@Url.Action("DeleteApprenticeshipConfirmation", new { Model.Data.Apprenticeship.HashedCommitmentId, Model.Data.Apprenticeship.HashedApprenticeshipId })" aria-label="Cancel">Delete</a>
+            <a class="links" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">Cancel</a>
+            
         </form>
     </div>
 </div>
@@ -197,8 +192,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

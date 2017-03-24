@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -10,7 +12,11 @@ using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Azure;
 using NLog;
 using NLog.Targets;
+using SFA.DAS.Audit.Client;
+using SFA.DAS.Audit.Client.Web;
+using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -32,6 +38,26 @@ namespace SFA.DAS.EAS.Web
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             FluentValidationModelValidatorProvider.Configure();
+
+            WebMessageBuilders.Register();
+            WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
+            WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
+
+            AuditMessageFactory.RegisterBuilder(message =>
+            {
+                message.Source = new Source
+                {
+                    Component = "EAS-Web",
+                    System = "EAS",
+                    Version = typeof(MvcApplication).Assembly.GetName().Version.ToString()
+                };
+            });
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var application = sender as HttpApplication;
+            application?.Context?.Response.Headers.Remove("Server");
         }
 
         protected void Application_Error(object sender, EventArgs e)

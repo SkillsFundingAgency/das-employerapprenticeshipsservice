@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Validation;
 
@@ -19,9 +20,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                 return result;
             }
 
-            if (command.Commitment == null)
-                result.AddError(nameof(command.Commitment), $"{nameof(command.Commitment)} must have a value.");
-
             if (command.Commitment.EmployerAccountId <= 0)
                 result.AddError(nameof(command.Commitment.EmployerAccountId), $"{nameof(command.Commitment.EmployerAccountId)} has an invalid value.");
 
@@ -39,6 +37,21 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                 if (string.IsNullOrWhiteSpace(command.Commitment.ProviderName))
                     result.AddError(nameof(command.Commitment.ProviderName), $"{nameof(command.Commitment.ProviderName)} must have a value.");
             }
+
+            if (command.Commitment.EmployerLastUpdateInfo == null)
+            {
+                result.AddError(nameof(command.Commitment.EmployerLastUpdateInfo), $"{nameof(command.Commitment.EmployerLastUpdateInfo)} must have a value.");
+                return result;
+            }
+
+            if (string.IsNullOrWhiteSpace(command.Commitment.EmployerLastUpdateInfo.Name))
+                result.AddError(nameof(command.Commitment.EmployerLastUpdateInfo.Name), $"{nameof(command.Commitment.EmployerLastUpdateInfo.Name)} must have a value.");
+
+            if (string.IsNullOrWhiteSpace(command.Commitment.EmployerLastUpdateInfo.EmailAddress))
+                result.AddError(nameof(command.Commitment.EmployerLastUpdateInfo.EmailAddress), $"{nameof(command.Commitment.EmployerLastUpdateInfo.EmailAddress)} must have a value.");
+
+            if(command.UserId == null)
+                result.AddError(nameof(command.UserId), $"{nameof(command.UserId)} must have a value.");
 
             return result;
         }

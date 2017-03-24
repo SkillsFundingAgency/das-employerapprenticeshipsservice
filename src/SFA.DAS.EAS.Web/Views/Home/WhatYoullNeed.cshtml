@@ -1,5 +1,6 @@
 ﻿@{ViewBag.PageID = "page-what-youll-need"; }
 @{ViewBag.Title = "What you'll need"; }
+@{ViewBag.HideNav = "true"; }
 
 @{ var errorMessage = TempData["Error"] as string; }
 
@@ -8,12 +9,17 @@
         <h1 class="heading-xlarge">
             What you'll need
         </h1>
-        <p>Your levy funds come from HMRC via your PAYE schemes.</p>
+        <p>Your levy funds are based on the levy amounts you declare to HMRC through your PAYE schemes.</p>
         <p>To access your funds you will need:</p>
-        <ul class="list-bullet">
-            <li>the Government Gateway login details and PAYE scheme numbers used for your payroll</li>
-            <li>your Companies House number - <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">find my Companies House number</a></li>
-        </ul>        
+        <ul class="list list-bullet">
+
+            <li>the Government Gateway login details for your PAYE schemes (ask your payroll department if you don't have access to this)</li>
+            <li>your organisation's Companies House Number or Charity number (only if your organisation has one)</li>
+            <li>the name of your public sector organisation if you are not a registered company or charity</li>
+        
+        </ul>
+        <p><a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" target="_blank">Can't find your Government Gateway details?</a></p>
+        <p>Search for <a href="https://beta.companieshouse.gov.uk/" rel="external" target="_blank">your Companies House number</a> or <a href="https://www.gov.uk/find-charity-information" rel="external" target="_blank">your Charity number</a></p>
         <form method="POST" action="@Url.Action("WhatYoullNeed", "Home")" >
             @Html.AntiForgeryToken()
             <div class="form-group" id="what-you-need-form">
@@ -21,7 +27,7 @@
                     <legend class="form-label-bold">
                         <span>Do you have everything you need?</span>
                         <span class="error-message js-hidden" aria-hidden="true" id="have-not-got-everything">
-                            You need your Companies House number and your Government Gateway login details to create an account
+                            You need your organisation's details and your Government Gateway login details to create an account
                         </span>
                         
                     </legend>
@@ -44,17 +50,12 @@
 </div>
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/" class="back-link">Back</a></li>
-        </ol>
+        <a href="@Url.Action("UsedServiceBefore", "Home")" class="link-back">Back</a>
     </div>
 }
 
 @section pageSpecificJS {
     <script type="text/javascript">
-        
-
-
         $(function () {
             sfa.homePage.init();
         });

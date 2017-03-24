@@ -1,0 +1,69 @@
+﻿@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web
+
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ManageApprenticeshipsViewModel>
+
+@{
+    ViewBag.PageID = "manage-apprentices";
+    ViewBag.Title = "Manage apprentices";
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <div class="hgroup">
+            <h1 class="heading-xlarge">Manage your apprentices</h1>
+        </div>
+
+        @if (!Model.Data.Apprenticeships.Any())
+        {
+            <div class="panel panel-border-wide alert-default">
+                <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
+            </div>
+        }
+        else
+        {
+            <table class="tableResponsive manage-all-apprentices">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of birth</th>
+                    <th>Status</th>
+                    <th></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var apprenticeship in Model.Data.Apprenticeships)
+                {
+                    <tr>
+                        <td>
+                            @apprenticeship.FirstName @apprenticeship.LastName &nbsp;
+                        </td>
+                        <td>
+                            @if (apprenticeship.DateOfBirth != null)
+                            {
+                                @apprenticeship.DateOfBirth.Value.ToGdsFormat()
+                            } &nbsp;
+                        </td>
+                        <td>
+                            @apprenticeship.Status &nbsp;
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"
+                               title="View  @apprenticeship.FirstName @apprenticeship.LastName"
+                               aria-label="View @apprenticeship.FirstName @apprenticeship.LastName">View</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to apprentices" class="back-link">Back to apprentices</a>
+    </div>
+}

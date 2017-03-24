@@ -43,6 +43,15 @@
     li {
         background-image:  url('/dist/images/separator.png');
     }
+    a {
+        font-size: 14px;
+        @include media(tablet) {
+            font-size: 16px;
+        }
+    }
+    .link-back {
+        margin: 0;
+    }
 }
 
 .back-link {
@@ -187,7 +196,7 @@ nav {
                         top: 0;
                         width: 5px;
                         position: absolute;
-                        z-index: 1;
+                        z-index: 0;
                         @include media(desktop) {
                             left: 15px;
                             right: 15px;
@@ -384,4 +393,28 @@ a#link-settings {
             display: none;
         }
     }
+}
+
+.sfa-logo {
+    border-left: 2px solid $department-for-education;
+    padding-top: 20px;
+    padding-left: 6px;
+    background: url(/dist/images/org_crest_13px.png) no-repeat 5px 0;
+    @include media(tablet) {
+        padding-top: 30px;
+        padding-left: 7px;
+        background: url(/dist/images/org_crest_18px.png) no-repeat 5px 0;
+    }
+    @include media(desktop) {
+        padding-top: 45px;
+        padding-left: 10px;
+        background: url(/dist/images/org_crest_27px.png) no-repeat 10px 0;
+    }
+}
+
+.organisation-logo {
+    position: relative;
+    line-height: 1.1em;
+    top: 3px;
+    display: block;
 }

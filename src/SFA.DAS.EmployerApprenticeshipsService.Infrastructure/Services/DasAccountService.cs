@@ -3,6 +3,7 @@ using MediatR;
 using SFA.DAS.EAS.Application.Queries.GetEmployerSchemes;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
@@ -15,10 +16,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _mediator = mediator;
         }
 
-        public async Task<Schemes> GetAccountSchemes(long accountId)
+        public async Task<PayeSchemes> GetAccountSchemes(long accountId)
         {
             var getEmployerSchemesResponse = await _mediator.SendAsync(new GetEmployerSchemesQuery { Id = accountId });
-            return getEmployerSchemesResponse.Schemes;
+            return getEmployerSchemesResponse.PayeSchemes;
         }
     }
 }

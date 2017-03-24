@@ -6,11 +6,14 @@ using Moq;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
+using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -27,18 +30,20 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
 
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
+        private Mock<IEventsApi> _eventsApi;
 
         public AccountCreationSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieService>();
+            _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
 
             _validator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult());
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
 
             _container.Inject(_validator.Object);
         }
@@ -59,23 +64,20 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             CreateUserWithRole(accountRole);
         }
 
-        public static void CreateDasAccount(SignInUserModel user, EmployerAccountOrchestrator orchestrator)
+        public static void CreateDasAccount(UserViewModel userView, EmployerAccountOrchestrator orchestrator)
         {
-
-            orchestrator.CreateAccount(new CreateAccountModel
+            orchestrator.CreateAccount(new CreateAccountViewModel
             {
-                UserId = user.UserId,
+                UserId = userView.UserId,
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
-                CompanyDateOfIncorporation = new DateTime(2016, 01, 01),
-                EmployerRef = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
-                CompanyName = "Test Company",
-                CompanyNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
-                CompanyRegisteredAddress = "Address Line 1",
-                CompanyStatus = "active"
-            },new Mock<HttpContextBase>().Object).Wait();
-
-
+                OrganisationDateOfInception = new DateTime(2016, 01, 01),
+                PayeReference = $"{Guid.NewGuid().ToString().Substring(0, 3)}/{Guid.NewGuid().ToString().Substring(0, 7)}",
+                OrganisationName = "Test Company",
+                OrganisationReferenceNumber = "123456TGB" + Guid.NewGuid().ToString().Substring(0, 6),
+                OrganisationAddress = "Address Line 1",
+                OrganisationStatus = "active"
+            }, new Mock<HttpContextBase>().Object).Wait();
         }
 
         private void CreateUserWithRole(string accountRole)
@@ -84,14 +86,14 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             Role roleOut;
             Enum.TryParse(accountRole, out roleOut);
 
-            var signInModel = new SignInUserModel
+            var signInModel = new UserViewModel
             {
                 Email = "test@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "test",
                 LastName = "tester",
                 UserId = _externalUserId
             };
-            var userCreation = new UserCreationSteps();
+            var userCreation = new UserSteps();
             userCreation.UpsertUser(signInModel);
 
             userCreation.CreateUserWithRole(
@@ -109,14 +111,14 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
             var accountOwnerUserId = Guid.NewGuid().ToString();
             ScenarioContext.Current["AccountOwnerUserId"] = accountOwnerUserId;
 
-            var signInUserModel = new SignInUserModel
+            var signInUserModel = new UserViewModel
             {
                 UserId = accountOwnerUserId,
                 Email = "accountowner@test.com" + Guid.NewGuid().ToString().Substring(0, 6),
                 FirstName = "Test",
                 LastName = "Tester"
             };
-            var userCreationSteps = new UserCreationSteps();
+            var userCreationSteps = new UserSteps();
             userCreationSteps.UpsertUser(signInUserModel);
 
             var user = userCreationSteps.GetExistingUserAccount();

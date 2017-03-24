@@ -5,13 +5,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -37,9 +39,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
+            var logger = new Mock<ILogger>();
 
             _employerAccountController = new EmployerAccountController(
-               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object)
+               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object, logger.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -47,10 +50,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                OrganisationName = "Test Corp",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10)
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -68,64 +71,64 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
+        //TODO add EmployerAccountOrganisationController tests when created
+        //[Test]
+        //public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
+        //{
+        //    //Assign
+        //    var request = new OrganisationDetailsViewModel
+        //    {
+        //        ReferenceNumber = "6576585",
+        //        Name = "Test Corp",
+        //        DateOfInception = DateTime.Now.AddYears(-12),
+        //        Address = "1, Test Street",
+        //        Status = "active"
+        //    };
 
-        [Test]
-        public void ThenIShouldSaveTheSelectedEmployerDetailsToCookies()
-        {
-            //Assign
-            var request = new SelectEmployerViewModel
-            {
-                CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
-                CompanyStatus = "active"
-            };
+        //    _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
+        //    _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
 
-            _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
-            _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
+        //    //Act
+        //    _employerAccountController.GatewayInform(request);
 
-            //Act
-            _employerAccountController.GatewayInform(request);
+        //    //Assert
+        //    _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
+        //        It.Is<EmployerAccountData>(data => 
+        //        data.OrganisationReferenceNumber.Equals(request.ReferenceNumber) &&
+        //        data.OrganisationStatus.Equals(request.Status) &&
+        //        data.OrganisationName.Equals(request.Name) &&
+        //        data.OrganisationDateOfInception.Equals(request.DateOfInception) &&
+        //        data.OrganisationRegisteredAddress.Equals(request.Address))));
+        //}
 
-            //Assert
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
-                It.Is<EmployerAccountData>(data => 
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
-        }
+        //[Test]
+        //public void ThenTheDataWillBeReadFromTheCookieIfIAmGoingBackThroughTheProcess()
+        //{
+        //    //Arrange
+        //    var request = new EmployerAccountData
+        //    {
+        //        OrganisationReferenceNumber = "6576585",
+        //        OrganisationName = "Test Corp",
+        //        OrganisationDateOfInception = DateTime.Now.AddYears(-12),
+        //        OrganisationRegisteredAddress = "1, Test Street",
+        //        OrganisationStatus = "active"
+        //    };
+        //    _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(request);
 
-        [Test]
-        public void ThenTheDataWillBeReadFromTheCookieIfIAmGoingBackThroughTheProcess()
-        {
-            //Arrange
-            var request = new EmployerAccountData
-            {
-                CompanyNumber = "6576585",
-                CompanyName = "Test Corp",
-                DateOfIncorporation = DateTime.Now.AddYears(-12),
-                RegisteredAddress = "1, Test Street",
-                CompanyStatus = "active"
-            };
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(request);
+        //    //Act
+        //    _employerAccountController.GatewayInform(null);
 
-            //Act
-            _employerAccountController.GatewayInform(null);
-
-            //Assert
-            _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
-                It.Is<EmployerAccountData>(data =>
-                data.CompanyNumber.Equals(request.CompanyNumber) &&
-                data.CompanyStatus.Equals(request.CompanyStatus) &&
-                data.CompanyName.Equals(request.CompanyName) &&
-                data.DateOfIncorporation.Equals(request.DateOfIncorporation) &&
-                data.RegisteredAddress.Equals(request.RegisteredAddress))));
-        }
+        //    //Assert
+        //    _orchestrator.Verify(x => x.CreateCookieData(It.IsAny<HttpContextBase>(),
+        //        It.Is<EmployerAccountData>(data =>
+        //        data.OrganisationReferenceNumber.Equals(request.OrganisationReferenceNumber) &&
+        //        data.OrganisationStatus.Equals(request.OrganisationStatus) &&
+        //        data.OrganisationName.Equals(request.OrganisationName) &&
+        //        data.OrganisationDateOfInception.Equals(request.OrganisationDateOfInception) &&
+        //        data.OrganisationRegisteredAddress.Equals(request.OrganisationRegisteredAddress))));
+        //}
     }
 }

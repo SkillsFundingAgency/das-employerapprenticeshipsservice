@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Audit.Types;
+using SFA.DAS.EAS.Application.Commands.AuditCommand;
 using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Audit;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.Notifications.Api.Types;
 using SFA.DAS.TimeProvider;
 
@@ -18,9 +24,10 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
         private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
+        private readonly IUserRepository _userRepository;
         private readonly ResendInvitationCommandValidator _validator;
 
-        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+        public ResendInvitationCommandHandler(IInvitationRepository invitationRepository, IMembershipRepository membershipRepository, IMediator mediator, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration, IUserRepository userRepository)
         {
             if (invitationRepository == null)
                 throw new ArgumentNullException(nameof(invitationRepository));
@@ -34,6 +41,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             _membershipRepository = membershipRepository;
             _mediator = mediator;
             _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            _userRepository = userRepository;
             _validator = new ResendInvitationCommandValidator();
         }
 
@@ -63,12 +71,30 @@ namespace SFA.DAS.EAS.Application.Commands.ResendInvitation
             
             await _invitationRepository.Resend(existing);
 
+            var existingUser = await _userRepository.GetByEmailAddress(message.Email);
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "INVITATION_RESENT",
+                    Description = $"Invitation to {message.Email} resent in Account {existing.AccountId}",
+                    ChangedProperties = new List<PropertyUpdate>
+                    {
+                        new PropertyUpdate {PropertyName = "Status",NewValue = existing.Status.ToString()},
+                        new PropertyUpdate {PropertyName = "ExpiryDate",NewValue = existing.ExpiryDate.ToString()}
+                    },
+                    RelatedEntities = new List<Entity> { new Entity { Id = existing.AccountId.ToString(), Type = "Account" } },
+                    AffectedEntity = new Entity { Type = "Invitation", Id = existing.Id.ToString() }
+                }
+            });
+            
             await _mediator.SendAsync(new SendNotificationCommand
             {
                 Email = new Email
                 {
                     RecipientsAddress = message.Email,
-                    TemplateId = _employerApprenticeshipsServiceConfiguration.EmailTemplates.Single(c=>c.TemplateType.Equals(EmailTemplateType.Invitation)).Key,
+                    TemplateId = existingUser?.UserRef != null ? "InvitationExistingUser" : "InvitationNewUser",
                     ReplyToAddress = "noreply@sfa.gov.uk",
                     Subject = "x",
                     SystemId = "x",

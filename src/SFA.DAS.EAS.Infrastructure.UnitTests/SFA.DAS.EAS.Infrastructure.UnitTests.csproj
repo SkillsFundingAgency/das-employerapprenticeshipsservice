@@ -38,8 +38,24 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
@@ -58,20 +74,44 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.14.0.17022, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.14.0.17022\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.14.0.17022, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.14.0.17022\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Client.Web, Version=1.0.0.20510, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.Web.1.0.0.20510\lib\net45\SFA.DAS.Audit.Client.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.21673, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.21673\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -85,20 +125,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\IdamsTests.cs" />
+    <Compile Include="Factories\WhenICreateARestClient.cs" />
+    <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AuditServiceTests\WhenISendAnAuditMessage.cs" />
+    <Compile Include="Services\CompaniesHouseEmployerVerificationServiceTests\WhenIGetCompanyInformation.cs" />
     <Compile Include="Services\DasAccountServiceTests\WhenIGetEmployerInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetEnglishFractionForAnEmpref.cs" />
+    <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />
     <Compile Include="Services\FeatureToggleFileBasedServiceTests\WhenIGetDisabledFeatures.cs" />
+    <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallHmrcServiceForLastEnglishFractionUpdateDate.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForAuthentication.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForDeclarations.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmpref.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefDiscovery.cs" />
     <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEnglishFractions.cs" />
-    <Compile Include="Services\ManagedCompanyLookupServiceTests\WhenIGetManagedCompanies.cs" />
+    <Compile Include="Services\ProviderEmailLookupService\ProviderEmailLookupServiceTests.cs" />
+    <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
     <Compile Include="Services\PaymentServiceTests\WhenIGetAccountPayments.cs" />
     <Compile Include="Services\WhiteListTests\WhenIGetUserWhiteList.cs" />
   </ItemGroup>
@@ -123,7 +171,9 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Factories\RestClientFactoryTests\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

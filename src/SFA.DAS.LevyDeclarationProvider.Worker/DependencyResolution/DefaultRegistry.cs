@@ -4,10 +4,8 @@ using System.Reflection;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Services;
 using StructureMap;
 using StructureMap.Graph;
 using WebGrease.Css.Extensions;
@@ -29,12 +27,27 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.DependencyResolution
             For<IUserRepository>().Use<UserRepository>();
 
             For<IConfiguration>().Use<LevyDeclarationProviderConfiguration>();
-
-            For<ILevyDeclarationService>().Use<LevyDeclarationFileBasedService>();
+            
+            RegisterExecutionPolicies();
 
             RegisterMapper();
 
             AddMediatrRegistrations();
+        }
+
+        private void RegisterExecutionPolicies()
+        {
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.CompaniesHouseExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.HmrcExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.HmrcExecutionPolicy.Name);
+
+            For<Infrastructure.ExecutionPolicies.ExecutionPolicy>()
+                .Use<Infrastructure.ExecutionPolicies.IdamsExecutionPolicy>()
+                .Named(Infrastructure.ExecutionPolicies.IdamsExecutionPolicy.Name);
         }
 
         private void AddMediatrRegistrations()

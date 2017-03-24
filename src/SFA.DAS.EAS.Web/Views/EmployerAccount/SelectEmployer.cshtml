@@ -1,7 +1,6 @@
 ﻿@{ViewBag.PageID = "page-onboard-companies-house"; }
 @{ViewBag.Title = "Enter your Companies House number"; }
 @{ViewBag.HideNav = "true"; }
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.SelectEmployerViewModel>
 
 
 @if (TempData["companyNumberError"] != null)
@@ -37,20 +36,18 @@
                         <span class="error-message" id="error-message-companies-house">Enter a valid Companies House number</span>
                     }
                 </label>
-                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text" aria-required="true" aria-describedby="error-message-companies-house"/>
+                <input class="form-control form-control-3-4" id="EmployerRef" name="EmployerRef" type="text" aria-required="true" 
+                       @(TempData["companyNumberError"] != null ? " aria-describedby=error-message-companies-house" : "")
+                      />
             </div>
-            <input type="hidden" id="HideBreadcrumb" name="HideBreadcrumb" value="@Model.Data.HideBreadcrumb.ToString()"/>
             <button type="submit" class="button" id="submit">Continue</button>
         </form>
     </div>
 </div>
-@if (!Model.Data.HideBreadcrumb)
-{
+
     @section breadcrumb {
         <div class="breadcrumbs">
-            <ol>
-                <li><a href="/" class="back-link">Back to Your User Profile</a></li>
-            </ol>
+            <a href="/" class="back-link">Back to your levy accounts</a>
         </div>
     }
-}
+

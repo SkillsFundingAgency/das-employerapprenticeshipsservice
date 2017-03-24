@@ -5,11 +5,12 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Web.AcceptanceTests.DependencyResolution;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         private static Mock<IOwinWrapper> _owinWrapper;
         private string _hashedAccountId;
         private static Mock<ICookieService> _cookieService;
-
+        private static Mock<IEventsApi> _eventsApi;
 
         [BeforeFeature]
         public static void Arrange()
@@ -32,9 +33,9 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _cookieService = new Mock<ICookieService>();
+            _eventsApi = new Mock<IEventsApi>();
 
-            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService);
-            
+            _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);
         }
 
         [AfterFeature]

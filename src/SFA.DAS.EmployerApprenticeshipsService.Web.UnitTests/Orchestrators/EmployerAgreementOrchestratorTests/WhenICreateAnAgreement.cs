@@ -6,6 +6,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
@@ -15,6 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
         private EmployerAgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -22,7 +25,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration(); 
+
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, _configuration);
         }
 
         [Test]
@@ -39,10 +44,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
             var latestTemplate = new EmployerAgreementTemplate
             {
                 Id = 1,
-                Ref = "12345",
-                Text = "Test template",
-                CreatedDate = DateTime.Now.AddDays(-20),
-                ReleasedDate = DateTime.Now.AddDays(-2)
+                PartialViewName = "12345",
+                CreatedDate = DateTime.Now.AddDays(-20)
             };
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetLatestEmployerAgreementTemplateRequest>()))
@@ -56,12 +59,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorT
 
             //Assert
             Assert.AreEqual(entityName, response.Data.EmployerAgreement.LegalEntityName);
-            Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityRegisteredAddress);
-            Assert.AreEqual(latestTemplate.Text, response.Data.EmployerAgreement.TemplateText);
-            Assert.AreEqual(latestTemplate.Ref, response.Data.EmployerAgreement.TemplateRef);
+            Assert.AreEqual(entityAddress, response.Data.EmployerAgreement.LegalEntityAddress);
+            Assert.AreEqual(latestTemplate.PartialViewName, response.Data.EmployerAgreement.TemplatePartialViewName);
             Assert.AreEqual(EmployerAgreementStatus.Pending, response.Data.EmployerAgreement.Status);
             Assert.AreEqual(entityRef, response.Data.EmployerAgreement.LegalEntityCode);
-            Assert.AreEqual(incorporatedDate, response.Data.EmployerAgreement.LegalEntityIncorporatedDate);
+            Assert.AreEqual(incorporatedDate, response.Data.EmployerAgreement.LegalEntityInceptionDate);
         }
     }
 }

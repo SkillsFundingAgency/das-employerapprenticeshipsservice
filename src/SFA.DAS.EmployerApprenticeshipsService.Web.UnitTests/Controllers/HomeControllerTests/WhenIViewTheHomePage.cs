@@ -5,12 +5,14 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
+using SignInUserViewModel = SFA.DAS.EAS.Web.ViewModels.SignInUserViewModel;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -29,10 +31,21 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         {
 
             _owinWrapper = new Mock<IOwinWrapper>();
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("false");
 
             _homeOrchestrator = new Mock<HomeOrchestrator>();
             _homeOrchestrator.Setup(x => x.GetUsers()).ReturnsAsync(new SignInUserViewModel());
-            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel()});
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(
+                new OrchestratorResponse<UserAccountsViewModel>
+                {
+                    Data = new UserAccountsViewModel
+                    {
+                        Accounts = new Accounts<Account>
+                        {
+                            AccountList = new List<Account> {new Account()}
+                        }
+                    }
+                });
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
@@ -61,6 +74,32 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             _homeOrchestrator.Verify(x=>x.GetUserAccounts(It.IsAny<string>()),Times.Never);
+        }
+
+        [Test]
+        public async Task ThenIfMyAccountIsAuthenticatedButNotActivated()
+        {
+            //Arrange
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(
+                new EmployerApprenticeshipsServiceConfiguration
+                {
+                    ApprenticeshipInfoService = new ApprenticeshipInfoServiceConfiguration
+                    {
+                        BaseUrl="http://test.local"
+                    },
+                    Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity" ,AccountActivationUrl = "/confirm"}
+                });
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("true");
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualRedirect = actual as RedirectResult;
+            Assert.IsNotNull(actualRedirect);
+            Assert.AreEqual("http://test.local/confirm", actualRedirect.Url);
         }
 
         [Test]
@@ -106,27 +145,53 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual("UsedServiceBefore", actualViewResult.ViewName);
+            Assert.AreEqual("ServiceStartPage", actualViewResult.ViewName);
         }
 
         [Test]
-        public async Task ThenIfThereAreNoAccountsTheUserIsRedirectedToTheAddEmployerAccountJourney()
+        public async Task ThenIfIHaveOneAccountIAmRedirectedToTheEmployerTeamsIndexPage()
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
-            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(new OrchestratorResponse<UserAccountsViewModel> {Data = new UserAccountsViewModel {Accounts = new Accounts {AccountList = new List<Account>()} } });
 
             //Act
             var actual = await _homeController.Index();
 
             //Assert
             Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
-            var redirectActual = actual as RedirectToRouteResult;
-            Assert.IsNotNull(redirectActual);
-            Assert.AreEqual("SelectEmployer", redirectActual.RouteValues["action"]);
-            Assert.AreEqual("EmployerAccount", redirectActual.RouteValues["controller"]);
+            var actualViewResult = actual as RedirectToRouteResult;
+            Assert.IsNotNull(actualViewResult);
+            Assert.AreEqual("Index", actualViewResult.RouteValues["Action"].ToString());
+            Assert.AreEqual("EmployerTeam", actualViewResult.RouteValues["Controller"].ToString());
         }
-        
+
+
+        [Test]
+        public async Task ThenIfIHaveMoreThanOneAccountIAmRedirectedToTheAccountsIndexPage()
+        {
+            //Arrange
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            _homeOrchestrator.Setup(x => x.GetUserAccounts(ExpectedUserId)).ReturnsAsync(
+                new OrchestratorResponse<UserAccountsViewModel>
+                {
+                    Data = new UserAccountsViewModel
+                    {
+                        Accounts = new Accounts<Account>
+                        {
+                            AccountList = new List<Account> { new Account(), new Account() }
+                        }
+                    }
+                });
+
+            //Act
+            var actual = await _homeController.Index();
+
+            //Assert
+            Assert.IsNotNull(actual);
+            var actualViewResult = actual as ViewResult;
+            Assert.IsNotNull(actualViewResult);
+            Assert.AreEqual("",actualViewResult.ViewName);
+            
+        }
     }
 }

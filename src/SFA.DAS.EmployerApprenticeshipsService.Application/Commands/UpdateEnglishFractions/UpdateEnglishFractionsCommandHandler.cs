@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
@@ -27,8 +28,27 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
 
         protected override async Task HandleCore(UpdateEnglishFractionsCommand message)
         {
-            var fractionCalculations =
-                await _hmrcService.GetEnglishFractions(message.AuthToken, message.EmployerReference);
+            var existingFractions = (await _englishFractionRepository.GetAllEmployerFractions(message.EmployerReference)).ToList();
+
+            if (existingFractions.Any() && !message.EnglishFractionUpdateResponse.UpdateRequired)
+            {
+                return;
+            }
+
+            DateTime? dateFrom = null;
+            if (existingFractions?.OrderByDescending(x=>x.DateCalculated).FirstOrDefault()?.DateCalculated != null 
+                && existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated != DateTime.MinValue)
+            {
+                dateFrom = existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated.AddDays(-1);
+            }
+
+
+            var fractionCalculations = await _hmrcService.GetEnglishFractions(message.EmployerReference, dateFrom);
+
+            if (fractionCalculations?.FractionCalculations == null)
+            {
+                return;
+            }
 
             var hmrcFractions = fractionCalculations.FractionCalculations.SelectMany(calculations =>
             {
@@ -63,8 +83,6 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateEnglishFractions
              
                 return fractions;
             }).ToList();
-
-            var existingFractions = await _englishFractionRepository.GetAllEmployerFractions(message.EmployerReference);
 
             var newFraction = hmrcFractions.Except(existingFractions, new DasEmployerComparer()).ToList();
 

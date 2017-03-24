@@ -7,7 +7,9 @@ using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -18,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<Accounts> GetAccountsByUserId(string userId)
+        public async Task<Accounts<Account>> GetAccountsByUserId(string userId)
         {
             var result = await WithConnection(async c =>
             {
@@ -26,12 +28,12 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<Account>(
-                    sql: @"[account].[GetAccounts_ByUserId]",
+                    sql: @"[employer_account].[GetAccounts_ByUserId]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
 
-            return new Accounts { AccountList = (List<Account>)result };
+            return new Accounts<Account> { AccountList = (List<Account>)result };
         }
 
         public async Task<User> Get(string email)
@@ -42,7 +44,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [account].[User] WHERE Email = @email;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [employer_account].[User] WHERE Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -58,7 +60,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [account].[User] WHERE Id = @id;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [employer_account].[User] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

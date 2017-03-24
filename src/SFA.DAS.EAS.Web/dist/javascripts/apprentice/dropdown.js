@@ -2,8 +2,8 @@
 
     // https://select2.github.io/examples.html
     var init = function () {
-        if ($("#TrainingId")) {
-            $("#TrainingId").select2();
+        if ($("#TrainingCode")) {
+            $("#TrainingCode").select2();
         }
     };
     init();
@@ -14,12 +14,12 @@
     });
 
     // retain tabbed order after selection
-    $('#TrainingId').on('select2:select', function () {
+    $('#TrainingCode').on('select2:select', function () {
         $("#StartDate_Month").focus();
     });
 
     // retain tabbed order on close without selection
-    $('#TrainingId').on('select2:close', function () {
+    $('#TrainingCode').on('select2:close', function () {
         $("#StartDate_Month").focus();
     });
 

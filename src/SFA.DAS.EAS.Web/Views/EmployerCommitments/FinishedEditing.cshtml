@@ -1,15 +1,13 @@
-﻿@model SFA.DAS.EAS.Web.Models.FinishEditingViewModel
+﻿@using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Enums
 @using SFA.DAS.EAS.Web.Extensions
-@using SFA.DAS.EAS.Web.Models.Types
+
+@model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.FinishEditingViewModel>
 
 @{
     ViewBag.Title = "Finish editing";
     ViewBag.PageID = "finish-editing";
 }
-
-@*@section pageSpecificJS {
-    @Scripts.Render("~/bundles/jqueryvalcustom")
-}*@
 
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -17,56 +15,69 @@
             @Html.AntiForgeryToken()
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
-            <h1 class="heading-xlarge">Choose an option</h1>
-           
-            @if (Model.NotReadyForApproval)
+            @if (Model.Data.NotReadyForApproval || !Model.Data.HasSignedTheAgreement || Model.Data.HasOverlappingErrors)
             {
-
-                <p>
-                    @Html.Raw(GetInvalidStateForApprovalMessage(Model.HasApprenticeships, Model.InvalidApprenticeshipCount))
-                </p>
-
+                <div class="panel panel-border-wide alert-default">
+                    <p class="heading-medium">You can't approve this cohort until: </p>
+                    <ul class="list list-bullet">                   
+                      <li>
+                        You've signed an <a href="@Url.Action("Index", "EmployerAgreement")" target="_blank">apprenticeship agreement</a> with the Skills Funding Agency
+                    </li>
+                    <li>
+                        All <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">apprentice records</a> are complete
+                    </li>
+                    <li>
+                        There are no <a href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">overlapping training dates</a> for your apprentices
+                    </li>
+                    </ul>
+                </div>
             }
+
+            <h1 class="heading-xlarge">Choose an option</h1>
+
             <fieldset>
                 <legend class="visuallyhidden">Things to do next</legend>
-                <div class="form-error-group form-group @Html.AddClassIfPropertyInError(x => x.SaveStatus, "error")">
+                <div class="form-error-group form-group @Html.AddClassIfPropertyInError("SaveStatus", "error")">
                     <div>
-                        @Html.ValidationMessageFor(m => m.SaveStatus, "Please choose an option", new { id = "error-message-" + Html.IdFor(m => m.SaveStatus) + "-SendAmend" })
+                        @Html.ValidationMessage("SaveStatus", "Please choose an option", new { id = "error-message-SaveStatus-SendAmend" })
                     </div>
-                    @if (!Model.NotReadyForApproval)
+                    @if (!Model.Data.NotReadyForApproval && Model.Data.HasSignedTheAgreement && !Model.Data.HasOverlappingErrors)
                     {
-                        if (Model.IsApproveAndSend)
+                        if (Model.Data.IsApproveAndSend)
                         {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.ApproveAndSend)">
-                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.NotReadyForApproval))
+                            @Html.RadioButton("SaveStatus", SaveStatus.ApproveAndSend, GetRadioButtonAttributes(SaveStatus.ApproveAndSend, Model.Data.NotReadyForApproval))
                             <span id="changeTwo">Approve and send to training provider</span>
                         </label>
                         }
                         else
                         {
                         <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Approve)">
-                            @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.NotReadyForApproval))
+                            @Html.RadioButton("SaveStatus", SaveStatus.Approve, GetRadioButtonAttributes(SaveStatus.Approve, Model.Data.NotReadyForApproval))
                             <span id="changeTwo">Approve</span>
                         </label>
                         }
                     }
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.AmendAndSend)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.AmendAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
+                        @Html.RadioButton("SaveStatus", SaveStatus.AmendAndSend, GetRadioButtonAttributes(SaveStatus.AmendAndSend, false))
                         <span id="changeOne">Send to training provider to review or add details</span>
                     </label>
 
                     <label class="block-label selection-button-radio" for="@RadioButtonId(SaveStatus.Save)">
-                        @Html.RadioButtonFor(m => m.SaveStatus, SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.Save, false))
+                        @Html.RadioButton("SaveStatus", SaveStatus.Save, GetRadioButtonAttributes(SaveStatus.Save, false))
                         <span id="changeThree">Save but don't send to training provider</span>
                     </label>
                 </div>
 
                 <div>
                     <input type="submit" class="button" id="paymentPlan" value="Continue">
-                    <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId })">Cancel</a>
+                    <a class="button text-link" aria-label="Cancel" href="@Url.Action("Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId })">Cancel</a>
                 </div>
-                @Html.HiddenFor(x => x.HashedCommitmentId)
+                @Html.Hidden("HashedCommitmentId", Model.Data.HashedCommitmentId)
+                @Html.Hidden("HasApprenticeships", Model.Data.HasApprenticeships)
+                @Html.Hidden("InvalidApprenticeshipCount", Model.Data.InvalidApprenticeshipCount)
+                @Html.Hidden("NotReadyForApproval", Model.Data.NotReadyForApproval)
             </fieldset>
         </form>
      
@@ -77,7 +88,7 @@
 {
     public string RadioButtonId(SaveStatus status)
     {
-        return $"{Html.IdFor(m => m.SaveStatus)}-{status}";
+        return $"SaveStatus-{status}";
     }
 
     public Dictionary<string, object> GetRadioButtonAttributes(SaveStatus status, bool disabled)
@@ -96,9 +107,9 @@
     public string GetInvalidStateForApprovalMessage(bool hasApprenticeships, int invalidApprentieshipCount)
     {
         if (!hasApprenticeships)
-            return "You need to add details for at least one apprentice before you can approve this cohort - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+            return "You need to add details for at least one apprentice before you can approve this cohort - " + Html.ActionLink("add an apprentice", "Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId });
 
-        var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.HashedAccountId, hashedCommitmentId = Model.HashedCommitmentId });
+        var emptyLink = Html.ActionLink("go back and add details", "Details", new { hashedAccountId = Model.Data.HashedAccountId, hashedCommitmentId = Model.Data.HashedCommitmentId });
 
         return invalidApprentieshipCount == 1
         ? "You have 1 apprentice with incomplete details. All apprentice details must be complete before you can approve this cohort - " + emptyLink
@@ -109,8 +120,6 @@
 
     @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a></li>
-        </ol>
+      <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
     </div>
 }

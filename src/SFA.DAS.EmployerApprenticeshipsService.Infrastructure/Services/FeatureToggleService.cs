@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
 using SFA.DAS.EAS.Infrastructure.Caching;
@@ -9,11 +10,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
     public class FeatureToggleService : AzureServiceBase<FeatureToggleLookup>, IFeatureToggle
     {
         private readonly ICacheProvider _cacheProvider;
-
+        public sealed override ILogger Logger { get; set; }
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.Features";
-        public FeatureToggleService(ICacheProvider cacheProvider)
+        public FeatureToggleService(ICacheProvider cacheProvider, ILogger logger)
         {
             _cacheProvider = cacheProvider;
+            Logger = logger;
         }
 
         public virtual FeatureToggleLookup GetFeatures()

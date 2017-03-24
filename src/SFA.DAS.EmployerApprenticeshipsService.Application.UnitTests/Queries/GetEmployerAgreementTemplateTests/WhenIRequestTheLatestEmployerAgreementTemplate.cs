@@ -6,6 +6,8 @@ using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementTemplateTests
 {
@@ -30,10 +32,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementTemplate
             _template = new EmployerAgreementTemplate
             {
                 Id = 10,
-                Ref = "324234",
-                Text = "template text",
-                CreatedDate = DateTime.Now.AddDays(-10),
-                ReleasedDate = DateTime.Now.AddDays(-2)
+                PartialViewName = "324234",
+                CreatedDate = DateTime.Now.AddDays(-10)
             };
 
             _employmentAgreementRepository = new Mock<IEmployerAgreementRepository>();

@@ -5,13 +5,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -37,9 +40,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
+            var logger = new Mock<ILogger>();
 
             _employerAccountController = new EmployerAccountController(
-               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object)
+               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object, logger.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -47,16 +51,18 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10),
-                CompanyStatus = "active",
-                EmployerRef = "123/ABC",
+                OrganisationName = "Test Corp",
+                EmployerRefName = "Scheme 1",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10),
+                OrganisationStatus = "active",
+                PayeReference = "123/ABC",
                 RefreshToken = "123",
                 AccessToken = "456",
                 EmpRefNotFound = true,
-                HideBreadcrumb = true
+                OrganisationType = OrganisationType.Charities,
+                Sector = "Public"
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -74,7 +80,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
@@ -100,20 +106,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             Assert.IsNotNull(result);
             Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
         }
-
-        [Test]
-        public async Task ThenTheBreadCrumbValueIsRemovedFromTempDataIfItExists()
-        {
-            //Arrange
-            _employerAccountController.TempData = new TempDataDictionary { { "HideBreadcrumb", true } };
-
-            //Act
-            await _employerAccountController.CreateAccount();
-
-            //Assert
-            Assert.IsFalse(_employerAccountController.TempData.ContainsKey("HideBreadcrumb"));
-        }
-
+        
         [Test]
         public async Task ThenTheParamtersArePassedFromTheCookieWhenCreatingTheAccount()
         {
@@ -121,17 +114,44 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountModel>(
+            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountViewModel>(
                 c =>
-                    c.CompanyStatus.Equals(_accountData.CompanyStatus) &&
-                    c.CompanyName.Equals(_accountData.CompanyName) &&
+                    c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
+                    c.OrganisationName.Equals(_accountData.OrganisationName) &&
                     c.RefreshToken.Equals(_accountData.RefreshToken) &&
-                    c.CompanyDateOfIncorporation.Equals(_accountData.DateOfIncorporation) &&
-                    c.CompanyRegisteredAddress.Equals(_accountData.RegisteredAddress) &&
+                    c.OrganisationDateOfInception.Equals(_accountData.OrganisationDateOfInception) &&
+                    c.OrganisationAddress.Equals(_accountData.OrganisationRegisteredAddress) &&
                     c.AccessToken.Equals(_accountData.AccessToken) &&
-                    c.EmployerRef.Equals(_accountData.EmployerRef) &&
-                    c.CompanyNumber.Equals(_accountData.CompanyNumber)
+                    c.PayeReference.Equals(_accountData.PayeReference) &&
+                    c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
+                    c.Sector.Equals(_accountData.Sector) &&
+                    c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
+        }
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheFlashMessageIsAddedToTempData()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("successHeader"));
+
+        }
+
+
+
+        [Test]
+        public async Task ThenIfTheAccountIsSucessfullyCreatedThenTheOrganisationTypeIsAddedToTempData()
+        {
+            //Act
+            await _employerAccountController.CreateAccount();
+
+            //Assert
+            Assert.IsTrue(_employerAccountController.TempData.ContainsKey("employerAccountCreated"));
+            Assert.AreEqual("Charities", _employerAccountController.TempData["employerAccountCreated"]);
+
         }
     }
 }

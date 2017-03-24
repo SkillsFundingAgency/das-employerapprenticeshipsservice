@@ -1,0 +1,66 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
+@{
+    ViewBag.PageID = "agreement-sign";
+    ViewBag.Title = "Agreement";
+    ViewBag.Section = "organisations";
+}  
+
+<div class="grid-row" id="publication-banner">
+    <div class="column-third">
+        <div class="sfa-logo">
+            <h1>
+                <span class="organisation-logo">
+                    <span>Skills Funding <br>
+                            Agency</span>
+                </span>
+            </h1>
+        </div>
+    </div>
+    <div class="column-two-thirds">
+        <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
+    </div>
+</div>
+
+
+
+
+@Html.Partial("_Agreement_v1")
+
+<hr />
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h2 class="heading-large">Accept this agreement</h2>
+        <table>
+            <tr>
+                <th scope="row">Accepted by:</th>
+                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+            </tr>
+            <tr>
+                <th scope="row">On behalf of:</th>
+                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+            </tr>
+            <tr>
+                <th scope="row">Address:</th>
+                <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
+            </tr>
+            <tr>
+                <th scope="row">Accepted on:</th>
+                <td>@DateTime.Today.ToString("dd/MM/yyyy")</td>
+            </tr>
+
+        </table>
+        <form method="post" action="@Url.Action("Sign","EmployerAgreement")">
+            @Html.AntiForgeryToken()
+            <input class="button" type="submit" value="Accept and finish" />
+        </form>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}

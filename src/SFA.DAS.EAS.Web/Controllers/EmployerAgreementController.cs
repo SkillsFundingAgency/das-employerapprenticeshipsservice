@@ -2,10 +2,11 @@
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("Agreements")]
+        [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, FlashMessageViewModel flashMessage)
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
@@ -38,145 +39,103 @@ namespace SFA.DAS.EAS.Web.Controllers
                 model.FlashMessage = new FlashMessageViewModel
                 {
                     Headline = "Agreement signed",
-                    Message = $"You've signed the agreement for {TempData["agreementSigned"]}",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                TempData.Remove("agreementSigned");
             }
 
             return View(model);
         }
 
         [HttpGet]
-        [Route("Agreements/Add")]
-        public async Task<ActionResult> Add(string hashedAccountId)
+        [Route("agreements/{agreementId}/details")]
+        public async Task<ActionResult> Details(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            var response = await _orchestrator.GetAddLegalEntityViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
-            return View(response);
-        }
-
-		[HttpGet]
-		[Route("Agreements/{agreementid}/View")]
-        public async Task<ActionResult> View(string agreementid, string hashedAccountId, FlashMessageViewModel flashMessage)
-        {
-            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(agreement);
         }
-        
-        [HttpPost]
-        [Route("Agreements/{agreementid}/Sign")]
-		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> Sign(string agreementid, string hashedAccountId, string understood, string legalEntityName)
+
+        [HttpGet]
+		[Route("agreements/{agreementId}/view")]
+        public async Task<ActionResult> View(string agreementId, string hashedAccountId, FlashMessageViewModel flashMessage)
         {
-            if (understood == nameof(understood))
-            {
-                var response = await _orchestrator.SignAgreement(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.Now);
-
-                if (response.Status == HttpStatusCode.OK)
-                {
-                    TempData["agreementSigned"] = legalEntityName;
-
-                    return RedirectToAction("Index", new { hashedAccountId });
-                }
-
-                return View("DeadView", response);
-            }
-
-            TempData["notunderstood"] = true;
-           
-            return RedirectToAction("View", new { agreementId = agreementid, hashedAccountId });
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            
+            return View(agreement);
         }
-        
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/Add")]
-        public async Task<ActionResult> FindLegalEntity(string hashedAccountId, string entityReferenceNumber)
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/about-your-agreement")]
+        public async Task<ActionResult> AboutYourAgreement(string agreementid, string hashedAccountId)
         {
-            var response = await _orchestrator.FindLegalEntity(hashedAccountId, entityReferenceNumber, OwinWrapper.GetClaimValue(@"sub"));
+            var agreement = await _orchestrator.GetById(agreementid, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(agreement);
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/sign-your-agreement")]
+        public async Task<ActionResult> SignAgreement(string agreementId, string hashedAccountId)
+        {
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(agreement);
+        }
+
+        [HttpPost]
+        [Route("agreements/{agreementId}/sign")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
+        {
+            
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), DateTime.UtcNow);
 
             if (response.Status == HttpStatusCode.OK)
             {
-                return View("FindLegalEntity",response);
+                TempData["agreementSigned"] = "true";
+
+                return RedirectToAction("Index", new { hashedAccountId });
             }
 
-            var errorResponse = new OrchestratorResponse<AddLegalEntityViewModel>
-            {
-                Data = new AddLegalEntityViewModel { HashedAccountId = hashedAccountId },
-                Status = HttpStatusCode.OK,
-            };
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            agreement.Exception = response.Exception;
+            agreement.Status = response.Status;
 
-            if (response.Status == HttpStatusCode.NotFound)
-            {
-                TempData["companyNumberError"] = "No company found. Please try again";
-            }
-
-            if (response.Status == HttpStatusCode.Conflict)
-            {
-                TempData["companyNumberError"] = "Enter a company that isn't already registered";
-            }
-
-            return View("Add", errorResponse);
+            return View("SignAgreement", agreement);
         }
 
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/ViewAgreement")]
-        public async Task<ActionResult> ViewEntityAgreement(string hashedAccountId, string name, string code, string address, 
-            DateTime incorporated)
+        [HttpGet]
+        [Route("agreements/{agreementId}/agreement-pdf")]
+        public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
         {
-            var response = await _orchestrator.Create(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), name, code, address, incorporated);
 
-            return View(response);
+            var stream = await _orchestrator.GetPdfEmployerAgreement(hashedAccountId,agreementId, OwinWrapper.GetClaimValue("sub"));
+
+            if (stream.Data.PdfStream == null)
+            {
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
+            }
+
+            return new FileStreamResult(stream.Data.PdfStream,"application/pdf");
         }
 
-        [HttpPost]
-		[ValidateAntiForgeryToken]
-        [Route("Agreements/CreateAgreement")]
-        public async Task<ActionResult> CreateLegalEntity(
-            string hashedAccountId, string name, string code, string address, DateTime incorporated, 
-            bool? userIsAuthorisedToSign, string submit, string legalEntityStatus)
+        [HttpGet]
+        [Route("agreements/{agreementId}/signed-agreement-pdf")]
+        public async Task<ActionResult> GetSignedPdfAgreement(string agreementId, string hashedAccountId)
         {
-            var request = new CreateNewLegalEntity
+
+            var stream = await _orchestrator.GetSignedPdfEmployerAgreement(hashedAccountId,agreementId,OwinWrapper.GetClaimValue("sub"));
+
+            if (stream.Data.PdfStream == null)
             {
-                HashedAccountId = hashedAccountId,
-                Name = name,
-                Code = code,
-                Address = address,
-                IncorporatedDate = incorporated,
-                UserIsAuthorisedToSign = userIsAuthorisedToSign ?? false,
-                SignedAgreement = submit.Equals("Sign", StringComparison.CurrentCultureIgnoreCase),
-                SignedDate = DateTime.Now,
-                ExternalUserId = OwinWrapper.GetClaimValue(@"sub"),
-                LegalEntityStatus = legalEntityStatus
-            };
-
-            var response = await _orchestrator.CreateLegalEntity(request);
-
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                response.Status = HttpStatusCode.OK; 
-
-                TempData["userNotAuthorised"] = "true";
-
-                return View("ViewEntityAgreement", response);
+                // ReSharper disable once Mvc.ViewNotResolved
+                return View(stream);
             }
 
-            TempData["extraCompanyAdded"] = "true";
-
-            if (request.UserIsAuthorisedToSign && request.SignedAgreement)
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "This account can now spend levy funds.";
-            }
-            else
-            {
-                TempData["successHeader"] = $"{response.Data.EmployerAgreement.LegalEntityName} has been added";
-                TempData["successMessage"] = "To spend the levy funds somebody needs to sign the agreement.";
-            }
-
-            return RedirectToAction("Index", new { hashedAccountId });
+            return new FileStreamResult(stream.Data.PdfStream, "application/pdf");
         }
     }
 }

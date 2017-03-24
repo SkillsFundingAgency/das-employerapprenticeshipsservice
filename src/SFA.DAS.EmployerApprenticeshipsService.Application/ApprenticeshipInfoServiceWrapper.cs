@@ -5,10 +5,14 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
-using SFA.DAS.EAS.Domain;
+using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.EAS.Domain.Interfaces;
-using Framework = SFA.DAS.EAS.Domain.Framework;
-using Provider = SFA.DAS.EAS.Domain.Provider;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.Domain.Models.Time;
+using Framework = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Framework;
+using Provider = SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider.Provider;
+using Standard = SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse.Standard;
 
 namespace SFA.DAS.EAS.Application
 {
@@ -62,12 +66,15 @@ namespace SFA.DAS.EAS.Application
         {
             try
             {
-                var api = new ProviderApiClient(_configuration.BaseUrl);
-                var providersView = MapFrom(api.Get(ukPrn));
-
-                return providersView;
+                var api = new Providers.Api.Client.ProviderApiClient(_configuration.BaseUrl);
+                var provider = api.Get(ukPrn);
+                return MapFrom(provider);
             }
             catch (HttpRequestException)
+            {
+                throw;
+            }
+            catch (EntityNotFoundException)
             {
                 return null;
             }
@@ -93,24 +100,25 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }
 
-        private static ProvidersView MapFrom(IEnumerable<Apprenticeships.Api.Types.Provider> providers)
+        private static ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
         {
             return new ProvidersView
             {
                 CreatedDate = DateTime.UtcNow,
-                Providers = providers.Select(x => new Provider
+                Provider = new Provider()
                 {
-                    Ukprn = x.Ukprn,
-                    ProviderName = x.ProviderName,
-                    Email = x.Email,
-                    Phone = x.Phone,
-                    NationalProvider = x.NationalProvider
-                }).ToList()
+                    Ukprn = provider.Ukprn,
+                    ProviderName = provider.ProviderName,
+                    Email = provider.Email,
+                    Phone = provider.Phone,
+                    NationalProvider = provider.NationalProvider
+                }
             };
         }
 
@@ -119,7 +127,7 @@ namespace SFA.DAS.EAS.Application
             return new StandardsView
             {
                 CreationDate = DateTime.UtcNow,
-                Standards = standards.Select(x => new EAS.Domain.Standard
+                Standards = standards.Select(x => new Standard
                 {
                     Id = x.Id,
                     Code = long.Parse(x.Id),
@@ -130,7 +138,8 @@ namespace SFA.DAS.EAS.Application
                         From = x.TypicalLength.From,
                         To = x.TypicalLength.To,
                         Unit = x.TypicalLength.Unit
-                    }
+                    },
+                    MaxFunding = x.MaxFunding
                 }).ToList()
             };
         }

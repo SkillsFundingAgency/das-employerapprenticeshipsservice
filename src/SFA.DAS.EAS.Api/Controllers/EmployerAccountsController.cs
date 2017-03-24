@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Api.Controllers
@@ -22,12 +20,13 @@ namespace SFA.DAS.EAS.Api.Controllers
         [Route("", Name = "AccountsIndex")]
         [Authorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]   
-        public async Task<IHttpActionResult> Index(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
             var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
             
             if (result.Status == HttpStatusCode.OK)
             {
+                result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
             else
@@ -35,6 +34,33 @@ namespace SFA.DAS.EAS.Api.Controllers
                 //TODO: Handle unhappy paths.
                 return Conflict();
             }
+        }
+
+        [Route("{hashedAccountId}", Name = "GetAccount")]
+        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetAccount(hashedAccountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
+            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
+            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
+            return Ok(result.Data);
+        }
+
+        private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
+        {
+            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
+        }
+
+        private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)
+        {
+            payeScheme.Href = Url.Route("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
         }
     }
 }

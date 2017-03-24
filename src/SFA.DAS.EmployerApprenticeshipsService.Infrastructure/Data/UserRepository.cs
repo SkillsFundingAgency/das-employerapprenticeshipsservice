@@ -6,12 +6,14 @@ using Dapper;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserRepository : BaseRepository, IUserRepository
     {
-        
+
         public UserRepository(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
@@ -24,7 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE Id = @id",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id",
                     param: parameters,
                     commandType: CommandType.Text);
                 return res;
@@ -38,9 +40,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@userRef", new Guid(id), DbType.Guid);
-                
+
                 var res = await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE PireanKey = @userRef",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE PireanKey = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
                 return res;
@@ -56,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", emailAddress, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User] WHERE Email = @email",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -66,7 +68,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task Create(User user)
         {
-            var result = await WithConnection(async c =>
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -74,16 +76,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
-                    sql: "INSERT INTO [account].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
+                    sql: "INSERT INTO [employer_account].[User] (PireanKey, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            Console.WriteLine(result);
         }
 
         public async Task Update(User user)
         {
-            var result = await WithConnection(async c =>
+            await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", user.Email, DbType.String);
@@ -91,11 +92,26 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
                 return await c.ExecuteAsync(
-                    sql: "UPDATE [account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where PireanKey = @userRef",
+                    sql: "UPDATE [employer_account].[User] set Email = @email, FirstName = @firstName, LastName = @lastName where PireanKey = @userRef",
                     param: parameters,
                     commandType: CommandType.Text);
             });
-            Console.WriteLine(result);
+        }
+
+        public async Task Upsert(User user)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@email", user.Email, DbType.String);
+                parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
+                parameters.Add("@firstName", user.FirstName, DbType.String);
+                parameters.Add("@lastName", user.LastName, DbType.String);
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    param: parameters,
+                    commandType: CommandType.Text);
+            });
         }
 
         public async Task<Users> GetAllUsers()
@@ -105,7 +121,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [account].[User];",
+                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
                     param: parameters,
                     commandType: CommandType.Text);
             });

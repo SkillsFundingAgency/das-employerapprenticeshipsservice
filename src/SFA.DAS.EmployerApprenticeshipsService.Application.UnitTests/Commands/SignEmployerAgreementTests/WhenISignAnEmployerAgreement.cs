@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
+using SFA.DAS.EAS.Application.Commands.PublishGenericEvent;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Application.Factories;
+using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.TimeProvider;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
 {
@@ -19,22 +26,64 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         private SignEmployerAgreementCommand _command;
         private MembershipView _owner;
         private Mock<IHashingService> _hashingService;
+        private Mock<IValidator<SignEmployerAgreementCommand>> _validator;
+        private Mock<IEmployerAgreementEventFactory> _agreementEventFactory;
+        private Mock<IGenericEventFactory> _genericEventFactory;
+        private Mock<IMediator> _mediator;
+        private EmployerAgreementView _agreement;
+        private AgreementSignedEvent _agreementEvent;
 
         private const long AgreementId = 123433;
+        private const string HashedLegalEntityId = "2635JHG";
 
         [SetUp]
         public void Setup()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _agreementRepository = new Mock<IEmployerAgreementRepository>();
+            
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(AgreementId);
-            _handler = new SignEmployerAgreementCommandHandler(_membershipRepository.Object, _agreementRepository.Object, _hashingService.Object);
+            _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(HashedLegalEntityId);
+
+            _validator = new Mock<IValidator<SignEmployerAgreementCommand>>();
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> ()});
+
+
+            _agreement = new EmployerAgreementView
+            {
+                HashedAgreementId = "124GHJG",
+                LegalEntityId = 56465
+            };
+
+            _agreementRepository = new Mock<IEmployerAgreementRepository>();
+
+            _agreementRepository.Setup(x => x.GetEmployerAgreement(It.IsAny<long>()))
+                                .ReturnsAsync(_agreement);
+
+            _agreementEventFactory = new Mock<IEmployerAgreementEventFactory>();
+
+            _agreementEvent = new AgreementSignedEvent();
+
+            _agreementEventFactory.Setup(
+                    x => x.CreateSignedEvent(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                          .Returns(_agreementEvent);
+
+            _genericEventFactory = new Mock<IGenericEventFactory>();
+            _mediator = new Mock<IMediator>();
+            
+            _handler = new SignEmployerAgreementCommandHandler(
+                _membershipRepository.Object, 
+                _agreementRepository.Object, 
+                _hashingService.Object, 
+                _validator.Object,
+                _agreementEventFactory.Object, 
+                _genericEventFactory.Object,
+                _mediator.Object);
 
             _command = new SignEmployerAgreementCommand
             {
-                HashedAccountId = "1",
-                HashedAgreementId = "2",
+                HashedAccountId = "1AVCFD",
+                HashedAgreementId = "2EQWE34",
                 ExternalUserId = Guid.NewGuid().ToString(),
                 SignedDate = DateTime.Now
             };
@@ -52,92 +101,70 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SignEmployerAgreementTests
         }
 
         [Test]
-        public void ThenAnInvalidCommandThrowsExcption()
+        public void ThenTheValidatorIsCalledAndAnInvalidRequestExceptionIsThrownIfItIsNotValid()
         {
-            _command = new SignEmployerAgreementCommand();
+            //Arrange
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(4));
+            //Act Assert
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_command));
         }
 
         [Test]
-        public void ThenNonMemberOfAccountThrowsExcption()
+        public void ThenIfTheUserIsNotConnectedToTheAccountThenAnUnauthorizedExceptionIsThrown()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
-                .ReturnsAsync(null);
+            //Arrange
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(null);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
+            //Act Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
+        }
 
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
+        [TestCase(Role.Transactor)]
+        [TestCase(Role.Viewer)]
+        [TestCase(Role.None)]
+        public void ThenIfTheUserIsNotAnOwnerThenAnUnauthorizedExceptionIsThrown(Role role)
+        {
+            //Arrange
+            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView {RoleId = (short)role});
+
+            //Act Assert
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _handler.Handle(_command));
         }
 
         [Test]
-        public void ThenNonOwnerOfAccountThrowsExcption()
+        public async Task ThenIfTheCommandIsValidTheRepositoryIsCalledWithThePassedParameters()
         {
-            _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
-                .ReturnsAsync(new MembershipView
-                {
-                    RoleId = (short)Role.Viewer
-                });
+            //Arrange
+            var agreementId = 87761263;
+            _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreementId);
 
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ThenAgreementNotFoundThrowsExcption()
-        {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
-                .ReturnsAsync(null);
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ThenAgreementIsAlreadySignedThrowsExcption()
-        {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    Status = EmployerAgreementStatus.Signed
-                });
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ThenAgreementHasExpiredThrowsExcption()
-        {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    Status = EmployerAgreementStatus.Pending,
-                    ExpiredDate = DateTimeProvider.Current.UtcNow.AddDays(-1)
-                });
-
-            var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
-
-            Assert.That(exception.ErrorMessages.Count, Is.EqualTo(1));
-        }
-
-        [Test]
-        public async Task ThenAgreementIsSigned()
-        {
-            _agreementRepository.Setup(x => x.GetEmployerAgreement(AgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    Status = EmployerAgreementStatus.Pending
-                });
-
+            //Act
             await _handler.Handle(_command);
 
-            _agreementRepository.Verify(x => x.SignAgreement(AgreementId, _owner.UserId, $"{_owner.FirstName} {_owner.LastName}", _command.SignedDate), Times.Once);
+            //Assert
+            _agreementRepository.Verify(x=>x.SignAgreement(It.Is<SignEmployerAgreement>(c=>c.SignedDate.Equals(_command.SignedDate) 
+                                && c.AgreementId.Equals(agreementId) 
+                                && c.SignedDate.Equals(_command.SignedDate)
+                                && c.SignedById.Equals(_owner.UserId)
+                                && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
+                                )));
+        }
+
+        [Test]
+        public async Task ThenAnEventShouldBePublished()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
+            _hashingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
+            _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId, 
+                _command.HashedAgreementId), Times.Once);
+            _genericEventFactory.Verify(x => x.Create(_agreementEvent), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<PublishGenericEventCommand>()), Times.Once);
+            
         }
     }
 }

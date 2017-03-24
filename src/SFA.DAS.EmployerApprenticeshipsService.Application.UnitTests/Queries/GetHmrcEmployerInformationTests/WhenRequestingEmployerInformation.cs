@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTests
 {
@@ -44,7 +45,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetHmrcEmployerInformationTe
             _validator.Setup(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new Scheme { Ref = ExpectedEmprefInUse } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme { Ref = ExpectedEmprefInUse } });
             _mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c=>c.Empref==ExpectedEmpref))).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null});
             
             _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object);

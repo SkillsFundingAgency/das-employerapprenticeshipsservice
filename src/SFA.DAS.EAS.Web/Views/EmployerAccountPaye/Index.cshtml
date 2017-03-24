@@ -1,9 +1,9 @@
-﻿
+﻿ 
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.Models.EmployerAccountPayeListViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAccountPayeListViewModel>
 @{
     ViewBag.PageID = "page-paye-schemes-index";
-    ViewBag.Title = "PAYE Schemes";
+    ViewBag.Title = "PAYE schemes";
     ViewBag.Section = "paye";
 
     if (TempData.ContainsKey("payeSchemeAdded"))
@@ -20,8 +20,9 @@
 
 <div class="grid-row header-index">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">PAYE Schemes</h1>
-        <p class="lede">Levy funds will credit your account from any PAYE schemes you add.</p>
+        <h1 class="heading-xlarge">PAYE schemes</h1>
+        <p>Funds will credit your account from any PAYE schemes you add. No funds will credit your account until May 2017.</p>
+        <p>You must add all PAYE schemes that your apprentices will be paid through.</p>
     </div>
     <div class="column-one-third pull-right">
         <form action="@Url.Action("GatewayInform")" method="GET">
@@ -38,8 +39,12 @@
                 <thead>
                     <tr>
                         <th scope="col">Added PAYE schemes</th>
-                        @*<th scope="col">English %</th>*@
-                        <th> </th>
+
+                        @if (Model.Data.ShowHistory)
+                        {
+                            <th scope="col">English %</th>
+                        }
+                        <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,7 +53,21 @@
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
                             <td>@scheme.PayeRef</td>
-                            @*<td>@englishFractionPercentage.ToString("P3")</td>*@
+                            @if (Model.Data.ShowHistory)
+			                {
+                                if (englishFractionPercentage == 1)
+                                {
+                                    <td>100%</td>
+                                }
+                                else if (englishFractionPercentage == 0)
+                                {
+                                    <td>0%</td>
+                                }
+                                else
+                                {
+                                    <td>@englishFractionPercentage.ToString("P3")</td>
+                                }
+			                }
                             <td class="link-right">
                                 <a aria-label="Details for PAYE scheme @scheme.PayeRef"
                                    title="Details for PAYE scheme @scheme.PayeRef"
@@ -58,6 +77,11 @@
                     }
                 </tbody>
             </table>
+
+            if (Model.Data.ShowHistory)
+            {
+                @Html.Partial("_WhatIsEnglishPercentage")
+            }
         }
         else
         {
@@ -72,9 +96,8 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Employer Account Homepage</a></li>
-            <li>PAYE Schemes</li>
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li>PAYE schemes</li>
         </ol>
     </div>
 }

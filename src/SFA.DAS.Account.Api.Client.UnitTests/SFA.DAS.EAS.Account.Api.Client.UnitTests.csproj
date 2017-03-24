@@ -34,6 +34,14 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FluentAssertions, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentAssertions.Core, Version=4.17.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentAssertions.4.17.0\lib\net45\FluentAssertions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.5.23.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.5.23\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
@@ -46,6 +54,10 @@
       <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +68,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountApiClientTests\WhenGettingAPayeScheme.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingALegalEntity.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingPayeSchemesForAnAccount.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingLegalEntitiesForAnAccount.cs" />
+    <Compile Include="AccountApiClientTests\WhenGettingAccountDetails.cs" />
     <Compile Include="AccountApiClientTests\WhenGettingAPageOfAccounts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,6 +83,10 @@
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
       <Project>{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

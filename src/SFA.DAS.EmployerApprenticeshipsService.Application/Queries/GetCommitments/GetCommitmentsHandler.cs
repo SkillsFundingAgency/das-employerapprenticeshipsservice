@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.EAS.Domain.Interfaces;
+
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetCommitments
 {
     public sealed class GetCommitmentsHandler : IAsyncRequestHandler<GetCommitmentsQuery, GetCommitmentsResponse>
     {
-        private readonly ICommitmentsApi _commitmentsApi;
-        private readonly IHashingService _hashingService;
+        private readonly IEmployerCommitmentApi _commitmentsApi;
 
-        public GetCommitmentsHandler(ICommitmentsApi commitmentsApi)
+        public GetCommitmentsHandler(IEmployerCommitmentApi commitmentsApi)
         {
             if(commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));

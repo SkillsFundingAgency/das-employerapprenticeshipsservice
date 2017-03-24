@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.Payments.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateNewPeriodEndTests

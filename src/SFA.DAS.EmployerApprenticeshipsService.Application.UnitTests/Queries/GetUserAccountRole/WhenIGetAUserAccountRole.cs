@@ -5,6 +5,9 @@ using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
 {
@@ -28,8 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole
             _membershipView = new MembershipView
             {
                 AccountId = 2,
-                UserId = long.Parse(ExternalUserId),
-                RoleName = Role.Owner.ToString()
+                UserId = long.Parse(ExternalUserId)
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();

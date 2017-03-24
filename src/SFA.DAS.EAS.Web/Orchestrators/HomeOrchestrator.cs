@@ -1,14 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using NLog;
+using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Queries.GetUserInvitations;
 using SFA.DAS.EAS.Application.Queries.GetUsers;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
-    public class HomeOrchestrator : IOrchestrator
+    public class HomeOrchestrator
     {
         private readonly IMediator _mediator;
 
@@ -23,14 +25,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public virtual async Task<SignInUserViewModel> GetUsers()
+        public virtual async Task<ViewModels.SignInUserViewModel> GetUsers()
         {
             var actual = await _mediator.SendAsync(new GetUsersQuery());
 
-            return new SignInUserViewModel
+            return new ViewModels.SignInUserViewModel
             {
                 AvailableUsers = actual.Users.Select(x =>
-                                                new SignInUserModel
+                                                new UserViewModel
                                                 {
                                                     Email = x.Email,
                                                     FirstName = x.FirstName,
@@ -58,6 +60,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Invitations = getUserInvitationsResponse.NumberOfInvites
                 }
             };
+        }
+
+        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        {
+            await _mediator.SendAsync(new UpsertRegisteredUserCommand
+            {
+                EmailAddress = email,
+                UserRef = userRef,
+                LastName = lastName,
+                FirstName = firstName
+            });
         }
     }
 }

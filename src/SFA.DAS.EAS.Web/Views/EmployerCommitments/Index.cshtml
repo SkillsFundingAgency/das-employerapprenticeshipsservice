@@ -1,4 +1,6 @@
-﻿@model String
+﻿@using SFA.DAS.EAS.Web
+
+@model OrchestratorResponse
 
 @{
     ViewBag.PageID = "apprentices-home-page";
@@ -10,8 +12,7 @@
 <form method="POST" action="@Url.Action("SetLegalEntity")">
     <div class="grid-row">
         <div class="column-full">
-            <h1 class="heading-xlarge">Apprentices</h1>
-            <hr class="hr-double">
+            <h1 class="heading-xlarge heading-dashboard">Apprentices</h1>
         </div>
     </div>
 
@@ -20,19 +21,21 @@
             <div class="grid-row">
                 <div class="column-half ">
                     <h2 class="heading-medium"><a href="@Url.Action("Inform")">Add an apprentice</a></h2>
-                    <p class="rj-home-spacer">Add an apprentice to your account, so your training provider gets paid for their training.</p>
+                    <p class="rj-home-spacer">Add apprentices to a new cohort or ask your training provider to add them.</p>
                     <hr />
                 </div>
                 <div class="column-half ">
-                    <h2 class="heading-medium"><a href="@Url.Action("Cohorts")">Requests in progress</a></h2>
-                    <p class="rj-home-spacer">Review, edit, approve and add more apprentices to requests you’ve already started.</p>
+                    <h2 class="heading-medium"><a href="@Url.Action("YourCohorts")">Your cohorts</a></h2>
+                    <p class="rj-home-spacer">Review, edit, approve and add more apprentices to cohorts you’ve already started</p>
                     <hr />
                 </div>
 
                 <div class="column-half">
-                    <h2 class="heading-medium">Update existing apprentices</h2>
+                    <h2 class="heading-medium">
+                        <a href="@Url.Action("ListAll", "EmployerManageApprentices")">Manage your apprentices</a>
+                    </h2>
                     <p class="rj-home-spacer">
-                        View, pause and stop apprentices that you've already added and approved.
+                        View approved apprentices, update details of existing apprentices or stop and pause payments to training providers.
                     </p>
                     <hr />
                 </div>
@@ -44,8 +47,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="/">Your User Profile</a></li>
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Employer Account Homepage</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.HashedAccountId })">Home</a></li>
             <li>Apprentices</li>
         </ol>
     </div>

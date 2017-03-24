@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries
@@ -62,13 +63,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Providers = new List<Provider>
-                    {
-                        new Provider()
+                    Provider = new Provider()
                         {
                             Name = ProviderName
                         }
-                    }
                 });
 
             RequestHandler = new FindEmployerAccountPaymentTransactionsHandler(

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Employer;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
 {
@@ -27,7 +28,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerInformationTests
         {
             const string id = "QWERTYUIOP";
 
-            _employerService.Setup(x => x.GetInformation(id)).ReturnsAsync(null);
+            _employerService.Setup(x => x.GetInformation(id)).ReturnsAsync(new EmployerInformation());
 
             var response = await _handler.Handle(new GetEmployerInformationRequest
             {

@@ -8,13 +8,16 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
+using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -40,9 +43,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userWhiteList = new Mock<IUserWhiteList>();
+            var logger = new Mock<ILogger>();
 
             _employerAccountController = new EmployerAccountController(
-               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object)
+               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userWhiteList.Object, logger.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -50,10 +54,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
 
             _accountData = new EmployerAccountData
             {
-                CompanyName = "Test Corp",
-                CompanyNumber = "1244454",
-                RegisteredAddress = "1, Test Street",
-                DateOfIncorporation = DateTime.Now.AddYears(-10)
+                OrganisationName = "Test Corp",
+                OrganisationReferenceNumber = "1244454",
+                OrganisationRegisteredAddress = "1, Test Street",
+                OrganisationDateOfInception = DateTime.Now.AddYears(-10)
             };
 
             _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
@@ -71,44 +75,25 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
         }
 
         [Test]
-        public void ThenTheInformationIsReadFromTheCookie()
+        public void ThenIAmShownASummary()
         {
             //Arrange
-            var employerAccountData = new EmployerAccountData
-            {
-                CompanyStatus = "Active",
-                CompanyName = "Test Company",
-                DateOfIncorporation = DateTime.MaxValue,
-                CompanyNumber = "ABC12345",
-                RegisteredAddress = "My Address",
-                EmployerRef = "123/abc",
-                EmpRefNotFound = true,
-                HideBreadcrumb = true
-            };
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>())).Returns(employerAccountData);
-
+            _orchestrator.Setup(x => x.GetSummaryViewModel(It.IsAny<HttpContextBase>()))
+                .Returns(new OrchestratorResponse<SummaryViewModel>());
 
             //Act
             var actual = _employerAccountController.Summary();
 
             //Assert
+            _orchestrator.Verify(x=> x.GetSummaryViewModel(It.IsAny<HttpContextBase>()), Times.Once);
             Assert.IsNotNull(actual);
-            var viewResult = actual as ViewResult;
-            Assert.IsNotNull(viewResult);
-            var model = viewResult.Model as SummaryViewModel;
+            var model = actual.Model as OrchestratorResponse<SummaryViewModel>;
             Assert.IsNotNull(model);
-            Assert.AreEqual(employerAccountData.CompanyName, model.CompanyName);
-            Assert.AreEqual(employerAccountData.CompanyStatus, model.CompanyStatus);
-            Assert.AreEqual(employerAccountData.CompanyNumber, model.CompanyNumber);
-            Assert.AreEqual(employerAccountData.EmployerRef, model.EmployerRef);
-            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.EmpRefNotFound);
-            Assert.AreEqual(employerAccountData.HideBreadcrumb, model.HideBreadcrumb);
-
         }
     }
 }

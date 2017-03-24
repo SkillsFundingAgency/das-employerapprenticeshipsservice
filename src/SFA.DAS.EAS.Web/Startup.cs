@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -18,7 +19,10 @@ using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
+using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 
 [assembly: OwinStartup(typeof(Startup))]
@@ -35,55 +39,52 @@ namespace SFA.DAS.EAS.Web
         {
             var config = GetConfigurationObject();
 
-            if (config.Identity.UseFake)
-            {
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "Cookies",
-                    LoginPath = new PathString("/home/FakeUserSignIn")
-                });
-            }
-            else
-            {
-                var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
-                var logger = LogManager.GetLogger("Startup");
+            
+            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestraor>();
+            var logger = LogManager.GetLogger("Startup");
             
 
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
-                JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Cookies",
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "TempState",
+                AuthenticationMode = AuthenticationMode.Passive
+            });
+
+            var constants = new Constants(config.Identity);
+
+            var urlHelper = new UrlHelper();
+
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://"+ config.DashboardUrl + "/service/password/change")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
+
+            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
+            {
+                ClientId = config.Identity.ClientId,
+                ClientSecret = config.Identity.ClientSecret,
+                Scopes = config.Identity.Scopes,
+                BaseUrl = constants.Configuration.BaseAddress,
+                TokenEndpoint = constants.TokenEndpoint(),
+                UserInfoEndpoint = constants.UserInfoEndpoint(),
+                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
+                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
+                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
+                AuthenticatedCallback = identity =>
                 {
-                    AuthenticationType = "Cookies",
-                    ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                    SlidingExpiration = true
-                });
+                    PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
+                }
+            });
 
-                app.UseCookieAuthentication(new CookieAuthenticationOptions
-                {
-                    AuthenticationType = "TempState",
-                    AuthenticationMode = AuthenticationMode.Passive
-                });
-
-                var constants = new Constants(config.Identity);
-                app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-                {
-                    ClientId = config.Identity.ClientId,
-                    ClientSecret = config.Identity.ClientSecret,
-                    Scopes = config.Identity.Scopes,
-                    BaseUrl = constants.Configuration.BaseAddress,
-                    TokenEndpoint = constants.TokenEndpoint(),
-                    UserInfoEndpoint = constants.UserInfoEndpoint(),
-                    AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-                    TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
-                    TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
-                    AuthenticatedCallback = identity =>
-                    {
-                        PostAuthentiationAction(identity, authenticationOrchestrator, logger, constants);
-                    }
-                });
-                
-            }
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
@@ -95,9 +96,24 @@ namespace SFA.DAS.EAS.Web
 
             return () =>
             {
-                var certificatePath = $@"{AppDomain.CurrentDomain.BaseDirectory}App_Data\Certificates\DasIDPCert.pfx";
+                var store = new X509Store(StoreLocation.LocalMachine);
+                store.Open(OpenFlags.ReadOnly);
+                try
+                {
+                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
-                return new X509Certificate2(certificatePath, "idsrv3test");
+                    if (certificates.Count < 1)
+                    {
+                        throw new Exception($"Could not find certificate with thumbprint {thumbprint} in LocalMachine store");
+                    }
+
+                    return certificates[0];
+                }
+                finally
+                {
+                    store.Close();
+                }
             };
         }
 
@@ -118,8 +134,6 @@ namespace SFA.DAS.EAS.Web
 
             Task.Run(async () =>
             {
-
-
                 await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName);
             }).Wait();
 

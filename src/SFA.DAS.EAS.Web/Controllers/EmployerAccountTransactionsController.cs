@@ -20,21 +20,21 @@ namespace SFA.DAS.EAS.Web.Controllers
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
         
-        [Route("Balance")]
+        [Route("balance")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            if (transactionViewResult.Account == null)
+            if (transactionViewResult.Data.Account == null)
             {
                 return RedirectToAction("Index", "AccessDenied");
             }
 
-            transactionViewResult.Model.Data.HashedAccountId = hashedAccountId;
-            return View(transactionViewResult.Model);
+            transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
+            return View(transactionViewResult.Data.Model);
         }
 
-        [Route("Balance/LevyDeclarationDetail")]
+        [Route("balance/levyDeclaration/details")]
         public async Task<ActionResult> LevyDeclarationDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.FindAccountLevyDeclarationTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("LevyDeclarationDetail", viewModel);
         }
 
-        [Route("Balance/PaymentDetail")]
+        [Route("balance/payment/details")]
         public async Task<ActionResult> PaymentDetail(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.FindAccountPaymentTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));

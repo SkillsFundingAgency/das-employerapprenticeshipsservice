@@ -13,7 +13,8 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Web.Models;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -41,12 +42,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new EmployerAccountPayeListViewModel
                 {
                     HashedId = hashedAccountId,
-                    PayeSchemes = response.PayeSchemes
+                    PayeSchemes = response.PayeSchemes,
+                    ShowHistory = Configuration.ShowPayeHistory()
                 }
             };
         }
 
-        public async Task<OrchestratorResponse<AddNewPayeScheme>> GetPayeConfirmModel(string hashedId, string code, string redirectUrl, NameValueCollection nameValueCollection)
+        public async Task<OrchestratorResponse<AddNewPayeSchemeViewModel>> GetPayeConfirmModel(string hashedId, string code, string redirectUrl, NameValueCollection nameValueCollection)
         { 
             var response = await GetGatewayTokenResponse(code, redirectUrl, nameValueCollection);
             if (response.Status != HttpStatusCode.OK)
@@ -56,9 +58,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.FlashMessage.Headline = "PAYE scheme not added";
                 response.FlashMessage.Message = "You need to grant authority to HMRC to add a PAYE scheme.";
 
-                return new OrchestratorResponse<AddNewPayeScheme>
+                return new OrchestratorResponse<AddNewPayeSchemeViewModel>
                 {
-                    Data = new AddNewPayeScheme
+                    Data = new AddNewPayeSchemeViewModel
                     {
                         HashedAccountId = hashedId
                     },
@@ -72,12 +74,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var hmrcResponse = await GetHmrcEmployerInformation(response.Data.AccessToken, string.Empty);
             
 
-            return new OrchestratorResponse < AddNewPayeScheme > { 
-               Data = new AddNewPayeScheme
+            return new OrchestratorResponse < AddNewPayeSchemeViewModel > { 
+               Data = new AddNewPayeSchemeViewModel
             {
                  
                 HashedAccountId = hashedId,
                 PayeScheme = hmrcResponse.Empref,
+                PayeName = hmrcResponse?.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                 EmprefNotFound = hmrcResponse.EmprefNotFound,
                 AccessToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.AccessToken : "",
                 RefreshToken = !string.IsNullOrEmpty(hmrcResponse.Empref) ? response.Data.RefreshToken : ""
@@ -123,19 +126,38 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
         
 
-        public async Task AddPayeSchemeToAccount(AddNewPayeScheme model, string userId)
+        public virtual async Task<OrchestratorResponse<AddNewPayeSchemeViewModel>> AddPayeSchemeToAccount(AddNewPayeSchemeViewModel model, string userId)
         {
-            await Mediator.SendAsync(new AddPayeToAccountCommand
+            var response = new OrchestratorResponse<AddNewPayeSchemeViewModel> { Data = model };
+
+            try
             {
-                HashedAccountId = model.HashedAccountId,
-                AccessToken = model.AccessToken,
-                RefreshToken = model.RefreshToken,
-                Empref = model.PayeScheme,
-                ExternalUserId = userId,
-            });
+                await Mediator.SendAsync(new AddPayeToAccountCommand
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    AccessToken = model.AccessToken,
+                    RefreshToken = model.RefreshToken,
+                    Empref = model.PayeScheme,
+                    ExternalUserId = userId,
+                    EmprefName = model.PayeName
+                });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                response.Status = HttpStatusCode.Unauthorized;
+                response.Exception = ex;
+            }
+            catch (InvalidRequestException ex)
+            {
+                response.Status = HttpStatusCode.BadRequest;
+                response.Data.ErrorDictionary = ex.ErrorMessages;
+                response.Exception = ex;
+            }
+
+            return response;
         }
 
-        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> GetRemovePayeSchemeModel(RemovePayeScheme model)
+        public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
             var response = await
                     Mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -146,12 +168,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             model.AccountName = response.Account.Name;
 
-            return new OrchestratorResponse<RemovePayeScheme> {Data = model};
+            return new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
         }
 
-        public virtual async Task<OrchestratorResponse<RemovePayeScheme>> RemoveSchemeFromAccount(RemovePayeScheme model)
+        public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> RemoveSchemeFromAccount(RemovePayeSchemeViewModel model)
         {
-            var response = new OrchestratorResponse<RemovePayeScheme> {Data = model};
+            var response = new OrchestratorResponse<RemovePayeSchemeViewModel> {Data = model};
             try
             {
                 await Mediator.SendAsync(new RemovePayeFromAccountCommand
@@ -177,9 +199,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<PayeSchemeDetail>>  GetPayeDetails(string empRef, string hashedAccountId, string userId)
+        public async Task<OrchestratorResponse<PayeSchemeDetailViewModel>>  GetPayeDetails(string empRef, string hashedAccountId, string userId)
         {
-            var response = new OrchestratorResponse<PayeSchemeDetail>();
+            var response = new OrchestratorResponse<PayeSchemeDetailViewModel>();
             try
             {
                 var result = await Mediator.SendAsync(new GetEmployerEnglishFractionQuery
@@ -188,7 +210,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     EmpRef = empRef,
                     UserId = userId
                 });
-                response.Data = new PayeSchemeDetail {Fractions = result.Fractions, EmpRef = result.EmpRef, EmpRefAdded = result.EmpRefAddedDate};
+                response.Data = new PayeSchemeDetailViewModel
+                {
+                    Fractions = result.Fractions,
+                    EmpRef = result.EmpRef,
+                    EmpRefAdded = result.EmpRefAddedDate,
+                    ShowHistory = Configuration.ShowPayeHistory()
+                };
                 return response;
             }
             catch (UnauthorizedAccessException )

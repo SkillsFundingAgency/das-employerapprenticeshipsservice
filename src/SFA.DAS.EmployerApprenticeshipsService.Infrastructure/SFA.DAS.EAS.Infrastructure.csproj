@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Pdf, Version=17.2.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Pdf.17.2.0\lib\net40-client\Aspose.Pdf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -58,6 +62,14 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.7.0\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.Platform, Version=3.13.8.999, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.3.13.8\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
       <Private>True</Private>
@@ -82,16 +94,36 @@
       <HintPath>..\packages\NLog.4.3.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.9.123.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.9.123\lib\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+    <Reference Include="Polly, Version=5.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.0.6\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.14.0.17022, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.14.0.17022\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.14.0.17022, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.14.0.17022\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.10.29\lib\net45\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Client.Web, Version=1.0.0.20510, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.Web.1.0.0.20510\lib\net45\SFA.DAS.Audit.Client.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.33.0.25796, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.33.0.25796\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -120,6 +152,18 @@
     </Reference>
     <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.21673, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.21673\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.1.608.0, Culture=neutral, processorArchitecture=MSIL">
@@ -157,6 +201,9 @@
     <Compile Include="Caching\RedisCache.cs" />
     <Compile Include="Caching\TaskSynchronizationScope.cs" />
     <Compile Include="Data\AccountIdUserTableParam.cs" />
+    <Compile Include="Data\IdamsEmailServiceWrapper.cs" />
+    <Compile Include="Data\PayeRepository.cs" />
+    <Compile Include="Data\LegalEntityRepository.cs" />
     <Compile Include="Data\AccountRepository.cs" />
     <Compile Include="Data\AccountTeamRepository.cs" />
     <Compile Include="Data\EnglishFractionRepository.cs" />
@@ -173,29 +220,52 @@
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
+    <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\HmrcExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\IdamsExecutionPolicy.cs" />
+    <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
+    <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
+    <Compile Include="Models\UserResponse.cs" />
     <Compile Include="DependencyResolution\ConfigurationPolicy.cs" />
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
     <Compile Include="DependencyResolution\MessagePolicy.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />
+    <Compile Include="Interfaces\REST\IRestServiceFactory.cs" />
+    <Compile Include="Factories\RestClientFactory.cs" />
+    <Compile Include="Factories\RestServiceFactory.cs" />
+    <Compile Include="Interfaces\REST\IRestClientFactory.cs" />
+    <Compile Include="Interfaces\REST\IRestService.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
-    <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
+    <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
+    <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
+    <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AddressLookupService.cs" />
+    <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
+    <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\DasLevyService.cs" />
-    <Compile Include="Services\ManagedCompanyLookupService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
     <Compile Include="Services\FeatureToggleService.cs" />
     <Compile Include="Services\HashingService.cs" />
+    <Compile Include="Services\HmrcDateService.cs" />
     <Compile Include="Services\HmrcService.cs" />
     <Compile Include="Services\HttpClientWrapper.cs" />
-    <Compile Include="Services\LevyDeclarationFileBasedService.cs" />
+    <Compile Include="Services\PdfService.cs" />
+    <Compile Include="Services\ProviderEmailLookupService.cs" />
+    <Compile Include="Services\ReferenceDataService.cs" />
+    <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\LevyDeclarationFileBase
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Configuration\" />
+    <Folder Include="Interfaces\PostcodeAnywhere\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

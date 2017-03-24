@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
 {
@@ -13,17 +13,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
     {
         private Mock<IUserAccountRepository> _userAccountRepository;
         private GetUserAccountsQueryHandler _getUserAccountsQueryHandler;
-        private List<Account> _accounts;
-        private Account _account;
-
+        private List<Domain.Data.Entities.Account.Account> _accounts;
+        private Domain.Data.Entities.Account.Account _account;
 
         [SetUp]
         public void Arrange()
         {
             _userAccountRepository = new Mock<IUserAccountRepository>();
-            _account = new Account {Name = "Test", RoleId = 1};
-            _accounts = new List<Account> {_account};
-            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts {AccountList = _accounts});
+            _account = new Domain.Data.Entities.Account.Account {Name = "Test", RoleId = 1};
+            _accounts = new List<Domain.Data.Entities.Account.Account> {_account};
+            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts<Domain.Data.Entities.Account.Account> { AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
 
         }

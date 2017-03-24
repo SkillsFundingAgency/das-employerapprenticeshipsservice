@@ -26,44 +26,59 @@ namespace SFA.DAS.EAS.TestCommon.ObjectMothers
                         {
                             Id = "1",
                             LevyDueYtd = 10,
-                            Date = DateTime.UtcNow
+                            SubmissionDate = DateTime.UtcNow
                         },
                         new DasDeclaration
                         {
                             Id = "2",
                             LevyDueYtd = 70,
-                            Date = DateTime.UtcNow.AddMonths(1)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(1)
                         },
                         new DasDeclaration
                         {
                             Id = "3",
                             NoPaymentForPeriod = true,
-                            Date = DateTime.UtcNow.AddMonths(2)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(2)
                         },
                         new DasDeclaration
                         {
                             Id = "4",
                             LevyDueYtd = 80,
-                            Date = DateTime.UtcNow.AddMonths(3)
+                            SubmissionDate = DateTime.UtcNow.AddMonths(3)
                         }
                     }
-                },
-                Fractions = new DasEnglishFractions
+                }
+                }
+               }
+
+            };
+
+
+            return refreshEmployerLevyDataCommand;
+        }
+
+        public static RefreshEmployerLevyDataCommand CreateEndOfYearAdjustment(string empRef, long accountId = 1)
+        {
+            var refreshEmployerLevyDataCommand = new RefreshEmployerLevyDataCommand
+            {
+                AccountId = accountId,
+                EmployerLevyData = new List<EmployerLevyData> {
+                    new EmployerLevyData
                 {
-                    Fractions = new List<DasEnglishFraction>
+                EmpRef = empRef,
+                Declarations = new DasDeclarations
+                {
+                    Declarations = new List<DasDeclaration>
                     {
-                        new DasEnglishFraction
+                        new DasDeclaration
                         {
-                            Amount = 0.89m,
                             Id = "1",
-                            DateCalculated = DateTime.UtcNow
-                        },
-                        new DasEnglishFraction
-                        {
-                            Amount = 0.89m,
-                            Id = "1",
-                            DateCalculated = DateTime.UtcNow
+                            LevyDueYtd = 10,
+                            PayrollYear = "16-17",
+                            PayrollMonth = 12,
+                            SubmissionDate = new DateTime(2017,05,01)
                         }
+                        
                     }
                 }
                 }

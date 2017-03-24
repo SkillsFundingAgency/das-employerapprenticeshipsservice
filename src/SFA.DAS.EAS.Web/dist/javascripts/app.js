@@ -1,5 +1,5 @@
 var sfa = sfa || {};
-    
+
 sfa.homePage = {
     init: function () {
         this.startButton();
@@ -47,10 +47,9 @@ sfa.navigation = {
     init: function () {
         this.setupMenus(this.elems.userNav);
         this.setupEvents(this.elems.userNav);
-        this.linkSettings();
     },
     setupMenus: function (menu) {
-        menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+       menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
     },
     setupEvents: function (menu) {
         var that = this;
@@ -60,6 +59,15 @@ sfa.navigation = {
             e.stopPropagation();
             e.preventDefault();
         });
+        // Focusout event on the links in the dropdown menu
+        menu.find('li.has-sub-menu > ul > li > a').on('focusout', function (e) {
+            // If its the last link in the drop down menu, then close
+            var $that = $(this);
+            if ($(this).parent().is(':last-child')) {
+                that.toggleMenu($that, $that.next('ul'));
+            }
+        });
+
     },
     toggleMenu: function (link, subMenu) {
         var $li = link.parent();
@@ -102,8 +110,40 @@ sfa.navigation = {
     }
 }
 
+sfa.forms = {
+    init: function () {
+        this.preventDoubleSubmit();
+    },
+    preventDoubleSubmit: function () {
+        var forms = $('form').not('.has-client-side-validation');
+        forms.on('submit', function (e) {
+            var button = $(this).find('.button');
+            button.attr('disabled', 'disabled');
+            setTimeout(function () {
+                button.removeAttr('disabled');
+            }, 20000);
+        });
+    },
+    removeDisabledAttr: function () {
+        var btns = $('form').not('.has-client-side-validation').find('.button');
+        btns.removeAttr('disabled');
+    }
+}
 
+window.onunload = function () {
+    sfa.forms.removeDisabledAttr();
+};
+
+sfa.forms.init();
 sfa.navigation.init();
 $('ul#global-nav-links').collapsableNav();
 
-var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox']");
+var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], label input[type='checkbox'], section input[type='radio']");
+var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
+
+
+// cohorts bingo balls - clickable block
+$(".clickable").on('click touchstart', (function () {
+    window.location = $(this).find("a").attr("href");
+    return false;
+}));

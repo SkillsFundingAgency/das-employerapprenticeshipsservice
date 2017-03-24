@@ -25,8 +25,8 @@
     text-decoration: underline;
 }
 .alert-default {
-    background-color: #eaf4f9;
-    border-color: #2b8cc4;
+    background-color: $light-blue-25;
+    border-color: $light-blue;
 }
 
 //validation styles
@@ -37,33 +37,347 @@
     .form-label-bold{
 	    color:$error-colour;
     }
-
 }
 
-.cant-approve{ 
-    
+.cant-approve{     
     .panel{
 	    border-color:$error-colour;
-	    color:$error-colour;
-        
+	    color:$error-colour;     
         p{
             font-weight:bold;
             font-size:19px;
         }
-
         }
 }
 
-
+#apprentice-details{
+     .flash-alert{
+        border-color:$turquoise;
+        .icon-green-tick{
+            background:url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+            padding-left:50px;
+        }
+    }
+    .apprentice-count-heading{
+        margin-top:4.5em;
+        @include media(tablet) {margin-top:1.875em;}
+    }
+    #empty-alert-top{margin-top:30px;}
+    .finishEditingBtn{
+        float:none;
+        margin-bottom:20px;
+    }
+}
 
 .form-group {
     #StartDate_Month,
     #EndDate_Month{
         width:40px;
-    }
-    
+    }   
     #StartDate_Year,
     #EndDate_Year{
         width:60px;
     }
+}
+.tableResponsive{
+     td{font-size:16px;}   
+}
+
+//review cohorts page styles
+#review-cohorts{
+    color:#fff;
+    margin:30px 0;
+    .all-apps{
+        background:#2e3391;
+        padding:20px;
+        margin:20px 0;       
+         @include media(tablet) {
+            margin:auto;
+            width:31%;
+            
+            }
+    }
+    .incomplete-apps{
+        background:#8e2a8d;
+        padding:20px;
+        margin-bottom:20px;     
+        @include media(tablet) {
+            margin:auto;            
+            margin-left:3.3333%;
+            width:31%;
+            }
+    }
+    .total-cost{
+        background:#d03a84;
+        padding:20px;
+        margin-bottom:30px;      
+        @include media(tablet) {
+            margin:auto;
+            margin-left:3.3333%;
+             width:31%;
+            }
+    }
+
+}
+
+
+//cohors summary block styles
+.js-enabled{
+    .clickable{cursor:pointer;}
+}
+#cohorts-landing-page{
+  .bingo-background{
+            background:#2e358b;
+            color:#fff; 
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            
+              @include media(tablet) {
+                    min-height:160px;
+                    width:48%;
+                    padding: 0 15px;
+              }
+              h2{margin-top:20px;
+                 a{
+                     text-decoration:none;
+                     color:#fff;
+                 }
+              }
+              .heading-small{margin-bottom:20px;}
+        }
+ 
+  .block-one, .block-two{
+       @include media(tablet) {
+            margin-bottom:30px;
+            }
+  }
+
+  .block-one,.block-three{
+       @include media(tablet) {
+      margin-right:2%;
+      }
+  }
+  .block-two, .block-four{
+     @include media(tablet) {
+      margin-left:2%;
+      }
+  }
+}
+
+//delete cohort
+#apprentice-details{
+     .delete-button{
+        background-color:$error-colour;
+        float:right;
+        margin:15px 0;
+        @include media(tablet){margin:auto;}
+        }
+}
+
+.grid-row{
+      .flash-alert{
+        border-color:$turquoise;
+         .icon-green-tick{
+            background:url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
+            padding-left:50px;
+            }
+        } 
+}
+
+#agreement-not-signed{
+    .notice{
+        margin:60px 0;
+        .icon-important{
+            background-image: url('/dist/images/icon-important.png');
+            top:13%;
+        }
+    }
+}
+ 
+.grey-background,
+.funding-cap-notification{
+    background:$panel-colour;
+    padding:20px 20px 10px;  
+    .heading-medium{margin-top:10px;}  
+}
+.bubble-arrow{    
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid $panel-colour;
+    content: "";
+    float: right;
+    margin-right: 75px;
+    }
+.overlap-arrow{    
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid $panel-colour;
+    content: "";
+    float: right;
+    margin-right:180px;
+    @include media(tablet) {margin-right: 320px;} 
+    }
+.funding-cap-alert{
+    border-left:10px solid $govuk-blue;
+          a{
+                text-decoration:none;
+                color:$text-colour;
+            }    
+}
+.funding-cap-alert-td{
+     border-bottom:5px solid $govuk-blue;
+      a{
+                text-decoration:none;
+                color:$text-colour;
+            }    
+}
+#add-provider-reference{
+    .ukprn-help{
+        margin-bottom:30px;
+    }
+}
+
+#service-help{
+    margin-top:30px;
+}
+
+// safari on mac icon bug on input fields fix
+body {
+    input::-webkit-contacts-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  }
+}
+
+#apprentice-details{
+    .overlap-notification{
+        border-left:10px solid $red;
+    }
+}
+
+.overlap-alert{
+      border-bottom: 5px solid $red;
+    a{
+        text-decoration:none;
+        color:$text-colour;
+    }
+}
+#finish-editing{
+    .alert-default{
+        border-color:$purple;
+        .heading-medium{
+            font-size:24px;
+        }
+    }
+}
+
+.validation-summary-max-funding{
+    border-color:$purple;
+    #warning-summary{
+        margin-top:0;
+    }
+ }
+  
+//all mobile media query breakpoints
+//==================================
+@media only screen and (max-device-width: 640px),
+only screen and (max-device-width: 667px),
+only screen and (max-width: 480px) {
+
+#apprentice-details {
+    .tableResponsive{
+        margin-top:30px;
+        .funding-cap-alert-td
+            {
+                border-left:10px solid $govuk-blue;
+                background:#fff;
+                  a{
+                    text-decoration:none;
+                    color:$text-colour;
+                     cursor:pointer;
+                }          
+            }
+        .overlap-alert
+             {
+                border-left:10px solid $error-colour;
+                background:#fff;
+                  a{
+                    text-decoration:none;
+                    color:$text-colour;
+                    cursor:pointer;
+                }          
+              }
+    }
+}  
+
+.bubble-arrow,.overlap-arrow {display:none;} 
+      
+.manage-all-apprentices{
+  td:nth-of-type(1):before {
+        content: "Name";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Date of birth";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Satus";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+    }
+
+.to-be-sent-list{
+     td:nth-of-type(1):before {
+        content: "Employer";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+        }
+        td:nth-of-type(2):before {
+        content: "Cohort reference";
+        font-weight: normal;
+        margin-top: 5px;
+        }
+        td:nth-of-type(3):before {
+        content: "Last message";
+        font-weight: normal;
+        margin-top: 5px;
+        word-wrap:break-word;
+        } 
+
+
+
+}
+
+
+}
+
+//delete apprentice
+#edit-apprentice{
+    .delete-button{
+        background-color:$error-colour;
+        float:right;
+        margin:15px 0;
+        @include media(tablet){
+            margin:auto;
+        }
+    }
+}
+
+#confirm-delete{
+    .heading-large{margin-bottom:0;}
+    .heading-small{margin-top:0;}
+    .secondary-text{
+        color:$grey-1;
+    }
+
 }

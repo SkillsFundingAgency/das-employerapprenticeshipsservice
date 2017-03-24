@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using SFA.DAS.Commitments.Api.Types;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
 {
@@ -7,5 +8,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeship
     {
         public long AccountId { get; set; }
         public Apprenticeship Apprenticeship { get; set; }
+
+        public string UserId { get; set; }
     }
 }

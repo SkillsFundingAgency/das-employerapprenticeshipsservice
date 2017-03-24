@@ -7,7 +7,8 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
-using SFA.DAS.EAS.Domain.Entities.Account;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
+using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -59,6 +60,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     });
 
             return result.FractionDetail;
+        }
+
+        public async Task<DasDeclaration> GetLastLevyDeclarationforEmpRef(string empRef)
+        {
+            var result = await _mediator.SendAsync(new GetLastLevyDeclarationQuery
+            {
+                EmpRef = empRef
+            });
+
+            return result.Transaction;
         }
     }
 }

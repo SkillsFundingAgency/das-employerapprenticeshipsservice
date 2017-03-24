@@ -1,7 +1,7 @@
 ﻿
 @using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.EAS.Web
-@using SFA.DAS.EAS.Web.Models
+@using SFA.DAS.EAS.Web.ViewModels
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -10,7 +10,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - Apprentices</title>
+    <title>@ViewBag.Title - Manage apprentices</title>
     <!--[if gt IE 8]><!-->
     <link href="~/dist/css/govuk-template.css" media="screen" rel="stylesheet" /><!--<![endif]-->
     <!--[if IE 6]><link href="/dist/css/govuk-template-ie6.css" media="screen" rel="stylesheet" /><![endif]-->
@@ -29,6 +29,7 @@
     <link rel="apple-touch-icon-precomposed" href="/dist/images/apple-touch-icon-60x60.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:image" content="/dist/images/opengraph-image.png">
+    <meta name="msapplication-config" content="none" />
     <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
     <!--[if IE 6]><link href="@Styles.Url("~/bundles/screenie6")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if IE 7]><link href="@Styles.Url("~/bundles/screenie7")" media="screen" rel="stylesheet" /><![endif]-->
@@ -92,7 +93,7 @@
             </div>
             <div class="header-proposition">
                 <div class="content">
-                    <a id="proposition-name" href="/">Apprenticeships</a>
+                    <a id="proposition-name" href="/">Manage apprenticeships</a>
                 </div>
             </div>
         </div>
@@ -103,24 +104,31 @@
             <div class="phase-banner">
                 <p>
                     <strong class="phase-tag">BETA</strong>
-                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">feedback</a> will help us to improve it. </span>
+                    <span>This is a new service – your <a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">feedback</a> will help us to improve it. </span>
                 </p>
             </div>
 
             @if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null) {
             <div class="account-information" role="navigation">
-                <a href="#user-nav" id="link-settings" aria-hidden="true" aria-label="Access your settings">Settings</a>
                 <nav id="user-nav">
                     <ul role="menubar">
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
                             <li class="has-sub-menu">
-                                <a href="/" role="menuitem">@HttpContext.Current.User.Identity.Name</a>
+                                <a href="/" role="menuitem">Settings</a>
                                 <ul role="menu">
-                                    <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Log out</a></li>
+                                    @if (string.IsNullOrWhiteSpace(ViewBag.HideNav))
+                                    {
+                                    <li><a href="@Url.Action("ViewAccounts", "Home")" role="menuitem">Your accounts</a></li>
+                                    <li><a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem">Rename account</a></li>
+                                    }
+                                    <li><a href="@UserLinksViewModel.ChangePasswordLink">Change your password</a></li>
+                                    <li><a href="@UserLinksViewModel.ChangeEmailLink">Change your email address</a></li>
+                                    
                                 </ul>
                             </li>
-                            <li><a href="@Url.Action("Index", "Home")" role="menuitem">Change levy account</a></li>
+                            <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
+                            
                         }
                         else
                         {
@@ -131,7 +139,6 @@
                         }
                     </ul>
                 </nav>
-               
             </div>
             }
         </div>
@@ -148,7 +155,7 @@
                     <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                     <li><a href="@Url.Action("Index", "EmployerCommitments")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                     <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
-                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Organisations</a></li>
+                    <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
                     <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>
                 </ul>
             </nav>
@@ -170,8 +177,8 @@
             <div class="footer-meta">
                 <div class="footer-meta-inner">
                     <ul class="platform-help-links">
-                        <li><a href="mailto:DASPrivateBeta@apprenticeships.gov.uk?subject=Digital Apprenticeship Service beta query">Contact us</a></li>
-                        <li><a href="https://www.surveymonkey.co.uk/r/accessmylevysurvey" target="_blank">Feedback</a></li>
+                        <li><a href="@Url.Action("Help", "Home")">Help</a></li>
+                        <li><a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank">Feedback</a></li>
                         <li><a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a></li>
                         <li>Built by the <a href="http://gov.uk/sfa" target="_blank">Skills Funding Agency</a></li>
                     </ul>
@@ -196,10 +203,10 @@
 
     @RenderSection("pageSpecificJS", required: false)
 
-    @if (!string.IsNullOrWhiteSpace(SystemDetails.EnvironmentName))
+    @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
         <div class="about">
-            Environment: @SystemDetails.EnvironmentName ● Version: @SystemDetails.VersionNumber
+            Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
         </div>
     }
 
