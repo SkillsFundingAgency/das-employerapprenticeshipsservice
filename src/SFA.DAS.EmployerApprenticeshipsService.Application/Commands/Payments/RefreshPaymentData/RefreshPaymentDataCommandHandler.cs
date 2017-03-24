@@ -6,11 +6,11 @@ using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application.Events.ProcessPayment;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Payments.Events.Api.Client;
 using SFA.DAS.Payments.Events.Api.Types;
+using SFA.DAS.EAS.Domain.Models.Payments;
 
 namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
 {
@@ -100,7 +100,30 @@ namespace SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData
                     courseName = string.Empty;
                 }
 
-                await _dasLevyRepository.CreatePaymentData(payment,message.AccountId,message.PeriodEnd, providerName, courseName);
+                await _dasLevyRepository.CreatePaymentData(
+                    new PaymentDetails
+                    {
+                        Amount = payment.Amount,
+                        ProviderName = providerName,
+                        PeriodEnd = message.PeriodEnd,
+                        CourseName = courseName,
+                        EmployerAccountId = message.AccountId,
+                        ApprenticeshipId = payment.ApprenticeshipId,
+                        ApprenticeshipVersion = payment.ApprenticeshipVersion,
+                        CollectionPeriod = payment.CollectionPeriod,
+                        DeliveryPeriod = payment.DeliveryPeriod,
+                        EmployerAccountVersion = payment.EmployerAccountVersion,
+                        EvidenceSubmittedOn = payment.EvidenceSubmittedOn,
+                        FrameworkCode = payment.FrameworkCode,
+                        FundingSource = payment.FundingSource,
+                        PathwayCode = payment.PathwayCode,
+                        ProgrammeType = payment.ProgrammeType,
+                        StandardCode = payment.StandardCode,
+                        TransactionType = payment.TransactionType,
+                        Ukprn = payment.Ukprn,
+                        Uln = payment.Uln,
+                    });
+                
                 sendPaymentDataChanged = true;
             }
 

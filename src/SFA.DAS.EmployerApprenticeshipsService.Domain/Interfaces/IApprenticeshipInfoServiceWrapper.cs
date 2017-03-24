@@ -8,6 +8,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     {
         Task<StandardsView> GetStandardsAsync(bool refreshCache = false);
         Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false);
-        ProvidersView GetProvider(int ukPrn);
+        ProvidersView GetProvider(long ukPrn);
     }
 }

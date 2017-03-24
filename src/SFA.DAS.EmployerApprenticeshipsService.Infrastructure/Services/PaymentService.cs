@@ -5,26 +5,26 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using NLog;
-using SFA.DAS.Commitments.Api.Client;
-using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Domain;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.Payments.Events.Api.Client;
-
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
-        private readonly ICommitmentsApi _commitmentsApiClient;
+        private readonly IEmployerCommitmentApi _commitmentsApiClient;
         private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoService;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
         public PaymentService(
             IPaymentsEventsApiClient paymentsEventsApiClient,
-            ICommitmentsApi commitmentsApiClient,
+            IEmployerCommitmentApi commitmentsApiClient,
             IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
             IMapper mapper,
             ILogger logger)
@@ -91,15 +91,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return payments;
         }
 
-        private async Task<Apprenticeship> GetApprenticeship(int providerUkPrn, long apprenticeshipId)
+        private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
             {
-                return await _commitmentsApiClient.GetProviderApprenticeship(providerUkPrn, apprenticeshipId);
+                return await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
             }
             catch (Exception e)
             {
-                _logger.Warn(e, $"Unable to get Apprenticeship with provider ID {providerUkPrn} and " +
+                _logger.Warn(e, $"Unable to get Apprenticeship with Employer Account ID {employerAccountId} and " +
                                  $"apprenticeship ID {apprenticeshipId} from commitments API.");
             }
 
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 try
                 {
                     var providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
-                    return providerView?.Providers?.FirstOrDefault();
+                    return providerView?.Provider;
                 }
                 catch (Exception e)
                 {

@@ -93,9 +93,8 @@
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents">
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.17.0.24066, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.17.0.24066\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Events.Api.Client">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
@@ -239,7 +238,6 @@
     <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />
-    <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\ReferenceData\Charity.cs" />
     <Compile Include="Models\ReferenceData\PagedResponse.cs" />
     <Compile Include="Models\ReferenceData\PublicSectorOrganisation.cs" />
@@ -248,7 +246,7 @@
     <Compile Include="Models\AccountTeam\Membership.cs" />
     <Compile Include="Models\AccountTeam\MembershipView.cs" />
     <Compile Include="Interfaces\IPaymentService.cs" />
-     <Compile Include="Models\Payments\PaymentEntry.cs" />
+    <Compile Include="Models\Payments\PaymentEntry.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\FeatureToggle\FeatureToggleItem.cs" />

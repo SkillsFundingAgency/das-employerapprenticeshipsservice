@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.Payments.Events.Api.Client;
 using SFA.DAS.Payments.Events.Api.Types;
 
@@ -177,7 +178,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<Payment>(),It.IsAny<long>(),It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),Times.Never);
+            _dasLevyRepository.Verify(x=>x.CreatePaymentData(It.IsAny<PaymentDetails>()),Times.Never);
         }
 
         [Test]
@@ -187,7 +188,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(),_command.AccountId,_command.PeriodEnd, It.IsAny<string>(), It.IsAny<string>()),Times.Exactly(_paymentData.Items.Length));
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<PaymentDetails>(pd => 
+                                        pd.EmployerAccountId.Equals(_command.AccountId) &&
+                                        pd.PeriodEnd.Equals(_command.PeriodEnd))),
+                                        Times.Exactly(_paymentData.Items.Length));
         }
 
         [Test]
@@ -236,7 +240,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, It.IsAny<string>()), Times.Exactly(_paymentData.Items.Length));
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<PaymentDetails>(pd =>
+                                        pd.EmployerAccountId.Equals(_command.AccountId) &&
+                                        pd.PeriodEnd.Equals(_command.PeriodEnd) &&
+                                        pd.ProviderName.Equals(_provider.ProviderName))), 
+                                        Times.Exactly(_paymentData.Items.Length));
         }
 
         [Test]
@@ -247,7 +255,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, StandardCourseName), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<PaymentDetails>(pd =>
+                                        pd.EmployerAccountId.Equals(_command.AccountId) &&
+                                        pd.PeriodEnd.Equals(_command.PeriodEnd) &&
+                                        pd.ProviderName.Equals(_provider.ProviderName) &&
+                                        pd.CourseName.Equals(StandardCourseName))), 
+                                        Times.Once);
         }
 
         [Test]
@@ -258,7 +271,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshPaymentDataTests
 
             //Assert
             _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Once);
-            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.IsAny<Payment>(), _command.AccountId, _command.PeriodEnd, _provider.ProviderName, FrameworkCourseName), Times.Once);
+            _dasLevyRepository.Verify(x => x.CreatePaymentData(It.Is<PaymentDetails>(pd =>
+                                        pd.EmployerAccountId.Equals(_command.AccountId) &&
+                                        pd.PeriodEnd.Equals(_command.PeriodEnd) &&
+                                        pd.ProviderName.Equals(_provider.ProviderName) &&
+                                        pd.CourseName.Equals(FrameworkCourseName))), Times.Once);
         }
     }
 }

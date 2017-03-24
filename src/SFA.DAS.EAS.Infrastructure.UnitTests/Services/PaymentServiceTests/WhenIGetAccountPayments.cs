@@ -9,9 +9,13 @@ using Moq;
 using NLog;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Payments.Events.Api.Client;
@@ -27,7 +31,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private const string FrameworkCourseName = "Framework Course";
 
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        private Mock<ICommitmentsApi> _commitmentsApiClient;
+        private Mock<IEmployerCommitmentApi> _commitmentsApiClient;
         private Mock<IPaymentsEventsApiClient> _paymentsApiClient;
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
@@ -89,7 +93,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId.ToString());
 
             //Assert
-            _commitmentsApiClient.Verify(x => x.GetProviderApprenticeship(_provider.Ukprn, _apprenticeship.Id), Times.Once);
+            _commitmentsApiClient.Verify(x => x.GetEmployerApprenticeship(AccountId, _apprenticeship.Id), Times.Once);
         }
 
         [Test]
@@ -200,7 +204,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         public async Task ThenShouldLogWarningIfCommitmentsApiCallFails()
         {
             //Arrange
-            _commitmentsApiClient.Setup(x => x.GetProviderApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
+            _commitmentsApiClient.Setup(x => x.GetEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
                 .Throws<WebException>();
 
             //Act
@@ -338,8 +342,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
         private void SetupCommitmentsApiMock()
         {
-            _commitmentsApiClient = new Mock<ICommitmentsApi>();
-            _commitmentsApiClient.Setup(x => x.GetProviderApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
+            _commitmentsApiClient = new Mock<IEmployerCommitmentApi>();
+            _commitmentsApiClient.Setup(x => x.GetEmployerApprenticeship(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(_apprenticeship);
         }
         
@@ -349,7 +353,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Providers = new List<Provider> { _provider }
+                    Provider = _provider
                 });
 
             _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(false))
