@@ -197,6 +197,19 @@
     }
 }
 
+.legal-warning {
+    @include bold-19;
+    position: relative;
+    padding-left: 50px;
+    margin: 30px 0;
+    .icon {
+        @include icon(icon-important, 35, 35, '../../dist/images');
+        position: absolute;
+        top: 5px;
+        left: 0;
+    }
+}
+
 /* PDF */
 #layout-agreement {
     * {

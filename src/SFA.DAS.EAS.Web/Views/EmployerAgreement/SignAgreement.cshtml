@@ -33,7 +33,7 @@
         <h2 class="heading-large">Accept this agreement</h2>
         <table>
             <tr>
-                <th scope="row">Accepted by:</th>
+                <th scope="row" class="no-wrap">Accepted by:</th>
                 <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
@@ -45,7 +45,7 @@
                 <td>@Model.Data.EmployerAgreement.LegalEntityAddress</td>
             </tr>
             <tr>
-                <th scope="row">Accepted on:</th>
+                <th scope="row" class="no-wrap">Accepted on:</th>
                 <td>@DateTime.Today.ToString("dd/MM/yyyy")</td>
             </tr>
 
@@ -54,6 +54,7 @@
             @Html.AntiForgeryToken()
             <input class="button" type="submit" value="Accept and finish" />
         </form>
+        <p class="legal-warning"><span class="icon"></span>This agreement is legally binding. You must have authority from your organisation to accept it.</p>
     </div>
 </div>
 
