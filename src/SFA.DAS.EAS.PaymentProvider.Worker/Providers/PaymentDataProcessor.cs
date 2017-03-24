@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
@@ -24,25 +26,49 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
             _logger = logger;
         }
 
-        public async Task Handle()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
-            var message = await _pollingMessageReceiver.ReceiveAsAsync<PaymentProcessorQueueMessage>();
-
-            if(message?.Content?.AccountId != null)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                _logger.Info($"Processing refresh payment command for AccountId:{message.Content.AccountId} PeriodEnd:{message.Content.PeriodEndId}");
-                await _mediator.SendAsync(new RefreshPaymentDataCommand
+                var message = await _pollingMessageReceiver.ReceiveAsAsync<PaymentProcessorQueueMessage>();
+
+                try
                 {
-                    AccountId = message.Content.AccountId,
-                    PeriodEnd = message.Content.PeriodEndId,
-                    PaymentUrl = message.Content.AccountPaymentUrl
-                });
+                    await ProcessMessage(message);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Fatal(ex,
+                        $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                    break; //Stop processing anymore messages as this failure needs to be investigated
+                }
+            }
+        }
+
+        private async Task ProcessMessage(Message<PaymentProcessorQueueMessage> message)
+        {
+            if (message?.Content?.AccountId == null)
+            {
+                _logger.Warn("Payment message has invalid content and cannot be processed");
+
+                if (message != null)
+                {
+                    await message.CompleteAsync();
+                }
+
+                return;
             }
 
-            if (message != null)
+            _logger.Info($"Processing refresh payment command for AccountId:{message.Content.AccountId} PeriodEnd:{message.Content.PeriodEndId}");
+
+            await _mediator.SendAsync(new RefreshPaymentDataCommand
             {
-                await message.CompleteAsync();
-            }
+                AccountId = message.Content.AccountId,
+                PeriodEnd = message.Content.PeriodEndId,
+                PaymentUrl = message.Content.AccountPaymentUrl
+            });
+
+            await message.CompleteAsync();
         }
     }
 }
