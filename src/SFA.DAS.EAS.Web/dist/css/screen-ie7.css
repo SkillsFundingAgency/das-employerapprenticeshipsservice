@@ -2872,6 +2872,15 @@ table.organisations td + td + td {
   margin-bottom: 30px;
 }
 
+.agreement a.background {
+  margin-top: 10px;
+  margin-left: 30px;
+  display: inline-block;
+  font-weight: normal;
+  color: white;
+  text-decoration: none;
+}
+
 .agreement ol li {
   list-style: decimal;
   font-weight: bold;
@@ -3040,7 +3049,21 @@ table.organisations td + td + td {
 }
 
 #layout-agreement .agreement #contents {
+  display: block;
+}
+
+#layout-agreement .agreement #contents h2 {
   display: none;
+}
+
+#layout-agreement .agreement #contents a {
+  color: black;
+  cursor: text;
+}
+
+#layout-agreement .agreement #contents ol {
+  list-style: decimal;
+  color: black;
 }
 
 #layout-agreement .agreement p.updated {
@@ -3064,7 +3087,6 @@ table.organisations td + td + td {
   clear: left;
   border-top: 1px solid white;
   margin-left: -45px;
-  padding-left: 45px;
 }
 
 #layout-agreement .agreement .agreement-contents h2 .number {
@@ -3086,6 +3108,19 @@ table.organisations td + td + td {
 
 #layout-agreement .agreement .agreement-contents h2 {
   margin-left: -45px;
+  margin-bottom: 0;
+  margin-top: 40px;
+  padding-left: 45px;
+}
+
+#layout-agreement .agreement .agreement-contents p span.point {
+  font-weight: bold;
+  color: green;
+  width: 30px;
+  display: block;
+  margin-bottom: -1.3em;
+  margin-left: -40px;
+  padding-top: 5px;
 }
 
 #layout-agreement table.sign-agreement th {
