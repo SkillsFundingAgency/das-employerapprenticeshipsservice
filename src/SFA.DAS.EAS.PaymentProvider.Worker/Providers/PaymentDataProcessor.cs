@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
                 catch (Exception ex)
                 {
                     _logger.Fatal(ex,
-                        $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                        $"Refresh payment message processing failed for account with ID [{message?.Content?.AccountId}]");
                     break; //Stop processing anymore messages as this failure needs to be investigated
                 }
             }
