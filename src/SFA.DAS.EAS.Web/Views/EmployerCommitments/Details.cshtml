@@ -70,7 +70,7 @@
        
     <div class="column-one-half employer-details">
             <p class="strong">Message:</p>
-            <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
+            <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No message added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
 
@@ -136,7 +136,7 @@
                         }
                         else if (group.ShowFundingLimitWarning && !Model.Data.HasOverlappingErrors)
                         {
-                            <div class="funding-cap-notification grey-background" id="max-funding-group-@group.GroupId">
+                            <div class="funding-cap-alert grey-background" id="max-funding-group-@group.GroupId">
                                 <p class="heading-small">
                                     @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
