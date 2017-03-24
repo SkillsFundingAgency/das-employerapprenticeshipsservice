@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -18,20 +15,21 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
 {
     public class WhenIProcessPaymentData
     {
-        private PaymentDataProcessor _paymentDataProcessor;
-        private Mock<IPollingMessageReceiver> _messageReceiver;
-        private Mock<IMediator> _mediator;
-        private Mock<ILogger> _logger;
-
         private const long ExpectedAccountId = 545648975;
         private const string ExpectedAccountPaymentUrl = "http://someurlForTestData";
         private const string ExpectedPeriodEndId = "R16-17";
 
-
+        private PaymentDataProcessor _paymentDataProcessor;
+        private Mock<IPollingMessageReceiver> _messageReceiver;
+        private Mock<IMediator> _mediator;
+        private Mock<ILogger> _logger;
+        private  CancellationTokenSource _cancellationTokenSource;
+        
         [SetUp]
         public void Arrange()
         {
             var stubDataFile = new FileInfo(@"C:\SomeFile.txt");
+            _cancellationTokenSource = new CancellationTokenSource();
 
             _messageReceiver = new Mock<IPollingMessageReceiver>();
             _mediator = new Mock<IMediator>();
@@ -43,7 +41,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
                         AccountId = ExpectedAccountId,
                         AccountPaymentUrl = ExpectedAccountPaymentUrl,
                         PeriodEndId = ExpectedPeriodEndId
-                    }));
+                    })).Callback(() => {_cancellationTokenSource.Cancel();});
 
             _logger = new Mock<ILogger>();
 
@@ -54,7 +52,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         public async Task ThenTheQueueIsReadForNewMessages()
         {
             //Act
-            await _paymentDataProcessor.Handle();
+            await _paymentDataProcessor.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
             _messageReceiver.Verify(x=>x.ReceiveAsAsync<PaymentProcessorQueueMessage>(), Times.Once);
@@ -65,10 +63,12 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         {
             //Arrange
             var fileSystemMessage = new Mock<Message<PaymentProcessorQueueMessage>>();
-            _messageReceiver.Setup(x => x.ReceiveAsAsync<PaymentProcessorQueueMessage>()).ReturnsAsync(fileSystemMessage.Object);
+            _messageReceiver.Setup(x => x.ReceiveAsAsync<PaymentProcessorQueueMessage>())
+                            .ReturnsAsync(fileSystemMessage.Object)
+                            .Callback(() => { _cancellationTokenSource.Cancel(); });
 
             //Act
-            await _paymentDataProcessor.Handle();
+            await _paymentDataProcessor.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
             _mediator.Verify(x=>x.SendAsync(It.IsAny<RefreshPaymentDataCommand>()),Times.Never);
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
         public async Task ThenTheCommandIsCalledIfTheMessageHasData()
         {
             //Act
-            await _paymentDataProcessor.Handle();
+            await _paymentDataProcessor.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<RefreshPaymentDataCommand>(c=>c.AccountId.Equals(ExpectedAccountId) 
@@ -93,10 +93,11 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.UnitTests.Providers.PaymentDataProc
             //Arrange
             var fileSystemMessage = new Mock<Message<PaymentProcessorQueueMessage>>();
             _messageReceiver.Setup(x => x.ReceiveAsAsync<PaymentProcessorQueueMessage>())
-                .ReturnsAsync(fileSystemMessage.Object);
+                .ReturnsAsync(fileSystemMessage.Object)
+                .Callback(() => {_cancellationTokenSource.Cancel();});
 
             //Act
-            await _paymentDataProcessor.Handle();
+            await _paymentDataProcessor.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
             fileSystemMessage.Verify(x=>x.CompleteAsync(),Times.Once);
