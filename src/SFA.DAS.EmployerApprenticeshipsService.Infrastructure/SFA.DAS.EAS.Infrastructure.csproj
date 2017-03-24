@@ -260,7 +260,7 @@
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\PaymentService.cs" />
-    <Compile Include="Services\LevyDeclarationFileBase
+    <Compile Include="Services\LevyDeclarationFileBase" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>
