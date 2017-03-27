@@ -4049,6 +4049,10 @@ span.helpText {
   margin: 30px 0;
 }
 
+#review-cohorts .heading-small {
+  font-size: 24px;
+}
+
 #review-cohorts .all-apps {
   background: #2e3391;
   padding: 20px;
@@ -4094,6 +4098,10 @@ span.helpText {
   cursor: pointer;
 }
 
+#cohorts-landing-page .heading-small {
+  font-size: 24px;
+}
+
 #cohorts-landing-page .bingo-background {
   background: #2e358b;
   color: #fff;
@@ -4103,7 +4111,7 @@ span.helpText {
 
 @media (min-width: 641px) {
   #cohorts-landing-page .bingo-background {
-    min-height: 160px;
+    min-height: 210px;
     width: 48%;
     padding: 0 15px;
   }
