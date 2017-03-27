@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     StandardCode = 1,
                     ProviderName = "Provider 1",
                     CourseName = "Course 1",
-                    PeriodEnd = "1617 - R12"
+                    PeriodEnd = "1617-R12"
                 }).Wait();
             }
 
