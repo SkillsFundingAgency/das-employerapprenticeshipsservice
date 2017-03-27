@@ -428,6 +428,7 @@
     <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validators\Messages\ValidationMessage.cs" />
     <Compile Include="Validators\Messages\WebApprenticeshipValidationText.cs" />
+    <Compile Include="Validators\UpdateApprenticeshipViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipListItemGroupViewModel.cs" />
@@ -1006,6 +1007,7 @@
     <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\SubmitChanges.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

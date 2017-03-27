@@ -1,8 +1,12 @@
-﻿using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+﻿using FluentValidation.Attributes;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
+    [Validator(typeof(UpdateApprenticeshipViewModelValidator))]
     public class UpdateApprenticeshipViewModel
     {
         public string FirstName { get; set; }
@@ -10,8 +14,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string LastName { get; set; }
 
         public string EmployerRef { get; set; }
-
-        public Apprenticeship OriginalApprenticeship { get; set; }
 
         public decimal? Cost { get; set; }
 
@@ -26,5 +28,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string TrainingCode { get; set; }
 
         public string TrainingName { get; set; }
+
+        public Apprenticeship OriginalApprenticeship { get; set; }
+
+        public bool? ChangesConfirmend { get; set; }
     }
 }
