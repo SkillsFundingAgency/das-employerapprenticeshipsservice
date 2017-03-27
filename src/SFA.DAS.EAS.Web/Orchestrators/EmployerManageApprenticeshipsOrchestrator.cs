@@ -11,9 +11,11 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using SFA.DAS.EAS.Web.ViewModels;
-using AutoMapper;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -145,6 +147,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                    Data = await apprenticeships
                     };
                 }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
+        {
+            var overlappingErrors = await _mediator.SendAsync(
+                new GetOverlappingApprenticeshipsQueryRequest
+                {
+                    Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapFrom(apprenticeship) }
+                });
+
+            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()

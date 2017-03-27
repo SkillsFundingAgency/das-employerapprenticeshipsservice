@@ -377,7 +377,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         Apprenticeship = apprenticeship,
                         ApprenticeshipProgrammes = await GetTrainingProgrammes(),
-                        ValidationErrors = MapOverlappingErrors(overlaps)
+                        ValidationErrors = _apprenticeshipMapper.MapOverlappingErrors(overlaps)
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -946,10 +946,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var overlappingErrors = await _mediator.SendAsync(
                 new GetOverlappingApprenticeshipsQueryRequest
                 {
-                    Apprenticeship = new List<Apprenticeship> { await MapFrom(apprenticeship) }
+                    Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapFrom(apprenticeship) }
                 });
 
-            return MapOverlappingErrors(overlappingErrors);
+            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
         }
 
         public async Task DeleteApprenticeship(DeleteApprenticeshipConfirmationViewModel model, string externalUser)
@@ -1051,35 +1051,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
-        {
-            var apprenticeship = new Apprenticeship
-            {
-                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
-                Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth.DateTime,
-                NINumber = viewModel.NINumber,
-                ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
-                StartDate = viewModel.StartDate.DateTime,
-                EndDate = viewModel.EndDate.DateTime,
-                ProviderRef = viewModel.ProviderRef,
-                EmployerRef = viewModel.EmployerRef
-            };
-
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
-            {
-                var training = await GetTrainingProgramme(viewModel.TrainingCode);
-                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                apprenticeship.TrainingCode = viewModel.TrainingCode;
-                apprenticeship.TrainingName = training.Title;
-            }
-
-            return apprenticeship;
-        }
-
         private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
         {
             return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
@@ -1121,39 +1092,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!allowedEditStatuses.Contains(commitment.EditStatus))
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
-        }
-
-        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
-        {
-            var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
-
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
-
-
-            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
-            {
-                switch (item.ValidationFailReason)
-                {
-                    case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        break;
-                    case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                }
-            }
-            return dict;
         }
     }
 }

@@ -7,8 +7,13 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using SFA.DAS.Commitments.Api.Types.Validation.Types;
+using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {
@@ -111,21 +116,67 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return apprenticeship;
         }
 
-        //public ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship)
-        //{
-        //    return new ApprenticeshipListItemViewModel
-        //    {
-        //        HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-        //        ApprenticeName = apprenticeship.ApprenticeshipName,
-        //        ApprenticeDateOfBirth = apprenticeship.DateOfBirth,
-        //        TrainingCode = apprenticeship.TrainingCode,
-        //        TrainingName = apprenticeship.TrainingName,
-        //        Cost = apprenticeship.Cost,
-        //        StartDate = apprenticeship.StartDate,
-        //        EndDate = apprenticeship.EndDate,
-        //        CanBeApproved = apprenticeship.CanBeApproved
-        //    };
-        //}
+        public async Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel)
+        {
+            var apprenticeship = new Apprenticeship
+            {
+                CommitmentId = _hashingService.DecodeValue(viewModel.HashedCommitmentId),
+                Id = string.IsNullOrWhiteSpace(viewModel.HashedApprenticeshipId) ? 0L : _hashingService.DecodeValue(viewModel.HashedApprenticeshipId),
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                DateOfBirth = viewModel.DateOfBirth.DateTime,
+                NINumber = viewModel.NINumber,
+                ULN = viewModel.ULN,
+                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
+                StartDate = viewModel.StartDate.DateTime,
+                EndDate = viewModel.EndDate.DateTime,
+                ProviderRef = viewModel.ProviderRef,
+                EmployerRef = viewModel.EmployerRef
+            };
+
+            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
+            {
+                var training = await GetTrainingProgramme(viewModel.TrainingCode);
+                apprenticeship.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
+                apprenticeship.TrainingCode = viewModel.TrainingCode;
+                apprenticeship.TrainingName = training.Title;
+            }
+
+            return apprenticeship;
+        }
+
+        public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
+        {
+            var dict = new Dictionary<string, string>();
+            const string StartText = "The start date is not valid";
+            const string EndText = "The end date is not valid";
+
+            const string StartDateKey = "StartDateOverlap";
+            const string EndDateKey = "EndDateOverlap";
+
+
+            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
+            {
+                switch (item.ValidationFailReason)
+                {
+                    case ValidationFailReason.OverlappingStartDate:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        break;
+                    case ValidationFailReason.OverlappingEndDate:
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateEmbrace:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                    case ValidationFailReason.DateWithin:
+                        dict.AddIfNotExists(StartDateKey, StartText);
+                        dict.AddIfNotExists(EndDateKey, EndText);
+                        break;
+                }
+            }
+            return dict;
+        }
 
         public async Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(
             Apprenticeship original, ApprenticeshipViewModel edited)

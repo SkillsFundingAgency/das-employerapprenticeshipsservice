@@ -23,6 +23,10 @@
                 </fieldset>
             </div>
 
+            @Html.Hidden("hashedAccountId", Model.Data.Apprenticeship.HashedAccountId)
+            @Html.Hidden("hashedApprenticeshipId", Model.Data.Apprenticeship.HashedApprenticeshipId)
+            @Html.Hidden("hashedCommitmentId", Model.Data.Apprenticeship.HashedCommitmentId)
+            @Html.Hidden("uln", Model.Data.Apprenticeship.ULN)
             <button type="submit" class="button" aria-label="Add">Update details</button>
             <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">
                 Cancel and return
@@ -36,7 +40,7 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.Apprenticeship.HashedAccountId, Model.Data.Apprenticeship.HashedApprenticeshipId} )" aria-label="Back to all apprentices" class="back-link">Back</a>
     </div>
 }
 

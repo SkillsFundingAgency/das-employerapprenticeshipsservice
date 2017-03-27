@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -11,6 +12,8 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -81,24 +84,29 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/confirm")]
-        public async Task<ActionResult> ConfirmChanges(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)
+        public async Task<ActionResult> ConfirmChanges(ApprenticeshipViewModel apprenticeship)
         {
-            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+            if (!await IsUserRoleAuthorized(apprenticeship.HashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
-            // ToDo: Add overlapping errors to ModelState..
+            AddErrorsToModelState(await _orchestrator.ValidateApprenticeship(apprenticeship));
             if (!ModelState.IsValid)
-                return await RedisplayEditApprenticeshipView(apprenticeship, hashedAccountId, hashedApprenticeshipId);
+                return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
 
-            var model = await _orchestrator.GetConfirmChangesModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
+            var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
 
             if (!AnyChanges(model.Data))
             {
                 ModelState.AddModelError("NoChangesRequested", "No changes made");
-                return await RedisplayEditApprenticeshipView(apprenticeship, hashedAccountId, hashedApprenticeshipId);
+                return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
             }
 
             return View(model);
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> dict)
+        {
+            dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
         }
 
         [HttpPost]
