@@ -153,11 +153,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         [Then(@"the balance should be (.*) on the screen")]
         public void ThenTheBalanceShouldBeOnTheScreen(decimal balance)
         {
-            var employerAccountTransactionsOrchestraotor = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
+            var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
-            var actual = employerAccountTransactionsOrchestraotor.GetAccountTransactions(hashedAccountId, userId).Result;
+            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, userId).Result;
 
             Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
         }
