@@ -17,6 +17,7 @@ using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.EAS.Web.Plumbing.Mvc;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -35,6 +36,8 @@ namespace SFA.DAS.EAS.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ModelBinders.Binders.Add(typeof(string), new TrimStringModelBinder());
 
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             FluentValidationModelValidatorProvider.Configure();
