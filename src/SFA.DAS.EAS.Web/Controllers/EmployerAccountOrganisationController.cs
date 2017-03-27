@@ -208,7 +208,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("FindAddress", addressModel);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("address/find")]
         public ActionResult FindAddress(FindOrganisationAddressViewModel request)
         {
@@ -217,6 +217,15 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = request,
                 Status = HttpStatusCode.OK
             };
+
+            if (!string.IsNullOrEmpty(request.OrganisationAddress))
+            {
+                var organisationDetailsViewModel = _orchestrator.StartConfirmOrganisationDetails(request);
+                
+                CreateOrganisationCookieData(organisationDetailsViewModel);
+
+                return RedirectToAction("GatewayInform", "EmployerAccount");
+            }
 
             return View(response);
         }
