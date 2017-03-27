@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateOrganisationAddressTe
             {
                 AddressFirstLine = "123, Test Lane",
                 AddressSecondLine = "Test Garden",
+                AddressThirdLine = "Testing",
                 TownOrCity = "Test Town",
                 County = "Testshire",
                 Postcode = "TE12 3ST"
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateOrganisationAddressTe
         public void ThenIShouldGetBackAAddressInAValidFormatIfTheAddressIsValid()
         {
             //Arange
-            var expectedAddress = $"{_request.AddressFirstLine}, {_request.AddressSecondLine}, " +
+            var expectedAddress = $"{_request.AddressFirstLine}, {_request.AddressSecondLine}, {_request.AddressThirdLine}, " +
                                   $"{_request.TownOrCity}, {_request.County}, {_request.Postcode}";
 
             //Act
