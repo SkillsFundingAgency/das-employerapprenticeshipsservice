@@ -56,6 +56,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _orchestrator
                 .GetApprenticeship(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
+
             return View(model);
         }
 
@@ -99,15 +105,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/changes/SubmitChanges")]
         public async Task<ActionResult> SubmitChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded)
         {
-            //var d  = JsonConvert.DeserializeObject<Apprenticeship>()
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
+            var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+            apprenticeship.OriginalApprenticeship = originalApprenticeship;
+
             if (!ModelState.IsValid)
             {
-                var d = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
-                apprenticeship.OriginalApprenticeship = d;
-
                 var errorModel = new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship };
                 return View("ConfirmChanges", errorModel);
             }
@@ -123,24 +128,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             // var model = await _orchestrator.GetConfirmChangesModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
             var flashmessage = new FlashMessageViewModel
             {
-                Headline = "Changed saved",
-                Message = "You successfully updated sent a change request",
-                Severity = FlashMessageSeverityLevel.Success
+                Message = $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. Your training provider needs to approve these changes.",
+                Severity = FlashMessageSeverityLevel.Okay
             };
             TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
 
-            RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
-
-            return View();
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
-        // ToDo: Delete
-        //[HttpGet]
-        //[Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
-        //public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
+        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            return View();
+        }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)
         {

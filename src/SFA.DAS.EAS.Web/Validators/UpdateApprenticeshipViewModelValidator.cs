@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Web.Validators
     {
         public UpdateApprenticeshipViewModelValidator()
         {
-            RuleFor(x => x.ChangesConfirmend).IsInEnum().WithMessage("Select an option");
+            RuleFor(x => x.ChangesConfirmend).NotNull().WithMessage("Select an option");
         }
     }
 }
