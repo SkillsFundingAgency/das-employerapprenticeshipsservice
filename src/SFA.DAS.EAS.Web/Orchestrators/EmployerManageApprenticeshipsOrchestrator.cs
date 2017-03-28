@@ -15,6 +15,9 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
+using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
+using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 
@@ -59,7 +62,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                     var apprenticeships = data.Apprenticeships
                         .OrderBy(m => m.ApprenticeshipName)
-                        .Select(_apprenticeshipMapper.MapToApprenticeshipDetailsViewModel)
+                        .Select(m => _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(m, default(ApprenticeshipUpdate)))
                         .ToList();
 
                     var model = new ManageApprenticeshipsViewModel
@@ -86,9 +89,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return await CheckUserAuthorization(async () =>
                 {
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                    var q = await _mediator.SendAsync(
+                        new GetApprenticeshipUpdateRequest { AccountId = accountId, ApprenticehsipId = apprenticeshipId } );
+
+                    var detailsViewModel = 
+                        _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship, q.ApprenticeshipUpdate);
+
                     return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
                                {
-                                   Data = _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship)
+                                   Data = detailsViewModel
                                };
                 }, hashedAccountId, externalUserId);
         }
@@ -165,6 +175,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
 
             return programmes.TrainingProgrammes;
+        }
+
+        public void CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId)
+        {
+            var employerId = _hashingService.DecodeValue(hashedAccountId);
+            _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+                {
+                    EmployerId = employerId,
+                    ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),
+                    UserId = userId
+                });
         }
     }
 }

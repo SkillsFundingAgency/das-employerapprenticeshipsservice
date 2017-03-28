@@ -104,12 +104,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
-        private void AddErrorsToModelState(Dictionary<string, string> dict)
-        {
-            dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
-        }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/SubmitChanges")]
         public async Task<ActionResult> SubmitChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded)
         {
@@ -134,6 +130,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             //return await RedisplayEditApprenticeshipView(apprenticeship);
 
             // var model = await _orchestrator.GetConfirmChangesModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
+            _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+
             var flashmessage = new FlashMessageViewModel
             {
                 Message = $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. Your training provider needs to approve these changes.",
@@ -176,6 +175,11 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return await _orchestrator
                 .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> dict)
+        {
+            dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
         }
     }
 }

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
@@ -168,6 +172,9 @@
     <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommand.cs" />
     <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommandResponse.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommand.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\CreateApprenticeship\CreateApprenticeshipCommandValidator.cs" />
@@ -325,6 +332,9 @@
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQuery.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQueryValidator.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateRequest.cs" />
+    <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateResponse.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />

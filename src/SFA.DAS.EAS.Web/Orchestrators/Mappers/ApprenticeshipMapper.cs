@@ -40,8 +40,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             _mediator = mediator;
         }
 
-        public ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship)
+        public ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship, ApprenticeshipUpdate apprenticeshipUpdate)
         {
+            var pendingChange = PendingChanges.None;
+            if (apprenticeshipUpdate?.Originator == Originator.Employer)
+                pendingChange = PendingChanges.WaitingForApproval;
+            if (apprenticeshipUpdate?.Originator == Originator.Provider)
+                pendingChange = PendingChanges.ReadyForApproval;
+
             var statusText =
                 apprenticeship.StartDate.HasValue
                 && apprenticeship.StartDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1)
@@ -59,7 +65,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 Status = statusText,
-                ProviderName = string.Empty
+                ProviderName = string.Empty,
+                PendingChanges = pendingChange
             };
         }
 
@@ -178,6 +185,25 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return dict;
         }
 
+        public ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel)
+        {
+            return new ApprenticeshipUpdate
+            {
+                ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
+                Cost = viewModel.Cost,
+                DateOfBirth = viewModel.DateOfBirth?.DateTime,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
+                StartDate = viewModel.StartDate?.DateTime,
+                EndDate = viewModel.EndDate?.DateTime,
+                Originator = Originator.Employer,
+                Status = ApprenticeshipUpdateStatus.Pending,
+                TrainingName = viewModel.TrainingName, 
+                TrainingCode = viewModel.TrainingCode,
+                TrainingType = viewModel.TrainingType,
+            };
+        }
+
         public async Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(
             Apprenticeship original, ApprenticeshipViewModel edited)
         {
@@ -187,14 +213,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             // ToDo: The rest of the mapping
             var model = new UpdateApprenticeshipViewModel
             {
-                // HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
-                // HashedCommitmentId = _hashingService.HashValue(apprenticeship.CommitmentId),
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),
                 LastName = changedOrNull(original.LastName, edited.LastName),
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
                     ? null
                     : edited.DateOfBirth,
-                // ULN = apprenticeship.ULN,
                 Cost = NullableDecimalToString(original.Cost) == edited.Cost 
                     ? default(decimal?) 
                     : string.IsNullOrEmpty(edited.Cost) ? 0m : decimal.Parse(edited.Cost),

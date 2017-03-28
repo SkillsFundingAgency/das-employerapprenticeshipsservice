@@ -12,13 +12,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
     public interface IApprenticeshipMapper
     {
         Task<Apprenticeship> MapFromAsync(ApprenticeshipViewModel viewModel);
-        ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship);
+
+        ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship, ApprenticeshipUpdate apprenticeshipUpdate);
+
         ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship);
-        //ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship);
+
         Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(Apprenticeship original, ApprenticeshipViewModel edited);
 
         Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel);
 
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
+
+        ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel);
     }
 }

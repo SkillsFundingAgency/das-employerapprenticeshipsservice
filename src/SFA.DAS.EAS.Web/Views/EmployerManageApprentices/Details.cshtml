@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ApprenticeshipDetailsViewModel>
 
 @{
@@ -18,18 +19,23 @@
         </div>*@
 
        <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
-            
-            <div class="panel panel-border-wide alert-default">
-                <p>There are changes to this apprentice's details that you need to review.  Until you've reviewed the changes, you'll only be able to edit the apprentice's status. </p>
-                <p><a href="#">Review changes</a></p>
-            </div>
 
-        <div class="panel panel-border-wide">
-            <p>
-                There are changes to this apprentice's details that are waiting for approval by the training provider.  You can continue to edit this apprentice if you need to.
-            <p><a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a></p>
-            </p>
-        </div>
+            @if (Model.Data.PendingChanges == PendingChanges.ReadyForApproval)
+            {
+                <div class="panel panel-border-wide alert-default">
+                    <p>There are changes to this apprentice's details that you need to review.  Until you've reviewed the changes, you'll only be able to edit the apprentice's status. </p>
+                    <p><a href="#">Review changes</a></p>
+                </div>
+            }else if (Model.Data.PendingChanges == PendingChanges.WaitingForApproval)
+            {
+
+                <div class="panel panel-border-wide">
+                    <p>
+                        There are changes to this apprentice's details that are waiting for approval by the training provider.  You can continue to edit this apprentice if you need to.
+                    <p><a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a></p>
+                    </p>
+                </div>
+            }
 
 
           
@@ -71,7 +77,10 @@
                     <tr>
                         <th colspan="2">
                             Apprentice
-                            <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
+                            @if (Model.Data.PendingChanges == PendingChanges.None)
+                            {
+                                <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
+                            }
                         </th>
                     </tr>
                 </thead>

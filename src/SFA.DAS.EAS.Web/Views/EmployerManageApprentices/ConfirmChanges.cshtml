@@ -46,7 +46,9 @@
                             <td>Date of birth</td>
                             <td>@Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat() </td>
                             <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("DateOfBirth", Model.Data.DateOfBirth)
+                            @Html.Hidden("DateOfBirth.Day", Model.Data.DateOfBirth.Day)
+                            @Html.Hidden("DateOfBirth.Month", Model.Data.DateOfBirth.Month)
+                            @Html.Hidden("DateOfBirth.Year", Model.Data.DateOfBirth.Year)
                         </tr>
                     }
 
@@ -66,10 +68,10 @@
                             <td>Planned training start date</td>
                             <td>@Model.Data.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
                             <td class="changed-item">@Model.Data.StartDate.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("StartDate", Model.Data.StartDate)
+                            @Html.Hidden("StartDate.Month", Model.Data.StartDate.Month)
+                            @Html.Hidden("StartDate.Year", Model.Data.StartDate.Year)
                         </tr>
                     }
-
 
                     @if (Model.Data.EndDate?.DateTime != null)
                     {
@@ -77,7 +79,8 @@
                             <td>Planned training end date</td>
                             <td>@Model.Data.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
                             <td class="changed-item">@Model.Data.EndDate.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("EndDate", Model.Data.EndDate)
+                            @Html.Hidden("EndDate.Month", Model.Data.EndDate.Month)
+                            @Html.Hidden("EndDate.Year", Model.Data.EndDate.Year)
                         </tr>
                     }
 
@@ -109,12 +112,10 @@
                         <legend class="visually-hidden">Do you want to make these changes?</legend>
 
                         <label class="block-label selection-button-radio" for="changes-confirmend-true">
-                            @*<input id="radio-1" type="radio" name="radio-group" value="yes change">*@
                             @Html.RadioButton("ChangesConfirmend", true, new { id ="changes-confirmend-true" })
                             Yes, change these details
                         </label>
                         <label class="block-label selection-button-radio" for="changes-confirmend-false">
-                            @*<input id="radio-2" type="radio" name="radio-group" value="no change">*@
                             @Html.RadioButton("ChangesConfirmend", false, new { id = "changes-confirmend-false" })
                             No, don't change these details
                         </label>
