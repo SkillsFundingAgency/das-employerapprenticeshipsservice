@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress
             var addressBuilder = new StringBuilder();
             addressBuilder.Append(request.AddressFirstLine + ", ");
             addressBuilder.Append(string.IsNullOrEmpty(request.AddressSecondLine) ? string.Empty : request.AddressSecondLine + ", ");
+            addressBuilder.Append(string.IsNullOrEmpty(request.AddressThirdLine) ? string.Empty : request.AddressThirdLine + ", ");
             addressBuilder.Append(request.TownOrCity + ", ");
             addressBuilder.Append(string.IsNullOrEmpty(request.County) ? string.Empty : request.County + ", ");
             addressBuilder.Append(request.Postcode.Trim());

@@ -37,18 +37,20 @@
                     if (!result.AddedToAccount)
                     {
                         <li>
-                            <a href="@Url.Action("FindAddress", "EmployerAccountOrganisation", new
-                                     {
-                                         OrganisationName = result.Name,
-                                         OrganisationType = OrganisationType.PublicBodies,
-                                         OrganisationReferenceNumber = result.ReferenceNumber,
-                                         OrganisationDateOfInception = result.DateOfInception,
-                                         PublicSectorDataSource = result.PublicSectorDataSource,
-                                         OrganisationStatus = result.Status,
-                                         Sector = result.Sector
-                                     })">
-                                @result.Name
-                            </a>
+                            <form action="@Url.Action("FindAddress", "EmployerAccountOrganisation")" method="post">
+                                <input type="hidden" id="OrganisationHashedId" name="OrganisationHashedId" value="@Model.Data.HashedAccountId" />
+                                <input type="hidden" id="OrganisationDateOfInception" name="OrganisationDateOfInception" value="@result.DateOfInception" />
+                                <input type="hidden" id="OrganisationReferenceNumber" name="OrganisationReferenceNumber" value="@result.ReferenceNumber" />
+                                <input type="hidden" id="PublicSectorDataSource" name="PublicSectorDataSource" value="@result.PublicSectorDataSource" />
+                                <input type="hidden" id="OrganisationType" name="OrganisationType" value="@OrganisationType.PublicBodies" />
+                                <input type="hidden" id="Sector" name="Sector" value="@result.Sector" />
+                                <input type="hidden" id="Status" name="Status" value="@result.Status" />
+                                <input type="hidden" id="OrganisationName" name="OrganisationName" value="@result.Name" />
+                                <input type="hidden" id="OrganisationAddress" name="OrganisationAddress" value="@result.Address" />
+                                <button type="submit" class="link-button">@result.Name</button>
+                            </form>
+
+
                         </li>
                     }
                     else

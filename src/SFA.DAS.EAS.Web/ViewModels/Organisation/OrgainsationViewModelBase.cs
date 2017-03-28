@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public short? PublicSectorDataSource { get; set; }
         public string OrganisationStatus { get; set; }
         public string Sector { get; set; }
+        public string OrganisationAddress { get; set; }
     }
 }
