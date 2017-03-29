@@ -153,8 +153,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 var standardsView = await _apprenticeshipInfoService.GetStandardsAsync();
 
-                return standardsView.Standards.SingleOrDefault(s =>
-                                             s.Code.Equals(standardCode));
+                return standardsView.Standards.SingleOrDefault(s => s.Code.Equals(standardCode));
             }
             catch (Exception e)
             {

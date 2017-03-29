@@ -228,7 +228,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
                 parameters.Add("@PaymentId", Guid.Parse(details.Id), DbType.Guid);
                 parameters.Add("@Ukprn", details.Ukprn, DbType.Int64);
-                parameters.Add("@ProviderName", details.ProviderName, DbType.StringFixedLength,ParameterDirection.Input,250);
+                parameters.Add("@ProviderName", details.ProviderName, DbType.String);
                 parameters.Add("@Uln", details.Uln, DbType.Int64);
                 parameters.Add("@AccountId", details.EmployerAccountId, DbType.Int64);
                 parameters.Add("@ApprenticeshipId", details.ApprenticeshipId, DbType.Int64);
@@ -248,7 +248,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@FrameworkCode", details.FrameworkCode, DbType.Int32);
                 parameters.Add("@ProgrammeType", details.ProgrammeType, DbType.Int32);
                 parameters.Add("@PathwayCode", details.PathwayCode, DbType.Int32);
-                parameters.Add("@CourseName", details.CourseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
+                parameters.Add("@CourseName", details.CourseName, DbType.String);
                 parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
                 parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);
                 parameters.Add("@ApprenticeshipCourseLevel", details.CourseLevel, DbType.Int32);

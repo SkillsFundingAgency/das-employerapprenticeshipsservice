@@ -1,14 +1,14 @@
 ﻿CREATE TABLE [employer_financial].[PaymentMetaData]
 (
 	[Id] BIGINT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
-    [ProviderName] NVARCHAR(MAX) NULL,
+    [ProviderName] VARCHAR(MAX) NULL,
     [StandardCode] BIGINT NULL, 
     [FrameworkCode] INT NULL, 	
     [ProgrammeType] INT NULL, 
     [PathwayCode] INT NULL, 
-    [ApprenticeshipCourseName] NVARCHAR(MAX) NULL, 
+    [ApprenticeshipCourseName] VARCHAR(MAX) NULL, 
 	[ApprenticeshipCourseStartDate] DATETIME NULL, 
 	[ApprenticeshipCourseLevel] INT NULL, 
-    [ApprenticeName] NVARCHAR(MAX) NULL, 
-    [ApprenticeNINumber] VARCHAR(10) NULL
+    [ApprenticeName] VARCHAR(MAX) NULL, 
+    [ApprenticeNINumber] VARCHAR(MAX) NULL
 )
