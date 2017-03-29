@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IUserWhiteList userWhiteList,
             IMapper mapper,
             ILogger logger) 
-            :base(owinWrapper, featureToggle, userWhiteList)
+            :base(owinWrapper, featureToggle)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;

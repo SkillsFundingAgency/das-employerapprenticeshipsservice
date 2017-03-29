@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

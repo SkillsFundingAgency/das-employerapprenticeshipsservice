@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public HomeController(IOwinWrapper owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerApprenticeshipsServiceConfiguration configuration, IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;

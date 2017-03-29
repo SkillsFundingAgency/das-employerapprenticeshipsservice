@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList, EmployerApprenticeshipsServiceConfiguration configuration) 
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));

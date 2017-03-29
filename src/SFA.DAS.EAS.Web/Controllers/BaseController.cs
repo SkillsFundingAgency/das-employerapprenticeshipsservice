@@ -15,17 +15,14 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class BaseController : Controller
     {
         private readonly IFeatureToggle _featureToggle;
-        private readonly IUserWhiteList _userWhiteList;
         protected IOwinWrapper OwinWrapper;
 
         public BaseController(
             IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle, 
-            IUserWhiteList userWhiteList)
+            IFeatureToggle featureToggle)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
-            _userWhiteList = userWhiteList;
         }
 
 
@@ -60,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.OK || orchestratorResponse.Status == HttpStatusCode.BadRequest)
-                return base.View(viewName, masterName, orchestratorResponse);
+                return ReturnViewResult(viewName, masterName, orchestratorResponse);
 
             if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
             {
@@ -80,6 +77,11 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return base.View(@"GenericError", masterName, orchestratorResponse);
+        }
+
+        private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
+        {
+            return base.View(viewName, masterName, orchestratorResponse);
         }
 
 

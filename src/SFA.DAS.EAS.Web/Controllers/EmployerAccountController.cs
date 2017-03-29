@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList, ILogger logger)
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));

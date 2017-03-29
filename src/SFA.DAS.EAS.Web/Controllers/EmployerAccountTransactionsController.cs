@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, 
             EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IUserWhiteList userWhiteList) 
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }

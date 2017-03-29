@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
         internal class TestController : BaseController
         {
             public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList)
-                : base(owinWrapper, featureToggle, userWhiteList)
+                : base(owinWrapper, featureToggle)
             {
 
             }

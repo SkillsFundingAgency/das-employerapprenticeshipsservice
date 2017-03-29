@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
             IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
-            : base(owinWrapper, featureToggle, userWhiteList)
+            : base(owinWrapper, featureToggle)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }

@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle, 
             IUserWhiteList userWhiteList)
-                : base(owinWrapper, featureToggle, userWhiteList)
+                : base(owinWrapper, featureToggle)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));
