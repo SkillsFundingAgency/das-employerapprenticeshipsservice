@@ -330,6 +330,31 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateEnglishFractions
 
         }
 
+        [Test]
+        public async Task ThenTheEmprefUsedInTheResponseFromTheCommandIsTheSameAsTheMessagePassed()
+        {
+            //Arrange
+            var expectedEmpref = "789UJY";
+            _hmrcService.Setup(x => x.GetEnglishFractions(expectedEmpref, It.IsAny<DateTime?>()))
+                .ReturnsAsync(new EnglishFractionDeclarations
+                {
+                    Empref = "123/ABC",
+                    FractionCalculations = _fractionCalculations
+                });
+
+            //Act
+            await _handler.Handle(new UpdateEnglishFractionsCommand
+            {
+                EmployerReference = expectedEmpref,
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
+            });
+
+            //Assert
+            _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
+               It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[0])),
+               expectedEmpref), Times.Once);
+        }
+
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)
         {
             var fractiondateString = fraction.DateCalculated.ToShortDateString();
