@@ -109,17 +109,22 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             var accountId = (long) ScenarioContext.Current["AccountId"];
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
 
+            var paymentsList = new List<PaymentDetails>();
+
             foreach (var tableRow in table.Rows)
             {
-                dasLevyRepository.CreatePaymentData(new PaymentDetails
+                var payment = new PaymentDetails
                 {
                     Id = Guid.NewGuid().ToString(),
                     Amount = Convert.ToDecimal(tableRow["Payment_Amount"]),
                     TransactionType = TransactionType.Learning,
                     ProgrammeType = tableRow["Payment_Type"].ToLower().Equals("levy") ? 1 : 2,
-                    DeliveryPeriod = new CalendarPeriod { Month = 1, Year = 2016 },
-                    CollectionPeriod = new NamedCalendarPeriod { Id = "1617-R12", Month = 1, Year = 2016 },
-                    FundingSource = tableRow["Payment_Type"].ToLower().Equals("levy") ? FundingSource.Levy : FundingSource.CoInvestedEmployer,
+                    DeliveryPeriod = new CalendarPeriod {Month = 1, Year = 2016},
+                    CollectionPeriod = new NamedCalendarPeriod {Id = "1617-R12", Month = 1, Year = 2016},
+                    FundingSource =
+                        tableRow["Payment_Type"].ToLower().Equals("levy")
+                            ? FundingSource.Levy
+                            : FundingSource.CoInvestedEmployer,
                     EvidenceSubmittedOn = DateTime.Now,
                     EmployerAccountVersion = "123",
                     ApprenticeshipId = 1,
@@ -133,8 +138,14 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
                     ProviderName = "Provider 1",
                     CourseName = "Course 1",
                     PeriodEnd = "1617-R12"
-                }).Wait();
+                };
+
+                paymentsList.Add(payment);
+
+                dasLevyRepository.CreatePaymentData(payment).Wait();
             }
+
+            ScenarioContext.Current["payments"] = paymentsList;
 
             dasLevyRepository.CreateNewPeriodEnd(new PeriodEnd
             {
