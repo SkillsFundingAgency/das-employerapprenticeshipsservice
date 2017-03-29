@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<Invitation> Get(long accountId, string email);
         Task ChangeStatus(Invitation invitation);
         Task Resend(Invitation invitation);
-        Task<long> Accept(string email, long accountId, short roleId);
+        Task Accept(string email, long accountId, short roleId);
         Task<int> GetNumberOfInvites(string userId);
     }
 }

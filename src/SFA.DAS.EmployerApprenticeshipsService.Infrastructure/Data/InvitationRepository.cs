@@ -137,25 +137,20 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             });
         }
 
-        public async Task<long> Accept(string email, long accountId, short roleId)
-        {
-            long membershipId = 0;
-
+        public async Task Accept(string email, long accountId, short roleId)
+        { 
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@email", email, DbType.String);
                 parameters.Add("@accountId", accountId, DbType.Int64);
                 parameters.Add("@roleId", roleId, DbType.Int16);
-                parameters.Add("@MembershipId", membershipId, direction: ParameterDirection.Output);
 
                 return await c.ExecuteAsync(
                     sql: "[employer_account].[AcceptInvitation]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
-
-            return membershipId;
         }
 
         public async Task<int> GetNumberOfInvites(string userId)

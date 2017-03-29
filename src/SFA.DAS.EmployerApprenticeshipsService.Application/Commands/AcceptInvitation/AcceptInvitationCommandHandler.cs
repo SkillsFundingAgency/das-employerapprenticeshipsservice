@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
             if (existing.ExpiryDate < DateTimeProvider.Current.UtcNow)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Invitation", "Invitation has expired" } });
 
-            var membershipId = await _invitationRepository.Accept(existing.Email, existing.AccountId, (short) existing.RoleId);
+            await _invitationRepository.Accept(existing.Email, existing.AccountId, (short) existing.RoleId);
 
             await _auditService.SendAuditMessage(new EasAuditMessage
             {
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Commands.AcceptInvitation
                     {
                         PropertyUpdate.FromString("Status", InvitationStatus.Accepted.ToString())
                     },
-                RelatedEntities = new List<Entity> { new Entity { Id = membershipId.ToString(), Type = "Membership" } },
+                RelatedEntities = new List<Entity> { new Entity { Id =$"Account Id [{existing.AccountId}], User Id [{user.Id}]", Type = "Membership" } },
                 AffectedEntity = new Entity { Type = "Invitation", Id = message.Id.ToString() }
             });
         }
