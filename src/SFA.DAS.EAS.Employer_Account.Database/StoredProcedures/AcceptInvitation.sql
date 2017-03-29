@@ -2,7 +2,8 @@
 (
 	@email NVARCHAR(255),
 	@accountId BIGINT,
-	@roleId TINYINT
+	@roleId TINYINT,
+	@membershipId BIGINT = null OUTPUT
 )
 AS
 BEGIN
@@ -21,5 +22,7 @@ BEGIN
 
 	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId])
 	VALUES (@accountId, @userId, @roleId);
+
+	SELECT @membershipId = SCOPE_IDENTITY()
 END
 GO
