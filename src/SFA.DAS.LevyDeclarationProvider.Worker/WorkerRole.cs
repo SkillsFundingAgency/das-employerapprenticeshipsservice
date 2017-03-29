@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
@@ -14,8 +13,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
         private IContainer _container;
 
         public override void Run()
@@ -26,11 +25,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
 
             try
             {
-                RunAsync(cancellationTokenSource.Token).Wait();
+                var levyDeclaration = _container.GetInstance<ILevyDeclaration>();
+                levyDeclaration.RunAsync(_cancellationTokenSource.Token).Wait();
             }
             finally
             {
-                runCompleteEvent.Set();
+                _runCompleteEvent.Set();
             }
         }
 
@@ -49,8 +49,6 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
                 c.AddRegistry<DefaultRegistry>();
             });
 
-
-
             var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker has been started");
@@ -62,25 +60,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker
         {
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker is stopping");
 
-            this.cancellationTokenSource.Cancel();
-            this.runCompleteEvent.WaitOne();
+            this._cancellationTokenSource.Cancel();
+            this._runCompleteEvent.WaitOne();
 
             base.OnStop();
 
             Trace.TraceInformation("SFA.DAS.LevyDeclarationProvider.Worker has stopped");
-        }
-
-        private async Task RunAsync(CancellationToken cancellationToken)
-        {
-            var levyDeclaration = _container.GetInstance<ILevyDeclaration>();
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                Trace.TraceInformation("Working");
-                
-                await levyDeclaration.Handle();
-                await Task.Delay(1000, cancellationToken);
-            }
         }
     }
 }

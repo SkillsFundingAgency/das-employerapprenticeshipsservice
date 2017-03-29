@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View("AddOrganisation", errorResponse);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("address/find")]
         public ActionResult FindAddress(FindOrganisationAddressViewModel request)
         {
@@ -175,6 +175,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Data = request,
                 Status = HttpStatusCode.OK
             };
+
 
             return View(response);
         }
@@ -208,6 +209,14 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("address/update")]
         public ActionResult AddOrganisationAddress(AddOrganisationAddressViewModel request)
         {
+
+            if (!string.IsNullOrEmpty(request.OrganisationAddress))
+            {
+                var organisationDetailsViewModel = _orchestrator.StartConfirmOrganisationDetails(request);
+                return View("ConfirmOrganisationDetails", organisationDetailsViewModel);
+            }
+
+
             if (request.Address == null)
             {
                 request.Address = new AddressViewModel();

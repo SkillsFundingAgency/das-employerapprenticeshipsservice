@@ -70,7 +70,7 @@
        
     <div class="column-one-half employer-details">
             <p class="strong">Message:</p>
-            <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No note added" : Model.Data.LatestMessage)</p>
+            <p>@(string.IsNullOrWhiteSpace(Model.Data.LatestMessage) ? "No message added" : Model.Data.LatestMessage)</p>
     </div>
 </div>
 
@@ -136,9 +136,9 @@
                         }
                         else if (group.ShowFundingLimitWarning && !Model.Data.HasOverlappingErrors)
                         {
-                            <div class="funding-cap-notification grey-background" id="max-funding-group-@group.GroupId">
+                            <div class="funding-cap-alert grey-background" id="max-funding-group-@group.GroupId">
                                 <p class="heading-small">
-                                    @($"{group.ApprenticeshipsOverFundingLimit} {group.TrainingProgramme.Title} {PluraliseApprentice(group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
+                                    @($"{group.ApprenticeshipsOverFundingLimit}  {_addS("apprenticeship", group.ApprenticeshipsOverFundingLimit).ToLower()} above funding band maximum")
                                 </p>
                                 <p>
                                     The costs are above the &pound;@group.TrainingProgramme.MaxFunding.ToString("N0") <a target="_blank" href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">maximum value of the funding band</a> for this apprenticeship. You'll need to pay the difference directly to the training provider - this can't be funded from your account.
@@ -247,6 +247,8 @@
 
         return $"{apprenticeships.Count} Apprentices";
     }
+
+    readonly Func<string, int, string> _addS = (word, count) => count == 1 ? word : $"{word}s";
 
     public string PluraliseApprentice(int count)
     {
