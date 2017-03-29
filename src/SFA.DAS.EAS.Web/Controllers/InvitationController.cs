@@ -20,8 +20,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
         public InvitationController(InvitationOrchestrator invitationOrchestrator, IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList, EmployerApprenticeshipsServiceConfiguration configuration) 
-            : base(owinWrapper, featureToggle)
+            IFeatureToggle featureToggle, IUserViewTestingService userViewTestingService, EmployerApprenticeshipsServiceConfiguration configuration) 
+            : base(owinWrapper, featureToggle,userViewTestingService)
         {
             if (invitationOrchestrator == null)
                 throw new ArgumentNullException(nameof(invitationOrchestrator));

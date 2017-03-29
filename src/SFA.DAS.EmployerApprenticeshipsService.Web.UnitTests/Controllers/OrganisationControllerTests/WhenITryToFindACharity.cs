@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<OrganisationOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IUserViewTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
 
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _orchestrator = new Mock<OrganisationOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
-            _userWhiteList = new Mock<IUserWhiteList>();
+            _userViewTestingService = new Mock<IUserViewTestingService>();
             _mapper = new Mock<IMapper>();
 
             _orchestrator.Setup(x => x.GetCharityByRegistrationNumber(It.Is<string>(c => c == "12345"), It.IsAny<string>(), It.IsAny<string>()))
@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 _featureToggle.Object,
-                _userWhiteList.Object,
+                _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object);
         }

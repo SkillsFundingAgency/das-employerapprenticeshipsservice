@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private HomeController _homeController;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IUserViewTestingService> _userViewTestingService;
 
         [SetUp]
         public void Arrange()
@@ -21,10 +21,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
             _featureToggle = new Mock<IFeatureToggle>();
-            _userWhiteList = new Mock<IUserWhiteList>();
+            _userViewTestingService = new Mock<IUserViewTestingService>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, null, _configuration.Object, _featureToggle.Object, _userWhiteList.Object);
+                _owinWrapper.Object, null, _configuration.Object, _featureToggle.Object, _userViewTestingService.Object);
         }
 
         [Test]

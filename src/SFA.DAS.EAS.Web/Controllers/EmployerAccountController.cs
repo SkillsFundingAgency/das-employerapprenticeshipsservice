@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILogger _logger;
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList, ILogger logger)
-            : base(owinWrapper, featureToggle)
+            IFeatureToggle featureToggle, IUserViewTestingService userViewTestingService, ILogger logger)
+            : base(owinWrapper, featureToggle,userViewTestingService)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));

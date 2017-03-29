@@ -15,14 +15,18 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class BaseController : Controller
     {
         private readonly IFeatureToggle _featureToggle;
+        private readonly IUserViewTestingService _userViewTestingService;
         protected IOwinWrapper OwinWrapper;
+        
 
         public BaseController(
             IOwinWrapper owinWrapper, 
-            IFeatureToggle featureToggle)
+            IFeatureToggle featureToggle,
+            IUserViewTestingService userViewTestingService)
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
+            _userViewTestingService = userViewTestingService;
         }
 
 

@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IUserViewTestingService> _userViewTestingService;
         private TestController _controller;
 
         [SetUp]
@@ -32,15 +32,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
             _featureToggle.Setup(x => x.GetFeatures())
                 .Returns(new FeatureToggleLookup { Data = new List<FeatureToggleItem>() });
 
-            _userWhiteList = new Mock<IUserWhiteList>();
-
+            
 
             var routes = new RouteData();
             routes.Values["action"] = "TestView";
             routes.Values["controller"] = "Test";
             _controllerContext.Setup(x => x.RouteData).Returns(routes);
 
-            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _userWhiteList.Object)
+            _controller = new TestController(_featureToggle.Object, _owinWrapper.Object, _userViewTestingService.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -141,8 +140,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserWhiteList userWhiteList)
-                : base(owinWrapper, featureToggle)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserViewTestingService userViewTestingService)
+                : base(owinWrapper, featureToggle, userViewTestingService)
             {
 
             }

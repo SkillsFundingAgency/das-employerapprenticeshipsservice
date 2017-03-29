@@ -17,8 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
 
         public EmployerAgreementController(IOwinWrapper owinWrapper, EmployerAgreementOrchestrator orchestrator, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
-            : base(owinWrapper, featureToggle)
+            IFeatureToggle featureToggle, IUserViewTestingService userViewTestingService) 
+            : base(owinWrapper, featureToggle, userViewTestingService)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));
