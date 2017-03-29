@@ -18,8 +18,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
         public EmployerTeamController(IOwinWrapper owinWrapper, EmployerTeamOrchestrator employerTeamOrchestrator, 
-            IFeatureToggle featureToggle, IUserViewTestingService userViewTestingService) 
-            : base(owinWrapper, featureToggle, userViewTestingService)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService) 
+            : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }

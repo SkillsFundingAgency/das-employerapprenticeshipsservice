@@ -18,8 +18,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
-            IFeatureToggle featureToggle, IUserViewTestingService userViewTestingService) 
-            : base(owinWrapper, featureToggle, userViewTestingService)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService) 
+            : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

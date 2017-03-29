@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<IUserViewTestingService> _userViewTestingService;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
         private TestController _controller;
 
         [SetUp]
@@ -140,8 +140,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.BaseControllerTests
 
         internal class TestController : BaseController
         {
-            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IUserViewTestingService userViewTestingService)
-                : base(owinWrapper, featureToggle, userViewTestingService)
+            public TestController(IFeatureToggle featureToggle, IOwinWrapper owinWrapper, IMultiVariantTestingService multiVariantTestingService)
+                : base(owinWrapper, featureToggle, multiVariantTestingService)
             {
 
             }

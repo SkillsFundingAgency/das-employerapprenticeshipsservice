@@ -19,8 +19,8 @@ namespace SFA.DAS.EAS.Web.Controllers
             EmployerManageApprenticeshipsOrchestrator orchestrator, 
             IOwinWrapper owinWrapper,
             IFeatureToggle featureToggle,
-            IUserViewTestingService userViewTestingService)
-                : base(owinWrapper, featureToggle, userViewTestingService)
+            IMultiVariantTestingService multiVariantTestingService)
+                : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             if (orchestrator == null)
                 throw new ArgumentNullException(nameof(orchestrator));

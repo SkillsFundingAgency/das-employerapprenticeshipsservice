@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserViewTestingService> _userViewTestingService;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
 
         [SetUp]
         public void Arrange()
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
-            _userViewTestingService = new Mock<IUserViewTestingService>();
+            _userViewTestingService = new Mock<IMultiVariantTestingService>();
 
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>

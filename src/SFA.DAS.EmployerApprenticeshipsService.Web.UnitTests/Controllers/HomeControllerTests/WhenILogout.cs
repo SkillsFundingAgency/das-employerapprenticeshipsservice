@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private HomeController _homeController;
         private Mock<EmployerApprenticeshipsServiceConfiguration> _configuration;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserViewTestingService> _userViewTestingService;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
 
         [SetUp]
         public void Arrange()
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _configuration = new Mock<EmployerApprenticeshipsServiceConfiguration>();
             _featureToggle = new Mock<IFeatureToggle>();
-            _userViewTestingService = new Mock<IUserViewTestingService>();
+            _userViewTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(
                 _owinWrapper.Object, null, _configuration.Object, _featureToggle.Object, _userViewTestingService.Object);

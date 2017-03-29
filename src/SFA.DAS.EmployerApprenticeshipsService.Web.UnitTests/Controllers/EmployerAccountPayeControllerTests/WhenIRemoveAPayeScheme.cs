@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         private Mock<IOwinWrapper> _owinWrapper;
         private EmployerAccountPayeController _controller;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserViewTestingService> _userViewTestingService;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
 
         [SetUp]
         public void Arrange()
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("123abc");
             _featureToggle = new Mock<IFeatureToggle>();
-            _userViewTestingService = new Mock<IUserViewTestingService>();
+            _userViewTestingService = new Mock<IMultiVariantTestingService>();
 
             _controller = new EmployerAccountPayeController(
                 _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userViewTestingService.Object);
