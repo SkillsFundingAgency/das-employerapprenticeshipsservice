@@ -159,6 +159,7 @@
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Interfaces\IProviderEmailLookupService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
+    <Compile Include="Interfaces\IUserViewTestingService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\CreateAccountResult.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
@@ -276,6 +277,9 @@
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />
+    <Compile Include="Models\UserView\UserViewItem.cs" />
+    <Compile Include="Models\UserView\UserViewLookup.cs" />
+    <Compile Include="Models\UserView\ViewAccess.cs" />
     <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
     <Compile Include="Models\PAYE\Paye.cs" />
     <Compile Include="Models\PAYE\PayeView.cs" />
