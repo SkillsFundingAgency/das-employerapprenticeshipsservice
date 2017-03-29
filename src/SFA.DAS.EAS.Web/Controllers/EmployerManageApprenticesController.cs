@@ -51,6 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedApprenticeshipId}/details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedApprenticeshipId)
         {
@@ -69,6 +70,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
         public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
         {
@@ -82,6 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
+        [OutputCache(CacheProfile = "NoCache")]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/confirm")]
         public async Task<ActionResult> ConfirmChanges(ApprenticeshipViewModel apprenticeship)

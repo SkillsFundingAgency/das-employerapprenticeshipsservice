@@ -21,9 +21,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate
 
         public async Task<GetApprenticeshipUpdateResponse> Handle(GetApprenticeshipUpdateRequest message)
         {
-            var result = await _commitmentApi.GetPendingApprenticeshipUpdate(message.AccountId, message.ApprenticehsipId);
-
-            return new GetApprenticeshipUpdateResponse { ApprenticeshipUpdate = result };
+            try
+            {
+                var result = await _commitmentApi.GetPendingApprenticeshipUpdate(message.AccountId, message.ApprenticehsipId);
+                return new GetApprenticeshipUpdateResponse { ApprenticeshipUpdate = result };
+            }
+            catch (NotFoundException exception)
+            {
+                // Remove catch when API is updated.
+                return new GetApprenticeshipUpdateResponse { ApprenticeshipUpdate = null };
+            }
         }
     }
 }

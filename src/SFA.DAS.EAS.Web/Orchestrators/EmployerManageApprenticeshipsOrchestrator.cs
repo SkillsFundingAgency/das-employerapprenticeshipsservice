@@ -20,6 +20,7 @@ using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
+using SFA.DAS.EAS.Web.Exceptions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -111,7 +112,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger.Info($"Getting Approved Apprenticeship for Editing, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             return await CheckUserAuthorization(async () =>
-            {
+                {
+                    await AssertApprenticeshipStatus(accountId, apprenticeshipId);
                 // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
 
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
@@ -140,13 +142,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
-            _logger.Info($"Getting.... ... ... ... ... ...: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+            _logger.Debug($"Getting confirm change model: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             return await CheckUserAuthorization(async () =>
                 {
+                    await AssertApprenticeshipStatus(accountId, apprenticeshipId);
+
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
                     {
-                        AccountId = accountId,
+                        AccountId = accountId,  
                         ApprenticeshipId = apprenticeshipId
                     });
 
@@ -186,6 +190,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),
                     UserId = userId
                 });
+        }
+
+        private async Task AssertApprenticeshipStatus(long accountId, long apprenticeshipId)
+        {
+            var result = await _mediator.SendAsync(new GetApprenticeshipUpdateRequest
+                                    {
+                                        AccountId = accountId,
+                                        ApprenticehsipId = apprenticeshipId
+                                    });
+
+            if(result.ApprenticeshipUpdate != null)
+                throw new InvalidStateException("Pending apprenticeship update");
         }
     }
 }
