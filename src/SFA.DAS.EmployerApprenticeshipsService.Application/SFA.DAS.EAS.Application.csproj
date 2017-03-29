@@ -195,8 +195,6 @@
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
-    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
-    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommand.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandHandler.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandValidator.cs" />
@@ -331,9 +329,6 @@
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsHandler.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsQuery.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsResponse.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
