@@ -7,13 +7,13 @@ using SFA.DAS.EAS.Infrastructure.Caching;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class UserViewTestingService : AzureServiceBase<UserViewLookup>, IUserViewTestingService
+    public class MultiVariantTestingService : AzureServiceBase<UserViewLookup>, IMultiVariantTestingService
     {
         private readonly ICacheProvider _cacheProvider;
-        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.UserViewTesting";
+        public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
         public sealed override ILogger Logger { get; set; }
 
-        public UserViewTestingService(ICacheProvider cacheProvider, ILogger logger)
+        public MultiVariantTestingService(ICacheProvider cacheProvider, ILogger logger)
         {
             _cacheProvider = cacheProvider;
             Logger = logger;
