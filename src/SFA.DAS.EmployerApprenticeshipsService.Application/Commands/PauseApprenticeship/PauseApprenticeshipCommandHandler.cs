@@ -8,6 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
 {
+    // TODO: LWA - Are we going to need this class
     public sealed class PauseApprenticeshipCommandHandler : AsyncRequestHandler<PauseApprenticeshipCommand>
     {
         private readonly IEmployerCommitmentApi _commitmentApi;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.PauseApprenticeship
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
 
             var apprenticeshipSubmission = new ApprenticeshipSubmission { PaymentStatus = PaymentStatus.Paused, UserId = message.UserId };
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, apprenticeshipSubmission);
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId, apprenticeshipSubmission);
         }
     }
 }

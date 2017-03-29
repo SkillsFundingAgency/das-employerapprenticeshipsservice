@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-
 using Newtonsoft.Json;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
@@ -14,6 +13,11 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 using WebGrease.Css.Extensions;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using FluentValidation.Mvc;
+using SFA.DAS.EAS.Web.ViewModels;
+using Newtonsoft.Json;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -52,7 +56,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/details")]
+        [Route("{hashedApprenticeshipId}/details", Name = "OnProgrammeApprenticeshipDetails")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -67,6 +71,131 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> ChangeStatus(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            // Only used for authorization and checking status of apprenticeship
+            var response = await _orchestrator.GetChangeStatusChoiceNavigation(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/details/statuschange", Name = "PostChangeStatusSelectOption")]
+        public async Task<ActionResult> ChangeStatus(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            if (!ModelState.IsValid)
+            {
+                return View(new OrchestratorResponse<ChangeStatusViewModel>());
+            }
+
+            if (model.ChangeType == ChangeStatusType.None)
+                return RedirectToRoute("OnProgrammeApprenticeshipDetails");
+
+            return RedirectToRoute("WhenToApplyChange", new { changeType = model.ChangeType.ToString().ToLower() });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/whentoapply", Name = "WhenToApplyChange")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> WhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusType changeType)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var response = await _orchestrator.GetChangeStatusDateOfChangeViewModel(hashedAccountId, hashedApprenticeshipId, changeType, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (response.Data.SkipStep)
+                return RedirectToRoute("StatusChangeConfirmation", new
+                {
+                    changeType = response.Data.ChangeStatusViewModel.ChangeType.ToString().ToLower(),
+                    whenToMakeChange = WhenToMakeChangeOptions.Immediately,
+                    dateOfChange = default(DateTime?)
+                });
+
+            return View(new OrchestratorResponse<WhenToMakeChangeViewModel>
+            {
+                Data = response.Data
+            });
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/whentoapply", Name = "PostWhenToApplyChange")]
+        public async Task<ActionResult> WhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId, [CustomizeValidator(RuleSet = "default,Date")] ChangeStatusViewModel model)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            if (!ModelState.IsValid)
+            {
+                var viewResponse = await _orchestrator.GetChangeStatusDateOfChangeViewModel(hashedAccountId, hashedApprenticeshipId, model.ChangeType.Value, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(new OrchestratorResponse<WhenToMakeChangeViewModel>() { Data = viewResponse.Data });
+            }
+
+            var response = await _orchestrator.ValidateWhenToApplyChange(hashedAccountId, hashedApprenticeshipId, model);
+
+            if (!response.ValidationResult.IsValid())
+            {
+                response.ValidationResult.AddToModelState(ModelState);
+
+                var viewResponse = await _orchestrator.GetChangeStatusDateOfChangeViewModel(hashedAccountId, hashedApprenticeshipId, model.ChangeType.Value, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(new OrchestratorResponse<WhenToMakeChangeViewModel>() { Data = viewResponse.Data });
+            }
+
+            return RedirectToRoute("StatusChangeConfirmation",  new { whenToMakeChange = model.WhenToMakeChange, dateOfChange = response.DateOfChange });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/confirm", Name = "StatusChangeConfirmation")]
+        [OutputCache(CacheProfile = "NoCache")]
+        public async Task<ActionResult> StatusChangeConfirmation(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusType changeType, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var response = await _orchestrator.GetChangeStatusConfirmationViewModel(hashedAccountId, hashedApprenticeshipId, changeType, whenToMakeChange, dateOfChange, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(response);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/details/statuschange/{changeType}/confirm", Name = "PostStatusChangeConfirmation")]
+        public async Task<ActionResult> StatusChangeConfirmation(string hashedAccountId, string hashedApprenticeshipId, [CustomizeValidator(RuleSet = "default,Date,Confirm")] ChangeStatusViewModel model)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            if (!ModelState.IsValid)
+            {
+                return View(new OrchestratorResponse<ConfirmationStateChangeViewModel> { Data = new ConfirmationStateChangeViewModel { ApprenticeName = "Fred", DateOfBirth = new DateTime(1977, 3, 4), ChangeStatusViewModel = model } });
+            }
+
+            if (model.ChangeConfirmed.HasValue && !model.ChangeConfirmed.Value)
+                return RedirectToRoute("OnProgrammeApprenticeshipDetails");
+
+            await _orchestrator.UpdateStatus(hashedAccountId, hashedApprenticeshipId, model, OwinWrapper.GetClaimValue(@"sub"));
+
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = "Apprentice stopped.",
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+
+            return RedirectToRoute("OnProgrammeApprenticeshipDetails");
         }
 
         [HttpGet]

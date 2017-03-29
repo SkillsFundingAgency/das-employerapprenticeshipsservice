@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -78,7 +79,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                             && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
-
+        
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel

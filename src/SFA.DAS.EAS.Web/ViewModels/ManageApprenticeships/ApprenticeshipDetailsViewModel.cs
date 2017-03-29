@@ -25,6 +25,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string ProviderName { get; set; }
 
         public PendingChanges PendingChanges { get; set; }
+        
+        public bool CanEditStatus { get;  set; }
 
         public string RecordStatus { get; set; }
 

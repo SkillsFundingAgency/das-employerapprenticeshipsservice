@@ -25,6 +25,8 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
+using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -34,11 +36,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
+        private readonly ICurrentDateTime _currentDateTime;
 
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
             IApprenticeshipMapper apprenticeshipMapper,
+            ICurrentDateTime currentDateTime,
             ILogger logger) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
@@ -47,12 +51,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(hashingService));
             if (apprenticeshipMapper == null)
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
+            if (currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
+            _currentDateTime = currentDateTime;
             _logger = logger;
         }
 
@@ -232,6 +239,157 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
 
             return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+        }
+
+        public async Task<OrchestratorResponse<ChangeStatusViewModel>> GetChangeStatusChoiceNavigation(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Determining navigation for type of change status selection. AccountId: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                CheckApprenticeshipStateValidForChange(data.Apprenticeship);
+
+                return new OrchestratorResponse<ChangeStatusViewModel> { Data = new ChangeStatusViewModel() };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<OrchestratorResponse<WhenToMakeChangeViewModel>> GetChangeStatusDateOfChangeViewModel(string hashedAccountId, string hashedApprenticeshipId, ViewModels.ManageApprenticeships.ChangeStatusType changeType, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Determining navigation for type of change status selection. AccountId: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                CheckApprenticeshipStateValidForChange(data.Apprenticeship);
+
+                return new OrchestratorResponse<WhenToMakeChangeViewModel>
+                {
+                    Data = new WhenToMakeChangeViewModel
+                    {
+                        StartDate = data.Apprenticeship.StartDate.Value,
+                        SkipStep = data.Apprenticeship.IsWaitingToStart(_currentDateTime),
+                        ChangeStatusViewModel = new ChangeStatusViewModel
+                        {
+                            ChangeType = changeType
+                        }
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task<ValidateWhenToApplyChangeResult> ValidateWhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Validating Date for when to apply change. AccountId: {accountId}, ApprenticeshipId: {apprenticeshipId}, ChangeType: {model.ChangeType}, ChangeDate: {model.DateOfChange.DateTime}");
+
+            var response = await _mediator.SendAsync(new ValidateStatusChangeDateQuery
+            {
+                AccountId = accountId,
+                ApprenticeshipId = apprenticeshipId,
+                ChangeOption = (Domain.Models.Apprenticeship.ChangeOption)model.WhenToMakeChange,
+                DateOfChange = model.DateOfChange.DateTime
+            });
+
+            return new ValidateWhenToApplyChangeResult { ValidationResult = response.ValidationResult, DateOfChange = response.ValidatedChangeOfDate };
+        }
+
+        public async Task<OrchestratorResponse<ConfirmationStateChangeViewModel>> GetChangeStatusConfirmationViewModel(string hashedAccountId, string hashedApprenticeshipId, ViewModels.ManageApprenticeships.ChangeStatusType changeType, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Getting Change Status Confirmation ViewModel. AccountId: {accountId}, ApprenticeshipId: {apprenticeshipId}, ChangeType: {changeType}");
+
+            return await CheckUserAuthorization(async () =>
+            {
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                CheckApprenticeshipStateValidForChange(data.Apprenticeship);
+
+                return new OrchestratorResponse<ConfirmationStateChangeViewModel>
+                {
+                    Data = new ConfirmationStateChangeViewModel
+                    {
+                        ApprenticeName = data.Apprenticeship.ApprenticeshipName,
+                        DateOfBirth = data.Apprenticeship.DateOfBirth.Value,
+                        ChangeStatusViewModel = new ChangeStatusViewModel
+                        {
+                            DateOfChange = DetermineChangeDate(data.Apprenticeship, whenToMakeChange, dateOfChange),
+                            ChangeType = changeType,
+                            WhenToMakeChange = whenToMakeChange,
+                            ChangeConfirmed = false
+                        }
+                    }
+                };
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        public async Task UpdateStatus(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Info($"Updating Apprenticeship status to {model.ChangeType}. AccountId: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            await CheckUserAuthorization(async () =>
+            {
+                var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+
+                CheckApprenticeshipStateValidForChange(data.Apprenticeship);
+
+                await _mediator.SendAsync(new UpdateApprenticeshipStatusCommand
+                {
+                    UserId = externalUserId,
+                    ApprenticeshipId = apprenticeshipId,
+                    EmployerAccountId = accountId,
+                    ChangeType = (Domain.Models.Apprenticeship.ChangeStatusType)model.ChangeType,
+                    DateOfChange = model.DateOfChange.DateTime.Value
+                });
+
+            }, hashedAccountId, externalUserId);
+        }
+
+        private void CheckApprenticeshipStateValidForChange(Apprenticeship apprentice)
+        {
+            if (!IsActiveOrPaused(apprentice))
+            {
+                throw new InvalidStateException($"Apprenticeship not is correct state for change: Current:{apprentice.PaymentStatus}");
+            }
+        }
+
+        private bool IsActiveOrPaused(Apprenticeship apprenticeship)
+        {
+            return apprenticeship.PaymentStatus != PaymentStatus.Withdrawn || apprenticeship.PaymentStatus != PaymentStatus.Completed;
+
+        }
+
+        private DateTimeViewModel DetermineChangeDate(Apprenticeship apprenticeship, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange)
+        {
+            if (apprenticeship.IsWaitingToStart(_currentDateTime))
+            {
+                return new DateTimeViewModel(apprenticeship.StartDate);
+            }
+
+            if (whenToMakeChange == WhenToMakeChangeOptions.Immediately)
+            {
+                return new DateTimeViewModel(_currentDateTime.Now.Date);
+            }
+
+            return new DateTimeViewModel(dateOfChange);
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
