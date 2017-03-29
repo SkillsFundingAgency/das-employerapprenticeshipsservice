@@ -998,6 +998,7 @@
     <Content Include="Views\Home\LegalAgreement.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Index_EF.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
