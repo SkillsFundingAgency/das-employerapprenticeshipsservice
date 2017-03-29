@@ -186,7 +186,6 @@
     <Compile Include="Data\Repositories\BaseRepository.cs" />
     <Compile Include="Data\Repositories\IAccountRepository.cs" />
     <Compile Include="Data\Repositories\IAccountTeamRepository.cs" />
-    <Compile Include="Data\Repositories\IAggregationRepository.cs" />
     <Compile Include="Data\Repositories\IEnglishFractionRepository.cs" />
     <Compile Include="Data\Repositories\IDasLevyRepository.cs" />
     <Compile Include="Data\Repositories\IEmployerAccountRepository.cs" />
