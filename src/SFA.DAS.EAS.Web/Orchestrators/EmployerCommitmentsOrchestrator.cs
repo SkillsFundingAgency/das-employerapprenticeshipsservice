@@ -190,7 +190,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }, hashedAccountId, externalUserId);
         }
 
-        private async Task<Provider> ProviderSearch(int providerId)
+        private async Task<Provider> ProviderSearch(long providerId)
         {
             var response =  await _mediator.SendAsync(new GetProviderQueryRequest
             {

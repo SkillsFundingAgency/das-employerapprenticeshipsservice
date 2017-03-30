@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 Status = statusText,
-                ProviderName =  string.Empty,
+                ProviderName = apprenticeship.ProviderName,
                 PendingChanges = pendingChange,
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 EmployerReference = apprenticeship.EmployerRef,
@@ -289,17 +289,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return pendingUpdateOriginator == Originator.Employer
                 ? "Changes pending" 
                 : "Changes for review" ;
-        }
-
-        private async Task<Provider> ProviderSearch(long providerId)
-        {
-            var response = await _mediator.SendAsync(new GetProviderQueryRequest
-            {
-                // ToDo: To long in request
-                ProviderId = (int)providerId
-            });
-
-            return response.ProvidersView?.Provider;
         }
     }
 }
