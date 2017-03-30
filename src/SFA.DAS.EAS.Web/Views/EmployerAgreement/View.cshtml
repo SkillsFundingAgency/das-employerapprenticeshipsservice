@@ -4,8 +4,11 @@
 @using SFA.DAS.EAS.Web.Extensions
 
 @model OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAgreementViewModel>
-@{ViewBag.Title = "Employer agreement";}
-
+@{
+    ViewBag.PageID = "agreement-view";
+    ViewBag.Title = "Agreement view";
+    ViewBag.Section = "organisations";
+}
 <div class="grid-row">
     <div class="column-two-thirds">
 
