@@ -26,10 +26,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             IOwinWrapper owinWrapper,
             OrganisationOrchestrator orchestrator,
             IFeatureToggle featureToggle,
-            IUserWhiteList userWhiteList,
+            IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILogger logger) 
-            :base(owinWrapper, featureToggle, userWhiteList)
+            :base(owinWrapper, featureToggle,multiVariantTestingService)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;

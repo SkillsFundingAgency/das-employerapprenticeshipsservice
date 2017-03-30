@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         private InvitationController _controller;
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -27,14 +27,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
 
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
-            _userWhiteList = new Mock<IUserWhiteList>();
+            _userViewTestingService = new Mock<IMultiVariantTestingService>();
 
             _invitationOrchestrator = new Mock<InvitationOrchestrator>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userWhiteList.Object, _configuration);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration);
         }
 
         [Test]

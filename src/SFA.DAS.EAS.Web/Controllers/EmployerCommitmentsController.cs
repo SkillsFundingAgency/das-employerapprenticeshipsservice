@@ -31,8 +31,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
 
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
-            : base(owinWrapper, featureToggle, userWhiteList)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService)
+            : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             if (employerCommitmentsOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));

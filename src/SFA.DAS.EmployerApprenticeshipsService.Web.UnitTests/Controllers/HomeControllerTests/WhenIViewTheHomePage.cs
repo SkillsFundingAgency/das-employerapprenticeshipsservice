@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedUserId = "123ABC";
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IMultiVariantTestingService> _userTestingService;
 
         [SetUp]
         public void Arrange()
@@ -59,11 +59,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
             };
 
             _featureToggle = new Mock<IFeatureToggle>();
-            _userWhiteList = new Mock<IUserWhiteList>();
+            _userTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(
                 _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
-                _userWhiteList.Object);
+                _userTestingService.Object);
         }
 
         [Test]

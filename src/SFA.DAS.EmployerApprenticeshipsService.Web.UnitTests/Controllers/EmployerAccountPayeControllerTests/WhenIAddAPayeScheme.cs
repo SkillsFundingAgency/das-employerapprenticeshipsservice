@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         private Mock<IOwinWrapper> _owinWrapper;
         private EmployerAccountPayeController _controller;
         private Mock<IFeatureToggle> _featureToggle;
-        private Mock<IUserWhiteList> _userWhiteList;
+        private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedAccountId = "AFD123";
         private const string ExpectedUserId = "456TGF3";
 
@@ -31,10 +31,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
             _featureToggle = new Mock<IFeatureToggle>();
-            _userWhiteList = new Mock<IUserWhiteList>();
+            _userViewTestingService = new Mock<IMultiVariantTestingService>();
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userWhiteList.Object);
+                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userViewTestingService.Object);
         }
 
         [Test]

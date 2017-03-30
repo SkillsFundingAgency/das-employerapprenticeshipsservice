@@ -2744,6 +2744,10 @@ table.organisations td + td + td {
   margin-bottom: 30px;
 }
 
+.panel-top-margin {
+  margin-top: 20px;
+}
+
 .panel-warning {
   border-top: 10px solid #005ea5;
   padding-left: 50px;
