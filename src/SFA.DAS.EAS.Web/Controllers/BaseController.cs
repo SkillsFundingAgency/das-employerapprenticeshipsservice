@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
+using SFA.DAS.EAS.Domain.Models.UserView;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -42,7 +44,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var orchestratorResponse = model as OrchestratorResponse;
 
-            if (orchestratorResponse == null) return base.View(viewName, masterName, model);
+            if (orchestratorResponse == null)
+            {
+                return base.View(viewName, masterName, model);
+            }
 
             var flashMessage = GetHomePageSucessMessage();
             if (flashMessage != null)
@@ -85,6 +90,46 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private ViewResult ReturnViewResult(string viewName, string masterName, OrchestratorResponse orchestratorResponse)
         {
+
+            var userViews = _multiVariantTestingService.GetMultiVariantViews();
+
+            if (userViews == null)
+            {
+                return base.View(viewName, masterName, orchestratorResponse);
+            }
+
+            var controllerName = ControllerContext.RouteData.Values["Controller"].ToString();
+            var actionName = ControllerContext.RouteData.Values["Action"].ToString();
+            var userView = userViews.Data.SingleOrDefault(c => c.Controller.Equals(controllerName, StringComparison.CurrentCultureIgnoreCase)
+                            && c.Action.Equals(actionName, StringComparison.CurrentCultureIgnoreCase));
+
+            if (userView != null)
+            {
+                if (!userView.SplitAccessAcrossUsers)
+                {
+                    var userEmail = OwinWrapper.GetClaimValue("email");
+
+                    foreach (var view in userView.Views)
+                    {
+                        if (view.EmailAddresses.Any(pattern => Regex.IsMatch(userEmail, pattern, RegexOptions.IgnoreCase)))
+                        {
+                            return base.View(view.ViewName, masterName, orchestratorResponse);
+                        }
+                    }
+                }
+                else
+                {
+                    var randomViewName = _multiVariantTestingService.GetRandomViewNameToShow(userView.Views);
+
+                    if (string.IsNullOrEmpty(randomViewName))
+                    {
+                        return base.View(viewName, masterName, orchestratorResponse);
+                    }
+
+                    return base.View(randomViewName, masterName, orchestratorResponse);
+                }
+            }
+
             return base.View(viewName, masterName, orchestratorResponse);
         }
 

@@ -1,9 +1,12 @@
-﻿using SFA.DAS.EAS.Domain.Models.UserView;
+﻿using System.Collections.Generic;
+using SFA.DAS.EAS.Domain.Models.UserView;
 
 namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IMultiVariantTestingService
     {
-        UserViewLookup GetUserViews();
+        MultiVariantViewLookup GetMultiVariantViews();
+
+        string GetRandomViewNameToShow(List<ViewAccess> views);
     }
 }
