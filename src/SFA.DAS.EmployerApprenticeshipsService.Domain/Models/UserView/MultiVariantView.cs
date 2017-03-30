@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Domain.Models.UserView
 {
-    public class UserViewItem
+    public class MultiVariantView
     {
         public string Controller { get; set; }
         public string Action { get; set; }

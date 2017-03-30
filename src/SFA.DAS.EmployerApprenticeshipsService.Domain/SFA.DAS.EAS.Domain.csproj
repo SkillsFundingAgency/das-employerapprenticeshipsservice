@@ -277,8 +277,8 @@
     <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />
-    <Compile Include="Models\UserView\UserViewItem.cs" />
-    <Compile Include="Models\UserView\UserViewLookup.cs" />
+    <Compile Include="Models\UserView\MultiVariantView.cs" />
+    <Compile Include="Models\UserView\MultiVariantViewLookup.cs" />
     <Compile Include="Models\UserView\ViewAccess.cs" />
     <Compile Include="Models\WhileList\UserWhiteListLookUp.cs" />
     <Compile Include="Models\PAYE\Paye.cs" />

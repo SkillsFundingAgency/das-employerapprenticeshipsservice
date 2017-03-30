@@ -2,8 +2,8 @@
 
 namespace SFA.DAS.EAS.Domain.Models.UserView
 {
-    public class UserViewLookup
+    public class MultiVariantViewLookup
     {
-        public List<UserViewItem> Data { get; set; }
+        public List<MultiVariantView> Data { get; set; }
     }
 }
