@@ -61,7 +61,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                     var data = await _mediator.SendAsync(new GetAllApprenticeshipsRequest { AccountId = accountId });
 
-                    var apprenticeships = data.Apprenticeships
+                    var apprenticeships = 
+                        data.Apprenticeships
                         .OrderBy(m => m.ApprenticeshipName)
                         .Select(m => _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(m, default(ApprenticeshipUpdate)))
                         .ToList();

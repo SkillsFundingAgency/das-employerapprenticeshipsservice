@@ -31,6 +31,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public Apprenticeship OriginalApprenticeship { get; set; }
 
-        public bool? ChangesConfirmend { get; set; }
+        public bool? ChangesConfirmed { get; set; }
     }
 }

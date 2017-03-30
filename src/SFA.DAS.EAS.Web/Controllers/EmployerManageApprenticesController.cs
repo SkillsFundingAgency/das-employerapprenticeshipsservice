@@ -124,17 +124,12 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return View("ConfirmChanges", errorModel);
             }
 
-            if (apprenticeship.ChangesConfirmend != null && !apprenticeship.ChangesConfirmend.Value)
+            if (apprenticeship.ChangesConfirmed != null && !apprenticeship.ChangesConfirmed.Value)
             {
                 return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
             }
-            // ToDo: Add overlapping errors to ModelState..
-            //if (!ModelState.IsValid)
-            //return await RedisplayEditApprenticeshipView(apprenticeship);
-
-            // var model = await _orchestrator.GetConfirmChangesModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
+            
             _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
-
 
             var flashmessage = new FlashMessageViewModel
             {

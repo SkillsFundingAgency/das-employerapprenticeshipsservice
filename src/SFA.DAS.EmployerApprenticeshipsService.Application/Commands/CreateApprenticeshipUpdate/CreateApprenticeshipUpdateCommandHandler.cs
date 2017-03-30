@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate
                 UserId = command.UserId
             };
 
-            await _commitmentsApi.CreateApprenticeshipUpdate(command.EmployerId, request);
+            await _commitmentsApi.CreateApprenticeshipUpdate(command.EmployerId, command.ApprenticeshipUpdate.ApprenticeshipId, request);
         }
     }
 }

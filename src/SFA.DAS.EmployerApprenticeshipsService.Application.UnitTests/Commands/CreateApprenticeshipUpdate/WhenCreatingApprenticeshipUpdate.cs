@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateApprenticeshipUpdate
         public void Arrange()
         {
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
-            _commitmentsApi.Setup(m => m.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()))
+            _commitmentsApi.Setup(m => m.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
             _validator = new Mock<IValidator<CreateApprenticeshipUpdateCommand>>();
@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateApprenticeshipUpdate
             await _handler.Handle(command);
 
             //Assert
-            _commitmentsApi.Verify(x => x.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()), Times.Once);
+            _commitmentsApi.Verify(x => x.CreateApprenticeshipUpdate(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<ApprenticeshipUpdateRequest>()), Times.Once);
         }
     }
 }

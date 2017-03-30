@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
+using SFA.DAS.EAS.Application.Queries.GetProvider;
+using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
@@ -65,8 +67,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 TrainingName = apprenticeship.TrainingName,
                 Cost = apprenticeship.Cost,
                 Status = statusText,
-                ProviderName = string.Empty,
-                PendingChanges = pendingChange
+                ProviderName =  string.Empty,
+                PendingChanges = pendingChange,
+                RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
+                EmployerReference = apprenticeship.EmployerRef,
+                CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId)
             };
         }
 
@@ -201,6 +206,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 TrainingName = viewModel.TrainingName, 
                 TrainingCode = viewModel.TrainingCode,
                 TrainingType = viewModel.TrainingType,
+                EmployerRef = viewModel.EmployerRef
             };
         }
 
@@ -274,6 +280,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 default:
                     return string.Empty;
             }
+        }
+
+        private string MapRecordStatus(Originator? pendingUpdateOriginator)
+        {
+            if (pendingUpdateOriginator == null) return string.Empty;
+
+            return pendingUpdateOriginator == Originator.Employer
+                ? "Changes pending" 
+                : "Changes for review" ;
+        }
+
+        private async Task<Provider> ProviderSearch(long providerId)
+        {
+            var response = await _mediator.SendAsync(new GetProviderQueryRequest
+            {
+                // ToDo: To long in request
+                ProviderId = (int)providerId
+            });
+
+            return response.ProvidersView?.Provider;
         }
     }
 }
