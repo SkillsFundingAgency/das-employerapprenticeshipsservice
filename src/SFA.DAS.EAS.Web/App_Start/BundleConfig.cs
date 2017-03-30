@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Web
                       "~/dist/javascripts/jquery-1.11.0.min.js",
                       "~/dist/javascripts/govuk-template.js",
                       "~/dist/javascripts/selection-buttons.js",
+                      "~/dist/javascripts/showhide-content.js",
                       "~/dist/javascripts/stacker.js",
                       "~/dist/javascripts/app.js"));  
 

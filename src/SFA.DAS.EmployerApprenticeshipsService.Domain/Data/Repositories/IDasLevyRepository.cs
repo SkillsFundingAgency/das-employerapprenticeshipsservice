@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.Payments.Events.Api.Types;
+using Payment = SFA.DAS.Payments.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
@@ -21,7 +23,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task CreateNewPeriodEnd(PeriodEnd periodEnd);
         Task<PeriodEnd> GetLatestPeriodEnd();
         Task<List<TransactionLine>> GetTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate);
-        Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName);
+        Task CreatePaymentData(PaymentDetails paymentDetails);
         Task<Payment> GetPaymentData(Guid paymentId);
         Task ProcessPaymentData();
         Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(string empRef);
