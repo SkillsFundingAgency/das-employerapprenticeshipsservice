@@ -143,9 +143,30 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
-        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
-            return View();
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Route("{hashedApprenticeshipId}/changes/view")]
+        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
+        {
+            if (undoChanges == null)
+            {
+                var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+                apprenticeship.OriginalApprenticeship = originalApprenticeship;
+                return View(new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship });
+            }
+
+            if (undoChanges.Value)
+            {
+                _orchestrator.UndoPendingApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId);;
+            }
+
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)

@@ -32,5 +32,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public Apprenticeship OriginalApprenticeship { get; set; }
 
         public bool? ChangesConfirmed { get; set; }
+
+        public string HashedAccountId { get; set; }
+
+        public string HashedApprenticeshipId { get; set; }
     }
 }

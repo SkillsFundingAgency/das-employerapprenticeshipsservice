@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 
 using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
-using SFA.DAS.EAS.Application.Queries.GetProvider;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
@@ -210,13 +208,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             };
         }
 
+        public UpdateApprenticeshipViewModel MapFrom(ApprenticeshipUpdate apprenticeshipUpdate)
+        {
+            return new UpdateApprenticeshipViewModel
+            {
+                Cost = apprenticeshipUpdate.Cost,
+                DateOfBirth = new DateTimeViewModel(apprenticeshipUpdate.DateOfBirth),
+                FirstName = apprenticeshipUpdate.FirstName,
+                LastName = apprenticeshipUpdate.LastName,
+                StartDate = new DateTimeViewModel(apprenticeshipUpdate.StartDate),
+                EndDate = new DateTimeViewModel(apprenticeshipUpdate.EndDate),
+                TrainingName = apprenticeshipUpdate.TrainingName,
+                TrainingCode = apprenticeshipUpdate.TrainingCode,
+                TrainingType = apprenticeshipUpdate.TrainingType,
+                EmployerRef = apprenticeshipUpdate.EmployerRef
+            };
+        }
+
         public async Task<UpdateApprenticeshipViewModel> CompareAndMapToApprenticeshipViewModel(
             Apprenticeship original, ApprenticeshipViewModel edited)
         {
             Func<string, string, string> changedOrNull = (a, edit) => 
                 a?.Trim() == edit?.Trim() ? null : edit;
 
-            // ToDo: The rest of the mapping
             var model = new UpdateApprenticeshipViewModel
             {
                 FirstName = changedOrNull(original.FirstName, edited.FirstName),

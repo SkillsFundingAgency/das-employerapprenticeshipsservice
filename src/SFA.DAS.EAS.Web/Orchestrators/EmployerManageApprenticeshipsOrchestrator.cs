@@ -93,7 +93,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
                     var q = await _mediator.SendAsync(
-                        new GetApprenticeshipUpdateRequest { AccountId = accountId, ApprenticehsipId = apprenticeshipId } );
+                        new GetApprenticeshipUpdateRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId } );
 
                     var detailsViewModel = 
                         _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship, q.ApprenticeshipUpdate);
@@ -164,6 +164,51 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 }, hashedAccountId, externalUserId);
         }
 
+        public async Task<OrchestratorResponse<UpdateApprenticeshipViewModel>> GetViewChangesViewModel(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Debug($"Getting confirm change model: {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var data = await _mediator.SendAsync(
+                            new GetApprenticeshipUpdateRequest
+                            {
+                                AccountId = accountId,
+                                ApprenticeshipId = apprenticeshipId
+                            });
+
+                        var apprenticeship = await _mediator.SendAsync(
+                            new GetApprenticeshipQueryRequest {
+                                AccountId = accountId,
+                                ApprenticeshipId = apprenticeshipId
+                            });
+
+                        var viewModel = _apprenticeshipMapper.MapFrom(data.ApprenticeshipUpdate);
+                        viewModel.OriginalApprenticeship = apprenticeship.Apprenticeship;
+                        viewModel.HashedAccountId = hashedAccountId;
+                        viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
+
+                        return new OrchestratorResponse<UpdateApprenticeshipViewModel>
+                                 {
+                                     Data = viewModel 
+                                 };
+                    }, hashedAccountId, externalUserId);
+        }
+
+        public void UndoPendingApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            _logger.Debug($"Undoing pending update for : AccountId {accountId}, ApprenticeshipId: {apprenticeshipId}");
+
+            // ToDo: To be implemented
+        }
+
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
             var overlappingErrors = await _mediator.SendAsync(
@@ -198,7 +243,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var result = await _mediator.SendAsync(new GetApprenticeshipUpdateRequest
                                     {
                                         AccountId = accountId,
-                                        ApprenticehsipId = apprenticeshipId
+                                        ApprenticeshipId = apprenticeshipId
                                     });
 
             if(result.ApprenticeshipUpdate != null)

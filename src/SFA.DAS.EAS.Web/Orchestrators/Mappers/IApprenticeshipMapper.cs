@@ -24,5 +24,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
 
         ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel);
+
+        UpdateApprenticeshipViewModel MapFrom(ApprenticeshipUpdate apprenticeshipUpdate);
     }
 }

@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate
     {
         public long AccountId { get; set; }
 
-        public long ApprenticehsipId { get; set; }
+        public long ApprenticeshipId { get; set; }
     }
 }
