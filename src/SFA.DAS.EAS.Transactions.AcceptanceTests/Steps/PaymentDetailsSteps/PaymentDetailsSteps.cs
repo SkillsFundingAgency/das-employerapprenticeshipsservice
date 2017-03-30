@@ -126,14 +126,29 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
 
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
-            dasLevyRepository.CreateNewPeriodEnd(new PeriodEnd
+
+            var periodEnd = dasLevyRepository.GetLatestPeriodEnd().Result;
+
+            if (periodEnd == null)
             {
-                CalendarPeriod = new CalendarPeriod { Month = 1, Year = 2016 },
-                CompletionDateTime = DateTime.Now,
-                Id = "1617-R12",
-                ReferenceData = new ReferenceDataDetails { AccountDataValidAt = DateTime.Now, CommitmentDataValidAt = DateTime.Now },
-                Links = new PeriodEndLinks { PaymentsForPeriod = "" }
-            }).Wait();
+                periodEnd = new PeriodEnd
+                {
+                    CalendarPeriod = new CalendarPeriod {Month = 1, Year = 2016},
+                    CompletionDateTime = DateTime.Now,
+                    Id = "1617-R12",
+                    ReferenceData =
+                        new ReferenceDataDetails
+                        {
+                            AccountDataValidAt = DateTime.Now,
+                            CommitmentDataValidAt = DateTime.Now
+                        },
+                    Links = new PeriodEndLinks {PaymentsForPeriod = ""}
+                };
+
+                dasLevyRepository.CreateNewPeriodEnd(periodEnd).Wait();
+            }
+
+            ScenarioContext.Current["periodEnd"] = periodEnd;
 
             var payment = new Payment
             {
@@ -143,7 +158,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
                 ApprenticeshipId = apprenticeship.Id,
                 DeliveryPeriod = new CalendarPeriod { Month = 3, Year = 2017 },
                 Amount = 200,
-                CollectionPeriod = new NamedCalendarPeriod { Id = "1617-R12", Month = 3, Year = 2017 },
+                CollectionPeriod = new NamedCalendarPeriod { Id = periodEnd.Id, Month = 3, Year = 2017 },
                 TransactionType = TransactionType.Learning,
                 EvidenceSubmittedOn = DateTime.Now.AddDays(-5),
                 Uln = 123,
@@ -199,10 +214,12 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
             var accountId = (long)ScenarioContext.Current["AccountId"];
             var standard = (Standard)ScenarioContext.Current["standard"];
             var apprenticeship = (Apprenticeship)ScenarioContext.Current["apprenticeship"];
+            var periodEnd = (PeriodEnd)ScenarioContext.Current["periodEnd"];
+
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
