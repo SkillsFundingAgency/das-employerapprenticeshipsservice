@@ -1,4 +1,4 @@
-@mixin closed-arrow {
+@mixin closed-arrow ($borCol: black) {
     content: "";
     position: absolute;
     width: 0;
@@ -6,15 +6,15 @@
     display: block;
     border-width: 4px 7px;
     border-color: rgba(0, 0, 0, 0);
-    border-left-color: $black;
+    border-left-color: $borCol;
     border-style: solid;
     left: 10px;
     top: 50%;
-    margin-top: -4px;
+    margin-top: -5px;
 }
 
-@mixin open-arrow {
+@mixin open-arrow ($borCol: black) {
     border-width: 7px 4px;
-    border-top-color: $black;
+    border-top-color: $borCol;
     border-left-color: transparent;
 }

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
@@ -86,9 +90,8 @@
       <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.26048\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.17.0.24066, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.17.0.24066\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.Events.Api.Client">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
@@ -192,8 +195,6 @@
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
-    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommand.cs" />
-    <Compile Include="Commands\CreateLevyAggregation\CreateLevyAggregationCommandHandler.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommand.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandHandler.cs" />
     <Compile Include="Commands\CreateNewPeriodEnd\CreateNewPeriodEndCommandValidator.cs" />
@@ -328,9 +329,6 @@
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsHandler.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsQuery.cs" />
-    <Compile Include="Queries\GetBatchEmployerAccountTransactions\GetBatchEmployerAccountTransactionsResponse.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />

@@ -216,7 +216,6 @@
     <Compile Include="Data\FileSystemStandardsRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\InvitationRepository.cs" />
-    <Compile Include="Data\AggregationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
@@ -227,6 +226,7 @@
     <Compile Include="ExecutionPolicies\IdamsExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\PolicyNameAttribute.cs" />
     <Compile Include="ExecutionPolicies\RequiredPolicyAttribute.cs" />
+    <Compile Include="Mapping\Profiles\PaymentMappings.cs" />
     <Compile Include="Models\UserResponse.cs" />
     <Compile Include="DependencyResolution\ConfigurationPolicy.cs" />
     <Compile Include="DependencyResolution\LoggingPolicy.cs" />
@@ -260,6 +260,7 @@
     <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
     <Compile Include="Services\MultiVariantTestingService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
     <Compile Include="Services\UserWhiteListService.cs" />
   </ItemGroup>
   <ItemGroup>

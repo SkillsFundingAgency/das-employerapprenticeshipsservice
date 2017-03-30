@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountPayeController : BaseController
     {
-      
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 

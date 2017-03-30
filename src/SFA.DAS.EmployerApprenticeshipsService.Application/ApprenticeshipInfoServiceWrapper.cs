@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Application
             return await _cache.GetCustomValueAsync<FrameworksView>(FrameworksKey);
         }
 
-        public ProvidersView GetProvider(int ukPrn)
+        public ProvidersView GetProvider(long ukPrn)
         {
             try
             {

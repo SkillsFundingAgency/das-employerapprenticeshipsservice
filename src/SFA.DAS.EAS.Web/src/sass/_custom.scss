@@ -85,6 +85,7 @@
 
 //review cohorts page styles
 #review-cohorts{
+    .heading-small{font-size:24px;}
     color:#fff;
     margin:30px 0;
     .all-apps{
@@ -126,14 +127,16 @@
     .clickable{cursor:pointer;}
 }
 #cohorts-landing-page{
-  .bingo-background{
+    .heading-small{font-size:24px;}
+    .bingo-background{
             background:#2e358b;
             color:#fff; 
             margin-bottom: 20px;
             padding: 10px 15px;
             
+           
               @include media(tablet) {
-                    min-height:160px;
+                    min-height:210px;
                     width:48%;
                     padding: 0 15px;
               }
