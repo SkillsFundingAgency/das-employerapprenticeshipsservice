@@ -2,10 +2,10 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Commands.AcceptInvitation;
-using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EAS.Domain.Models.Audit;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.TimeProvider;
 
@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
         private Mock<IInvitationRepository> _invitationRepository;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IUserAccountRepository> _userAccountRepository;
+        private Mock<IAuditService> _auditService;
 
         [SetUp]
         public void Setup()
@@ -26,7 +27,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             _invitationRepository = new Mock<IInvitationRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
             _userAccountRepository = new Mock<IUserAccountRepository>();
-            _handler = new AcceptInvitationCommandHandler(_invitationRepository.Object, _membershipRepository.Object, _userAccountRepository.Object);
+            _auditService = new Mock<IAuditService>();
+            _handler = new AcceptInvitationCommandHandler(
+                _invitationRepository.Object, 
+                _membershipRepository.Object, 
+                _userAccountRepository.Object,
+                _auditService.Object);
             _invitation = new Invitation
             {
                 Id = 1,
@@ -57,6 +63,24 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.AcceptInvitationTests
             });
 
             _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (short)_invitation.RoleId), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenShouldAuditWheninviteHasBeenAccepted()
+        {
+            //Arrange
+            _invitationRepository.Setup(x => x.Get(_invitation.Id)).ReturnsAsync(_invitation);
+            _userAccountRepository.Setup(x => x.Get(_invitation.Email)).ReturnsAsync(new User());
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(null);
+
+            //Act
+            await _handler.Handle(new AcceptInvitationCommand
+            {
+                Id = _invitation.Id
+            });
+
+            //Assert
+            _auditService.Verify(x => x.SendAuditMessage(It.IsAny<EasAuditMessage>()), Times.Once);
         }
 
         [Test]

@@ -20,6 +20,6 @@ BEGIN
 		AND [AccountId] = @accountId;
 
 	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId])
-	VALUES (@accountId, @userId, @roleId);
+	VALUES (@accountId, @userId, @roleId);	
 END
 GO
