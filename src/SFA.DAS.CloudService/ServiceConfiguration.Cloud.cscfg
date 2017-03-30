@@ -30,7 +30,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
-      <Setting name="DeclarationsEnabled" value="true" />
+      <Setting name="DeclarationsEnabled" value="both" />
       <Setting name="TokenServiceCertificateThumbprint" value="__TokenServiceCertificateThumbprint__" />
     </ConfigurationSettings>
     <Certificates>

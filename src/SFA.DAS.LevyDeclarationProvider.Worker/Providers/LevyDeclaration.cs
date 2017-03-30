@@ -30,9 +30,14 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         private readonly ILogger _logger;
         private readonly IDasAccountService _dasAccountService;
 
-        private static bool DeclarationProcessingEnabled => 
-            !CloudConfigurationManager.GetSetting("DeclarationsEnabled")
-                                      .Equals("false", StringComparison.CurrentCultureIgnoreCase);
+        private static bool HmrcProcessingEnabled => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+                                      .Equals("both", StringComparison.CurrentCultureIgnoreCase);
+
+        private static bool DeclarationProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+            .Equals("declarations", StringComparison.CurrentCultureIgnoreCase);
+
+        private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+            .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
 
         public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, 
             ILogger logger, IDasAccountService dasAccountService)
@@ -51,7 +56,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
                 try
                 {
-                    if (DeclarationProcessingEnabled)
+                    if (HmrcProcessingEnabled || DeclarationProcessingOnly || FractionProcessingOnly)
                     {
                         await ProcessMessage(message);
                     }
@@ -94,35 +99,38 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
             var employerDataList = new List<EmployerLevyData>();
 
-            var englishFractionUpdateResponse =
+            if (HmrcProcessingEnabled || FractionProcessingOnly)
+            {
+                var englishFractionUpdateResponse =
                 await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
 
-            foreach (var scheme in employerSchemesResult.SchemesList)
-            {
-                await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
+                foreach (var scheme in employerSchemesResult.SchemesList)
+                {
+                    await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
+                }
+
+                if (englishFractionUpdateResponse.UpdateRequired)
+                {
+                    await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
+                    {
+                        DateCalculated = englishFractionUpdateResponse.DateCalculated
+                    });
+                }
             }
 
-            if (englishFractionUpdateResponse.UpdateRequired)
+            if (HmrcProcessingEnabled || DeclarationProcessingOnly)
             {
-                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
+                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
                 {
-                    DateCalculated = englishFractionUpdateResponse.DateCalculated
+                    AccountId = employerAccountId,
+                    EmployerLevyData = employerDataList
                 });
             }
-
-            await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
-            {
-                AccountId = employerAccountId,
-                EmployerLevyData = employerDataList
-            });
 
             await message.CompleteAsync();
         }
 
-        private async Task ProcessScheme(
-            PayeScheme scheme, 
-            GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse,
-            ICollection<EmployerLevyData> employerDataList)
+        private async Task ProcessScheme(PayeScheme scheme, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
         {
             await _mediator.SendAsync(new UpdateEnglishFractionsCommand
             {
