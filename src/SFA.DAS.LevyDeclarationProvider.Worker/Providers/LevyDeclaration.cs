@@ -99,47 +99,48 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 
             var employerDataList = new List<EmployerLevyData>();
 
-            if (HmrcProcessingEnabled || FractionProcessingOnly)
+            
+            var englishFractionUpdateResponse =
+            await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+
+            foreach (var scheme in employerSchemesResult.SchemesList)
             {
-                var englishFractionUpdateResponse =
-                await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
-
-                foreach (var scheme in employerSchemesResult.SchemesList)
-                {
-                    await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
-                }
-
-                if (englishFractionUpdateResponse.UpdateRequired)
-                {
-                    await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
-                    {
-                        DateCalculated = englishFractionUpdateResponse.DateCalculated
-                    });
-                }
+                await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
             }
 
-            if (HmrcProcessingEnabled || DeclarationProcessingOnly)
+            if (englishFractionUpdateResponse.UpdateRequired)
             {
-                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
                 {
-                    AccountId = employerAccountId,
-                    EmployerLevyData = employerDataList
+                    DateCalculated = englishFractionUpdateResponse.DateCalculated
                 });
             }
+            
+
+            
+            await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+            {
+                AccountId = employerAccountId,
+                EmployerLevyData = employerDataList
+            });
+            
 
             await message.CompleteAsync();
         }
 
         private async Task ProcessScheme(PayeScheme scheme, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
         {
-            await _mediator.SendAsync(new UpdateEnglishFractionsCommand
+            if (HmrcProcessingEnabled || FractionProcessingOnly)
             {
-                EmployerReference = scheme.Ref,
-                EnglishFractionUpdateResponse = englishFractionUpdateResponse
-            });
+                await _mediator.SendAsync(new UpdateEnglishFractionsCommand
+                {
+                    EmployerReference = scheme.Ref,
+                    EnglishFractionUpdateResponse = englishFractionUpdateResponse
+                });
+            }
 
-            var levyDeclarationQueryResult =
-                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = scheme.Ref});
+            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = scheme.Ref}) : null;
 
             var employerData = new EmployerLevyData();
 

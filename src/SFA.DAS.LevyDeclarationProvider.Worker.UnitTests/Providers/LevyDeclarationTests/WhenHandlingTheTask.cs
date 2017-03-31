@@ -44,11 +44,11 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             _pollingMessageReceiver = new Mock<IPollingMessageReceiver>();
             _pollingMessageReceiver.Setup(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>()).
-                ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile, 
-                new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId })).Callback(() => {_cancellationTokenSource.Cancel();});
-            
+                ReturnsAsync(new FileSystemMessage<EmployerRefreshLevyQueueMessage>(stubDataFile, stubDataFile,
+                new EmployerRefreshLevyQueueMessage { AccountId = ExpectedAccountId })).Callback(() => { _cancellationTokenSource.Cancel(); });
+
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpectedAccountId})).ReturnsAsync(new GetEmployerAccountResponse());
+            _mediator.Setup(x => x.SendAsync(new GetEmployerAccountQuery { AccountId = ExpectedAccountId })).ReturnsAsync(new GetEmployerAccountResponse());
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionUpdateRequiredRequest>()))
                 .ReturnsAsync(new GetEnglishFractionUpdateRequiredResponse
                 {
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
 
             _logger = new Mock<ILogger>();
 
-            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object,_dasAccountService.Object);
+            _levyDeclaration = new LevyDeclaration(_pollingMessageReceiver.Object, _mediator.Object, _logger.Object, _dasAccountService.Object);
         }
 
         [Test]
@@ -71,9 +71,9 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _pollingMessageReceiver.Verify(x=>x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(),Times.Once);
+            _pollingMessageReceiver.Verify(x => x.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>(), Times.Once);
         }
-        
+
 
         [Test]
         public async Task ThenTheSchemesAreRetrunedFromTheService()
@@ -82,8 +82,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _dasAccountService.Verify(x=>x.GetAccountSchemes(ExpectedAccountId), Times.Once);
-        } 
+            _dasAccountService.Verify(x => x.GetAccountSchemes(ExpectedAccountId), Times.Once);
+        }
 
         [Test]
         public async Task ThenTheCommandIsNotCalledIfTheMessageIsEmpty()
@@ -98,8 +98,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()),Times.Never());
-            mockFileMessage.Verify(x=>x.CompleteAsync(),Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()), Times.Never());
+            mockFileMessage.Verify(x => x.CompleteAsync(), Times.Once);
         }
 
         [Test]
@@ -166,7 +166,7 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _dasAccountService.Verify(x=>x.GetAccountSchemes(It.IsAny<long>()), Times.Never);
+            _dasAccountService.Verify(x => x.GetAccountSchemes(It.IsAny<long>()), Times.Never);
         }
 
         [Test]
@@ -190,8 +190,9 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateEnglishFractionCalculationDateCommand>()), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.IsAny<RefreshEmployerLevyDataCommand>()), Times.Never);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<RefreshEmployerLevyDataCommand>()), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()), Times.Never);
 
         }
 
@@ -217,8 +218,9 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.UnitTests.Providers.LevyDec
             await _levyDeclaration.RunAsync(_cancellationTokenSource.Token);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateEnglishFractionCalculationDateCommand>()), Times.Never);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<UpdateEnglishFractionsCommand>()), Times.Never);
             _mediator.Verify(x => x.SendAsync(It.IsAny<RefreshEmployerLevyDataCommand>()), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetHMRCLevyDeclarationQuery>()), Times.Once);
 
         }
     }
