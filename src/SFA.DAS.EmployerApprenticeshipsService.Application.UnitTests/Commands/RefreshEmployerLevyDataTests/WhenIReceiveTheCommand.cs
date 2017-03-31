@@ -172,5 +172,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c => c.EndOfYearAdjustment && c.EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
         }
+
+        [Test]
+        public async Task ThenIfTheSubmissionIsForATaxMonthInTheFutureItWillNotBeProcessed()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithFutureSubmissions(ExpectedEmpRef,DateTime.Now, ExpectedAccountId);
+
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+        }
     }
 }

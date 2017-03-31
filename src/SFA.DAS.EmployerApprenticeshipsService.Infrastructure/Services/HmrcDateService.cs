@@ -26,13 +26,24 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return submissionDate >= endDate;
         }
 
+        public bool IsSubmissionForFuturePeriod(string payroll, int payrollMonth, DateTime submissionDate)
+        {
+            throw new NotImplementedException();
+        }
+
         private static DateTime GetDateRange(string payrollYear, out DateTime endDate)
         {
             var payrollSplit = payrollYear.Split('-');
 
-            var startDate = new DateTime(Convert.ToInt32("20" + payrollSplit[0]), 5, 1);
-            endDate = new DateTime(Convert.ToInt32("20" + payrollSplit[1]), 4, 30, 23, 59, 59);
+            var startDate = new DateTime(Convert.ToInt32("20" + payrollSplit[0]), 4, 1);
+            endDate = new DateTime(Convert.ToInt32("20" + payrollSplit[1]), 3, 31, 23, 59, 59);
             return startDate;
+        }
+
+        private static DateTime GetDateFromPayrollYearMonth(string payroll, int payrollMonth)
+        {
+            
+            return new DateTime();
         }
     }
 }

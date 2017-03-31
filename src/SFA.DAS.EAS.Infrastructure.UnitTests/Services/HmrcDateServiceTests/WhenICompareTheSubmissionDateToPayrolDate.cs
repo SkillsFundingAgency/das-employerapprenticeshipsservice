@@ -74,6 +74,19 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             Assert.AreEqual(expectedResult, actual);
         }
 
+        [Test]
+        public void ThenIfThePayrollPeriodIsInTheFutureThenFalseIsReturned()
+        {
+            //Arrange
+            var payroll = $"{DateTime.Now.AddYears(1).Year.ToString("yy")}-{DateTime.Now.AddYears(2).Year.ToString("yy")}";
+            var submissionDate = DateTime.Now;
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod(payroll, 9, submissionDate);
+
+            //Assert
+            Assert.IsFalse(actual);
+        }
 
     }
 }
