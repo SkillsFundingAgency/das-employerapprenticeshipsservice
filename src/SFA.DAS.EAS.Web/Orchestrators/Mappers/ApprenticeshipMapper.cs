@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 DateOfBirth = viewModel.DateOfBirth.DateTime,
                 NINumber = viewModel.NINumber,
                 ULN = viewModel.ULN,
-                Cost = viewModel.Cost == null ? default(decimal?) : decimal.Parse(viewModel.Cost),
+                Cost = viewModel.Cost.AsNullableDecimal(),
                 StartDate = viewModel.StartDate.DateTime,
                 EndDate = viewModel.EndDate.DateTime,
                 ProviderRef = viewModel.ProviderRef,
@@ -193,7 +193,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return new ApprenticeshipUpdate
             {
                 ApprenticeshipId = viewModel.OriginalApprenticeship.Id,
-                Cost = viewModel.Cost,
+                Cost = viewModel.Cost.AsNullableDecimal(),
                 DateOfBirth = viewModel.DateOfBirth?.DateTime,
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
@@ -212,7 +212,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
         {
             return new UpdateApprenticeshipViewModel
             {
-                Cost = apprenticeshipUpdate.Cost,
+                Cost = NullableDecimalToString(apprenticeshipUpdate.Cost),
                 DateOfBirth = new DateTimeViewModel(apprenticeshipUpdate.DateOfBirth),
                 FirstName = apprenticeshipUpdate.FirstName,
                 LastName = apprenticeshipUpdate.LastName,
@@ -238,9 +238,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 DateOfBirth = original.DateOfBirth == edited.DateOfBirth.DateTime
                     ? null
                     : edited.DateOfBirth,
-                Cost = NullableDecimalToString(original.Cost) == edited.Cost 
-                    ? default(decimal?) 
-                    : string.IsNullOrEmpty(edited.Cost) ? 0m : decimal.Parse(edited.Cost),
+                Cost = original.Cost == edited.Cost.AsNullableDecimal() ? null : edited.Cost,
                 StartDate =  original.StartDate == edited.StartDate.DateTime
                   ? null
                   : edited.StartDate,

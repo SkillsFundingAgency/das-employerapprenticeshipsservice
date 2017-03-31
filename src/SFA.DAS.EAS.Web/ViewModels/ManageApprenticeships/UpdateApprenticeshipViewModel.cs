@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public string EmployerRef { get; set; }
 
-        public decimal? Cost { get; set; }
+        public string Cost { get; set; }
 
         public DateTimeViewModel StartDate { get; set; }
 
