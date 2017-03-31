@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ApprenticeshipDetailsViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<ApprenticeshipDetailsViewModel>
 
 @{
     ViewBag.Title = "Apprentice detail";
@@ -19,7 +19,8 @@
                     <p>
                         There are changes to this apprentice's details that you need to review.
                     </p>
-                    <p><a href="#">Review changes</a>
+                    <p>
+                        @*<a href="@Url.RouteUrl("ReviewChanges")">Review changes</a>*@
                     </p>
                 </div>
             }
@@ -29,7 +30,8 @@
                     <h3>Changes pending</h3>
                     <p>
                         There are changes to this apprentice's details that are waiting for approval by the training provider.
-                        <p><a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a>
+                        <p>
+                            @*<a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a>*@
                         </p>
                     </p>
                 </div>
@@ -77,7 +79,7 @@
                             Apprentice
                             @if (Model.Data.PendingChanges == PendingChanges.None)
                             {
-                                <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit apprenticesihp </a>
+                                <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
                             }
                         </th>
                     </tr>

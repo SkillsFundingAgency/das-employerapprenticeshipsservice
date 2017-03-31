@@ -15,7 +15,6 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
