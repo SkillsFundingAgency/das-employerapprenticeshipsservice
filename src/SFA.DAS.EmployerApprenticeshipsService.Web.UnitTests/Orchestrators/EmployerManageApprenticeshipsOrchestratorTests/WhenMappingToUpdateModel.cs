@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                   FirstName = "Fredrik",
                                   LastName = "Stockborg",
                                   EmployerRef = "New ref",
-                                  Cost = "4.3"
+                                  Cost = "5"
                               };
 
             var model = await _mappingTjänst.CompareAndMapToApprenticeshipViewModel(a , updated);
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             model.FirstName.Should().Be("Fredrik");
             model.LastName.Should().Be("Stockborg");
             model.EmployerRef.Should().Be("New ref");
-            model.Cost.Value.Should().Be(4.3M);
+            model.Cost.Should().Be("5");
         }
 
         [TestCase(1.5, "1600")]
@@ -85,9 +85,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
 
             var model = await _mappingTjänst.CompareAndMapToApprenticeshipViewModel(a, updated);
             
-            model.Cost.HasValue.Should().BeTrue();
+            model.Cost.Should().NotBeEmpty();
             updatedCost = updatedCost == string.Empty ? "0" : updatedCost;
-            model.Cost.Value.Should().Be(decimal.Parse(updatedCost));
+            model.Cost.Should().Be(updatedCost);
         }
 
         [Test]
