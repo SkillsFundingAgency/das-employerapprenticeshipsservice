@@ -17,6 +17,16 @@
     background: $panel-colour;
 }
 
+.panel-filled-purple {
+    border-color: $purple;
+    background: mix(white,$purple,90%);
+    margin-bottom: 30px;
+}
+
+.panel-top-margin {
+    margin-top: 20px;
+}
+
 .panel-warning {
     border-top: 10px solid $govuk-blue;
     padding-left: 50px;
@@ -32,3 +42,4 @@
         font-weight: 600;
     }
 }
+

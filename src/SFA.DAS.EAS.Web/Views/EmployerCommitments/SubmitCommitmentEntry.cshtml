@@ -13,7 +13,7 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Instructions for your training provider</h1>
+        <h1 class="heading-xlarge">Message for your training provider</h1>
 
         <p class="lede">Let <span class="heading-medium">@Model.Data.ProviderName</span> know what you'd like them to do next.
         </p>
@@ -21,7 +21,7 @@
             @Html.AntiForgeryToken()
 
             <div class="form-error-group form-group">
-                <label class="form-label strong" for="Message">Instructions (optional)</label>
+                <label class="form-label strong" for="Message">Message (optional)</label>
                 @*<p class="form-hint">For example, please add the 12 admin level 2 apprentices and 13 engineering level 3 apprentices</p>*@
                 <textarea class="form-control form-control-3-4" id="Message" name="Message"
                           cols="40" rows="10"
@@ -44,6 +44,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to Apprentices</a>
+       <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to Apprentices" class="back-link">Back to apprentices</a>
     </div>
 }

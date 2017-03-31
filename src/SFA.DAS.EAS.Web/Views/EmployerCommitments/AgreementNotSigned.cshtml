@@ -13,13 +13,15 @@
             </i>
 
             <strong class="bold-small">
-               You must have a signed agreement with the Skills Funding Agency before you can approve cohorts - this needs to be done by an account owner.
+
+               @Model.LegalEntityName 
+                    doesn't have a signed agreement with the Skills Funding Agency (SFA). Without a signed agreement you can add apprentice details, but won't be able to authorise payments to training providers.
                 <br /><br />
-                If you're not the account owner, you can find out who is by visiting the <a href="@Url.Action("ViewTeam", "EmployerTeam")">Your team</a> area of your account.
+                    Only account owners can sign SFA agreements. If you're not sure who the owner is, you can <a href="@Url.Action("ViewTeam", "EmployerTeam")">check your team details</a>.
             </strong>
 
         </div>
-        <p><a class="button" href="@Url.Action("Index", "EmployerAgreement")" aria-label="Review your agreement">Review your agreement</a>
+        <p><a class="button" href="@Url.Action("Index", "EmployerAgreement")" aria-label="Review your agreement">Review agreement</a>
         <p><a href="@Url.Action("SearchProvider", new {Model.HashedAccountId, Model.LegalEntityCode, Model.CohortRef})">Continue anyway</a></p>
     </div>
 </div>

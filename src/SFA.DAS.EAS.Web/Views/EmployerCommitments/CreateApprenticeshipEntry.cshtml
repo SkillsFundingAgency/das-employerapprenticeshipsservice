@@ -19,24 +19,25 @@
 
             <div class="form-group">
            
-                <h1 class="heading-xlarge">Add an apprentice</h1>
+                <h1 class="heading-xlarge">Add apprentice details</h1>
                 <div class="panel panel-border-wide">
-                    <p>You must add the apprentice’s first and last names – fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
-                    <p>                        You'll only be able to approve the release of payments for this apprentice once all the fields have been completed - either by yourself or your training provider.</p>
+                    <p>You must add the apprentice’s first and last names - fill in as many other fields as you can. You'll be able to return later to make changes or add more information.</p>
+                    <p>You'll only be able to authorise payments for this apprentice once all the fields have been completed - either by yourself or your training provider.</p>
                 </div>
 
                 <hr />
             <fieldset>
                 <legend class="visuallyhidden">Add an apprentice</legend>
-                
                 @Html.Partial("EditApprenticeship", Model.Data)
 
                 <div class="form-group">
                     <hr />
                     <div class="grey-background">
                         <p class="form-label-bold">End-point assessments</p>
-                        <p>At the end of each apprenticeship standard, an apprentice's knowledge, skills and behaviours are assessed by an independent end-point assessment organisation. Before the final gateway stage of the apprenticeship, we'll ask you to tell us which <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window">end-point assessment organisation</a> you've chosen for this apprentice.</p>
-                        <p>Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.</p>
+                        <p>If you've chosen an apprenticeship standard, we'll ask you to confirm the <a href="https://www.gov.uk/government/publications/using-the-register-of-apprentice-assessment-organisations" target="_blank" title="Opens in a new window" rel="external">apprentice assessment organisation</a> for this apprentice. We'll do this before the end of the apprenticeship.</p>
+                        <p>
+                            Apprenticeship frameworks have different assessment arrangements and don't need end-point assessments.
+                        </p>
                     </div>
                 </div>
 

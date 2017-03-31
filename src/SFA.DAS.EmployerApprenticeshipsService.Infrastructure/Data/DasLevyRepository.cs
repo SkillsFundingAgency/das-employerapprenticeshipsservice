@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.Payments.Events.Api.Types;
+using Payment = SFA.DAS.Payments.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -219,36 +220,39 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return MapTransactions(result);
         }
-
-        //TODO refactor not to use Payment type here
-        public async Task CreatePaymentData(Payment payment, long accountId, string periodEnd, string providerName, string courseName)
+        
+        public async Task CreatePaymentData(PaymentDetails details)
         {
             await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@PaymentId", Guid.Parse(payment.Id), DbType.Guid);
-                parameters.Add("@Ukprn", payment.Ukprn, DbType.Int64);
-                parameters.Add("@ProviderName", providerName, DbType.StringFixedLength,ParameterDirection.Input,250);
-                parameters.Add("@Uln", payment.Uln, DbType.Int64);
-                parameters.Add("@AccountId", accountId, DbType.Int64);
-                parameters.Add("@ApprenticeshipId", payment.ApprenticeshipId, DbType.Int64);
-                parameters.Add("@DeliveryPeriodMonth", payment.DeliveryPeriod.Month, DbType.Int32);
-                parameters.Add("@DeliveryPeriodYear", payment.DeliveryPeriod.Year, DbType.Int32);
-                parameters.Add("@CollectionPeriodId", payment.CollectionPeriod.Id, DbType.String);
-                parameters.Add("@CollectionPeriodMonth", payment.CollectionPeriod.Month, DbType.Int32);
-                parameters.Add("@CollectionPeriodYear", payment.CollectionPeriod.Year, DbType.Int32);
-                parameters.Add("@EvidenceSubmittedOn", payment.EvidenceSubmittedOn, DbType.DateTime);
-                parameters.Add("@EmployerAccountVersion", payment.EmployerAccountVersion, DbType.String);
-                parameters.Add("@ApprenticeshipVersion", payment.ApprenticeshipVersion, DbType.String);
-                parameters.Add("@FundingSource", payment.FundingSource, DbType.String);
-                parameters.Add("@TransactionType", payment.TransactionType, DbType.String);
-                parameters.Add("@Amount", payment.Amount, DbType.Decimal);
-                parameters.Add("@PeriodEnd", periodEnd, DbType.String);
-                parameters.Add("@StandardCode", payment.StandardCode, DbType.Int64);
-                parameters.Add("@FrameworkCode", payment.FrameworkCode, DbType.Int32);
-                parameters.Add("@ProgrammeType", payment.ProgrammeType, DbType.Int32);
-                parameters.Add("@PathwayCode", payment.PathwayCode, DbType.Int32);
-                parameters.Add("@CourseName", courseName, DbType.StringFixedLength, ParameterDirection.Input, 250);
+                parameters.Add("@PaymentId", Guid.Parse(details.Id), DbType.Guid);
+                parameters.Add("@Ukprn", details.Ukprn, DbType.Int64);
+                parameters.Add("@ProviderName", details.ProviderName, DbType.String);
+                parameters.Add("@Uln", details.Uln, DbType.Int64);
+                parameters.Add("@AccountId", details.EmployerAccountId, DbType.Int64);
+                parameters.Add("@ApprenticeshipId", details.ApprenticeshipId, DbType.Int64);
+                parameters.Add("@DeliveryPeriodMonth", details.DeliveryPeriod.Month, DbType.Int32);
+                parameters.Add("@DeliveryPeriodYear", details.DeliveryPeriod.Year, DbType.Int32);
+                parameters.Add("@CollectionPeriodId", details.CollectionPeriod.Id, DbType.String);
+                parameters.Add("@CollectionPeriodMonth", details.CollectionPeriod.Month, DbType.Int32);
+                parameters.Add("@CollectionPeriodYear", details.CollectionPeriod.Year, DbType.Int32);
+                parameters.Add("@EvidenceSubmittedOn", details.EvidenceSubmittedOn, DbType.DateTime);
+                parameters.Add("@EmployerAccountVersion", details.EmployerAccountVersion, DbType.String);
+                parameters.Add("@ApprenticeshipVersion", details.ApprenticeshipVersion, DbType.String);
+                parameters.Add("@FundingSource", details.FundingSource, DbType.String);
+                parameters.Add("@TransactionType", details.TransactionType, DbType.String);
+                parameters.Add("@Amount", details.Amount, DbType.Decimal);
+                parameters.Add("@PeriodEnd", details.PeriodEnd, DbType.String);
+                parameters.Add("@StandardCode", details.StandardCode, DbType.Int64);
+                parameters.Add("@FrameworkCode", details.FrameworkCode, DbType.Int32);
+                parameters.Add("@ProgrammeType", details.ProgrammeType, DbType.Int32);
+                parameters.Add("@PathwayCode", details.PathwayCode, DbType.Int32);
+                parameters.Add("@CourseName", details.CourseName, DbType.String);
+                parameters.Add("@ApprenticeName", details.ApprenticeName, DbType.String);
+                parameters.Add("@ApprenticeNINumber", details.ApprenticeNINumber, DbType.String);
+                parameters.Add("@ApprenticeshipCourseLevel", details.CourseLevel, DbType.Int32);
+                parameters.Add("@ApprenticeshipCourseStartDate", details.CourseStartDate, DbType.DateTime);
 
                 return await c.ExecuteAsync(
                     sql: "[employer_financial].[CreatePayment]",

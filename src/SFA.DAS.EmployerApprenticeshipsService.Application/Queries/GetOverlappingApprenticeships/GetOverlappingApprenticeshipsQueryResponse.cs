@@ -9,9 +9,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships
     {
         public IEnumerable<ApprenticeshipOverlapValidationResult> Overlaps { get; set; }
 
-        public IEnumerable<OverlappingApprenticeship> GetOverlappingApprenticeships(string uln)
+        public IEnumerable<OverlappingApprenticeship> GetOverlappingApprenticeships(long apprenticeshipId)
         {
-            return Overlaps.FirstOrDefault(m => m.Self.Uln == uln)
+            return Overlaps.FirstOrDefault(m => m.Self.ApprenticeshipId == apprenticeshipId)
                        ?.OverlappingApprenticeships
                    ?? Enumerable.Empty<OverlappingApprenticeship>();
         }

@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
@@ -108,29 +109,43 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             var accountId = (long) ScenarioContext.Current["AccountId"];
             var dasLevyRepository = _container.GetInstance<IDasLevyRepository>();
 
+            var paymentsList = new List<PaymentDetails>();
+
             foreach (var tableRow in table.Rows)
             {
-                dasLevyRepository.CreatePaymentData(new Payment
+                var payment = new PaymentDetails
                 {
-                    Id= Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Amount = Convert.ToDecimal(tableRow["Payment_Amount"]),
                     TransactionType = TransactionType.Learning,
                     ProgrammeType = tableRow["Payment_Type"].ToLower().Equals("levy") ? 1 : 2,
-                    DeliveryPeriod = new CalendarPeriod { Month=1,Year=2016},
-                    CollectionPeriod = new NamedCalendarPeriod { Id= "1617-R12" ,Month=1,Year=2016},
-                    FundingSource = tableRow["Payment_Type"].ToLower().Equals("levy") ? FundingSource.Levy : FundingSource.CoInvestedEmployer,
+                    DeliveryPeriod = new CalendarPeriod {Month = 1, Year = 2016},
+                    CollectionPeriod = new NamedCalendarPeriod {Id = "1617-R12", Month = 1, Year = 2016},
+                    FundingSource =
+                        tableRow["Payment_Type"].ToLower().Equals("levy")
+                            ? FundingSource.Levy
+                            : FundingSource.CoInvestedEmployer,
                     EvidenceSubmittedOn = DateTime.Now,
                     EmployerAccountVersion = "123",
                     ApprenticeshipId = 1,
                     ApprenticeshipVersion = "123",
-                    EmployerAccountId = accountId.ToString(),
+                    EmployerAccountId = accountId,
                     Ukprn = 1,
                     Uln = 1,
                     FrameworkCode = 1,
                     PathwayCode = 1,
-                    StandardCode = 1
-                }, accountId, "1617-R12", "Provider 1", "Course 1").Wait();
+                    StandardCode = 1,
+                    ProviderName = "Provider 1",
+                    CourseName = "Course 1",
+                    PeriodEnd = "1617-R12"
+                };
+
+                paymentsList.Add(payment);
+
+                dasLevyRepository.CreatePaymentData(payment).Wait();
             }
+
+            ScenarioContext.Current["payments"] = paymentsList;
 
             dasLevyRepository.CreateNewPeriodEnd(new PeriodEnd
             {
@@ -149,11 +164,11 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
         [Then(@"the balance should be (.*) on the screen")]
         public void ThenTheBalanceShouldBeOnTheScreen(decimal balance)
         {
-            var employerAccountTransactionsOrchestraotor = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
+            var employerAccountTransactionsOrchestrator = _container.GetInstance<EmployerAccountTransactionsOrchestrator>();
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
-            var actual = employerAccountTransactionsOrchestraotor.GetAccountTransactions(hashedAccountId, userId).Result;
+            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, userId).Result;
 
             Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
         }

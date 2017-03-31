@@ -40,10 +40,6 @@
                     <tr>
                         <th scope="col">Added PAYE schemes</th>
 
-                        @if (Model.Data.ShowHistory)
-                        {
-                            <th scope="col">English %</th>
-                        }
                         <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
@@ -53,21 +49,7 @@
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
                         <tr>
                             <td>@scheme.PayeRef</td>
-                            @if (Model.Data.ShowHistory)
-			                {
-                                if (englishFractionPercentage == 1)
-                                {
-                                    <td>100%</td>
-                                }
-                                else if (englishFractionPercentage == 0)
-                                {
-                                    <td>0%</td>
-                                }
-                                else
-                                {
-                                    <td>@englishFractionPercentage.ToString("P3")</td>
-                                }
-			                }
+                            
                             <td class="link-right">
                                 <a aria-label="Details for PAYE scheme @scheme.PayeRef"
                                    title="Details for PAYE scheme @scheme.PayeRef"
@@ -77,11 +59,7 @@
                     }
                 </tbody>
             </table>
-
-            if (Model.Data.ShowHistory)
-            {
-                @Html.Partial("_WhatIsEnglishPercentage")
-            }
+            
         }
         else
         {

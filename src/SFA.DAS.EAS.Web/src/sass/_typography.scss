@@ -24,6 +24,9 @@ dl.inline {
     dd {
         font-weight: bold;
     }
+    &.course-details {
+        margin-bottom: 15px;
+    }
 }
 
 .responsive-detail {

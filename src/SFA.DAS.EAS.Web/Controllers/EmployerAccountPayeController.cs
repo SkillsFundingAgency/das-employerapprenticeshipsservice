@@ -14,12 +14,11 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountPayeController : BaseController
     {
-      
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(IOwinWrapper owinWrapper,EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator, 
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList) 
-            : base(owinWrapper, featureToggle, userWhiteList)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService) 
+            : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             if (owinWrapper == null)
                 throw new ArgumentNullException(nameof(owinWrapper));

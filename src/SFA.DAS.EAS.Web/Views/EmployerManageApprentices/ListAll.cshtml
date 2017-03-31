@@ -17,7 +17,7 @@
         @if (!Model.Data.Apprenticeships.Any())
         {
             <div class="panel panel-border-wide alert-default">
-                <p>Once you've approved a cohort, the apprentices from that cohort will appear here.</p>
+                <p>Once you and your training provider have approved a cohort, the apprentices from that cohort will appear here.</p>
             </div>
         }
         else
@@ -67,6 +67,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to apprenticeship start page" class="back-link">Back</a>
+        <a href="@Url.Action("Index", "EmployerCommitments")" aria-label="Back to apprentices" class="back-link">Back to apprentices</a>
     </div>
 }

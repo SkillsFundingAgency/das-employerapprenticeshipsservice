@@ -19,5 +19,6 @@ namespace SFA.DAS.EAS.Web.ViewModels.Organisation
         public bool AddedToAccount { get; set; }
         public string NameError => GetErrorMessage(nameof(Name));
         public string Sector { get; set; }
+        public string OrganisationCode { get; set; }
     }
 }

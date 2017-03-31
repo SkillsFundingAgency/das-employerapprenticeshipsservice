@@ -1,7 +1,7 @@
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
@@ -14,8 +14,8 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 {
     public class WorkerRole : RoleEntryPoint
     {
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-        private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ManualResetEvent _runCompleteEvent = new ManualResetEvent(false);
         private IContainer _container;
 
         public override void Run()
@@ -25,11 +25,12 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
 
             try
             {
-                this.RunAsync(this.cancellationTokenSource.Token).Wait();
+                var paymentDataProcessor = _container.GetInstance<IPaymentDataProcessor>();
+                paymentDataProcessor.RunAsync(_cancellationTokenSource.Token).Wait();
             }
             finally
             {
-                this.runCompleteEvent.Set();
+                _runCompleteEvent.Set();
             }
         }
 
@@ -41,21 +42,21 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
             // For information on handling configuration changes
             // see the MSDN topic at https://go.microsoft.com/fwlink/?LinkId=166357.
 
-            bool result = base.OnStart();
+            var result = base.OnStart();
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has been started");
-
+           
             _container = new Container(c =>
             {
                 c.Policies.Add(new ConfigurationPolicy<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ConfigurationPolicy<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI"));
+                c.Policies.Add(new ConfigurationPolicy<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI"));
                 c.Policies.Add<LoggingPolicy>();
                 c.Policies.Add(new MessagePolicy<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider"));
                 c.Policies.Add(new ExecutionPolicyPolicy());
                 c.AddRegistry<DefaultRegistry>();
             });
-
             return result;
         }
 
@@ -63,25 +64,12 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker
         {
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker is stopping");
 
-            this.cancellationTokenSource.Cancel();
-            this.runCompleteEvent.WaitOne();
+            _cancellationTokenSource.Cancel();
+            _runCompleteEvent.WaitOne();
 
             base.OnStop();
 
             Trace.TraceInformation("SFA.DAS.EAS.PaymentProvider.Worker has stopped");
-        }
-
-        private async Task RunAsync(CancellationToken cancellationToken)
-        {
-            var paymentDataProcessor = _container.GetInstance<IPaymentDataProcessor>();
-
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                Trace.TraceInformation("Working");
-
-                await paymentDataProcessor.Handle();
-                await Task.Delay(1000);
-            }
         }
     }
 }
