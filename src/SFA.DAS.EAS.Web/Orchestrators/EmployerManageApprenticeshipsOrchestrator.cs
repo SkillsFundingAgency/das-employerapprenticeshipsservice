@@ -90,18 +90,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             return await CheckUserAuthorization(async () =>
                 {
-                    var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+                    var data = await _mediator.SendAsync(
+                        new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
 
-                    var q = await _mediator.SendAsync(
+                    var updateReponse = await _mediator.SendAsync(
                         new GetApprenticeshipUpdateRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId } );
 
                     var detailsViewModel = 
-                        _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship, q.ApprenticeshipUpdate);
+                        _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship, updateReponse.ApprenticeshipUpdate);
 
-                    return new OrchestratorResponse<ApprenticeshipDetailsViewModel>
-                               {
-                                   Data = detailsViewModel
-                               };
+                    return new OrchestratorResponse<ApprenticeshipDetailsViewModel> { Data = detailsViewModel };
                 }, hashedAccountId, externalUserId);
         }
 

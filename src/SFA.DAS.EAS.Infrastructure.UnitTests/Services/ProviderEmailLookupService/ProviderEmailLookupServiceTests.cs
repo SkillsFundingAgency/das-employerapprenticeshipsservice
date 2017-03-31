@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
             result.Count.Should().Be(0);
             _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
             _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Once);
-            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Once);
+            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<long>()), Times.Once);
         }
 
         [Test]
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
         public async Task WhenAddressInProviderApi()
         {
             _config.CommitmentNotification.UseProviderEmail = true;
-            _mockApprenticeshipService.Setup(m => m.GetProvider(It.IsAny<int>()))
+            _mockApprenticeshipService.Setup(m => m.GetProvider(It.IsAny<long>()))
                 .Returns(
                     new ProvidersView
                         {
@@ -137,7 +137,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
             result[0].Should().Be("provider@email.uk");
             _mockIdamsService.Verify(m => m.GetEmailsAsync(It.IsAny<long>()), Times.Once);
             _mockIdamsService.Verify(m => m.GetSuperUserEmailsAsync(It.IsAny<long>()), Times.Once);
-            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<int>()), Times.Once);
+            _mockApprenticeshipService.Verify(m => m.GetProvider(It.IsAny<long>()), Times.Once);
         }
     }
 }

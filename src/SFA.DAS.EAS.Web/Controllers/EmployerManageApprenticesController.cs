@@ -84,7 +84,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [OutputCache(CacheProfile = "NoCache")]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/confirm")]
         public async Task<ActionResult> ConfirmChanges(ApprenticeshipViewModel apprenticeship)
@@ -94,7 +93,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             AddErrorsToModelState(await _orchestrator.ValidateApprenticeship(apprenticeship));
             if (!ModelState.IsValid)
+            {
                 return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
+            }
 
             var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
 

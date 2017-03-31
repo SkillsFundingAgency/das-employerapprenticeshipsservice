@@ -13,6 +13,9 @@ using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using System;
 using System.Threading.Tasks;
 
+using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
     [TestFixture]
@@ -49,6 +52,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                             StartDate = new DateTime(1998, startMonth, 1)
                                         }
                                   });
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse());
 
             var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
@@ -74,10 +79,67 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                         }
                 });
 
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse());
+
             var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
             result.Data.Status.Should().Be("On programme");
+        }
+
+        [Test]
+        public async Task ShouldSetRecordStatusTextForApprenticeshipWithUpdateWaitingForApproval()
+        {
+            _mockDateTime.Setup(m => m.Now).Returns(new DateTime(1998, 12, 8));
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship =
+                                        new Apprenticeship
+                                        {
+                                            PaymentStatus = PaymentStatus.Active,
+                                            StartDate = new DateTime(1998, 11, 1)
+                                        }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse
+                                  {
+                                      ApprenticeshipUpdate = 
+                                          new ApprenticeshipUpdate
+                                          {
+                                              ApprenticeshipId = 1L,
+                                              Originator = Originator.Employer
+                                          }
+                                  });
+
+            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
+            result.Data.PendingChanges.Should().Be(PendingChanges.WaitingForApproval);
+        }
+
+        [Test]
+        public async Task ShouldSetRecordStatusTextForApprenticeshipWithUpdateReadyForReview()
+        {
+            _mockDateTime.Setup(m => m.Now).Returns(new DateTime(1998, 12, 8));
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship =
+                        new Apprenticeship { PaymentStatus = PaymentStatus.Active, StartDate = new DateTime(1998, 11, 1) }
+                });
+
+            _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
+                .ReturnsAsync(new GetApprenticeshipUpdateResponse
+                {
+                    ApprenticeshipUpdate =
+                        new ApprenticeshipUpdate {ApprenticeshipId = 1L, Originator = Originator.Provider }
+                });
+
+            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
+            result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
     }
 }

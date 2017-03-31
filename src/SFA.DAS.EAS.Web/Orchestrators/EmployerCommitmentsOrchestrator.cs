@@ -445,7 +445,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HasApprenticeships = response.Commitment.Apprenticeships.Any(),
                         InvalidApprenticeshipCount = response.Commitment.Apprenticeships.Count(x => !x.CanBeApproved),
                         HasSignedTheAgreement = hasSigned,
-                        HasOverlappingErrors = overlaps.Overlaps.Any()
+                        HasOverlappingErrors = overlaps?.Overlaps?.Any() ?? true
                     }
                 };
             }, hashedAccountId, externalUserId);
