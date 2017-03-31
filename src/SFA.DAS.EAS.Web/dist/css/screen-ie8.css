@@ -3150,6 +3150,38 @@ table.organisations td + td + td {
   display: none;
 }
 
+.js-enabled .accordion-tab {
+  position: relative;
+  color: #005ea5;
+  padding-left: 15px;
+}
+
+.js-enabled .accordion-tab:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  display: block;
+  border-width: 4px 7px;
+  border-color: transparent;
+  border-left-color: #005ea5;
+  border-style: solid;
+  left: 10px;
+  top: 50%;
+  margin-top: -5px;
+  left: 0;
+}
+
+.js-enabled .accordion-tab:focus {
+  outline: 3px solid #ffbf47;
+}
+
+.js-enabled .accordion-tab.open:before {
+  border-width: 7px 4px;
+  border-top-color: #005ea5;
+  border-left-color: transparent;
+}
+
 .validation-summary-valid,
 .form-group .field-validation-valid {
   display: none;
