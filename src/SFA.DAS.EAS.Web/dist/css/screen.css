@@ -2864,6 +2864,14 @@ legend {
   margin-bottom: 0;
 }
 
+.error-summary h1 {
+  display: none;
+}
+
+.error-summary h1 + p {
+  display: none;
+}
+
 .error-summary-standalone .error-summary {
   margin-bottom: 0;
 }
