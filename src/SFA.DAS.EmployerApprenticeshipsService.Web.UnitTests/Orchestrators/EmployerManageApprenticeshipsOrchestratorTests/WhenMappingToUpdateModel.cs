@@ -84,9 +84,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             var updated = new ApprenticeshipViewModel { Cost = updatedCost };
 
             var model = await _mappingTjänst.CompareAndMapToApprenticeshipViewModel(a, updated);
-            
-            model.Cost.Should().NotBeEmpty();
-            updatedCost = updatedCost == string.Empty ? "0" : updatedCost;
             model.Cost.Should().Be(updatedCost);
         }
 
