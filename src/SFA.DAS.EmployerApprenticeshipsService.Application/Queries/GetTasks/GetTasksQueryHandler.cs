@@ -20,8 +20,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetTasks
 
         public async Task<GetTasksQueryResponse> Handle(GetTasksQueryRequest message)
         {
-            var assigneePrfix = message.AssigneeEmployer ? "EMPLOYER" : "PROVIDER";
-            var assignee = $"{assigneePrfix}-{message.AccountId}";
+            var assigneePrfix = message.IsAssigneeEmployer ? "EMPLOYER" : "PROVIDER";
+            var assignee = $"{assigneePrfix}-{message.Id}";
 
             var tasks = await _tasksApi.GetTasks(assignee);
 
