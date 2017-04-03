@@ -279,9 +279,12 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             model.Type = OrganisationType.Other;
 
-            var addressModel = _mapper.Map<FindOrganisationAddressViewModel>(response.Data);
-
-            return RedirectToAction("FindAddress", addressModel);
+            var addressModel = new OrchestratorResponse<FindOrganisationAddressViewModel>
+            {
+                Data = _mapper.Map<FindOrganisationAddressViewModel>(response.Data)
+            };
+            
+            return View("FindAddress", addressModel);
         }
 
         [HttpPost]
