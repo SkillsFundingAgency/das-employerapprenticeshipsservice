@@ -40,8 +40,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return startDate;
         }
 
-        private static DateTime GetDateFromPayrollYearMonth(string payroll, int payrollMonth)
+        private static DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth)
         {
+
             
             return new DateTime();
         }
