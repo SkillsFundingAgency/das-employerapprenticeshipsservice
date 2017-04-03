@@ -969,6 +969,9 @@
     <Content Include="StartUp\IIS.PS1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	<Content Include="StartUp\TokenServiceCertInstall.PS1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="StartUp\Powershell.msi">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

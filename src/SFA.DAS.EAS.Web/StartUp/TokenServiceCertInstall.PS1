@@ -103,12 +103,12 @@ if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure })
     [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
     $ConfigurationStorageConnectionString = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("ConfigurationStorageConnectionString")
     $EnvironmentName = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("EnvironmentName")
-    $Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenCertificateThumbprint")
+    $Thumbprint = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TokenServiceCertificateThumbprint")
 
     $checkcert=(Get-ChildItem cert:\LocalMachine\My | Where thumbprint -eq $thumbprint).Thumbprint
     $Ctx = New-AzureStorageContext -ConnectionString "$ConfigurationStorageConnectionString"
-    $BlobName = "$environmentname/DasIDPCert.pfx"
-    $BlobNamePassword = "$environmentname/password.txt"
+    $BlobName = "$environmentname/TokenServiceCert.pfx"
+    $BlobNamePassword = "$environmentname/TokenServiceCertPassword.txt"
     $ContainerName = "certs"
     $localTargetDirectory = "C:\Cert"
              
@@ -142,11 +142,11 @@ if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure })
             break
         }
 
-        $CertPassword = Get-Content "C:\Cert\$environmentname\password.txt"
+        $CertPassword = Get-Content "C:\Cert\$environmentname\TokenServiceCertPassword.txt"
 
         $mypwd = ConvertTo-SecureString -String "$CertPassword" -Force -AsPlainText
 
-        Import-PfxCertificate -FilePath C:\Cert\$environmentname\DasIDPCert.pfx cert:\localMachine\my -Password $mypwd
+        Import-PfxCertificate -FilePath C:\Cert\$environmentname\TokenServiceCert.pfx cert:\localMachine\my -Password $mypwd
         $logger.Info("Importing the certificate")
         #Setting Permission on the Cert for ReadAccess#
         Permissions
