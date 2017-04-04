@@ -26,9 +26,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return submissionDate >= endDate;
         }
 
-        public bool IsSubmissionForFuturePeriod(string payroll, int payrollMonth, DateTime submissionDate)
+        public bool IsSubmissionForFuturePeriod(string payrollYear, int payrollMonth, DateTime submissionDate)
         {
-            throw new NotImplementedException();
+            var dateToCompare = GetDateFromPayrollYearMonth(payrollYear, payrollMonth);
+
+            return submissionDate > dateToCompare;
         }
 
         private static DateTime GetDateRange(string payrollYear, out DateTime endDate)
@@ -42,9 +44,23 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         private static DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth)
         {
+            var yearToUse = 2000;
+            int monthToUse;
 
+            var yearSplit = payrollYear.Split('-');
+
+            if (payrollMonth >= 10)
+            {
+                yearToUse += Convert.ToInt32(yearSplit[1]);
+                monthToUse = payrollMonth - 9;
+            }
+            else
+            {
+                yearToUse += Convert.ToInt32(yearSplit[0]);
+                monthToUse = payrollMonth + 3;
+            }
             
-            return new DateTime();
+            return new DateTime(yearToUse,monthToUse,1);
         }
     }
 }
