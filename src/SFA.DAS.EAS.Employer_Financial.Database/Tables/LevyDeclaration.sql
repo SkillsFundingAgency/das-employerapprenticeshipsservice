@@ -14,5 +14,6 @@
 	[EndOfYearAdjustmentAmount] DECIMAL(18,4) NULL,
 	[DateCeased] DATETIME NULL,
 	[InactiveFrom] DATETIME NULL,
-	[InactiveTo] DATETIME NULL
+	[InactiveTo] DATETIME NULL,
+	[HmrcSubmissionId] BIGINT NULL
 )
