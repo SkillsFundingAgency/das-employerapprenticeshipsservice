@@ -93,5 +93,30 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             
         }
 
+        [Test]
+        public void ThenIfThePayrollPeriodIsForTheCorrectSubmissionDateThenTrueIsReturned()
+        {
+            //Arrange
+            var submissionDate = new DateTime(2017,03,16);
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, submissionDate);
+
+            //Assert
+            Assert.IsTrue(actual);
+        }
+
+        [Test]
+        public void ThenIfThePayrollPeriodIsInThePastThenTrueIsReturned()
+        {
+            //Arrange
+            var submissionDate = new DateTime(2017, 03, 16);
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("15-16", 12, submissionDate);
+
+            //Assert
+            Assert.IsTrue(actual);
+        }
     }
 }
