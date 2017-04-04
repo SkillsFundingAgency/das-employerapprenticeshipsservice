@@ -177,6 +177,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
         public async Task ThenIfTheSubmissionIsForATaxMonthInTheFutureItWillNotBeProcessed()
         {
             //Arrange
+            _hmrcDateService.Setup(x => x.IsSubmissionForCurrentPeriod("16-17", It.IsAny<int>(), It.IsAny<DateTime>())).Returns(true);
             var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithFutureSubmissions(ExpectedEmpRef,DateTime.Now, ExpectedAccountId);
 
             //Act

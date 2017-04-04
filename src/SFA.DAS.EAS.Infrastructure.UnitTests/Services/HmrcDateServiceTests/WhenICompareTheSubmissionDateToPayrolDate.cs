@@ -85,7 +85,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             for (var i = 1; i <= 12; i++)
             {
                 //Act
-                var actual = _hmrcDateService.IsSubmissionForFuturePeriod(payroll, i, submissionDate);
+                var actual = _hmrcDateService.IsSubmissionForCurrentPeriod(payroll, i, submissionDate);
 
                 //Assert
                 Assert.IsFalse(actual);
@@ -100,7 +100,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             var submissionDate = new DateTime(2017,03,16);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForCurrentPeriod("16-17", 12, submissionDate);
 
             //Assert
             Assert.IsTrue(actual);
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             var submissionDate = new DateTime(2017, 03, 16);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("15-16", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForCurrentPeriod("15-16", 12, submissionDate);
 
             //Assert
             Assert.IsTrue(actual);
