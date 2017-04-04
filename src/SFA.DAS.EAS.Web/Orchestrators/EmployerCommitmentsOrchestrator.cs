@@ -52,8 +52,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ICommitmentStatusCalculator _statusCalculator;
 
         private readonly Func<int, string> _addPluralizationSuffix = i => i > 1 ? "s" : "";
-        private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromProviderFunc;
-        private readonly Func<CommitmentListItem, Task<string>> _latestMessageFromEmployerFunc;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ICommitmentMapper _commitmentMapper;
 
@@ -84,9 +82,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _apprenticeshipMapper = apprenticeshipMapper;
             _commitmentMapper = commitmentMapper;
             _logger = logger;
-
-            _latestMessageFromProviderFunc = async item => await GetLatestMessageFromProvider(item.EmployerAccountId, item.Id);
-            _latestMessageFromEmployerFunc = async item => await GetLatestMessageFromEmployer(item.ProviderId, item.Id);
         }
 
         public async Task<OrchestratorResponse<Account>> CheckAccountAuthorization(string hashedAccountId, string externalUserId)
@@ -579,7 +574,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CommitmentId = commitmentId
                 });
 
-                var messageTask = GetLatestMessageFromEmployer(data.Commitment);
+                var messageTask = GetLatestMessage(data.Commitment.ProviderId, data.Commitment.Id, isEmployerAssignee: false);
 
                 return new OrchestratorResponse<AcknowledgementViewModel>
                 {
@@ -641,12 +636,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     var commitments = (await GetAll(accountId, RequestStatus.NewRequest)).ToList();
 
+                    var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
+
                     return new OrchestratorResponse<CommitmentListViewModel>
                     {
                         Data = new CommitmentListViewModel
                         {
                             AccountHashId = hashedAccountId,
-                            Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
+                            Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
@@ -666,12 +663,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
 
+                var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
+
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
+                        Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
                         PageTitle = "Cohorts for approval",
                         PageId = "ready-for-approval",
                         PageHeading = "Cohorts for approval",
@@ -692,12 +691,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
 
+                var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
+
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromProviderFunc))),
+                        Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
                         PageTitle = "Cohorts for review",
                         PageId = "ready-for-review",
                         PageHeading = "Cohorts for review",
@@ -725,12 +726,21 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                   .Concat(sentToProvider)
                                   .ToList();
 
+                var uniqueProviderIds = commitments.Select(x => x.ProviderId).Distinct();
+
+                var employerCommitmentMessages = new List<CreateCommitmentTemplate>();
+
+                foreach (var providerId in uniqueProviderIds)
+                {
+                    employerCommitmentMessages.AddRange(await GetLatestCommitmentMessages(providerId, isEmployerAssignee: false));
+                }
+
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = await Task.WhenAll(commitments.Select(m => _commitmentMapper.MapToCommitmentListItemViewModelAsync(m, _latestMessageFromEmployerFunc))),
+                        Commitments = MapFrom(commitments, employerCommitmentMessages),
                         PageTitle = "With training providers",
                         PageId = "with-the-provider",
                         PageHeading = "With training providers",
@@ -771,7 +781,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-                var messageTask = GetLatestMessageFromProvider(data.Commitment);
+                var messageTask = GetLatestMessage(data.Commitment.EmployerAccountId, data.Commitment.Id, isEmployerAssignee: true);
 
                 var overlappingApprenticeships = await _mediator.SendAsync(
                    new GetOverlappingApprenticeshipsQueryRequest
@@ -991,39 +1001,33 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return approvalState;
          }
 
-        private async Task<string> GetLatestMessageFromEmployer(Commitment commitment)
+        private async Task<string> GetLatestMessage(long? id, long commitmentId, bool isEmployerAssignee)
         {
-            return await GetLatestMessage(commitment.ProviderId, commitment.Id, false);
-        }
+            if (id == null) return string.Empty;
 
-        private async Task<string> GetLatestMessageFromEmployer(long? providerId, long commitmentId)
-        {
-            return await GetLatestMessage(providerId, commitmentId, false);
-        }
-        private async Task<string> GetLatestMessageFromProvider(Commitment commitment)
-        {
-            return await GetLatestMessage(commitment.EmployerAccountId, commitment.Id, true);
-        }
+            var allTasks = await GetLatestCommitmentMessages(id, isEmployerAssignee);
 
-        private async Task<string> GetLatestMessageFromProvider(long? employerAccountId, long commitmentId)
-        {
-            return await GetLatestMessage(employerAccountId, commitmentId, true);
-        }
+            var taskForCommitment = allTasks?.SingleOrDefault(x => x.CommitmentId == commitmentId);
 
-        private async Task<string> GetLatestMessage(long? accountId, long commitmentId, bool assigneeEmployer)
-        {
-            if (accountId == null) return string.Empty;
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { AccountId = accountId.Value, AssigneeEmployer = assigneeEmployer });
-
-            var taskForCommitment = allTasks?.Tasks
-                .Select(x => new { Task = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
-                .Where(x => x.Task != null && x.Task.CommitmentId == commitmentId)
-                .OrderByDescending(x => x.CreateDate)
-                .FirstOrDefault();
-
-            var message = taskForCommitment?.Task?.Message ?? string.Empty;
+            var message = taskForCommitment?.Message ?? string.Empty;
 
             return message;
+        }
+
+        private async Task<IEnumerable<CreateCommitmentTemplate>> GetLatestCommitmentMessages(long? id, bool isEmployerAssignee)
+        {
+            if (!id.HasValue)
+                return new List<CreateCommitmentTemplate>(0);
+
+            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { Id = id.Value, IsAssigneeEmployer = isEmployerAssignee });
+
+            var allMessages = allTasks?.Tasks
+                .Select(x => new { TaskItem = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
+                .OrderByDescending(x => x.CreateDate)
+                .GroupBy(x => x.TaskItem.CommitmentId)
+                .Select(g => g.First().TaskItem);
+
+            return allMessages;
         }
 
         private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(string hashedAccountId, string externalUserId)
@@ -1034,6 +1038,39 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 UserId = externalUserId
             });
         }
+
+        private CommitmentViewModel MapFrom(Commitment commitment)
+        {
+            return new CommitmentViewModel
+            {
+                HashedId = _hashingService.HashValue(commitment.Id),
+                Name = commitment.Reference,
+                LegalEntityName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName
+            };
+        }
+
+        private IEnumerable<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments, IList<CreateCommitmentTemplate> allLastestMessages)
+        {
+            var commitmentsList = commitments.Select(m => MapFrom(m, allLastestMessages.SingleOrDefault(x => x.CommitmentId == m.Id)?.Message));
+
+            return commitmentsList;
+        }
+
+        private CommitmentListItemViewModel MapFrom(CommitmentListItem commitment, string latestMessage)
+        {
+            return new CommitmentListItemViewModel
+            {
+                HashedCommitmentId = _hashingService.HashValue(commitment.Id),
+                Name = commitment.Reference,
+                LegalEntityName = commitment.LegalEntityName,
+                ProviderName = commitment.ProviderName,
+                Status = _statusCalculator.GetStatus(commitment.EditStatus, commitment.ApprenticeshipCount, commitment.LastAction, commitment.AgreementStatus),
+                ShowViewLink = commitment.EditStatus == EditStatus.EmployerOnly,
+                LatestMessage = latestMessage
+            };
+        }
+        
 
         private ApprenticeshipListItemViewModel MapToApprenticeshipListItem(Apprenticeship apprenticeship, GetOverlappingApprenticeshipsQueryResponse overlappingApprenticeships)
         {
@@ -1093,38 +1130,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (!allowedEditStatuses.Contains(commitment.EditStatus))
                 throw new InvalidStateException($"Invalid commitment state (edit status is {commitment.EditStatus}, expected {string.Join(",", allowedEditStatuses)})");
-        }
-
-        private Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
-        {
-            var dict = new Dictionary<string, string>();
-            const string StartText = "The start date is not valid";
-            const string EndText = "The end date is not valid";
-
-            const string StartDateKey = "StartDateOverlap";
-            const string EndDateKey = "EndDateOverlap";
-
-            foreach (var item in overlappingErrors.GetFirstOverlappingApprenticeships())
-            {
-                switch (item.ValidationFailReason)
-                {
-                    case ValidationFailReason.OverlappingStartDate:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        break;
-                    case ValidationFailReason.OverlappingEndDate:
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateEmbrace:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                    case ValidationFailReason.DateWithin:
-                        dict.AddIfNotExists(StartDateKey, StartText);
-                        dict.AddIfNotExists(EndDateKey, EndText);
-                        break;
-                }
-            }
-            return dict;
         }
     }
 }
