@@ -1,11 +1,7 @@
-﻿using SFA.DAS.Events.Api.Types;
-
-namespace SFA.DAS.EAS.Account.Api.Types.Events.Account
+﻿namespace SFA.DAS.EAS.Account.Api.Types.Events.Account
 {
-    public class AccountCreatedEvent : IEventView
+    public class AccountCreatedEvent
     {
-        public long Id { get; set; }
-        public string Event { get; set; }
         public string ResourceUri { get; set; }
     }
 }

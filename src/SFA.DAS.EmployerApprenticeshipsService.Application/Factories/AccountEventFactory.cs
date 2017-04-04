@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
             return new AccountCreatedEvent
             {
-                Event = "AccountCreated",
                 ResourceUri = $"api/accounts/{hashedAccountId}"
             };
         }
@@ -17,7 +16,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
             return new AccountRenamedEvent
             {
-                Event = "AccountRenamed",
                 ResourceUri = $"api/accounts/{hashedAccountId}"
             };
         }

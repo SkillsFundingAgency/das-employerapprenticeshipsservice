@@ -9,7 +9,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
             return new PayeSchemeAddedEvent
             {
-                Event = "PayeSchemeAdded",
                 ResourceUri =  GeneratePayeResourceUrl(hashedAccountId, payeSchemeRef)
             };
         }
@@ -18,7 +17,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
             return new PayeSchemeRemovedEvent
             {
-                Event = "PayeSchemeRemoved",
                 ResourceUri = GeneratePayeResourceUrl(hashedAccountId, payeSchemeRef)
             };
         }
