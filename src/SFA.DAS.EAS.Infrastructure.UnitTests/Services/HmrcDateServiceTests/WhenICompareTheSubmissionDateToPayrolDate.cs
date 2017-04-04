@@ -75,7 +75,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         }
 
         [Test]
-        public void ThenIfThePayrollPeriodIsInTheFutureThenFalseIsReturned()
+        public void ThenIfThePayrollPeriodIsInTheFutureThenTrueIsReturned()
         {
             //Arrange
             var payroll = $"{DateTime.Now.AddYears(1).ToString("yy")}-{DateTime.Now.AddYears(2).ToString("yy")}";
@@ -85,38 +85,38 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
             for (var i = 1; i <= 12; i++)
             {
                 //Act
-                var actual = _hmrcDateService.IsSubmissionForCurrentPeriod(payroll, i, submissionDate);
+                var actual = _hmrcDateService.IsSubmissionForFuturePeriod(payroll, i, submissionDate);
 
                 //Assert
-                Assert.IsFalse(actual);
+                Assert.IsTrue(actual);
             }
             
         }
 
         [Test]
-        public void ThenIfThePayrollPeriodIsForTheCorrectSubmissionDateThenTrueIsReturned()
+        public void ThenIfThePayrollPeriodIsForTheCorrectSubmissionDateThenFalseIsReturned()
         {
             //Arrange
             var submissionDate = new DateTime(2017,03,16);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForCurrentPeriod("16-17", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, submissionDate);
 
             //Assert
-            Assert.IsTrue(actual);
+            Assert.IsFalse(actual);
         }
 
         [Test]
-        public void ThenIfThePayrollPeriodIsInThePastThenTrueIsReturned()
+        public void ThenIfThePayrollPeriodIsInThePastThenFalseIsReturned()
         {
             //Arrange
             var submissionDate = new DateTime(2017, 03, 16);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForCurrentPeriod("15-16", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("15-16", 12, submissionDate);
 
             //Assert
-            Assert.IsTrue(actual);
+            Assert.IsFalse(actual);
         }
     }
 }

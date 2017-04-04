@@ -26,11 +26,11 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return submissionDate >= endDate;
         }
 
-        public bool IsSubmissionForCurrentPeriod(string payrollYear, int payrollMonth, DateTime submissionDate)
+        public bool IsSubmissionForFuturePeriod(string payrollYear, int payrollMonth, DateTime submissionDate)
         {
             var dateToCompare = GetDateFromPayrollYearMonth(payrollYear, payrollMonth);
 
-            return submissionDate > dateToCompare;
+            return dateToCompare > submissionDate;
         }
 
         private static DateTime GetDateRange(string payrollYear, out DateTime endDate)
