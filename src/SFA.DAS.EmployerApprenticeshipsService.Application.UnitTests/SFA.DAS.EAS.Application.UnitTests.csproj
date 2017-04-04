@@ -260,6 +260,8 @@
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
+    <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
