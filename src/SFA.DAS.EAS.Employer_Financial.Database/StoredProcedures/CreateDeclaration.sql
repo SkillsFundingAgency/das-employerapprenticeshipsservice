@@ -3,6 +3,7 @@
 	@EmpRef NVARCHAR(20), 
 	@SubmissionDate DATETIME, 
 	@SubmissionId BIGINT, 
+	@HmrcSubmissionId BIGINT,
 	@AccountId BIGINT,
 	@LevyAllowanceForYear DECIMAL(18, 4),
 	@PayrollYear NVARCHAR(10),
@@ -31,7 +32,8 @@ INSERT INTO [employer_financial].[LevyDeclaration]
 		EndOfYearAdjustmentAmount,
 		DateCeased,
 		InactiveFrom,
-		InactiveTo
+		InactiveTo,
+		HmrcSubmissionId
 	) 
 VALUES 
 	(
@@ -48,5 +50,6 @@ VALUES
 		@EndOfYearAdjustmentAmount,
 		@DateCeased,
 		@InactiveFrom,
-		@InactiveTo
+		@InactiveTo,
+		@HmrcSubmissionId
 	);

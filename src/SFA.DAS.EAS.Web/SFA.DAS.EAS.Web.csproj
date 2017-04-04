@@ -1002,6 +1002,7 @@
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index_EF.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details_EF.cshtml" />
+    <Content Include="src\sass\_accordions.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

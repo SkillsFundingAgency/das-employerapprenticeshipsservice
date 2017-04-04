@@ -59,6 +59,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@PayrollMonth", dasDeclaration.PayrollMonth, DbType.Int16);
                 parameters.Add("@SubmissionDate", dasDeclaration.SubmissionDate, DbType.DateTime);
                 parameters.Add("@SubmissionId", dasDeclaration.Id, DbType.String);
+                parameters.Add("@HmrcSubmissionId", dasDeclaration.SubmissionId, DbType.Int64);
                 parameters.Add("@CreatedDate", DateTime.UtcNow, DbType.DateTime);
                 if (dasDeclaration.DateCeased.HasValue && dasDeclaration.DateCeased != DateTime.MinValue)
                 {

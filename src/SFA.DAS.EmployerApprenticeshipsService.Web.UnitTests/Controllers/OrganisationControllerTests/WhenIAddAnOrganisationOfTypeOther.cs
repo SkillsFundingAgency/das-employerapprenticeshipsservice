@@ -92,9 +92,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             var result = await _controller.AddOtherOrganisationDetails(model);
 
             //Assert
-            var redirectResult = result as RedirectToRouteResult;
-            Assert.IsNotNull(redirectResult);
-            Assert.AreEqual("FindAddress", redirectResult?.RouteValues["Action"]);
+            var viewResult = result as ViewResult;
+            Assert.IsNotNull(viewResult);
+            Assert.AreEqual("FindAddress", viewResult.ViewName);
         }
 
         [Test]
