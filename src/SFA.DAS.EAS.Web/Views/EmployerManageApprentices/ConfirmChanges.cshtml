@@ -35,16 +35,6 @@
                     </tr>
                 }
 
-                @if (!string.IsNullOrEmpty(Model.Data.LastName))
-                {
-                    <tr>
-                        <td>Last name</td>
-                        <td>@Model.Data.OriginalApprenticeship.LastName </td>
-                        <td class="changed-item">@Model.Data.LastName</td>
-                        @Html.Hidden("LastName", Model.Data.LastName)
-                    </tr>
-                }
-
                 @if (Model.Data.DateOfBirth?.DateTime != null)
                 {
                     <tr>
