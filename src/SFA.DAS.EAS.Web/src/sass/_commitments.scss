@@ -173,6 +173,29 @@ span.helpText {
     border-color: $black transparent;
 }
 
+#app-status{
+    td{
+        border-top:1px solid $border-colour;
+    }
+}
+
+table{
+    th{
+        .float-right{
+            float:right;
+            font-weight:normal;
+        }
+    }
+}
+
+#confirm-edited-changes,
+#view-changes{
+    .changed-item{
+        font-weight:bold;
+    }
+}
+
+
 
 //all mobile media query breakpoints
 //==================================
@@ -320,4 +343,29 @@ only screen and (max-width: 480px) {
         font-weight: normal;
         margin-top: 5px;
     }
+
+    //manage all apprentices
+      #manage-all-apprentices td:nth-of-type(1):before {
+        content: "Name";
+        font-weight: normal;
+        margin-top: 5px;
+        min-height: 30px;
+    }
+        #manage-all-apprentices td:nth-of-type(2):before {
+        content: "Date of birth";
+        font-weight: normal;
+        margin-top: 5px;
+    }
+        #manage-all-apprentices td:nth-of-type(3):before {
+        content: "Training status";
+        font-weight: normal;
+        margin-top: 5px;
+    }
+       #manage-all-apprentices td:nth-of-type(4):before {
+        content: "Record status";
+        font-weight: normal;
+        margin-top: 5px;
+    }
+
+
 } // mobile view ends

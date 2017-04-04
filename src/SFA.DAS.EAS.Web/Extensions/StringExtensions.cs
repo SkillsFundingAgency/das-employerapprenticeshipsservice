@@ -11,5 +11,17 @@
         {
             return scheme.Replace("_", "/");
         }
+
+        public static decimal? AsNullableDecimal(this string input)
+        {
+            var result = default(decimal?);
+            decimal parsed;
+            if (decimal.TryParse(input, out parsed))
+            {
+                result = parsed;
+            }
+
+            return result;
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeship
                     {
                         Apprenticeship = message.Apprenticeship,
                         UserId = message.UserId
-                });
+                    });
         }
     }
 }

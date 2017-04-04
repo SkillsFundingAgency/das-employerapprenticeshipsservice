@@ -3908,6 +3908,20 @@ span.helpText {
   border-color: #0b0c0c transparent;
 }
 
+#app-status td {
+  border-top: 1px solid #bfc1c3;
+}
+
+table th .float-right {
+  float: right;
+  font-weight: normal;
+}
+
+#confirm-edited-changes .changed-item,
+#view-changes .changed-item {
+  font-weight: bold;
+}
+
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
   .select2-container--default {
     width: 100% !important;
@@ -4038,6 +4052,27 @@ span.helpText {
   }
   .tasksList td:nth-of-type(3):before {
     content: "Status";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #manage-all-apprentices td:nth-of-type(1):before {
+    content: "Name";
+    font-weight: normal;
+    margin-top: 5px;
+    min-height: 30px;
+  }
+  #manage-all-apprentices td:nth-of-type(2):before {
+    content: "Date of birth";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #manage-all-apprentices td:nth-of-type(3):before {
+    content: "Training status";
+    font-weight: normal;
+    margin-top: 5px;
+  }
+  #manage-all-apprentices td:nth-of-type(4):before {
+    content: "Record status";
     font-weight: normal;
     margin-top: 5px;
   }
