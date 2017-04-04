@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly ILogger _logger;
 
         public EmployerAccountController(IOwinWrapper owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList, ILogger logger)
-            : base(owinWrapper, featureToggle, userWhiteList)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService, ILogger logger)
+            : base(owinWrapper, featureToggle,multiVariantTestingService)
         {
             if (employerAccountOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerAccountOrchestrator));
@@ -82,7 +82,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params["code"], Url.Action("GateWayResponse", "EmployerAccount", null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
                 if (response.Status != HttpStatusCode.OK)
                 {
-                    _logger.Warn($"Gatway response does not indicate success. Status = {response.Status}.");
+                    _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
                     response.Status = HttpStatusCode.OK;
 
                     TempData["FlashMessage"] = JsonConvert.SerializeObject(response.FlashMessage);
@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error processing Gatway response - {ex.Message}");
+                _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
                 throw;
             }
         }

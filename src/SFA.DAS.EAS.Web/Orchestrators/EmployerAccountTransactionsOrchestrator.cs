@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
@@ -64,6 +66,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ToDate = toDate,
                     ExternalUserId = externalUserId
                 });
+                
+                var courseGroups = data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.CourseStartDate});
+
+                var coursePaymentGroups = courseGroups.Select(x => new ApprenticeshipPaymentGroup
+                {
+                    ApprenticeCourseName = x.Key.CourseName,
+                    CourseLevel = x.Key.CourseLevel,
+                    CourseStartDate = x.Key.CourseStartDate,
+                    Payments = x.ToList()
+                }).ToList();
+              
 
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
@@ -73,7 +86,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         ProviderName = data.ProviderName,
                         TransactionDate = data.TransactionDate,
                         Amount = data.Total,
-                        SubTransactions = data.Transactions
+                        SubTransactions = data.Transactions,
+                        CoursePaymentGroups = coursePaymentGroups
                     }
                 };
             }

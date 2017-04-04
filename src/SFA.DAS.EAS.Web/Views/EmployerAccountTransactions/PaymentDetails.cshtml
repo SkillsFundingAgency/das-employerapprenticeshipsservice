@@ -5,40 +5,108 @@
     var culture = new CultureInfo("en-GB");
     ViewBag.PageID = "page-payment-details";
     ViewBag.Title = "Debit details";
-    ViewBag.Section = "finance"; 
+    ViewBag.Section = "finance";
 
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Debit details</h1>
-        <p class="lede">Payment to @Model.Data.ProviderName for @Model.Data.TransactionDate.ToString("MMMM yyyy")</p>
-        <p><span class="strong">Amount: </span> @(Model.Data.Amount.ToString("C0", culture))</p>
-        <p><span class="strong">Payment Date: </span> @Model.Data.TransactionDate.ToString("dd MMMM yyyy")</p>
+
+        <p>The following shows details of the payment from your account.</p>
+
+        <h2 class="heading-medium">Payment</h2>
+
         <table>
             <thead>
                 <tr>
-                    <th scope="col">Course</th>
-                    <th class="numeric" scope="col">Paid out</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var payment in Model.Data.SubTransactions)
-                {
-                    <tr class="responsive-tr">
-                        <td>
-                            @payment.CourseName
-                        </td>
-                        <td class="numeric">
-                            @(payment.LineAmount.ToString("C0", culture))
-                        </td>
-                    </tr>
-                }
-            <tr class="total">
-                <td></td>
-                <td class="numeric">@Model.Data.Amount.ToString("C0", culture)</td>
-            </tr>
+                <tr class="responsive-tr">
+                    <td>Payment to</td>
+                    <td>@Model.Data.ProviderName</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>This payment</td>
+                    <td>@(Model.Data.Amount.ToString("C0", culture))</td>
+                </tr>
+                <tr class="responsive-tr">
+                    <td>Date of payment</td>
+                    <td>@Model.Data.TransactionDate.ToString("dd MMMM yyyy")</td>
+                </tr>
             </tbody>
         </table>
+
+@{
+    var courseCount = 0;
+}
+
+            @foreach (var group in Model.Data.CoursePaymentGroups)
+            {
+                courseCount++;
+
+                <h2 class="heading-medium">@group.ApprenticeCourseName</h2>
+                var startDate = group.CourseStartDate?.ToString("d") ?? "Unavailable";
+
+                <dl class="inline course-details">
+
+                    @if (group.CourseLevel != null) 
+                    {
+                    <dt>Level: </dt>
+                    <dd>@group.CourseLevel</dd>
+                    }
+
+                    <dt>Start date: </dt>
+                    <dd>@startDate</dd>
+
+                    <dt>Training code: </dt>
+                    <dd>12345</dd>
+
+                </dl>
+
+                <h3 class="accordion-tab" aria-controls="learners-@courseCount" id="apprentices-heading-@courseCount">See all apprentices (@group.Payments.Count)</h3>
+                <div class="accordion-panel" id="learners-@courseCount">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">National insurance number</th>
+                                <th scope="col" class="numeric">Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var payment in group.Payments)
+                            {
+                                <tr>
+                                    @if (string.IsNullOrWhiteSpace(payment.ApprenticeName) && string.IsNullOrWhiteSpace(payment.ApprenticeNINumber))
+                                    {
+                                        <td colspan="2">Appentice details unavailable</td>
+                                    }
+                                    else
+                                    {
+                                        var apprenticeName = string.IsNullOrWhiteSpace(payment.ApprenticeName) ? "Name unavailable" : payment.ApprenticeName;
+                                        var apprenticeNiNumber = string.IsNullOrWhiteSpace(payment.ApprenticeNINumber) ? "Number unavailable" : payment.ApprenticeNINumber;
+
+                                        <td>
+                                            @apprenticeName
+                                        </td>
+                                        <td>
+                                            @apprenticeNiNumber
+                                        </td>
+                                    }
+
+                                    <td class="numeric">
+                                        @(payment.LineAmount.ToString("C0", culture))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
     </div>
 </div>
 @section breadcrumb {

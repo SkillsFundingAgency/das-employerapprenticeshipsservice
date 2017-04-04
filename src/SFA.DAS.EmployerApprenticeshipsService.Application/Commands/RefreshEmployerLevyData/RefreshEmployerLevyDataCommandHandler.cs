@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                         {
                             var adjustmentDeclaration = await _dasLevyRepository.GetSubmissionByEmprefPayrollYearAndMonth(employerLevyData.EmpRef, dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value);
                             dasDeclaration.EndOfYearAdjustment = true;
-                            dasDeclaration.EndOfYearAdjustmentAmount = adjustmentDeclaration.LevyDueYtd - dasDeclaration.LevyDueYtd;
+                            dasDeclaration.EndOfYearAdjustmentAmount = adjustmentDeclaration?.LevyDueYtd - dasDeclaration.LevyDueYtd ?? 0;
                         }
 
                         await _dasLevyRepository.CreateEmployerDeclaration(dasDeclaration, employerLevyData.EmpRef, message.AccountId);

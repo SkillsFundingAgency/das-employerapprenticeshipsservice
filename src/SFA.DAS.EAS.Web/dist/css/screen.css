@@ -2171,6 +2171,10 @@ dl.inline dd {
   font-weight: bold;
 }
 
+dl.inline.course-details {
+  margin-bottom: 15px;
+}
+
 .responsive-detail {
   color: #6f777b;
 }
@@ -2621,11 +2625,11 @@ nav ul {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 .js-enabled #user-nav li.has-sub-menu.open > a {
@@ -2636,7 +2640,7 @@ nav ul {
 
 .js-enabled #user-nav li.has-sub-menu.open > a:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -2728,16 +2732,16 @@ li.menu-link.sub-menu-open ul li a {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 .header-organisation ul li.menu-link.sub-menu-open > a:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -2763,16 +2767,16 @@ a#link-settings:before {
   display: block;
   border-width: 4px 7px;
   border-color: transparent;
-  border-left-color: #0b0c0c;
+  border-left-color: black;
   border-style: solid;
   left: 10px;
   top: 50%;
-  margin-top: -4px;
+  margin-top: -5px;
 }
 
 a#link-settings.open:before {
   border-width: 7px 4px;
-  border-top-color: #0b0c0c;
+  border-top-color: black;
   border-left-color: transparent;
 }
 
@@ -3047,6 +3051,10 @@ legend {
   color: #2b8cc4;
 }
 
+.search-results .link-button {
+  text-align: left;
+}
+
 .form-group form {
   display: inline-block;
 }
@@ -3194,6 +3202,16 @@ table.organisations td + td + td {
   background: #dee0e2;
 }
 
+.panel-filled-purple {
+  border-color: #2e358b;
+  background: #eaebf3;
+  margin-bottom: 30px;
+}
+
+.panel-top-margin {
+  margin-top: 20px;
+}
+
 .panel-warning {
   border-top: 10px solid #005ea5;
   padding-left: 50px;
@@ -3317,6 +3335,15 @@ table.organisations td + td + td {
 
 .agreement .headings {
   margin-bottom: 30px;
+}
+
+.agreement a.background {
+  margin-top: 10px;
+  margin-left: 30px;
+  display: inline-block;
+  font-weight: normal;
+  color: white;
+  text-decoration: none;
 }
 
 .agreement ol li {
@@ -3484,6 +3511,40 @@ table.organisations td + td + td {
   }
 }
 
+.legal-warning {
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  position: relative;
+  padding-left: 50px;
+  margin: 30px 0;
+}
+
+@media (min-width: 641px) {
+  .legal-warning {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+.legal-warning .icon {
+  width: 35px;
+  height: 35px;
+  background-image: url("/public/images/../../dist/images/icon-important.png");
+  position: absolute;
+  top: 5px;
+  left: 0;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+  .legal-warning .icon {
+    background-image: url("/public/images/../../dist/images/icon-important-2x.png");
+    background-size: 100%;
+  }
+}
+
 /* PDF */
 #layout-agreement {
   margin: 0;
@@ -3514,7 +3575,21 @@ table.organisations td + td + td {
 }
 
 #layout-agreement .agreement #contents {
+  display: block;
+}
+
+#layout-agreement .agreement #contents h2 {
   display: none;
+}
+
+#layout-agreement .agreement #contents a {
+  color: black;
+  cursor: text;
+}
+
+#layout-agreement .agreement #contents ol {
+  list-style: decimal;
+  color: black;
 }
 
 #layout-agreement .agreement p.updated {
@@ -3538,7 +3613,6 @@ table.organisations td + td + td {
   clear: left;
   border-top: 1px solid white;
   margin-left: -45px;
-  padding-left: 45px;
 }
 
 #layout-agreement .agreement .agreement-contents h2 .number {
@@ -3560,6 +3634,19 @@ table.organisations td + td + td {
 
 #layout-agreement .agreement .agreement-contents h2 {
   margin-left: -45px;
+  margin-bottom: 0;
+  margin-top: 40px;
+  padding-left: 45px;
+}
+
+#layout-agreement .agreement .agreement-contents p span.point {
+  font-weight: bold;
+  color: green;
+  width: 30px;
+  display: block;
+  margin-bottom: -1.3em;
+  margin-left: -40px;
+  padding-top: 5px;
 }
 
 #layout-agreement table.sign-agreement th {
@@ -4014,6 +4101,10 @@ span.helpText {
   margin: 30px 0;
 }
 
+#review-cohorts .heading-small {
+  font-size: 24px;
+}
+
 #review-cohorts .all-apps {
   background: #2e3391;
   padding: 20px;
@@ -4059,6 +4150,10 @@ span.helpText {
   cursor: pointer;
 }
 
+#cohorts-landing-page .heading-small {
+  font-size: 24px;
+}
+
 #cohorts-landing-page .bingo-background {
   background: #2e358b;
   color: #fff;
@@ -4068,7 +4163,7 @@ span.helpText {
 
 @media (min-width: 641px) {
   #cohorts-landing-page .bingo-background {
-    min-height: 160px;
+    min-height: 210px;
     width: 48%;
     padding: 0 15px;
   }

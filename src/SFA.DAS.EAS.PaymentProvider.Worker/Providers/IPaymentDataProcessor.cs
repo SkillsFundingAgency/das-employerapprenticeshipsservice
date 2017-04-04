@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
 {
     public interface IPaymentDataProcessor
     {
-        Task Handle();
+        Task RunAsync(CancellationToken cancellationToken);
     }
 }

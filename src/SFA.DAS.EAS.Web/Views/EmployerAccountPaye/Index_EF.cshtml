@@ -1,0 +1,101 @@
+﻿ 
+@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.EmployerAccountPayeListViewModel>
+@{
+    ViewBag.PageID = "page-paye-schemes-index";
+    ViewBag.Title = "PAYE schemes";
+    ViewBag.Section = "paye";
+
+    if (TempData.ContainsKey("payeSchemeAdded"))
+    {
+        ViewBag.PageID = "page-paye-scheme-added";
+        TempData.Remove("payeSchemeAdded");
+    }
+    if (TempData.ContainsKey("payeSchemeDeleted"))
+    {
+        ViewBag.PageID = "page-paye-scheme-deleted";
+        TempData.Remove("payeSchemeDeleted");
+    }
+}
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">PAYE schemes</h1>
+        <p>Funds will credit your account from any PAYE schemes you add. No funds will credit your account until May 2017.</p>
+        <p>You must add all PAYE schemes that your apprentices will be paid through.</p>
+    </div>
+    <div class="column-one-third pull-right">
+        <form action="@Url.Action("GatewayInform")" method="GET">
+            <input class="button action-add" id="addNewPaye" type="submit" value="Add new scheme">
+        </form>
+    </div>
+</div>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (Model.Data.PayeSchemes.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Added PAYE schemes</th>
+                        <th scope="col">English %</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var scheme in Model.Data.PayeSchemes)
+                    {
+                        var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
+                        <tr>
+                            <td>@scheme.PayeRef</td>
+                            
+                            @if (englishFractionPercentage == 1)
+                            {
+                                <td>100%</td>
+                            }
+                            else if (englishFractionPercentage == 0)
+                            {
+                                <td>0%</td>
+                            }
+                            else
+                            {
+                                <td>@englishFractionPercentage.ToString("P3")</td>
+                            }
+			                
+                            <td class="link-right">
+                                <a aria-label="Details for PAYE scheme @scheme.PayeRef"
+                                   title="Details for PAYE scheme @scheme.PayeRef"
+                                   href="@Url.Action("Details", new {empRef = scheme.PayeRef.FormatPayeForUrl()})">Details<span class="vh"> for PAYE scheme @scheme.PayeRef</span></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            
+            @Html.Partial("_WhatIsEnglishPercentage")
+
+            <div class="panel panel-filled-purple panel-top-margin">
+                <p>There's an error of margin in the English percentage data. <a href="https://www.surveymonkey.co.uk/r/CDZXRQL" target="_blank" id="link-ef-questionnaire">Give us your feedback</a> if it's not what you expected. </p>
+            </div>
+            
+        }
+        else
+        {
+            <div class="panel panel-no-records">
+                <p>There are no PAYE schemes associated with this organisation.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
+            <li>PAYE schemes</li>
+        </ol>
+    </div>
+}

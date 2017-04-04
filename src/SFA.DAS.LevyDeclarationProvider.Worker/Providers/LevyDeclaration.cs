@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure;
@@ -14,6 +15,7 @@ using SFA.DAS.EAS.Domain.Attributes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.Levy;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.Messaging;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
@@ -28,6 +30,15 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
         private readonly ILogger _logger;
         private readonly IDasAccountService _dasAccountService;
 
+        private static bool HmrcProcessingEnabled => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+                                      .Equals("both", StringComparison.CurrentCultureIgnoreCase);
+
+        private static bool DeclarationProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+            .Equals("declarations", StringComparison.CurrentCultureIgnoreCase);
+
+        private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+            .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
+
         public LevyDeclaration(IPollingMessageReceiver pollingMessageReceiver, IMediator mediator, 
             ILogger logger, IDasAccountService dasAccountService)
         {
@@ -37,91 +48,125 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
             _dasAccountService = dasAccountService;
         }
 
-        public async Task Handle()
+        public async Task RunAsync(CancellationToken cancellationToken)
         {
-    
-            var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
-            if (message?.Content != null)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                if (CloudConfigurationManager.GetSetting("DeclarationsEnabled").Equals("false",StringComparison.CurrentCultureIgnoreCase))
+                var message = await _pollingMessageReceiver.ReceiveAsAsync<EmployerRefreshLevyQueueMessage>();
+
+                try
                 {
-                    await message.CompleteAsync();
-                    return;
-                }
-                var employerAccountId = message.Content.AccountId;
-
-                _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
-                
-                var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
-                if (employerSchemesResult?.SchemesList == null)
-                {
-                    await message.CompleteAsync();
-                    return;
-                }
-
-                var employerDataList = new List<EmployerLevyData>();
-
-                var englishFractionUpdateResponse = await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
-
-                foreach (var scheme in employerSchemesResult.SchemesList)
-                {
-                    
-                    await _mediator.SendAsync(new UpdateEnglishFractionsCommand
+                    if (HmrcProcessingEnabled || DeclarationProcessingOnly || FractionProcessingOnly)
                     {
-                        EmployerReference = scheme.Ref,
-                        EnglishFractionUpdateResponse = englishFractionUpdateResponse
-                    });
-                    
-                    
-                    var levyDeclarationQueryResult = await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery { EmpRef = scheme.Ref });
-
-                    var employerData = new EmployerLevyData();
-
-                    if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+                        await ProcessMessage(message);
+                    }
+                    else
                     {
-
-                        foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
-                        {
-                            var dasDeclaration = new DasDeclaration
-                            {
-                                SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
-                                Id = declaration.Id,
-                                PayrollMonth = declaration.PayrollPeriod?.Month,
-                                PayrollYear = declaration.PayrollPeriod?.Year,
-                                LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
-                                LevyDueYtd = declaration.LevyDueYearToDate,
-                                NoPaymentForPeriod = declaration.NoPaymentForPeriod,
-                                DateCeased = declaration.DateCeased,
-                                InactiveFrom = declaration.InactiveFrom,
-                                InactiveTo = declaration.InactiveTo
-                                
-                            };
-                            
-                            employerData.EmpRef = scheme.Ref;
-                            employerData.Declarations.Declarations.Add(dasDeclaration);
-                        }
-
-                        employerDataList.Add(employerData);
+                        //Ignore the message as we are not processing declarations
+                        await message.CompleteAsync();
                     }
                 }
-
-                if (englishFractionUpdateResponse.UpdateRequired)
+                catch (Exception ex)
                 {
-                    await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
-                    {
-                        DateCalculated = englishFractionUpdateResponse.DateCalculated
-                    });
+                    _logger.Fatal(ex, $"Levy declaration processing failed for account with ID [{message?.Content?.AccountId}]");
+                    break; //Stop processing anymore messages as this failure needs to be investigated
                 }
-
-                await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
-                {
-                    AccountId = employerAccountId,
-                    EmployerLevyData = employerDataList
-                });
             }
-            if (message != null)
+        }
+
+        private async Task ProcessMessage(Message<EmployerRefreshLevyQueueMessage> message)
+        {
+            if (message?.Content == null)
+            {
+                if (message != null)
+                {
+                    await message.CompleteAsync();
+                }
+                return;
+            }
+          
+            var employerAccountId = message.Content.AccountId;
+
+            _logger.Info($"Processing LevyDeclaration for {employerAccountId}");
+
+            var employerSchemesResult = await _dasAccountService.GetAccountSchemes(employerAccountId);
+
+            if (employerSchemesResult?.SchemesList == null)
             {
                 await message.CompleteAsync();
+                return;
+            }
+
+            var employerDataList = new List<EmployerLevyData>();
+
+            
+            var englishFractionUpdateResponse =
+            await _mediator.SendAsync(new GetEnglishFractionUpdateRequiredRequest());
+
+            foreach (var scheme in employerSchemesResult.SchemesList)
+            {
+                await ProcessScheme(scheme, englishFractionUpdateResponse, employerDataList);
+            }
+
+            if (englishFractionUpdateResponse.UpdateRequired)
+            {
+                await _mediator.SendAsync(new CreateEnglishFractionCalculationDateCommand
+                {
+                    DateCalculated = englishFractionUpdateResponse.DateCalculated
+                });
+            }
+            
+
+            
+            await _mediator.SendAsync(new RefreshEmployerLevyDataCommand
+            {
+                AccountId = employerAccountId,
+                EmployerLevyData = employerDataList
+            });
+            
+
+            await message.CompleteAsync();
+        }
+
+        private async Task ProcessScheme(PayeScheme scheme, GetEnglishFractionUpdateRequiredResponse englishFractionUpdateResponse, ICollection<EmployerLevyData> employerDataList)
+        {
+            if (HmrcProcessingEnabled || FractionProcessingOnly)
+            {
+                await _mediator.SendAsync(new UpdateEnglishFractionsCommand
+                {
+                    EmployerReference = scheme.Ref,
+                    EnglishFractionUpdateResponse = englishFractionUpdateResponse
+                });
+            }
+
+            var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
+                await _mediator.SendAsync(new GetHMRCLevyDeclarationQuery {EmpRef = scheme.Ref}) : null;
+
+            var employerData = new EmployerLevyData();
+
+            if (levyDeclarationQueryResult?.LevyDeclarations?.Declarations != null)
+            {
+                foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
+                {
+                    var dasDeclaration = new DasDeclaration
+                    {
+                        SubmissionDate = DateTime.Parse(declaration.SubmissionTime),
+                        Id = declaration.Id,
+                        PayrollMonth = declaration.PayrollPeriod?.Month,
+                        PayrollYear = declaration.PayrollPeriod?.Year,
+                        LevyAllowanceForFullYear = declaration.LevyAllowanceForFullYear,
+                        LevyDueYtd = declaration.LevyDueYearToDate,
+                        NoPaymentForPeriod = declaration.NoPaymentForPeriod,
+                        DateCeased = declaration.DateCeased,
+                        InactiveFrom = declaration.InactiveFrom,
+                        InactiveTo = declaration.InactiveTo
+                    };
+
+                    employerData.EmpRef = scheme.Ref;
+                    employerData.Declarations.Declarations.Add(dasDeclaration);
+                }
+
+                employerDataList.Add(employerData);
             }
         }
     }

@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
 {
-    interface ILevyDeclaration
+    internal interface ILevyDeclaration
     {
-        Task Handle();
+        Task RunAsync(CancellationToken cancellationToken);
     }
 }

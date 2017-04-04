@@ -42,6 +42,14 @@
     .headings {
         margin-bottom: 30px;
     }
+    a.background {
+        margin-top: 10px;
+        margin-left: 30px;
+        display: inline-block;
+        font-weight: normal;
+        color: white;
+        text-decoration: none;
+    }
     ol {
         li {
             list-style: decimal;
@@ -197,6 +205,19 @@
     }
 }
 
+.legal-warning {
+    @include bold-19;
+    position: relative;
+    padding-left: 50px;
+    margin: 30px 0;
+    .icon {
+        @include icon(icon-important, 35, 35, '../../dist/images');
+        position: absolute;
+        top: 5px;
+        left: 0;
+    }
+}
+
 /* PDF */
 #layout-agreement {
     * {
@@ -221,7 +242,18 @@
             margin: 0;
         }
         #contents {
-            display: none;
+            display: block;
+            h2 {
+                display: none;
+            }
+            a {
+                color: black;
+                cursor: text;
+            }
+            ol {
+                list-style: decimal;
+                color: black;
+            }
         }
         p.updated {
             margin-bottom: 0;
@@ -242,7 +274,7 @@
                clear: left;
                border-top: 1px solid white;
                margin-left: -45px;
-               padding-left: 45px;
+               
                .number {
                    display: inline-block;
                    width: 35px;
@@ -260,9 +292,25 @@
            }
            h2 {
                margin-left: -45px;
+               margin-bottom: 0;
+               margin-top: 40px;
+               padding-left: 45px;
            }
-        }
-        
+          
+           p span.point {
+               font-weight: bold;
+                color: green;
+               
+                width: 30px;
+                display: block;
+                margin-bottom: -1.3em;
+                margin-left: -40px;
+                padding-top: 5px;
+           }
+           h3 {
+              
+           }
+        }        
     }
     table.sign-agreement {
         th {

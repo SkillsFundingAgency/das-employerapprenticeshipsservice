@@ -14,61 +14,6 @@
             @Model.Data.EmpRef
         </h1>
         
-        @if (Model.Data.ShowHistory)
-        {
-            <h2 class="heading-medium">Scheme history</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th class="numeric" scope="col">English %</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Data.Fractions.Any())
-                    {
-                        foreach (var fraction in Model.Data.Fractions)
-                        {
-                            <tr>
-                                <td>
-                                    <span>@fraction.DateCalculated.ToString("dd MMM yy")</span>
-                                </td>
-                                <td class="numeric">
-                                    @if (fraction.Amount == 1)
-                                    {
-                                        <span>100%</span>
-                                    }
-                                    else if (fraction.Amount == 0)
-                                    {
-                                        <span>0%</span>
-                                    }
-                                    else
-                                    {
-                                        <span>@fraction.Amount.ToString("P3")</span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td>
-                                <span>@Model.Data.EmpRefAdded.ToString("dd MMM yy")</span>
-                            </td>
-                            <td class="numeric">
-                                <span>100%</span>
-                            </td>
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
-
-            @Html.Partial("_WhatIsEnglishPercentage")
-
-        }
-
     </div>
     <div class="column-one-third">
         <a aria-label="Remove PAYE scheme @Model.Data.EmpRef"

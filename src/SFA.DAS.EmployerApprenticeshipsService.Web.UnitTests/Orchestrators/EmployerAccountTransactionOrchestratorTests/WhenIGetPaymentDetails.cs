@@ -117,5 +117,23 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, result.Status);
         }
+
+        [Test]
+        public async Task ThenIShouldGetPaymentsGroupedByCourse()
+        {
+            //Arrange
+            _response.Transactions = new List<PaymentTransactionLine>
+            {
+                new PaymentTransactionLine
+                {
+                    
+                }
+            };
+
+            //Act
+
+
+            //Assert
+        }
     }
 }

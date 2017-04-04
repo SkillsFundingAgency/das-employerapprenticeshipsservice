@@ -11,5 +11,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LegalEntityCode { get; set; }
         public string CohortRef { get; set; }
         public bool HasSignedAgreement { get; set; }
+        public string LegalEntityName { get; set; }
     }
 }

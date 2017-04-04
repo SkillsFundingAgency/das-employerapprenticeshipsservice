@@ -146,14 +146,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Status = HttpStatusCode.OK
                 };
             }
-
+            
             var organisations = searchResults.Organisaions.Data.Select(x => new OrganisationDetailsViewModel
             {
                 Name = x.Name,
                 Status = string.Empty,
                 Type = OrganisationType.PublicBodies,
                 PublicSectorDataSource = (short)x.Source,
-                Sector = x.Sector
+                Sector = x.Sector,
+                Address = !string.IsNullOrEmpty(x.AddressLine1) && !string.IsNullOrEmpty(x.AddressLine4) && !string.IsNullOrEmpty(x.PostCode) 
+                        ?_mediator.Send(new CreateOrganisationAddressRequest
+                        {
+                            AddressFirstLine = x.AddressLine1,
+                            AddressSecondLine = x.AddressLine2,
+                            AddressThirdLine =x.AddressLine3,
+                            TownOrCity = x.AddressLine4,
+                            County = x.AddressLine5,
+                            Postcode = x.PostCode
+                        }).Address : "",
+                OrganisationCode = x.OrganisationCode
+                 
             }).ToList();
 
             if (!string.IsNullOrEmpty(hashedAccountId))
@@ -544,6 +556,44 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
 
             return null;
+        }
+
+        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(AddOrganisationAddressViewModel request)
+        {
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
+                {
+                    HashedId = request.OrganisationHashedId,
+                    Name = request.OrganisationName,
+                    Address = request.OrganisationAddress,
+                    DateOfInception = request.OrganisationDateOfInception,
+                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
+                    Type = request.OrganisationType,
+                    PublicSectorDataSource = request.PublicSectorDataSource,
+                    Status = request.OrganisationStatus,
+                    Sector = request.Sector
+                }
+            };
+        }
+
+        public OrchestratorResponse<OrganisationDetailsViewModel> StartConfirmOrganisationDetails(FindOrganisationAddressViewModel request)
+        {
+            return new OrchestratorResponse<OrganisationDetailsViewModel>
+            {
+                Data = new OrganisationDetailsViewModel
+                {
+                    HashedId = request.OrganisationHashedId,
+                    Name = request.OrganisationName,
+                    Address = request.OrganisationAddress,
+                    DateOfInception = request.OrganisationDateOfInception,
+                    ReferenceNumber = request.OrganisationReferenceNumber ?? string.Empty,
+                    Type = request.OrganisationType,
+                    PublicSectorDataSource = request.PublicSectorDataSource,
+                    Status = request.OrganisationStatus,
+                    Sector = request.Sector
+                }
+            };
         }
     }
 }

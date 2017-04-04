@@ -4,8 +4,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetTasks
 {
     public class GetTasksQueryRequest : IAsyncRequest<GetTasksQueryResponse>
     {
-        public long AccountId { get; set; }
+        public long Id { get; set; }
 
-        public bool AssigneeEmployer { get; set; }
+        public bool IsAssigneeEmployer { get; set; }
     }
 }

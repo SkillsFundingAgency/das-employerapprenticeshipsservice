@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreatePayment]
 	@PaymentId as uniqueidentifier,
 	@Ukprn as BIGINT,
-	@ProviderName as NVARCHAR(250),
+	@ProviderName as VARCHAR(MAX),
 	@Uln as BIGINT,
 	@AccountId as BIGINT,
 	@ApprenticeshipId as BIGINT,
@@ -21,23 +21,35 @@
 	@FrameworkCode as INT,
 	@ProgrammeType as INT,
 	@PathwayCode as INT,
-	@CourseName as NVARCHAR(250)
+	@CourseName as VARCHAR(MAX),
+	@ApprenticeName as NVARCHAR(MAX),
+	@ApprenticeNINumber as VARCHAR(MAX),
+	@ApprenticeshipCourseLevel as INT,
+	@ApprenticeshipCourseStartDate as DATETIME
 as
 
 INSERT INTO [employer_financial].[PaymentMetaData]
 			(ProviderName
 			,StandardCode
-			,FrameworkCode
+			,FrameworkCode			
 			,ProgrammeType
 			,PathwayCode
-			,ApprenticeshipCourseName)
+			,ApprenticeshipCourseName
+			,ApprenticeName
+			,ApprenticeNINumber
+			,ApprenticeshipCourseLevel
+			,ApprenticeshipCourseStartDate)
 		VALUES
 			(@ProviderName
 			,@StandardCode
-			,@FrameworkCode
+			,@FrameworkCode			
 			,@ProgrammeType
 			,@PathwayCode
-			,@CourseName)
+			,@CourseName
+			,@ApprenticeName
+			,@ApprenticeNINumber
+			,@ApprenticeshipCourseLevel
+			,@ApprenticeshipCourseStartDate)
 
 DECLARE @PaymentMetaDataId AS BIGINT = SCOPE_IDENTITY()
 

@@ -31,8 +31,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private const string LastCohortPageSessionKey = "lastCohortPageSessionKey";
 
         public EmployerCommitmentsController(EmployerCommitmentsOrchestrator employerCommitmentsOrchestrator, IOwinWrapper owinWrapper,
-            IFeatureToggle featureToggle, IUserWhiteList userWhiteList)
-            : base(owinWrapper, featureToggle, userWhiteList)
+            IFeatureToggle featureToggle, IMultiVariantTestingService multiVariantTestingService)
+            : base(owinWrapper, featureToggle, multiVariantTestingService)
         {
             if (employerCommitmentsOrchestrator == null)
                 throw new ArgumentNullException(nameof(employerCommitmentsOrchestrator));
@@ -557,7 +557,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             await _employerCommitmentsOrchestrator.SubmitCommitment(model, userId, userDisplayName, userEmail);
 
-            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId });
+            return RedirectToAction("AcknowledgementExisting", new { hashedCommitmentId = model.HashedCommitmentId, model.SaveStatus });
         }
 
         [HttpGet]
@@ -609,12 +609,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerCommitmentsOrchestrator
                 .GetAcknowledgementModelForExistingCommitment(hashedAccountId, hashedCommitmentId, OwinWrapper.GetClaimValue(@"sub"));
 
+            response.Data.Content = GetAcknowledgementContent(SaveStatus.Save);
+
             return View("Acknowledgement", response);
         }
 
         [HttpGet]
         [Route("{hashedCommitmentId}/Acknowledgement")]
-        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId)
+        public async Task<ActionResult> AcknowledgementExisting(string hashedAccountId, string hashedCommitmentId, SaveStatus saveStatus)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
@@ -632,7 +634,38 @@ namespace SFA.DAS.EAS.Web.Controllers
                 ? new LinkViewModel { Url = Url.Action("YourCohorts", new { hashedAccountId }), Text = "Return to Your cohorts" }
                 : new LinkViewModel { Url = returnUrl, Text = "Go back to view cohorts" };
 
+            response.Data.Content = GetAcknowledgementContent(saveStatus);
+            
+            
+
             return View("Acknowledgement", response);
+        }
+
+        private AcknowledgementContent GetAcknowledgementContent(SaveStatus saveStatus)
+        {
+            switch (saveStatus)
+            {
+                case SaveStatus.AmendAndSend:
+                    return new AcknowledgementContent
+                               {
+                                   Title = "Cohort sent for review",
+                                   Text = "Your training provider will review your cohort and contact you as soon as possible."
+                               };
+                case SaveStatus.ApproveAndSend:
+                    return new AcknowledgementContent
+                               {
+                                   Title = "Cohort approved and sent to training provider",
+                                   Text = "Your training provider will review your cohort and either confirm the information is correct or contact you to suggest changes."
+                               };
+                case SaveStatus.Save:
+                    return new AcknowledgementContent
+                               {
+                                   Title = "Message sent",
+                                   Text =
+                                   "Your training provider will review your request and contact you as soon as possible - either with questions or to ask you to review the apprentice details they've added."
+                               };
+            }
+            return new AcknowledgementContent();
         }
 
         [HttpGet]
@@ -641,7 +674,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         public async Task<ActionResult> DeleteApprenticeshipConfirmation(string hashedAccountId, string hashedCommitmentId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+            {
                 return View("AccessDenied");
+            }
 
             var response = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), hashedCommitmentId, hashedApprenticeshipId);
 
@@ -655,10 +690,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var errorResponse =
-                    await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(viewModel.HashedAccountId,
-                        OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId,
-                        viewModel.HashedApprenticeshipId);
+                var errorResponse = await _employerCommitmentsOrchestrator.GetDeleteApprenticeshipViewModel(viewModel.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId);
 
                 return View(errorResponse);
             }
@@ -667,18 +699,13 @@ namespace SFA.DAS.EAS.Web.Controllers
             {
                 await _employerCommitmentsOrchestrator.DeleteApprenticeship(viewModel, OwinWrapper.GetClaimValue(@"sub"));
 
-                var flashMessage = new FlashMessageViewModel
-                {
-                    Severity = FlashMessageSeverityLevel.Okay,
-                    Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted")
-                };
+                var flashMessage = new FlashMessageViewModel { Severity = FlashMessageSeverityLevel.Okay, Message = string.Format($"Apprentice record for {viewModel.ApprenticeshipName} deleted") };
                 TempData["FlashMessage"] = JsonConvert.SerializeObject(flashMessage);
 
-                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId});
+                return RedirectToAction("Details", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId });
             }
 
-            return RedirectToAction("EditApprenticeship",
-                new {viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId});
+            return RedirectToAction("EditApprenticeship", new { viewModel.HashedAccountId, viewModel.HashedCommitmentId, viewModel.HashedApprenticeshipId });
         }
 
         private RequestStatus GetSessionRequestStatus()
@@ -774,8 +801,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
         {
-            return await _employerCommitmentsOrchestrator
-                .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+            return await _employerCommitmentsOrchestrator.AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
         }
     }
 }
