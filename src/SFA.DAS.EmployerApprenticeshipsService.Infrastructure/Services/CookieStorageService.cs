@@ -1,9 +1,10 @@
 ﻿using System.Web;
 using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
-    public class CookieStorageService<T>
+    public class CookieStorageService<T> : ICookieStorageService<T>
     {
         private readonly ICookieService<T> _cookieService;
         private readonly HttpContextBase _httpContextBase;
