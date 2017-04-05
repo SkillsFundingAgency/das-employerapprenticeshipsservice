@@ -38,7 +38,7 @@ legend {
     }
 }
 
-.error-summary {
+.error-summary:not(.validation-summary-max-funding) {
     h1 {
         display: none;
         & + p {
