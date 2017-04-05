@@ -4,8 +4,8 @@ using System.Net;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
         private string _hashedAccountId;
-        private static Mock<ICookieService<EmployerAccountData>> _cookieService;
+        private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
 
         [BeforeFeature]
@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
-            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);

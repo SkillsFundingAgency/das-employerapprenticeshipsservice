@@ -8,26 +8,21 @@ using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using MediatR;
-using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
 using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate;
 using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -39,14 +34,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly ICookieService<EmployerAccountData> _cookieService;
+        private readonly ICookieStorageService<EmployerAccountData> _cookieService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         protected OrganisationOrchestrator()
         {
         }
 
-        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieService<EmployerAccountData> cookieService)
+        public OrganisationOrchestrator(IMediator mediator, ILogger logger, IMapper mapper, ICookieStorageService<EmployerAccountData> cookieService)
             : base(mediator)
         {
             _mediator = mediator;
@@ -450,12 +445,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
-            return _cookieService.Get(context, CookieName);
+            return _cookieService.Get(CookieName);
         }
 
         public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            _cookieService.Create(context, CookieName, data, 365);
+            _cookieService.Create(data,CookieName, 365);
         }
 
         public virtual async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(

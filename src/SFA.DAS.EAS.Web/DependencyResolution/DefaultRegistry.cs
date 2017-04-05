@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
@@ -70,7 +71,9 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                     scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                 });
 
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
+            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 

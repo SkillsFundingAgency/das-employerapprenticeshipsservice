@@ -2,7 +2,7 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
@@ -24,7 +24,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.AgreementSteps
         {
             var messagePublisher = new Mock<IMessagePublisher>();
             var owinWrapper = new Mock<IOwinWrapper>();
-            var cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            var cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             var eventsApi = new Mock<IEventsApi>();
 
             _container = IoC.CreateContainer(messagePublisher, owinWrapper, cookieService, eventsApi);

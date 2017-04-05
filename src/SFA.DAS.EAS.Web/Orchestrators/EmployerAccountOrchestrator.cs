@@ -5,13 +5,13 @@ using System.Web;
 using MediatR;
 using Newtonsoft.Json;
 using NLog;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService<EmployerAccountData> cookieService,
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService,
             EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Sector = viewModel.Sector
                 });
 
-                CookieService.Delete(context, CookieName);
+                CookieService.Delete(CookieName);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
@@ -119,18 +119,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
-            return CookieService.Get(context, CookieName);
+            return CookieService.Get(CookieName);
             
         }
 
         public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            CookieService.Create(context, CookieName, data, 365);
+            CookieService.Create(data,CookieName, 365);
         }
 
         public void UpdateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            CookieService.Update(context, CookieName, data);
+            CookieService.Update(CookieName, data);
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountViewModel viewModel)
@@ -157,7 +157,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual void DeleteCookieData(HttpContextBase context)
         {
-            CookieService.Delete(context,CookieName);
+            CookieService.Delete(CookieName);
         }
 
         public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)

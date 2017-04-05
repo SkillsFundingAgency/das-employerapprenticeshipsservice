@@ -8,11 +8,11 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetPublicSectorOrganisation;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<ICookieService<EmployerAccountData>> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         [SetUp]
         public void Arrange()
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntitiesResponse {Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()} });
 
-            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _orchestrator = new OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
         }

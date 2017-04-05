@@ -3,16 +3,14 @@ using System.Linq;
 using System.Web;
 using MediatR;
 using Moq;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.ScenarioCommonSteps;
-using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -29,7 +27,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<ICookieService<EmployerAccountData>> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private string _externalUserId;
         private Mock<IValidator<GetAccountPayeSchemesQuery>> _validator;
@@ -39,7 +37,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.CommonSteps
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
-            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _validator = new Mock<IValidator<GetAccountPayeSchemesQuery>>();
 

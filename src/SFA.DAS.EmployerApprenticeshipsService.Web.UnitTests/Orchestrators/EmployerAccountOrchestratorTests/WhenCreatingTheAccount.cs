@@ -5,9 +5,9 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
-        private Mock<ICookieService<EmployerAccountData>> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
 
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
         {
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
-            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTes
                 EmpRefNotFound = true
             };
 
-            _cookieService.Setup(x => x.Get(It.IsAny<HttpContextBase>(), It.IsAny<string>()))
+            _cookieService.Setup(x => x.Get( It.IsAny<string>()))
                 .Returns(employerAccountData);
 
             var context = new Mock<HttpContextBase>();

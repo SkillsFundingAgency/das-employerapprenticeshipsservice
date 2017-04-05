@@ -6,7 +6,6 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
 using SFA.DAS.EAS.Domain.Configuration;
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
-        private Mock<ICookieService<EmployerAccountData>> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         {
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
-            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
             new Mock<IEmpRefFileBasedService>();
             

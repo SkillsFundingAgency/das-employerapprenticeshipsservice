@@ -217,8 +217,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.EmployerUsers.WebClientComponents, Version=1.0.0.4388, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.EmployerUsers.WebClientComponents.1.0.0.4388\lib\net45\SFA.DAS.EmployerUsers.WebClientComponents.dll</HintPath>
