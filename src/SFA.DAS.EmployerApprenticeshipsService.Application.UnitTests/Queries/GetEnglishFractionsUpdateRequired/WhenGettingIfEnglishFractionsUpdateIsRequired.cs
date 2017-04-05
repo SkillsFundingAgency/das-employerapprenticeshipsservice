@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEnglishFractionUpdateRequired;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 
@@ -14,12 +13,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFractionsUpdateReq
         private GetEnglishFractionsUpdateRequiredQueryHandler _handler;
         private Mock<IHmrcService> _hmrcService;
         private Mock<IEnglishFractionRepository> _englishFractionRepository;
-
+        
         [SetUp]
         public void Arrange()
         {
             _hmrcService = new Mock<IHmrcService>();
             _englishFractionRepository = new Mock<IEnglishFractionRepository>();
+
             _handler = new GetEnglishFractionsUpdateRequiredQueryHandler(_hmrcService.Object, _englishFractionRepository.Object);    
         }
 
@@ -52,5 +52,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEnglishFractionsUpdateReq
             //Assert
             Assert.IsFalse(result.UpdateRequired);
         }
+        
     }
 }

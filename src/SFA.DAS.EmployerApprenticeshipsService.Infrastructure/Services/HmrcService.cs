@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcEmployer;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 
@@ -21,15 +22,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
         private readonly ExecutionPolicy _executionPolicy;
+        private readonly ICacheProvider _cacheProvider;
 
 
-        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient,
-            [RequiredPolicy(HmrcExecutionPolicy.Name)]ExecutionPolicy executionPolicy)
+        public HmrcService(EmployerApprenticeshipsServiceConfiguration configuration, IHttpClientWrapper httpClientWrapper, ITokenServiceApiClient tokenServiceApiClient, [RequiredPolicy(HmrcExecutionPolicy.Name)] ExecutionPolicy executionPolicy, ICacheProvider cacheProvider)
         {
             _configuration = configuration;
             _httpClientWrapper = httpClientWrapper;
             _tokenServiceApiClient = tokenServiceApiClient;
             _executionPolicy = executionPolicy;
+            _cacheProvider = cacheProvider;
 
             _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
@@ -127,13 +129,25 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<DateTime> GetLastEnglishFractionUpdate()
         {
-            return await _executionPolicy.ExecuteAsync(async () =>
+            var hmrcLatestUpdateDate = _cacheProvider.Get<DateTime?>("HmrcFractionLastCalculatedDate");
+            if (hmrcLatestUpdateDate == null)
             {
-                var accessToken = await GetOgdAccessToken();
+                return await _executionPolicy.ExecuteAsync(async () =>
+                {
+                    var accessToken = await GetOgdAccessToken();
 
-                const string url = "apprenticeship-levy/fraction-calculation-date";
-                return await _httpClientWrapper.Get<DateTime>(accessToken, url);
-            });
+                    const string url = "apprenticeship-levy/fraction-calculation-date";
+                    hmrcLatestUpdateDate = await _httpClientWrapper.Get<DateTime>(accessToken, url);
+
+                    if (hmrcLatestUpdateDate != null)
+                    {
+                        _cacheProvider.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(1,0,0,0));
+                    }
+
+                    return hmrcLatestUpdateDate.Value;
+                });
+            }
+            return hmrcLatestUpdateDate.Value;
         }
 
         public async Task<string> GetOgdAccessToken()
