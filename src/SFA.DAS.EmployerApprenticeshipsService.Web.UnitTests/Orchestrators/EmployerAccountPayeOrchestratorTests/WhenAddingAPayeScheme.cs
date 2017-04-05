@@ -7,14 +7,15 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetMember;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieService<EmployerAccountData>> _cookieService;
         private ConfirmNewPayeSchemeViewModel _model;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private const string ExpectedHashedId = "jgdfg786";
@@ -51,7 +52,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _configuration = new EmployerApprenticeshipsServiceConfiguration {Hmrc = new HmrcConfiguration()};
 
             _logger = new Mock<ILogger>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
             
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>())).ReturnsAsync(new GetAccountLegalEntitiesResponse{Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}});

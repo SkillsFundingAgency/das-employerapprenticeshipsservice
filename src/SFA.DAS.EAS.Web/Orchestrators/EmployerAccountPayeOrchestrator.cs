@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using NLog;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.AddPayeToAccount;
 using SFA.DAS.EAS.Application.Commands.RemovePayeFromAccount;
@@ -13,6 +14,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService<EmployerAccountData> cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
         {
         }
 

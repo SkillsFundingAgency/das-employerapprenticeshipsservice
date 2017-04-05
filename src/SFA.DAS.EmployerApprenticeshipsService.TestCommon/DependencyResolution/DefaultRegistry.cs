@@ -6,10 +6,12 @@ using MediatR;
 using Microsoft.Azure;
 using Moq;
 using SFA.DAS.Audit.Client;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Web;
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
     public class DefaultRegistry : Registry
     {
 
-        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieService> cookieServiceMock, Mock<IEventsApi> eventApi)
+        public DefaultRegistry(Mock<IOwinWrapper> owinWrapperMock, Mock<ICookieService<EmployerAccountData>> cookieServiceMock, Mock<IEventsApi> eventApi)
         {
             Scan(scan =>
             {
@@ -38,7 +40,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 
             For<IOwinWrapper>().Use(() => owinWrapperMock.Object);
 
-            For<ICookieService>().Use(() => cookieServiceMock.Object);
+            For<ICookieService<EmployerAccountData>>().Use(() => cookieServiceMock.Object);
             
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 

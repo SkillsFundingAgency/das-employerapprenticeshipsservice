@@ -4,7 +4,9 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Domain;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -17,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieService<EmployerAccountData>> _cookieService;
 
         [SetUp]
         public void Arrange()
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger>();
             _mapper = new Mock<IMapper>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
 
             _orchestrator = new Web.Orchestrators.OrganisationOrchestrator(_mediator.Object, _logger.Object, _mapper.Object, _cookieService.Object);
         }

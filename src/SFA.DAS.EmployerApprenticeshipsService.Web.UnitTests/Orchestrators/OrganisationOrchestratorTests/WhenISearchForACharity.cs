@@ -6,10 +6,12 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities;
 using SFA.DAS.EAS.Application.Queries.GetCharity;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Domain.Models.ReferenceData;
 using SFA.DAS.EAS.Web.Orchestrators;
@@ -22,7 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
         private Mock<IMapper> _mapper;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieService<EmployerAccountData>> _cookieService;
         private GetCharityQueryResponse _expected;
 
         [SetUp]
@@ -38,7 +40,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.OrganisationOrchestratorTests
                     Entites = new LegalEntities {LegalEntityList = new List<LegalEntity>()}
                 });
 
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
 
             _expected = new GetCharityQueryResponse
             {

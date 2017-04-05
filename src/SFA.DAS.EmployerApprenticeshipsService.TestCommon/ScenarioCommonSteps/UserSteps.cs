@@ -2,8 +2,10 @@
 using System.Linq;
 using MediatR;
 using Moq;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Commands.UpsertRegisteredUser;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web;
@@ -22,14 +24,14 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         private IContainer _container;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<IOwinWrapper> _owinWrapper;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieService<EmployerAccountData>> _cookieService;
         private Mock<IEventsApi> _eventsApi;
 
         public UserSteps()
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
 
             _container = IoC.CreateContainer(_messagePublisher, _owinWrapper, _cookieService, _eventsApi);

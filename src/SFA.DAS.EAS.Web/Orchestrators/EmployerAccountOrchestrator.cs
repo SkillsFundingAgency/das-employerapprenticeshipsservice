@@ -5,16 +5,16 @@ using System.Web;
 using MediatR;
 using Newtonsoft.Json;
 using NLog;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Commands.CreateAccount;
 using SFA.DAS.EAS.Application.Commands.RenameEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService,
+        public EmployerAccountOrchestrator(IMediator mediator, ILogger logger, ICookieService<EmployerAccountData> cookieService,
             EmployerApprenticeshipsServiceConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
@@ -119,23 +119,18 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual EmployerAccountData GetCookieData(HttpContextBase context)
         {
-            var cookie = (string)CookieService.Get(context, CookieName);
-
-            if(string.IsNullOrEmpty(cookie))
-                return null;
+            return CookieService.Get(context, CookieName);
             
-            return JsonConvert.DeserializeObject<EmployerAccountData>(cookie);
         }
 
-        public virtual void CreateCookieData(HttpContextBase context, object data)
+        public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            var json = JsonConvert.SerializeObject(data);
-            CookieService.Create(context, CookieName, json, 365);
+            CookieService.Create(context, CookieName, data, 365);
         }
 
-        public void UpdateCookieData(HttpContextBase context, object data)
+        public void UpdateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            CookieService.Update(context, CookieName, JsonConvert.SerializeObject(data));
+            CookieService.Update(context, CookieName, data);
         }
 
         public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetAccountAgreementTemplate(CreateAccountViewModel viewModel)
