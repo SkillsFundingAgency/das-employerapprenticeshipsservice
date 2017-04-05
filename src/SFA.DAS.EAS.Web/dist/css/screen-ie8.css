@@ -3154,6 +3154,7 @@ table.organisations td + td + td {
   position: relative;
   color: #005ea5;
   padding-left: 15px;
+  cursor: pointer;
 }
 
 .js-enabled .accordion-tab:before {
