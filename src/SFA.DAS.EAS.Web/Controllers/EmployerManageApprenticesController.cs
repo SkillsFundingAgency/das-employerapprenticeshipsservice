@@ -170,6 +170,31 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/review")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId, bool? approveChanges)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (approveChanges == null)
+                return View(viewModel);
+
+            //_orchestrator.ReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, approveChanges);
+
+            return View(viewModel);
+        }
+
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)
         {
             var response = await _orchestrator.GetApprenticeshipForEdit(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
