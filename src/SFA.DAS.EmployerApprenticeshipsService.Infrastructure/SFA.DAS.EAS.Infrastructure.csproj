@@ -251,6 +251,7 @@
     <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
+    <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\DasAccountService.cs" />
