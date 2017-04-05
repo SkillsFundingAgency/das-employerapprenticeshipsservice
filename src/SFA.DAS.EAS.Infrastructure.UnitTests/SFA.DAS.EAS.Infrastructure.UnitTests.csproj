@@ -97,6 +97,10 @@
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.40.0.27093, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.40.0.27093\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
