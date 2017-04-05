@@ -3,7 +3,6 @@ using System.Text;
 using System.Web;
 using System.Web.Security;
 using SFA.DAS.EAS.Domain;
-using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -66,23 +65,5 @@ namespace SFA.DAS.EAS.Web
             var base64EncodedBytes = Convert.FromBase64String(context.Request.Cookies[name].Value);
             return Encoding.UTF8.GetString(MachineKey.Unprotect(base64EncodedBytes));
         }
-    }
-
-    public class EmployerAccountData
-    {
-        public OrganisationType OrganisationType { get; set; }
-        public short? PublicSectorDataSource { get; set; }
-        public string OrganisationName { get; set; }
-        public string OrganisationReferenceNumber { get; set; }
-        public string OrganisationRegisteredAddress { get; set; }
-        public DateTime? OrganisationDateOfInception { get; set; }
-
-        public string PayeReference { get; set; }
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-        public bool EmpRefNotFound { get; set; }
-        public string OrganisationStatus { get; set; }
-        public string EmployerRefName { get; set; }
-        public string Sector { get; set; }
     }
 }

@@ -418,6 +418,7 @@
     </Compile>
     <Compile Include="ICookieService.cs" />
     <Compile Include="Mapping\OrganisationMapping.cs" />
+    <Compile Include="Models\EmployerAccountData.cs" />
     <Compile Include="Orchestrators\CommitmentsBaseOrchestrator.cs" />
     <Compile Include="Orchestrators\Mappers\ApprenticeshipMapper.cs" />
     <Compile Include="Orchestrators\Mappers\CommitmentMapper.cs" />
