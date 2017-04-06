@@ -250,6 +250,29 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
 
+        public async Task<OrchestratorResponse<UpdateApprenticeshipViewModel>> GetOrchestratorResponseUpdateApprenticeshipViewModelFromCookie(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
+
+            var mappedModel = await _apprenticeshipMapper.MapToUpdateApprenticeshipViewModel(model);
+
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+
+            var apprenticeship = await _mediator.SendAsync(
+                            new GetApprenticeshipQueryRequest
+                            {
+                                AccountId = accountId,
+                                ApprenticeshipId = apprenticeshipId
+                            });
+
+            mappedModel.OriginalApprenticeship = apprenticeship.Apprenticeship;
+            mappedModel.HashedAccountId = hashedAccountId;
+            mappedModel.HashedApprenticeshipId = hashedApprenticeshipId;
+
+            return new OrchestratorResponse<UpdateApprenticeshipViewModel> {Data = mappedModel };
+        }
+
         public void CreateApprenticeshipViewModelCookie(ApprenticeshipViewModel model)
         {
             _apprenticshipsViewModelCookieStorageService.Delete(CookieName);

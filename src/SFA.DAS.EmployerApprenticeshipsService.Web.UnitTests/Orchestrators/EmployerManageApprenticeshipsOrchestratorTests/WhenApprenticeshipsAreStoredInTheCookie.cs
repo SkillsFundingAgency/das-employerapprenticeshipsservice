@@ -7,6 +7,8 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
@@ -62,6 +64,38 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _cookieStorageService.Verify(x=>x.Delete(CookieName));
             _cookieStorageService.Verify(x=>x.Create(model,CookieName,1));
 
+        }
+
+        [Test]
+        public async Task ThenTheModelIsPopulatedFromTheCookie()
+        {
+            //Arrange
+            var expectedHashedAccountId = "123456PRDF";
+            var expectedHashedApprenticeshipId = "ABCC456";
+            var expectedAccountId = 12345;
+            var expectedApprenticeshipId = 54321;
+            _cookieStorageService.Setup(x => x.Get(CookieName)).Returns(new ApprenticeshipViewModel());
+            _apprenticeshipMapper.Setup(x => x.MapToUpdateApprenticeshipViewModel(It.IsAny<ApprenticeshipViewModel>())).ReturnsAsync(new UpdateApprenticeshipViewModel());
+            _hashingService.Setup(x => x.DecodeValue(expectedHashedAccountId)).Returns(expectedAccountId);
+            _hashingService.Setup(x => x.DecodeValue(expectedHashedApprenticeshipId)).Returns(expectedApprenticeshipId);
+            _mediator.Setup(
+                x =>
+                    x.SendAsync( It.Is<GetApprenticeshipQueryRequest>(
+                                c =>
+                                c.AccountId.Equals(expectedAccountId) &&
+                                c.ApprenticeshipId.Equals(expectedApprenticeshipId))))
+                .ReturnsAsync(new GetApprenticeshipQueryResponse
+                {
+                    Apprenticeship = new Apprenticeship { }
+                });
+
+            //Act
+            var actual = await _orchestrator.GetOrchestratorResponseUpdateApprenticeshipViewModelFromCookie(expectedHashedAccountId, expectedHashedApprenticeshipId);
+
+            //Assert
+            Assert.IsNotNull(actual);
+            _cookieStorageService.Verify(x=>x.Get(CookieName), Times.Once);
+            Assert.IsAssignableFrom<OrchestratorResponse<UpdateApprenticeshipViewModel>>(actual);
         }
     }
 }
