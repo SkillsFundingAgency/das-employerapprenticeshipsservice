@@ -2864,11 +2864,11 @@ legend {
   margin-bottom: 0;
 }
 
-.error-summary h1 {
+.error-summary:not(.validation-summary-max-funding) h1 {
   display: none;
 }
 
-.error-summary h1 + p {
+.error-summary:not(.validation-summary-max-funding) h1 + p {
   display: none;
 }
 
@@ -3680,6 +3680,7 @@ table.organisations td + td + td {
   position: relative;
   color: #005ea5;
   padding-left: 15px;
+  cursor: pointer;
 }
 
 .js-enabled .accordion-tab:before {
