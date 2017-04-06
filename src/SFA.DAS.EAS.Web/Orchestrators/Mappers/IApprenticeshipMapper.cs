@@ -21,6 +21,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
         Task<Apprenticeship> MapFrom(ApprenticeshipViewModel viewModel);
 
+        Task<UpdateApprenticeshipViewModel> MapToUpdateApprenticeshipViewModel(ApprenticeshipViewModel viewModel);
+
         Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors);
 
         ApprenticeshipUpdate MapFrom(UpdateApprenticeshipViewModel viewModel);

@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using System;
 using System.Threading.Tasks;
-
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
@@ -22,8 +22,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
     [TestFixture]
     public class WhenMappingApprenticeship
     {
-        private EmployerManageApprenticeshipsOrchestrator _sut;
-        private ApprenticeshipMapper _mockApprenticeshipMapper;
+        private EmployerManageApprenticeshipsOrchestrator _orchestrator;
+        private ApprenticeshipMapper _apprenticeshipMapper;
         private Mock<IMediator> _mockMediator;
         private Mock<ICurrentDateTime> _mockDateTime;
         private Mock<ICookieStorageService<ApprenticeshipViewModel>> _cookieStorageService;
@@ -36,9 +36,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
 
             _cookieStorageService = new Mock<ICookieStorageService<ApprenticeshipViewModel>>();
 
-            _mockApprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
+            _apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, Mock.Of<ILogger>(),_cookieStorageService.Object);
+            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _apprenticeshipMapper, Mock.Of<ILogger>(),_cookieStorageService.Object);
         }
 
         [TestCase(8, 5, arg3: 10)]
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
                 .ReturnsAsync(new GetApprenticeshipUpdateResponse());
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
             result.Data.Status.Should().Be("Waiting to start");
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
                 .ReturnsAsync(new GetApprenticeshipUpdateResponse());
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
             result.Data.Status.Should().Be("On programme");
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                           }
                                   });
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.WaitingForApproval);
         }
@@ -141,9 +141,35 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                         new ApprenticeshipUpdate {ApprenticeshipId = 1L, Originator = Originator.Provider }
                 });
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
+        }
+
+        [Test]
+        public async Task ThenTheApprenticeshipViewModelIsMappedToTheUpdateApprenticeshipViewModel()
+        {
+            //Arrange
+            var updateApprenticeshipViewModel = new UpdateApprenticeshipViewModel
+            {
+                LastName = "Tester",
+                FirstName = "Test",
+                NINumber = "134AD",
+                ULN = "trgf4567",
+                DateOfBirth = new DateTimeViewModel {Day = 10, Month = 3, Year = 2000},
+                Cost = "12345",
+                EmployerRef = "123ERD",
+                ProviderRef = "654TRF",
+                StartDate = new DateTimeViewModel {Day = 11, Month = 4, Year = 2018},
+                EndDate = new DateTimeViewModel {Day = 12, Month = 5, Year = 2019}
+
+            };
+
+            //Act
+            var actual = await _apprenticeshipMapper.MapToUpdateApprenticeshipViewModel(updateApprenticeshipViewModel);
+
+            //Assert
+            actual.ShouldBeEquivalentTo(updateApprenticeshipViewModel);
         }
     }
 }
