@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-
 using MediatR;
 using NLog;
-
 using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -13,7 +11,6 @@ using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
-
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
@@ -29,26 +26,17 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
+        private readonly ICookieStorageService<ApprenticeshipViewModel> _apprenticshipsViewModelCookieStorageService;
 
-        public EmployerManageApprenticeshipsOrchestrator(
-            IMediator mediator, 
-            IHashingService hashingService,
-            IApprenticeshipMapper apprenticeshipMapper,
-            ILogger logger) : base(mediator, hashingService, logger)
+        private const string CookieName = "sfa-das-employerapprenticeshipsservice-apprentices";
+
+        public EmployerManageApprenticeshipsOrchestrator(IMediator mediator, IHashingService hashingService, IApprenticeshipMapper apprenticeshipMapper, ILogger logger, ICookieStorageService<ApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService) : base(mediator, hashingService, logger)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
-            if (hashingService == null)
-                throw new ArgumentNullException(nameof(hashingService));
-            if (apprenticeshipMapper == null)
-                throw new ArgumentNullException(nameof(apprenticeshipMapper));
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
             _logger = logger;
+            _apprenticshipsViewModelCookieStorageService = apprenticshipsViewModelCookieStorageService;
         }
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
@@ -246,6 +234,28 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if(result.ApprenticeshipUpdate != null)
                 throw new InvalidStateException("Pending apprenticeship update");
         }
+
+        public ApprenticeshipViewModel GetApprenticeshipViewModelFromCookie()
+        {
+            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
+
+            return model;
+        }
+
+        public UpdateApprenticeshipViewModel GetUpdateApprenticeshipViewModelFromCookie()
+        {
+            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
+
+            return (UpdateApprenticeshipViewModel) model;
+        }
+
+
+        public void CreateApprenticeshipViewModelCookie(ApprenticeshipViewModel model)
+        {
+            _apprenticshipsViewModelCookieStorageService.Delete(CookieName);
+            _apprenticshipsViewModelCookieStorageService.Create(model,CookieName);
+        }
+        
     }
 }
 
