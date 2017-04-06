@@ -92,7 +92,7 @@
                         <tr>
                             <td>Cost</td>
                             <td>@Model.Data.OriginalApprenticeship.Cost.FormatCost() </td>
-                            <td class="changed-item">@Model.Data.Cost.FormatCost() </td>
+                            <td class="changed-item">@Model.Data.Cost</td>
                             @Html.Hidden("Cost", Model.Data.Cost)
                         </tr>
                     }

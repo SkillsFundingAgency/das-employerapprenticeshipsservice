@@ -55,5 +55,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return result.SingleOrDefault();
         }
+
+        public async Task<ICollection<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
+        {
+            var result = await WithConnection(async connection =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
+
+                return await connection.QueryAsync<TeamMember>(
+                    sql: "[employer_account].[GetEmployerAccountMembers]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
     }
 }

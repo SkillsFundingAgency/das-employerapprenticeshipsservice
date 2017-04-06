@@ -53,7 +53,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy());
+            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(), null);
         }
         
         [Test]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -15,6 +16,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
             _configuration = configuration;
             _httpClient = new SecureHttpClient(configuration);
         }
+
         internal AccountApiClient(IAccountApiConfiguration configuration, SecureHttpClient httpClient)
         {
             _configuration = configuration;
@@ -34,7 +36,25 @@ namespace SFA.DAS.EAS.Account.Api.Client
             var json = await _httpClient.GetAsync(url);
             return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(json);
         }
-        
+
+        public async Task<ICollection<TeamMemberViewModel>> GetAccountUsers(string accountId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/accounts/{accountId}/users";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<ICollection<TeamMemberViewModel>>(json);
+        }
+
+        public async Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/user/{userId}/accounts";
+
+            var json = await _httpClient.GetAsync(url);
+            return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
+        }
+
         public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);

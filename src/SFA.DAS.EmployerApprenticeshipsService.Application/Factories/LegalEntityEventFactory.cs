@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
             return new LegalEntityCreatedEvent
             {
-                Event = "LegalEntityCreated",
                 ResourceUri = $"api/accounts/{hashedAccountId}/legalentities/{legalEntityId}"
             };
         }

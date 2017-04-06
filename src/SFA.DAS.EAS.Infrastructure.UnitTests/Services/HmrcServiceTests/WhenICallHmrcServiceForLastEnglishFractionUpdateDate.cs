@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Caching;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         
         private Mock<ITokenServiceApiClient> _tokenService;
+        private Mock<ICacheProvider> _cacheProvider;
 
         [SetUp]
         public void Arrange()
@@ -46,7 +48,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken {AccessCode = ExpectedAccessCode});
 
-            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy());
+            _cacheProvider = new Mock<ICacheProvider>();
+            _cacheProvider.SetupSequence(c => c.Get<DateTime?>("HmrcFractionLastCalculatedDate"))
+                .Returns(null)
+                .Returns(new DateTime());
+
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _tokenService.Object, new NoopExecutionPolicy(),_cacheProvider.Object);
         }
 
         [Test]
@@ -65,6 +72,22 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             //Assert
             _httpClientWrapper.Verify(x => x.Get<DateTime>(ExpectedAccessCode, expectedApiUrl), Times.Once);
             Assert.AreEqual(updateDate, result);
+        }
+
+
+        [Test]
+        public async Task ThenTheFractionLastCaclulatedDateIsReadFromTheCacheOnSubsequentReads()
+        {
+            //Arrange
+            const string expectedApiUrl = "apprenticeship-levy/fraction-calculation-date";
+            
+            //Act
+            await _hmrcService.GetLastEnglishFractionUpdate();
+            await _hmrcService.GetLastEnglishFractionUpdate();
+
+            //Assert
+            _httpClientWrapper.Verify(x => x.Get<DateTime>(ExpectedAccessCode, expectedApiUrl), Times.Once);
+            _cacheProvider.Verify(x => x.Set("HmrcFractionLastCalculatedDate", It.IsAny<DateTime>(), It.Is<TimeSpan>(c => c.Days.Equals(1))));
         }
     }
 }

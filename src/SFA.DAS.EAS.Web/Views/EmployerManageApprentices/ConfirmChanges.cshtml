@@ -35,21 +35,16 @@
                     </tr>
                 }
 
-                @if (!string.IsNullOrEmpty(Model.Data.LastName))
-                {
-                    <tr>
-                        <td>Last name</td>
-                        <td>@Model.Data.OriginalApprenticeship.LastName </td>
-                        <td class="changed-item">@Model.Data.LastName</td>
-                        @Html.Hidden("LastName", Model.Data.LastName)
-                    </tr>
-                }
-
                 @if (Model.Data.DateOfBirth?.DateTime != null)
                 {
                     <tr>
                         <td>Date of birth</td>
-                        <td>@Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat() </td>
+                        <td>
+                            @if (Model.Data.OriginalApprenticeship.DateOfBirth.HasValue)
+                            {
+                                @Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat()
+                            }
+                        </td>
                         <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
                         @Html.Hidden("DateOfBirth.Day", Model.Data.DateOfBirth.Day)
                         @Html.Hidden("DateOfBirth.Month", Model.Data.DateOfBirth.Month)

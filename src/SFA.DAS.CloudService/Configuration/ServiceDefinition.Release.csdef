@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceDefinition name="SFA.DAS.EmployerApprenticeshipsService" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6" upgradeDomainCount="5">
   <WebRole name="SFA.DAS.EAS.Web" vmsize="Standard_D2_v2">
+    <Runtime executionContext="elevated" />
     <Startup>
       <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
       </Task>
@@ -38,6 +39,11 @@
     </Imports>
   </WebRole>
   <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Standard_D1_v2">
+    <Runtime executionContext="elevated" />
+    <Startup>
+      <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
+      </Task>
+    </Startup>
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />

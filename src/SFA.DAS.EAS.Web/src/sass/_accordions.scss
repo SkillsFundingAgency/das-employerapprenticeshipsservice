@@ -3,6 +3,7 @@
         position: relative;
         color: $link-colour;
         padding-left: 15px;
+        cursor: pointer;
         &:before {
             @include closed-arrow($govuk-blue);
             left: 0;

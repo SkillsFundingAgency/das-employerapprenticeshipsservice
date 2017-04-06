@@ -16,7 +16,6 @@ namespace SFA.DAS.EAS.Application.Factories
         {
            return new AgreementSignedEvent
            {
-               Event = "EmployerAgreementSigned",
                ResourceUrl = $"{_configuration.BaseUrl}api/accounts/{hashedAccountId}/legalEntities/{hashedLegalEntityId}/agreements/{hashedAgreementId}"
            };
         }

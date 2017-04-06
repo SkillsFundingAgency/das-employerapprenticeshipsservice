@@ -26,6 +26,9 @@ namespace SFA.DAS.EAS.Domain.Models.HmrcLevy
     {
         [JsonProperty("id")]
         public string Id { get; set; }
+
+        [JsonProperty("submissionId")]
+        public long SubmissionId { get; set; }
        
         [JsonProperty("dateCeased")]
         public DateTime DateCeased { get; set; }

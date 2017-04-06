@@ -141,7 +141,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
             }
             
-            _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
             var flashmessage = new FlashMessageViewModel
             {
@@ -164,7 +164,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpPost]
         [Route("{hashedApprenticeshipId}/changes/view")]
-        public ActionResult ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
         {
             if (undoChanges == null)
             {
@@ -175,9 +175,41 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (undoChanges.Value)
             {
-                _orchestrator.UndoPendingApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId);;
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
             }
 
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/review")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId, bool? approveChanges)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (approveChanges == null)
+                return View(viewModel);
+
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
+
+            var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = message,
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
             return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 

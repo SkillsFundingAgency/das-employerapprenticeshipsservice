@@ -17,5 +17,6 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public DateTime? InactiveTo { get; set; }
         public bool EndOfYearAdjustment { get; set; }
         public decimal EndOfYearAdjustmentAmount { get; set; }
+        public long SubmissionId { get; set; }
     }
 }

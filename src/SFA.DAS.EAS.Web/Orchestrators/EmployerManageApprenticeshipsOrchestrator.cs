@@ -11,8 +11,13 @@ using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
+using FluentValidation;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
+using SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate;
+using SFA.DAS.EAS.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
@@ -98,8 +103,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger.Info($"Getting Approved Apprenticeship for Editing, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             return await CheckUserAuthorization(async () =>
-                {
-                    await AssertApprenticeshipStatus(accountId, apprenticeshipId);
+            {
+                await AssertApprenticeshipStatus(accountId, apprenticeshipId);
                 // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
 
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
@@ -108,6 +113,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId
                 });
 
+                AssertApprenticeshipIsEditable(data.Apprenticeship);
                 var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
 
                 apprenticeship.HashedAccountId = hashedAccountId;
@@ -184,14 +190,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }, hashedAccountId, externalUserId);
         }
 
-        public void UndoPendingApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId)
+        public async Task SubmitUndoApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
             _logger.Debug($"Undoing pending update for : AccountId {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
-            // ToDo: To be implemented
+            await CheckUserAuthorization(async () =>
+            {
+                await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId,
+                    UserId = userId
+                });
+            }
+            , hashedAccountId, userId);
         }
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
@@ -212,10 +227,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return programmes.TrainingProgrammes;
         }
 
-        public void CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId)
+        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId)
         {
             var employerId = _hashingService.DecodeValue(hashedAccountId);
-            _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
                 {
                     EmployerId = employerId,
                     ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),
@@ -278,7 +293,37 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _apprenticshipsViewModelCookieStorageService.Delete(CookieName);
             _apprenticshipsViewModelCookieStorageService.Create(model,CookieName);
         }
-        
+        public async Task SubmitReviewApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId, bool isApproved)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await CheckUserAuthorization(async () =>
+            {
+                await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId,
+                    UserId = userId,
+                    IsApproved = isApproved
+                });
+            }
+            ,hashedAccountId, userId);
+        }
+
+        private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
+        {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            var editable = isStartDateInFuture
+                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
+
+            if (!editable)
+            {
+                throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
+            }
+        }
     }
 }
 

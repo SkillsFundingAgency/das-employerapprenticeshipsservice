@@ -112,6 +112,7 @@
     <Build Include="StoredProcedures\GetLegalEntity_ById.sql" />
     <Build Include="StoredProcedures\GetPayeForAccount_ByRef.sql" />
     <Build Include="StoredProcedures\UpsertUser.sql" />
+    <Build Include="StoredProcedures\GetEmployerAccountMembers.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedDevData.sql" />

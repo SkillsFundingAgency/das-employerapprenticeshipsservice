@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Application.Factories
 {
     public class GenericEventFactory : IGenericEventFactory
     {
-        public GenericEvent Create<T>(T value) where T : IEventView
+        public GenericEvent Create<T>(T value)
         {
             var typeName = typeof(T).Name;
 
@@ -16,7 +16,6 @@ namespace SFA.DAS.EAS.Application.Factories
 
             return new GenericEvent
             {
-                Event = value.Event,
                 Type = typeName,
                 Payload = payload,
                 CreatedOn = DateTime.Now
