@@ -83,6 +83,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/confirm")]
+        public async Task<ActionResult> ConfirmChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetOrchestratorResponseUpdateApprenticeshipViewModelFromCookie(hashedAccountId, hashedApprenticeshipId);
+            return View(model);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/confirm")]
@@ -105,7 +114,9 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
             }
 
-            return View(model);
+            _orchestrator.CreateApprenticeshipViewModelCookie(model.Data);
+
+            return RedirectToAction("ConfirmChanges");
         }
 
         [HttpPost]
