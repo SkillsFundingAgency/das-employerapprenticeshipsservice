@@ -31,6 +31,8 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string EmployerReference { get; set; }
 
         public string CohortReference { get; set; }
+
+        public bool EnableEdit { get; set; }
     }
 
     public enum PendingChanges

@@ -77,7 +77,7 @@
                     <tr>
                         <th colspan="2">
                             Apprentice
-                            @if (Model.Data.PendingChanges == PendingChanges.None)
+                            @if (Model.Data.EnableEdit)
                             {
                                 <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
                             }

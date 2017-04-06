@@ -42,6 +42,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
         public ApprenticeshipDetailsViewModel MapToApprenticeshipDetailsViewModel(Apprenticeship apprenticeship, ApprenticeshipUpdate apprenticeshipUpdate)
         {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
             var pendingChange = PendingChanges.None;
             if (apprenticeshipUpdate?.Originator == Originator.Employer)
                 pendingChange = PendingChanges.WaitingForApproval;
@@ -69,7 +72,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 PendingChanges = pendingChange,
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 EmployerReference = apprenticeship.EmployerRef,
-                CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId)
+                CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
+                EnableEdit = isStartDateInFuture
+                            && pendingChange == PendingChanges.None
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
 
