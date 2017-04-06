@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IISExpressSSLPort />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1003,6 +1004,7 @@
     <Content Include="Views\EmployerAccountPaye\Index_EF.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details_EF.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
+    <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

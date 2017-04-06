@@ -1,0 +1,97 @@
+﻿@using System.Globalization
+@using SFA.DAS.EAS.Domain
+@using SFA.DAS.EAS.Domain.Models.Transaction
+@using SFA.DAS.EAS.Web.Extensions
+@model SFA.DAS.EAS.Web.ViewModels.TransactionViewModel
+@{
+    var culture = new CultureInfo("en-GB");
+}
+@{ViewBag.PageID = "page-transactions"; }
+@{ViewBag.Section = "finance"; }
+@{ViewBag.Title = "Your transactions";}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Your transactions</h1>
+        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.TransactionLines.Count == 0)
+        {
+            <p>
+                No funds will be paid into your account until May 2017.
+            </p>
+        }
+        else
+        {
+            <div class="data">
+                <h2 class="heading-small">Current balance</h2>
+                <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
+            </div>
+        }
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+        @if (Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+        {
+            <p class="panel panel-info">
+                No transaction data exists for this account, please try again later.
+            </p>
+            
+        }
+        else if(Model.Data.TransactionLines.Count != 0)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col"><span class="no-wrap">Payment date</span></th>
+                        <th scope="col" class="mobile-hide-cell">Description</th>
+                        <th scope="col" class="numeric">Amount</th>
+                        <th scope="col" class="numeric">Balance</th>
+                        <th scope="col"><span class="vh">Action</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var aggregationLine in Model.Data.TransactionLines)
+                    {
+                        var fromDate = aggregationLine.TransactionDate;
+                        var toDate = aggregationLine.TransactionDate;
+                        <tr>
+                            <td>
+                                <span class="no-wrap">@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </span>
+                            </td>
+                            <td class="mobile-hide-cell">
+                                <span class="description">
+                                    @aggregationLine.Description
+                                </span>
+                            </td>
+                            <td class="numeric"> @(aggregationLine.Amount.ToString("C2", culture)) </td>
+                            <td class="numeric">@(aggregationLine.Balance.ToString("C2", culture))</td>
+                            <td class="link-right">
+                                @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
+                         aggregationLine.TransactionType == TransactionItemType.TopUp)
+                                {
+                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
+                                        Details <span class="vh"> for the transaction on @date</span>
+                                    </a>
+                                }
+                                else if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                                {
+                                    <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
+                                        Details <span class="vh"> for the transaction on @date</span>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                                    }
+                </tbody>
+            </table>
+                                    }
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
+            <li>@ViewBag.Title</li>
+        </ol>
+    </div>
+}
