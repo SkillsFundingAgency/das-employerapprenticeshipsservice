@@ -14,7 +14,10 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using System.Collections.Generic;
 
+using FluentValidation;
+
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Commands.UndoApprenticeshipUpdate;
@@ -112,8 +115,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _logger.Info($"Getting Approved Apprenticeship for Editing, Account: {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
             return await CheckUserAuthorization(async () =>
-                {
-                    await AssertApprenticeshipStatus(accountId, apprenticeshipId);
+            {
+                await AssertApprenticeshipStatus(accountId, apprenticeshipId);
                 // TODO: LWA Assert that the apprenticeship can be edited - Story says should be allowed to go to edit details page??
 
                 var data = await _mediator.SendAsync(new GetApprenticeshipQueryRequest
@@ -122,6 +125,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     ApprenticeshipId = apprenticeshipId
                 });
 
+                AssertApprenticeshipIsEditable(data.Apprenticeship);
                 var apprenticeship = _apprenticeshipMapper.MapToApprenticeshipViewModel(data.Apprenticeship);
 
                 apprenticeship.HashedAccountId = hashedAccountId;
@@ -274,6 +278,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 });
             }
             ,hashedAccountId, userId);
+        }
+
+        private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
+        {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            var editable = isStartDateInFuture
+                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
+
+            if (!editable)
+            {
+                throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
+            }
         }
     }
 }
