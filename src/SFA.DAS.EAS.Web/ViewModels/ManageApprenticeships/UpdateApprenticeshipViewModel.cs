@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 
         public DateTimeViewModel EndDate { get; set; }
 
-        public DateTimeViewModel DateOfBirth { get; set; }
+        public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(0);
 
         public TrainingType? TrainingType { get; set; }
 

@@ -190,9 +190,16 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (approveChanges == null)
                 return View(viewModel);
 
-            //_orchestrator.ReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, approveChanges);
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
 
-            return View(viewModel);
+            var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = message,
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
         private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)

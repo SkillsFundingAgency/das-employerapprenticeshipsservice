@@ -16,6 +16,7 @@ using System.Collections.Generic;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
+using SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
@@ -245,6 +246,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if(result.ApprenticeshipUpdate != null)
                 throw new InvalidStateException("Pending apprenticeship update");
+        }
+
+        public async Task SubmitReviewApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId, bool isApproved)
+        {
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            await CheckUserAuthorization(async () =>
+            {
+                await _mediator.SendAsync(new ReviewApprenticeshipUpdateCommand
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId,
+                    UserId = userId,
+                    IsApproved = isApproved
+                });
+            }
+            ,hashedAccountId, userId);
         }
     }
 }

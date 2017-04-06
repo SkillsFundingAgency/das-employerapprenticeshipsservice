@@ -39,7 +39,12 @@
                 {
                     <tr>
                         <td>Date of birth</td>
-                        <td>@Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat() </td>
+                        <td>
+                            @if (Model.Data.OriginalApprenticeship.DateOfBirth.HasValue)
+                            {
+                                @Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat()
+                            }
+                        </td>
                         <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
                         @Html.Hidden("DateOfBirth.Day", Model.Data.DateOfBirth.Day)
                         @Html.Hidden("DateOfBirth.Month", Model.Data.DateOfBirth.Month)

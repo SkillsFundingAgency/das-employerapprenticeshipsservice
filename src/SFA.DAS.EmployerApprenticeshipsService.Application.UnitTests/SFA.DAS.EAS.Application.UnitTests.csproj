@@ -186,6 +186,7 @@
     <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenICallRenameAccount.cs" />
     <Compile Include="Commands\RenameEmployerAccountCommandTests\WhenIValidateTheRenameAccountCommand.cs" />
     <Compile Include="Commands\ResendInvitationTests\WhenIResendAnInvitation.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenSendingNotificationCommand.cs" />
     <Compile Include="Commands\SendNotificationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreementTests\WhenISignAnEmployerAgreement.cs" />

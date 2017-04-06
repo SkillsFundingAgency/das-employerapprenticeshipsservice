@@ -236,6 +236,9 @@
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommand.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandHandler.cs" />
     <Compile Include="Commands\RemoveTeamMember\RemoveTeamMemberCommandValidator.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommand.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\ReviewApprenticeshipUpdate\ReviewApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
