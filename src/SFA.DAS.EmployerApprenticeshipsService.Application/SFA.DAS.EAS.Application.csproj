@@ -246,6 +246,9 @@
     <Compile Include="Commands\PauseApprenticeship\PauseApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandHandler.cs" />
     <Compile Include="Commands\SubmitCommitment\SubmitCommitmentCommandValidator.cs" />
+    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommand.cs" />
+    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandHandler.cs" />
+    <Compile Include="Commands\UndoApprenticeshipUpdate\UndoApprenticeshipUpdateCommandValidator.cs" />
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommand.cs" />
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandHandler.cs" />
     <Compile Include="Commands\UpdateApprenticeship\UpdateApprenticeshipCommandValidator.cs" />

@@ -193,6 +193,8 @@
     <Compile Include="Commands\SignEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenSubmittingCommitment.cs" />
     <Compile Include="Commands\SubmitCommitmentTests\WhenValidatingTheSubmitCommitmentRequest.cs" />
+    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
+    <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />

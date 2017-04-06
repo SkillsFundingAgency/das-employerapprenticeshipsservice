@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Application.Commands.CreateApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Commands.ReviewApprenticeshipUpdate;
+using SFA.DAS.EAS.Application.Commands.UndoApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
@@ -197,14 +198,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }, hashedAccountId, externalUserId);
         }
 
-        public void UndoPendingApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId)
+        public async Task SubmitUndoApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
 
             _logger.Debug($"Undoing pending update for : AccountId {accountId}, ApprenticeshipId: {apprenticeshipId}");
 
-            // ToDo: To be implemented
+            await CheckUserAuthorization(async () =>
+            {
+                await _mediator.SendAsync(new UndoApprenticeshipUpdateCommand
+                {
+                    AccountId = accountId,
+                    ApprenticeshipId = apprenticeshipId,
+                    UserId = userId
+                });
+            }
+            , hashedAccountId, userId);
         }
 
         public async Task<Dictionary<string, string>> ValidateApprenticeship(ApprenticeshipViewModel apprenticeship)
@@ -225,10 +235,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return programmes.TrainingProgrammes;
         }
 
-        public void CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId)
+        public async Task CreateApprenticeshipUpdate(UpdateApprenticeshipViewModel apprenticeship, string hashedAccountId, string userId)
         {
             var employerId = _hashingService.DecodeValue(hashedAccountId);
-            _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
+            await _mediator.SendAsync(new CreateApprenticeshipUpdateCommand
                 {
                     EmployerId = employerId,
                     ApprenticeshipUpdate = _apprenticeshipMapper.MapFrom(apprenticeship),

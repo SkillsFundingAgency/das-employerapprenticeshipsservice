@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using MediatR;
 using Newtonsoft.Json;
 
 using NLog;
 
-using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
