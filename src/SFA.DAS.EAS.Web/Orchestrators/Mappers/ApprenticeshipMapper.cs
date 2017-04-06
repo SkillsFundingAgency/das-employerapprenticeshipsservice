@@ -220,7 +220,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EndDate = new DateTimeViewModel(apprenticeshipUpdate.EndDate),
                 TrainingName = apprenticeshipUpdate.TrainingName,
                 TrainingCode = apprenticeshipUpdate.TrainingCode,
-                TrainingType = apprenticeshipUpdate.TrainingType,
+                TrainingType = apprenticeshipUpdate.TrainingType.Value,
                 EmployerRef = apprenticeshipUpdate.EmployerRef
             };
         }

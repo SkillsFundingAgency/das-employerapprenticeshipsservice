@@ -3,11 +3,12 @@ using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {
     [Validator(typeof(ApprenticeshipViewModelValidator))]
-    public sealed class ApprenticeshipViewModel
+    public class ApprenticeshipViewModel 
     {
         public ApprenticeshipViewModel()
         {
