@@ -8,5 +8,6 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     {
         Task<List<TeamMember>> GetAccountTeamMembersForUserId(string hashedAccountId, string externalUserId);
         Task<TeamMember> GetMember(string hashedAccountId, string email);
+        Task<ICollection<TeamMember>> GetAccountTeamMembers(string hashedAccountId);
     }
 }

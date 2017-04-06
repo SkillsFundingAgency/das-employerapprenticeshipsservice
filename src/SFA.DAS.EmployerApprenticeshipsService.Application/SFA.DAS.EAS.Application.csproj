@@ -89,15 +89,12 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.EAS.Account.Api.Types, Version=1.0.0.26048, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Account.Api.Types.1.0.0.26048\lib\net45\SFA.DAS.EAS.Account.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Client">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.18.0.24078, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.18.0.24078\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Events.Api.Types, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Events.Api.Types.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=2.0.0.6450, Culture=neutral, processorArchitecture=MSIL">
@@ -483,6 +480,10 @@
     <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
     <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
+    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequest.cs" />
+    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
+    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
+    <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
     <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />
@@ -512,6 +513,10 @@
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

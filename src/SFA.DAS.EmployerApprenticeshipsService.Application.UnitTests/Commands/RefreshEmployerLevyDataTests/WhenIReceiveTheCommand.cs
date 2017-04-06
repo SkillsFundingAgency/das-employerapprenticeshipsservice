@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
             _mediator = new Mock<IMediator>();
 
             _hmrcDateService = new Mock<IHmrcDateService>();
+            _hmrcDateService.Setup(x => x.IsSubmissionForFuturePeriod(It.IsAny<string>(), It.IsAny<short>(), It.IsAny<DateTime>())).Returns(false);
 
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(
                 _validator.Object, _levyRepository.Object, _mediator.Object, _hmrcDateService.Object);
@@ -171,6 +172,21 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             //Assert
             _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.Is<DasDeclaration>(c => c.EndOfYearAdjustment && c.EndOfYearAdjustmentAmount.Equals(10m)), ExpectedEmpRef, ExpectedAccountId), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheSubmissionIsForATaxMonthInTheFutureItWillNotBeProcessed()
+        {
+            //Arrange
+            var data = RefreshEmployerLevyDataCommandObjectMother.CreateLevyDataWithFutureSubmissions(ExpectedEmpRef, DateTime.UtcNow, ExpectedAccountId);
+            var declaration = data.EmployerLevyData.Last().Declarations.Declarations.Last();
+            _hmrcDateService.Setup(x => x.IsSubmissionForFuturePeriod(declaration.PayrollYear, declaration.PayrollMonth.Value,It.IsAny<DateTime>())).Returns(true);
+            
+            //Act
+            await _refreshEmployerLevyDataCommandHandler.Handle(data);
+
+            //Assert
+            _levyRepository.Verify(x => x.CreateEmployerDeclaration(It.IsAny<DasDeclaration>(),ExpectedEmpRef,ExpectedAccountId), Times.Exactly(4));
         }
     }
 }

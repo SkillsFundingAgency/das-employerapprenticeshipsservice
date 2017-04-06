@@ -53,6 +53,21 @@ namespace SFA.DAS.EAS.Api.Controllers
             return Ok(result.Data);
         }
 
+        [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
+        [Authorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
+
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+           
+            return Ok(result.Data);
+        }
+
         private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
         {
             legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });

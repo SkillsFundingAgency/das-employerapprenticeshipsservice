@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using NLog;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -10,6 +12,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityById;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 
 namespace SFA.DAS.EAS.Api.Orchestrators
 {
@@ -17,13 +20,15 @@ namespace SFA.DAS.EAS.Api.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public AccountsOrchestrator(IMediator mediator, ILogger logger)
+        public AccountsOrchestrator(IMediator mediator, ILogger logger, IMapper mapper)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
@@ -89,6 +94,21 @@ namespace SFA.DAS.EAS.Api.Orchestrators
 
             var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
             return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
+        }
+
+        public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(string hashedAccountId)
+        {
+            _logger.Info($"Requesting team members for account {hashedAccountId}");
+
+            var teamMembers = await _mediator.SendAsync(new GetTeamMembersRequest {HashedAccountId = hashedAccountId});
+
+            var memberViewModels = teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMemberViewModel>(x)).ToList();
+
+            return new OrchestratorResponse<ICollection<TeamMemberViewModel>>
+            {
+                Data = memberViewModels,
+                Status = HttpStatusCode.OK
+            };
         }
 
         private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)

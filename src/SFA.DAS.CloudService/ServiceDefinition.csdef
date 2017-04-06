@@ -40,6 +40,11 @@
     </Imports>
   </WebRole>
   <WorkerRole name="SFA.DAS.EAS.LevyDeclarationProvider.Worker" vmsize="Small">
+    <Runtime executionContext="elevated" />
+    <Startup>
+      <Task commandLine="StartUp\IIS.bat" executionContext="elevated" taskType="background">
+      </Task>
+    </Startup>
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="ConfigurationStorageConnectionString" />

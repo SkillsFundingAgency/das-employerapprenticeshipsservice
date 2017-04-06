@@ -34,7 +34,16 @@ legend {
 
 .error-summary-wrapper {
     .error-summary {
-        margin-bottom: 0
+        margin-bottom: 0;
+    }
+}
+
+.error-summary:not(.validation-summary-max-funding) {
+    h1 {
+        display: none;
+        & + p {
+            display: none;
+        }
     }
 }
 

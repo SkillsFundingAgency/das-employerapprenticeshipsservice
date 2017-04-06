@@ -159,7 +159,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                         NoPaymentForPeriod = declaration.NoPaymentForPeriod,
                         DateCeased = declaration.DateCeased,
                         InactiveFrom = declaration.InactiveFrom,
-                        InactiveTo = declaration.InactiveTo
+                        InactiveTo = declaration.InactiveTo,
+                        SubmissionId = declaration.SubmissionId
                     };
 
                     employerData.EmpRef = scheme.Ref;

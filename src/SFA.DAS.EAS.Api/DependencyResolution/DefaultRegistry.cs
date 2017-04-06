@@ -61,13 +61,18 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
 
         private void RegisterMapper()
         {
-            var profiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
+            var infrastructureProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Infrastructure").GetTypes()
+                            .Where(t => typeof(Profile).IsAssignableFrom(t))
+                            .Select(t => (Profile)Activator.CreateInstance(t));
+
+            var apiProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Account.Api").GetTypes()
                             .Where(t => typeof(Profile).IsAssignableFrom(t))
                             .Select(t => (Profile)Activator.CreateInstance(t));
 
             var config = new MapperConfiguration(cfg =>
             {
-                profiles.ForEach(cfg.AddProfile);
+                infrastructureProfiles.ForEach(cfg.AddProfile);
+                apiProfiles.ForEach(cfg.AddProfile);
             });
 
             var mapper = config.CreateMapper();

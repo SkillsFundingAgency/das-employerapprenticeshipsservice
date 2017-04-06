@@ -276,6 +276,7 @@
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
+    <Compile Include="Controllers\EmployerUserController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -285,9 +286,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mappings\AccountMappings.cs" />
+    <Compile Include="Mappings\UserMappings.cs" />
     <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\OrchestratorResponse.cs" />
+    <Compile Include="Orchestrators\UsersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -304,6 +308,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\EmployerUser\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
