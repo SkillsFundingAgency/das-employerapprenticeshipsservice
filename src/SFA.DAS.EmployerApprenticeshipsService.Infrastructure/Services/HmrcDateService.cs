@@ -30,6 +30,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         {
             var dateToCompare = GetDateFromPayrollYearMonth(payrollYear, payrollMonth);
 
+            dateToCompare = dateToCompare.AddMonths(1);
+
             return dateToCompare > dateProcessed;
         }
 
@@ -60,7 +62,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                 monthToUse = payrollMonth + 3;
             }
             
-            return new DateTime(yearToUse,monthToUse,1);
+            return new DateTime(yearToUse,monthToUse,21);
         }
     }
 }

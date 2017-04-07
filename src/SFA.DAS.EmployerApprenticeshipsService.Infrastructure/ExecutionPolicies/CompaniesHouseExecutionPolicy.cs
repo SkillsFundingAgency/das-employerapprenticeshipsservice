@@ -25,6 +25,15 @@ namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 
         protected override T OnException<T>(Exception ex)
         {
+            var httpException = ex as HttpException;
+
+            //Ignore 404 not found errors
+            if (httpException != null && httpException.StatusCode.Equals(404))
+            {
+                _logger.Info(ex, $"Resource could not be found {ex.Message}");
+                return default(T);
+            }
+
             _logger.Error(ex, $"Exceeded retry limit - {ex.Message}");
             return default(T);
         }

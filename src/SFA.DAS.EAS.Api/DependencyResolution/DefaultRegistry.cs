@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Api.DependencyResolution {
                             .Where(t => typeof(Profile).IsAssignableFrom(t))
                             .Select(t => (Profile)Activator.CreateInstance(t));
 
-            var apiProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Account.Api").GetTypes()
+            var apiProfiles = Assembly.Load($"{ServiceNamespace}.EAS.Api").GetTypes()
                             .Where(t => typeof(Profile).IsAssignableFrom(t))
                             .Select(t => (Profile)Activator.CreateInstance(t));
 
