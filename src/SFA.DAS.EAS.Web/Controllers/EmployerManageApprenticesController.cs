@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
+        [Route("{hashedApprenticeshipId}/edit")]
         public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -132,46 +132,15 @@ namespace SFA.DAS.EAS.Web.Controllers
             
             await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
 
-            var flashmessage = new FlashMessageViewModel
-            {
-                Message = $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. Your training provider needs to approve these changes.",
-                Severity = FlashMessageSeverityLevel.Okay
-            };
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+            var message =
+                $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. Your training provider needs to approve these changes.";
 
+            SetOkayMessage(message);
             return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
-        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
-        {
-            var viewModel = await _orchestrator
-                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        [Route("{hashedApprenticeshipId}/changes/view")]
-        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
-        {
-            if (undoChanges == null)
-            {
-                var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
-                apprenticeship.OriginalApprenticeship = originalApprenticeship;
-                return View(new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship });
-            }
-
-            if (undoChanges.Value)
-            {
-                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-            }
-
-            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
-        }
-
-        [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
+        [Route("{hashedApprenticeshipId}/changes/review")]
         public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             var viewModel = await _orchestrator
@@ -193,12 +162,37 @@ namespace SFA.DAS.EAS.Web.Controllers
             await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
 
             var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
-            var flashmessage = new FlashMessageViewModel
+            SetOkayMessage(message);
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/view")]
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/view")]
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
+        {
+            if (undoChanges == null)
             {
-                Message = message,
-                Severity = FlashMessageSeverityLevel.Okay
-            };
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
+                var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+                apprenticeship.OriginalApprenticeship = originalApprenticeship;
+                return View(new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship });
+            }
+
+            if (undoChanges.Value)
+            {
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                SetOkayMessage("Changes undone");
+            }
+
             return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
@@ -232,6 +226,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         private void AddErrorsToModelState(Dictionary<string, string> dict)
         {
             dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
+        }
+
+        private void SetOkayMessage(string message)
+        {
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = message,
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
         }
     }
 }
