@@ -4,7 +4,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
 {
     public class LevyDeclarationViewModel : IAccountResource
     {
-        public string DasAccountId { get; set; }
+        public string HashedAccountId { get; set; }
         public long LevyDeclarationId { get; set; }
         public string PayeSchemeReference { get; set; }
         public decimal? LevyDueYearToDate { get; set; }
