@@ -50,6 +50,7 @@
     <Compile Include="Events\Account\AccountRenamedEvent.cs" />
     <Compile Include="Events\Agreement\AgreementSignedEvent.cs" />
     <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
+    <Compile Include="Events\Levy\LevyDeclarationUpdatedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
     <Compile Include="LevyDeclarationViewModel.cs" />
