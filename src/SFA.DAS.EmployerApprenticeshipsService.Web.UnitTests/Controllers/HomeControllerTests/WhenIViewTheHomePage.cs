@@ -25,10 +25,12 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
         private string ExpectedUserId = "123ABC";
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
         public void Arrange()
         {
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _owinWrapper = new Mock<IOwinWrapper>();
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("false");
@@ -63,7 +65,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
 
             _homeController = new HomeController(
                 _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
-                _userTestingService.Object);
+                _userTestingService.Object,_flashMessage.Object);
         }
 
         [Test]

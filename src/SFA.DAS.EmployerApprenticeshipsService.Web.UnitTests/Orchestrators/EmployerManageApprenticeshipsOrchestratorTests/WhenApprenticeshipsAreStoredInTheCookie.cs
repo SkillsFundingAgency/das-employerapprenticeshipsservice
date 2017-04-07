@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
 
             //Assert
             _cookieStorageService.Verify(x=>x.Get(CookieName));
-            Assert.IsAssignableFrom<OrchestratorResponse<UpdateApprenticeshipViewModel>>(actual);
+            Assert.IsAssignableFrom<UpdateApprenticeshipViewModel>(actual);
         }
 
         [Test]

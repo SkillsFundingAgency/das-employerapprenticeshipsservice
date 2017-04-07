@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
 
         [SetUp]
@@ -37,6 +38,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILogger>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _orchestrator.Setup(x => x.RenameEmployerAccount(It.IsAny<RenameEmployerAccountViewModel>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<RenameEmployerAccountViewModel>
@@ -45,7 +47,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
                     Data = new RenameEmployerAccountViewModel()
                 });
 
-            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object)
+            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

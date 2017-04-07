@@ -30,6 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string HashedAccountId = "ABC123";
 
         [SetUp]
@@ -43,9 +44,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILogger>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _employerAccountController = new EmployerAccountController(
-               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object)
+               _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

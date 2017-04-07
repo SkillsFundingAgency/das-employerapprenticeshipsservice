@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
-
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.FeatureToggle;
-using SFA.DAS.EAS.Domain.Models.UserView;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -18,17 +15,20 @@ namespace SFA.DAS.EAS.Web.Controllers
     {
         private readonly IFeatureToggle _featureToggle;
         private readonly IMultiVariantTestingService _multiVariantTestingService;
+        private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
         protected IOwinWrapper OwinWrapper;
         
 
         public BaseController(
             IOwinWrapper owinWrapper, 
             IFeatureToggle featureToggle,
-            IMultiVariantTestingService multiVariantTestingService)
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage )
         {
             OwinWrapper = owinWrapper;
             _featureToggle = featureToggle;
             _multiVariantTestingService = multiVariantTestingService;
+            _flashMessage = flashMessage;
         }
 
 
