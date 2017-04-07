@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/edit")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/review")]
+        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
         public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             var viewModel = await _orchestrator
@@ -167,7 +167,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/view")]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewChanges")]
         public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             var viewModel = await _orchestrator

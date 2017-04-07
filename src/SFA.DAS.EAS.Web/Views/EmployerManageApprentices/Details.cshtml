@@ -31,7 +31,7 @@
                     <p>
                         There are changes to this apprentice's details that are waiting for approval by the training provider.
                         <p>
-                            <a href="@Url.RouteUrl("ViewChanges")">View changes</a>
+                            <a href="@Url.RouteUrl("ViewChanges", "EmployerManageApprentices")">View changes</a>
                         </p>
                     </p>
                 </div>
@@ -79,7 +79,7 @@
                             Apprentice
                             @if (Model.Data.EnableEdit)
                             {
-                                <a href="@Url.RouteUrl("Edit")" class="float-right">Edit</a>
+                                <a href="@Url.RouteUrl("EditApprenticeship")" class="float-right">Edit</a>
                             }
                         </th>
                     </tr>

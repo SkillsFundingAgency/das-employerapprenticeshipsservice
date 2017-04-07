@@ -98,10 +98,6 @@
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.14869, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.14869\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SFA.DAS.Payments.Events.Api.Types">
       <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
     </Reference>
