@@ -52,6 +52,7 @@
     <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
+    <Compile Include="LevyDeclarationViewModel.cs" />
     <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="LegalEntityViewModel.cs" />
