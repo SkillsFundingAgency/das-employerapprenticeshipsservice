@@ -529,6 +529,7 @@
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
+    <None Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>

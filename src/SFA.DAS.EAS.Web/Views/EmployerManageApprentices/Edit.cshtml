@@ -43,11 +43,3 @@
         <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.Apprenticeship.HashedAccountId, Model.Data.Apprenticeship.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back</a>
     </div>
 }
-
-@functions {
-    public string FormatCost(decimal? cost)
-    {
-        return !cost.HasValue ? string.Empty : $"£{cost.Value:n0}";
-    }
-
-}

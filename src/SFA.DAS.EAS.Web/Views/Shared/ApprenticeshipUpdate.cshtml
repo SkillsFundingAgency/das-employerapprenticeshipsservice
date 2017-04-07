@@ -1,0 +1,121 @@
+﻿@using SFA.DAS.Commitments.Api.Types.Apprenticeship
+@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
+
+@model UpdateApprenticeshipViewModel
+
+@{
+    var currentValuHeader = string .IsNullOrEmpty(Model.CurrentTableHeadingText) ? "Current" :  Model.CurrentTableHeadingText;
+}
+
+<table class="edited-changes">
+    <thead>
+    <tr>
+        <th></th>
+        <th>@currentValuHeader</th>
+        <th>Changed to</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    @if (!string.IsNullOrWhiteSpace(Model.FirstName) || !string.IsNullOrWhiteSpace(Model.LastName))
+    {
+        <tr>
+            <td>Name</td>
+            <td>@Model.OriginalApprenticeship.FirstName @Model.OriginalApprenticeship.LastName</td>
+            <td class="changed-item">@GetNameChange(Model.OriginalApprenticeship, Model)</td>
+            @Html.Hidden("FirstName", Model.FirstName)
+            @Html.Hidden("Lastname", Model.LastName)
+        </tr>
+    }
+
+    @if (Model.DateOfBirth?.DateTime != null)
+    {
+        <tr>
+            <td>Date of birth</td>
+            <td>
+                @if (Model.OriginalApprenticeship.DateOfBirth.HasValue)
+                {
+                    @Model.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat()
+                }
+            </td>
+            <td class="changed-item">@Model.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
+            @Html.Hidden("DateOfBirth.Day", Model.DateOfBirth.Day)
+            @Html.Hidden("DateOfBirth.Month", Model.DateOfBirth.Month)
+            @Html.Hidden("DateOfBirth.Year", Model.DateOfBirth.Year)
+        </tr>
+    }
+
+    @if (Model.TrainingName != null)
+    {
+        <tr>
+            <td>Apprenticeship training course</td>
+            <td>@Model.OriginalApprenticeship.TrainingName </td>
+            <td class="changed-item">@Model.TrainingName</td>
+            @Html.Hidden("TrainingCode", Model.TrainingCode)
+        </tr>
+    }
+
+    @if (Model.StartDate?.DateTime != null)
+    {
+        <tr>
+            <td>Planned training start date</td>
+            <td>@Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
+            <td class="changed-item">@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
+            @Html.Hidden("StartDate.Month", Model.StartDate.Month)
+            @Html.Hidden("StartDate.Year", Model.StartDate.Year)
+        </tr>
+    }
+
+    @if (Model.EndDate?.DateTime != null)
+    {
+        <tr>
+            <td>Planned training end date</td>
+            <td>@Model.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
+            <td class="changed-item">@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
+            @Html.Hidden("EndDate.Month", Model.EndDate.Month)
+            @Html.Hidden("EndDate.Year", Model.EndDate.Year)
+        </tr>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Cost))
+    {
+        <tr>
+            <td>Cost</td>
+            <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
+            <td class="changed-item">@FormatCost(Model.Cost)</td>
+            @Html.Hidden("Cost", Model.Cost)
+        </tr>
+    }
+
+    @if (Model.EmployerRef != null)
+    {
+        <tr>
+            <td>Reference</td>
+            <td>@Model.OriginalApprenticeship.EmployerRef</td>
+            <td class="changed-item">@Model.EmployerRef</td>
+            @Html.Hidden("EmployerRef", Model.EmployerRef)
+        </tr>
+    }
+    </tbody>
+</table>
+
+@functions
+{
+    private static string GetNameChange(Apprenticeship originalApprenticeship, UpdateApprenticeshipViewModel update)
+    {
+        var first = !string.IsNullOrWhiteSpace(update.FirstName) ? update.FirstName : originalApprenticeship.FirstName;
+        var last = !string.IsNullOrWhiteSpace(update.LastName) ? update.LastName : originalApprenticeship.LastName;
+        return $"{first} {last}";
+    }
+
+    public string FormatCost(string cost)
+    {
+        if (!string.IsNullOrEmpty(cost))
+        {
+            var dCost = decimal.Parse(cost);
+            return $"£{dCost:n0}";
+        }
+        return string.Empty;
+    }
+}
