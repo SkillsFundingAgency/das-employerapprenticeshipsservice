@@ -6,7 +6,7 @@ select 1 AS IsUser,
 	a.HashedId,
 	u.Id ,CONCAT(u.FirstName, ' ', u.LastName) as Name,  
 	u.Email,
-	CONVERT(varchar(64), u.PireanKey) as 'UserRef', 
+	CONVERT(varchar(64), u.UserRef) as 'UserRef', 
 	m.RoleId as 'Role', 
 	2 as 'Status',
 	NULL AS ExpiryDate

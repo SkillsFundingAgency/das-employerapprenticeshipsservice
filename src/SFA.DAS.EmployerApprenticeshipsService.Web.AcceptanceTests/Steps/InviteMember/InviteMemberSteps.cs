@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.InviteMember
         {
             var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var mediator = _container.GetInstance<IMediator>();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserId = accountOwnerId }).Result;
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery {UserRef = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             _hashedAccountId = account?.HashedId;

@@ -18,9 +18,9 @@ namespace SFA.DAS.EAS.Api.Controllers
         [Route("accounts", Name = "Accounts")]
         [Authorize(Roles = "ReadUserAccounts")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetUserAccounts(string userId)
+        public async Task<IHttpActionResult> GetUserAccounts(string userRef)
         {
-            var result = await _orchestrator.GetUserAccounts(userId);
+            var result = await _orchestrator.GetUserAccounts(userRef);
 
             if (result.Status == HttpStatusCode.OK)
             {

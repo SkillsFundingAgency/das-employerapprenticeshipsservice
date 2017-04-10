@@ -83,3 +83,12 @@ inner join employer_Account.LegalEntity le on le.id = ea.LegalEntityId
 delete from employer_account.LegalEntity
 where id not in
 (select LegalEntityId from employer_account.employeragreement)
+
+
+--------------------------------------------------------------------------------------
+-- Rename PrieanKey Column for User table
+--------------------------------------------------------------------------------------
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'PrieanKey' AND TABLE_NAME ='User' AND TABLE_SCHEMA='employer_account')
+	BEGIN
+		EXEC sp_RENAME 'employer_account.User.PrieanKey', 'UserRef' , 'COLUMN'
+	END

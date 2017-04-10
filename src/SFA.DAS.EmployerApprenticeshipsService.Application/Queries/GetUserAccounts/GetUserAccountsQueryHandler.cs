@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
@@ -17,9 +16,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccounts
         public async Task<GetUserAccountsQueryResponse> Handle(GetUserAccountsQuery message)
         {
             //TODO add validator.
-            var userId = message.UserId;
+            var userRef = message.UserRef;
 
-            var accounts = await _userAccountsRepository.GetAccountsByUserId(userId);
+            var accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
             return new GetUserAccountsQueryResponse {Accounts = accounts};
         }
     }
