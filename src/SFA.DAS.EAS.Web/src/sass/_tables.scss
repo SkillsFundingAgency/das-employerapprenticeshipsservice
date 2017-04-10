@@ -62,3 +62,10 @@ table.organisations {
         width: 20%;
     }
 }
+
+table.edited-changes {
+    td.changed-item {
+        font-weight: 700;
+        font-size: 105%;
+    }
+}

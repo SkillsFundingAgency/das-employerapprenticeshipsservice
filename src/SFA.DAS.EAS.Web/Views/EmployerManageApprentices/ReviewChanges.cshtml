@@ -13,14 +13,15 @@
             @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
             @Html.AntiForgeryToken()
 
-            <h1 class="heading-xlarge">View changes</h1>
+            <h1 class="heading-xlarge">Review changes</h1>
+            <p class="lede">The training provider has suggested these changes: </p>
 
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
-            <h1 class="heading-medium">Do you want to undo these changes?</h1>
+
+            <h2 class="heading-medium">Are you happy to approve these changes?</h2>
             <div class="form-group">
                 <fieldset>
-                    <legend class="visually-hidden">Do you want to undo these changes?</legend>
-
+                    <legend class="visually-hidden">Are you happy to approve these changes?</legend>
                     <label class="block-label selection-button-radio" for="changes-approve-true">
                         @Html.RadioButton("ApproveChanges", true, new { id = "changes-approve-true" })
                         Yes, approve these changes
@@ -35,14 +36,10 @@
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Continue">Continue</button>
 
-            <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
+            <a class="button-link" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
                 Cancel and return
             </a>
         </form>
-
-        <div class="column-one-thirds">
-        </div>
-
     </div>
 </div>
 

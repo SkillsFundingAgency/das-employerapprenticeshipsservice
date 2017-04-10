@@ -2733,6 +2733,11 @@ table.organisations td + td + td {
   width: 20%;
 }
 
+table.edited-changes td.changed-item {
+  font-weight: 700;
+  font-size: 105%;
+}
+
 .panel p {
   font-size: 14px;
   font-size: 16px;
