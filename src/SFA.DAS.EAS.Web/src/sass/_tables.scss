@@ -69,3 +69,11 @@ table.edited-changes {
         font-size: 105%;
     }
 }
+
+table.details-list {
+    border-top: 1px solid $border-colour;
+    th {
+        width: 55%;
+        font-weight: normal;
+    }
+}

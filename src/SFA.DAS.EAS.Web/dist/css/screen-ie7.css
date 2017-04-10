@@ -2785,6 +2785,15 @@ table.edited-changes td.changed-item {
   font-size: 105%;
 }
 
+table.details-list {
+  border-top: 1px solid #bfc1c3;
+}
+
+table.details-list th {
+  width: 55%;
+  font-weight: normal;
+}
+
 .panel p {
   font-size: 14px;
   font-size: 16px;
@@ -3439,7 +3448,7 @@ span.helpText {
   border-top: 1px solid #bfc1c3;
 }
 
-table th .float-right {
+table .float-right, h2 .float-right {
   float: right;
   font-weight: normal;
 }
@@ -3658,11 +3667,17 @@ table th .float-right {
 
 #apprentice-details .flash-alert {
   border-color: #28a197;
+  background: #eaf6f5;
 }
 
 #apprentice-details .flash-alert .icon-green-tick {
-  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
-  padding-left: 50px;
+  background: url(/dist/images/icon-green-tick.png) no-repeat 0 -4px;
+  width: 30px;
+  height: 22px;
+  margin-left: -2px;
+  margin-right: 10px;
+  display: inline-block;
+  float: left;
 }
 
 #apprentice-details .apprentice-count-heading {
@@ -3780,11 +3795,17 @@ table th .float-right {
 
 .grid-row .flash-alert {
   border-color: #28a197;
+  background: #eaf6f5;
 }
 
 .grid-row .flash-alert .icon-green-tick {
-  background: url(../../dist/images/icon-green-tick.png) no-repeat 0 0;
-  padding-left: 50px;
+  background: url(/dist/images/icon-green-tick.png) no-repeat 0 -4px;
+  width: 30px;
+  height: 22px;
+  margin-left: -2px;
+  margin-right: 10px;
+  display: inline-block;
+  float: left;
 }
 
 #agreement-not-signed .notice {

@@ -179,12 +179,10 @@ span.helpText {
     }
 }
 
-table{
-    th{
-        .float-right{
-            float:right;
-            font-weight:normal;
-        }
+table, h2 {
+    .float-right{
+        float:right;
+        font-weight:normal;
     }
 }
 

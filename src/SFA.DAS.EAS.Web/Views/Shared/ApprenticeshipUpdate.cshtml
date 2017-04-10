@@ -12,16 +12,15 @@
     <thead>
     <tr>
         <th></th>
-        <th>@currentValuHeader</th>
-        <th>Changed to</th>
-
+        <th scope="col">@currentValuHeader</th>
+        <th scope="col">Changed to</th>
     </tr>
     </thead>
     <tbody>
     @if (!string.IsNullOrWhiteSpace(Model.FirstName) || !string.IsNullOrWhiteSpace(Model.LastName))
     {
         <tr>
-            <td>Name</td>
+            <th scope="row">Name</th>
             <td>@Model.OriginalApprenticeship.FirstName @Model.OriginalApprenticeship.LastName</td>
             <td class="changed-item">@GetNameChange(Model.OriginalApprenticeship, Model)</td>
             @Html.Hidden("FirstName", Model.FirstName)
@@ -32,7 +31,7 @@
     @if (Model.DateOfBirth?.DateTime != null)
     {
         <tr>
-            <td>Date of birth</td>
+            <th scope="row">Date of birth</th>
             <td>
                 @if (Model.OriginalApprenticeship.DateOfBirth.HasValue)
                 {
@@ -49,7 +48,7 @@
     @if (Model.TrainingName != null)
     {
         <tr>
-            <td>Apprenticeship training course</td>
+            <th scope="row">Apprenticeship training course</th>
             <td>@Model.OriginalApprenticeship.TrainingName </td>
             <td class="changed-item">@Model.TrainingName</td>
             @Html.Hidden("TrainingCode", Model.TrainingCode)
@@ -59,7 +58,7 @@
     @if (Model.StartDate?.DateTime != null)
     {
         <tr>
-            <td>Planned training start date</td>
+            <th scope="row">Planned training start date</th>
             <td>@Model.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
             <td class="changed-item">@Model.StartDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("StartDate.Month", Model.StartDate.Month)
@@ -70,7 +69,7 @@
     @if (Model.EndDate?.DateTime != null)
     {
         <tr>
-            <td>Planned training end date</td>
+            <th scope="row">Planned training end date</th>
             <td>@Model.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
             <td class="changed-item">@Model.EndDate.DateTime.Value.ToGdsFormat()</td>
             @Html.Hidden("EndDate.Month", Model.EndDate.Month)
@@ -81,7 +80,7 @@
     @if (!string.IsNullOrEmpty(Model.Cost))
     {
         <tr>
-            <td>Cost</td>
+            <th scope="row">Cost</th>
             <td>@Model.OriginalApprenticeship.Cost.FormatCost() </td>
             <td class="changed-item">@FormatCost(Model.Cost)</td>
             @Html.Hidden("Cost", Model.Cost)
@@ -91,7 +90,7 @@
     @if (Model.EmployerRef != null)
     {
         <tr>
-            <td>Reference</td>
+            <th scope="row">Reference</th>
             <td>@Model.OriginalApprenticeship.EmployerRef</td>
             <td class="changed-item">@Model.EmployerRef</td>
             @Html.Hidden("EmployerRef", Model.EmployerRef)
