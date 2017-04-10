@@ -14,7 +14,7 @@
             @Html.AntiForgeryToken()
 
             <h1 class="heading-xlarge">View changes</h1>
-            <p class="lede">{{ TRAINING_PROVIDER }} are reviewing these changes:</p>
+            <p class="lede">@Model.Data.ProviderName are reviewing these changes:</p>
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
 
             <h2 class="heading-medium">Do you want to undo these changes?</h2>

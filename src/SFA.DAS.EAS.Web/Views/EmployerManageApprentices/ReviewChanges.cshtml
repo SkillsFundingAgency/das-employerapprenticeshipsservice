@@ -14,7 +14,7 @@
             @Html.AntiForgeryToken()
 
             <h1 class="heading-xlarge">Review changes</h1>
-            <p class="lede">{{ TRAINING_PROVIDER }} have suggested these changes: </p>
+            <p class="lede">@Model.Data.ProviderName have suggested these changes: </p>
 
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
 

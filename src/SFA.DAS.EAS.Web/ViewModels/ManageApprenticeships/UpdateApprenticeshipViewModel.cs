@@ -35,5 +35,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string HashedAccountId { get; set; }
 
         public string CurrentTableHeadingText { get; set; }
+
+        public string ProviderName { get; set; }
     }
 }
