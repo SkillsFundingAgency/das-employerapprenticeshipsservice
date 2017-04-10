@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountResourceList.cs" />
     <Compile Include="EmployerAgreementStatus.cs" />
     <Compile Include="Events\Account\AccountCreatedEvent.cs" />
     <Compile Include="Events\Account\AccountRenamedEvent.cs" />
