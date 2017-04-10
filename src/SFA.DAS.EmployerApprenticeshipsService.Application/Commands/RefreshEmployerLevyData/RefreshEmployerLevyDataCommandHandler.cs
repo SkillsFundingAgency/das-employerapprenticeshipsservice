@@ -47,8 +47,8 @@ namespace SFA.DAS.EAS.Application.Commands.RefreshEmployerLevyData
                         if (dasDeclaration.NoPaymentForPeriod)
                         {
                             var previousSubmission = await _dasLevyRepository.GetLastSubmissionForScheme(employerLevyData.EmpRef);
-                            dasDeclaration.LevyDueYtd = previousSubmission.LevyDueYtd;
-                            dasDeclaration.LevyAllowanceForFullYear = previousSubmission.LevyAllowanceForFullYear;
+                            dasDeclaration.LevyDueYtd =  previousSubmission?.LevyDueYtd ?? 0;
+                            dasDeclaration.LevyAllowanceForFullYear = previousSubmission?.LevyAllowanceForFullYear ?? 0;
                         }
 
                         if (dasDeclaration.PayrollMonth.HasValue && _hmrcDateService.IsSubmissionEndOfYearAdjustment(dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value, dasDeclaration.SubmissionDate))

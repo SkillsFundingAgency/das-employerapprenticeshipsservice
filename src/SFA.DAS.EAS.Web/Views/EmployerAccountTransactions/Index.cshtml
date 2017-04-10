@@ -2,7 +2,7 @@
 @using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.ViewModels.TransactionViewModel
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
 @{
     var culture = new CultureInfo("en-GB");
 }
@@ -28,7 +28,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId})">Home</a></li>
             <li>@ViewBag.Title</li>
         </ol>
     </div>
