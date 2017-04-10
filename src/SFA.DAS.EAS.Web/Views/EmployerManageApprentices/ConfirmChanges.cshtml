@@ -18,26 +18,24 @@
             
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
 
-            <h1 class="heading-medium">Do you want to make these changes?</h1>
-            <fieldset>
-                <legend class="visually-hidden">Do you want to make these changes?</legend>
+            <h2 class="heading-medium">Do you want to make these changes?</h2>
+            <div class="form-group">
+                <fieldset>
+                    <legend class="visually-hidden">Do you want to make these changes?</legend>
 
-                <label class="block-label selection-button-radio" for="changes-confirmed-true">
-                    @Html.RadioButton("ChangesConfirmed", true, new { id ="changes-confirmed-true" })
-                    Yes, change these details
-                </label>
-                <label class="block-label selection-button-radio" for="changes-confirmed-false">
-                    @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
-                    No, don't change these details
-                </label>
-            </fieldset>
-            
+                    <label class="block-label selection-button-radio" for="changes-confirmed-true">
+                        @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-confirmed-true" })
+                        Yes, change these details
+                    </label>
+                    <label class="block-label selection-button-radio" for="changes-confirmed-false">
+                        @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
+                        No, don't change these details
+                    </label>
+                </fieldset>
+            </div>
+
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Finish">Finish</button>
-
-            <div class="column-one-thirds">
-
-            </div>
         </form>
     </div>
 </div>
