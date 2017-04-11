@@ -9,7 +9,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("ViewChanges")" novalidate="novalidate">
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            
             @Html.AntiForgeryToken()
 
             <h1 class="heading-xlarge">View changes</h1>
