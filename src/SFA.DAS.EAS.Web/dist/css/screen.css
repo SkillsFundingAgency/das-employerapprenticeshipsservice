@@ -2335,6 +2335,42 @@ table.top-border {
   margin-bottom: 10px;
 }
 
+#unsupported-browser-message {
+  padding: 15px 0;
+  background: #d5e8f3;
+  width: 100%;
+  border-bottom: 1px solid #2b8cc4;
+}
+
+#unsupported-browser-message p {
+  margin: 0 15px;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.1428571429;
+}
+
+@media (min-width: 641px) {
+  #unsupported-browser-message p {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+}
+
+@media (min-width: 641px) {
+  #unsupported-browser-message p {
+    margin: 0 30px;
+  }
+}
+
+@media (min-width: 1020px) {
+  #unsupported-browser-message p {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+}
+
 @media (min-width: 641px) {
   #global-header.with-proposition .header-wrapper .header-global {
     float: left;

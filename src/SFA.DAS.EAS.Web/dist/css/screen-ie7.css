@@ -1976,6 +1976,27 @@ table.top-border {
   margin-bottom: 10px;
 }
 
+#unsupported-browser-message {
+  padding: 15px 0;
+  background: #d5e8f3;
+  width: 100%;
+  border-bottom: 1px solid #2b8cc4;
+}
+
+#unsupported-browser-message p {
+  margin: 0 15px;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 14px;
+  line-height: 1.1428571429;
+  font-size: 16px;
+  line-height: 1.25;
+  margin: 0 30px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 #global-header.with-proposition .header-wrapper .header-global {
   float: left;
   width: 33.33%;

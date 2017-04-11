@@ -1,3 +1,21 @@
+#unsupported-browser-message {
+    padding: 15px 0;
+    background: $light-blue-25;
+    width: 100%;
+    border-bottom: 1px solid $light-blue;
+    p {
+        margin: 0 15px;
+        @include core-16;
+        @include media(tablet) {
+            margin: 0 30px;
+        }
+        @include media(1020px) {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+    }
+}
+
 @include media(tablet) {
     #global-header.with-proposition .header-wrapper {
         .header-global {
