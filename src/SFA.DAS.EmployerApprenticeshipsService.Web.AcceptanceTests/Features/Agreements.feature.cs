@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Agreements", "\tIn order to allow spending on my account\r\n\tI want to be able to sign an SFA agre" +
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Agreements", "\tIn order to allow spending on my account\r\n\tI want to be able to sign an ESFA agre" +
                     "ement against a legal entity connected to my account", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
