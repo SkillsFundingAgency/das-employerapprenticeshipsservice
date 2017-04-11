@@ -158,6 +158,61 @@ if(Get-Module -ListAvailable | Where-Object{ $_.Name -eq $Azure })
 	
 	}
 
+	if($EnvironmentName.ToLower() -eq "preprod" -or $EnvironmentName.ToLower() -eq "prod")
+	{
+		$checkrootcert=(Get-ChildItem cert:\LocalMachine\Root | Where thumbprint -eq $thumbprint).Thumbprint
+
+		if ($checkrootcert)
+		{
+			Write-Warning -Message "Root Certificate already installed"
+			#Apply Permissions Just Incase#
+			permissions 
+			$logger.Info("Root Certificate already Installed with thumbprint $Thumbprint")
+		}
+		else{
+			#If Certificate doesnt exist do the below#
+
+			#Create Folder#
+			New-Item $localTargetDirectory -type directory -ErrorAction SilentlyContinue -WarningAction SilentlyContinue
+
+			#Download Certifacte & Password#
+			$error.clear()
+			Try {Get-AzureStorageBlobContent -Blob $BlobName -Container $ContainerName -Destination $localTargetDirectory -Context $ctx -Force }
+			catch {
+				"There has been an error downloading the file"
+				$logger.Error("There has been an error downloading the file")
+				break
+			}
+
+			$error.clear()
+			Try {Get-AzureStorageBlobContent -Blob $BlobNamePassword -Container $ContainerName -Destination $localTargetDirectory -Context $ctx -Force }
+			catch {
+				"There has been an error downloading the file"
+				$logger.Error("There has been an error downloading the password file")
+				break
+			}
+
+			$CertPassword = Get-Content "C:\Cert\$environmentname\TokenServiceCertPassword.txt"
+
+			$mypwd = ConvertTo-SecureString -String "$CertPassword" -Force -AsPlainText
+
+			Import-PfxCertificate -FilePath C:\Cert\$environmentname\TokenServiceCert.pfx cert:\localMachine\root -Password $mypwd
+			$logger.Info("Importing the root certificate")
+			#Setting Permission on the Cert for ReadAccess#
+			Permissions
+			$logger.Info("Setting Permissions on the root certificate")
+			#Removing the Certificate download location#
+
+			Remove-Item $localTargetDirectory -Force -Recurse
+			$logger.Info("Removing local folder")
+	
+		}
+	} else{
+			Write-Warning -Message "Root Certificate not required in this environment"
+			$logger.Info("Root Certificate not required in this environment")
+
+	}
+
 }
 else  
 {  
