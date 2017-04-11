@@ -13,6 +13,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     public class BaseController : Controller
     {
+        private const string FlashMessageCookieName = "sfa-das-employerapprenticeshipsservice-flashmessage";
+
         private readonly IFeatureToggle _featureToggle;
         private readonly IMultiVariantTestingService _multiVariantTestingService;
         private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
@@ -188,6 +190,25 @@ namespace SFA.DAS.EAS.Web.Controllers
                 return successMessageViewModel;
             }
             return null;
+        }
+
+        public void AddFlashMessageToCookie(FlashMessageViewModel model)
+        {
+            _flashMessage.Delete(FlashMessageCookieName);
+
+            _flashMessage.Create(model, FlashMessageCookieName);
+        }
+
+        public FlashMessageViewModel GetFlashMessageViewModelFromCookie()
+        {
+            var flashMessageViewModelFromCookie = _flashMessage.Get(FlashMessageCookieName);
+            _flashMessage.Delete(FlashMessageCookieName);
+            return flashMessageViewModelFromCookie;
+        }
+
+        public void RemoveFlashMessageFromCookie()
+        {
+            _flashMessage.Delete(FlashMessageCookieName);
         }
     }
 }
