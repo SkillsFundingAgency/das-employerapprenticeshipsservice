@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.ApproveApprenticeshipComman
             await _handler.Handle(_validCommand);
 
             _mockCommitmentApi.Verify(x => x.PatchEmployerApprenticeship(
-                It.IsAny<long>(), It.IsAny<long>(), It.IsAny<long>(), It.Is<ApprenticeshipSubmission>(y => y.PaymentStatus == PaymentStatus.Active)));
+                It.IsAny<long>(), It.IsAny<long>(), It.Is<ApprenticeshipSubmission>(y => y.PaymentStatus == PaymentStatus.Active)));
         }
 
         [Test]

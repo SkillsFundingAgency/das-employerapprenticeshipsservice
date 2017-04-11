@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
             var apprenticeship = await _commitmentApi.GetEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId);
 
             var apprenticeshipSubmission = new ApprenticeshipSubmission { PaymentStatus = PaymentStatus.Active, UserId = message.UserId };
-            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.CommitmentId, message.ApprenticeshipId, apprenticeshipSubmission);
+            await _commitmentApi.PatchEmployerApprenticeship(message.EmployerAccountId, message.ApprenticeshipId, apprenticeshipSubmission);
         }
     }
 }
