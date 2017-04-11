@@ -2,7 +2,7 @@
 @using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.ViewModels.TransactionViewModel
+@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
 @{
     var culture = new CultureInfo("en-GB");
 }
@@ -13,7 +13,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Your transactions</h1>
-        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.TransactionLines.Count == 0)
+        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p>
                 No funds will be paid into your account until May 2017.
@@ -23,21 +23,21 @@
         {
             <div class="data">
                 <h2 class="heading-small">Current balance</h2>
-                <h2 class="bold-xlarge">@Model.CurrentBalance.ToString("C2", culture)</h2>
+                <h2 class="bold-xlarge">@Model.Data.Model.CurrentBalance.ToString("C2", culture)</h2>
             </div>
         }
     </div>
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
         {
             <p class="panel panel-info">
                 No transaction data exists for this account, please try again later.
             </p>
             
         }
-        else if(Model.Data.TransactionLines.Count != 0)
+        else if(Model.Data.Model.Data.TransactionLines.Count != 0)
         {
             <table>
                 <thead>
@@ -50,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var aggregationLine in Model.Data.TransactionLines)
+                    @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
                     {
                         var fromDate = aggregationLine.TransactionDate;
                         var toDate = aggregationLine.TransactionDate;
@@ -69,13 +69,13 @@
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                          aggregationLine.TransactionType == TransactionItemType.TopUp)
                                 {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
+                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
                                     </a>
                                 }
                                 else if (aggregationLine.TransactionType == TransactionItemType.Payment)
                                 {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.HashedAccountId, fromDate, toDate})">
+                                    <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
                                         Details <span class="vh"> for the transaction on @date</span>
                                     </a>
                                 }
@@ -90,7 +90,7 @@
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = @Model.Data.HashedAccountId})">Home</a></li>
+            <li><a href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId})">Home</a></li>
             <li>@ViewBag.Title</li>
         </ol>
     </div>

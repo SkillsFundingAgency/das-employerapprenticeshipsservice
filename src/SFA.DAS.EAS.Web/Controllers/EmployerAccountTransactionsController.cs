@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
 
             transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
-            return View(transactionViewResult.Data.Model);
+            return View(transactionViewResult);
         }
 
         [Route("balance/levyDeclaration/details")]

@@ -45,13 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountResourceList.cs" />
     <Compile Include="EmployerAgreementStatus.cs" />
     <Compile Include="Events\Account\AccountCreatedEvent.cs" />
     <Compile Include="Events\Account\AccountRenamedEvent.cs" />
     <Compile Include="Events\Agreement\AgreementSignedEvent.cs" />
     <Compile Include="Events\LegalEntity\LegalEntityCreatedEvent.cs" />
+    <Compile Include="Events\Levy\LevyDeclarationUpdatedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeAddedEvent.cs" />
     <Compile Include="Events\PayeScheme\PayeSchemeRemovedEvent.cs" />
+    <Compile Include="LevyDeclarationViewModel.cs" />
     <Compile Include="PayeSchemeViewModel.cs" />
     <Compile Include="AccountDetailViewModel.cs" />
     <Compile Include="LegalEntityViewModel.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="ResourceList.cs" />
     <Compile Include="ResourceViewModel.cs" />
     <Compile Include="TeamMemberViewModel.cs" />
+    <Compile Include="TransactionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
