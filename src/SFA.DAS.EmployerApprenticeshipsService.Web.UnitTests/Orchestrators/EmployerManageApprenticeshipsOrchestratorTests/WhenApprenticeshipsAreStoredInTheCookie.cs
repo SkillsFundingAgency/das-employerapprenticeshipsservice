@@ -43,6 +43,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         [Test]
         public void ThenTheModelIsReadFromTheCookie()
         {
+            //Arrange
+            _cookieStorageService.Setup(x => x.Get(CookieName)).Returns(new UpdateApprenticeshipViewModel());
+
             //Act
             var actual = _orchestrator.GetUpdateApprenticeshipViewModelFromCookie();
 

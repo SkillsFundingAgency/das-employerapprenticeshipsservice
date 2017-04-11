@@ -13,6 +13,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public Apprenticeship OriginalApprenticeship { get; set; }
 
         public bool? ChangesConfirmed { get; set; }
-        
+
+        public string CurrentTableHeadingText { get; set; }
+
+        public string ProviderName { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -63,7 +64,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (flashMessage != null )
             {
                 model.FlashMessage = flashMessage;
-                RemoveFlashMessageFromCookie();
             }
 
             return View(model);
@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
         public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -84,7 +84,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (flashMessage?.ErrorMessages != null && flashMessage.ErrorMessages.Any())
             {
                 model.FlashMessage = flashMessage;
-                RemoveFlashMessageFromCookie();
             }
             
             return View(model);
@@ -107,13 +106,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!await IsUserRoleAuthorized(apprenticeship.HashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
-            var dictionary = await _orchestrator.ValidateApprenticeship(apprenticeship);
-            AddErrorsToFlashDictionaryCookie(dictionary);
-            if (dictionary.Any())
+            if (!ModelState.IsValid)
             {
+                AddErrorsToFlashDictionaryCookie();
                 return RedirectToAction("Edit");
             }
 
+            var dictionary = await _orchestrator.ValidateApprenticeship(apprenticeship);
+            
+            if (dictionary.Any())
+            {
+                AddErrorsToFlashDictionaryCookie(dictionary);
+                return RedirectToAction("Edit");
+            }
+            
             var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
 
             if (!AnyChanges(model.Data))
@@ -140,8 +146,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                var errorModel = new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship };
-                return View("ConfirmChanges", errorModel);
+                AddErrorsToFlashDictionaryCookie();
+                //var errorModel = new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship };
+                return RedirectToAction("ConfirmChanges");
             }
 
             if (apprenticeship.ChangesConfirmed != null && !apprenticeship.ChangesConfirmed.Value)
@@ -240,6 +247,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             return await _orchestrator
                 .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+        }
+
+        private void AddErrorsToFlashDictionaryCookie()
+        {
+            var errorDictionary = ModelState
+                                    .Where(c=>c.Value.Errors.Any())
+                                    .ToDictionary(errorKeyValuePair => 
+                                                        errorKeyValuePair.Key, 
+                                                        errorMessage => errorMessage.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "Error");
+
+            AddErrorsToFlashDictionaryCookie(errorDictionary);
         }
 
         private void AddErrorsToFlashDictionaryCookie(Dictionary<string, string> dict)
