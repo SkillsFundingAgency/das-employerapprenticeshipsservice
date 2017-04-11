@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Api.Attributes;
 using SFA.DAS.EAS.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Api.Controllers
@@ -16,7 +17,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("", Name = "GetLegalEntities")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
         {
@@ -32,7 +33,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("{legalentityid}", Name = "GetLegalEntity")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntity(string hashedAccountId, long legalEntityId)
         {
