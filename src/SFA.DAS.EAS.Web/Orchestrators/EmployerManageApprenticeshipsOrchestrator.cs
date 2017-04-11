@@ -183,6 +183,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         viewModel.HashedAccountId = hashedAccountId;
                         viewModel.HashedApprenticeshipId = hashedApprenticeshipId;
 
+                        viewModel.ProviderName = apprenticeship.Apprenticeship.ProviderName;
+
                         return new OrchestratorResponse<UpdateApprenticeshipViewModel>
                                  {
                                      Data = viewModel 

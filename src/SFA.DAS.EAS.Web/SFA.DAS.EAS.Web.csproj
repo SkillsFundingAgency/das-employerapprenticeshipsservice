@@ -533,6 +533,7 @@
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
+    <None Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
@@ -1013,11 +1014,11 @@
     <Content Include="Views\EmployerManageApprentices\ConfirmChanges.cshtml" />
     <Content Include="Views\Shared\EditApprenticeship.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
-    <Content Include="Views\EmployerManageApprentices\SubmitChanges.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Index_EF.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Details_EF.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ReviewChanges.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
+    <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

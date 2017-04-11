@@ -1,10 +1,11 @@
 ﻿@using SFA.DAS.Commitments.Api.Types.Apprenticeship
-@using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.UpdateApprenticeshipViewModel>
+@model SFA.DAS.EAS.Web.OrchestratorResponse<UpdateApprenticeshipViewModel>
 @{
     ViewBag.Title = "Confirm changes";
     ViewBag.PageID = "confirm-edited-changes";
+
+    Model.Data.CurrentTableHeadingText = "Current";
 }
 
 <div class="grid-row">
@@ -14,119 +15,27 @@
             @Html.AntiForgeryToken()
 
             <h1 class="heading-xlarge">Confirm changes</h1>
-            <table class="edited-changes">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Current</th>
-                    <th>Changed to</th>
-                </tr>
-                </thead>
-                <tbody>
-                
-                @if (!string.IsNullOrWhiteSpace(Model.Data.FirstName) || !string.IsNullOrWhiteSpace(Model.Data.LastName))
-                {
-                    <tr>
-                        <td>Name</td>
-                        <td>@Model.Data.OriginalApprenticeship.FirstName @Model.Data.OriginalApprenticeship.LastName</td>
-                        <td class="changed-item">@GetNameChange(Model.Data.OriginalApprenticeship, Model.Data)</td>
-                        @Html.Hidden("FirstName", Model.Data.FirstName)
-                        @Html.Hidden("Lastname", Model.Data.LastName)
-                    </tr>
-                }
-
-                @if (Model.Data.DateOfBirth?.DateTime != null)
-                {
-                    <tr>
-                        <td>Date of birth</td>
-                        <td>
-                            @if (Model.Data.OriginalApprenticeship.DateOfBirth.HasValue)
-                            {
-                                @Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat()
-                            }
-                        </td>
-                        <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
-                        @Html.Hidden("DateOfBirth.Day", Model.Data.DateOfBirth.Day)
-                        @Html.Hidden("DateOfBirth.Month", Model.Data.DateOfBirth.Month)
-                        @Html.Hidden("DateOfBirth.Year", Model.Data.DateOfBirth.Year)
-                    </tr>
-                }
-
-                @if (Model.Data.TrainingName != null)
-                {
-                    <tr>
-                        <td>Apprenticeship training course</td>
-                        <td>@Model.Data.OriginalApprenticeship.TrainingName </td>
-                        <td class="changed-item">@Model.Data.TrainingName</td>
-                        @Html.Hidden("TrainingCode", Model.Data.TrainingCode)
-                    </tr>
-                }
-
-                @if (Model.Data.StartDate?.DateTime != null)
-                {
-                    <tr>
-                        <td>Planned training start date</td>
-                        <td>@Model.Data.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
-                        <td class="changed-item">@Model.Data.StartDate.DateTime.Value.ToGdsFormat()</td>
-                        @Html.Hidden("StartDate.Month", Model.Data.StartDate.Month)
-                        @Html.Hidden("StartDate.Year", Model.Data.StartDate.Year)
-                    </tr>
-                }
-
-                @if (Model.Data.EndDate?.DateTime != null)
-                {
-                    <tr>
-                        <td>Planned training end date</td>
-                        <td>@Model.Data.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
-                        <td class="changed-item">@Model.Data.EndDate.DateTime.Value.ToGdsFormat()</td>
-                        @Html.Hidden("EndDate.Month", Model.Data.EndDate.Month)
-                        @Html.Hidden("EndDate.Year", Model.Data.EndDate.Year)
-                    </tr>
-                }
-
-                @if (Model.Data.Cost != null)
-                {
-                    <tr>
-                        <td>Cost</td>
-                        <td>@Model.Data.OriginalApprenticeship.Cost.FormatCost() </td>
-                        <td class="changed-item">@Model.Data.Cost.AsNullableDecimal().FormatCost() </td>
-                        @Html.Hidden("Cost", Model.Data.Cost)
-                    </tr>
-                }
-
-                @if (Model.Data.EmployerRef != null)
-                {
-                    <tr>
-                        <td>Reference</td>
-                        <td>@Model.Data.OriginalApprenticeship.EmployerRef</td>
-                        <td class="changed-item">@Model.Data.EmployerRef</td>
-                        @Html.Hidden("EmployerRef", Model.Data.EmployerRef)
-                    </tr>
-                }
-
-                </tbody>
-            </table>
-
-            <h1 class="heading-medium">Do you want to make these changes?</h1>
-            <fieldset>
-                <legend class="visually-hidden">Do you want to make these changes?</legend>
-
-                <label class="block-label selection-button-radio" for="changes-confirmed-true">
-                    @Html.RadioButton("ChangesConfirmed", true, new { id ="changes-confirmed-true" })
-                    Yes, change these details
-                </label>
-                <label class="block-label selection-button-radio" for="changes-confirmed-false">
-                    @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
-                    No, don't change these details
-                </label>
-            </fieldset>
             
+            @Html.Partial("ApprenticeshipUpdate", Model.Data)
+
+            <h2 class="heading-medium">Do you want to make these changes?</h2>
+            <div class="form-group">
+                <fieldset>
+                    <legend class="visually-hidden">Do you want to make these changes?</legend>
+
+                    <label class="block-label selection-button-radio" for="changes-confirmed-true">
+                        @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-confirmed-true" })
+                        Yes, change these details
+                    </label>
+                    <label class="block-label selection-button-radio" for="changes-confirmed-false">
+                        @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
+                        No, don't change these details
+                    </label>
+                </fieldset>
+            </div>
+
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Finish">Finish</button>
-
-            <div class="column-one-thirds">
-
-            </div>
         </form>
     </div>
 </div>
@@ -145,6 +54,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("ListAll", "EmployerManageApprentices")" aria-label="Back to all apprentices" class="back-link">Back</a>
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

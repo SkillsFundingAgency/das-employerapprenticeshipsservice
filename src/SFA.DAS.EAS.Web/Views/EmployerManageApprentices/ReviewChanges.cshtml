@@ -1,9 +1,10 @@
-﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.UpdateApprenticeshipViewModel>
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.UpdateApprenticeshipViewModel>
 
 @{
-    ViewBag.Title = "View changes";
-    ViewBag.PageID = "view-changes";
+    ViewBag.Title = "Review changes";
+    ViewBag.PageID = "review-changes";
+
+    Model.Data.CurrentTableHeadingText = "Previous";
 }
 
 <div class="grid-row">
@@ -12,113 +13,15 @@
             
             @Html.AntiForgeryToken()
 
-            <h1 class="heading-xlarge">View changes</h1>
+            <h1 class="heading-xlarge">Review changes</h1>
+            <p class="lede">@Model.Data.ProviderName have suggested these changes: </p>
 
-            <table class="edited-changes">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Previous</th>
-                        <th>Changed to</th>
+            @Html.Partial("ApprenticeshipUpdate", Model.Data)
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (!string.IsNullOrEmpty(Model.Data.FirstName))
-                    {
-                        <tr>
-                            <td>First name</td>
-                            <td>@Model.Data.OriginalApprenticeship.FirstName </td>
-                            <td class="changed-item">@Model.Data.FirstName</td>
-                            @Html.Hidden("FirstName", Model.Data.FirstName)
-                        </tr>
-                    }
-                    @if (!string.IsNullOrEmpty(Model.Data.LastName))
-                    {
-                        <tr>
-                            <td>Last name</td>
-                            <td>@Model.Data.OriginalApprenticeship.LastName </td>
-                            <td class="changed-item">@Model.Data.LastName</td>
-                            @Html.Hidden("LastName", Model.Data.LastName)
-                        </tr>
-                    }
-
-                    @if (Model.Data.DateOfBirth?.DateTime != null)
-                    {
-                        <tr>
-                            <td>Date of birth</td>
-                            <td>
-                                @if (Model.Data.OriginalApprenticeship.DateOfBirth.HasValue)
-                                {
-                                    @Model.Data.OriginalApprenticeship.DateOfBirth.Value.ToGdsFormat()
-                                }
-                            </td>
-                            <td class="changed-item">@Model.Data.DateOfBirth.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("DateOfBirth.Day", Model.Data.DateOfBirth.Day)
-                            @Html.Hidden("DateOfBirth.Month", Model.Data.DateOfBirth.Month)
-                            @Html.Hidden("DateOfBirth.Year", Model.Data.DateOfBirth.Year)
-                        </tr>
-                    }
-
-                    @if (Model.Data.TrainingName != null)
-                    {
-                        <tr>
-                            <td>Apprenticeship training course</td>
-                            <td>@Model.Data.OriginalApprenticeship.TrainingName </td>
-                            <td class="changed-item">@Model.Data.TrainingName</td>
-                            @Html.Hidden("TrainingCode", Model.Data.TrainingCode)
-                        </tr>
-                    }
-
-                    @if (Model.Data.StartDate?.DateTime != null)
-                    {
-                        <tr>
-                            <td>Planned training start date</td>
-                            <td>@Model.Data.OriginalApprenticeship.StartDate.Value.ToGdsFormat() </td>
-                            <td class="changed-item">@Model.Data.StartDate.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("StartDate.Month", Model.Data.StartDate.Month)
-                            @Html.Hidden("StartDate.Year", Model.Data.StartDate.Year)
-                        </tr>
-                    }
-
-                    @if (Model.Data.EndDate?.DateTime != null)
-                    {
-                        <tr>
-                            <td>Planned training end date</td>
-                            <td>@Model.Data.OriginalApprenticeship.EndDate.Value.ToGdsFormat() </td>
-                            <td class="changed-item">@Model.Data.EndDate.DateTime.Value.ToGdsFormat()</td>
-                            @Html.Hidden("EndDate.Month", Model.Data.EndDate.Month)
-                            @Html.Hidden("EndDate.Year", Model.Data.EndDate.Year)
-                        </tr>
-                    }
-
-                    @if (!string.IsNullOrEmpty(Model.Data.Cost))
-                    {
-                        <tr>
-                            <td>Cost</td>
-                            <td>@Model.Data.OriginalApprenticeship.Cost.FormatCost() </td>
-                            <td class="changed-item">@Model.Data.Cost</td>
-                            @Html.Hidden("Cost", Model.Data.Cost)
-                        </tr>
-                    }
-
-                    @if (Model.Data.EmployerRef != null)
-                    {
-                        <tr>
-                            <td>Reference</td>
-                            <td>@Model.Data.OriginalApprenticeship.EmployerRef</td>
-                            <td class="changed-item">@Model.Data.EmployerRef</td>
-                            @Html.Hidden("EmployerRef", Model.Data.EmployerRef)
-                        </tr>
-                    }
-                </tbody>
-            </table>
-
-            <h1 class="heading-medium">Do you want to undo these changes?</h1>
+            <h2 class="heading-medium">Are you happy to approve these changes?</h2>
             <div class="form-group">
                 <fieldset>
-                    <legend class="visually-hidden">Do you want to undo these changes?</legend>
-
+                    <legend class="visually-hidden">Are you happy to approve these changes?</legend>
                     <label class="block-label selection-button-radio" for="changes-approve-true">
                         @Html.RadioButton("ApproveChanges", true, new { id = "changes-approve-true" })
                         Yes, approve these changes
@@ -133,22 +36,15 @@
             @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
             <button type="submit" class="button" aria-label="Continue">Continue</button>
 
-            <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
+            <a class="button-link" href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId })" aria-label="Back to apprentice details">
                 Cancel and return
             </a>
         </form>
-
-
-        <div class="column-one-thirds">
-
-        </div>
-
     </div>
 </div>
 
-
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back</a>
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

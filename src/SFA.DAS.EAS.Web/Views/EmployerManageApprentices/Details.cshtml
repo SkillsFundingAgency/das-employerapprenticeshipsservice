@@ -6,8 +6,6 @@
     ViewBag.Title = "Apprentice detail";
     ViewBag.PageId = "apprentices-detail";
 }
-
-
 <div class="grid-row">
     <div class="column-two-thirds">
        <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
@@ -15,7 +13,7 @@
             @if (Model.Data.PendingChanges == PendingChanges.ReadyForApproval)
             {
                 <div class="panel panel-border-wide alert-default">
-                    <h3>Changes for review</h3>
+                    <h3 class="heading-small">Changes for review</h3>
                     <p>
                         There are changes to this apprentice's details that you need to review.
                     </p>
@@ -27,70 +25,55 @@
             else if (Model.Data.PendingChanges == PendingChanges.WaitingForApproval)
             {
                 <div class="panel panel-border-wide">
-                    <h3>Changes pending</h3>
+                    <h3 class="heading-small">Changes pending</h3>
                     <p>
                         There are changes to this apprentice's details that are waiting for approval by the training provider.
                         <p>
-                            <a href="@Url.RouteUrl("ViewPendingChanges")">View changes</a>
+                            <a href="@Url.RouteUrl("ViewChanges", "EmployerManageApprentices")">View changes</a>
                         </p>
                     </p>
                 </div>
             }
 
-            <table id="app-status">
-                <thead>
-                    <tr>
-                        <th colspan="3" class="visually-hidden">Apprentice Status</th>
-                    </tr>
-                </thead>
+            <h2 class="heading-medium visually-hidden">Apprentice status</h2>
+            <table id="app-status" class="details-list">
                 <tbody>
                     <tr>
-                        <td>Status</td>
+                        <th scope="row">Status</th>
                         <td>@Model.Data.Status</td>
-                        <td>
-                            @*<a href="#">Edit status</a>*@
-                        </td>
                     </tr>
                 </tbody>
             </table>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Overview</th>
-                    </tr>
-                </thead>
+            <h2 class="heading-medium">Overview</h2>
+            <table class="details-list">
                 <tbody>
                     <tr>
-                        <td>Training provider</td>
+                        <th scope="row">Training provider</th>
                         <td>@Model.Data.ProviderName</td>
                     </tr>
                     <tr>
-                        <td>Cohort reference</td>
+                        <th scope="row">Cohort reference</th>
                         <td>@Model.Data.CohortReference</td>
                     </tr>
                 </tbody>
             </table>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">
-                            Apprentice
-                            @if (Model.Data.EnableEdit)
-                            {
-                                <a href="@Url.RouteUrl("EditApprovedApprentice")" class="float-right">Edit</a>
-                            }
-                        </th>
-                    </tr>
-                </thead>
+        <h2 class="heading-medium">
+            Apprentice
+            @if (Model.Data.EnableEdit)
+            {
+                <a href="@Url.RouteUrl("EditApprenticeship")" class="float-right">Edit</a>
+            }
+        </h2>
+            <table class="details-list">
                 <tbody>
                     <tr>
-                        <td>Name</td>
+                        <th scope="row">Name</th>
                         <td>@Model.Data.FirstName @Model.Data.LastName</td>
                     </tr>
                     <tr>
-                        <td>Date of birth</td>
+                        <th scope="row">Date of birth</th>
                         <td>
                             @if (Model.Data.DateOfBirth.HasValue)
                             {
@@ -99,15 +82,15 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Apprenticeship training course </td>
+                        <th scope="row">Apprenticeship training course </th>
                         <td>@Model.Data.TrainingName </td>
                     </tr>
                     @*<tr>
-                        <td>End-point assessor </td>
+                        <th>End-point assessor </th>
                         <td>@Model.Data.EndPointAssessor</td>
                     </tr>*@
                     <tr>
-                        <td>Training start date </td>
+                        <th scope="row">Training start date </th>
                         <td>
                             @if (@Model.Data.StartDate.HasValue)
                             {
@@ -116,7 +99,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Training end date </td>
+                        <th scope="row">Training end date </th>
                         <td>
                             @if (Model.Data.EndDate.HasValue)
                             {
@@ -125,20 +108,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Total cost of training </td>
+                        <th scope="row">Total cost of training </th>
                         <td>@FormatCost(Model.Data.Cost) </td>
                     </tr>
                     <tr>
-                        <td>Reference </td>
+                        <th scope="row">Reference </th>
                         <td>@Model.Data.EmployerReference</td>
                     </tr>
                 </tbody>
             </table>
     
         </div>
-    <div class="column-one-thirds">
-
-    </div>
 </div>
 
 @section breadcrumb {

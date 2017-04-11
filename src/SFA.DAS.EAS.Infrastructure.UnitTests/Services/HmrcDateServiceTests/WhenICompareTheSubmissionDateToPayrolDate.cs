@@ -79,13 +79,13 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         {
             //Arrange
             var payroll = $"{DateTime.Now.AddYears(1).ToString("yy")}-{DateTime.Now.AddYears(2).ToString("yy")}";
-            var submissionDate = DateTime.Now;
+            var dateProcessed = DateTime.Now;
 
             
             for (var i = 1; i <= 12; i++)
             {
                 //Act
-                var actual = _hmrcDateService.IsSubmissionForFuturePeriod(payroll, i, submissionDate);
+                var actual = _hmrcDateService.IsSubmissionForFuturePeriod(payroll, i, dateProcessed);
 
                 //Assert
                 Assert.IsTrue(actual);
@@ -94,26 +94,53 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
         }
 
         [Test]
-        public void ThenIfThePayrollPeriodIsForTheCorrectSubmissionDateThenFalseIsReturned()
+        public void ThenPayrollPeriodsAreProcessedInArrears()
         {
             //Arrange
-            var submissionDate = new DateTime(2017,03,16);
+            var dateProcessed = new DateTime(2017, 04, 20);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, dateProcessed);
+
+            //Arrange
+            Assert.IsTrue(actual);
+        }
+
+
+        [Test]
+        public void ThenPayrollPeriodsAreProcessedInArrearsAndAfterTheTwentyFirstAreProcessed()
+        {
+            //Arrange
+            var dateProcessed = new DateTime(2017, 04, 22);
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, dateProcessed);
+
+            //Arrange
+            Assert.IsFalse(actual);
+        }
+
+        [Test]
+        public void ThenIfThePayrollPeriodIsForTheCorrectSubmissionDateThenTrueIsReturned()
+        {
+            //Arrange
+            var dateProcessed = new DateTime(2017,03,16);
+
+            //Act
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("16-17", 12, dateProcessed);
 
             //Assert
-            Assert.IsFalse(actual);
+            Assert.IsTrue(actual);
         }
 
         [Test]
         public void ThenIfThePayrollPeriodIsInThePastThenFalseIsReturned()
         {
             //Arrange
-            var submissionDate = new DateTime(2017, 03, 16);
+            var dateProcessed = new DateTime(2017, 03, 16);
 
             //Act
-            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("15-16", 12, submissionDate);
+            var actual = _hmrcDateService.IsSubmissionForFuturePeriod("15-16", 12, dateProcessed);
 
             //Assert
             Assert.IsFalse(actual);
