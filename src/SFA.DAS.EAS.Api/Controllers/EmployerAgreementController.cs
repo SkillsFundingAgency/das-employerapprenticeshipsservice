@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
+using SFA.DAS.EAS.Api.Attributes;
 using SFA.DAS.EAS.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Api.Controllers
@@ -15,7 +16,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("{agreementId}", Name = "AgreementById")]
-        [Authorize(Roles = "ReadAllEmployerAgreements")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
         [HttpGet]   
         public async Task<IHttpActionResult> GetAgreement(string agreementId)
         {
