@@ -92,3 +92,19 @@ IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'PrieanK
 	BEGIN
 		EXEC sp_RENAME 'employer_account.User.PrieanKey', 'UserRef' , 'COLUMN'
 	END
+
+--------------------------------------------------------------------------------------
+-- Delete old stored procedures
+--------------------------------------------------------------------------------------
+
+IF OBJECT_ID('employer_account.GetAccounts_ByUserId', 'P') IS NOT NULL
+	BEGIN
+		DROP PROCEDURE employer_account.GetAccounts_ByUserId
+	END
+
+IF OBJECT_ID('employer_account.GetNumberOfInvitations_ByUserId', 'P') IS NOT NULL
+	BEGIN
+		DROP PROCEDURE employer_account.GetNumberOfInvitations_ByUserId
+	END
+
+
