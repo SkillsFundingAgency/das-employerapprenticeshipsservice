@@ -63,13 +63,12 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     else
                     {
                         //Ignore the message as we are not processing declarations
-                        if (message?.Content == null)
+                        
+                        if (message?.Content != null)
                         {
-                            if (message != null)
-                            {
-                                await message.CompleteAsync();
-                            }
+                            await message.CompleteAsync();
                         }
+                        
                     }
                 }
                 catch (Exception ex)
