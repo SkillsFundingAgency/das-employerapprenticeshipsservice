@@ -1,3 +1,8 @@
+﻿using Moq;
+using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using System.Threading.Tasks;
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +20,12 @@ using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Web.Orchestrators;
+﻿using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
 {
     [TestFixture]
-    public class WhenGettingFinishEditing
+    public class WhenGettingFinishEditing : OrchestratorTestBase
     {
         private Mock<IMediator> _mediator;
         private Mock<ILogger> _logger;
@@ -55,25 +61,30 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
                 .ReturnsAsync(
                     new GetOverlappingApprenticeshipsQueryResponse { Overlaps = Enumerable.Empty<ApprenticeshipOverlapValidationResult>() });
 
-            _employerCommitmentOrchestrator = new EmployerCommitmentsOrchestrator(_mediator.Object,
-                _hashingService.Object, _calculator.Object, _logger.Object);
+            _employerCommitmentOrchestrator = new EmployerCommitmentsOrchestrator(
+                _mediator.Object,
+                _hashingService.Object, 
+                _calculator.Object, 
+                Mock.Of<IApprenticeshipMapper>(), 
+                Mock.Of<ICommitmentMapper>(), 
+                _logger.Object);
         }
 
         [Test]
         public async Task ShouldCallMediatorToGetLegalEntityAgreementRequest()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLegalEntityAgreementRequest>()))
+            MockMediator.Setup(x => x.SendAsync(It.IsAny<GetLegalEntityAgreementRequest>()))
                 .ReturnsAsync(new GetLegalEntityAgreementResponse
                 {
                     EmployerAgreement = new EmployerAgreementView()
                 });
 
             //Act
-            await _employerCommitmentOrchestrator.GetFinishEditingViewModel("ABC123", "XYZ123", "ABC321");
+            await EmployerCommitmentOrchestrator.GetFinishEditingViewModel("ABC123", "XYZ123", "ABC321");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetLegalEntityAgreementRequest>(c => c.AccountId == 123L && c.LegalEntityCode=="321" )), Times.Once);
+            MockMediator.Verify(x => x.SendAsync(It.Is<GetLegalEntityAgreementRequest>(c => c.AccountId == 123L && c.LegalEntityCode=="321" )), Times.Once);
         }
 
         [TestCase(true, Description = "The Employer has signed the agreement")]
@@ -81,14 +92,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
         public async Task ThenTheViewModelShouldReflectWhetherTheAgreementHasBeenSigned(bool isSigned)
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetLegalEntityAgreementRequest>()))
+            MockMediator.Setup(x => x.SendAsync(It.IsAny<GetLegalEntityAgreementRequest>()))
                 .ReturnsAsync(new GetLegalEntityAgreementResponse
                 {
                     EmployerAgreement = isSigned ? null : new EmployerAgreementView()
                 });
 
             //Act
-            var result = await _employerCommitmentOrchestrator.GetFinishEditingViewModel("ABC123", "XYZ123", "ABC321");
+            var result = await EmployerCommitmentOrchestrator.GetFinishEditingViewModel("ABC123", "XYZ123", "ABC321");
 
             //Assert
             Assert.AreEqual(isSigned, result.Data.HasSignedTheAgreement);

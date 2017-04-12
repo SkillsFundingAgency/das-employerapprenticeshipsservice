@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         private bool GetProviderAddresses(long providerId, out List<string> addresses)
         {
             addresses = new List<string>();
-            var providers = _apprenticeshipInfoService.GetProvider((int)providerId);
+            var providers = _apprenticeshipInfoService.GetProvider(providerId);
             if (!string.IsNullOrEmpty(providers?.Provider?.Email))
             {
                 _logger.Info($"Getting email from apprenticeship provider service");

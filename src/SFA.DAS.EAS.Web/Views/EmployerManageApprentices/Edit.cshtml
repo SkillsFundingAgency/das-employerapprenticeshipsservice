@@ -1,0 +1,45 @@
+﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ExtendedApprenticeshipViewModel>
+
+@{
+    ViewBag.Title = "Apprentice detail";
+    ViewBag.PageId = "apprentices-detail";
+}
+
+@section pageSpecificJS {
+    @Scripts.Render("~/bundles/apprentice")
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
+            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <h1 class="heading-xlarge">Edit apprentice</h1>
+                <fieldset>
+                    <legend class="visuallyhidden">Edit apprentice</legend>
+
+                    @Html.Partial("EditApprenticeship", Model.Data)
+                </fieldset>
+            </div>
+
+            @Html.Hidden("hashedAccountId", Model.Data.Apprenticeship.HashedAccountId)
+            @Html.Hidden("hashedApprenticeshipId", Model.Data.Apprenticeship.HashedApprenticeshipId)
+            @Html.Hidden("hashedCommitmentId", Model.Data.Apprenticeship.HashedCommitmentId)
+            @Html.Hidden("uln", Model.Data.Apprenticeship.ULN)
+            <button type="submit" class="button" aria-label="Add">Update details</button>
+            <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">
+                Cancel and return
+            </a>
+        </form>
+    </div>
+
+    <div class="column-one-thirds">
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.Apprenticeship.HashedAccountId, Model.Data.Apprenticeship.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back</a>
+    </div>
+}
