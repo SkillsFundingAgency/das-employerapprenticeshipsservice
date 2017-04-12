@@ -3,7 +3,6 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
@@ -12,9 +11,7 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using System;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
-using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
@@ -26,7 +23,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         private ApprenticeshipMapper _apprenticeshipMapper;
         private Mock<IMediator> _mockMediator;
         private Mock<ICurrentDateTime> _mockDateTime;
-        private Mock<ICookieStorageService<ApprenticeshipViewModel>> _cookieStorageService;
+        private Mock<ICookieStorageService<UpdateApprenticeshipViewModel>> _cookieStorageService;
 
         [SetUp]
         public void SetUp()
@@ -34,7 +31,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator = new Mock<IMediator>();
             _mockDateTime = new Mock<ICurrentDateTime>();
 
-            _cookieStorageService = new Mock<ICookieStorageService<ApprenticeshipViewModel>>();
+            _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
 
             _apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
 
@@ -145,5 +142,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
+        
     }
 }

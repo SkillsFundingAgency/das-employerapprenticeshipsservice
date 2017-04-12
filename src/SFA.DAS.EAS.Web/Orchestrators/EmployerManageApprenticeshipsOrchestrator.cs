@@ -31,11 +31,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IHashingService _hashingService;
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
-        private readonly ICookieStorageService<ApprenticeshipViewModel> _apprenticshipsViewModelCookieStorageService;
+        private readonly ICookieStorageService<UpdateApprenticeshipViewModel> _apprenticshipsViewModelCookieStorageService;
 
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-apprentices";
 
-        public EmployerManageApprenticeshipsOrchestrator(IMediator mediator, IHashingService hashingService, IApprenticeshipMapper apprenticeshipMapper, ILogger logger, ICookieStorageService<ApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService) : base(mediator, hashingService, logger)
+        public EmployerManageApprenticeshipsOrchestrator(IMediator mediator, IHashingService hashingService, IApprenticeshipMapper apprenticeshipMapper, ILogger logger, ICookieStorageService<UpdateApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService) : base(mediator, hashingService, logger)
         {
             _mediator = mediator;
             _hashingService = hashingService;
@@ -251,24 +251,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             if(result.ApprenticeshipUpdate != null)
                 throw new InvalidStateException("Pending apprenticeship update");
         }
-
-        public ApprenticeshipViewModel GetApprenticeshipViewModelFromCookie()
-        {
-            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
-
-            return model;
-        }
-
-        public UpdateApprenticeshipViewModel GetUpdateApprenticeshipViewModelFromCookie()
-        {
-            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
-
-            return (UpdateApprenticeshipViewModel) model;
-        }
-
-
+        
         public async Task<OrchestratorResponse<UpdateApprenticeshipViewModel>> GetOrchestratorResponseUpdateApprenticeshipViewModelFromCookie(string hashedAccountId, string hashedApprenticeshipId)
         {
+            var mappedModel = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
 
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var accountId = _hashingService.DecodeValue(hashedAccountId);
@@ -287,11 +273,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new OrchestratorResponse<UpdateApprenticeshipViewModel> {Data = mappedModel };
         }
 
-        public void CreateApprenticeshipViewModelCookie(ApprenticeshipViewModel model)
+        public void CreateApprenticeshipViewModelCookie(UpdateApprenticeshipViewModel model)
         {
             _apprenticshipsViewModelCookieStorageService.Delete(CookieName);
+            model.OriginalApprenticeship = null;
             _apprenticshipsViewModelCookieStorageService.Create(model,CookieName);
         }
+
         public async Task SubmitReviewApprenticeshipUpdate(string hashedAccountId, string hashedApprenticeshipId, string userId, bool isApproved)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);

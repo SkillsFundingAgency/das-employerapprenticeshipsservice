@@ -147,7 +147,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!ModelState.IsValid)
             {
                 AddErrorsToFlashDictionaryCookie();
-                //var errorModel = new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship };
                 return RedirectToAction("ConfirmChanges");
             }
 
