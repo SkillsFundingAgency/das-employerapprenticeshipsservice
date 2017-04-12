@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 namespace SFA.DAS.EAS.Web.ViewModels
 {
     [Validator(typeof(ApprenticeshipViewModelValidator))]
-    public class ApprenticeshipViewModel 
+    public class ApprenticeshipViewModel : ViewModelBase
     {
         public ApprenticeshipViewModel()
         {
@@ -23,6 +23,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LastName { get; set; }
 
         public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(0);
+
+        public string DateOfBirthDayError => GetErrorMessage("DateOfBirth.Day");
 
         public string NINumber { get; set; }
 
@@ -63,5 +65,14 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public PaymentStatus PaymentStatus { get; set; }
 
         public AgreementStatus AgreementStatus { get; set; }
+        public string FirstNameError => GetErrorMessage(nameof(FirstName));
+        public string LastNameError => GetErrorMessage(nameof(LastName));
+        public string DateOfBirthError => GetErrorMessage(nameof(DateOfBirth));
+        public string StartDateError => GetErrorMessage(nameof(StartDate));
+        public string EndDateError => GetErrorMessage(nameof(EndDate));
+        public string CostError => GetErrorMessage(nameof(CostError));
+        public string StartDateOverlapError => GetErrorMessage("StartDateOverlap");
+        public string EndDateOverlapError => GetErrorMessage("EndDateOverlap");
+        public string EmployerRefError => GetErrorMessage(nameof(EmployerRef));
     }
 }

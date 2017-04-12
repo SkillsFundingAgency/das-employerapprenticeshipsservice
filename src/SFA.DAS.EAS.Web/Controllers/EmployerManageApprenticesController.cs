@@ -84,6 +84,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (flashMessage?.ErrorMessages != null && flashMessage.ErrorMessages.Any())
             {
                 model.FlashMessage = flashMessage;
+                model.Data.Apprenticeship.ErrorDictionary = flashMessage.ErrorMessages;
             }
             
             return View(model);
