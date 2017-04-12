@@ -215,6 +215,7 @@
     <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
+    <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriodTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLegalEntityByIdTests\WhenIGetALegalEntity.cs" />
