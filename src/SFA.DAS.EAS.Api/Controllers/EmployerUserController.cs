@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Api.Controllers
 {
-    [RoutePrefix("api/user/{userId}")]
+    [RoutePrefix("api/user/{userRef}")]
     public class EmployerUserController : ApiController
     {
         private readonly UsersOrchestrator _orchestrator;
