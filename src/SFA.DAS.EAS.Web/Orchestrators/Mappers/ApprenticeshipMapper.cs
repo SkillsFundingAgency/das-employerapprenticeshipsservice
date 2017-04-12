@@ -160,34 +160,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
             return apprenticeship;
         }
-
-        public async Task<UpdateApprenticeshipViewModel> MapToUpdateApprenticeshipViewModel(ApprenticeshipViewModel viewModel)
-        {
-            var model =  new UpdateApprenticeshipViewModel
-            {
-                FirstName = viewModel.FirstName,
-                LastName = viewModel.LastName,
-                DateOfBirth = viewModel.DateOfBirth,
-                NINumber = viewModel.NINumber,
-                ULN = viewModel.ULN,
-                Cost = viewModel.Cost,
-                StartDate = viewModel.StartDate,
-                EndDate = viewModel.EndDate,
-                ProviderRef = viewModel.ProviderRef,
-                EmployerRef = viewModel.EmployerRef,
-                
-            };
-            
-            if (!string.IsNullOrWhiteSpace(viewModel.TrainingCode))
-            {
-                var training = await GetTrainingProgramme(viewModel.TrainingCode);
-                model.TrainingType = training is Standard ? TrainingType.Standard : TrainingType.Framework;
-                model.TrainingCode = viewModel.TrainingCode;
-                model.TrainingName = training.Title;
-            }
-
-            return model;
-        }
+        
 
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {

@@ -78,7 +78,6 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             var expectedAccountId = 12345;
             var expectedApprenticeshipId = 54321;
             _cookieStorageService.Setup(x => x.Get(CookieName)).Returns(new ApprenticeshipViewModel());
-            _apprenticeshipMapper.Setup(x => x.MapToUpdateApprenticeshipViewModel(It.IsAny<ApprenticeshipViewModel>())).ReturnsAsync(new UpdateApprenticeshipViewModel());
             _hashingService.Setup(x => x.DecodeValue(expectedHashedAccountId)).Returns(expectedAccountId);
             _hashingService.Setup(x => x.DecodeValue(expectedHashedApprenticeshipId)).Returns(expectedApprenticeshipId);
             _mediator.Setup(

@@ -269,9 +269,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<UpdateApprenticeshipViewModel>> GetOrchestratorResponseUpdateApprenticeshipViewModelFromCookie(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = _apprenticshipsViewModelCookieStorageService.Get(CookieName);
-
-            var mappedModel = await _apprenticeshipMapper.MapToUpdateApprenticeshipViewModel(model);
 
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
             var accountId = _hashingService.DecodeValue(hashedAccountId);

@@ -145,31 +145,5 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
-
-        [Test]
-        public async Task ThenTheApprenticeshipViewModelIsMappedToTheUpdateApprenticeshipViewModel()
-        {
-            //Arrange
-            var updateApprenticeshipViewModel = new UpdateApprenticeshipViewModel
-            {
-                LastName = "Tester",
-                FirstName = "Test",
-                NINumber = "134AD",
-                ULN = "trgf4567",
-                DateOfBirth = new DateTimeViewModel {Day = 10, Month = 3, Year = 2000},
-                Cost = "12345",
-                EmployerRef = "123ERD",
-                ProviderRef = "654TRF",
-                StartDate = new DateTimeViewModel {Day = 11, Month = 4, Year = 2018},
-                EndDate = new DateTimeViewModel {Day = 12, Month = 5, Year = 2019}
-
-            };
-
-            //Act
-            var actual = await _apprenticeshipMapper.MapToUpdateApprenticeshipViewModel(updateApprenticeshipViewModel);
-
-            //Assert
-            actual.ShouldBeEquivalentTo(updateApprenticeshipViewModel);
-        }
     }
 }
