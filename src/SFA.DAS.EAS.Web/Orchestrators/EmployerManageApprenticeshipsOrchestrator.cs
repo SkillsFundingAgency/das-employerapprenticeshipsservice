@@ -241,7 +241,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
         }
 
-        public async Task<OrchestratorResponse<ChangeStatusViewModel>> GetChangeStatusChoiceNavigation(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
+        public async Task<OrchestratorResponse<ChangeStatusChoiceViewModel>> GetChangeStatusChoiceNavigation(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -254,7 +254,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 CheckApprenticeshipStateValidForChange(data.Apprenticeship);
 
-                return new OrchestratorResponse<ChangeStatusViewModel> { Data = new ChangeStatusViewModel() };
+                var isPaused = data.Apprenticeship.PaymentStatus == PaymentStatus.Paused;
+
+                return new OrchestratorResponse<ChangeStatusChoiceViewModel> { Data = new ChangeStatusChoiceViewModel { IsCurrentlyPaused = isPaused } };
 
             }, hashedAccountId, externalUserId);
         }
@@ -277,7 +279,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new WhenToMakeChangeViewModel
                     {
                         StartDate = data.Apprenticeship.StartDate.Value,
-                        SkipStep = data.Apprenticeship.IsWaitingToStart(_currentDateTime),
+                        SkipStep = CanChangeDateStepBeSkipped(changeType, data),
                         ChangeStatusViewModel = new ChangeStatusViewModel
                         {
                             ChangeType = changeType
@@ -286,6 +288,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 };
 
             }, hashedAccountId, externalUserId);
+        }
+
+        private bool CanChangeDateStepBeSkipped(ChangeStatusType changeType, GetApprenticeshipQueryResponse data)
+        {
+            return data.Apprenticeship.IsWaitingToStart(_currentDateTime) // Not started
+                || (data.Apprenticeship.PaymentStatus == PaymentStatus.Paused && changeType == ChangeStatusType.Resume) // Resuming 
+                || (data.Apprenticeship.PaymentStatus == PaymentStatus.Active && changeType == ChangeStatusType.Pause); // Pausing
         }
 
         public async Task<ValidateWhenToApplyChangeResult> ValidateWhenToApplyChange(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusViewModel model)

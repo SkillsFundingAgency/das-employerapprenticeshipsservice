@@ -61,6 +61,48 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             response.Data.SkipStep.Should().BeTrue();
         }
 
+        [Test]
+        public async Task ThenShouldSkipSelectingChangeDateIfPausingLiveApprenticeship()
+        {
+            _testApprenticeship.PaymentStatus = PaymentStatus.Active;
+
+            OrchestratorResponse<WhenToMakeChangeViewModel> response = await _sut.GetChangeStatusDateOfChangeViewModel("ABC123", "CDE321", ChangeStatusType.Pause, "user123");
+
+            response.Data.SkipStep.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task ThenShouldSkipSelectingChangeDateIfResumingApprenticeship()
+        {
+            _testApprenticeship.PaymentStatus = PaymentStatus.Paused;
+
+            OrchestratorResponse<WhenToMakeChangeViewModel> response = await _sut.GetChangeStatusDateOfChangeViewModel("ABC123", "CDE321", ChangeStatusType.Resume, "user123");
+
+            response.Data.SkipStep.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task ThenShouldSkipSelectingChangeDateIfPausingWaitingToStartApprenticeship()
+        {
+            _testApprenticeship.PaymentStatus = PaymentStatus.Active;
+            _testApprenticeship.StartDate = DateTime.UtcNow.AddMonths(-1); // Already started
+
+            OrchestratorResponse<WhenToMakeChangeViewModel> response = await _sut.GetChangeStatusDateOfChangeViewModel("ABC123", "CDE321", ChangeStatusType.Pause, "user123");
+
+            response.Data.SkipStep.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task ThenShouldSkipSelectingChangeDateIfResumingWaitingToStartApprenticeship()
+        {
+            _testApprenticeship.PaymentStatus = PaymentStatus.Paused;
+            _testApprenticeship.StartDate = DateTime.UtcNow.AddMonths(-1); // Already started
+
+            OrchestratorResponse<WhenToMakeChangeViewModel> response = await _sut.GetChangeStatusDateOfChangeViewModel("ABC123", "CDE321", ChangeStatusType.Resume, "user123");
+
+            response.Data.SkipStep.Should().BeTrue();
+        }
+
         [TestCase(PaymentStatus.Active)]
         [TestCase(PaymentStatus.Paused)]
         public async Task ThenShouldNotSkipSelectingChangeDateIfTrainingStarted(PaymentStatus paymentStatus)
