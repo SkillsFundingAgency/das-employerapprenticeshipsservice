@@ -41,6 +41,12 @@
                     <tr>
                         <th scope="row">Status</th>
                         <td>@Model.Data.Status</td>
+                        <td>
+                            @if (Model.Data.CanEditStatus)
+                            {
+                                @Html.RouteLink("Edit status", "ChangeStatusSelectOption");
+                            }
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -63,7 +69,7 @@
             Apprentice
             @if (Model.Data.EnableEdit)
             {
-                <a href="@Url.RouteUrl("EditApprenticeship")" class="float-right">Edit</a>
+                <a href="@Url.RouteUrl("EditApprenticeship")" class="float-right">Edit apprentice</a>
             }
         </h2>
             <table class="details-list">
