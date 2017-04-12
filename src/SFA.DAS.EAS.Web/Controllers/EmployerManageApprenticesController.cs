@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
+using Newtonsoft.Json;
+
+using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
+
+using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -43,6 +51,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
         [Route("{hashedApprenticeshipId}/details")]
         public async Task<ActionResult> Details(string hashedAccountId, string hashedApprenticeshipId)
         {
@@ -51,13 +60,182 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _orchestrator
                 .GetApprenticeship(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (!string.IsNullOrEmpty(TempData["FlashMessage"]?.ToString()))
+            {
+                model.FlashMessage = JsonConvert.DeserializeObject<FlashMessageViewModel>(TempData["FlashMessage"].ToString());
+            }
+
             return View(model);
+        }
+
+        [HttpGet]
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
+        public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var model = await _orchestrator
+                .GetApprenticeshipForEdit(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/confirm")]
+        public async Task<ActionResult> ConfirmChanges(ApprenticeshipViewModel apprenticeship)
+        {
+            if (!await IsUserRoleAuthorized(apprenticeship.HashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            AddErrorsToModelState(await _orchestrator.ValidateApprenticeship(apprenticeship));
+            if (!ModelState.IsValid)
+            {
+                return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
+            }
+
+            var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
+
+            if (!AnyChanges(model.Data))
+            {
+                ModelState.AddModelError("NoChangesRequested", "No changes made");
+                return await RedisplayEditApprenticeshipView(apprenticeship, apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId);
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/SubmitChanges")]
+        public async Task<ActionResult> SubmitChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded)
+        {
+            if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
+                return View("AccessDenied");
+
+            var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+            apprenticeship.OriginalApprenticeship = originalApprenticeship;
+
+            if (!ModelState.IsValid)
+            {
+                var errorModel = new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship };
+                return View("ConfirmChanges", errorModel);
+            }
+
+            if (apprenticeship.ChangesConfirmed != null && !apprenticeship.ChangesConfirmed.Value)
+            {
+                return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+            }
+            
+            await _orchestrator.CreateApprenticeshipUpdate(apprenticeship, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            var message =
+                $"You suggested changes to the record for {originalApprenticeship.FirstName} {originalApprenticeship.LastName}. Your training provider needs to approve these changes.";
+
+            SetOkayMessage(message);
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/review", Name = "ReviewChanges")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/review")]
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId, bool? approveChanges)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+            if (approveChanges == null)
+                return View(viewModel);
+
+            await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
+
+            var message = approveChanges.Value ? "Changes approved" : "Changes rejected";
+            SetOkayMessage(message);
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+        }
+
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewChanges")]
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var viewModel = await _orchestrator
+                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("{hashedApprenticeshipId}/changes/view")]
+        public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, string originalApprenticeshipDecoded, bool? undoChanges)
+        {
+            if (undoChanges == null)
+            {
+                var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
+                apprenticeship.OriginalApprenticeship = originalApprenticeship;
+                return View(new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship });
+            }
+
+            if (undoChanges.Value)
+            {
+                await _orchestrator.SubmitUndoApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                SetOkayMessage("Changes undone");
+            }
+
+            return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
+        }
+
+        private async Task<ActionResult> RedisplayEditApprenticeshipView(ApprenticeshipViewModel apprenticeship, string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var response = await _orchestrator.GetApprenticeshipForEdit(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            response.Data.Apprenticeship = apprenticeship;
+
+            return View("Edit", response);
+        }
+
+        private bool AnyChanges(UpdateApprenticeshipViewModel data)
+        {
+            return
+                   !string.IsNullOrEmpty(data.FirstName)
+                || !string.IsNullOrEmpty(data.LastName)
+                || data.DateOfBirth != null
+                || !string.IsNullOrEmpty(data.TrainingName)
+                || data.StartDate != null
+                || data.EndDate != null
+                || data.Cost != null
+                || !string.IsNullOrEmpty(data.EmployerRef);
         }
 
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
         {
             return await _orchestrator
                 .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+        }
+
+        private void AddErrorsToModelState(Dictionary<string, string> dict)
+        {
+            dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
+        }
+
+        private void SetOkayMessage(string message)
+        {
+            var flashmessage = new FlashMessageViewModel
+            {
+                Message = message,
+                Severity = FlashMessageSeverityLevel.Okay
+            };
+            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
         }
     }
 }

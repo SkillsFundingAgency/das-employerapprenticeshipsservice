@@ -23,5 +23,22 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string Status { get; set; }
 
         public string ProviderName { get; set; }
+
+        public PendingChanges PendingChanges { get; set; }
+
+        public string RecordStatus { get; set; }
+
+        public string EmployerReference { get; set; }
+
+        public string CohortReference { get; set; }
+
+        public bool EnableEdit { get; set; }
+    }
+
+    public enum PendingChanges
+    {
+        None = 0,
+        ReadyForApproval = 1,
+        WaitingForApproval = 2
     }
 }
