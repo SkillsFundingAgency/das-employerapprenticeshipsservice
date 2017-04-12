@@ -14,14 +14,15 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public string PayrollYear { get; set; }
         public short? PayrollMonth { get; set; }
         public int LastSubmission { get; set; }
+        public decimal TopUpPercentage { get; set; }
         public decimal TopUp { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool EndOfYearAdjustment { get; set; }
         public decimal EndOfYearAdjustmentAmount { get; set; }
         public decimal LevyAllowanceForYear { get; set; }
-        public DateTime DateCeased { get; set; }
-        public DateTime InactiveFrom { get; set; }
-        public DateTime InactiveTo { get; set; }
+        public DateTime? DateCeased { get; set; }
+        public DateTime? InactiveFrom { get; set; }
+        public DateTime? InactiveTo { get; set; }
         public long HmrcSubmissionId { get; set; }
 
         public DateTime? PayrollDate()
