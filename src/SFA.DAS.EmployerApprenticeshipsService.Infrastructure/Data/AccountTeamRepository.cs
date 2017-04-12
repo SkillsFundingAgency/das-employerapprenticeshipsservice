@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 const string sql = @"select tm.* from [employer_account].[GetTeamMembers] tm 
                             join [employer_account].[Membership] m on m.AccountId = tm.AccountId
                             join [employer_account].[User] u on u.Id = m.UserId
-                            where u.PireanKey = @externalUserId and tm.hashedId = @hashedAccountId";
+                            where u.UserRef = @externalUserId and tm.hashedId = @hashedAccountId";
                 return await connection.QueryAsync<TeamMember>(
                     sql: sql,
                     param: parameters,

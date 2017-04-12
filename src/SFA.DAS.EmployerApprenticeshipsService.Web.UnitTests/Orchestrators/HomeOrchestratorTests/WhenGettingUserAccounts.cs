@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HomeOrchestratorTests
             await _homeOrchestrator.GetUserAccounts(ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserAccountsQuery>(c=>c.UserId.Equals(ExpectedUserId))), Times.Once);
+            _mediator.Verify(x=>x.SendAsync(It.Is<GetUserAccountsQuery>(c=>c.UserRef.Equals(ExpectedUserId))), Times.Once);
         }
 
         [Test]

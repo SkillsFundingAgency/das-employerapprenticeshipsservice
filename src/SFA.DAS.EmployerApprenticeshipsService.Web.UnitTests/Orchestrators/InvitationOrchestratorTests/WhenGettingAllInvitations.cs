@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.InvitationOrchestratorTests
             await _invitationOrchestrator.GetAllInvitationsForUser(expectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.UserId.Equals(expectedUserId))), Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountsQuery>(c => c.UserRef.Equals(expectedUserId))), Times.Once);
         }
     }
 }

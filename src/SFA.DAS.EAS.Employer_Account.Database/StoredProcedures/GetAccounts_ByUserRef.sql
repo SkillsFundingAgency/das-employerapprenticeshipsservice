@@ -1,5 +1,5 @@
-﻿CREATE PROCEDURE [employer_account].[GetAccounts_ByUserId]
-	@userId UNIQUEIDENTIFIER
+﻿CREATE PROCEDURE [employer_account].[GetAccounts_ByUserRef]
+	@userRef UNIQUEIDENTIFIER
 	
 AS
 select 
@@ -11,4 +11,4 @@ inner join
 inner join
 	[employer_account].[Account]  a on m.AccountId = a.Id
 where 
-u.PireanKey = @userId
+u.UserRef = @userRef
