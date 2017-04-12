@@ -1,7 +1,7 @@
-﻿CREATE PROCEDURE [employer_financial].[GetLevyDeclarations_ByHashedAccountPayrollMonthPayrollYear]
+﻿CREATE PROCEDURE [employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]
 	@accountId BIGINT,
 	@payrollYear VARCHAR(10),
-	@payrollMonth INT
+	@payrollMonth TINYINT
 AS
 SELECT * FROM (
 	SELECT

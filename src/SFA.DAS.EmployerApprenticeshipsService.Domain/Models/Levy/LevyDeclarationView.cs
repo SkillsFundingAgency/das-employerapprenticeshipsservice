@@ -15,6 +15,15 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
         public short? PayrollMonth { get; set; }
         public int LastSubmission { get; set; }
         public decimal TopUp { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public bool EndOfYearAdjustment { get; set; }
+        public decimal EndOfYearAdjustmentAmount { get; set; }
+        public decimal LevyAllowanceForYear { get; set; }
+        public DateTime DateCeased { get; set; }
+        public DateTime InactiveFrom { get; set; }
+        public DateTime InactiveTo { get; set; }
+        public long HmrcSubmissionId { get; set; }
+
         public DateTime? PayrollDate()
         {
 
@@ -29,16 +38,16 @@ namespace SFA.DAS.EAS.Domain.Models.Levy
             if (PayrollMonth <= 9)
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[0]);
-                month = (short) (PayrollMonth + 3);
+                month = (short)(PayrollMonth + 3);
             }
             else
             {
                 year += Convert.ToInt32(PayrollYear.Split('-')[1]);
-                month = (short) (PayrollMonth - 9);
+                month = (short)(PayrollMonth - 9);
             }
 
-            var dateTime = new DateTime(year, month,1);
-            
+            var dateTime = new DateTime(year, month, 1);
+
             return dateTime;
         }
     }
