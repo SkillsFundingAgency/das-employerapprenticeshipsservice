@@ -25,7 +25,7 @@
             pageTitle = "Apprenticeship stopped";
             pageId = "apprentice-stopped";
             pageHeading = "Stop apprentice";
-            pageAction = "stopp";
+            pageAction = "stop";
             break;
         default:
             throw new ArgumentOutOfRangeException(nameof(Model.Data.ChangeStatusViewModel.ChangeType), "Not a valid value");
@@ -127,12 +127,10 @@
                 </fieldset>
             </div>
             @Html.Hidden("WhenToMakeChange", Model.Data.ChangeStatusViewModel.WhenToMakeChange)
-            @if (Model.Data.ChangeStatusViewModel.ChangeType == ChangeStatusType.Stop)
-            {
-                @Html.Hidden("DateOfChange.Day", Model.Data.ChangeStatusViewModel.DateOfChange.Day)
-                @Html.Hidden("DateOfChange.Month", Model.Data.ChangeStatusViewModel.DateOfChange.Month)
-                @Html.Hidden("DateOfChange.Year", Model.Data.ChangeStatusViewModel.DateOfChange.Year)
-            }
+            @Html.Hidden("DateOfChange.Day", Model.Data.ChangeStatusViewModel.DateOfChange.Day)
+            @Html.Hidden("DateOfChange.Month", Model.Data.ChangeStatusViewModel.DateOfChange.Month)
+            @Html.Hidden("DateOfChange.Year", Model.Data.ChangeStatusViewModel.DateOfChange.Year)
+
             <button class="button" type="submit">Confirm</button>
         </form>
 

@@ -315,7 +315,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return new ValidateWhenToApplyChangeResult { ValidationResult = response.ValidationResult, DateOfChange = response.ValidatedChangeOfDate };
         }
 
-        public async Task<OrchestratorResponse<ConfirmationStateChangeViewModel>> GetChangeStatusConfirmationViewModel(string hashedAccountId, string hashedApprenticeshipId, ViewModels.ManageApprenticeships.ChangeStatusType changeType, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange, string externalUserId)
+        public async Task<OrchestratorResponse<ConfirmationStateChangeViewModel>> GetChangeStatusConfirmationViewModel(string hashedAccountId, string hashedApprenticeshipId, ChangeStatusType changeType, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -336,7 +336,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         DateOfBirth = data.Apprenticeship.DateOfBirth.Value,
                         ChangeStatusViewModel = new ChangeStatusViewModel
                         {
-                            DateOfChange = DetermineChangeDate(data.Apprenticeship, whenToMakeChange, dateOfChange),
+                            DateOfChange = DetermineChangeDate(changeType, data.Apprenticeship, whenToMakeChange, dateOfChange),
                             ChangeType = changeType,
                             WhenToMakeChange = whenToMakeChange,
                             ChangeConfirmed = false
@@ -386,8 +386,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        private DateTimeViewModel DetermineChangeDate(Apprenticeship apprenticeship, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange)
+        private DateTimeViewModel DetermineChangeDate(ChangeStatusType changeType, Apprenticeship apprenticeship, WhenToMakeChangeOptions whenToMakeChange, DateTime? dateOfChange)
         {
+            if (changeType == ChangeStatusType.Pause || changeType == ChangeStatusType.Resume)
+            {
+                return new DateTimeViewModel(_currentDateTime.Now.Date);
+            }
+
             if (apprenticeship.IsWaitingToStart(_currentDateTime))
             {
                 return new DateTimeViewModel(apprenticeship.StartDate);
