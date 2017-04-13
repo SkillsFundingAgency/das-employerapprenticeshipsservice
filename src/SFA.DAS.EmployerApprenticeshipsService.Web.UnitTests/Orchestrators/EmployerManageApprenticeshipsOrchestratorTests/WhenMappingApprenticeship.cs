@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
 
             _apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(),_cookieStorageService.Object);
+            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _apprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(),_cookieStorageService.Object);
         }
 
         [TestCase(8, 5, arg3: 10)]
