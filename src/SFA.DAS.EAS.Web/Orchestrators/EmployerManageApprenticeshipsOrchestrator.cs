@@ -25,6 +25,7 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Validators;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -35,11 +36,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly IApprenticeshipMapper _apprenticeshipMapper;
         private readonly ILogger _logger;
 
+        private readonly ApprovedApprenticeshipViewModelValidator _apprenticeshipValidator;
+
         public EmployerManageApprenticeshipsOrchestrator(
             IMediator mediator, 
             IHashingService hashingService,
             IApprenticeshipMapper apprenticeshipMapper,
-            ILogger logger) : base(mediator, hashingService, logger)
+            ILogger logger,
+            ApprovedApprenticeshipViewModelValidator apprenticeshipValidator) : base(mediator, hashingService, logger)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
@@ -49,11 +53,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ArgumentNullException(nameof(apprenticeshipMapper));
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
+            if (apprenticeshipValidator == null)
+                throw new ArgumentNullException(nameof(apprenticeshipValidator));
 
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
             _logger = logger;
+            _apprenticeshipValidator = apprenticeshipValidator;
         }
 
         public async Task<OrchestratorResponse<ManageApprenticeshipsViewModel>> GetApprenticeships(string hashedAccountId, string externalUserId)
@@ -231,7 +238,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> { await _apprenticeshipMapper.MapFrom(apprenticeship) }
                 });
 
-            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+            var result = _apprenticeshipMapper
+                .MapOverlappingErrors(overlappingErrors)
+                .ToDictionary(overlap => overlap.Key, overlap => overlap.Value);
+
+            foreach (var error in _apprenticeshipValidator.ValidateToDictionary(apprenticeship))
+            {
+                result.Add(error.Key, error.Value);
+            }
+
+            return result;
         }
 
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
@@ -284,11 +300,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var editable = isStartDateInFuture
-                         && apprenticeship.PaymentStatus == PaymentStatus.Active;
+            var editable = apprenticeship.PaymentStatus == PaymentStatus.Active;
 
             if (!editable)
             {

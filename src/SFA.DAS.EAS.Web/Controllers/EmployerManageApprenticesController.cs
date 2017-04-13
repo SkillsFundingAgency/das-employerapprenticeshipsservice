@@ -225,6 +225,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private void AddErrorsToModelState(Dictionary<string, string> dict)
         {
+            ModelState.Clear();
             dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
         }
 

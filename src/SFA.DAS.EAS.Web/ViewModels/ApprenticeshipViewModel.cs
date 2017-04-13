@@ -62,5 +62,7 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public PaymentStatus PaymentStatus { get; set; }
 
         public AgreementStatus AgreementStatus { get; set; }
+
+        public bool HasStarted { get; set; }
     }
 }

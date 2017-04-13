@@ -73,14 +73,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 RecordStatus = MapRecordStatus(apprenticeship.PendingUpdateOriginator),
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
-                EnableEdit = isStartDateInFuture
-                            && pendingChange == PendingChanges.None
+                EnableEdit = pendingChange == PendingChanges.None
                             && apprenticeship.PaymentStatus == PaymentStatus.Active
             };
         }
 
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
+            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
+                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
             return new ApprenticeshipViewModel
             {
                 HashedApprenticeshipId = _hashingService.HashValue(apprenticeship.Id),
@@ -99,7 +101,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 PaymentStatus = apprenticeship.PaymentStatus,
                 AgreementStatus = apprenticeship.AgreementStatus,
                 ProviderRef = apprenticeship.ProviderRef,
-                EmployerRef = apprenticeship.EmployerRef
+                EmployerRef = apprenticeship.EmployerRef,
+                HasStarted = !isStartDateInFuture
             };
         }
 

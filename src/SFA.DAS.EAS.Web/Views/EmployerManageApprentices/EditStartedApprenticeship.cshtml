@@ -1,0 +1,101 @@
+﻿@using SFA.DAS.EAS.Web.ViewModels
+@using SFA.DAS.EAS.Web.Extensions
+
+@model ExtendedApprenticeshipViewModel
+
+
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("FirstName", "error")">
+    @Html.Label("FirstName", "First name", new { @class = "form-label form-label-bold" })
+    @Html.ValidationMessage("FirstName", new { id = "error-message-FirstName" })
+    @Html.TextBox("FirstName", Model.Apprenticeship.FirstName, new { @class = "form-control form-control-3-4" })
+</div>
+
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("LastName", "error")">
+    @Html.Label("LastName", "Last name", new { @class = "form-label form-label-bold" })
+    @Html.ValidationMessage("LastName", new { id = "error-message-LastName" })
+    @Html.TextBox("LastName", Model.Apprenticeship.LastName, new { @class = "form-control form-control-3-4" })
+
+</div>
+
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("DateOfBirth", "error")">
+    <hr />
+    <span class="form-label-bold">Date of birth</span>
+    <span class="form-hint">For example, 08 12 2001</span>
+
+    <div class="form-date">
+        @Html.ValidationMessage("DateOfBirth", new { id = "error-message-DateOfBirth", @class = "error-message" })
+        <div class="form-group form-group-day">
+            <label for="DateOfBirth.Day">
+                Day
+            </label>
+
+            @Html.TextBox("DateOfBirth.Day", Model.Apprenticeship.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Day" })
+
+        </div>
+        <div class="form-group form-group-month">
+            <label for="DateOfBirth.Month">
+                Month
+            </label>
+
+            @Html.TextBox("DateOfBirth.Month", Model.Apprenticeship.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Month" })
+
+        </div>
+        <div class="form-group form-group-year">
+            <label for="DateOfBirth.Year">
+                Year
+            </label>
+
+            @Html.TextBox("DateOfBirth.Year", Model.Apprenticeship.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Year" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <hr />
+    <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
+    <span>@Model.Apprenticeship.TrainingName</span>
+</div>
+
+<div class="form-error-group form-group">
+    <hr />
+    <label class="form-label-bold">Planned training start date</label>
+    <span>@Model.Apprenticeship.StartDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
+</div>
+
+<div class="form-error-group form-group">
+    <hr />
+    <span class="form-label-bold">Planned training finish date</span>
+    <span class="">@Model.Apprenticeship.EndDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
+</div>
+
+<div class="form-error-group form-group @Html.AddClassIfPropertyInError("Cost", "error")">
+
+    <hr />
+    <label for="Cost">
+        <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
+        <span class="form-hint">For example, for £1,500 enter 1500</span>
+        @Html.ValidationMessage("Cost", "Enter the cost in whole pounds", new { id = "error-message-Cost", @class = "error-message" })
+    </label>
+
+    <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost" })
+
+</div>
+
+<div class="form-group @Html.AddClassIfPropertyInError("EmployerRef", "error")">
+    <hr/>
+    @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
+    <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
+    @Html.ValidationMessage("EmployerRef", new { id = "error-message-EmployerRef" })
+    @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
+</div>
+
+
+@Html.Hidden("TrainingCode", Model.Apprenticeship.TrainingCode)
+@Html.Hidden("TrainingType", Model.Apprenticeship.TrainingType)
+@Html.Hidden("TrainingName", Model.Apprenticeship.TrainingName)
+
+@Html.Hidden("StartDate.Month", Model.Apprenticeship.StartDate.Month)
+@Html.Hidden("StartDate.Year", Model.Apprenticeship.StartDate.Year)
+
+@Html.Hidden("EndDate.Month", Model.Apprenticeship.EndDate.Month)
+@Html.Hidden("EndDate.Year", Model.Apprenticeship.EndDate.Year)
