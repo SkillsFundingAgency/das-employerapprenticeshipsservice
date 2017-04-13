@@ -192,8 +192,8 @@ namespace SFA.DAS.EAS.Web.Controllers
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
-            TempData["FlashMessage"] = JsonConvert.SerializeObject(flashmessage);
-
+            AddFlashMessageToCookie(flashmessage);
+            
             return RedirectToRoute("OnProgrammeApprenticeshipDetails");
         }
 
