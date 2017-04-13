@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.TestCommon.ScenarioCommonSteps
         public static void SetAccountIdForUser(IMediator mediator, ScenarioContext scenarioContext)
         {
             var accountOwnerId = scenarioContext["AccountOwnerUserId"].ToString();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserId = accountOwnerId }).Result;
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             scenarioContext["AccountId"] = account.Id;

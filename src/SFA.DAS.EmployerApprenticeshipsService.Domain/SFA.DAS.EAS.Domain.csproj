@@ -163,6 +163,8 @@
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\CreateAccountResult.cs" />
+    <Compile Include="Models\Apprenticeship\ChangeOption.cs" />
+    <Compile Include="Models\Apprenticeship\ChangeStatusType.cs" />
     <Compile Include="Models\Account\EmployerAccountData.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />

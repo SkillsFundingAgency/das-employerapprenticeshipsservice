@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Api.Attributes;
 using SFA.DAS.EAS.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Api.Controllers
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("", Name = "AccountsIndex")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]   
         public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
@@ -37,7 +38,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("{hashedAccountId}", Name = "GetAccount")]
-        [Authorize(Roles = "ReadAllEmployerAccountBalances")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
         {
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Api.Controllers
         }
 
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
-        [Authorize(Roles = "ReadAllAccountUsers")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
         {

@@ -147,3 +147,19 @@ $(".clickable").on('click touchstart', (function () {
     window.location = $(this).find("a").attr("href");
     return false;
 }));
+
+// stop apprentice - show/hide date block
+
+$(".js-enabled #stop-effective").hide();
+
+$(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
+    $("#stop-effective").hide();
+}));
+
+$(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function () {
+    $("#stop-effective").show();
+}));
+
+if ($("#WhenToMakeChange-SpecificDate").is(':checked')) {
+    $("#stop-effective").show();
+}

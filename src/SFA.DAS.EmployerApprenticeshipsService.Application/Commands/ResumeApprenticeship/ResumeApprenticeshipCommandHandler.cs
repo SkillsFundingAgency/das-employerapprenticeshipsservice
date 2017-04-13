@@ -8,6 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.ResumeApprenticeship
 {
+    // TODO: LWA - Are we going to need this class??
     public sealed class ResumeApprenticeshipCommandHandler : AsyncRequestHandler<ResumeApprenticeshipCommand>
     {
         private readonly IEmployerCommitmentApi _commitmentApi;

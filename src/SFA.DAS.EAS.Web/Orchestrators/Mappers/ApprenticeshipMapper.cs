@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,10 +76,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = isStartDateInFuture
                             && pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active,
+                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
-
+        
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             return new ApprenticeshipViewModel

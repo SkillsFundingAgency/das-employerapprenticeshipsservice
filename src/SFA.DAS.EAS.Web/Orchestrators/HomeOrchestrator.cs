@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         {
             var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
             {
-                UserId = userId
+                UserRef = userId
             });
             var getUserInvitationsResponse = await _mediator.SendAsync(new GetNumberOfUserInvitationsQuery
             {

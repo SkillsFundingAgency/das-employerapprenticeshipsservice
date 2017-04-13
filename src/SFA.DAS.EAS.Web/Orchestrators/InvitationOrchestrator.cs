@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
                 var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery
                 {
-                    UserId = externalUserId
+                    UserRef = externalUserId
                 });
 
                 var result = new OrchestratorResponse<UserInvitationsViewModel>
