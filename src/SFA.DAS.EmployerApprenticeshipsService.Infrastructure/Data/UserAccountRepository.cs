@@ -4,16 +4,16 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserAccountRepository : BaseRepository, IUserAccountRepository
     {
-        public UserAccountRepository(IConfiguration configuration)
+        public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration)
             : base(configuration)
         {
         }

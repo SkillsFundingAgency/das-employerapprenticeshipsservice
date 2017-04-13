@@ -158,10 +158,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@id", Guid.Parse(userId), DbType.Guid);
+                parameters.Add("@ref", Guid.Parse(userId), DbType.Guid);
 
                 return await c.QueryAsync<int>(
-                    sql: "[employer_account].[GetNumberOfInvitations_ByUserId]",
+                    sql: "[employer_account].[GetNumberOfInvitations_ByUserRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
