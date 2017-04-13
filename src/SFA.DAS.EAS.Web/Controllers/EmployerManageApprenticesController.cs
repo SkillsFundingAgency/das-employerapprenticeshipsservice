@@ -11,11 +11,7 @@ using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
-using WebGrease.Css.Extensions;
-using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using FluentValidation.Mvc;
-using SFA.DAS.EAS.Web.ViewModels;
-using Newtonsoft.Json;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -50,6 +46,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var model = await _orchestrator
                 .GetApprenticeships(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+
+            RemoveFlashMessageFromCookie();
 
             return View(model);
         }
@@ -201,7 +199,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [HttpGet]
         [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprovedApprentice")]
+        [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public async Task<ActionResult> Edit(string hashedAccountId, string hashedApprenticeshipId)
         {
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
@@ -302,7 +300,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
 
         [HttpGet]
-        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewPendingChanges")]
+        [Route("{hashedApprenticeshipId}/changes/view", Name = "ViewChanges")]
         public async Task<ActionResult> ViewChanges(string hashedAccountId, string hashedApprenticeshipId)
         {
             var viewModel = await _orchestrator
