@@ -48,7 +48,7 @@ select mainUpdate.* from
 	(
 	select 
 			x.AccountId,
-			y.CreatedDate as DateCreated,
+			DATEFROMPARTS(DatePart(yyyy,y.CreatedDate),DatePart(MM,y.CreatedDate),DATEPART(dd,y.CreatedDate)) as DateCreated,
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
@@ -72,7 +72,7 @@ select mainUpdate.* from
 	union all	
 		select 
 			x.AccountId,
-			x.CreatedDate as DateCreated,
+			DATEFROMPARTS(DatePart(yyyy,x.CreatedDate),DatePart(MM,x.CreatedDate),DATEPART(dd,x.CreatedDate)) as DateCreated,
 			x.SubmissionId as SubmissionId,
 			x.SubmissionDate as TransactionDate,
 			1 as TransactionType,
