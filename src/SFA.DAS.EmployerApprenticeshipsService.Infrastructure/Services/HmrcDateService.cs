@@ -22,6 +22,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             DateTime endDate;
             GetDateRange(payrollYear, out endDate);
+            endDate = endDate.AddDays(21);
 
             return submissionDate >= endDate;
         }
