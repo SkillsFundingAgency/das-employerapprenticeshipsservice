@@ -144,5 +144,7 @@
     <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
     @Html.ValidationMessage("EmployerRef", new { id = "error-message-EmployerRef" })
     @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
+    <p id="charCount-noJS">Enter upto a maximum of 20 characters</p>
+    <p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
 </div>
 
