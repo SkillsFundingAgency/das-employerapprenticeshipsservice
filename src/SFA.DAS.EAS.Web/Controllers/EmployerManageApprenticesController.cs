@@ -81,7 +81,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             if (!await IsUserRoleAuthorized(hashedAccountId, Role.Owner, Role.Transactor))
                 return View("AccessDenied");
 
-            // Only used for authorization and checking status of apprenticeship
             var response = await _orchestrator.GetChangeStatusChoiceNavigation(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
 
             return View(response);
@@ -96,7 +95,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(new OrchestratorResponse<ChangeStatusViewModel>());
+                var response = await _orchestrator.GetChangeStatusChoiceNavigation(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(response);
             }
 
             if (model.ChangeType == ChangeStatusType.None)
@@ -179,7 +180,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(new OrchestratorResponse<ConfirmationStateChangeViewModel> { Data = new ConfirmationStateChangeViewModel { ApprenticeName = "Fred", DateOfBirth = new DateTime(1977, 3, 4), ChangeStatusViewModel = model } });
+                var response = await _orchestrator.GetChangeStatusConfirmationViewModel(hashedAccountId, hashedApprenticeshipId, model.ChangeType.Value, model.WhenToMakeChange, model.DateOfChange.DateTime, OwinWrapper.GetClaimValue(@"sub"));
+
+                return View(response);
             }
 
             if (model.ChangeConfirmed.HasValue && !model.ChangeConfirmed.Value)
@@ -189,7 +192,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var flashmessage = new FlashMessageViewModel
             {
-                Message = "Apprentice stopped.",
+                Message = model.ChangeType.Value == ChangeStatusType.Resume ? "Apprentice resumed." : "Apprentice stopped.",
                 Severity = FlashMessageSeverityLevel.Okay
             };
 

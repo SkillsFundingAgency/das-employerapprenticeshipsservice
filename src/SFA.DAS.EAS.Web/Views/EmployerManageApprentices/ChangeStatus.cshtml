@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
-@model OrchestratorResponse<ChangeStatusViewModel>
+@model OrchestratorResponse<ChangeStatusChoiceViewModel>
 
 @{
     ViewBag.Title = "Change apprentice status";
@@ -22,11 +22,22 @@
                     <legend class="form-label-bold">What status change do you want to make?</legend>
                     
                     @Html.ValidationMessage("ChangeType", "Please choose an option", new { id = "error-message-ChangeType" })
-                    @*<label for=@($"ChangeType-{ChangeStatusType.Pause}") class="block-label selection-button-radio">
-                        @Html.RadioButton("ChangeType", ChangeStatusType.Pause, new { id = $"ChangeType-{ChangeStatusType.Pause}" })
-                        Pause
-                    </label>*@
-                   
+                    
+                    @if (Model.Data.IsCurrentlyPaused)
+                    {
+                        <label for=@($"ChangeType-{ChangeStatusType.Resume}") class="block-label selection-button-radio">
+                            @Html.RadioButton("ChangeType", ChangeStatusType.Resume, new { id = $"ChangeType-{ChangeStatusType.Resume}" })
+                            Resume
+                        </label>
+                    }
+                    else
+                    {
+                        <label for=@($"ChangeType-{ChangeStatusType.Pause}") class="block-label selection-button-radio">
+                            @Html.RadioButton("ChangeType", ChangeStatusType.Pause, new { id = $"ChangeType-{ChangeStatusType.Pause}" })
+                            Pause
+                        </label>
+                    }
+                    
                     <label for=@($"ChangeType-{ChangeStatusType.Stop}") class="block-label selection-button-radio">
                         @Html.RadioButton("ChangeType", ChangeStatusType.Stop, new { id = $"ChangeType-{ChangeStatusType.Stop}" })
                         Stop

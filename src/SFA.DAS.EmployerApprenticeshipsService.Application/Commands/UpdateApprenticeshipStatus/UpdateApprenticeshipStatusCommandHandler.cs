@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Models.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Application.Validation;
+using System;
 
 namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus
 {
@@ -47,36 +48,48 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus
 
         private async Task ValidateDateOfChange(UpdateApprenticeshipStatusCommand command, Validation.ValidationResult validationResult)
         {
-            var response = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = command.EmployerAccountId, ApprenticeshipId = command.ApprenticeshipId });
-
-            if (response.Apprenticeship.IsWaitingToStart(_currentDateTime))
+            if (command.ChangeType == ChangeStatusType.Stop) // Only need to validate date for stop currently
             {
-                if (!command.DateOfChange.Equals(response.Apprenticeship.StartDate))
-                {
-                    validationResult.AddError(nameof(command.DateOfChange), "Date must the same as start date if training hasn't started");
-                    throw new InvalidRequestException(validationResult.ValidationDictionary);
-                }
-            }
-            else
-            {
-                if (command.DateOfChange > _currentDateTime.Now.Date)
-                {
-                    validationResult.AddError(nameof(command.DateOfChange), "Date must be a date in the past");
-                    throw new InvalidRequestException(validationResult.ValidationDictionary);
-                }
+                var response = await _mediator.SendAsync(new GetApprenticeshipQueryRequest { AccountId = command.EmployerAccountId, ApprenticeshipId = command.ApprenticeshipId });
 
-                if (response.Apprenticeship.StartDate > command.DateOfChange)
+                if (response.Apprenticeship.IsWaitingToStart(_currentDateTime))
                 {
-                    validationResult.AddError(nameof(command.DateOfChange), "Date cannot be earlier than training start date");
-                    throw new InvalidRequestException(validationResult.ValidationDictionary);
+                    if (!command.DateOfChange.Equals(response.Apprenticeship.StartDate))
+                    {
+                        validationResult.AddError(nameof(command.DateOfChange), "Date must the same as start date if training hasn't started");
+                        throw new InvalidRequestException(validationResult.ValidationDictionary);
+                    }
+                }
+                else
+                {
+                    if (command.DateOfChange > _currentDateTime.Now.Date)
+                    {
+                        validationResult.AddError(nameof(command.DateOfChange), "Date must be a date in the past");
+                        throw new InvalidRequestException(validationResult.ValidationDictionary);
+                    }
+
+                    if (response.Apprenticeship.StartDate > command.DateOfChange)
+                    {
+                        validationResult.AddError(nameof(command.DateOfChange), "Date cannot be earlier than training start date");
+                        throw new InvalidRequestException(validationResult.ValidationDictionary);
+                    }
                 }
             }
         }
 
         private static PaymentStatus DeterminePaymentStatusForChange(ChangeStatusType changeType)
         {
-            // Add switch when need to handle more change types.
-            return PaymentStatus.Withdrawn;
+            switch (changeType)
+            {
+                case ChangeStatusType.Pause:
+                    return PaymentStatus.Paused;
+                case ChangeStatusType.Resume:
+                    return PaymentStatus.Active;
+                case ChangeStatusType.Stop:
+                    return PaymentStatus.Withdrawn;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(changeType), "Not a valid change type");
+            }
         }
     }
 }
