@@ -20,7 +20,12 @@ SELECT
 	else 0 end as LastSubmission,
 	ld.CreatedDate,
 	ld.EndOfYearAdjustment,
-	ld.EndOfYearAdjustmentAmount
+	ld.EndOfYearAdjustmentAmount,
+	ld.LevyAllowanceForYear AS LevyAllowanceForYear,
+	ld.DateCeased AS DateCeased,
+	ld.InactiveFrom AS InactiveFrom,
+	ld.InactiveTo AS InactiveTo,
+	ld.HmrcSubmissionId AS HmrcSubmissionId
 FROM [employer_financial].[LevyDeclaration] ld
 left join
 (

@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
         Task<DasDeclaration> GetEmployerDeclaration(string id, string empRef);
         Task CreateEmployerDeclaration(DasDeclaration dasDeclaration, string empRef, long accountId);
         Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId);
+        Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth);
         Task<DasDeclaration> GetLastSubmissionForScheme(string empRef);
         Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth);
         Task ProcessDeclarations();

@@ -169,8 +169,6 @@
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommand.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandHandler.cs" />
     <Compile Include="Commands\ChangeTeamMemberRole\ChangeTeamMemberRoleCommandValidator.cs" />
-    <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommand.cs" />
-    <Compile Include="Commands\CreateAccountEvent\CreateAccountEventCommandHandler.cs" />
     <Compile Include="Commands\CreateAccount\CreateAccountCommandResponse.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommand.cs" />
     <Compile Include="Commands\CreateApprenticeshipUpdate\CreateApprenticeshipUpdateCommandHandler.cs" />
@@ -269,9 +267,11 @@
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
+    <Compile Include="Factories\LevyEventFactory.cs" />
     <Compile Include="Factories\AccountEventFactory.cs" />
     <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
+    <Compile Include="Factories\ILevyEventFactory.cs" />
     <Compile Include="Factories\IAccountEventFactory.cs" />
     <Compile Include="Factories\IEmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\IGenericEventFactory.cs" />
@@ -365,6 +365,9 @@
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdResponse.cs" />
     <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryValidator.cs" />
+    <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodQueryHandler.cs" />
+    <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodRequest.cs" />
+    <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodResponse.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryHandler.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryRequest.cs" />
     <Compile Include="Queries\GetOverlappingApprenticeships\GetOverlappingApprenticeshipsQueryResponse.cs" />

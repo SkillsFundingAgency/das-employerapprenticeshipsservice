@@ -28,7 +28,7 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>Add each organisation that will make contracts with your training providers.</p>
+        <p>Add each organisation that will contract with your training providers.</p>
         <p>There is no restriction on the number of <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank" rel="external">connected organisations</a> you can add.</p>
     </div>
 </div>
@@ -65,8 +65,8 @@
                                 }
                                 else
                                 {
-                                    @: Agreement not signed
-                                    <span class="secondary-text">SFA agreement needs to be signed</span>
+                                    @: Agreement not accepted
+                                    <span class="secondary-text">Agreement needs to be accepted</span>
                                 }
                             </td>
                             <td>
@@ -79,7 +79,7 @@
                                 }
                                 else
                                 {
-                                    <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="Sign agreement for @employerAgreement.LegalEntityName">Sign agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
+                                    <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new {agreementid = employerAgreement.HashedAgreementId})" title="View agreement for @employerAgreement.LegalEntityName">View agreement <span class="vh">for @employerAgreement.LegalEntityName</span></a>
                                 }
                             </td>
                         }

@@ -273,6 +273,7 @@
     <Compile Include="App_Start\ValidationErrorResult.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
+    <Compile Include="Controllers\AccountLevyController.cs" />
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
