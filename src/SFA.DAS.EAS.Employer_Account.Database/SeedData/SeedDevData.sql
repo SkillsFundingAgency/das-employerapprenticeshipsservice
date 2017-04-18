@@ -30,16 +30,16 @@ SET IDENTITY_INSERT  [employer_account].[Account] OFF
 -- User seed data 
 SET IDENTITY_INSERT  [employer_account].[User] ON
 IF (NOT EXISTS(SELECT * FROM [employer_account].[User] WHERE Id = 1
-	AND PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B'
+	AND UserRef = '758943A5-86AA-4579-86AF-FB3D4A05850B'
     AND Email = 'floyd.price@test.local'))
 BEGIN 
-    INSERT INTO [employer_account].[User](Id, PireanKey, Email, FirstName, LastName) 
+    INSERT INTO [employer_account].[User](Id, UserRef, Email, FirstName, LastName) 
     VALUES(1,'758943A5-86AA-4579-86AF-FB3D4A05850B','floyd.price@test.local', 'Floyd', 'Price') 
 END 
 ELSE 
 BEGIN 
     UPDATE [employer_account].[User] 
-    SET PireanKey = '758943A5-86AA-4579-86AF-FB3D4A05850B', Email = 'floyd.price@test.local', FirstName = 'Floyd', LastName = 'Price'
+    SET UserRef = '758943A5-86AA-4579-86AF-FB3D4A05850B', Email = 'floyd.price@test.local', FirstName = 'Floyd', LastName = 'Price'
     WHERE Id = 1
 END 
 

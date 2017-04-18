@@ -296,7 +296,19 @@ body {
         margin-top:0;
     }
  }
-  
+
+#apprentice-stopped{ 
+    .apprentice-to-stop{
+        margin-top:30px;
+        margin-bottom:40px;      
+    }
+    .stopped-flash-message{
+        border-color:$turquoise;
+    }
+}
+
+
+
 //all mobile media query breakpoints
 //==================================
 @media only screen and (max-device-width: 640px),

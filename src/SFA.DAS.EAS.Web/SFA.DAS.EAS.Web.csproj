@@ -196,12 +196,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.42.0.27461, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.43.0.27771, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.43.0.27771\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.42.0.27461, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.42.0.27461\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.43.0.27771, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.43.0.27771\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.6634, Culture=neutral, processorArchitecture=MSIL">
@@ -387,6 +387,14 @@
     <Compile Include="Authentication\IOwinWrapper.cs" />
     <Compile Include="Authentication\OwinWrapper.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
+    <Compile Include="Extensions\ValidationResultExtensions.cs" />
+    <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusNavigationLocation.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusType.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusViewModel.cs" />
     <Compile Include="Controllers\EmployerAccountOrganisationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerCommitmentsController.cs" />
@@ -438,6 +446,8 @@
     <Compile Include="ViewModels\DeleteCommitmentViewModel.cs" />
     <Compile Include="ViewModels\InvalidStateViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\UpdateApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\ConfirmationStateChangeViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeOptions.cs" />
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\YourCohortsViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
@@ -532,7 +542,7 @@
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
-    <None Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
+    <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />
   </ItemGroup>
@@ -1017,6 +1027,9 @@
     <Content Include="Views\EmployerAccountPaye\Details_EF.cshtml" />
     <Content Include="Views\EmployerManageApprentices\ReviewChanges.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
+    <Content Include="Views\EmployerManageApprentices\ChangeStatus.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\StatusChangeConfirmation.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
   </ItemGroup>
   <ItemGroup>

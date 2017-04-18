@@ -6,7 +6,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
 {
     public interface IUserAccountRepository 
     {
-        Task<Accounts<Account>> GetAccountsByUserId(string userId);
+        Task<Accounts<Account>> GetAccountsByUserRef(string userRef);
         Task<User> Get(string email);
         Task<User> Get(long id);
     }

@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
 using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,11 +52,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             if (apprenticeshipUpdate?.Originator == Originator.Provider)
                 pendingChange = PendingChanges.ReadyForApproval;
 
-            var statusText =
-                apprenticeship.StartDate.HasValue
-                && apprenticeship.StartDate.Value > new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1)
-                        ? "Waiting to start"
-                        : MapPaymentStatus(apprenticeship.PaymentStatus);
+            var statusText = MapPaymentStatus(apprenticeship.PaymentStatus, apprenticeship.StartDate);
 
             return new ApprenticeshipDetailsViewModel
             {
@@ -74,10 +71,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active
+                            && apprenticeship.PaymentStatus == PaymentStatus.Active,
+                CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
-
+        
         public ApprenticeshipViewModel MapToApprenticeshipViewModel(Apprenticeship apprenticeship)
         {
             var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
@@ -282,8 +280,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             return (item.HasValue) ? ((int)item).ToString() : string.Empty;
         }
 
-        private string MapPaymentStatus(PaymentStatus paymentStatus)
+        private string MapPaymentStatus(PaymentStatus paymentStatus, DateTime? apprenticeshipStartDate)
         {
+            var now = new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
+            var waitingToStart = apprenticeshipStartDate.HasValue && apprenticeshipStartDate.Value > now;
+
+            if (waitingToStart && paymentStatus != PaymentStatus.Paused)
+            {
+                return "Waiting to start";
+            }
+
             switch (paymentStatus)
             {
                 case PaymentStatus.PendingApproval:

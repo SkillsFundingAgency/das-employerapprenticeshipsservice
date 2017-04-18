@@ -130,7 +130,7 @@ namespace SFA.DAS.EAS.Web.AcceptanceTests.Steps.CommonSteps
         {
             var accountOwnerId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
             var mediator = _container.GetInstance<IMediator>();
-            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserId = accountOwnerId }).Result;
+            var getUserAccountsQueryResponse = mediator.SendAsync(new GetUserAccountsQuery { UserRef = accountOwnerId }).Result;
 
             var account = getUserAccountsQueryResponse.Accounts.AccountList.FirstOrDefault();
             ScenarioContext.Current["AccountId"] = account.Id;

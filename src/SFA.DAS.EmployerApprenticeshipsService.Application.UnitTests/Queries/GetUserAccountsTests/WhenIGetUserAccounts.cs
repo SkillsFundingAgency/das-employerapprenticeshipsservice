@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
             _userAccountRepository = new Mock<IUserAccountRepository>();
             _account = new Domain.Data.Entities.Account.Account {Name = "Test", RoleId = 1};
             _accounts = new List<Domain.Data.Entities.Account.Account> {_account};
-            _userAccountRepository.Setup(repository => repository.GetAccountsByUserId("1")).ReturnsAsync(new Accounts<Domain.Data.Entities.Account.Account> { AccountList = _accounts});
+            _userAccountRepository.Setup(repository => repository.GetAccountsByUserRef("1")).ReturnsAsync(new Accounts<Domain.Data.Entities.Account.Account> { AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);
 
         }
@@ -31,17 +31,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
         public async Task ThenTheUserRepositoryIsCalledToGetAllUsers()
         {
             //Act
-             await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery {UserId = "1"});
+             await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery {UserRef = "1"});
 
             //Assert
-            _userAccountRepository.Verify(x => x.GetAccountsByUserId("1"), Times.Once);
+            _userAccountRepository.Verify(x => x.GetAccountsByUserRef("1"), Times.Once);
         }
 
         [Test]
         public async Task ThenTheRoleNameIsCorrectlMapped()
         {
             //Act
-            var actual = await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery { UserId = "1" });
+            var actual = await _getUserAccountsQueryHandler.Handle(new GetUserAccountsQuery { UserRef = "1" });
 
             //Assert
             var account = actual.Accounts.AccountList.FirstOrDefault();
