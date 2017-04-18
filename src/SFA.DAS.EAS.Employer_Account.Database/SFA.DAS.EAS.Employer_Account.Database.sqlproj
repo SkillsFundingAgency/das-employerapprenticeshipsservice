@@ -77,8 +77,8 @@
     <Build Include="StoredProcedures\SeedDataForRoles.sql" />
     <Build Include="Views\MembershipView.sql" />
     <Build Include="StoredProcedures\AcceptInvitation.sql" />
-    <Build Include="StoredProcedures\GetAccounts_ByUserId.sql" />
-    <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserId.sql" />
+    <Build Include="StoredProcedures\GetAccounts_ByUserRef.sql" />
+    <Build Include="StoredProcedures\GetNumberOfInvitations_ByUserRef.sql" />
     <Build Include="Views\GetAccountPayeSchemes.sql" />
     <Build Include="Tables\LegalEntity.sql" />
     <Build Include="StoredProcedures\CreatePaye.sql" />

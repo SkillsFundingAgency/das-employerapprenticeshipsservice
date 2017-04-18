@@ -4,9 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -20,15 +18,15 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
         }
 
-        public async Task<Accounts<Account>> GetAccountsByUserId(string userId)
+        public async Task<Accounts<Account>> GetAccountsByUserRef(string userRef)
         {
             var result = await WithConnection(async c =>
             {
                 var parameters = new DynamicParameters();
-                parameters.Add("@userId", Guid.Parse(userId), DbType.Guid);
+                parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
 
                 return await c.QueryAsync<Account>(
-                    sql: @"[employer_account].[GetAccounts_ByUserId]",
+                    sql: @"[employer_account].[GetAccounts_ByUserRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
@@ -44,7 +42,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@email", email, DbType.String);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [employer_account].[User] WHERE Email = @email;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email FROM [employer_account].[User] WHERE Email = @email;",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -60,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@id", id, DbType.Int64);
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), PireanKey) AS UserRef, Email FROM [employer_account].[User] WHERE Id = @id;",
+                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email FROM [employer_account].[User] WHERE Id = @id;",
                     param: parameters,
                     commandType: CommandType.Text);
             });

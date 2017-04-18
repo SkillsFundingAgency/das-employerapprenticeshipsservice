@@ -62,3 +62,18 @@ table.organisations {
         width: 20%;
     }
 }
+
+table.edited-changes {
+    td.changed-item {
+        font-weight: 700;
+        font-size: 105%;
+    }
+}
+
+table.details-list {
+    border-top: 1px solid $border-colour;
+    th {
+        width: 55%;
+        font-weight: normal;
+    }
+}

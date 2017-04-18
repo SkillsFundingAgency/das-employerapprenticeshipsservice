@@ -1,159 +1,130 @@
 ﻿@using SFA.DAS.EAS.Web.Extensions
-@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships.ApprenticeshipDetailsViewModel>
+@using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
+@model SFA.DAS.EAS.Web.OrchestratorResponse<ApprenticeshipDetailsViewModel>
 
 @{
     ViewBag.Title = "Apprentice detail";
     ViewBag.PageId = "apprentices-detail";
 }
-
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div class="hgroup">
-            <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
+       <h1 class="heading-xlarge">@Model.Data.FirstName @Model.Data.LastName</h1>
+
+            @if (Model.Data.PendingChanges == PendingChanges.ReadyForApproval)
+            {
+                <div class="panel panel-border-wide alert-default">
+                    <h3 class="heading-small">Changes for review</h3>
+                    <p>
+                        There are changes to this apprentice's details that you need to review.
+                    </p>
+                    <p>
+                        <a href="@Url.RouteUrl("ReviewChanges")">Review changes</a>
+                    </p>
+                </div>
+            }
+            else if (Model.Data.PendingChanges == PendingChanges.WaitingForApproval)
+            {
+                <div class="panel panel-border-wide">
+                    <h3 class="heading-small">Changes pending</h3>
+                    <p>
+                        There are changes to this apprentice's details that are waiting for approval by the training provider.
+                        <p>
+                            <a href="@Url.RouteUrl("ViewChanges", "EmployerManageApprentices")">View changes</a>
+                        </p>
+                    </p>
+                </div>
+            }
+
+            <h2 class="heading-medium visually-hidden">Apprentice status</h2>
+            <table id="app-status" class="details-list">
+                <tbody>
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>@Model.Data.Status</td>
+                        <td>
+                            @if (Model.Data.CanEditStatus)
+                            {
+                                @Html.RouteLink("Edit status", "ChangeStatusSelectOption");
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="heading-medium">Overview</h2>
+            <table class="details-list">
+                <tbody>
+                    <tr>
+                        <th scope="row">Training provider</th>
+                        <td>@Model.Data.ProviderName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Cohort reference</th>
+                        <td>@Model.Data.CohortReference</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <h2 class="heading-medium">
+            Apprentice
+            @if (Model.Data.EnableEdit)
+            {
+                <a href="@Url.RouteUrl("EditApprenticeship")" class="float-right">Edit apprentice</a>
+            }
+        </h2>
+            <table class="details-list">
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>@Model.Data.FirstName @Model.Data.LastName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date of birth</th>
+                        <td>
+                            @if (Model.Data.DateOfBirth.HasValue)
+                            {
+                                @Model.Data.DateOfBirth.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Apprenticeship training course </th>
+                        <td>@Model.Data.TrainingName </td>
+                    </tr>
+                    @*<tr>
+                        <th>End-point assessor </th>
+                        <td>@Model.Data.EndPointAssessor</td>
+                    </tr>*@
+                    <tr>
+                        <th scope="row">Training start date </th>
+                        <td>
+                            @if (@Model.Data.StartDate.HasValue)
+                            {
+                                @Model.Data.StartDate.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Training end date </th>
+                        <td>
+                            @if (Model.Data.EndDate.HasValue)
+                            {
+                                @Model.Data.EndDate.Value.ToGdsFormat()
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total cost of training </th>
+                        <td>@FormatCost(Model.Data.Cost) </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Reference </th>
+                        <td>@Model.Data.EmployerReference</td>
+                    </tr>
+                </tbody>
+            </table>
+    
         </div>
-
-        <table class="status-section">
-            <thead>
-            <tr>
-                <th colspan="2">Status</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Status</td>
-                <td>@Model.Data.Status</td>
-            </tr>
-            </tbody>
-        </table>
-
-        <table class="apprentice-section">
-            <thead>
-            <tr>
-                <th colspan="2">Apprentice</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Name</td>
-                <td>@Model.Data.FirstName @Model.Data.LastName</td>
-            </tr>
-            <tr>
-                <td>Date of birth</td>
-                <td>
-                    @if (Model.Data.DateOfBirth.HasValue)
-                    {
-                        @Model.Data.DateOfBirth.Value.ToGdsFormat()
-                    }
-                </td>
-            </tr>
-            </tbody>
-        </table>
-
-        <table class="training-section">
-            <thead>
-            <tr>
-                <th colspan="2">Training</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Apprenticeship training course</td>
-                <td>@Model.Data.TrainingName</td>
-
-            </tr>
-            <!--
-                enhancement    
-            <tr>
-                <td>Provider</td>
-                <td>@Model.Data.ProviderName</td>
-
-            </tr>
-            -->
-
-            <!--
-                enhancement    
-            <tr>
-                <td>End-point assessor</td>
-                <td>Pham Assessment Ltd</td>
-            </tr>
-            -->
-
-            </tbody>
-        </table>
-
-        <table class="dates-section">
-            <thead>
-            <tr>
-                <th colspan="3">Dates</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Training start date</td>
-                <td>
-                    @if (@Model.Data.StartDate.HasValue)
-                    {
-                        @Model.Data.StartDate.Value.ToGdsFormat()
-                    }
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td>Training end date</td>
-                <td>
-                    @if (Model.Data.EndDate.HasValue)
-                    {
-                        @Model.Data.EndDate.Value.ToGdsFormat()
-                    }
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-            <!--
-                enhancement    
-            <tr>
-                <td>Time left</td>
-                <td> 10 months</td>
-                <td>&nbsp;</td>
-            </tr>
-            -->
-
-            </tbody>
-        </table>
-
-        <table class="payment-section">
-            <thead>
-            <tr>
-                <th colspan="3">Payment</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Apprenticeship price</td>
-                <td>@FormatCost(Model.Data.Cost)</td>
-                <td>&nbsp;</td>
-            </tr>
-            <!--
-                enhancement
-            <tr>
-                <td>Amount paid to date</td>
-                <td>&pound;1,312.56</td>
-                <td><a href="#">View</a></td>
-            </tr>
-            <tr>
-                <td>Balance</td>
-                <td>&pound;1,645.00</td>
-                <td><a href="#">View</a></td>
-            </tr>
-
-            -->
-            </tbody>
-        </table>
-
-    </div>
-
-    <div class="column-one-thirds">
-
-    </div>
 </div>
 
 @section breadcrumb {

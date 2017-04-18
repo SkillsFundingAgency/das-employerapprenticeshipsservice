@@ -65,7 +65,6 @@
     <Compile Include="ResourceList.cs" />
     <Compile Include="ResourceViewModel.cs" />
     <Compile Include="TeamMemberViewModel.cs" />
-    <Compile Include="TransactionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

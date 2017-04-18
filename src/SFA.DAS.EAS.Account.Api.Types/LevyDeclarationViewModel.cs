@@ -5,9 +5,9 @@ namespace SFA.DAS.EAS.Account.Api.Types
     public class LevyDeclarationViewModel : IAccountResource
     {
         public string HashedAccountId { get; set; }
-        public long LevyDeclarationId { get; set; }
+        public long Id { get; set; }
         public string PayeSchemeReference { get; set; }
-        public decimal? LevyDueYearToDate { get; set; }
+        public decimal? LevyDueYtd { get; set; }
         public decimal? LevyAllowanceForYear { get; set; }
         public DateTime? SubmissionDate { get; set; }
         public long SubmissionId { get; set; }
@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public DateTime? InactiveTo { get; set; }
         public long HmrcSubmissionId { get; set; }
         public decimal EnglishFraction { get; set; }
-        public decimal TopupPercentage { get; set; }
+        public decimal TopUpPercentage { get; set; }
+        public decimal TopUp { get; set; }
     }
 }

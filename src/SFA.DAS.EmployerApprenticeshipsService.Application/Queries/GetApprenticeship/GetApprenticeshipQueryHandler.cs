@@ -14,6 +14,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetApprenticeship
         {
             if (commitmentsApi == null)
                 throw new ArgumentNullException(nameof(commitmentsApi));
+
             _commitmentsApi = commitmentsApi;
         }
 

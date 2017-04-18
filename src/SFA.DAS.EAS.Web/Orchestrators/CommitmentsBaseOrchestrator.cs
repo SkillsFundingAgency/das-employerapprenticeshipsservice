@@ -14,9 +14,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     public class CommitmentsBaseOrchestrator
     {
         private readonly IMediator _mediator;
-
         private readonly IHashingService _hashingService;
-
         private readonly ILogger _logger;
 
         public CommitmentsBaseOrchestrator(

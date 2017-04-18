@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Application.Queries.GetApprenticeshipDetails
 {

@@ -1,7 +1,7 @@
 ﻿CREATE VIEW [employer_account].[MembershipView]
 AS
 SELECT m.*, 
-	CONVERT(varchar(64), u.PireanKey) AS UserRef, 
+	CONVERT(varchar(64), u.UserRef) AS UserRef, 
 	u.Email,
 	u.FirstName,
 	u.LastName, 
