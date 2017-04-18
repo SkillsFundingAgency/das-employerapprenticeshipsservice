@@ -2,7 +2,6 @@
 {
     public class LevyDeclarationUpdatedEvent
     {
-        public string LevyDeclarationsResourceUri { get; set; }
-        public string TransactionsResourceUri { get; set; }
+        public string ResourceUri { get; set; }
     }
 }

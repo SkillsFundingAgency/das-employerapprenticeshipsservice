@@ -85,6 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesControllerTests\AccountLegalEntitiesControllerTests.cs" />
+    <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
+    <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccount.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\AccountPayeSchemesControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
@@ -116,6 +118,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
+      <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
+      <Name>SFA.DAS.EAS.TestCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
