@@ -192,7 +192,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             var flashmessage = new FlashMessageViewModel
             {
-                Message = "Apprentice stopped.",
+                Message = model.ChangeType.Value == ChangeStatusType.Resume ? "Apprentice resumed." : "Apprentice stopped.",
                 Severity = FlashMessageSeverityLevel.Okay
             };
 
