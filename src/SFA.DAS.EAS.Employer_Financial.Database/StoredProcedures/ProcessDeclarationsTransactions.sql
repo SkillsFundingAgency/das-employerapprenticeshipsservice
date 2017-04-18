@@ -9,7 +9,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 
 	select 
 		x.AccountId,
-		GetDate() as DateAdded,
+		DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
 		x.SubmissionId,
 		x.SubmissionDate,
 		case y.PayrollMonth when 1 then  (y.LevyDueYTD* isnull(y.EnglishFraction,0))* isnull(y.TopUpPercentage,0) 
@@ -24,7 +24,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	union all
 	select
 		x.AccountId,
-		GetDate() as DateAdded,
+		DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
 		x.SubmissionId,
 		x.SubmissionDate,
 		((x.EndOfYearAdjustmentAmount * isnull(x.EnglishFraction,0))* isnull(x.TopUpPercentage,0) * -1) as Amount

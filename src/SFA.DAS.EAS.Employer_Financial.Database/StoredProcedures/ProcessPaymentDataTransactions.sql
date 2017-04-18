@@ -8,7 +8,7 @@ select mainUpdate.* from
 	(
 	select 
 			x.AccountId as AccountId,
-			GETDATE() as DateCreated,
+			DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
 			null as submissionId,
 			Max(pe.CompletionDateTime) as TransactionDate,
 			3 as TransactionType,
