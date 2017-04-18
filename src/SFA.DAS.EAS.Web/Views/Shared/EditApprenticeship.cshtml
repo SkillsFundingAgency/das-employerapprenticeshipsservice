@@ -171,5 +171,7 @@
         <span class="error-message" id="error-message-employerref">@Model.Apprenticeship.EmployerRefError</span>
     }
     @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
+    <p id="charCount-noJS">Enter up to a maximum of 20 characters</p>
+    <p id="charCount" style="display:none;"><span name="countchars" id="countchars"></span> characters remaining</p>
 </div>
 

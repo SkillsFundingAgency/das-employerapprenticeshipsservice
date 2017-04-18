@@ -3939,6 +3939,11 @@ body input::-webkit-contacts-auto-fill-button {
   margin-top: 0;
 }
 
+.form-group .limit-reached {
+  color: #b10e1e;
+  font-weight: bold;
+}
+
 #apprentice-stopped .apprentice-to-stop {
   margin-top: 30px;
   margin-bottom: 40px;
@@ -3946,6 +3951,10 @@ body input::-webkit-contacts-auto-fill-button {
 
 #apprentice-stopped .stopped-flash-message {
   border-color: #28a197;
+}
+
+#charCount {
+  margin-bottom: 0;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
