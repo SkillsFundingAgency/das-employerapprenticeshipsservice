@@ -142,6 +142,22 @@ var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], la
 var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
 
 
+// stop apprentice - show/hide date block
+$(".js-enabled #stop-effective").hide();
+
+$(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
+    $("#stop-effective").hide();
+}));
+
+$(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function () {
+    $("#stop-effective").show();
+}));
+
+if ($("#WhenToMakeChange-SpecificDate").is(':checked')) {
+    $("#stop-effective").show();
+}
+
+
 // cohorts bingo balls - clickable block
 $(".clickable").on('click touchstart', (function () {
     window.location = $(this).find("a").attr("href");
@@ -153,7 +169,7 @@ $('#charCount').show(); // javascript enabled version only
 $('#charCount-noJS').hide(); // javascript disabled version only
 
 var totalChars = 20; //Total characters allowed in textarea
-var countTextBox = $('#EmployerRef') // Textarea input box
+var countTextBox = $('#EmployerRef'); // Textarea input box
 var charsCountEl = $('#countchars'); // Remaining characters
 charsCountEl.text(totalChars); //initial value of countchars element
 
@@ -171,17 +187,3 @@ countTextBox.keyup(function () { //user releases a key on the keyboard
     }
 });
 
-// stop apprentice - show/hide date block
-$(".js-enabled #stop-effective").hide();
-
-$(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
-    $("#stop-effective").hide();
-}));
-
-$(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function () {
-    $("#stop-effective").show();
-}));
-
-if ($("#WhenToMakeChange-SpecificDate").is(':checked')) {
-    $("#stop-effective").show();
-}
