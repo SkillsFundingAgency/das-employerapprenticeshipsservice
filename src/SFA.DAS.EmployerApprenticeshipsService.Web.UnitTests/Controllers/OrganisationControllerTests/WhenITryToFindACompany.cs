@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
@@ -23,6 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILogger> _logger;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
         public void Arrange()
@@ -32,6 +34,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _logger = new Mock<ILogger>();
 
@@ -41,7 +44,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.OrganisationControllerTests
                 _featureToggle.Object,
                 _userViewTestingService.Object,
                 _mapper.Object,
-                _logger.Object);
+                _logger.Object,
+                _flashMessage.Object);
         }
 
         [Test]

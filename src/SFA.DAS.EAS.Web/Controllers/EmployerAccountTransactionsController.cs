@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -14,8 +15,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
         public EmployerAccountTransactionsController(IOwinWrapper owinWrapper, IFeatureToggle featureToggle, 
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService) 
-            : base(owinWrapper, featureToggle,multiVariantTestingService)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            : base(owinWrapper, featureToggle,multiVariantTestingService,flashMessage)
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }

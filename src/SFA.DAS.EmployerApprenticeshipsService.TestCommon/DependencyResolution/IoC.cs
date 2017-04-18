@@ -1,8 +1,9 @@
 ﻿using Moq;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using SFA.DAS.EAS.TestCommon.MockPolicy;
-using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
@@ -12,7 +13,7 @@ namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {
     public static class IoC
     {
-        public static Container CreateContainer(Mock<IMessagePublisher> messagePublisher, Mock<IOwinWrapper> owinWrapper, Mock<ICookieService> cookieService, Mock<IEventsApi> eventsApi)
+        public static Container CreateContainer(Mock<IMessagePublisher> messagePublisher, Mock<IOwinWrapper> owinWrapper, Mock<ICookieStorageService<EmployerAccountData>> cookieService, Mock<IEventsApi> eventsApi)
         {
             return new Container(c =>
             {

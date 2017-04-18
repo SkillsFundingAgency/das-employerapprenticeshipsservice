@@ -3,7 +3,6 @@ using MediatR;
 using Moq;
 using NLog;
 using NUnit.Framework;
-
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
@@ -13,7 +12,6 @@ using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using System;
 using SFA.DAS.EAS.Infrastructure.Services;
 using System.Threading.Tasks;
-
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
@@ -22,10 +20,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
     [TestFixture]
     public class WhenMappingApprenticeship
     {
-        private EmployerManageApprenticeshipsOrchestrator _sut;
-        private ApprenticeshipMapper _mockApprenticeshipMapper;
+        private EmployerManageApprenticeshipsOrchestrator _orchestrator;
+        private ApprenticeshipMapper _apprenticeshipMapper;
         private Mock<IMediator> _mockMediator;
         private Mock<ICurrentDateTime> _mockDateTime;
+        private Mock<ICookieStorageService<UpdateApprenticeshipViewModel>> _cookieStorageService;
 
         [SetUp]
         public void SetUp()
@@ -33,9 +32,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator = new Mock<IMediator>();
             _mockDateTime = new Mock<ICurrentDateTime>();
 
-            _mockApprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
+            _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>());
+            _apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
+
+            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _apprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(),_cookieStorageService.Object);
         }
 
         [TestCase(8, 5, arg3: 10)]
@@ -56,7 +57,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
                 .ReturnsAsync(new GetApprenticeshipUpdateResponse());
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
             result.Data.Status.Should().Be("Waiting to start");
@@ -83,7 +84,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipUpdateRequest>()))
                 .ReturnsAsync(new GetApprenticeshipUpdateResponse());
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
 
             result.Data.Status.Should().Be("On programme");
@@ -115,7 +116,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                                           }
                                   });
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.WaitingForApproval);
         }
@@ -138,9 +139,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                         new ApprenticeshipUpdate {ApprenticeshipId = 1L, Originator = Originator.Provider }
                 });
 
-            var result = await _sut.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
+            var result = await _orchestrator.GetApprenticeship("hashedAccountId", "hashedApprenticeshipId", "UserId");
             _mockMediator.Verify(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()), Times.Once);
             result.Data.PendingChanges.Should().Be(PendingChanges.ReadyForApproval);
         }
+        
     }
 }

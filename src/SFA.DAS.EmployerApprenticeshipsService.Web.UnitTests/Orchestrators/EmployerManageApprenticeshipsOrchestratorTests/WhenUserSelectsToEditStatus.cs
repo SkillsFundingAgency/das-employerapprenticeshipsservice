@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
         private Mock<IMediator> _mockMediator;
         private Mock<ICurrentDateTime> _mockDateTime;
         private Apprenticeship _testApprenticeship;
+        private Mock<ICookieStorageService<UpdateApprenticeshipViewModel>> _cookieStorageService;
 
         [SetUp]
         public void SetUp()
@@ -41,13 +42,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _mockDateTime = new Mock<ICurrentDateTime>();
             _mockApprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
 
+            _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
+
             _mockMediator.Setup(m => m.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>()))
                 .ReturnsAsync(new GetApprenticeshipQueryResponse
                 {
                     Apprenticeship = _testApprenticeship
                 });
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>());
+            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(), _cookieStorageService.Object);
         }
 
         [TestCase(PaymentStatus.Active)]

@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         private Mock<IOwinWrapper> _owinWrapper;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
         public void Arrange()
@@ -26,6 +27,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
@@ -40,7 +42,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                     }
                 });
 
-            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object, _orchestrator.Object, _userViewTestingService.Object);
+            _controller = new Web.Controllers.EmployerAccountTransactionsController(_owinWrapper.Object, _featureToggle.Object, _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object);
         }
 
         [Test]

@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using AutoMapper;
 using MediatR;
 using Microsoft.Azure;
@@ -30,6 +31,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Configuration.FileStorage;
+using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -68,6 +70,10 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                     scan.RegisterConcreteTypesAgainstTheFirstInterface();
                     scan.ConnectImplementationsToTypesClosing(typeof(IValidator<>)).OnAddedPluginTypes(t => t.Singleton());
                 });
+
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
+            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
             For<IConfiguration>().Use<EmployerApprenticeshipsServiceConfiguration>();
 

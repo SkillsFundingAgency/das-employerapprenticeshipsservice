@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
+    <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenIRenameAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingtLegalEntitySignedAgreement.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingDeleteApprenticeshipConfirmation.cs" />
     <Compile Include="Orchestrators\EmployerCommitmentOrchestrator\WhenGettingFinishEditing.cs" />
+    <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenApprenticeshipsAreStoredInTheCookie.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingToUpdateModel.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenUserSelectsToEditStatus.cs" />
     <Compile Include="Orchestrators\EmployerManageApprenticeshipsOrchestratorTests\WhenMappingApprenticeship.cs" />

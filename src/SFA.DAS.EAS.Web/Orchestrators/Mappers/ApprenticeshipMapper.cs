@@ -158,6 +158,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 
             return apprenticeship;
         }
+        
 
         public Dictionary<string, string> MapOverlappingErrors(GetOverlappingApprenticeshipsQueryResponse overlappingErrors)
         {

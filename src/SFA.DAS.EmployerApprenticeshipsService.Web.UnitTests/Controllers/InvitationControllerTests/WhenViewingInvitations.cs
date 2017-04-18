@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
 {
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
         public void Arrange()
@@ -28,13 +30,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _invitationOrchestrator = new Mock<InvitationOrchestrator>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
             _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration);
+                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration, _flashMessage.Object);
         }
 
         [Test]
