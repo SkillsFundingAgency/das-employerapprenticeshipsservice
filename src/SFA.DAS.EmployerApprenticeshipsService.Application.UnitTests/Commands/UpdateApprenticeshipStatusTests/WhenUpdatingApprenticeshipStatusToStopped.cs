@@ -13,11 +13,12 @@ using MediatR;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Application.Validation;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
+using FluentAssertions;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusTests
 {
     [TestFixture]
-    public sealed class WhenUpdatingApprenticeshipStatus
+    public sealed class WhenUpdatingApprenticeshipStatusToStopped
     {
         private UpdateApprenticeshipStatusCommandHandler _handler;
         private Mock<IEmployerCommitmentApi> _mockCommitmentApi;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
         private Mock<ICurrentDateTime> _mockCurrentDateTime;
         private IValidator<UpdateApprenticeshipStatusCommand> _validator = new UpdateApprenticeshipStatusCommandValidator();
         private UpdateApprenticeshipStatusCommand _validCommand;
+        private Apprenticeship _testApprenticeship;
 
         [SetUp]
         public void Setup()
@@ -38,13 +40,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
                 DateOfChange = DateTime.UtcNow.Date
             };
 
-            var apprenticeshipFromApi = new Apprenticeship { StartDate = DateTime.UtcNow.AddMonths(-2).Date };
+            _testApprenticeship = new Apprenticeship { StartDate = DateTime.UtcNow.AddMonths(-2).Date };
 
             _mockCommitmentApi = new Mock<IEmployerCommitmentApi>();
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
             _mockMediator = new Mock<IMediator>();
 
-            var apprenticeshipGetResponse = new GetApprenticeshipQueryResponse { Apprenticeship = apprenticeshipFromApi };
+            var apprenticeshipGetResponse = new GetApprenticeshipQueryResponse { Apprenticeship = _testApprenticeship };
             _mockMediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipQueryRequest>())).ReturnsAsync(apprenticeshipGetResponse);
             _mockCurrentDateTime = new Mock<ICurrentDateTime>();
             _mockCurrentDateTime.SetupGet(x => x.Now).Returns(DateTime.UtcNow);
@@ -52,24 +54,35 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
             _handler = new UpdateApprenticeshipStatusCommandHandler(_mockCommitmentApi.Object, _mockMediator.Object, _mockCurrentDateTime.Object, _validator);
         }
 
-        [TestCase(ChangeStatusType.Stop, PaymentStatus.Withdrawn)]
-        [TestCase(ChangeStatusType.Pause, PaymentStatus.Paused)]
-        [TestCase(ChangeStatusType.Resume, PaymentStatus.Active)]
-        public async Task ThenTheCommitmentApiShouldBeCalledWithCorrectStatus(ChangeStatusType type, PaymentStatus expectedStatus)
+        [Test]
+        public void ShouldThrowValidationErrorIfChangeDateGreaterThanTodayForLiveApprenticeship()
         {
-            _validCommand.ChangeType = type;
-            await _handler.Handle(_validCommand);
+            _validCommand.DateOfChange = DateTime.UtcNow.AddMonths(1); // Change date in the future
 
-            _mockCommitmentApi.Verify(x => x.PatchEmployerApprenticeship(
-                It.IsAny<long>(), It.IsAny<long>(), It.Is<ApprenticeshipSubmission>(y => y.PaymentStatus == expectedStatus)));
+            Func<Task> act = async () => await _handler.Handle(_validCommand);
+
+            act.ShouldThrow<InvalidRequestException>().Which.Message.Contains("Date must be a date in the past");
         }
 
         [Test]
-        public void ThenValidationErrorsShouldThrowAnException()
+        public void ShouldThrowValidationErrorIfChangeDateEarlierThanStartDateForLiveApprenticeship()
         {
-            _validCommand.ApprenticeshipId = 0; // Should fail validation
+            _validCommand.DateOfChange = DateTime.UtcNow.AddMonths(-3); // Change before start date
 
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
+            Func<Task> act = async () => await _handler.Handle(_validCommand);
+
+            act.ShouldThrow<InvalidRequestException>().Which.Message.Contains("Date cannot be earlier than training start date");
+        }
+
+        [Test]
+        public void ShouldThrowValidationErrorIfChangeDateIsntTheSameAsStartDateForApprenticeshipWaitingToStart()
+        {
+            _testApprenticeship.StartDate = DateTime.UtcNow.AddMonths(2).Date;
+            _validCommand.DateOfChange = DateTime.UtcNow.AddMonths(2).AddDays(1).Date;
+
+            Func<Task> act = async () => await _handler.Handle(_validCommand);
+
+            act.ShouldThrow<InvalidRequestException>().Which.Message.Contains("Date must the same as start date if training hasn't started");
         }
     }
 }

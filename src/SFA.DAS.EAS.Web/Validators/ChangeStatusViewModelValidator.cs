@@ -15,18 +15,21 @@ namespace SFA.DAS.EAS.Web.Validators
 
             RuleSet("Date", () => 
             {
-                RuleFor(x => x.WhenToMakeChange)
-                    .NotNull().WithMessage("Select an option")
-                    .IsInEnum().WithMessage("Select an option");
-
-                When(x => x.WhenToMakeChange == WhenToMakeChangeOptions.SpecificDate, () =>
+                When(x => x.ChangeType == ChangeStatusType.Stop, () =>
                 {
-                    RuleFor(r => r.DateOfChange)
-                            .Cascade(CascadeMode.StopOnFirstFailure)
-                            .NotNull().WithMessage("Date is not valid")
-                            .Must(ValidateDateOfBirth).WithMessage("Date is not valid")
-                            .Must(d => d.DateTime < DateTime.UtcNow.Date.AddDays(1)).WithMessage("Date must be a date in the past"); // TODO: Should this rule be done in the application layer?
-                        });
+                    RuleFor(x => x.WhenToMakeChange)
+                        .NotNull().WithMessage("Select an option")
+                        .IsInEnum().WithMessage("Select an option");
+
+                    When(x => x.WhenToMakeChange == WhenToMakeChangeOptions.SpecificDate, () =>
+                    {
+                        RuleFor(r => r.DateOfChange)
+                                .Cascade(CascadeMode.StopOnFirstFailure)
+                                .NotNull().WithMessage("Date is not valid")
+                                .Must(ValidateDateOfBirth).WithMessage("Date is not valid")
+                                .Must(d => d.DateTime < DateTime.UtcNow.Date.AddDays(1)).WithMessage("Date must be a date in the past");
+                    });
+                });
             });
 
             RuleSet("Confirm", () =>
