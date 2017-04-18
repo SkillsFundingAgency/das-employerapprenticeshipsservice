@@ -100,6 +100,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return result.ToList();
         }
 
+        public async Task<List<LevyDeclarationView>> GetAccountLevyDeclarations(long accountId, string payrollYear, short payrollMonth)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@accountId", accountId, DbType.Int64);
+                parameters.Add("@payrollYear", payrollYear, DbType.String);
+                parameters.Add("@payrollMonth", payrollMonth, DbType.Int16);
+
+                return await c.QueryAsync<LevyDeclarationView>(
+                    sql: "[employer_financial].[GetLevyDeclarations_ByAccountPayrollMonthPayrollYear]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+
+            return result.ToList();
+        }
+
         public async Task<DasDeclaration> GetLastSubmissionForScheme(string empRef)
         {
             var result = await WithConnection(async c =>
