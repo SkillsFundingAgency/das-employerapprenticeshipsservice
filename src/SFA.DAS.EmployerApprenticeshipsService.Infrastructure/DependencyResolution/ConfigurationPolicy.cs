@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
-using Microsoft.Azure;
-using SFA.DAS.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.Configuration.FileStorage;
 using SFA.DAS.EAS.Domain.Interfaces;
 using StructureMap;
 using StructureMap.Pipeline;
@@ -29,17 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
 
             if (serviceConfigurationParamater != null)
             {
-                var environment = Environment.GetEnvironmentVariable("DASENV");
-                if (string.IsNullOrEmpty(environment))
-                {
-                    environment = CloudConfigurationManager.GetSetting("EnvironmentName");
-                }
-
-                var configurationRepository = GetConfigurationRepository();
-                var configurationService = new ConfigurationService(configurationRepository,
-                    new ConfigurationOptions(_serviceName, environment, "1.0"));
-
-                var result = configurationService.Get<T>();
+                var result = ConfigurationHelper.GetConfiguration<T>(_serviceName);
                 if (result != null)
                 {
                     instance.Dependencies.AddForConstructorParameter(serviceConfigurationParamater, result);
@@ -47,20 +32,5 @@ namespace SFA.DAS.EAS.Infrastructure.DependencyResolution
             }
             
         }
-        
-        private static IConfigurationRepository GetConfigurationRepository()
-        {
-            IConfigurationRepository configurationRepository;
-            if (bool.Parse(ConfigurationManager.AppSettings["LocalConfig"]))
-            {
-                configurationRepository = new FileStorageConfigurationRepository();
-            }
-            else
-            {
-                configurationRepository = new AzureTableStorageConfigurationRepository(CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString"));
-            }
-            return configurationRepository;
-        }
-        
     }
 }

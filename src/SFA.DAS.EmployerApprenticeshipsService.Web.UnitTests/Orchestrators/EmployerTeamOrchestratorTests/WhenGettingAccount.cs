@@ -53,21 +53,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _configuration);
         }
-
-        [Test]
-        public async Task ThenAnAgreementShouldNeedSigningIfTheUserIsAnOwnerOrTransactorAndThereAreUnsignedAgreements()
-        {
-            //Arrange
-            ConfigurationManager.AppSettings["ShowAgreements"] = "true";
-
-            // Act
-            var actual = await _orchestrator.GetAccount(AccountId, UserId);
-
-            // Assert
-            Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Data.RequiresAgreementSigning);
-        }
-
+        
         [Test]
         public async Task ThenAnAgreementShouldNotNeedSigningIfTheUserIsAnOwnerOrTransactorButThereAreNoAgreementsThatNeedSigning()
         {

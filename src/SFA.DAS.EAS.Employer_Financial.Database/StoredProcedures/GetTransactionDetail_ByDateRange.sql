@@ -20,7 +20,8 @@ select
     tl.Amount as LineAmount,
     tl.TransactionType,
 	null as UkPrn,
-	null as PeriodEnd
+	null as PeriodEnd,
+	DateCreated
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].LevyDeclarationTopup ldt on ldt.SubmissionId = tl.SubmissionId
 OUTER APPLY
@@ -31,8 +32,8 @@ OUTER APPLY
 		AND ef.[DateCalculated] <= tl.TransactionDate
 	ORDER BY [DateCalculated] DESC
 ) t
-where    tl.TransactionDate >= @fromDate AND 
-        tl.TransactionDate <= @toDate AND 
+where    tl.DateCreated >= @fromDate AND 
+        tl.DateCreated <= @toDate AND 
         tl.AccountId = @accountId
 
 union all
@@ -53,10 +54,11 @@ select
     (p.Amount) as LineAmount,
     tl.TransactionType,
 	p.Ukprn as UkPrn,
-	p.PeriodEnd as PeriodEnd  
+	p.PeriodEnd as PeriodEnd,
+	DateCreated
 from [employer_financial].TransactionLine tl
 inner join [employer_financial].Payment p on p.PeriodEnd = tl.PeriodEnd and p.AccountId = tl.AccountId
 inner join [employer_financial].PaymentMetaData meta on p.PaymentMetaDataId = meta.Id
-where   tl.TransactionDate >= @fromDate AND 
-        tl.TransactionDate <= @toDate AND 
+where   tl.DateCreated >= @fromDate AND 
+        tl.DateCreated <= @toDate AND 
         tl.AccountId = @accountId

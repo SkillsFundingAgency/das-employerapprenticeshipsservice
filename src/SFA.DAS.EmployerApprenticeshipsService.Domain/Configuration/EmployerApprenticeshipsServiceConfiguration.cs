@@ -14,17 +14,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public HmrcConfiguration Hmrc { get; set; }
         public string DatabaseConnectionString { get; set; }
 
-        public bool ShowAgreements()
-        {
-
-            if (CloudConfigurationManager.GetSetting("ShowAgreements") != null)
-            {
-                return Convert.ToBoolean(CloudConfigurationManager.GetSetting("ShowAgreements"));
-            }
-
-            return false;
-        }
-
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
         public TasksApiClientConfiguration TasksApi { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }

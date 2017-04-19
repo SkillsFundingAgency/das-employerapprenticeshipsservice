@@ -24,7 +24,6 @@
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
       <Setting name="TokenCertificateThumbprint"/>
-      <Setting name="ShowAgreements" />
       <Setting name="ShowPayeHistory" />
     </ConfigurationSettings>
     <Endpoints>
