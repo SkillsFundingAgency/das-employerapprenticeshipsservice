@@ -290,6 +290,10 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
             //Assert
             _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(numberOfPages));
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),1), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),2), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3), Times.Once);
+
             Assert.AreEqual(2 * numberOfPages, result.Count);
 
         }

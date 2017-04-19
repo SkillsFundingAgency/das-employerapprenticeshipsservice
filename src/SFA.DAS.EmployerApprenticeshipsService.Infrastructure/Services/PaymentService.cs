@@ -116,7 +116,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 for (var index = 0; index < totalPages; index++)
                 {
-                    var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString());
+                    var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), index + 1);
 
                     if (payments == null)
                     {
