@@ -4,32 +4,42 @@
 @model ExtendedApprenticeshipViewModel
 
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("FirstName", "error")">
+<div class="form-error-group form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.FirstNameError) ? "error" : "")">
     @Html.Label("FirstName", "First name", new { @class = "form-label form-label-bold" })
-    @Html.ValidationMessage("FirstName", new { id = "error-message-FirstName" })
+    @if (!string.IsNullOrEmpty(Model.Apprenticeship.FirstNameError))
+    {
+        <span class="error-message" id="error-message-firstname">@Model.Apprenticeship.FirstNameError</span>
+    }
     @Html.TextBox("FirstName", Model.Apprenticeship.FirstName, new { @class = "form-control form-control-3-4" })
 </div>
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("LastName", "error")">
+<div class="form-error-group form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.LastNameError) ? "error" : "")">
     @Html.Label("LastName", "Last name", new { @class = "form-label form-label-bold" })
-    @Html.ValidationMessage("LastName", new { id = "error-message-LastName" })
+    @if (!string.IsNullOrEmpty(Model.Apprenticeship.LastNameError))
+    {
+        <span class="error-message" id="error-message-lastname">@Model.Apprenticeship.LastNameError</span>
+    }
     @Html.TextBox("LastName", Model.Apprenticeship.LastName, new { @class = "form-control form-control-3-4" })
-
 </div>
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("DateOfBirth", "error")">
+<div class="form-error-group form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.DateOfBirthError) ? "error" : "")">
     <hr />
     <span class="form-label-bold">Date of birth</span>
     <span class="form-hint">For example, 08 12 2001</span>
 
     <div class="form-date">
-        @Html.ValidationMessage("DateOfBirth", new { id = "error-message-DateOfBirth", @class = "error-message" })
+
+        @if (!string.IsNullOrEmpty(Model.Apprenticeship.DateOfBirthError))
+        {
+            <span class="error-message" id="error-message-dateofbirth">@Model.Apprenticeship.DateOfBirthError</span>
+        }
+        
         <div class="form-group form-group-day">
             <label for="DateOfBirth.Day">
                 Day
             </label>
 
-            @Html.TextBox("DateOfBirth.Day", Model.Apprenticeship.DateOfBirth.Day, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Day" })
+            @Html.TextBox("DateOfBirth.Day", Model.Apprenticeship.DateOfBirth.Day, new {@class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Day"})
 
         </div>
         <div class="form-group form-group-month">
@@ -37,7 +47,7 @@
                 Month
             </label>
 
-            @Html.TextBox("DateOfBirth.Month", Model.Apprenticeship.DateOfBirth.Month, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Month" })
+            @Html.TextBox("DateOfBirth.Month", Model.Apprenticeship.DateOfBirth.Month, new {@class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Month"})
 
         </div>
         <div class="form-group form-group-year">
@@ -45,7 +55,7 @@
                 Year
             </label>
 
-            @Html.TextBox("DateOfBirth.Year", Model.Apprenticeship.DateOfBirth.Year, new { @class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Year" })
+            @Html.TextBox("DateOfBirth.Year", Model.Apprenticeship.DateOfBirth.Year, new {@class = "form-control", type = "number", aria_labelledby = "DateOfBirth.Year"})
         </div>
     </div>
 </div>
@@ -68,24 +78,30 @@
     <span class="">@Model.Apprenticeship.EndDate.DateTime.Value.ToGdsFormatWithoutDay() </span>
 </div>
 
-<div class="form-error-group form-group @Html.AddClassIfPropertyInError("Cost", "error")">
+<div class="form-error-group form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.CostError) ? "error" : "")">
 
     <hr />
     <label for="Cost">
         <span class="form-label-bold">Total agreed training cost (excluding VAT)</span>
         <span class="form-hint">For example, for £1,500 enter 1500</span>
-        @Html.ValidationMessage("Cost", "Enter the cost in whole pounds", new { id = "error-message-Cost", @class = "error-message" })
+        @if (!string.IsNullOrEmpty(Model.Apprenticeship.CostError))
+        {
+            <span class="error-message" id="error-message-cost">@Model.Apprenticeship.CostError</span>
+        }
     </label>
 
     <span class="heading-small">£ </span>@Html.TextBox("Cost", Model.Apprenticeship.Cost, new { @class = "form-control form-control-3-4", type = "text", aria_labelledby = "Cost" })
 
 </div>
 
-<div class="form-group @Html.AddClassIfPropertyInError("EmployerRef", "error")">
+<div class="form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError) ? "error" : "")">
     <hr/>
     @Html.Label("EmployerRef", "Reference (optional)", new { @class = "form-label-bold" })
     <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
-    @Html.ValidationMessage("EmployerRef", new { id = "error-message-EmployerRef" })
+    @if (!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError))
+    {
+        <span class="error-message" id="error-message-employerref">@Model.Apprenticeship.EmployerRefError</span>
+    }
     @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
 </div>
 

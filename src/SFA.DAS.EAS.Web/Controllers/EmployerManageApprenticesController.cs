@@ -384,7 +384,6 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private void AddErrorsToFlashDictionaryCookie()
         {
-            ModelState.Clear();
             var errorDictionary = ModelState
                                     .Where(c=>c.Value.Errors.Any())
                                     .ToDictionary(errorKeyValuePair => 
