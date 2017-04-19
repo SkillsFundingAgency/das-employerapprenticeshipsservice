@@ -283,17 +283,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             var now = new DateTime(_currentDateTime.Now.Year, _currentDateTime.Now.Month, 1);
             var waitingToStart = apprenticeshipStartDate.HasValue && apprenticeshipStartDate.Value > now;
 
-            if (waitingToStart && paymentStatus != PaymentStatus.Paused)
-            {
-                return "Waiting to start";
-            }
-
             switch (paymentStatus)
             {
                 case PaymentStatus.PendingApproval:
                     return "Approval needed";
                 case PaymentStatus.Active:
-                    return "On programme";
+                    return waitingToStart ? "Waiting to start" : "On programme";
                 case PaymentStatus.Paused:
                     return "Paused";
                 case PaymentStatus.Withdrawn:
