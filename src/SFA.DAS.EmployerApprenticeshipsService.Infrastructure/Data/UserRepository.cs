@@ -121,7 +121,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 var parameters = new DynamicParameters();
 
                 return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(varchar(64), PireanKey) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                    sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
                     param: parameters,
                     commandType: CommandType.Text);
             });

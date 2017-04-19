@@ -59,7 +59,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcDateServiceTests
 
         [TestCase("2016-01-30", false)]
         [TestCase("2017-03-31", false)]
-        [TestCase("2017-04-01", true)]
+        [TestCase("2017-04-01", false)]
+        [TestCase("2017-04-22", true)]
         [TestCase("2018-05-30", true)]
         public void ThenIfTheSubmissionDateIsGreaterThanThePayrollYearThenTrueIsReturned(string submissionDate, bool expectedResult)
         {

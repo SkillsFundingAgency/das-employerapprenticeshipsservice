@@ -3,20 +3,21 @@
 AS
 select 
 	main.*
-	,SUM(Amount) OVER(ORDER BY TransactionDate asc 
+	,SUM(Amount) OVER(ORDER BY DateCreated asc 
 		RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW ) 
 	     AS Balance
 from
 (
 	SELECT 
 	   [AccountId]
-      ,[TransactionDate]
+      ,Max([TransactionDate]) as TransactionDate
       ,MAX([TransactionType]) as TransactionType
       ,Sum(Amount) as Amount
 	  ,UkPrn
+	  ,DateCreated
   FROM [employer_financial].[TransactionLine]
   WHERE AccountId = @accountId
-  GROUP BY TransactionDate ,AccountId, UKPRN
+  GROUP BY DateCreated ,AccountId, UKPRN
   
 ) as main
 order by TransactionDate desc

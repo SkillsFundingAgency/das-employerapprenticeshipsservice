@@ -52,11 +52,11 @@
                 <tbody>
                     @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
                     {
-                        var fromDate = aggregationLine.TransactionDate;
-                        var toDate = aggregationLine.TransactionDate;
+                        var fromDate = aggregationLine.DateCreated;
+                        var toDate = aggregationLine.DateCreated.AddHours(23);
                         <tr>
                             <td>
-                                <span class="no-wrap">@{var date = aggregationLine.TransactionDate.ToGdsFormat();} @date </span>
+                                <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
                             </td>
                             <td class="mobile-hide-cell">
                                 <span class="description">
