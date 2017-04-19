@@ -8,6 +8,8 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -17,7 +19,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
     {
         private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<ILogger> _logger;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private Mock<IMediator> _mediator;
         private EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
         private const string EmpRef = "123/AGB";
@@ -31,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestrato
             _configuration = new EmployerApprenticeshipsServiceConfiguration { Hmrc = new HmrcConfiguration() };
 
             _logger = new Mock<ILogger>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>())).ReturnsAsync(new GetEmployerEnglishFractionResponse { Fractions = new List<DasEnglishFraction>()  });

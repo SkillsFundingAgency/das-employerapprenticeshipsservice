@@ -11,12 +11,12 @@ using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Application.Commands.Payments.RefreshPaymentData;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.TestCommon.DependencyResolution;
-using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         private static IContainer _container;
         private static Mock<IMessagePublisher> _messagePublisher;
         private static Mock<IOwinWrapper> _owinWrapper;
-        private static Mock<ICookieService> _cookieService;
+        private static Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private static Mock<IEventsApi> _eventsApi;
         private static Mock<IPaymentsEventsApiClient> _paymentEventsApi;
         private static Mock<IEmployerCommitmentApi> _employerCommitmentApi;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         {
             _messagePublisher = new Mock<IMessagePublisher>();
             _owinWrapper = new Mock<IOwinWrapper>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _eventsApi = new Mock<IEventsApi>();
             _paymentEventsApi = new Mock<IPaymentsEventsApiClient>();
             _employerCommitmentApi = new Mock<IEmployerCommitmentApi>();

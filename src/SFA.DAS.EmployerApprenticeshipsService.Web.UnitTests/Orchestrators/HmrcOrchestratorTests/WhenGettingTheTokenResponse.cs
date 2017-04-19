@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
         private EmployerAccountOrchestrator _employerAccountOrchestrator;
         private Mock<ILogger> _logger;
         private Mock<IMediator> _mediator;
-        private Mock<ICookieService> _cookieService;
+        private Mock<ICookieStorageService<EmployerAccountData>> _cookieService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
@@ -27,7 +28,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
         {
             _logger = new Mock<ILogger>();
             _mediator = new Mock<IMediator>();
-            _cookieService = new Mock<ICookieService>();
+            _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
                 Hmrc = new HmrcConfiguration ()

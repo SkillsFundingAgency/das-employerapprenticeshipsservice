@@ -142,14 +142,7 @@ var selectionButtons = new GOVUK.SelectionButtons("label input[type='radio'], la
 var selectionButtonsOrgType = new GOVUK.SelectionButtons("section input[type='radio']", { parentElem: 'section' });
 
 
-// cohorts bingo balls - clickable block
-$(".clickable").on('click touchstart', (function () {
-    window.location = $(this).find("a").attr("href");
-    return false;
-}));
-
 // stop apprentice - show/hide date block
-
 $(".js-enabled #stop-effective").hide();
 
 $(".js-enabled #WhenToMakeChange-Immediately").on('click touchstart', (function () {
@@ -163,3 +156,34 @@ $(".js-enabled #WhenToMakeChange-SpecificDate").on('click touchstart', (function
 if ($("#WhenToMakeChange-SpecificDate").is(':checked')) {
     $("#stop-effective").show();
 }
+
+
+// cohorts bingo balls - clickable block
+$(".clickable").on('click touchstart', (function () {
+    window.location = $(this).find("a").attr("href");
+    return false;
+}));
+
+// character limitation script
+$('#charCount').show(); // javascript enabled version only
+$('#charCount-noJS').hide(); // javascript disabled version only
+
+var totalChars = 20; //Total characters allowed in textarea
+var countTextBox = $('#EmployerRef'); // Textarea input box
+var charsCountEl = $('#countchars'); // Remaining characters
+charsCountEl.text(totalChars); //initial value of countchars element
+
+countTextBox.keyup(function () { //user releases a key on the keyboard
+    var thisChars = this.value.replace(/{.*}/g, '').length; //get chars count in textarea
+    if (thisChars > totalChars) //if we have more chars than it should be
+    {
+        var CharsToDel = (thisChars - totalChars); // total extra chars to delete
+        this.value = this.value.substring(0, this.value.length - CharsToDel); //remove excess chars from textarea
+        $("#charCount").addClass('limit-reached');
+    }
+    else {
+        charsCountEl.text(totalChars - thisChars); //count remaining chars
+        $("#charCount").removeClass('limit-reached');
+    }
+});
+

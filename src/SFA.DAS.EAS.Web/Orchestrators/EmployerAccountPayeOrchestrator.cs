@@ -11,8 +11,9 @@ using SFA.DAS.EAS.Application.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EAS.Application.Queries.GetMember;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
         }
 
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerApprenticeshipsServiceConfiguration configuration) : base(mediator, logger, cookieService, configuration)
         {
         }
 

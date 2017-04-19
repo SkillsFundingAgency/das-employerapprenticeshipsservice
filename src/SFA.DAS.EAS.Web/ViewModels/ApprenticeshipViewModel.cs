@@ -3,11 +3,12 @@ using FluentValidation.Attributes;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.EAS.Web.Validators;
+using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.ViewModels
 {
     [Validator(typeof(ApprenticeshipViewModelValidator))]
-    public sealed class ApprenticeshipViewModel
+    public class ApprenticeshipViewModel : ViewModelBase
     {
         public ApprenticeshipViewModel()
         {
@@ -22,6 +23,8 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string LastName { get; set; }
 
         public DateTimeViewModel DateOfBirth { get; set; } = new DateTimeViewModel(0);
+
+        public string DateOfBirthDayError => GetErrorMessage("DateOfBirth.Day");
 
         public string NINumber { get; set; }
 
@@ -64,5 +67,15 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public AgreementStatus AgreementStatus { get; set; }
 
         public bool HasStarted { get; set; }
+
+        public string FirstNameError => GetErrorMessage(nameof(FirstName));
+        public string LastNameError => GetErrorMessage(nameof(LastName));
+        public string DateOfBirthError => GetErrorMessage(nameof(DateOfBirth));
+        public string StartDateError => GetErrorMessage(nameof(StartDate));
+        public string EndDateError => GetErrorMessage(nameof(EndDate));
+        public string CostError => GetErrorMessage(nameof(Cost));
+        public string StartDateOverlapError => GetErrorMessage("StartDateOverlap");
+        public string EndDateOverlapError => GetErrorMessage("EndDateOverlap");
+        public string EmployerRefError => GetErrorMessage(nameof(EmployerRef));
     }
 }

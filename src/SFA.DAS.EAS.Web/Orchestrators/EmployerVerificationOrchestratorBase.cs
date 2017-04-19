@@ -12,6 +12,8 @@ using SFA.DAS.EAS.Application.Queries.GetGatewayToken;
 using SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -22,7 +24,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
     {
         protected readonly IMediator Mediator;
         protected readonly ILogger Logger;
-        protected readonly ICookieService CookieService;
+        protected readonly ICookieStorageService<EmployerAccountData> CookieService;
         protected readonly EmployerApprenticeshipsServiceConfiguration Configuration;
 
         //Needed for tests
@@ -31,7 +33,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieService cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILogger logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerApprenticeshipsServiceConfiguration configuration)
         {
             Mediator = mediator;
             Logger = logger;

@@ -20,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
         [SetUp]
         public void Arrange()
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _owinWrapper = new Mock<IOwinWrapper>();
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _configuration = new EmployerApprenticeshipsServiceConfiguration();
 
@@ -60,7 +62,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.InvitationControllerTests
             _invitationOrchestrator.Setup(x => x.AcceptInvitation(It.IsAny<long>(), It.IsAny<string>()))
                 .Returns(Task.FromResult<object>(null));
 
-            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration);
+            _controller = new InvitationController(_invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, _userViewTestingService.Object, _configuration,_flashMessage.Object);
 
             //Act
             await _controller.Accept(invitationId, invitation);

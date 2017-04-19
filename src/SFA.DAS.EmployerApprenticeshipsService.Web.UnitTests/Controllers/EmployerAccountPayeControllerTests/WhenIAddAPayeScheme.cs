@@ -20,6 +20,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
         private EmployerAccountPayeController _controller;
         private Mock<IFeatureToggle> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedAccountId = "AFD123";
         private const string ExpectedUserId = "456TGF3";
 
@@ -32,9 +33,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountPayeControllerTes
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
             _featureToggle = new Mock<IFeatureToggle>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
+            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userViewTestingService.Object);
+                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, _flashMessage.Object);
         }
 
         [Test]

@@ -6,8 +6,10 @@ using System.Web.Mvc;
 using AutoMapper;
 using NLog;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Organisation;
 using SFA.DAS.EAS.Web.Authentication;
+using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.Organisation;
@@ -28,8 +30,9 @@ namespace SFA.DAS.EAS.Web.Controllers
             IFeatureToggle featureToggle,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
-            ILogger logger) 
-            :base(owinWrapper, featureToggle,multiVariantTestingService)
+            ILogger logger,
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            :base(owinWrapper, featureToggle,multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
