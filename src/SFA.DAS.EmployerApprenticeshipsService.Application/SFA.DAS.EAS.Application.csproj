@@ -152,6 +152,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommand.cs" />
+    <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationCommandHandler.cs" />
     <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationValidator.cs" />
     <Compile Include="Extensions\ApprenticeshipExtensions.cs" />
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
