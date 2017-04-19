@@ -49,7 +49,14 @@ namespace SFA.DAS.EAS.Api.Orchestrators
             accountsResult.Accounts.ForEach(account =>
             {
                 var accountBalance = transactionResult.Accounts.SingleOrDefault(c => c.AccountId == account.Id);
-                data.Add(new AccountWithBalanceViewModel { AccountId = account.Id, AccountName = account.Name, AccountHashId = account.HashedId, Balance = accountBalance?.Balance ?? 0 });
+                data.Add(new AccountWithBalanceViewModel
+                {
+                    AccountId = account.Id,
+                    AccountName = account.Name,
+                    AccountHashId = account.HashedId,
+                    Balance = accountBalance?.Balance ?? 0,
+                    IsLevyPayer = accountBalance?.IsLevyPayer ?? 0
+                });
             });
 
             return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>() { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel>() { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };

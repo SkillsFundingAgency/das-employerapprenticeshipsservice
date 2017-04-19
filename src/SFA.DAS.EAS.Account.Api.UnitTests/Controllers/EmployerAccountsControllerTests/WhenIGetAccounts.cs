@@ -38,8 +38,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             {
                 Accounts = new List<AccountBalance>
                     {
-                        new AccountBalance {AccountId = accountsResponse.Accounts[0].Id, Balance = 987.65m},
-                        new AccountBalance {AccountId = accountsResponse.Accounts[1].Id, Balance = 123.45m}
+                        new AccountBalance {AccountId = accountsResponse.Accounts[0].Id, Balance = 987.65m,IsLevyPayer = 1},
+                        new AccountBalance {AccountId = accountsResponse.Accounts[1].Id, Balance = 123.45m,IsLevyPayer = 1}
                     }
             };
             Mediator.Setup(x => x.SendAsync(It.Is<GetAccountBalancesRequest>(q => q.AccountIds.TrueForAll(id => accountsResponse.Accounts.Any(a => a.Id == id))))).ReturnsAsync(balancesResponse);
@@ -62,6 +62,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 returnedAccount.Should().NotBeNull();
                 returnedAccount.Balance.Should().Be(balancesResponse.Accounts.Single(b => b.AccountId == returnedAccount.AccountId).Balance);
                 returnedAccount.Href.Should().Be($"/api/accounts/{returnedAccount.AccountHashId}");
+                returnedAccount.IsLevyPayer.Should().Be(1);
             }
         }
 
