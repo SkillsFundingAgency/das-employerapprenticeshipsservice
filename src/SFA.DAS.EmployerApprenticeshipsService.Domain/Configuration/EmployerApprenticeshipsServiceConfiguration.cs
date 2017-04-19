@@ -13,18 +13,7 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string DashboardUrl { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public string DatabaseConnectionString { get; set; }
-
-        public bool ShowAgreements()
-        {
-
-            if (CloudConfigurationManager.GetSetting("ShowAgreements") != null)
-            {
-                return Convert.ToBoolean(CloudConfigurationManager.GetSetting("ShowAgreements"));
-            }
-
-            return false;
-        }
-
+        
         public bool ShowPayeHistory()
         {
             if (CloudConfigurationManager.GetSetting("ShowPayeHistory") != null)

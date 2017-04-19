@@ -53,26 +53,24 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 
                 var showSigningNotice = false;
 
-                if (_configuration.ShowAgreements())
+                
+                var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
+                if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
                 {
-                    var userRoleResponse = await GetUserAccountRole(accountId, externalUserId);
-                    if (userRoleResponse.UserRole == Role.Owner || userRoleResponse.UserRole == Role.Transactor)
+                    var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                     {
-                        var agreementsResponse = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
-                        {
-                            HashedAccountId = accountId,
-                            ExternalUserId = externalUserId
-                        });
-                        showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
-                    }
+                        HashedAccountId = accountId,
+                        ExternalUserId = externalUserId
+                    });
+                    showSigningNotice = agreementsResponse.EmployerAgreements.Any(a => a.Status == Domain.Models.EmployerAgreement.EmployerAgreementStatus.Pending);
                 }
+                
 
 
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
-                    RequiresAgreementSigning = showSigningNotice,
-                    ShowAgreements = _configuration.ShowAgreements()
+                    RequiresAgreementSigning = showSigningNotice
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
