@@ -21,5 +21,10 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var getEmployerSchemesResponse = await _mediator.SendAsync(new GetEmployerSchemesQuery { Id = accountId });
             return getEmployerSchemesResponse.PayeSchemes;
         }
+
+        public Task UpdatePayeScheme(string expectedEmpref)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

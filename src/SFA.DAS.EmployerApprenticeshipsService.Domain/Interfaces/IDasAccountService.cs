@@ -6,5 +6,6 @@ namespace SFA.DAS.EAS.Domain.Interfaces
     public interface IDasAccountService
     {
         Task<PayeSchemes> GetAccountSchemes(long accountId);
+        Task UpdatePayeScheme(string expectedEmpref);
     }
 }

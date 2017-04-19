@@ -142,6 +142,8 @@ namespace SFA.DAS.EAS.LevyDeclarationProvider.Worker.Providers
                     EmployerReference = scheme.Ref,
                     EnglishFractionUpdateResponse = englishFractionUpdateResponse
                 });
+
+                await _dasAccountService.UpdatePayeScheme(scheme.Ref);
             }
 
             var levyDeclarationQueryResult = HmrcProcessingEnabled || DeclarationProcessingOnly ?
