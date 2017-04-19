@@ -11,5 +11,6 @@
         public decimal Balance { get; set; }
 
         public string Href { get; set; }
+        public int IsLevyPayer { get; set; }
     }
 }
