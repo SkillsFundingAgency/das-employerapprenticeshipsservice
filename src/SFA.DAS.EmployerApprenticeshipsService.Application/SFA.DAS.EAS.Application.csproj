@@ -152,6 +152,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\UpdatePayeInformation\UpdatePayeInformationValidator.cs" />
     <Compile Include="Extensions\ApprenticeshipExtensions.cs" />
     <Compile Include="ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\AcceptInvitation\AcceptInvitationCommand.cs" />

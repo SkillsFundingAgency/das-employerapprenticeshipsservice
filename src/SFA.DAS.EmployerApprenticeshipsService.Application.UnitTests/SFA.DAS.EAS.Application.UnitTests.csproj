@@ -193,6 +193,7 @@
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenValidatingCommand.cs" />
     <Compile Include="Commands\UndoApprenticeshipUpdate\WhenUndoingApprenticeshipUpdate.cs" />
     <Compile Include="Commands\UpdateEnglishFractions\WhenISendTheUpdateEnglishFractionsCommand.cs" />
+    <Compile Include="Commands\UpdatePayeInformationTests\WhenValidatingTheCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUserTests\WhenUpsertingAUser.cs" />
     <Compile Include="Events\ProcessDeclarationTests\WhenIProcessDeclarations.cs" />
     <Compile Include="Events\ProcessPaymentTests\WhenIProcessPaymentData.cs" />
