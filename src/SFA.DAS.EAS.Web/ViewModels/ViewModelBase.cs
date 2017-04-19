@@ -31,5 +31,17 @@ namespace SFA.DAS.EAS.Web.ViewModels
                 ErrorDictionary.Add(property, error.ErrorMessage);
             }
         }
+
+        public void AddErrorsFromDictionary(Dictionary<string, string> errorDictionary)
+        {
+            foreach (var property in errorDictionary.Keys)
+            {
+                if (ErrorDictionary.ContainsKey(property)) continue;
+                if (!errorDictionary[property].Any()) continue;
+
+                var error = errorDictionary[property];
+                ErrorDictionary.Add(property, error);
+            }
+        }
     }
 }

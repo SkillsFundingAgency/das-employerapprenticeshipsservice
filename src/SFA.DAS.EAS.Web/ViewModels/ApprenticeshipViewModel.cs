@@ -77,5 +77,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string StartDateOverlapError => GetErrorMessage("StartDateOverlap");
         public string EndDateOverlapError => GetErrorMessage("EndDateOverlap");
         public string EmployerRefError => GetErrorMessage(nameof(EmployerRef));
+        public string TrainingCodeError => GetErrorMessage(nameof(TrainingCode));
     }
 }

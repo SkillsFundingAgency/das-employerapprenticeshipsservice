@@ -242,24 +242,47 @@ namespace SFA.DAS.EAS.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                AddErrorsToFlashDictionaryCookie();
-                return RedirectToAction("Edit");
+                apprenticeship.AddErrorsFromModelState(ModelState);
             }
 
-            var dictionary = await _orchestrator.ValidateApprenticeship(apprenticeship);
-            
-            if (dictionary.Any())
+            var validatorResult = await _orchestrator.ValidateApprenticeship(apprenticeship);
+            if (validatorResult.Any())
             {
-                AddErrorsToFlashDictionaryCookie(dictionary);
-                return RedirectToAction("Edit");
+                apprenticeship.AddErrorsFromDictionary(validatorResult);
             }
-            
+
+            if (apprenticeship.ErrorDictionary.Any())
+            {
+                var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                viewModel.Data.Apprenticeship = apprenticeship;
+                viewModel.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = apprenticeship.ErrorDictionary,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+
+                return View("Edit", viewModel);
+            }
+           
             var model = await _orchestrator.GetConfirmChangesModel(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship);
 
             if (!AnyChanges(model.Data))
             {
-                AddErrorsToFlashDictionaryCookie(new Dictionary<string, string> { { "NoChangesRequested", "No changes made" } });
-                return RedirectToAction("Edit");
+                var viewModel = await _orchestrator.GetApprenticeshipForEdit(apprenticeship.HashedAccountId, apprenticeship.HashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+                viewModel.Data.Apprenticeship = apprenticeship;
+                viewModel.Data.Apprenticeship.ErrorDictionary.Add("NoChangesRequested", "No changes made");
+
+                viewModel.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = apprenticeship.ErrorDictionary,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+
+                return View("Edit", viewModel);
             }
 
             _orchestrator.CreateApprenticeshipViewModelCookie(model.Data);
@@ -382,20 +405,24 @@ namespace SFA.DAS.EAS.Web.Controllers
                 .AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
         }
 
+        private Dictionary<string, string> GetModelStateAsDictionary()
+        {
+            return ModelState
+                    .Where(c => c.Value.Errors.Any())
+                    .ToDictionary(errorKeyValuePair =>
+                                        errorKeyValuePair.Key,
+                                        errorMessage => errorMessage.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "Error");
+        }
+
         private void AddErrorsToFlashDictionaryCookie()
         {
-            var errorDictionary = ModelState
-                                    .Where(c=>c.Value.Errors.Any())
-                                    .ToDictionary(errorKeyValuePair => 
-                                                        errorKeyValuePair.Key, 
-                                                        errorMessage => errorMessage.Value.Errors.FirstOrDefault()?.ErrorMessage ?? "Error");
+            var errorDictionary = GetModelStateAsDictionary();
 
             AddErrorsToFlashDictionaryCookie(errorDictionary);
         }
 
         private void AddErrorsToFlashDictionaryCookie(Dictionary<string, string> dict)
         {
-            dict.ForEach(error => ModelState.AddModelError(error.Key, error.Value));
             var flashMessage = new FlashMessageViewModel
             {
                 ErrorMessages = dict,
