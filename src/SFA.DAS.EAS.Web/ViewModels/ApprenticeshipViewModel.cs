@@ -65,6 +65,9 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public PaymentStatus PaymentStatus { get; set; }
 
         public AgreementStatus AgreementStatus { get; set; }
+
+        public bool HasStarted { get; set; }
+
         public string FirstNameError => GetErrorMessage(nameof(FirstName));
         public string LastNameError => GetErrorMessage(nameof(LastName));
         public string DateOfBirthError => GetErrorMessage(nameof(DateOfBirth));
@@ -74,5 +77,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public string StartDateOverlapError => GetErrorMessage("StartDateOverlap");
         public string EndDateOverlapError => GetErrorMessage("EndDateOverlap");
         public string EmployerRefError => GetErrorMessage(nameof(EmployerRef));
+        public string TrainingCodeError => GetErrorMessage(nameof(TrainingCode));
     }
 }

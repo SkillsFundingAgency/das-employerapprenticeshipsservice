@@ -73,6 +73,13 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             });
         }
 
+        public async Task<EmpRefLevyInformation> GetEmprefInformation(string empRef)
+        {
+            var accessToken =  await _executionPolicy.ExecuteAsync(async () => await GetOgdAccessToken());
+
+            return await GetEmprefInformation(accessToken, empRef);
+        }
+
         public async Task<string> DiscoverEmpref(string authToken)
         {
             return await _executionPolicy.ExecuteAsync(async () =>

@@ -14,6 +14,8 @@ using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using System;
 using System.Threading.Tasks;
 
+using SFA.DAS.EAS.Web.Validators;
+
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
 {
     [TestFixture]
@@ -50,7 +52,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
                     Apprenticeship = _testApprenticeship
                 });
 
-            _sut = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _mockApprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(), _cookieStorageService.Object);
+            _sut = new EmployerManageApprenticeshipsOrchestrator(
+                _mockMediator.Object, 
+                Mock.Of<IHashingService>(),
+                _mockApprenticeshipMapper,
+                new ApprovedApprenticeshipViewModelValidator(),
+                new CurrentDateTime(),
+                Mock.Of<ILogger>(),
+                _cookieStorageService.Object);
         }
 
         [TestCase(PaymentStatus.Active)]

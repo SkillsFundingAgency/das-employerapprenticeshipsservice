@@ -13,6 +13,7 @@ using System;
 using SFA.DAS.EAS.Infrastructure.Services;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
+using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
@@ -35,8 +36,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
 
             _apprenticeshipMapper = new ApprenticeshipMapper(Mock.Of<IHashingService>(), _mockDateTime.Object, _mockMediator.Object);
-
-            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(_mockMediator.Object, Mock.Of<IHashingService>(), _apprenticeshipMapper, new CurrentDateTime(), Mock.Of<ILogger>(),_cookieStorageService.Object);
+            
+            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(
+                _mockMediator.Object, 
+                Mock.Of<IHashingService>(),
+                _apprenticeshipMapper, 
+                Mock.Of<ApprovedApprenticeshipViewModelValidator>(), 
+                new CurrentDateTime(), 
+                Mock.Of<ILogger>(),
+                _cookieStorageService.Object);
         }
 
         [TestCase(8, 5, arg3: 10)]

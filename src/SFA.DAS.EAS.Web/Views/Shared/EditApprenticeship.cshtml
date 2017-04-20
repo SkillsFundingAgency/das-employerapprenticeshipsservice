@@ -1,6 +1,4 @@
 ﻿@using SFA.DAS.EAS.Web.ViewModels
-@using SFA.DAS.EAS.Web.Extensions
-
 @model ExtendedApprenticeshipViewModel
 
 
@@ -8,7 +6,7 @@
     @Html.Label("FirstName", "First name", new { @class = "form-label form-label-bold" })
     @if (!string.IsNullOrEmpty(Model.Apprenticeship.FirstNameError))
     {
-        <span class="error-message" id="error-message-firstname">@Model.Apprenticeship.FirstNameError</span>
+        <span class="error-message" id="error-message-FirstName">@Model.Apprenticeship.FirstNameError</span>
     }
     @Html.TextBox("FirstName", Model.Apprenticeship.FirstName, new { @class = "form-control form-control-3-4" })
 </div>
@@ -17,7 +15,7 @@
     @Html.Label("LastName", "Last name", new { @class = "form-label form-label-bold" })
     @if (!string.IsNullOrEmpty(Model.Apprenticeship.LastNameError))
     {
-        <span class="error-message" id="error-message-lastname">@Model.Apprenticeship.LastNameError</span>
+        <span class="error-message" id="error-message-LastName">@Model.Apprenticeship.LastNameError</span>
     }
     @Html.TextBox("LastName", Model.Apprenticeship.LastName, new { @class = "form-control form-control-3-4" })
 
@@ -28,11 +26,11 @@
     <span class="form-label-bold">Date of birth</span>
     <span class="form-hint">For example, 08 12 2001</span>
 
-    <div class="form-date">
+    <div id="DateOfBirth" class="form-date">
         
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.DateOfBirthError))
         {
-            <span class="error-message" id="error-message-dateofbirth">@Model.Apprenticeship.DateOfBirthError</span>
+            <span class="error-message" id="error-message-DateOfBirth">@Model.Apprenticeship.DateOfBirthError</span>
         }
 
         <div class="form-group form-group-day">
@@ -61,7 +59,7 @@
     </div>
 </div>
 
-<div class="form-group">
+<div class="form-group @(!string.IsNullOrEmpty(Model.Apprenticeship.TrainingCodeError) ? "error" : "")">
     <hr />
     <label class="form-label-bold" for="TrainingCode">Apprenticeship training course</label>
     <select name="TrainingCode" id="TrainingCode" class="form-control form-control-3-4" aria-label="Apprenticeship training course">
@@ -82,15 +80,15 @@
     <span class="form-label-bold">Planned training start date</span>
     <span class="form-hint">For example, 09 2017</span>
 
-    <div class="form-date">
+    <div id="StartDate" class="form-date">
 
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.StartDateError))
         {
-            <span class="error-message" id="error-message-startdate">@Model.Apprenticeship.StartDateError</span>
+            <span class="error-message" id="error-message-StartDate">@Model.Apprenticeship.StartDateError</span>
         }
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.StartDateOverlapError))
         {
-            <span class="error-message" id="error-message-startdate">The date overlaps with existing training dates for the same apprentice. Please check the date - contact your training provider for help.</span>
+            <span class="error-message" id="error-message-StartDate">The date overlaps with existing training dates for the same apprentice. Please check the date - contact your training provider for help.</span>
         }
        
         <div class="form-group form-group-month">
@@ -116,14 +114,14 @@
     <span class="form-label-bold">Planned training finish date</span>
     <span class="form-hint">For example, 02 2019</span>
 
-    <div class="form-date">
+    <div id="EndDate" class="form-date">
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.EndDateError))
         {
-            <span class="error-message" id="error-message-enddate">@Model.Apprenticeship.EndDateError</span>
+            <span class="error-message" id="error-message-EndDate">@Model.Apprenticeship.EndDateError</span>
         }
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.EndDateOverlapError))
         {
-            <span class="error-message" id="error-message-enddate">The date overlaps with existing training dates for the same apprentice. Please check the date - contact your training provider for help.</span>
+            <span class="error-message" id="error-message-EndDate">The date overlaps with existing training dates for the same apprentice. Please check the date - contact your training provider for help.</span>
         }
        
         <div class="form-group form-group-month">
@@ -153,7 +151,7 @@
         <span class="form-hint">For example, for £1,500 enter 1500</span>
         @if (!string.IsNullOrEmpty(Model.Apprenticeship.CostError))
         {
-            <span class="error-message" id="error-message-cost">@Model.Apprenticeship.CostError</span>
+            <span class="error-message" id="error-message-Cost">@Model.Apprenticeship.CostError</span>
         }
 
     </label>
@@ -168,7 +166,7 @@
     <span class="form-hint">Add a reference, such as employee number or location - this can help identify this apprentice if you have more than one with the same name.</span>
     @if (!string.IsNullOrEmpty(Model.Apprenticeship.EmployerRefError))
     {
-        <span class="error-message" id="error-message-employerref">@Model.Apprenticeship.EmployerRefError</span>
+        <span class="error-message" id="error-message-EmployerRef">@Model.Apprenticeship.EmployerRefError</span>
     }
     @Html.TextBox("EmployerRef", Model.Apprenticeship.EmployerRef, new { @class = "form-control form-control-3-4" })
     <p id="charCount-noJS">Enter up to a maximum of 20 characters</p>

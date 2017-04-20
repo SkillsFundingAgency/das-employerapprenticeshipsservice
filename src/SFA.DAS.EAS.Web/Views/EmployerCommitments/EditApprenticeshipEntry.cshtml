@@ -14,7 +14,6 @@
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("EditApprenticeship")" novalidate="novalidate">
             @Html.AntiForgeryToken()
-            @Html.Partial("ValidationSummary", Html.ViewData.ModelState)
 
             <h1 class="heading-xlarge">Edit an apprentice</h1>
             <div class="panel panel-border-wide">

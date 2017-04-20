@@ -17,30 +17,34 @@
             <h1 class="heading-xlarge">Confirm changes</h1>
             
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
+                <h2 class="heading-medium">Do you want to make these changes?</h2>
+                <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
+                    <fieldset>
+                        <legend class="visually-hidden">Do you want to make these changes?</legend>
+            
+                        <div id="ChangesConfirmed"></div>
+                        @if (!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError))
+                        {
+                            <span class="error-message" id="error-message-ChangesConfirmed">@Model.Data.ChangesConfirmedError</span>
+                        }
 
-            <h2 class="heading-medium">Do you want to make these changes?</h2>
-            <div class="form-group">
-                <fieldset>
-                    <legend class="visually-hidden">Do you want to make these changes?</legend>
+                        <label class="block-label selection-button-radio" for="changes-confirmed-true">
+                            @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-confirmed-true" })
+                            Yes, change these details
+                        </label>
+                        <label class="block-label selection-button-radio" for="changes-confirmed-false">
+                            @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
+                            No, don't change these details
+                        </label>
+                    </fieldset>
+                </div>
 
-                    <label class="block-label selection-button-radio" for="changes-confirmed-true">
-                        @Html.RadioButton("ChangesConfirmed", true, new { id = "changes-confirmed-true" })
-                        Yes, change these details
-                    </label>
-                    <label class="block-label selection-button-radio" for="changes-confirmed-false">
-                        @Html.RadioButton("ChangesConfirmed", false, new { id = "changes-confirmed-false" })
-                        No, don't change these details
-                    </label>
-                </fieldset>
-            </div>
-
-            @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
-            <button type="submit" class="button" aria-label="Finish">Finish</button>
-        </form>
+                @Html.Hidden("OriginalApprenticeshipDecoded", @Json.Encode(Model.Data.OriginalApprenticeship))
+                <button type="submit" class="button" aria-label="Finish">Finish</button>
+</form>
     </div>
 </div>
     
-
 @functions
 {
     private static string GetNameChange(Apprenticeship originalApprenticeship, UpdateApprenticeshipViewModel update)
@@ -54,6 +58,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.HashedAccountId, Model.Data.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
+        <a href="@Url.Action("Details", "EmployerManageApprentices")" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }
