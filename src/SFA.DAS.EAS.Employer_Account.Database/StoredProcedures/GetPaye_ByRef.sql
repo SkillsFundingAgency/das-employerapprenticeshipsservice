@@ -7,3 +7,5 @@ Select TOP 1
     paye.Name as RefName
 from 
 	employer_account.Paye paye
+WHERE
+	paye.ref = @Ref
