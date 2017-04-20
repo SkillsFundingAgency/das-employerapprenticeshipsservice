@@ -43,8 +43,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new EmployerAccountPayeListViewModel
                 {
                     HashedId = hashedAccountId,
-                    PayeSchemes = response.PayeSchemes,
-                    ShowHistory = Configuration.ShowPayeHistory()
+                    PayeSchemes = response.PayeSchemes
                 }
             };
         }
@@ -215,8 +214,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     Fractions = result.Fractions,
                     EmpRef = result.EmpRef,
-                    EmpRefAdded = result.EmpRefAddedDate,
-                    ShowHistory = Configuration.ShowPayeHistory()
+                    EmpRefAdded = result.EmpRefAddedDate
                 };
                 return response;
             }
