@@ -22,9 +22,10 @@
                     <fieldset>
                         <legend class="visually-hidden">Do you want to make these changes?</legend>
             
+                        <div id="ChangesConfirmed"></div>
                         @if (!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError))
                         {
-                            <span class="error-message" id="error-message-StartDate">@Model.Data.ChangesConfirmedError</span>
+                            <span class="error-message" id="error-message-ChangesConfirmed">@Model.Data.ChangesConfirmedError</span>
                         }
 
                         <label class="block-label selection-button-radio" for="changes-confirmed-true">

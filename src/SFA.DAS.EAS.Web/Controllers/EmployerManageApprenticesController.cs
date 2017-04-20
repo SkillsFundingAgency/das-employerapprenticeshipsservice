@@ -334,9 +334,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             if (undoChanges == null)
             {
-                var originalApprenticeship = System.Web.Helpers.Json.Decode<Apprenticeship>(originalApprenticeshipDecoded);
-                apprenticeship.OriginalApprenticeship = originalApprenticeship;
-                return View(new OrchestratorResponse<UpdateApprenticeshipViewModel> { Data = apprenticeship });
+                var viewmodel = await _orchestrator
+                    .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+                viewmodel.Data.AddErrorsFromModelState(ModelState);
+                SetErrorMessage(viewmodel, viewmodel.Data.ErrorDictionary);
+                return View(viewmodel);
             }
 
             if (undoChanges.Value)
@@ -360,13 +363,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{hashedApprenticeshipId}/changes/review")]
-        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId, bool? approveChanges)
+        public async Task<ActionResult> ReviewChanges(string hashedAccountId, string hashedApprenticeshipId, UpdateApprenticeshipViewModel apprenticeship, bool? approveChanges)
         {
-            var viewModel = await _orchestrator
-                .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
-
             if (approveChanges == null)
-                return View(viewModel);
+            {
+                var viewmodel = await _orchestrator
+                    .GetViewChangesViewModel(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+
+                viewmodel.Data.AddErrorsFromModelState(ModelState);
+                SetErrorMessage(viewmodel, viewmodel.Data.ErrorDictionary);
+                return View(viewmodel);
+            }
 
             await _orchestrator.SubmitReviewApprenticeshipUpdate(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"), approveChanges.Value);
 
