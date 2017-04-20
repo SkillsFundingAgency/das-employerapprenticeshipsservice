@@ -136,8 +136,8 @@ DECLARE @userId BIGINT
 SELECT @userId = Id FROM [employer_account].[User] WHERE UserRef = @userRef
 
 -- Account seed data
-EXECUTE #CreateAccount 2, @userId, '00445790', 'Tesco Plc', '222/AA00002', 'Tesco House, Shire Park, Kestrel Way, Welwyn Garden City, AL7 1GA', '1947-11-27 00:00:00.000', 'active', 1, NULL, 'Employer for scenario 2 scheme 2', '', '84VBNV'
-EXECUTE #CreateAccount 3, @userId, 'SC171417', 'SAINSBURY''S LIMITED', '123/SFAT029', 'No 2 Lochrin Square, 96 Fountainbridge, Edinburgh, EH3 9QA', '1997-01-16 00:00:00.000', 'active', 1, NULL, '', '', 'JLVKPM'
-EXECUTE #CreateAccount 4, @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '101/CUR00016', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, NULL, '', '', 'G6M7RV'
+EXECUTE #CreateAccount 2, @userId, '00445790', 'Tesco Plc', '222/ZZ00002', 'Tesco House, Shire Park, Kestrel Way, Welwyn Garden City, AL7 1GA', '1947-11-27 00:00:00.000', 'active', 1, NULL, 'Employer for scenario 2 scheme 2', '', '84VBNV'
+EXECUTE #CreateAccount 3, @userId, 'SC171417', 'SAINSBURY''S LIMITED', '123/SFZZ029', 'No 2 Lochrin Square, 96 Fountainbridge, Edinburgh, EH3 9QA', '1997-01-16 00:00:00.000', 'active', 1, NULL, '', '', 'JLVKPM'
+EXECUTE #CreateAccount 4, @userId, '07297044', 'DINE CONTRACT CATERING LIMITED', '101/ZZR00016', '1st Floor The Centre, Birchwood Park, Warrington, Lancashire, WA3 6YN', '2010-06-28 00:00:00.000', 'active', 1, NULL, '', '', 'G6M7RV'
 
 DROP PROCEDURE #CreateAccount
