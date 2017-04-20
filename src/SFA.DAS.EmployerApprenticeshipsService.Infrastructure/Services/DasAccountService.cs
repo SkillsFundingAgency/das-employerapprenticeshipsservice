@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Application.Commands.UpdatePayeInformation;
 using SFA.DAS.EAS.Application.Queries.GetEmployerSchemes;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.PAYE;
 
@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return getEmployerSchemesResponse.PayeSchemes;
         }
 
-        public Task UpdatePayeScheme(string expectedEmpref)
+        public async Task UpdatePayeScheme(string empRef)
         {
-            throw new System.NotImplementedException();
+            await _mediator.SendAsync(new UpdatePayeInformationCommand {PayeRef = empRef});
         }
     }
 }

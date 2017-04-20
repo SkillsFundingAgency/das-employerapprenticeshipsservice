@@ -142,6 +142,7 @@
     <Compile Include="Services\CompaniesHouseEmployerVerificationServiceTests\WhenIGetCompanyInformation.cs" />
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
     <Compile Include="Services\DasAccountServiceTests\WhenIGetEmployerInformation.cs" />
+    <Compile Include="Services\DasAccountServiceTests\WhenIUpdatePayeSchemeNames.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetEnglishFractionForAnEmpref.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
