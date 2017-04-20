@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdatePayeInformation
 
             var result = await _hmrcService.GetEmprefInformation(scheme.EmpRef);
 
-            if (string.IsNullOrEmpty(result.Employer.Name.EmprefAssociatedName))
+            if (string.IsNullOrEmpty(result?.Employer?.Name?.EmprefAssociatedName))
             {
                 return;
             }

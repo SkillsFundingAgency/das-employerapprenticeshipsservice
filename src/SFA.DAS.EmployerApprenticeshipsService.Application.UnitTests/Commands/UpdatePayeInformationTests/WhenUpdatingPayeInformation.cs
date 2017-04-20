@@ -115,5 +115,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdatePayeInformationTests
             //Assert
             _payeRepository.Verify(x => x.UpdatePayeSchemeName(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
+
+        [Test]
+        public async Task ThenIfNullIsReturnedFromHmrcThenTheRecordIsNotUpdated()
+        {
+            //Arrange
+            _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef)).ReturnsAsync(null);
+
+            //Act
+            await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
+
+            //Assert
+            _payeRepository.Verify(x => x.UpdatePayeSchemeName(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
     }
 }
