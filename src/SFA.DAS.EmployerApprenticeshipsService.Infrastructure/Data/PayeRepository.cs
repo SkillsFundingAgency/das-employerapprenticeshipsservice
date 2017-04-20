@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@Ref", payeRef, DbType.String);
                 parameters.Add("@RefName", refName, DbType.String);
 
-                return await c.QueryAsync<Paye>(
+                return await c.ExecuteAsync(
                     sql: "[employer_account].[UpdatePayeName_ByRef]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
