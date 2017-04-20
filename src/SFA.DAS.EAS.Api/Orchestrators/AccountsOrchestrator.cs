@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Api.Orchestrators
                     AccountName = account.Name,
                     AccountHashId = account.HashedId,
                     Balance = accountBalance?.Balance ?? 0,
-                    IsLevyPayer = accountBalance?.IsLevyPayer ?? 0
+                    IsLevyPayer = accountBalance?.IsLevyPayer == 1
                 });
             });
 

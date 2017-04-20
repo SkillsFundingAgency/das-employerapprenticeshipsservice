@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 returnedAccount.Should().NotBeNull();
                 returnedAccount.Balance.Should().Be(balancesResponse.Accounts.Single(b => b.AccountId == returnedAccount.AccountId).Balance);
                 returnedAccount.Href.Should().Be($"/api/accounts/{returnedAccount.AccountHashId}");
-                returnedAccount.IsLevyPayer.Should().Be(1);
+                returnedAccount.IsLevyPayer.Should().Be(true);
             }
         }
 
