@@ -165,36 +165,33 @@ $(".clickable").on('click touchstart', (function () {
 }));
 
 
-    // character limitation script
+// character limitation script
 $('#charCount').show(); // javascript enabled version only
 $('#charCount-noJS').hide(); // javascript disabled version only
 
-// Part of the best practices make sure the variables are assigned like below
+// variables
 var totalChars = 20, countTextBox = $('#EmployerRef'), charsCountEl = $('#countchars');
 charsCountEl.text(totalChars);
 var thisChars = countTextBox.val().replace(/{.*}/g, '').length;
 
-charLeft(countTextBox, thisChars, totalChars); // function to trigger on page load
+// function to trigger on page load
+charLeft(countTextBox, thisChars, totalChars); 
 
 countTextBox.keyup(function (e) {
     var $this = $(this);
     var thisChars = $this.val().replace(/{.*}/g, '').length;
 
     if (thisChars > totalChars) {
-
         $this.val($this.val().slice(0, totalChars));
         $("#charCount").addClass('limit-reached');
-
     } else {
-
         charLeft($this, thisChars, totalChars);
-
     }
 });
 
 function charLeft($this, thisChars, totalChars) {
-    charsCountEl.text(totalChars - thisChars);
-    $("#charCount").removeClass('limit-reached');
+        charsCountEl.text(totalChars - thisChars);
+        $("#charCount").removeClass('limit-reached');
 }
 
 
