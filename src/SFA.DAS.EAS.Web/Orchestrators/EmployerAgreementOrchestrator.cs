@@ -104,8 +104,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new EmployerAgreementListViewModel
                     {
                         HashedAccountId = hashedId,
-                        EmployerAgreements = response.EmployerAgreements,
-                        ShowAgreements = _configuration.ShowAgreements()
+                        EmployerAgreements = response.EmployerAgreements
                     }
                 };
             }

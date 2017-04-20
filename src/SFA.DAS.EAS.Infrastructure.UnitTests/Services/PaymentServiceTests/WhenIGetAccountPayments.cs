@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,11 +7,8 @@ using Castle.Components.DictionaryAdapter;
 using Moq;
 using NLog;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
@@ -274,6 +270,32 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 
             //Assert
             _logger.Verify(x => x.Warn(It.IsAny<Exception>(), "Could not get frameworks from apprenticeship API."), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenShouldGetPaymentsFromAllPages()
+        {
+            //Arrange
+            const int numberOfPages = 3;
+
+            _paymentsApiClient.Setup(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .ReturnsAsync(new PageOfResults<Payment>
+                {
+                    Items = new[]{ new Payment(), new Payment() },
+                    TotalNumberOfPages = numberOfPages
+                });
+
+            //Act
+            var result = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            //Assert
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()), Times.Exactly(numberOfPages));
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),1), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(),2), Times.Once);
+            _paymentsApiClient.Verify(x => x.GetPayments(It.IsAny<string>(), It.IsAny<string>(), 3), Times.Once);
+
+            Assert.AreEqual(2 * numberOfPages, result.Count);
+
         }
 
         private void SetupTestModels()

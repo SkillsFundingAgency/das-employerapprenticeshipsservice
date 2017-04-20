@@ -16,7 +16,7 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@paymentType details</h1>
-        <p class="lede">@paymentType made on @Model.Data.SubTransactions.First().TransactionDate.ToGdsFormatFull().</p>
+        <p class="lede">@paymentType made on @Model.Data.TransactionDate.ToGdsFormatFull().</p>
         <p>Levy declared to HMRC might include negative adjustments from previous months. </p>
     </div>
 </div>

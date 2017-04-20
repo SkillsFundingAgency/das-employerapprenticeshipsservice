@@ -112,14 +112,21 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
             try
             {
-                var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString());
+                var totalPages = 1;
 
-                if (payments == null)
+                for (var index = 0; index < totalPages; index++)
                 {
-                    return paymentDetails;
-                }
+                    var payments = await _paymentsEventsApiClient.GetPayments(periodEnd, employerAccountId.ToString(), index + 1);
 
-                paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToList();
+                    if (payments == null)
+                    {
+                        return paymentDetails;
+                    }
+                    
+                    paymentDetails.AddRange(payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)));
+
+                    totalPages = payments.TotalNumberOfPages;
+                }
             }
             catch (WebException ex)
             {

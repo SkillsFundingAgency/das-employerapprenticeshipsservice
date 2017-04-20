@@ -13,7 +13,6 @@
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
-      <Setting name="ShowAgreements" value="true" />
       <Setting name="ShowPayeHistory" value="true" />
     </ConfigurationSettings>
     <Certificates>

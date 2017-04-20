@@ -9,6 +9,5 @@ namespace SFA.DAS.EAS.Web.ViewModels
         public IEnumerable<DasEnglishFraction> Fractions { get; set; }
         public string EmpRef { get; set; }
         public DateTime EmpRefAdded { get; set; }
-        public bool ShowHistory { get; set; }
     }
 }
