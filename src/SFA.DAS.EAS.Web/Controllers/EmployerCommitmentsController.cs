@@ -748,14 +748,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
         }
 
-        private void AddErrorsToModelState(InvalidRequestException ex)
-        {
-            foreach (var error in ex.ErrorMessages)
-            {
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
         private void AddErrorsToModelState(Dictionary<string, string> dict)
         {
             foreach (var error in dict)
@@ -843,6 +835,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
         {
             return await _employerCommitmentsOrchestrator.AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+        }
+
+        private void SetErrorMessage(OrchestratorResponse orchestratorResponse, Dictionary<string, string> errorDictionary)
+        {
+            orchestratorResponse.FlashMessage = new FlashMessageViewModel
+            {
+                Headline = "Errors to fix",
+                Message = "Check the following details:",
+                ErrorMessages = errorDictionary,
+                Severity = FlashMessageSeverityLevel.Error
+            };
         }
     }
 }
