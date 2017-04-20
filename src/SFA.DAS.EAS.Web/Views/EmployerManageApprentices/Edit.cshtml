@@ -1,8 +1,8 @@
 ﻿@model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.ExtendedApprenticeshipViewModel>
 
 @{
-    ViewBag.Title = "Apprentice detail";
-    ViewBag.PageId = "apprentices-detail";
+    ViewBag.Title = "Edit Apprentice detail";
+    ViewBag.PageId = "edit-apprentices-detail";
 }
 
 @section pageSpecificJS {
@@ -12,14 +12,21 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <form method="POST" action="@Url.Action("ConfirmChanges")" novalidate="novalidate">
-            
             @Html.AntiForgeryToken()
+
             <div class="form-group">
                 <h1 class="heading-xlarge">Edit apprentice</h1>
                 <fieldset>
                     <legend class="visuallyhidden">Edit apprentice</legend>
 
-                    @Html.Partial("EditApprenticeship", Model.Data)
+                    @if (Model.Data.Apprenticeship.HasStarted)
+                    {
+                        @Html.Partial("EditStartedApprenticeship", Model.Data)
+                    }
+                    else
+                    {
+                        @Html.Partial("EditApprenticeship", Model.Data)
+                    }
                 </fieldset>
             </div>
 
@@ -27,6 +34,7 @@
             @Html.Hidden("hashedApprenticeshipId", Model.Data.Apprenticeship.HashedApprenticeshipId)
             @Html.Hidden("hashedCommitmentId", Model.Data.Apprenticeship.HashedCommitmentId)
             @Html.Hidden("uln", Model.Data.Apprenticeship.ULN)
+            @Html.Hidden("HasStarted", Model.Data.Apprenticeship.HasStarted)
             <button type="submit" class="button" aria-label="Add">Update details</button>
             <a class="button text-link" href="@Url.Action("Details", new { hashedAccountId = Model.Data.Apprenticeship.HashedAccountId, hashedCommitmentId = Model.Data.Apprenticeship.HashedCommitmentId })" aria-label="Cancel">
                 Cancel and return
@@ -40,6 +48,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.Apprenticeship.HashedAccountId, Model.Data.Apprenticeship.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back</a>
+        <a href="@Url.Action("Details", "EmployerManageApprentices", new { Model.Data.Apprenticeship.HashedAccountId, Model.Data.Apprenticeship.HashedApprenticeshipId} )" aria-label="Back to apprentice details" class="back-link">Back to apprentice details</a>
     </div>
 }

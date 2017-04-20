@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
 using MediatR;
 using NLog;
+using FluentValidation;
+
 using SFA.DAS.EAS.Application.Queries.GetAllApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
@@ -10,8 +14,6 @@ using SFA.DAS.EAS.Web.Orchestrators.Mappers;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
-using System.Collections.Generic;
-using FluentValidation;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
@@ -22,6 +24,7 @@ using SFA.DAS.EAS.Application.Queries.GetApprenticeshipUpdate;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
 
@@ -35,22 +38,41 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         private readonly ILogger _logger;
         private readonly ICurrentDateTime _currentDateTime;
 
+        private readonly ApprovedApprenticeshipViewModelValidator _apprenticeshipValidator;
+
         private readonly ICookieStorageService<UpdateApprenticeshipViewModel>
             _apprenticshipsViewModelCookieStorageService;
 
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-apprentices";
 
-        public EmployerManageApprenticeshipsOrchestrator(IMediator mediator, IHashingService hashingService,
-            IApprenticeshipMapper apprenticeshipMapper, ICurrentDateTime currentDateTime, ILogger logger,
-            ICookieStorageService<UpdateApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService)
-            : base(mediator, hashingService, logger)
+        public EmployerManageApprenticeshipsOrchestrator(
+            IMediator mediator, 
+            IHashingService hashingService,
+            IApprenticeshipMapper apprenticeshipMapper,
+            ApprovedApprenticeshipViewModelValidator apprenticeshipValidator,
+            ICurrentDateTime currentDateTime,
+            ILogger logger,
+            ICookieStorageService<UpdateApprenticeshipViewModel> apprenticshipsViewModelCookieStorageService) : base(mediator, hashingService, logger)
         {
+            if (mediator == null)
+                throw new ArgumentNullException(nameof(mediator));
+            if (hashingService == null)
+                throw new ArgumentNullException(nameof(hashingService));
+            if (apprenticeshipMapper == null)
+                throw new ArgumentNullException(nameof(apprenticeshipMapper));
+            if (currentDateTime == null)
+                throw new ArgumentNullException(nameof(currentDateTime));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+            if (apprenticeshipValidator == null)
+                throw new ArgumentNullException(nameof(apprenticeshipValidator));
             
             _mediator = mediator;
             _hashingService = hashingService;
             _apprenticeshipMapper = apprenticeshipMapper;
             _currentDateTime = currentDateTime;
             _logger = logger;
+            _apprenticeshipValidator = apprenticeshipValidator;
             _apprenticshipsViewModelCookieStorageService = apprenticshipsViewModelCookieStorageService;
         }
 
@@ -244,7 +266,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Apprenticeship = new List<Apprenticeship> {await _apprenticeshipMapper.MapFrom(apprenticeship)}
                 });
 
-            return _apprenticeshipMapper.MapOverlappingErrors(overlappingErrors);
+            var result = _apprenticeshipMapper
+                .MapOverlappingErrors(overlappingErrors)
+                .ToDictionary(overlap => overlap.Key, overlap => overlap.Value);
+
+            foreach (var error in _apprenticeshipValidator.ValidateToDictionary(apprenticeship))
+            {
+                result.Add(error.Key, error.Value);
+            }
+
+            return result;
         }
 
         public async Task<OrchestratorResponse<ChangeStatusChoiceViewModel>> GetChangeStatusChoiceNavigation(string hashedAccountId, string hashedApprenticeshipId, string externalUserId)
@@ -534,11 +565,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
         {
-            var isStartDateInFuture = apprenticeship.StartDate.HasValue && apprenticeship.StartDate.Value >
-                                      new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            var editable = isStartDateInFuture
-                           && apprenticeship.PaymentStatus == PaymentStatus.Active;
+            var editable = apprenticeship.PaymentStatus == PaymentStatus.Active;
 
             if (!editable)
             {

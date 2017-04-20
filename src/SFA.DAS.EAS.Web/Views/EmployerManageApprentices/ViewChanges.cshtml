@@ -18,9 +18,15 @@
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
 
             <h2 class="heading-medium">Do you want to undo these changes?</h2>
-            <div class="form-group">
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
                 <fieldset>
                     <legend class="visually-hidden">Do you want to undo these changes?</legend>
+                    
+                    <div id="ChangesConfirmed"></div>
+                    @if (!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError))
+                    {
+                        <span class="error-message" id="error-message-ChangesConfirmed">@Model.Data.ChangesConfirmedError</span>
+                    }
 
                     <label class="block-label selection-button-radio" for="changes-undo-true">
                         @Html.RadioButton("UndoChanges", true, new { id = "changes-undo-true" })
