@@ -7,6 +7,9 @@
         TopUp = 2,
         Payment = 3,
         SFACoInvestment = 4,
-        EmployerCoInvestment = 5
+        EmployerCoInvestment = 5,
+        //This type is used to group SFA and Employer transactions together
+        CoInvestment = 6,
+
     }
 }
