@@ -436,6 +436,7 @@
     <Compile Include="Orchestrators\Mappers\ICommitmentMapper.cs" />
     <Compile Include="Plumbing\Mvc\TrimStringModelBinder.cs" />
     <Compile Include="Validators\ApprenticeshipCoreValidator.cs" />
+    <Compile Include="Validators\ApprovedApprenticeshipViewModelValidator.cs" />
     <Compile Include="Validators\DeleteCohortConfirmationViewModelValidator.cs" />
     <Compile Include="Validators\Messages\IApprenticeshipValidationErrorText.cs" />
     <Compile Include="Validators\Messages\ValidationMessage.cs" />
@@ -543,6 +544,7 @@
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
+    <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
     <Compile Include="WebRole.cs" />
     <Compile Include="Validators\ApprenticeshipViewModelValidator.cs" />

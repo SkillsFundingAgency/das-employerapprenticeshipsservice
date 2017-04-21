@@ -164,26 +164,35 @@ $(".clickable").on('click touchstart', (function () {
     return false;
 }));
 
+
 // character limitation script
 $('#charCount').show(); // javascript enabled version only
 $('#charCount-noJS').hide(); // javascript disabled version only
 
-var totalChars = 20; //Total characters allowed in textarea
-var countTextBox = $('#EmployerRef'); // Textarea input box
-var charsCountEl = $('#countchars'); // Remaining characters
-charsCountEl.text(totalChars); //initial value of countchars element
+// variables
+var totalChars = 20, countTextBox = $('#EmployerRef'), charsCountEl = $('#countchars');
+charsCountEl.text(totalChars);
+var thisChars = countTextBox.val().replace(/{.*}/g, '').length;
 
-countTextBox.keyup(function () { //user releases a key on the keyboard
-    var thisChars = this.value.replace(/{.*}/g, '').length; //get chars count in textarea
-    if (thisChars > totalChars) //if we have more chars than it should be
-    {
-        var CharsToDel = (thisChars - totalChars); // total extra chars to delete
-        this.value = this.value.substring(0, this.value.length - CharsToDel); //remove excess chars from textarea
+// function to trigger on page load
+charLeft(countTextBox, thisChars, totalChars); 
+
+countTextBox.keyup(function (e) {
+    var $this = $(this);
+    var thisChars = $this.val().replace(/{.*}/g, '').length;
+
+    if (thisChars > totalChars) {
+        $this.val($this.val().slice(0, totalChars));
         $("#charCount").addClass('limit-reached');
-    }
-    else {
-        charsCountEl.text(totalChars - thisChars); //count remaining chars
-        $("#charCount").removeClass('limit-reached');
+    } else {
+        charLeft($this, thisChars, totalChars);
     }
 });
+
+function charLeft($this, thisChars, totalChars) {
+        charsCountEl.text(totalChars - thisChars);
+        $("#charCount").removeClass('limit-reached');
+}
+
+
 

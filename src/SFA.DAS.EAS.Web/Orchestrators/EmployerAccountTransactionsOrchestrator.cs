@@ -49,7 +49,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 Data = new TransactionLineViewModel<LevyDeclarationTransactionLine>
                 {
                     Amount = data.Total,
-                    SubTransactions = data.Transactions
+                    SubTransactions = data.Transactions,
+                    TransactionDate = data.Transactions.FirstOrDefault().DateCreated 
                 }
             };
         }

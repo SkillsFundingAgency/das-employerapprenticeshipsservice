@@ -19,9 +19,16 @@
             @Html.Partial("ApprenticeshipUpdate", Model.Data)
 
             <h2 class="heading-medium">Are you happy to approve these changes?</h2>
-            <div class="form-group">
+            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError) ? "error" : "")">
                 <fieldset>
                     <legend class="visually-hidden">Are you happy to approve these changes?</legend>
+                    
+                    <div id="ChangesConfirmed"></div>
+                    @if (!string.IsNullOrEmpty(Model.Data.ChangesConfirmedError))
+                    {
+                        <span class="error-message" id="error-message-ChangesConfirmed">@Model.Data.ChangesConfirmedError</span>
+                    }
+
                     <label class="block-label selection-button-radio" for="changes-approve-true">
                         @Html.RadioButton("ApproveChanges", true, new { id = "changes-approve-true" })
                         Yes, approve these changes

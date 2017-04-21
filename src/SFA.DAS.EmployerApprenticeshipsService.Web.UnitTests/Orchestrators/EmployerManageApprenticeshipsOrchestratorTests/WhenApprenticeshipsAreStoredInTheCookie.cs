@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.Orchestrators.Mappers;
+using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsOrchestratorTests
@@ -33,7 +34,14 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerManageApprenticeshipsO
             _logger = new Mock<ILogger>();
             _cookieStorageService = new Mock<ICookieStorageService<UpdateApprenticeshipViewModel>>();
 
-            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(_mediator.Object, _hashingService.Object, _apprenticeshipMapper.Object,new CurrentDateTime(),  _logger.Object, _cookieStorageService.Object);
+            _orchestrator = new EmployerManageApprenticeshipsOrchestrator(
+                _mediator.Object, 
+                _hashingService.Object, 
+                _apprenticeshipMapper.Object,
+                new ApprovedApprenticeshipViewModelValidator(),
+                new CurrentDateTime(),
+                _logger.Object,
+                _cookieStorageService.Object);
         }
 
        

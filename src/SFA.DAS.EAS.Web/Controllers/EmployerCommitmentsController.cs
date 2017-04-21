@@ -402,19 +402,29 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/apprenticeships/create")]
         public async Task<ActionResult> CreateApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
+            if (!ModelState.IsValid)
+            {
+                apprenticeship.AddErrorsFromModelState(ModelState);
+            }
+
+            var validatorResult = await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship);
+            if (validatorResult.Any())
+            {
+                apprenticeship.AddErrorsFromDictionary(validatorResult);
+            }
+
+            if (apprenticeship.ErrorDictionary.Any())
+            {
+                return await RedisplayCreateApprenticeshipView(apprenticeship);
+            }
+
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayCreateApprenticeshipView(apprenticeship);
-                }
-
                 await _employerCommitmentsOrchestrator.CreateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
             {
-                AddErrorsToModelState(ex);
-
+                apprenticeship.AddErrorsFromDictionary(ex.ErrorMessages);
                 return await RedisplayCreateApprenticeshipView(apprenticeship);
             }
 
@@ -439,20 +449,29 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedCommitmentId}/apprenticeships/{HashedApprenticeshipId}/edit")]
         public async Task<ActionResult> EditApprenticeship(ApprenticeshipViewModel apprenticeship)
         {
+            if (!ModelState.IsValid)
+            {
+                apprenticeship.AddErrorsFromModelState(ModelState);
+            }
+
+            var validatorResult = await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship);
+            if (validatorResult.Any())
+            {
+                apprenticeship.AddErrorsFromDictionary(validatorResult);
+            }
+
+            if (apprenticeship.ErrorDictionary.Any())
+            {
+                return await RedisplayEditApprenticeshipView(apprenticeship);
+            }
+
             try
             {
-                AddErrorsToModelState(await _employerCommitmentsOrchestrator.ValidateApprenticeship(apprenticeship));
-                if (!ModelState.IsValid)
-                {
-                    return await RedisplayEditApprenticeshipView(apprenticeship);
-                }
-
                 await _employerCommitmentsOrchestrator.UpdateApprenticeship(apprenticeship, OwinWrapper.GetClaimValue(@"sub"));
             }
             catch (InvalidRequestException ex)
             {
-                AddErrorsToModelState(ex);
-
+                apprenticeship.AddErrorsFromDictionary(ex.ErrorMessages);
                 return await RedisplayEditApprenticeshipView(apprenticeship);
             }
 
@@ -729,14 +748,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             }
         }
 
-        private void AddErrorsToModelState(InvalidRequestException ex)
-        {
-            foreach (var error in ex.ErrorMessages)
-            {
-                ModelState.AddModelError(error.Key, error.Value);
-            }
-        }
-
         private void AddErrorsToModelState(Dictionary<string, string> dict)
         {
             foreach (var error in dict)
@@ -750,6 +761,17 @@ namespace SFA.DAS.EAS.Web.Controllers
             var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
             response.Data.Apprenticeship = apprenticeship;
 
+            if (response.Data.Apprenticeship.ErrorDictionary.Any())
+            {
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = apprenticeship.ErrorDictionary,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+            }
+
             return View("CreateApprenticeshipEntry", response);
         }
 
@@ -757,6 +779,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var response = await _employerCommitmentsOrchestrator.GetSkeletonApprenticeshipDetails(apprenticeship.HashedAccountId, OwinWrapper.GetClaimValue(@"sub"), apprenticeship.HashedCommitmentId);
             response.Data.Apprenticeship = apprenticeship;
+
+            if (response.Data.Apprenticeship.ErrorDictionary.Any())
+            {
+                response.FlashMessage = new FlashMessageViewModel
+                {
+                    Headline = "Errors to fix",
+                    Message = "Check the following details:",
+                    ErrorMessages = apprenticeship.ErrorDictionary,
+                    Severity = FlashMessageSeverityLevel.Error
+                };
+            }
 
             return View("EditApprenticeshipEntry", response);
         }
@@ -802,6 +835,17 @@ namespace SFA.DAS.EAS.Web.Controllers
         private async Task<bool> IsUserRoleAuthorized(string hashedAccountId, params Role[] roles)
         {
             return await _employerCommitmentsOrchestrator.AuthorizeRole(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"), roles);
+        }
+
+        private void SetErrorMessage(OrchestratorResponse orchestratorResponse, Dictionary<string, string> errorDictionary)
+        {
+            orchestratorResponse.FlashMessage = new FlashMessageViewModel
+            {
+                Headline = "Errors to fix",
+                Message = "Check the following details:",
+                ErrorMessages = errorDictionary,
+                Severity = FlashMessageSeverityLevel.Error
+            };
         }
     }
 }

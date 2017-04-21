@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.PAYE;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -29,6 +30,36 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     commandType: CommandType.StoredProcedure);
             });
             return result.SingleOrDefault();
+        }
+
+        public async Task<Paye> GetPayeSchemeByRef(string payeRef)
+        {
+            var result = await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Ref", payeRef, DbType.String);
+
+                return await c.QueryAsync<Paye>(
+                    sql: "[employer_account].[GetPaye_ByRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
+            return result.SingleOrDefault();
+        }
+
+        public async Task UpdatePayeSchemeName(string payeRef, string refName)
+        {
+            await WithConnection(async c =>
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Ref", payeRef, DbType.String);
+                parameters.Add("@RefName", refName, DbType.String);
+
+                return await c.ExecuteAsync(
+                    sql: "[employer_account].[UpdatePayeName_ByRef]",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure);
+            });
         }
     }
 }

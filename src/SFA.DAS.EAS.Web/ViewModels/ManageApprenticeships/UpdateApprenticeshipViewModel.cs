@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Web.Validators;
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
     [Validator(typeof(UpdateApprenticeshipViewModelValidator))]
-    public class UpdateApprenticeshipViewModel
+    public class UpdateApprenticeshipViewModel : ViewModelBase
     {
         public string HashedApprenticeshipId { get; set; }
         public string FirstName { get; set; }
@@ -37,5 +37,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string CurrentTableHeadingText { get; set; }
 
         public string ProviderName { get; set; }
+
+        public string ChangesConfirmedError => GetErrorMessage(nameof(ChangesConfirmed));
     }
 }
