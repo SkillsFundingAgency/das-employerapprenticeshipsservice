@@ -11,13 +11,13 @@ from
 	SELECT 
 	   [AccountId]
       ,Max([TransactionDate]) as TransactionDate
-      ,MAX([TransactionType]) as TransactionType
+      ,TransactionType
       ,Sum(Amount) as Amount
 	  ,UkPrn
 	  ,DateCreated
   FROM [employer_financial].[TransactionLine]
   WHERE AccountId = @accountId
-  GROUP BY DateCreated ,AccountId, UKPRN
+  GROUP BY DateCreated ,AccountId, UKPRN, TransactionType
   
 ) as main
 order by TransactionDate desc
