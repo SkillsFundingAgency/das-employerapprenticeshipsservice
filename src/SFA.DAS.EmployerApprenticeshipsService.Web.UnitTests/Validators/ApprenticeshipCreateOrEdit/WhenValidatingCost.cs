@@ -99,5 +99,15 @@ namespace SFA.DAS.EAS.Web.UnitTests.Validators.ApprenticeshipCreateOrEdit
 
             result.IsValid.Should().BeFalse();
         }
+
+        [Test]
+        public void VeryLargeNumberShouldNotCauseOverflow()
+        {
+            ValidModel.Cost = "999999999999999999999999999999";
+
+            var result = Validator.Validate(ValidModel);
+
+            result.IsValid.Should().BeFalse();
+        }
     }
 }
