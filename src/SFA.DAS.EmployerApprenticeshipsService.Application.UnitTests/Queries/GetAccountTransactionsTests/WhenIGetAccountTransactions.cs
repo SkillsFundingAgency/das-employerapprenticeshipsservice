@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
@@ -50,7 +45,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _repository.Setup(x => x.GetTransactions(ExpectedAccountId)).ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
+            _repository.Setup(x => x.GetTransactions(ExpectedAccountId))
+                       .ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
 
             //Act
             var actual = await RequestHandler.Handle(Query);
