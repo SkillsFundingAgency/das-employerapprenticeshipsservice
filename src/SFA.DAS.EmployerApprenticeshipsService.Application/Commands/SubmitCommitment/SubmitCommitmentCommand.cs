@@ -13,8 +13,6 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         public string Message { get; set; }
 
-        public bool CreateTask { get; set; }
-
         public LastAction LastAction { get; set; }
         public string UserDisplayName { get; set; }
         public string UserEmailAddress { get; set; }

@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
             };
         }
 
-        public CommitmentViewModel MapToCommitmentViewModel(Commitment commitment)
+        public CommitmentViewModel MapToCommitmentViewModel(CommitmentView commitment)
         {
             return new CommitmentViewModel
             {

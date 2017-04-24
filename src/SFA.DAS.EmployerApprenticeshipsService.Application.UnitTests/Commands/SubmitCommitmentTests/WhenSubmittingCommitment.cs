@@ -10,7 +10,6 @@ using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Application.Commands.SubmitCommitment;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.Tasks.Api.Client;
 using FluentAssertions;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -24,17 +23,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
     {
         private SubmitCommitmentCommandHandler _handler;
         private Mock<IEmployerCommitmentApi> _mockCommitmentApi;
-        private Mock<ITasksApi> _mockTasksApi;
         private SubmitCommitmentCommand _validCommand;
         private Mock<IMediator> _mockMediator;
         private Mock<IProviderEmailLookupService> _mockEmailLookup;
-        private Commitment _repositoryCommitment;
+        private CommitmentView _repositoryCommitment;
 
         [SetUp]
         public void Setup()
         {
             _validCommand = new SubmitCommitmentCommand { EmployerAccountId = 12L, CommitmentId = 2L, UserDisplayName = "Test User", UserEmailAddress = "test@test.com", UserId = "externalUserId"};
-            _repositoryCommitment = new Commitment
+            _repositoryCommitment = new CommitmentView
             {
                 ProviderId = 456L,
                 EmployerAccountId = 12L,
@@ -45,7 +43,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>()))
                 .ReturnsAsync(_repositoryCommitment);
 
-            _mockTasksApi = new Mock<ITasksApi>();
             _mockMediator = new Mock<IMediator>();
             var config = new EmployerApprenticeshipsServiceConfiguration
                              {
@@ -54,7 +51,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _mockEmailLookup = new Mock<IProviderEmailLookupService>();
             _mockEmailLookup.Setup(m => m.GetEmailsAsync(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new List<string>());
 
-            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockTasksApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILogger>());
+            _handler = new SubmitCommitmentCommandHandler(_mockCommitmentApi.Object, _mockMediator.Object, config, _mockEmailLookup.Object, Mock.Of<ILogger>());
         }
 
         [Test]
@@ -180,24 +177,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.SubmitCommitmentTests
             _validCommand.EmployerAccountId = 2;
 
             Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(_validCommand));
-        }
-
-        [Test]
-        public async Task ShouldNotCallTasksApi()
-        {
-            _validCommand.CreateTask = false;
-            await _handler.Handle(_validCommand);
-
-            _mockTasksApi.Verify(m => m.CreateTask("", It.IsAny<Tasks.Api.Types.Task>()), Times.Never);
-        }
-
-        [Test]
-        public async Task ShouldCallTasksApi()
-        {
-            _validCommand.CreateTask = true;
-            await _handler.Handle(_validCommand);
-
-            _mockTasksApi.Verify(m => m.CreateTask(It.IsAny<string>(), It.IsAny<Tasks.Api.Types.Task>()), Times.Once);
         }
     }
 }

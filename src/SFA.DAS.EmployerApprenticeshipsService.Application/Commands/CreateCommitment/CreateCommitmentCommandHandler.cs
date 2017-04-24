@@ -13,17 +13,13 @@ using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Tasks.Api.Client;
-using SFA.DAS.Tasks.Api.Types.Templates;
-
 namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 {
     public sealed class CreateCommitmentCommandHandler :
         IAsyncRequestHandler<CreateCommitmentCommand, CreateCommitmentCommandResponse>
     {
         private readonly IEmployerCommitmentApi _commitmentApi;
-        private readonly ITasksApi _tasksApi;
-
+        
         private readonly IMediator _mediator;
 
         private readonly ILogger _logger;
@@ -36,7 +32,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
 
         public CreateCommitmentCommandHandler(
             IEmployerCommitmentApi commitmentApi, 
-            ITasksApi tasksApi,
             IMediator mediator,
             ILogger logger,
             EmployerApprenticeshipsServiceConfiguration configuration,
@@ -45,13 +40,10 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         {
             if (commitmentApi == null)
                 throw new ArgumentNullException(nameof(commitmentApi));
-            if (tasksApi == null)
-                throw new ArgumentNullException(nameof(tasksApi));
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
 
             _commitmentApi = commitmentApi;
-            _tasksApi = tasksApi;
             _mediator = mediator;
             _logger = logger;
             _configuration = configuration;
@@ -62,20 +54,19 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
         public async Task<CreateCommitmentCommandResponse> Handle(CreateCommitmentCommand request)
         {
             // TODO: This needs to return just the Id
-            var commitmentRequest = new CommitmentRequest { Commitment = request.Commitment, UserId = request.UserId };
+            var commitmentRequest = new CommitmentRequest { Commitment = request.Commitment, UserId = request.UserId, Message = request.Message };
             var commitmentId = (await _commitmentApi.CreateEmployerCommitment(request.Commitment.EmployerAccountId, commitmentRequest)).Id;
             var commitment = await _commitmentApi.GetEmployerCommitment(request.Commitment.EmployerAccountId, commitmentId);
 
             if (request.Commitment.CommitmentStatus == CommitmentStatus.Active)
             {
-                await CreateTask(request, commitment.Id);
                 await SendNotification(commitment);
             }
 
             return new CreateCommitmentCommandResponse { CommitmentId = commitment.Id };
         }
 
-        private async Task SendNotification(Commitment commitment)
+        private async Task SendNotification(CommitmentView commitment)
         {
             var hashedCommitmentId = _hashingService.HashValue(commitment.Id);
             var emails = await
@@ -94,7 +85,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
             }
         }
 
-        private SendNotificationCommand BuildNotificationCommand(string emailAddress, Commitment commitment)
+        private SendNotificationCommand BuildNotificationCommand(string emailAddress, CommitmentView commitment)
         {
             return new SendNotificationCommand
             {
@@ -112,26 +103,6 @@ namespace SFA.DAS.EAS.Application.Commands.CreateCommitment
                     }
                 }
             };
-        }
-
-        private async Task CreateTask(CreateCommitmentCommand request, long commitmentId)
-        {
-            var taskTemplate = new CreateCommitmentTemplate
-            {
-                CommitmentId = commitmentId,
-                Message = request.Message,
-                Source = $"EMPLOYER-{request.Commitment.EmployerAccountId}"
-            };
-
-            var task = new Tasks.Api.Types.Task
-            {
-                Assignee = $"PROVIDER-{request.Commitment.ProviderId}",
-                TaskTemplateId = CreateCommitmentTemplate.TemplateId,
-                Name = "Create Commitment",
-                Body = JsonConvert.SerializeObject(taskTemplate)
-            };
-
-            await this._tasksApi.CreateTask(task.Assignee, task);
         }
     }
 }

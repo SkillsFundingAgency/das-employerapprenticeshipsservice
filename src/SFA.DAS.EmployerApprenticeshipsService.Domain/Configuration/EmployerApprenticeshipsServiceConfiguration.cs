@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string DatabaseConnectionString { get; set; }
 
         public CommitmentsApiClientConfiguration CommitmentsApi { get; set; }
-        public TasksApiClientConfiguration TasksApi { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public EmployerApprenticeshipApiConfiguration EmployerApprenticeshipApi { get; set; }
 

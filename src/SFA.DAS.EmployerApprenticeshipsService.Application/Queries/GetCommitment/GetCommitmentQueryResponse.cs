@@ -4,6 +4,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetCommitment
 {
     public class GetCommitmentQueryResponse
     {
-        public Commitment Commitment { get; set; }
+        public CommitmentView Commitment { get; set; }
     }
 }
