@@ -1,5 +1,8 @@
 table {
     margin-bottom: 20px;
+    td.numeric {
+        font-size:inherit
+    }
 }
 
 td.link-right {
@@ -76,4 +79,110 @@ table.details-list {
         width: 55%;
         font-weight: normal;
     }
+}
+
+
+
+td, th {
+    &.highlight {
+        background: $grey-3;
+    }
+}
+
+// Responsive Tables 
+
+table.responsive {
+    thead {
+        display: none;
+    }
+    tr {
+        border: 1px solid $border-colour;
+        margin-bottom: 10px;
+        display: block;
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+        td {
+            display: block;
+            text-align: right;
+            clear:left;
+            float:left;
+            width: 100%;
+            padding: 10px 10px 8px;
+            box-sizing: border-box;
+            border-bottom: 1px dotted $border-colour;
+            &:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                padding-right: 10px;
+            }
+            &:last-child {
+                border-bottom: none;
+            }
+            &:empty {
+                display: none;
+            }
+        }
+        &.total {
+            border: 2px solid #000;
+        }
+    }
+}
+
+@include media(tablet) {
+    table.responsive {
+        thead {
+            display: table-header-group;
+        }
+        tr {
+            display: table-row;
+            border:none;
+            float: none;
+            margin: 0;
+            th, td {
+                display: table-cell;
+                text-align: left;
+                float: none;
+                clear: none;
+                padding: 0.6em 1em 0.5em;
+                border-bottom-style: solid;
+                width: auto;
+                &:first-child {
+                    padding-left: 0;
+                }
+                &:last-child {
+                    padding-right: 0;
+                }
+                &:before {
+                    display: none;
+                }
+                &.numeric {
+                    text-align: right;
+                }
+                &.colgroup {
+                    text-align: center
+                }
+                &:last-child {
+                    border-bottom: 1px solid $border-colour;
+                } 
+            }
+            &.total {
+                border: none;
+                td {
+                    border-bottom: none;
+                    &.total {
+                        border-bottom: 2px solid #000;
+                    }
+                }
+            }
+        }
+    }
+
+    @for $i from 1 through 14 {
+        table.responsive tr th.tw-#{$i * 5} {
+            width: $i * 5%;
+        }
+    }
+
 }
