@@ -49,8 +49,6 @@ namespace SFA.DAS.EAS.PaymentProvider.Worker.Providers
         {
             if (message?.Content?.AccountId == null)
             {
-                _logger.Warn("Payment message has invalid content and cannot be processed");
-
                 if (message != null)
                 {
                     await message.CompleteAsync();
