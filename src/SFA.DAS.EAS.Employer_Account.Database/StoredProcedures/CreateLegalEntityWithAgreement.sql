@@ -16,9 +16,14 @@ BEGIN
 	DECLARE @lastName NVARCHAR(MAX)
 	DECLARE @signedByName NVARCHAR(100)	
 
-	EXEC [employer_account].[CreateLegalEntity] 
-	@companyNumber,@companyName,@companyAddress,
-	@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
+	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @companyNumber and Source in (1,2);
+
+	IF(@legalEntityId is null)
+	BEGIN
+		EXEC [employer_account].[CreateLegalEntity] 
+		@companyNumber,@companyName,@companyAddress,
+		@companyDateOfIncorporation, @status, @source, @publicSectorDataSource,@sector, @legalEntityId OUTPUT	
+	END
 
 	EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 
