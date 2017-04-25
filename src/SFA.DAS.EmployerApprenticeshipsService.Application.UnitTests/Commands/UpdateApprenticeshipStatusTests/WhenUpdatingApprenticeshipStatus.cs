@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.UpdateApprenticeshipStatusT
             var apprenticeshipFromApi = new Apprenticeship { StartDate = DateTime.UtcNow.AddMonths(-2).Date };
 
             _mockCommitmentApi = new Mock<IEmployerCommitmentApi>();
-            _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new Commitment { ProviderId = 456L });
+            _mockCommitmentApi.Setup(x => x.GetEmployerCommitment(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(new CommitmentView { ProviderId = 456L });
             _mockMediator = new Mock<IMediator>();
 
             var apprenticeshipGetResponse = new GetApprenticeshipQueryResponse { Apprenticeship = apprenticeshipFromApi };

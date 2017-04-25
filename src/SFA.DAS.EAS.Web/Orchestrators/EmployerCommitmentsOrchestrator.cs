@@ -14,18 +14,14 @@ using SFA.DAS.EAS.Application.Queries.GetCommitment;
 using SFA.DAS.EAS.Application.Queries.GetCommitments;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntityAgreement;
 using SFA.DAS.EAS.Application.Queries.GetProvider;
-using SFA.DAS.EAS.Application.Queries.GetTasks;
 using SFA.DAS.EAS.Application.Queries.GetTrainingProgrammes;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Exceptions;
-using SFA.DAS.Tasks.Api.Types.Templates;
 using System.Net;
 
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.Commitments.Api.Types.Apprenticeship.Types;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Commitments.Api.Types.Commitment.Types;
-using SFA.DAS.Commitments.Api.Types.Validation.Types;
 using SFA.DAS.EAS.Application.Queries.GetOverlappingApprenticeships;
 using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
@@ -467,7 +463,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     LastAction = lastAction,
                     UserDisplayName = userDisplayName,
                     UserEmailAddress = userEmail,
-                    CreateTask = saveStatus != SaveStatus.Approve,
                     UserId = externalUserId
                 });
             }, hashedAccountId, externalUserId);
@@ -553,7 +548,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         LastAction = lastAction,
                         UserDisplayName = userDisplayName,
                         UserEmailAddress = userEmail,
-                        CreateTask = model.SaveStatus != SaveStatus.Approve,
                         UserId = externalUserId
                     });
                 }
@@ -574,8 +568,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     CommitmentId = commitmentId
                 });
 
-                var messageTask = GetLatestMessage(data.Commitment.ProviderId, data.Commitment.Id, isEmployerAssignee: false);
-
                 return new OrchestratorResponse<AcknowledgementViewModel>
                 {
                     Data = new AcknowledgementViewModel
@@ -584,7 +576,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         HashedCommitmentId = hashedCommitmentId,
                         ProviderName = data.Commitment.ProviderName,
                         LegalEntityName = data.Commitment.LegalEntityName,
-                        Message = await messageTask
+                        Message = GetLatestMessage(data.Commitment.Messages, false)?.Message
                     }
                 };
             }, hashedAccountId, externalUserId);
@@ -636,14 +628,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 {
                     var commitments = (await GetAll(accountId, RequestStatus.NewRequest)).ToList();
 
-                    var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
-
                     return new OrchestratorResponse<CommitmentListViewModel>
                     {
                         Data = new CommitmentListViewModel
                         {
                             AccountHashId = hashedAccountId,
-                            Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
+                            Commitments = MapFrom(commitments, true),
                             PageTitle = "Waiting to be sent",
                             PageId = "waiting-to-be-sent",
                             PageHeading = "Waiting to be sent",
@@ -663,14 +653,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForApproval)).ToList();
 
-                var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
-
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
+                        Commitments = MapFrom(commitments, true),
                         PageTitle = "Cohorts for approval",
                         PageId = "ready-for-approval",
                         PageHeading = "Cohorts for approval",
@@ -691,14 +679,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 var commitments = (await GetAll(accountId, RequestStatus.ReadyForReview)).ToList();
 
-                var latestMessagesForAllCommitments = await GetLatestCommitmentMessages(accountId, true);
-
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = MapFrom(commitments, latestMessagesForAllCommitments.ToList()),
+                        Commitments = MapFrom(commitments, true),
                         PageTitle = "Cohorts for review",
                         PageId = "ready-for-review",
                         PageHeading = "Cohorts for review",
@@ -726,21 +712,12 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                                   .Concat(sentToProvider)
                                   .ToList();
 
-                var uniqueProviderIds = commitments.Select(x => x.ProviderId).Distinct();
-
-                var employerCommitmentMessages = new List<CreateCommitmentTemplate>();
-
-                foreach (var providerId in uniqueProviderIds)
-                {
-                    employerCommitmentMessages.AddRange(await GetLatestCommitmentMessages(providerId, isEmployerAssignee: false));
-                }
-
                 return new OrchestratorResponse<CommitmentListViewModel>
                 {
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = MapFrom(commitments, employerCommitmentMessages),
+                        Commitments = MapFrom(commitments, true),
                         PageTitle = "With training providers",
                         PageId = "with-the-provider",
                         PageHeading = "With training providers",
@@ -781,8 +758,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 AssertCommitmentStatus(data.Commitment, EditStatus.EmployerOnly);
                 AssertCommitmentStatus(data.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
 
-                var messageTask = GetLatestMessage(data.Commitment.EmployerAccountId, data.Commitment.Id, isEmployerAssignee: true);
-
                 var overlappingApprenticeships = await _mediator.SendAsync(
                    new GetOverlappingApprenticeshipsQueryRequest
                    {
@@ -819,7 +794,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     HasApprenticeships = apprenticships.Count > 0,
                     Apprenticeships = apprenticships,
                     ShowApproveOnlyOption = data.Commitment.AgreementStatus == AgreementStatus.ProviderAgreed,
-                    LatestMessage = await messageTask,
+                    LatestMessage = GetLatestMessage(data.Commitment.Messages, true)?.Message,
                     ApprenticeshipGroups = apprenticeshipGroups,
                     HasOverlappingErrors = apprenticeshipGroups.Any(m => m.ShowOverlapError),
                     FundingCapWarnings = warnings
@@ -991,7 +966,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return Guid.NewGuid().ToString().ToUpper();
         }
 
-        private static ApprovalState GetApprovalState(Commitment commitment)
+        private static ApprovalState GetApprovalState(CommitmentView commitment)
         {
             if (!commitment.Apprenticeships.Any()) return ApprovalState.ApproveAndSend;
 
@@ -1000,35 +975,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
  
             return approvalState;
          }
-
-        private async Task<string> GetLatestMessage(long? id, long commitmentId, bool isEmployerAssignee)
-        {
-            if (id == null) return string.Empty;
-
-            var allTasks = await GetLatestCommitmentMessages(id, isEmployerAssignee);
-
-            var taskForCommitment = allTasks?.SingleOrDefault(x => x.CommitmentId == commitmentId);
-
-            var message = taskForCommitment?.Message ?? string.Empty;
-
-            return message;
-        }
-
-        private async Task<IEnumerable<CreateCommitmentTemplate>> GetLatestCommitmentMessages(long? id, bool isEmployerAssignee)
-        {
-            if (!id.HasValue)
-                return new List<CreateCommitmentTemplate>(0);
-
-            var allTasks = await _mediator.SendAsync(new GetTasksQueryRequest { Id = id.Value, IsAssigneeEmployer = isEmployerAssignee });
-
-            var allMessages = allTasks?.Tasks
-                .Select(x => new { TaskItem = JsonConvert.DeserializeObject<CreateCommitmentTemplate>(x.Body), CreateDate = x.CreatedOn })
-                .OrderByDescending(x => x.CreateDate)
-                .GroupBy(x => x.TaskItem.CommitmentId)
-                .Select(g => g.First().TaskItem);
-
-            return allMessages;
-        }
 
         private async Task<GetAccountLegalEntitiesResponse> GetActiveLegalEntities(string hashedAccountId, string externalUserId)
         {
@@ -1039,7 +985,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             });
         }
 
-        private CommitmentViewModel MapFrom(Commitment commitment)
+        private CommitmentViewModel MapFrom(CommitmentView commitment)
         {
             return new CommitmentViewModel
             {
@@ -1050,11 +996,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private IEnumerable<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments, IList<CreateCommitmentTemplate> allLastestMessages)
+        private IEnumerable<CommitmentListItemViewModel> MapFrom(List<CommitmentListItem> commitments, bool showEmployer)
         {
-            var commitmentsList = commitments.Select(m => MapFrom(m, allLastestMessages.SingleOrDefault(x => x.CommitmentId == m.Id)?.Message));
+            var commitmentsList = commitments.Select(m => MapFrom(m, GetLatestMessage(m.Messages, showEmployer)?.Message));
 
             return commitmentsList;
+        }
+
+        private MessageView GetLatestMessage(IEnumerable<MessageView> messages, bool showEmployer)
+        {
+            return messages.Where(x => x.CreatedBy == (showEmployer ? MessageCreator.Provider : MessageCreator.Employer)).OrderByDescending(x => x.CreatedDateTime).FirstOrDefault();
         }
 
         private CommitmentListItemViewModel MapFrom(CommitmentListItem commitment, string latestMessage)
@@ -1089,11 +1040,6 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             };
         }
 
-        private async Task<ITrainingProgramme> GetTrainingProgramme(string trainingCode)
-        {
-            return (await GetTrainingProgrammes()).Where(x => x.Id == trainingCode).Single();
-        }
-
         private async Task<List<ITrainingProgramme>> GetTrainingProgrammes()
         {
             var programmes = await _mediator.SendAsync(new GetTrainingProgrammesQueryRequest());
@@ -1102,7 +1048,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         private static void AssertCommitmentStatus(
-            Commitment commitment,
+            CommitmentView commitment,
             params AgreementStatus[] allowedAgreementStatuses)
         {
             if (commitment == null)
@@ -1123,7 +1069,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             AssertCommitmentStatus(commitmentData.Commitment, AgreementStatus.EmployerAgreed, AgreementStatus.ProviderAgreed, AgreementStatus.NotAgreed);
         }
 
-        private static void AssertCommitmentStatus(Commitment commitment, params EditStatus[] allowedEditStatuses)
+        private static void AssertCommitmentStatus(CommitmentView commitment, params EditStatus[] allowedEditStatuses)
         {
             if (commitment == null)
                 throw new InvalidStateException("Null commitment");

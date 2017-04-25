@@ -81,12 +81,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.43.0.27771, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.43.0.27771\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.44.0.28906, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.44.0.28906\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.43.0.27771, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.43.0.27771\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.44.0.28906, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.44.0.28906\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
@@ -123,14 +123,6 @@
     </Reference>
     <Reference Include="SFA.DAS.Providers.Api.Client, Version=0.10.29.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Providers.Api.Client.0.10.29-prerelease\lib\net45\SFA.DAS.Providers.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Client, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SFA.DAS.Tasks.Api.Types, Version=1.6.0.12635, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.6.0.12635\lib\net45\SFA.DAS.Tasks.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
@@ -481,12 +473,6 @@
     <Compile Include="Queries\GetStandards\GetStandardsQueryHandler.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryRequest.cs" />
     <Compile Include="Queries\GetStandards\GetStandardsQueryResponse.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryHandler.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryRequest.cs" />
-    <Compile Include="Queries\GetTasks\GetTasksQueryResponse.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryHandler.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryRequest.cs" />
-    <Compile Include="Queries\GetTask\GetTaskQueryResponse.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequest.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
@@ -519,7 +505,6 @@
     <Compile Include="Queries\ValidateStatusChangeDate\ValidateStatusChangeDateQueryHandler.cs" />
     <Compile Include="Queries\ValidateStatusChangeDate\ValidateStatusChangeDateQueryResponse.cs" />
     <Compile Include="Queries\ValidateStatusChangeDate\ValidateStatusChangeDateQueryValidator.cs" />
-    <Compile Include="TaskFactory.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\ValidationResult.cs" />
   </ItemGroup>

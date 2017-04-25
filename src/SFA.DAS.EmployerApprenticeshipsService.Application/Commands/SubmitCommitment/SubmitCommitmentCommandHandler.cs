@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
 using MediatR;
-using Newtonsoft.Json;
-
 using NLog;
 
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -13,8 +11,6 @@ using SFA.DAS.EAS.Application.Commands.SendNotification;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.Tasks.Api.Client;
-using SFA.DAS.Tasks.Api.Types.Templates;
 using Task = System.Threading.Tasks.Task;
 
 namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
@@ -22,8 +18,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
     public sealed class SubmitCommitmentCommandHandler : AsyncRequestHandler<SubmitCommitmentCommand>
     {
         private readonly IEmployerCommitmentApi _commitmentApi;
-        private readonly ITasksApi _tasksApi;
-
+        
         private readonly IMediator _mediator;
 
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
@@ -36,14 +31,12 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
 
         public SubmitCommitmentCommandHandler(
             IEmployerCommitmentApi commitmentApi, 
-            ITasksApi tasksApi,
             IMediator mediator,
             EmployerApprenticeshipsServiceConfiguration configuration,
             IProviderEmailLookupService providerEmailLookupService,
             ILogger logger)
         {
             _commitmentApi = commitmentApi;
-            _tasksApi = tasksApi;
             _mediator = mediator;
             _configuration = configuration;
             _providerEmailLookupService = providerEmailLookupService;
@@ -68,13 +61,11 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             {
                 Action = message.LastAction,
                 LastUpdatedByInfo = new LastUpdateInfo { Name = message.UserDisplayName, EmailAddress = message.UserEmailAddress },
-                UserId = message.UserId
+                UserId = message.UserId,
+                Message = message.Message
             };
 
             await _commitmentApi.PatchEmployerCommitment(message.EmployerAccountId, message.CommitmentId, submission);
-
-            if (message.CreateTask)
-                await CreateTask(message, commitment);
 
             if (message.LastAction != LastAction.None)
             {
@@ -83,7 +74,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             _logger.Info("Submit commitment");
         }
 
-        private async Task SendNotification(Commitment commitment, SubmitCommitmentCommand message)
+        private async Task SendNotification(CommitmentView commitment, SubmitCommitmentCommand message)
         {
             var emails = await 
                 _providerEmailLookupService.GetEmailsAsync(
@@ -105,7 +96,7 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
             }
         }
 
-        private SendNotificationCommand BuildNotificationCommand(string email, Commitment commitment, LastAction action)
+        private SendNotificationCommand BuildNotificationCommand(string email, CommitmentView commitment, LastAction action)
         {
             return new SendNotificationCommand
             {
@@ -122,26 +113,6 @@ namespace SFA.DAS.EAS.Application.Commands.SubmitCommitment
                     }
                 }
             };
-        }
-
-        private async Task CreateTask(SubmitCommitmentCommand message, Commitment commitment)
-        {
-            var taskTemplate = new CreateCommitmentTemplate
-                                   {
-                                       CommitmentId = message.CommitmentId,
-                                       Message = message.Message,
-                                       Source = $"EMPLOYER-{message.EmployerAccountId}"
-                                   };
-
-            var task = new Tasks.Api.Types.Task
-                           {
-                               Assignee = $"PROVIDER-{commitment.ProviderId}",
-                               TaskTemplateId = CreateCommitmentTemplate.TemplateId,
-                               Name = "Create Commitment",
-                               Body = JsonConvert.SerializeObject(taskTemplate)
-                           };
-
-            await _tasksApi.CreateTask(task.Assignee, task);
         }
     }
 }
