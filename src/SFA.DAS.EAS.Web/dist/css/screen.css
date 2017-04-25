@@ -2214,6 +2214,48 @@ dl.inline.course-details {
   }
 }
 
+.data {
+  background: #912b88;
+  color: white;
+  padding: 15px;
+}
+
+.data dl {
+  display: table;
+}
+
+.data dl dt {
+  display: table-footer-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+@media (min-width: 641px) {
+  .data dl dt {
+    font-size: 19px;
+    line-height: 1.3157894737;
+  }
+}
+
+.data dl dd {
+  display: table-header-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 32px;
+  line-height: 1.09375;
+}
+
+@media (min-width: 641px) {
+  .data dl dd {
+    font-size: 48px;
+    line-height: 1.0416666667;
+  }
+}
+
 main, .header-inner {
   max-width: 960px;
   margin: 0 15px;

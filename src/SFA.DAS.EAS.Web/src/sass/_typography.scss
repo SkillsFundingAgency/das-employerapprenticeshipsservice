@@ -54,3 +54,20 @@ dl.inline {
     color: $secondary-text-colour;
     margin: 0;
 }
+
+.data {
+    background: $fuschia;
+    color: white;
+    padding: 15px;
+    dl {
+        display: table;
+        dt {
+            display: table-footer-group;
+            @include bold-19;
+        }
+        dd {
+            display: table-header-group;
+            @include bold-48;
+        }
+    }
+}
