@@ -565,11 +565,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         private void AssertApprenticeshipIsEditable(Apprenticeship apprenticeship)
         {
-            var editable = apprenticeship.PaymentStatus == PaymentStatus.Active;
+            var editable = new[] { PaymentStatus.Active, PaymentStatus.Paused, }.Contains(apprenticeship.PaymentStatus);
 
             if (!editable)
             {
-                throw new ValidationException("Unable to edit apprenticeship - not waiting to start");
+                throw new ValidationException("Unable to edit apprenticeship - status not active or paused");
             }
         }
     }

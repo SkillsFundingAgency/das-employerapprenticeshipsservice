@@ -71,7 +71,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 EmployerReference = apprenticeship.EmployerRef,
                 CohortReference = _hashingService.HashValue(apprenticeship.CommitmentId),
                 EnableEdit = pendingChange == PendingChanges.None
-                            && apprenticeship.PaymentStatus == PaymentStatus.Active,
+                            && new []{ PaymentStatus.Active, PaymentStatus.Paused,  }.Contains(apprenticeship.PaymentStatus),
                 CanEditStatus = !(new List<PaymentStatus> { PaymentStatus.Completed, PaymentStatus.Withdrawn }).Contains(apprenticeship.PaymentStatus)
             };
         }
