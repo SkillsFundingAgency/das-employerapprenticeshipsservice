@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
 {
     public interface ICommitmentMapper
     {
-        CommitmentViewModel MapToCommitmentViewModel(Commitment commitment);
+        CommitmentViewModel MapToCommitmentViewModel(CommitmentView commitment);
         Task<CommitmentListItemViewModel> MapToCommitmentListItemViewModelAsync(CommitmentListItem commitment, Func<CommitmentListItem, Task<string>> latestMessageFunc);
     }
 }

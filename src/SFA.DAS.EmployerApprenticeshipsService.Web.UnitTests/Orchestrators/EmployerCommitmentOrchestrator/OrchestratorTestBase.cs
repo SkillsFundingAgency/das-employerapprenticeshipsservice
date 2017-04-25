@@ -40,12 +40,11 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerCommitmentOrchestrator
             MockMediator.Setup(x => x.SendAsync(It.IsAny<GetCommitmentQueryRequest>()))
                 .ReturnsAsync(new GetCommitmentQueryResponse
                 {
-                    Commitment = new Commitment
+                    Commitment = new CommitmentView
                     {
                         Id = 123,
                         LegalEntityId = "321",
-                        EditStatus = EditStatus.EmployerOnly,
-                        CommitmentStatus = CommitmentStatus.Active
+                        EditStatus = EditStatus.EmployerOnly
                     }
                 });
 
