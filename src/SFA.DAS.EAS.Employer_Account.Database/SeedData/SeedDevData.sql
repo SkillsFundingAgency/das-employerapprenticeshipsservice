@@ -51,6 +51,8 @@ BEGIN
 	
 		EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 	
+		EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId,''Test'',GETDATE()
+
 		INSERT INTO [employer_account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
 		IF EXISTS(select 1 from [employer_account].[Paye] where ref = @employerRef)
