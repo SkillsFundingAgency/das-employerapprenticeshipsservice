@@ -51,7 +51,10 @@ BEGIN
 	
 		EXEC [employer_account].[CreateEmployerAgreement] @legalEntityId, @accountId, @employerAgreementId OUTPUT
 	
-		EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId,''Test'',GETDATE()
+		DECLARE @dateForAgreement as DATETIME
+		SELECT @dateForAgreement = GETDATE()
+
+		EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId,''Test User'',@dateForAgreement
 
 		INSERT INTO [employer_account].[AccountEmployerAgreement](AccountId, EmployerAgreementId) VALUES (@accountId, @employerAgreementId);
 
