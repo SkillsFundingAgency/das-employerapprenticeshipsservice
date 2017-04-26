@@ -119,6 +119,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId,
+            DateTime fromDate, 
+            DateTime toDate,
             string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -126,6 +128,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 HashedAccountId = hashedId,
                 UserId = externalUserId
             });
+
             if (employerAccountResult.Account == null)
             {
                 return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
@@ -137,6 +140,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountId = employerAccountResult.Account.Id,
                         ExternalUserId = externalUserId,
+                        FromDate = fromDate,
+                        ToDate = toDate,
                         HashedAccountId = hashedId
                     });
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();

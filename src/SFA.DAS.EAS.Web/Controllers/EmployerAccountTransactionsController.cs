@@ -22,9 +22,9 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
         
         [Route("balance")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, DateTime fromDate, DateTime toDate)
         {
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Data.Account == null)
             {
