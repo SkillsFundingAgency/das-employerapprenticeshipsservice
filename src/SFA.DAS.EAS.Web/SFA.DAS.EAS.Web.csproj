@@ -1023,6 +1023,7 @@
     <Content Include="Views\EmployerManageApprentices\StatusChangeConfirmation.cshtml" />
     <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
+    <Content Include="src\sass\_navigation.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
