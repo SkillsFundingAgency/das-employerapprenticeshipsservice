@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -169,7 +170,12 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
             var hashedAccountId = ScenarioContext.Current["HashedAccountId"].ToString();
             var userId = ScenarioContext.Current["AccountOwnerUserId"].ToString();
 
-            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, userId).Result;
+            var payment = ((List<Payment>) ScenarioContext.Current["payments"]).First();
+
+            var fromDate = new DateTime(payment.CollectionPeriod.Year, payment.CollectionPeriod.Month, 1);
+            var toDate = new DateTime(payment.CollectionPeriod.Year, payment.CollectionPeriod.Month + 1, 1);
+
+            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, fromDate, toDate, userId).Result;
 
             Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
         }

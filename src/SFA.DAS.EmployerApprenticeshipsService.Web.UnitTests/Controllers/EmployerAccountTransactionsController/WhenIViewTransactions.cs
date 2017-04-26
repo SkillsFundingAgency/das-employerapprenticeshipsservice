@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<string>()))
+            _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
                 {
                     Data = new TransactionViewResultViewModel
@@ -49,10 +50,10 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
         public async Task ThenTransactionsAreRetrievedForTheAccount()
         {
             //Act
-            var result = await _controller.Index("TEST");
+            var result = await _controller.Index("TEST", DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1));
 
             //Assert
-            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<string>()), Times.Once);
+            _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result as ViewResult);
         }
     }

@@ -35,12 +35,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _request = new GetEmployerAccountTransactionsQuery
             {
                 AccountId = 1,
-                ExternalUserId = "3EFR",
-                HashedAccountId = "RTF34"
+                HashedAccountId = "RTF34",
+                FromDate = DateTime.Now.AddDays(-10),
+                ToDate = DateTime.Now.AddDays(10),
+                ExternalUserId = "3EFR"
             };
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<TransactionLine>());
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
@@ -58,7 +60,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             await RequestHandler.Handle(_request);
 
             //Assert
-            _dasLevyService.Verify(x => x.GetTransactionsByAccountId(_request.AccountId));
+            _dasLevyService.Verify(x => x.GetTransactionsByDateRange<TransactionLine>(_request.AccountId, _request.FromDate, _request.ToDate, _request.ExternalUserId), Times.Once);
         }
 
         [Test]
@@ -71,14 +73,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                     {
                         AccountId = 1,
                         SubmissionId = 1,
-                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        TransactionDate = DateTime.Now.AddDays(-3),
                         Amount = 1000,
                         TransactionType = TransactionItemType.TopUp,
                         EmpRef = "123"
                     }
                 };
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(transactions);
 
             //Act
@@ -119,7 +121,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         UkPrn = expectedUkprn
                     }
                 };
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                           .ReturnsAsync(transactions);
+
             _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Provider {ProviderName = "test"}});
 
             //Act
@@ -144,7 +148,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         UkPrn = 1254545
                     }
                 };
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                           .ReturnsAsync(transactions);
+
             _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>())).Throws(new WebException());
 
             //Act
@@ -165,7 +171,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 Amount = 123.45M
             };
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     transaction
@@ -192,7 +198,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 Amount = -100.50M
             };
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     transaction
@@ -223,7 +229,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
                 .Returns(new ProvidersView { Provider = provider });
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     transaction
@@ -254,7 +260,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
                 .Returns(new ProvidersView { Provider = provider });
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     transaction
@@ -287,7 +293,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             var p = _apprenticshipInfoService.Object.GetProvider(100);
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     transaction
@@ -325,7 +331,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
                 .Returns(new ProvidersView { Provider = provider });
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<TransactionLine>(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<TransactionLine>
                 {
                     sfaTransaction,
@@ -343,7 +349,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(2, actualTransaction.SubTransactions.Count);
             Assert.Contains(sfaTransaction, actualTransaction.SubTransactions);
             Assert.Contains(employerTransaction, actualTransaction.SubTransactions);
-
         }
     }
 }
