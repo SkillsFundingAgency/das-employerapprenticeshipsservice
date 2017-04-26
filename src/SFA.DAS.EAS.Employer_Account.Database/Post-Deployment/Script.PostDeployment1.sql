@@ -88,7 +88,7 @@ where id not in
 --------------------------------------------------------------------------------------
 -- Rename PrieanKey Column for User table
 --------------------------------------------------------------------------------------
-IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'PrieanKey' AND TABLE_NAME ='User' AND TABLE_SCHEMA='employer_account')
+IF EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = 'PireanKey' AND TABLE_NAME ='User' AND TABLE_SCHEMA='employer_account')
 	BEGIN
 		EXEC sp_RENAME 'employer_account.User.PrieanKey', 'UserRef' , 'COLUMN'
 	END
