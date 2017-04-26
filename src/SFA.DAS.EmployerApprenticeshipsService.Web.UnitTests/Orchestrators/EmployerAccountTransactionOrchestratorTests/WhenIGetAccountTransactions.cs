@@ -55,13 +55,39 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         }
 
         [Test]
-        public async Task ThenARequestShouldBeMadeForTransactions()
+        [TestCase(2,2017)]
+        [TestCase(6, 2017)]
+        [TestCase(8, 2019)]
+        [TestCase(12, 2020)]
+        public async Task ThenARequestShouldBeMadeForTransactions(int month, int year)
         {
+            //Arrange
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
             //Act
-           await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.AddMonths(-1), DateTime.Now.AddMonths(1), ExternalUser);
+           await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
 
             //Assert
-            _mediator.Verify(x=> x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()), Times.Once);
+            _mediator.Verify(x=> x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
+                q => q.FromDate.Equals(new DateTime(year, month, 1)) &&
+                q.ToDate.Equals(new DateTime(year, month, daysInMonth)))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenARequestShouldBeMadeForTransactionsForCurrentMonthIfNoYearOrMonthHasBeenGiven()
+        {
+            //Arrange
+            var year = DateTime.Now.Year;
+            var month = DateTime.Now.Month;
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
+            //Act
+            await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(
+                q => q.FromDate.Equals(new DateTime(year, month, 1)) &&
+                     q.ToDate.Equals(new DateTime(year, month, daysInMonth)))), Times.Once);
         }
     }
 }

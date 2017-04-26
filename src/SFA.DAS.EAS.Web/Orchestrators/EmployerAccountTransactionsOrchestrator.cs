@@ -118,10 +118,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId,
-            DateTime fromDate, 
-            DateTime toDate,
-            string externalUserId)
+        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
@@ -133,6 +130,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
             }
+
+            year = year == default(int) ? DateTime.Now.Year : year;
+            month = month == default(int) ? DateTime.Now.Month : month;
+
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
+            var fromDate = new DateTime(year, month, 1);
+            var toDate = new DateTime(year, month, daysInMonth);
 
             var data =
                 await

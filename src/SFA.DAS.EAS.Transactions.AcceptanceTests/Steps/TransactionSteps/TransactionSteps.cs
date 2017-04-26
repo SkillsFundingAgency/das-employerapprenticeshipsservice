@@ -172,10 +172,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.TransactionSteps
 
             var payment = ((List<Payment>) ScenarioContext.Current["payments"]).First();
 
-            var fromDate = new DateTime(payment.CollectionPeriod.Year, payment.CollectionPeriod.Month, 1);
-            var toDate = new DateTime(payment.CollectionPeriod.Year, payment.CollectionPeriod.Month + 1, 1);
-
-            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, fromDate, toDate, userId).Result;
+            var actual = employerAccountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, payment.CollectionPeriod.Year, payment.CollectionPeriod.Month, userId).Result;
 
             Assert.AreEqual(balance,actual.Data.Model.CurrentBalance);
         }

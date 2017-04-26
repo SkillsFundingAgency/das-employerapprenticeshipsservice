@@ -21,10 +21,10 @@ namespace SFA.DAS.EAS.Web.Controllers
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
         
-        [Route("balance")]
-        public async Task<ActionResult> Index(string hashedAccountId, DateTime fromDate, DateTime toDate)
+        [Route("balance/{year}/{month}")]
+        public async Task<ActionResult> Index(string hashedAccountId, int year, int month)
         {
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, fromDate, toDate, OwinWrapper.GetClaimValue(@"sub"));
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Data.Account == null)
             {
