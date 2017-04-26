@@ -1,2 +1,57 @@
-﻿body {
+﻿.previous-next-navigation {
+    margin: 20px -3px;
+    padding: 3px;
+    overflow: hidden;
+    li {
+        display: block;
+        padding: 0;
+        margin: 0;
+        width: 50%;
+        float: left;
+        a {
+            display: block;
+            padding: 15px 0 15px 35px;
+            text-decoration: none;
+            @include core-24;
+            &:before {
+                background: url('/dist/images/arrow-sprite.png');
+                background-position: -4px -2px;
+                margin-top: -2px;
+                margin-left: -30px;
+                display: block;
+                float: left;
+                width: 30px;
+                height: 40px;
+                content: " ";
+                @include media(tablet) {
+                    margin-top: 4px;
+                }
+            }
+            &:hover {
+                background: $grey-4;
+            }
+            &:focus {
+                background: $grey-3;
+            }
+        }
+        .detail {
+            display: block;
+            @include core-19;
+        }
+        &.next {
+            text-align: right;
+            a {
+                padding: 15px 35px 15px 0;
+                &:before {
+                    float: right;
+                    margin-left: 0;
+                    margin-right: -30px;
+                    background-position: -86px -2px;
+                }
+            }
+            .detail {
+                
+            }
+        }
+    }
 }
