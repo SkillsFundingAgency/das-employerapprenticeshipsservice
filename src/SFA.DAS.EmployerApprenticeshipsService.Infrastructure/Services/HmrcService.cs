@@ -103,13 +103,22 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
                 var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations?fromDate=";
 
+                var defaultFromDate = "2017-04-01";
+
                 if (fromDate.HasValue)
                 {
-                    url += $"{fromDate.Value.ToString("yyyy-MM-dd")}";
+                    if (fromDate.Value >= new DateTime(2017, 04, 01))
+                    {
+                        url += $"{fromDate.Value.ToString("yyyy-MM-dd")}";
+                    }
+                    else
+                    {
+                        url += defaultFromDate;
+                    }
                 }
                 else
                 {
-                    url += "2017-04-01";
+                    url += defaultFromDate;
                 }
 
                 return await _httpClientWrapper.Get<LevyDeclarations>(accessToken, url);

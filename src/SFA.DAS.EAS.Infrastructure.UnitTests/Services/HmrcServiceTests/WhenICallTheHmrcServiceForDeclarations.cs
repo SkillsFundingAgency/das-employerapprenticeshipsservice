@@ -2,12 +2,9 @@
 using System.Threading.Tasks;
 using System.Web;
 using Moq;
-using Newtonsoft.Json;
-using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Http;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.TokenService.Api.Client;
@@ -60,7 +57,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
             //Arrange
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations";
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
             
             var levyDeclarations = new LevyDeclarations();
             _httpClientWrapper.Setup(x => x.Get<LevyDeclarations>(It.IsAny<string>(), expectedApiUrl))
@@ -78,8 +75,22 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public async Task ThenTheDateFromIsAddedToTheRequestIfPopulated()
         {
             //Arrange
-            var expectedDate = new DateTime(2017,04,29);
-            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-29";
+            var expectedDate = new DateTime(2017,04,01);
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
+
+            //Act
+            await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
+
+            //Assert
+            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenTheDateRequestedCannotBeLessThanApril2017()
+        {
+            //Arrange
+            var expectedDate = new DateTime(2017, 03, 31);
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
