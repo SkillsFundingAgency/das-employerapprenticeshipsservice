@@ -27,7 +27,7 @@ BEGIN
 
 	if(@employerNumber is not null)
 	BEGIN
-		SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @employerNumber and Source in (1,2);
+		SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @employerNumber and Source = @source
 	END
 
 	IF (@legalEntityId IS NULL)
