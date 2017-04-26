@@ -180,11 +180,12 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         {
             var accountId = (long) ScenarioContext.Current["AccountId"];
             var mediator = _container.GetInstance<IMediator>();
+            var periodEnd = (PeriodEnd)ScenarioContext.Current["periodEnd"];
 
             mediator.SendAsync(new RefreshPaymentDataCommand
             {
                 AccountId = accountId,
-                PeriodEnd = "1617-R12",
+                PeriodEnd = periodEnd.Id,
                 PaymentUrl = "test"
             }).Wait();
         }
