@@ -45,7 +45,6 @@
                         <th scope="col"><span class="no-wrap">Payment date</span></th>
                         <th scope="col" class="mobile-hide-cell">Description</th>
                         <th scope="col" class="numeric">Amount</th>
-                        <th scope="col" class="numeric">Balance</th>
                         <th scope="col"><span class="vh">Action</span></th>
                     </tr>
                 </thead>
@@ -64,7 +63,6 @@
                                 </span>
                             </td>
                             <td class="numeric"> @(aggregationLine.Amount.ToString("C2", culture)) </td>
-                            <td class="numeric">@(aggregationLine.Balance.ToString("C2", culture))</td>
                             <td class="link-right">
                                 @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
                          aggregationLine.TransactionType == TransactionItemType.TopUp)
