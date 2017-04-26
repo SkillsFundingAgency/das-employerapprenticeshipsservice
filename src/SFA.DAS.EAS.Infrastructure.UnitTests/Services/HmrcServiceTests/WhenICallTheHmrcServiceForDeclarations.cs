@@ -87,5 +87,18 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             //Assert
             _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
         }
+
+        [Test]
+        public async Task ThenTheFromDateIsCorrectlyDefaultedWhenNotSupplied()
+        {
+            //Arrange
+            var expectedApiUrl = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(EmpRef)}/declarations?fromDate=2017-04-01";
+
+            //Act
+            await _hmrcService.GetLevyDeclarations(EmpRef);
+
+            //Assert
+            _httpClientWrapper.Verify(x => x.Get<LevyDeclarations>(ExpectedAuthToken, expectedApiUrl), Times.Once);
+        }
     }
 }

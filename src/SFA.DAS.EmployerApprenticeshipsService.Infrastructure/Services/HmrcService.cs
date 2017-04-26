@@ -101,11 +101,15 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 var accessToken = await GetOgdAccessToken();
 
-                var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations";
+                var url = $"apprenticeship-levy/epaye/{HttpUtility.UrlEncode(empRef)}/declarations?fromDate=";
 
                 if (fromDate.HasValue)
                 {
-                    url += $"?fromDate={fromDate.Value.ToString("yyyy-MM-dd")}";
+                    url += $"{fromDate.Value.ToString("yyyy-MM-dd")}";
+                }
+                else
+                {
+                    url += "2017-04-01";
                 }
 
                 return await _httpClientWrapper.Get<LevyDeclarations>(accessToken, url);
