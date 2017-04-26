@@ -37,8 +37,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var transactions = await _dasLevyService.GetTransactionsByAccountId(message.AccountId);
-
+            var transactions = await _dasLevyService.GetTransactionsByDateRange<TransactionLine>(message.AccountId, message.FromDate,
+                message.ToDate, message.ExternalUserId);
+            
             if (!transactions.Any())
             {
                 return GetResponse(message.HashedAccountId, message.AccountId);
@@ -119,6 +120,5 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 }
             };
         }
-        
     }
 }
