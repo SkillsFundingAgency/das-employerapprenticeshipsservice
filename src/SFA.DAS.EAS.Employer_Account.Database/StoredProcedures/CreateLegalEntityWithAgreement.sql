@@ -16,7 +16,7 @@ BEGIN
 	DECLARE @lastName NVARCHAR(MAX)
 	DECLARE @signedByName NVARCHAR(100)	
 
-	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @companyNumber and Source in (1,2);
+	SELECT @legalEntityId = Id FROM [employer_account].[LegalEntity] WHERE Code = @companyNumber and Source = @source
 
 	IF(@legalEntityId is null)
 	BEGIN
