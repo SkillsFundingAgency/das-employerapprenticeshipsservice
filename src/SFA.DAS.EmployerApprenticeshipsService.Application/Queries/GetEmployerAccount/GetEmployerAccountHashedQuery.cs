@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
 {
