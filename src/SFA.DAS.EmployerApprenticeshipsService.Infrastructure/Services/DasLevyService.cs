@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionD
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
+using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransactionsCount;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -65,6 +66,18 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                     });
 
             return result.FractionDetail;
+        }
+
+        public async Task<int> GetPreviousAccountTransaction(long accountId, DateTime fromDate, string externalUserId)
+        {
+            var result = await _mediator.SendAsync(new GetPreviousTransactionsCountRequest
+            {
+                AccountId = accountId,
+                FromDate = fromDate,
+                ExternalUserId = externalUserId
+            });
+
+            return result.Count;
         }
 
         public async Task<DasDeclaration> GetLastLevyDeclarationforEmpRef(string empRef)
