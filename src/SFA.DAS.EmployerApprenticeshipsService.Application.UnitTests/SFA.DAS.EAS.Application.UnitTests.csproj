@@ -258,6 +258,8 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
+    <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIGetPreviousTransactionsCount.cs" />
+    <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />

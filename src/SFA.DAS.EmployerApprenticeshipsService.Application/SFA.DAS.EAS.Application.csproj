@@ -301,6 +301,10 @@
     <Compile Include="Queries\AccountTransactions\GetLastLevyDeclaration\GetLastLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetLastLevyDeclaration\GetLastLevyDeclarationResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetLastLevyDeclaration\GetLastLevyDeclarationValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequest.cs" />
+    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestHandler.cs" />
+    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountRequestValidator.cs" />
+    <Compile Include="Queries\AccountTransactions\GetPreviousTransactionsCount\GetPreviousTransactionsCountResponse.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsHandler.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQuery.cs" />
     <Compile Include="Queries\FindEmployerAccountPaymentTransactions\FindEmployerAccountPaymentTransactionsQueryValidator.cs" />
