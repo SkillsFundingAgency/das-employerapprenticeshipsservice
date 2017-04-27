@@ -1,5 +1,5 @@
 ﻿.previous-next-navigation {
-    margin: 20px -3px;
+    margin: 40px -3px;
     padding: 3px;
     overflow: hidden;
     li {
@@ -10,7 +10,7 @@
         float: left;
         a {
             display: block;
-            padding: 15px 0 15px 35px;
+            padding: 15px 0 15px 38px;
             text-decoration: none;
             @include core-24;
             &:before {
@@ -24,7 +24,7 @@
                 height: 40px;
                 content: " ";
                 @include media(tablet) {
-                    margin-top: 4px;
+                    margin-top: 6px;
                 }
             }
             &:hover {
@@ -40,8 +40,9 @@
         }
         &.next {
             text-align: right;
+            float: right;
             a {
-                padding: 15px 35px 15px 0;
+                padding: 15px 38px 15px 0;
                 &:before {
                     float: right;
                     margin-left: 0;

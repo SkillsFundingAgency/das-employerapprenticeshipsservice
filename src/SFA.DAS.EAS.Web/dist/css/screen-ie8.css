@@ -2405,7 +2405,7 @@ a#link-settings:focus {
 }
 
 .previous-next-navigation {
-  margin: 20px -3px;
+  margin: 40px -3px;
   padding: 3px;
   overflow: hidden;
 }
@@ -2420,7 +2420,7 @@ a#link-settings:focus {
 
 .previous-next-navigation li a {
   display: block;
-  padding: 15px 0 15px 35px;
+  padding: 15px 0 15px 38px;
   text-decoration: none;
   font-family: "nta", Arial, sans-serif;
   font-weight: 400;
@@ -2441,7 +2441,7 @@ a#link-settings:focus {
   width: 30px;
   height: 40px;
   content: " ";
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .previous-next-navigation li a:hover {
@@ -2465,10 +2465,11 @@ a#link-settings:focus {
 
 .previous-next-navigation li.next {
   text-align: right;
+  float: right;
 }
 
 .previous-next-navigation li.next a {
-  padding: 15px 35px 15px 0;
+  padding: 15px 38px 15px 0;
 }
 
 .previous-next-navigation li.next a:before {
