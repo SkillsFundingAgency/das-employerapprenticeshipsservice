@@ -12,5 +12,6 @@ namespace SFA.DAS.EAS.Web.ViewModels
 
         public bool IsLatestMonth => DateTime.Now.Year == Year && DateTime.Now.Month == Month;
         public bool IsFirstMonthOfLevy => DateTime.Now.Year == 2017 && DateTime.Now.Month == 4;
+        public bool AccountHasPreviousTransactions { get; set; }
     }
 }

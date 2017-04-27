@@ -97,7 +97,7 @@
            }
 
         <ul class="previous-next-navigation">
-            @if (!Model.Data.IsFirstMonthOfLevy)
+            @if (!Model.Data.IsFirstMonthOfLevy && Model.Data.AccountHasPreviousTransactions)
             {
                 <li class="previous">
                     <a href="@Url.Action("Index")/@previousMonthDate.Year/@previousMonthDate.Month">

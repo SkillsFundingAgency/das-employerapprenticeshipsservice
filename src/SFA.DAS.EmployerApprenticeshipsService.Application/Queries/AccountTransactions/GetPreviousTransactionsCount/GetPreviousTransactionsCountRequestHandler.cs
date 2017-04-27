@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
 
         public async Task<GetPreviousTransactionsCountResponse> Handle(GetPreviousTransactionsCountRequest message)
         {
-            var validationResult = _validator.Validate(message);
+            var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
             {

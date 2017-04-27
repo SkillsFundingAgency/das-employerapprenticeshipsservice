@@ -48,7 +48,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                         {
                             new LevyDeclarationTransactionLine()
                         }
-                    }
+                    },
+                    AccountHasPreviousTransactions = true
                 });
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object);
@@ -115,6 +116,16 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             //Assert
             Assert.AreEqual(true, resultLatestMonth.Data.IsLatestMonth);
             Assert.AreEqual(false, resultHistoricalMonth.Data.IsLatestMonth);
+        }
+
+        [Test]
+        public async Task ThenResultShouldHaveWhetherPreviousTransactionsAreAvailable()
+        {
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, 2017, 8, ExternalUser);
+
+            //Assert
+            Assert.IsTrue(result.Data.AccountHasPreviousTransactions);
         }
     }
 }

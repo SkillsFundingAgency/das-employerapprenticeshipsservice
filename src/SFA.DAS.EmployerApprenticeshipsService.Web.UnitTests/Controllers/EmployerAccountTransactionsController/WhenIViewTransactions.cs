@@ -39,7 +39,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
                         Model = new TransactionViewModel
                         {
                             Data = new AggregationData()
-                        }
+                        },
+                        AccountHasPreviousTransactions = true
                     }
                 });
 
@@ -55,6 +56,20 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             //Assert
             _orchestrator.Verify(x=> x.GetAccountTransactions(It.Is<string>(s => s=="TEST"), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
             Assert.IsNotNull(result as ViewResult);
+        }
+
+        [Test]
+        public async Task ThenPreivousTransactionsStatusIsShown()
+        {
+            //Act
+            var result = await _controller.Index("TEST", 2017, 1);
+
+            var viewResult = result as ViewResult;
+            var viewModel = viewResult?.Model as OrchestratorResponse<TransactionViewResultViewModel>;
+
+            //Assert
+            Assert.IsNotNull(viewModel);
+            Assert.IsTrue(viewModel.Data.AccountHasPreviousTransactions);
         }
     }
 }

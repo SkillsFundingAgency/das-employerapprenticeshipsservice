@@ -164,6 +164,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
+            
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
                 Data = new TransactionViewResultViewModel
@@ -176,7 +177,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         Data = data.Data
                     },
                     Month = month,
-                    Year = year
+                    Year = year,
+                    AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
         }

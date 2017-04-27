@@ -187,7 +187,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@fromDate", new DateTime(fromDate.Year, fromDate.Month, fromDate.Day), DbType.DateTime);
 
                 return await c.ExecuteScalarAsync<int>(
-                    sql: "[employer_financial].[[GetPreviousTransactionsCount]]",
+                    sql: "[employer_financial].[GetPreviousTransactionsCount]",
                     param: parameters,
                     commandType: CommandType.StoredProcedure);
             });
