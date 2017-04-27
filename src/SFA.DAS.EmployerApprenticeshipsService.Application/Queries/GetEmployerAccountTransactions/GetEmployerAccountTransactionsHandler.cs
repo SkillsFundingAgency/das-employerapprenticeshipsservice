@@ -97,17 +97,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             transactionSummaries.AddRange(combinedCoInvestedTransactions);
 
-            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries);
+            var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(message.AccountId, message.FromDate, message.ExternalUserId) > 0;
+
+            return GetResponse(message.HashedAccountId, message.AccountId, transactionSummaries, hasPreviousTransactions);
         }
 
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId)
         {
-            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>());
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>(), false);
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(
-            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions)
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions, bool hasPreviousTransactions)
         {
             return new GetEmployerAccountTransactionsResponse
             {
@@ -116,7 +118,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                     HashedAccountId = hashedAccountId,
                     AccountId = accountId,
                     TransactionLines = transactions
-                }
+                },
+                AccountHasPreviousTransactions = hasPreviousTransactions
+                
             };
         }
     }

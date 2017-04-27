@@ -45,6 +45,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<TransactionLine>());
 
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync(2);
+
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
             _logger = new Mock<ILogger>();
@@ -349,6 +352,64 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             Assert.AreEqual(2, actualTransaction.SubTransactions.Count);
             Assert.Contains(sfaTransaction, actualTransaction.SubTransactions);
             Assert.Contains(employerTransaction, actualTransaction.SubTransactions);
+        }
+
+        [Test]
+        public async Task ThenShouldReturnPreviousTransactionsAreAvailableIfThereAreSome()
+        {
+            //Arrange
+            var transactions = new List<TransactionLine>
+            {
+                new LevyDeclarationTransactionLine
+                {
+                    AccountId = 1,
+                    SubmissionId = 1,
+                    TransactionDate = DateTime.Now.AddDays(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.TopUp,
+                    EmpRef = "123"
+                }
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(transactions);
+
+            //Act
+            var result = await RequestHandler.Handle(_request);
+
+            //Assert
+            Assert.IsTrue(result.AccountHasPreviousTransactions);
+        }
+
+        [Test]
+        public async Task ThenShouldReturnPreviousTransactionsAreNotAvailableIfThereAreNone()
+        {
+            //Arrange
+            //Arrange
+            var transactions = new List<TransactionLine>
+            {
+                new LevyDeclarationTransactionLine
+                {
+                    AccountId = 1,
+                    SubmissionId = 1,
+                    TransactionDate = DateTime.Now.AddDays(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.TopUp,
+                    EmpRef = "123"
+                }
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(transactions);
+
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync(0);
+
+            //Act
+            var result = await RequestHandler.Handle(_request);
+
+            //Assert
+            Assert.IsFalse(result.AccountHasPreviousTransactions);
         }
     }
 }
