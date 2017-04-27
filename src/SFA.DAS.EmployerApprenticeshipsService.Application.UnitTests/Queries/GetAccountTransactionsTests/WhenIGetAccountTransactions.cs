@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Moq;
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
 
             _repository = new Mock<IDasLevyRepository>();
 
-            Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId};
+            Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId, FromDate = DateTime.Now.AddDays(-1), ToDate = DateTime.Now.AddDays(1) };
 
             RequestHandler = new GetAccountTransactionsQueryHandler(RequestValidator.Object, _repository.Object);
             
@@ -38,14 +39,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactions(ExpectedAccountId), Times.Once);
+            _repository.Verify(x=>x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _repository.Setup(x => x.GetTransactions(ExpectedAccountId))
+            _repository.Setup(x => x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
                        .ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
 
             //Act

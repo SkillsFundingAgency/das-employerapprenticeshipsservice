@@ -24,9 +24,14 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _mediator = mediator;
         }
 
-        public async Task<ICollection<TransactionLine>> GetTransactionsByAccountId(long accountId)
+        public async Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
-            var result = await _mediator.SendAsync(new GetAccountTransactionsRequest {AccountId = accountId});
+            var result = await _mediator.SendAsync(new GetAccountTransactionsRequest
+            {
+                AccountId = accountId,
+                FromDate = fromDate,
+                ToDate = toDate
+            });
 
             return result.TransactionLines;
         }
@@ -38,7 +43,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return result.Accounts;
         }
 
-        public async Task<ICollection<T>> GetTransactionsByDateRange<T>(
+        public async Task<ICollection<T>> GetTransactionDetailsByDateRange<T>(
             long accountId, DateTime fromDate, DateTime toDate, string externalUserId) where T : TransactionLine
         {
             var result = await _mediator.SendAsync(new GetAccountTransactionsByDateRangeQuery

@@ -37,8 +37,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 throw new InvalidRequestException(result.ValidationDictionary);
             }
 
-            var transactions = await _dasLevyService.GetTransactionsByDateRange<TransactionLine>(message.AccountId, message.FromDate,
-                message.ToDate, message.ExternalUserId);
+            var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
             
             if (!transactions.Any())
             {
