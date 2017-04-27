@@ -89,5 +89,32 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                 q => q.FromDate.Equals(new DateTime(year, month, 1)) &&
                      q.ToDate.Equals(new DateTime(year, month, daysInMonth)))), Times.Once);
         }
+
+        [Test]
+        public async Task ThenResultShouldHaveYearAndMonthOfRequest()
+        {
+            //Arrange
+            const int year = 2016;
+            const int month = 2;
+
+            //Act
+            var result = await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
+
+            //Assert
+            Assert.AreEqual(year, result.Data.Year);
+            Assert.AreEqual(month, result.Data.Month);
+        }
+
+        [Test]
+        public async Task ThenResultShouldShowIfTheSelectMonthIsTheLatest()
+        {
+            //Act
+            var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
+            var resultHistoricalMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, 2016, 1, ExternalUser);
+
+            //Assert
+            Assert.AreEqual(true, resultLatestMonth.Data.IsLatestMonth);
+            Assert.AreEqual(false, resultHistoricalMonth.Data.IsLatestMonth);
+        }
     }
 }
