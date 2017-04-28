@@ -572,6 +572,23 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 throw new ValidationException("Unable to edit apprenticeship - status not active or paused");
             }
         }
-    }
 
+        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatus(string hashedAccountId, string hashedApprenticeshipId, string user)
+        {
+            var programms = await GetTrainingProgrammes();
+            var currentProgram = programms.Single(m => m.Id == "8");
+            var newProgram = programms.Single(m => m.Id == "42");
+            return new OrchestratorResponse<DataLockStatusViewModel>
+                       {
+                           Data = new DataLockStatusViewModel
+                                      {
+                                          HashedAccountId = hashedAccountId,
+                                          HashedApprenticeshipId = hashedAccountId,
+                                          CurrentProgram = currentProgram,
+                                          IlrProgram = newProgram,
+                                          PeriodStartData = new DateTime(2017, 08, 08)
+                                      }
+                       };
+        }
+    }
 }

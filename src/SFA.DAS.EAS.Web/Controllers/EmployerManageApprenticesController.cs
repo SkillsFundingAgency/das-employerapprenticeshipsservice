@@ -382,6 +382,14 @@ namespace SFA.DAS.EAS.Web.Controllers
             return RedirectToAction("Details", new { hashedAccountId, hashedApprenticeshipId });
         }
 
+        [HttpGet]
+        [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
+        public async Task<ActionResult> RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
+        {
+            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            return View(model);
+        }
+
         private bool AnyChanges(UpdateApprenticeshipViewModel data)
         {
             return

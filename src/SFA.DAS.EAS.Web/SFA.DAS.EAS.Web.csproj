@@ -386,6 +386,7 @@
     <Compile Include="Extensions\ValidationResultExtensions.cs" />
     <Compile Include="Validators\ChangeStatusViewModelValidator.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusChoiceViewModel.cs" />
+    <Compile Include="ViewModels\ManageApprenticeships\DataLockStatusViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ValidateWhenToApplyChangeResult.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\WhenToMakeChangeViewModel.cs" />
     <Compile Include="ViewModels\ManageApprenticeships\ChangeStatusNavigationLocation.cs" />
@@ -1023,6 +1024,7 @@
     <Content Include="Views\EmployerManageApprentices\StatusChangeConfirmation.cshtml" />
     <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
+    <Content Include="Views\EmployerManageApprentices\RequestRestart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
