@@ -2410,6 +2410,113 @@ a#link-settings:focus {
   display: block;
 }
 
+.error-summary, .info-summary, .success-summary, .warning-summary {
+  border-width: 4px;
+  border-style: solid;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px 10px;
+  border-width: 5px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px 15px 15px;
+}
+
+.error-summary:focus, .info-summary:focus, .success-summary:focus, .warning-summary:focus {
+  outline: 3px solid #ffbf47;
+}
+
+.error-summary p, .info-summary p, .success-summary p, .warning-summary p {
+  margin-bottom: 10px;
+}
+
+.error-summary-heading, .info-summary-heading, .success-summary-heading, .warning-summary-heading {
+  margin-top: 0;
+}
+
+.error-summary h1[class^="heading-"], .info-summary h1[class^="heading-"], .success-summary h1[class^="heading-"], .warning-summary h1[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary h2[class^="heading-"], .info-summary h2[class^="heading-"], .success-summary h2[class^="heading-"], .warning-summary h2[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary h3[class^="heading-"], .info-summary h3[class^="heading-"], .success-summary h3[class^="heading-"], .warning-summary h3[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary h4[class^="heading-"], .info-summary h4[class^="heading-"], .success-summary h4[class^="heading-"], .warning-summary h4[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary h5[class^="heading-"], .info-summary h5[class^="heading-"], .success-summary h5[class^="heading-"], .warning-summary h5[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary h6[class^="heading-"], .info-summary h6[class^="heading-"], .success-summary h6[class^="heading-"], .warning-summary h6[class^="heading-"] {
+  margin: 0;
+}
+
+.error-summary-list, .info-summary-list, .success-summary-list, .warning-summary-list {
+  padding-left: 0;
+}
+
+.error-summary-list li, .info-summary-list li, .success-summary-list li, .warning-summary-list li {
+  margin-bottom: 5px;
+}
+
+.error-summary-list a, .info-summary-list a, .success-summary-list a, .warning-summary-list a {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.info-dismiss, .success-dismiss, .warning-dismiss {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.info-summary {
+  border-color: #2e358b;
+}
+
+.info-summary .info-summary-list a {
+  color: #2e358b;
+}
+
+.info-summary .info-dismiss {
+  color: #2e358b;
+}
+
+.success-summary {
+  border-color: #28a197;
+}
+
+.success-summary .success-summary-list a {
+  color: #28a197;
+}
+
+.success-summary .success-dismiss {
+  color: #28a197;
+}
+
+.warning-summary {
+  border-color: #f47738;
+}
+
+.warning-summary .warning-summary-list a {
+  color: #f47738;
+}
+
+.warning-summary .warning-dismiss {
+  color: #f47738;
+}
+
+.sfa-govuk-box-highlight {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
 .govuk-box-highlight {
   padding: 1.8em 15px 1.5em;
   margin-bottom: 0;
