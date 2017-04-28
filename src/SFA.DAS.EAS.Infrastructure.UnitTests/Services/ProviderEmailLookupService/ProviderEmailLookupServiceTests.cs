@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ProviderEmailLookupServi
                     new ProvidersView
                         {
                             CreatedDate = DateTime.Now,
-                            Provider = new Provider { Email = "provider@email.uk" } 
+                            Provider = new Domain.Models.ApprenticeshipProvider.Provider { Email = "provider@email.uk" } 
                             
                         });
             var result = await _sut.GetEmailsAsync(123456L, string.Empty);

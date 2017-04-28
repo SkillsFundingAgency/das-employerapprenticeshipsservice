@@ -12,8 +12,8 @@ using SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
-using SFA.DAS.Payments.Events.Api.Client;
-using SFA.DAS.Payments.Events.Api.Types;
+using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
 {
