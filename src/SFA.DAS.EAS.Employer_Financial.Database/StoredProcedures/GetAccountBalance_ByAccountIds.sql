@@ -10,10 +10,8 @@ AS
 	inner join 
 	(	select 
 			case when SUM(LevyDueYTD) > 0 then 1
-			else
-				case when MAX(t.IsLevyPayer) is not null 
-				then MAX(t.IsLevyPayer) 
-				else 0 end end
+			else ISNULL(MAX(t.IsLevyPayer),0)
+			end
 			as IsLevyPayer, 
 			AccountId 
 		from employer_financial.LevyDeclaration ld
