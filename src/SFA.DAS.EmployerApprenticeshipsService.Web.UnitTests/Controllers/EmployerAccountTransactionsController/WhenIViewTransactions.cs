@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.EmployerAccountTransactionsContr
             _orchestrator.Setup(x => x.GetAccountTransactions(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<string>()))
                 .ReturnsAsync(new OrchestratorResponse<TransactionViewResultViewModel>
                 {
-                    Data = new TransactionViewResultViewModel
+                    Data = new TransactionViewResultViewModel(DateTime.Now)
                     {
                         Account = new Account(),
                         Model = new TransactionViewModel

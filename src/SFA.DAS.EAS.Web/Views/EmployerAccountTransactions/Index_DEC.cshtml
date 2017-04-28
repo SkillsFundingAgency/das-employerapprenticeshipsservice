@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
@@ -22,7 +21,7 @@
             Your transactions 
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
-        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
+        @if (Model.Data.CurrentTime < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p>
                 No funds will be paid into your account until May 2017.
@@ -41,7 +40,7 @@
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && Model.Data.CurrentTime > new DateTime(2017, 05, 20))
         {
             <p class="panel panel-info">
                 No transaction data exists for this account, please try again later.

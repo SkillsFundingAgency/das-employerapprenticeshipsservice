@@ -7,8 +7,10 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EAS.Web.Orchestrators;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrchestratorTests
@@ -21,11 +23,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
+        private Mock<ICurrentDateTime> _currentTime;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+            _currentTime = new Mock<ICurrentDateTime>();
 
             _response = new GetEmployerAccountResponse
             {
@@ -52,7 +56,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
                     AccountHasPreviousTransactions = true
                 });
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object);
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
         }
 
         [Test]

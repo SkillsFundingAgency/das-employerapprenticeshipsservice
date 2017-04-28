@@ -5,6 +5,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public sealed class CurrentDateTime : ICurrentDateTime
     {
-        public DateTime Now => DateTime.UtcNow;
+        public DateTime Now { get; }
+
+        public CurrentDateTime()
+        {
+            Now = DateTime.UtcNow;
+        }
+
+        public CurrentDateTime(DateTime time)
+        {
+            Now = time;
+        }
     }
 }

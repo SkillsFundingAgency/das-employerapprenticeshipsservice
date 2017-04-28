@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -17,18 +17,15 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountTransactionsOrchestrator
     {
+        private readonly DateTime _currentTime;
         private readonly IMediator _mediator;
 
-        public EmployerAccountTransactionsOrchestrator()
-        {
-            
-        }
-
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _currentTime = currentTime.Now;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -128,11 +125,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (employerAccountResult.Account == null)
             {
-                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
+                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime) };
             }
 
-            year = year == default(int) ? DateTime.Now.Year : year;
-            month = month == default(int) ? DateTime.Now.Month : month;
+            year = year == default(int) ? _currentTime.Year : year;
+            month = month == default(int) ? _currentTime.Month : month;
 
             var daysInMonth = DateTime.DaysInMonth(year, month);
 
@@ -167,7 +164,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
-                Data = new TransactionViewResultViewModel
+                Data = new TransactionViewResultViewModel(_currentTime)
                 {
                     Account = employerAccountResult.Account,
                     Model = new TransactionViewModel
