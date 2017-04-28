@@ -10,7 +10,7 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">Change apprentice details</h1>
 
-        <p> < - Provider - > have requested these updates:
+        <p>@Model.Data.ProviderName have requested these updates:
 
         <table class="edited-changes">
             <thead>
@@ -37,7 +37,7 @@
                         }
                     </td>
                     <td>@Model.Data.CurrentProgram.Title</td>
-                    <td class="changed-item">@Model.Data.IlrProgram.Title</td>
+                    <td>@Model.Data.IlrProgram.Title</td>
                 </tr>
             }
 
@@ -47,7 +47,7 @@
 
         To update this apprentice's training details, you need to do the following:
 
-        <ul>
+        <ul class="list-bullet">
             <li>
                 Change the apprentice's status to 'stopped'
             </li>
@@ -56,9 +56,11 @@
             </li>
         </ul>
 
-        <p>
-            The apprentice's new training start date must be at least the day after the stop date of the current course.
-        </p>
+        <div class="panel panel-border-wide">
+            <p>
+                The apprentice's new training start date must be at least the day after the stop date of the current course.
+            </p>
+        </div>
     </div>
 </div>
 

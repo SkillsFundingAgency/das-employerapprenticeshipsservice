@@ -1,5 +1,6 @@
 using System;
 
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
@@ -15,5 +16,9 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         public string HashedAccountId { get; set; }
 
         public string HashedApprenticeshipId { get; set; }
+
+        public string ProviderName { get; set; }
+
+        public TriageStatus TriageStatus { get; set; }
     }
 }

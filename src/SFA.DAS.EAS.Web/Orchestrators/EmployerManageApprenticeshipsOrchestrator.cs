@@ -27,6 +27,7 @@ using SFA.DAS.EAS.Web.Exceptions;
 using SFA.DAS.EAS.Web.Validators;
 using SFA.DAS.EAS.Application.Queries.ValidateStatusChangeDate;
 using SFA.DAS.EAS.Application.Commands.UpdateApprenticeshipStatus;
+using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDataLock;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -91,8 +92,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         .OrderBy(m => m.ApprenticeshipName)
                         .Select(
                             m =>
-                                _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(m,
-                                    default(ApprenticeshipUpdate)))
+                                _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(m))
                         .ToList();
 
                 var model = new ManageApprenticeshipsViewModel
@@ -123,12 +123,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 var data = await _mediator.SendAsync(
                     new GetApprenticeshipQueryRequest {AccountId = accountId, ApprenticeshipId = apprenticeshipId});
 
-                var updateReponse = await _mediator.SendAsync(
-                    new GetApprenticeshipUpdateRequest {AccountId = accountId, ApprenticeshipId = apprenticeshipId});
-
                 var detailsViewModel =
-                    _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship,
-                        updateReponse.ApprenticeshipUpdate);
+                    _apprenticeshipMapper.MapToApprenticeshipDetailsViewModel(data.Apprenticeship);
 
                 return new OrchestratorResponse<ApprenticeshipDetailsViewModel> {Data = detailsViewModel};
             }, hashedAccountId, externalUserId);
@@ -308,7 +304,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public async Task<OrchestratorResponse<WhenToMakeChangeViewModel>> GetChangeStatusDateOfChangeViewModel(
             string hashedAccountId, string hashedApprenticeshipId,
-            ViewModels.ManageApprenticeships.ChangeStatusType changeType, string externalUserId)
+            ChangeStatusType changeType, string externalUserId)
         {
             var accountId = _hashingService.DecodeValue(hashedAccountId);
             var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
@@ -573,22 +569,38 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatus(string hashedAccountId, string hashedApprenticeshipId, string user)
+        public async Task<OrchestratorResponse<DataLockStatusViewModel>> GetDataLockStatus(string hashedAccountId, string hashedApprenticeshipId, string userId)
         {
-            var programms = await GetTrainingProgrammes();
-            var currentProgram = programms.Single(m => m.Id == "8");
-            var newProgram = programms.Single(m => m.Id == "42");
-            return new OrchestratorResponse<DataLockStatusViewModel>
-                       {
-                           Data = new DataLockStatusViewModel
-                                      {
-                                          HashedAccountId = hashedAccountId,
-                                          HashedApprenticeshipId = hashedAccountId,
-                                          CurrentProgram = currentProgram,
-                                          IlrProgram = newProgram,
-                                          PeriodStartData = new DateTime(2017, 08, 08)
-                                      }
-                       };
+            var accountId = _hashingService.DecodeValue(hashedAccountId);
+            var apprenticeshipId = _hashingService.DecodeValue(hashedApprenticeshipId);
+
+            return await CheckUserAuthorization(
+                async () =>
+                    {
+                        var dataLock = await _mediator.SendAsync(
+                                new GetApprenticeshipDataLockRequest { ApprenticeshipId = apprenticeshipId });
+
+                        var apprenticeship = await _mediator.SendAsync(
+                            new GetApprenticeshipQueryRequest { AccountId = accountId, ApprenticeshipId = apprenticeshipId });
+                        
+                        var programms = await GetTrainingProgrammes();
+                        var currentProgram = programms.Single(m => m.Id == apprenticeship.Apprenticeship.TrainingCode);
+                        var newProgram = programms.Single(m => m.Id == dataLock.DataLockStatus.IlrTrainingCourseCode);
+
+                        return new OrchestratorResponse<DataLockStatusViewModel>
+                            {
+                                Data = new DataLockStatusViewModel
+                                    {
+                                        HashedAccountId = hashedAccountId,
+                                        HashedApprenticeshipId = hashedApprenticeshipId,
+                                        CurrentProgram = currentProgram,
+                                        IlrProgram = newProgram,
+                                        PeriodStartData = new DateTime(2017, 08, 08),
+                                        ProviderName = apprenticeship.Apprenticeship.ProviderName,
+                                        TriageStatus = dataLock.DataLockStatus.TriageStatus
+                                    }
+                           };
+            }, hashedAccountId, userId);
         }
     }
 }

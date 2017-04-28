@@ -81,12 +81,12 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.44.0.28906, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.44.0.28906\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=1.47.0.29287, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.1.47.0.29287\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.44.0.28906, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.44.0.28906\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=1.47.0.29287, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.1.47.0.29287\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
@@ -327,6 +327,8 @@
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsRequest.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetAllEmployerAccounts\GetAllEmplyoerAccountsQueryHandler.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQuery.cs" />
     <Compile Include="Queries\GetApprenticeshipDetails\GetApprenticeshipDetailsQueryValidator.cs" />
@@ -334,6 +336,7 @@
     <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateHandler.cs" />
     <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateRequest.cs" />
     <Compile Include="Queries\GetApprenticeshipUpdate\GetApprenticeshipUpdateResponse.cs" />
+    <Compile Include="Queries\GetApprenticeshipDataLock\GetApprenticeshipDataLockRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryHandler.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryRequest.cs" />
     <Compile Include="Queries\GetApprenticeship\GetApprenticeshipQueryResponse.cs" />

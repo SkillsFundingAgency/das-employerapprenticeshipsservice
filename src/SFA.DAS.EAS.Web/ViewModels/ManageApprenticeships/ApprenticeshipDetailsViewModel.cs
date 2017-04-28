@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Microsoft.SqlServer.Server;
+
 namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
 {
     public class ApprenticeshipDetailsViewModel
@@ -28,7 +30,7 @@ namespace SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships
         
         public bool CanEditStatus { get;  set; }
 
-        public string RecordStatus { get; set; }
+        public string Alert { get; set; }
 
         public string EmployerReference { get; set; }
 

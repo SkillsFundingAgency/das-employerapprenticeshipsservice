@@ -27,8 +27,8 @@
                 <tr>
                     <th>Name</th>
                     <th>Date of birth</th>
-                    <th>Training status</th>
-                    <th>Record status</th>
+                    <th>Status</th>
+                    <th>Alerts</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -49,7 +49,7 @@
                             @apprenticeship.Status &nbsp;
                         </td>
                         <td>
-                            @apprenticeship.RecordStatus &nbsp;
+                            @apprenticeship.Alert &nbsp;
                         </td>
                         <td>
                             <a href="@Url.Action("Details", new { Model.Data.HashedAccountId, hashedApprenticeshipId = apprenticeship.HashedApprenticeshipId })"

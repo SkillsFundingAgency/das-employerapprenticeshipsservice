@@ -12,9 +12,10 @@ using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EAS.Web.ViewModels.ManageApprenticeships;
 using FluentValidation.Mvc;
-using SFA.DAS.EAS.Web.Extensions;
 
-using WebGrease.Css.Extensions;
+using SFA.DAS.Commitments.Api.Types.DataLock.Types;
+using SFA.DAS.EAS.Web.Exceptions;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -386,7 +387,10 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/datalock/restart", Name = "RequestRestart")]
         public async Task<ActionResult> RequestRestart(string hashedAccountId, string hashedApprenticeshipId)
         {
-            var model = await _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await  _orchestrator.GetDataLockStatus(hashedAccountId, hashedApprenticeshipId, OwinWrapper.GetClaimValue(@"sub"));
+            if(model.Data.TriageStatus != TriageStatus.Restart)
+                throw new InvalidStateException($"Apprenticeship data lock not is correct state, Current: {model.Data.TriageStatus}");
+
             return View(model);
         }
 
