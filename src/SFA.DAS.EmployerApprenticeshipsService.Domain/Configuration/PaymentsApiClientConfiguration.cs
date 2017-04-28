@@ -9,5 +9,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string ApiBaseUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public bool PaymentsDisabled { get; set; }
     }
 }

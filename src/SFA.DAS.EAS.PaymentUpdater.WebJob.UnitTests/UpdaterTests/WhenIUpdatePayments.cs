@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Entities.Account;
 using SFA.DAS.EAS.PaymentUpdater.WebJob.Updater;
 using SFA.DAS.Messaging;
@@ -24,6 +25,7 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
         private Mock<IMediator> _mediator;
         private Mock<IMessagePublisher> _messagePublisher;
         private Mock<ILogger> _logger;
+        private PaymentsApiClientConfiguration _configuration;
         private const long ExpectedAccountId = 12345444;
 
 
@@ -37,8 +39,10 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
 
             _logger = new Mock<ILogger>();
 
+            _configuration = new PaymentsApiClientConfiguration();
+
             _messagePublisher = new Mock<IMessagePublisher>();
-            _paymentProcessor = new PaymentProcessor(_paymentsClient.Object, _mediator.Object, _messagePublisher.Object, _logger.Object);
+            _paymentProcessor = new PaymentProcessor(_paymentsClient.Object, _mediator.Object, _messagePublisher.Object, _logger.Object, _configuration);
         }
 
         [Test]
@@ -196,6 +200,25 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.UnitTests.UpdaterTests
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Once);
             _messagePublisher.Verify(x => x.PublishAsync(It.IsAny<PaymentProcessorQueueMessage>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenNoPaymentsAreProcessedWhenTheConfigIsSet()
+        {
+            //Arrange
+            _configuration.PaymentsDisabled = true;
+            var expectedAccountId = 12345;
+            var expectedPaymentsForPeriodUrl = "afd";
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>())).ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { new Account { Id = expectedAccountId } } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new PeriodEnd { Id = "123" } });
+            _paymentsClient.Setup(x => x.GetPeriodEnds()).ReturnsAsync(new[] { new PeriodEnd { Id = "123" }, new PeriodEnd { Id = "1234", Links = new PeriodEndLinks { PaymentsForPeriod = expectedPaymentsForPeriodUrl } } });
+
+            //Act
+            await _paymentProcessor.RunUpdate();
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Never);
+            _logger.Verify(x=>x.Info("Payment processing disabled"));
         }
     }
 }
