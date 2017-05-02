@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MediatR;
-using SFA.DAS.Payments.Events.Api.Types;
+﻿using MediatR;
+using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.CreateNewPeriodEnd
 {

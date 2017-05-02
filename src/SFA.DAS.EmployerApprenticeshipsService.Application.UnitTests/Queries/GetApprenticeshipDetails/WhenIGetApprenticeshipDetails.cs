@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetApprenticeshipDetails;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 
@@ -14,7 +13,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
     class WhenIGetApprenticeshipDetails : QueryBaseTest<GetApprenticeshipDetailsHandler, GetApprenticeshipDetailsQuery, GetApprenticeshipDetailsResponse>
     {
         private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
-        private Provider _provider;
+        private Domain.Models.ApprenticeshipProvider.Provider _provider;
         
         public override GetApprenticeshipDetailsQuery Query { get; set; }
         public override GetApprenticeshipDetailsHandler RequestHandler { get; set; }
@@ -25,7 +24,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
         {
             base.SetUp();
 
-            _provider = new Provider
+            _provider = new Domain.Models.ApprenticeshipProvider.Provider
             {
                 Name = "Test Provider"
             };
@@ -71,7 +70,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetApprenticeshipDetails
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Returns(new ProvidersView
             {
                 CreatedDate = DateTime.Now,
-                Provider = new Provider()
+                Provider = new Domain.Models.ApprenticeshipProvider.Provider()
             });
 
             //Act

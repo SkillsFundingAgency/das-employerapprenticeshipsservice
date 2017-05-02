@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var result = await _dasLevyRepository.GetTransactions(message.AccountId);
+            var result = await _dasLevyRepository.GetTransactionsByDateRange(message.AccountId, message.FromDate, message.ToDate);
 
             return new GetAccountTransactionsResponse {TransactionLines = result};
         }

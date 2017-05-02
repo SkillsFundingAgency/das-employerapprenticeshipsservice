@@ -14,6 +14,7 @@
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />
       <Setting name="ShowPayeHistory" value="false" />
+      <Setting name="CurrentTime" value="" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="WebSslCert" thumbprint="EDCEF8D64D09C1D1FEDFD534CACB55E0437CFAD3" thumbprintAlgorithm="sha1" />
@@ -46,6 +47,7 @@
       <Setting name="LogLevel" value="__loglevel__" />
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
+      <Setting name="ProcessPayments" value="true" />
     </ConfigurationSettings>
   </Role>
   <NetworkConfiguration>

@@ -8,7 +8,6 @@ using NLog;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -36,13 +35,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _request = new GetEmployerAccountTransactionsQuery
             {
                 AccountId = 1,
-                ExternalUserId = "3EFR",
-                HashedAccountId = "RTF34"
+                HashedAccountId = "RTF34",
+                FromDate = DateTime.Now.AddDays(-10),
+                ToDate = DateTime.Now.AddDays(10),
+                ExternalUserId = "3EFR"
             };
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(new List<TransactionLine>());
+
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync(2);
 
             _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
@@ -59,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             await RequestHandler.Handle(_request);
 
             //Assert
-            _dasLevyService.Verify(x => x.GetTransactionsByAccountId(_request.AccountId));
+            _dasLevyService.Verify(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()), Times.Once);
         }
 
         [Test]
@@ -72,14 +76,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                     {
                         AccountId = 1,
                         SubmissionId = 1,
-                        TransactionDate = DateTime.Now.AddMonths(-3),
+                        TransactionDate = DateTime.Now.AddDays(-3),
                         Amount = 1000,
                         TransactionType = TransactionItemType.TopUp,
                         EmpRef = "123"
                     }
                 };
 
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>()))
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(transactions);
 
             //Act
@@ -120,8 +124,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         UkPrn = expectedUkprn
                     }
                 };
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
-            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Provider {ProviderName = "test"}});
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                           .ReturnsAsync(transactions);
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Domain.Models.ApprenticeshipProvider.Provider {ProviderName = "test"}});
 
             //Act
             await RequestHandler.Handle(_request);
@@ -145,8 +151,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                         UkPrn = 1254545
                     }
                 };
-            _dasLevyService.Setup(x => x.GetTransactionsByAccountId(It.IsAny<long>())).ReturnsAsync(transactions);
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>())).Throws(new WebException());
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                           .ReturnsAsync(transactions);
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>())).Throws(new WebException());
 
             //Act
             var actual = await RequestHandler.Handle(_request);
@@ -154,6 +162,254 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
             _logger.Verify(x=>x.Info(It.IsAny<Exception>(),"Provider not found for UkPrn:1254545"));
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectLevyTransactions()
+        {
+            //Arrange
+            var transaction = new LevyDeclarationTransactionLine
+            {
+                TransactionType = TransactionItemType.Declaration,
+                Amount = 123.45M
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual("Levy", actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
+
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectLevyAdjustmentTransactions()
+        {
+            //Arrange
+            var transaction = new LevyDeclarationTransactionLine
+            {
+                TransactionType = TransactionItemType.Declaration,
+                Amount = -100.50M
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual("Levy adjustment", actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectPaymentTransactions()
+        {
+            //Arrange
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var transaction = new PaymentTransactionLine
+            {
+                UkPrn = 100,
+                TransactionType = TransactionItemType.Payment,
+                Amount = 123.45M
+            };
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
+                .Returns(new ProvidersView { Provider = provider });
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual(provider.ProviderName, actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromSFAPayment()
+        {
+            //Arrange
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var transaction = new PaymentTransactionLine
+            {
+                UkPrn = 100,
+                TransactionType = TransactionItemType.SFACoInvestment,
+                Amount = 123.45M
+            };
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
+                .Returns(new ProvidersView { Provider = provider });
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+            
+            Assert.AreEqual($"Co-invested - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromEmployerPayment()
+        {
+            //Arrange
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var transaction = new PaymentTransactionLine
+            {
+                UkPrn = 100,
+                TransactionType = TransactionItemType.EmployerCoInvestment,
+                Amount = 123.45M
+            };
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
+                .Returns(new ProvidersView { Provider = provider });
+
+            var p = _apprenticshipInfoService.Object.GetProvider(100);
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual($"Co-invested - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionsFromCombinedPayment()
+        {
+            //Arrange
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var sfaTransaction = new PaymentTransactionLine
+            {
+                UkPrn = 100,
+                TransactionType = TransactionItemType.SFACoInvestment,
+                Amount = 123.45M
+            };
+
+            var employerTransaction = new PaymentTransactionLine
+            {
+                UkPrn = 100,
+                TransactionType = TransactionItemType.EmployerCoInvestment,
+                Amount = 123.45M
+            };
+
+            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
+                .Returns(new ProvidersView { Provider = provider });
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    sfaTransaction,
+                    employerTransaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual($"Co-invested - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual(sfaTransaction.Amount + employerTransaction.Amount, actualTransaction.Amount);
+            Assert.AreEqual(2, actualTransaction.SubTransactions.Count);
+            Assert.Contains(sfaTransaction, actualTransaction.SubTransactions);
+            Assert.Contains(employerTransaction, actualTransaction.SubTransactions);
+        }
+
+        [Test]
+        public async Task ThenShouldReturnPreviousTransactionsAreAvailableIfThereAreSome()
+        {
+            //Arrange
+            var transactions = new List<TransactionLine>
+            {
+                new LevyDeclarationTransactionLine
+                {
+                    AccountId = 1,
+                    SubmissionId = 1,
+                    TransactionDate = DateTime.Now.AddDays(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.TopUp,
+                    EmpRef = "123"
+                }
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(transactions);
+
+            //Act
+            var result = await RequestHandler.Handle(_request);
+
+            //Assert
+            Assert.IsTrue(result.AccountHasPreviousTransactions);
+        }
+
+        [Test]
+        public async Task ThenShouldReturnPreviousTransactionsAreNotAvailableIfThereAreNone()
+        {
+            //Arrange
+            //Arrange
+            var transactions = new List<TransactionLine>
+            {
+                new LevyDeclarationTransactionLine
+                {
+                    AccountId = 1,
+                    SubmissionId = 1,
+                    TransactionDate = DateTime.Now.AddDays(-3),
+                    Amount = 1000,
+                    TransactionType = TransactionItemType.TopUp,
+                    EmpRef = "123"
+                }
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(transactions);
+
+            _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .ReturnsAsync(0);
+
+            //Act
+            var result = await RequestHandler.Handle(_request);
+
+            //Assert
+            Assert.IsFalse(result.AccountHasPreviousTransactions);
         }
     }
 }

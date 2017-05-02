@@ -20,8 +20,8 @@ using SFA.DAS.EAS.TestCommon.DependencyResolution;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.Messaging;
-using SFA.DAS.Payments.Events.Api.Client;
-using SFA.DAS.Payments.Events.Api.Types;
+using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap;
 using TechTalk.SpecFlow;
 
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
         [Given(@"I have a provider")]
         public void GivenIHaveAProvider()
         {
-            var provider = new Provider { ProviderName = "Test Corp" };
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "Test Corp" };
 
             ScenarioContext.Current["provider"] = provider;
 
@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -220,7 +220,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, periodEnd.CompletionDateTime.AddDays(-1), periodEnd.CompletionDateTime.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 
@@ -240,7 +240,7 @@ namespace SFA.DAS.EAS.Transactions.AcceptanceTests.Steps.PaymentDetailsSteps
 
             var repository = _container.GetInstance<IDasLevyRepository>();
 
-            var transactions = repository.GetTransactionsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
+            var transactions = repository.GetTransactionDetailsByDateRange(accountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1)).Result;
 
             var paymentTransaction = transactions.OfType<PaymentTransactionLine>().First();
 

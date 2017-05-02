@@ -533,6 +533,7 @@
     <Compile Include="Validators\FinishEditingViewModelValidator.cs" />
     <Compile Include="Validators\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="Validators\SelectProviderViewModelValidator.cs" />
+    <Content Include="dist\images\arrow-sprite.png" />
     <Content Include="dist\javascripts\character-limit.js" />
     <Content Include="Views\EmployerManageApprentices\EditStartedApprenticeship.cshtml" />
     <Content Include="Views\Shared\ApprenticeshipUpdate.cshtml" />
@@ -604,7 +605,6 @@
     <Content Include="dist\javascripts\stacker.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Gruntfile.js" />
     <Content Include="robots.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -629,7 +629,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="package.json" />
     <None Include="Properties\PublishProfiles\SFA.DAS.EASPublishProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1025,6 +1024,7 @@
     <Content Include="Views\EmployerManageApprentices\WhenToApplyChange.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\Index_DEC.cshtml" />
     <Content Include="Views\EmployerManageApprentices\RequestRestart.cshtml" />
+    <Content Include="src\sass\_navigation.scss" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">

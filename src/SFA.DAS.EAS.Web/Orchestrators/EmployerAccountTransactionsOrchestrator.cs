@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,6 +8,7 @@ using SFA.DAS.EAS.Application.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Web.Models;
 using SFA.DAS.EAS.Web.ViewModels;
@@ -17,18 +17,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountTransactionsOrchestrator
     {
+        private readonly ICurrentDateTime _currentTime;
         private readonly IMediator _mediator;
 
-        public EmployerAccountTransactionsOrchestrator()
+        protected EmployerAccountTransactionsOrchestrator()
         {
-            
+
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator)
+        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
+            _currentTime = currentTime;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -118,18 +120,26 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId,
-            string externalUserId)
+        public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(string hashedId, int year, int month, string externalUserId)
         {
             var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
             {
                 HashedAccountId = hashedId,
                 UserId = externalUserId
             });
+
             if (employerAccountResult.Account == null)
             {
-                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel()};
+                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime.Now) };
             }
+
+            year = year == default(int) ? _currentTime.Now.Year : year;
+            month = month == default(int) ? _currentTime.Now.Month : month;
+
+            var daysInMonth = DateTime.DaysInMonth(year, month);
+
+            var fromDate = new DateTime(year, month, 1);
+            var toDate = new DateTime(year, month, daysInMonth);
 
             var data =
                 await
@@ -137,6 +147,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     {
                         AccountId = employerAccountResult.Account.Id,
                         ExternalUserId = externalUserId,
+                        FromDate = fromDate,
+                        ToDate = toDate,
                         HashedAccountId = hashedId
                     });
             var latestLineItem = data.Data.TransactionLines.FirstOrDefault();
@@ -154,9 +166,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 currentBalanceCalcultedOn = DateTime.Today;
             }
 
+            
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
-                Data = new TransactionViewResultViewModel
+                Data = new TransactionViewResultViewModel(_currentTime.Now)
                 {
                     Account = employerAccountResult.Account,
                     Model = new TransactionViewModel
@@ -164,7 +177,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                         CurrentBalance = currentBalance,
                         CurrentBalanceCalcultedOn = currentBalanceCalcultedOn,
                         Data = data.Data
-                    }
+                    },
+                    Month = month,
+                    Year = year,
+                    AccountHasPreviousTransactions = data.AccountHasPreviousTransactions
                 }
             };
         }

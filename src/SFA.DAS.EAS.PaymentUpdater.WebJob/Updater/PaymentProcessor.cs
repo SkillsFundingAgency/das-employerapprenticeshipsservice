@@ -8,9 +8,10 @@ using SFA.DAS.EAS.Application.Messages;
 using SFA.DAS.EAS.Application.Queries.GetAllEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.Payments.GetCurrentPeriodEnd;
 using SFA.DAS.EAS.Domain.Attributes;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Messaging;
-using SFA.DAS.Payments.Events.Api.Client;
-using SFA.DAS.Payments.Events.Api.Types;
+using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
 {
@@ -24,19 +25,28 @@ namespace SFA.DAS.EAS.PaymentUpdater.WebJob.Updater
         private readonly IMediator _mediator;
         private readonly IMessagePublisher _publisher;
         private readonly ILogger _logger;
+        private readonly PaymentsApiClientConfiguration _configuration;
 
 
-        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher, ILogger logger)
+        public PaymentProcessor(IPaymentsEventsApiClient paymentsEventsApiClient, IMediator mediator, IMessagePublisher publisher, ILogger logger, PaymentsApiClientConfiguration configuration)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _mediator = mediator;
             _publisher = publisher;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task RunUpdate()
         {
             _logger.Info($"Calling Payments API");
+
+            if (_configuration.PaymentsDisabled)
+            {
+                _logger.Info("Payment processing disabled");
+                return;
+            }
+
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
