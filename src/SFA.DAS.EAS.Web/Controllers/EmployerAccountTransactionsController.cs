@@ -20,11 +20,18 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             _accountTransactionsOrchestrator = accountTransactionsOrchestrator;
         }
-        
+
+        //TODO: Review this once we know how the URL should look
         [Route("balance")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            return await Index(hashedAccountId, 0, 0);
+        }
+        
+        [Route("balance/{year}/{month}")]
+        public async Task<ActionResult> Index(string hashedAccountId, int year, int month)
+        {
+            var transactionViewResult  = await _accountTransactionsOrchestrator.GetAccountTransactions(hashedAccountId, year, month, OwinWrapper.GetClaimValue(@"sub"));
 
             if (transactionViewResult.Data.Account == null)
             {

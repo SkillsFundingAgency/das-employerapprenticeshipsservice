@@ -1,5 +1,5 @@
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.Payments.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Client;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -9,5 +9,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string ApiBaseUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public bool PaymentsDisabled { get; set; }
     }
 }

@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
-using SFA.DAS.EAS.Domain.Data;
-using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Infrastructure.Services;
 
@@ -34,7 +29,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheMediatorMethodIsCalled()
         {
             //Act
-            await _dasLevyService.GetTransactionsByAccountId(ExpectedAccountId);
+            await _dasLevyService.GetAccountTransactionsByDateRange(ExpectedAccountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTransactionsRequest>(c=>c.AccountId.Equals(ExpectedAccountId))), Times.Once);
@@ -44,7 +39,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
         public async Task ThenTheResponseFromTheQueryIsReturned()
         {
             //Act
-            var actual = await _dasLevyService.GetTransactionsByAccountId(ExpectedAccountId);
+            var actual = await _dasLevyService.GetAccountTransactionsByDateRange(ExpectedAccountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
 
             //Assert
             Assert.IsNotEmpty(actual);
@@ -57,7 +52,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.DasLevyServiceTests
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTransactionsRequest>())).ReturnsAsync(new GetAccountTransactionsResponse {TransactionLines = null});
 
             //Act
-            var actual = await _dasLevyService.GetTransactionsByAccountId(ExpectedAccountId);
+            var actual = await _dasLevyService.GetAccountTransactionsByDateRange(ExpectedAccountId, DateTime.Now.AddDays(-1), DateTime.Now.AddDays(1));
 
             //Assert
             Assert.IsNull(actual);

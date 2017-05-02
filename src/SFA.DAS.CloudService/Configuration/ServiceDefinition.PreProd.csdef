@@ -25,6 +25,7 @@
       <Setting name="LoggingRedisKey"/>
       <Setting name="TokenCertificateThumbprint"/>
       <Setting name="ShowPayeHistory" />
+      <Setting name="CurrentTime" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="WebSslCert" loadBalancer="das-pp-eas-ilb"/>
@@ -71,6 +72,7 @@
       <Setting name="InstrumentationKey" />
       <Setting name="LoggingRedisConnectionString"/>
       <Setting name="LoggingRedisKey"/>
+      <Setting name="ProcessPayments" />
     </ConfigurationSettings>
     <Endpoints>
       <InputEndpoint name="Fake" protocol="tcp" port="50122" />

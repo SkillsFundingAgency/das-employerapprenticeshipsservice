@@ -1,5 +1,4 @@
 ﻿@using System.Globalization
-@using SFA.DAS.EAS.Domain
 @using SFA.DAS.EAS.Domain.Models.Transaction
 @using SFA.DAS.EAS.Web.Extensions
 @model SFA.DAS.EAS.Web.OrchestratorResponse<SFA.DAS.EAS.Web.ViewModels.TransactionViewResultViewModel>
@@ -10,27 +9,38 @@
 @{ViewBag.Section = "finance"; }
 @{ViewBag.Title = "Your transactions";}
 
+@{
+    var displayingMonthDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
+    var previousMonthDate = displayingMonthDate.AddMonths(-1);
+    var nextMonthDate = displayingMonthDate.AddMonths(1);
+}
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your transactions</h1>
-        @if (DateTime.Today < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
+        <h1 class="heading-xlarge">
+            Your transactions 
+            <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
+        </h1>
+        @if (Model.Data.CurrentTime < new DateTime(2017, 05, 20) && Model.Data.Model.Data.TransactionLines.Count == 0)
         {
             <p>
                 No funds will be paid into your account until May 2017.
             </p>
         }
-        else
+        else if (Model.Data.IsLatestMonth)
         {
             <div class="data">
-                <h2 class="heading-small">Current balance</h2>
-                <h2 class="bold-xlarge">@Model.Data.Model.CurrentBalance.ToString("C2", culture)</h2>
+                <dl>
+                    <dt>Current balance</dt>
+                    <dd>@Model.Data.Model.CurrentBalance.ToString("C2", culture)</dd>
+                </dl>
             </div>
         }
     </div>
 </div>
 <div class="grid-row">
     <div class="column-full">
-        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && DateTime.Today > new DateTime(2017, 05, 20))
+        @if (Model.Data.Model.Data.TransactionLines.Count == 0 && Model.Data.CurrentTime > new DateTime(2017, 05, 20))
         {
             <p class="panel panel-info">
                 No transaction data exists for this account, please try again later.
@@ -41,59 +51,81 @@
         {
             <table>
                 <thead>
-                    <tr>
-                        <th scope="col"><span class="no-wrap">Payment date</span></th>
-                        <th scope="col" class="mobile-hide-cell">Description</th>
-                        <th scope="col" class="numeric">Amount</th>
-                        <th scope="col" class="numeric">Balance</th>
-                        <th scope="col"><span class="vh">Action</span></th>
-                    </tr>
+                <tr>
+                    <th scope="col"><span class="no-wrap">Payment date</span></th>
+                    <th scope="col" class="mobile-hide-cell">Description</th>
+                    <th scope="col" class="numeric">Amount</th>
+                    <th scope="col"><span class="vh">Action</span></th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
-                    {
-                        var fromDate = aggregationLine.DateCreated;
-                        var toDate = aggregationLine.DateCreated.AddHours(23);
-                        <tr>
-                            <td>
-                                <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
-                            </td>
-                            <td class="mobile-hide-cell">
-                                <span class="description">
-                                    @aggregationLine.Description
-                                </span>
-                            </td>
-                            <td class="numeric"> @(aggregationLine.Amount.ToString("C2", culture)) </td>
-                            <td class="numeric">@(aggregationLine.Balance.ToString("C2", culture))</td>
-                            <td class="link-right">
-                                @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
-                         aggregationLine.TransactionType == TransactionItemType.TopUp)
-                                {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
-                                        Details <span class="vh"> for the transaction on @date</span>
-                                    </a>
-                                }
-                                else if (aggregationLine.TransactionType == TransactionItemType.Payment)
-                                {
-                                    <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
-                                        Details <span class="vh"> for the transaction on @date</span>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                   }
+                @foreach (var aggregationLine in Model.Data.Model.Data.TransactionLines)
+                {
+                    var fromDate = aggregationLine.DateCreated;
+                    var toDate = aggregationLine.DateCreated.AddHours(23);
+                    <tr>
+                        <td>
+                            <span class="no-wrap">@{var date = aggregationLine.DateCreated.ToGdsFormat();} @date </span>
+                        </td>
+                        <td class="mobile-hide-cell">
+                            <span class="description">
+                                @aggregationLine.Description
+                            </span>
+                        </td>
+                        <td class="numeric"> <span class="no-wrap"> @(aggregationLine.Amount.ToString("C2", culture)) </span> </td>
+                        <td class="link-right">
+                            @if (aggregationLine.TransactionType == TransactionItemType.Declaration ||
+                                 aggregationLine.TransactionType == TransactionItemType.TopUp)
+                            {
+                                <a title="View details for the transaction on @date" href="@Url.Action("LevyDeclarationDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                    Details <span class="vh"> for the transaction on @date</span>
+                                </a>
+                            }
+                            else if (aggregationLine.TransactionType == TransactionItemType.Payment)
+                            {
+                                <a title="View details for the transaction on @date" href="@Url.Action("PaymentDetail", "EmployerAccountTransactions", new {HashedAccountId = Model.Data.Model.Data.HashedAccountId, fromDate, toDate})">
+                                    Details <span class="vh"> for the transaction on @date</span>
+                                    
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
                 </tbody>
-            </table>
-            <div class="grid-row">
-                <div class="column-two-thirds">
-                    <div class="panel panel-filled">
-                        <h3 class="heading-medium">Help us improve this section</h3>
-                        <p><a href="https://www.surveymonkey.co.uk/r/levybalance" target="_blank">Give us feedback</a> about your levy data to make this section better suit your needs.</p>
-                        <p><a href="https://www.surveymonkey.co.uk/r/levybalance" target="_blank" class="button">Give us feedback <span class="vh">so that we can improve this section</span></a></p>
-                    </div>
+            </table>            
+           }
+
+        <ul class="previous-next-navigation">
+            @if (!Model.Data.IsFirstMonthOfLevy && Model.Data.AccountHasPreviousTransactions)
+            {
+                <li class="previous">
+                    <a href="@Url.Action("Index")/@previousMonthDate.Year/@previousMonthDate.Month">
+                        Previous <span class="hide-mobile">month</span>
+                        <span class="detail">@previousMonthDate.ToGdsFormatWithoutDay()</span>
+                    </a>
+                </li>
+            }
+            @if (!Model.Data.IsLatestMonth)
+            {
+                <li class="next">
+                    <a href="@Url.Action("Index")/@nextMonthDate.Year/@nextMonthDate.Month">
+                        Next month
+                        <span class="detail">@nextMonthDate.ToGdsFormatWithoutDay()</span>
+                        
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <div class="panel panel-filled">
+                    <h3 class="heading-medium">Help us improve this section</h3>
+                    <p><a href="https://www.surveymonkey.co.uk/r/levybalance" target="_blank">Give us feedback</a> about your levy data to make this section better suit your needs.</p>
+                    <p><a href="https://www.surveymonkey.co.uk/r/levybalance" target="_blank" class="button">Give us feedback <span class="vh">so that we can improve this section</span></a></p>
                 </div>
             </div>
-           }
+        </div>
     </div>
 </div>
 @section breadcrumb {

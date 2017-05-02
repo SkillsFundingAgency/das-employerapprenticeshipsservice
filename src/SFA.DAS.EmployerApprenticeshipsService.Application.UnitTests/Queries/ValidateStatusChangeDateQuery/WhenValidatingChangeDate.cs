@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.ValidateStatusChangeDateQuer
         {
             _testQuery = new ValidateStatusChangeDateQuery { AccountId = 123, ApprenticeshipId = 456, ChangeOption = ChangeOption.SpecificDate };
             _mockCurrentDate = new Mock<ICurrentDateTime>();
-            _mockCurrentDate.SetupGet(x => x.Now).Returns(DateTime.UtcNow.AddDays(-5)); // Started training
+            _mockCurrentDate.SetupGet(x => x.Now).Returns(new DateTime(2017, 6, 20)); // Started training
             _apprenticeship = new Apprenticeship { StartDate = DateTime.UtcNow.Date };
 
             _mockMediator = new Mock<IMediator>();
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.ValidateStatusChangeDateQuer
         [Test]
         public async Task WhenDateIsInTheFutureAnValidationErrorReturned()
         {
-            _testQuery.DateOfChange = DateTime.UtcNow.AddMonths(2);
+            _testQuery.DateOfChange = new DateTime(2017, 7, 10); // Change date in the future
 
             var response = await _handler.Handle(_testQuery);
 
@@ -49,10 +49,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.ValidateStatusChangeDateQuer
         }
 
         [Test]
-        public async Task WhenDateIsEarlierThanTrainingStartDateAnValidationErrorReturned()
+        public async Task WhenDateIsEarlierThanTrainingStartDateAValidationErrorReturned()
         {
-            _testQuery.DateOfChange = DateTime.UtcNow.AddMonths(-2);
-            _apprenticeship.StartDate = DateTime.UtcNow.Date.AddMonths(-1);
+            _apprenticeship.StartDate = new DateTime(2017, 5, 1);
+            _testQuery.DateOfChange = new DateTime(2017, 4, 28); // Change date before Training start date.
 
             var response = await _handler.Handle(_testQuery);
 

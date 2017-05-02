@@ -97,7 +97,7 @@
     <Build Include="Tables\EnglishFractionCalculationDate.sql" />
     <Build Include="StoredProcedures\GetLevyDeclaration_ByEmpRefPayrollMonthPayrollYear.sql" />
     <Build Include="StoredProcedures\GetLevyDeclarations_ByAccountPayrollMonthPayrollYear.sql" />
-    <Build Include="Tables\LevyOverride.sql" />
+    <Build Include="StoredProcedures\GetPreviousTransactionsCount.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SeedData\SeedData.sql" />

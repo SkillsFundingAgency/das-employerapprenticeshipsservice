@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>())).Returns(_accountId);
 
             _dasLevyService = new Mock<IDasLevyService>();
-            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                 {
@@ -63,7 +63,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
             _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
                 .Returns(new ProvidersView
                 {
-                    Provider = new Provider()
+                    Provider = new Domain.Models.ApprenticeshipProvider.Provider()
                         {
                             Name = ProviderName
                         }
@@ -83,7 +83,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
 
             //Assert
             _hashingService.Verify(x => x.DecodeValue(_hashedAccountId), Times.Once);
-            _dasLevyService.Verify(x=>x.GetTransactionsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Verify(x=>x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
                                             (_accountId, _fromDate, _toDate, _externalUserId));
         }
 
@@ -124,7 +124,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         {
             //Arrange
             var transactionDate = DateTime.Now.AddDays(-2);
-            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
                                            (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                            .ReturnsAsync(new List<PaymentTransactionLine>
                {
@@ -142,7 +142,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries
         public void ThenANotFoundExceptionShouldBeThrowIfNoTransactionsAreFound()
         {
             //Arrange
-            _dasLevyService.Setup(x => x.GetTransactionsByDateRange<PaymentTransactionLine>
+            _dasLevyService.Setup(x => x.GetTransactionDetailsByDateRange<PaymentTransactionLine>
                     (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
                 .ReturnsAsync(new List<PaymentTransactionLine>());
 

@@ -1,5 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetTransactionLines_ByAccountId]
-	@accountId BIGINT
+	@accountId BIGINT,
+	@fromDate datetime,
+	@toDate datetime
 AS
 select 
     main.*
@@ -15,7 +17,7 @@ from
       ,UkPrn
       ,DateCreated
   FROM [employer_financial].[TransactionLine]
-  WHERE AccountId = @accountId
+  WHERE AccountId = @accountId AND DateCreated >= @fromDate AND DateCreated <= @toDate
   GROUP BY DateCreated ,AccountId, UKPRN,[TransactionType]
   
 ) as main
