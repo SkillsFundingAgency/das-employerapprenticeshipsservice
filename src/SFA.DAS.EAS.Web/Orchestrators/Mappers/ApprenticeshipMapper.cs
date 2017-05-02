@@ -321,7 +321,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators.Mappers
                 switch (dataLockTriageStatus)
                 {
                     case TriageStatus.Restart:
-                        dataLockText = "changes requested";
+                        dataLockText = "Changes requested";
                         break;
                 }
             }
