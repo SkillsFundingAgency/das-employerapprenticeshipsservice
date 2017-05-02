@@ -717,7 +717,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     Data = new CommitmentListViewModel
                     {
                         AccountHashId = hashedAccountId,
-                        Commitments = MapFrom(commitments, true),
+                        Commitments = MapFrom(commitments, false),
                         PageTitle = "With training providers",
                         PageId = "with-the-provider",
                         PageHeading = "With training providers",
