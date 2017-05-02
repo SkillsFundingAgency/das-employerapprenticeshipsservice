@@ -9,7 +9,7 @@
 
 @if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.Headline))
 {
-    <div class="grid-row error-summary-wrapper">
+    <div class="grid-row notification-wrapper">
         <div class="column-full">
 
             <div class="@viewModel.FlashMessage.SeverityCssClass">

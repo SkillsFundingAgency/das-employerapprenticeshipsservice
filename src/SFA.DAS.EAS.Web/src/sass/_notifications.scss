@@ -5,7 +5,6 @@ $warning-colour:    $orange;
 .error-summary, .info-summary, .success-summary, .warning-summary {
     border-width: 4px;
     border-style: solid;
-
     margin-top: $gutter-half;
     margin-bottom: $gutter-half;
     padding: $gutter-half 10px;
@@ -50,6 +49,12 @@ $warning-colour:    $orange;
             text-decoration: underline;
         }
     }  
+}
+
+.notification-wrapper {
+    .error-summary, .info-summary, .success-summary, .warning-summary {
+        margin-bottom: 0;
+    }
 }
 
 .info-dismiss, .success-dismiss, .warning-dismiss {
