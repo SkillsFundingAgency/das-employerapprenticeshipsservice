@@ -3989,6 +3989,7 @@ table .float-right, h2 .float-right {
 #apprentice-details .finishEditingBtn {
   float: none;
   margin-bottom: 3px;
+  margin-right: 10px;
 }
 
 .form-group #StartDate_Month,
@@ -4239,6 +4240,12 @@ h2 .float-right {
 
 #review-cohorts .incomplete-apps h2.bold-xlarge {
   font-size: 80px;
+}
+
+.purple-border {
+  border: 5px solid #2e358b;
+  margin-bottom: 20px;
+  padding: 20px;
 }
 
 @media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {

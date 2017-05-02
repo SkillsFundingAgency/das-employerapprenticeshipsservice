@@ -79,6 +79,7 @@
     .finishEditingBtn{
         float:none;
         margin-bottom:3px;
+        margin-right:10px;
     }
 }
 
@@ -340,6 +341,11 @@ body {
      }
 }
 
+.purple-border{
+    border:5px solid $purple;
+    margin-bottom: 20px;
+    padding: 20px;
+}
 
 //all mobile media query breakpoints
 //==================================
