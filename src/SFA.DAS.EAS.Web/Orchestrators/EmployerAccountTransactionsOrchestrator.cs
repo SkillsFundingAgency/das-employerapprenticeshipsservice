@@ -17,15 +17,20 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 {
     public class EmployerAccountTransactionsOrchestrator
     {
-        private readonly DateTime _currentTime;
+        private readonly ICurrentDateTime _currentTime;
         private readonly IMediator _mediator;
+
+        protected EmployerAccountTransactionsOrchestrator()
+        {
+
+        }
 
         public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime)
         {
             if (mediator == null)
                 throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
-            _currentTime = currentTime.Now;
+            _currentTime = currentTime;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>
@@ -125,11 +130,11 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             if (employerAccountResult.Account == null)
             {
-                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime) };
+                return new OrchestratorResponse<TransactionViewResultViewModel> {Data = new TransactionViewResultViewModel(_currentTime.Now) };
             }
 
-            year = year == default(int) ? _currentTime.Year : year;
-            month = month == default(int) ? _currentTime.Month : month;
+            year = year == default(int) ? _currentTime.Now.Year : year;
+            month = month == default(int) ? _currentTime.Now.Month : month;
 
             var daysInMonth = DateTime.DaysInMonth(year, month);
 
@@ -164,7 +169,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             
             return new OrchestratorResponse<TransactionViewResultViewModel>
             {
-                Data = new TransactionViewResultViewModel(_currentTime)
+                Data = new TransactionViewResultViewModel(_currentTime.Now)
                 {
                     Account = employerAccountResult.Account,
                     Model = new TransactionViewModel
