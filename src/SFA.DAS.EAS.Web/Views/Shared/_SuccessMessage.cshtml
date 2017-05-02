@@ -12,7 +12,7 @@
     <div class="grid-row notification-wrapper">
         <div class="column-full">
 
-            <div class="@viewModel.FlashMessage.SeverityCssClass">
+            <div class="@viewModel.FlashMessage.SeverityCssClass" tabindex="-1">
                 @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
                 {
                     <h1 class="@(viewModel.FlashMessage.Severity == FlashMessageSeverityLevel.Error ? "bold-medium" : "bold-large")">@viewModel.FlashMessage.Headline</h1>
