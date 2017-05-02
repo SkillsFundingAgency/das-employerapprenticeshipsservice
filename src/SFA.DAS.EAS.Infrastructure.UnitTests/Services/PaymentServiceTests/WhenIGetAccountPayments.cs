@@ -14,8 +14,8 @@ using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.Payments.Events.Api.Client;
-using SFA.DAS.Payments.Events.Api.Types;
+using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
 {
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
         private Framework _framework;
         private Standard _standard;
         private Apprenticeship _apprenticeship;
-        private Provider _provider;
+        private Domain.Models.ApprenticeshipProvider.Provider _provider;
         private PaymentDetails _standardPayment;
         private PaymentDetails _frameworkPayment;
 
@@ -323,7 +323,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.PaymentServiceTests
                 NINumber = "12345678"
             };
 
-            _provider = new Provider
+            _provider = new Domain.Models.ApprenticeshipProvider.Provider
             {
                 Id = 10,
                 Ukprn = 74765,

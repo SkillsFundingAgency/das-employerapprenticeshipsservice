@@ -114,12 +114,12 @@
     <Reference Include="SFA.DAS.Notifications.Api.Types">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.1.1.0.12760\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Types, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.TimeProvider, Version=1.0.0.3956, Culture=neutral, processorArchitecture=MSIL">
@@ -258,6 +258,8 @@
     <Compile Include="Queries\GetHmrcLevyDeclarationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
+    <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIGetPreviousTransactionsCount.cs" />
+    <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIGetPublicSectorOrganisations.cs" />
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetSignedEmployerAgreementPdfTests\WhenIGetTheSignedEmployerAgreement.cs" />

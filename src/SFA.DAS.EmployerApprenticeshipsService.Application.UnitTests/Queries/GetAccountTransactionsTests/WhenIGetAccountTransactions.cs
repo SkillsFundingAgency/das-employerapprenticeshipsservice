@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions;
 using SFA.DAS.EAS.Application.Validation;
-using SFA.DAS.EAS.Domain.Data;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
@@ -30,7 +26,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
 
             _repository = new Mock<IDasLevyRepository>();
 
-            Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId};
+            Query = new GetAccountTransactionsRequest {AccountId = ExpectedAccountId, FromDate = DateTime.Now.AddDays(-1), ToDate = DateTime.Now.AddDays(1) };
 
             RequestHandler = new GetAccountTransactionsQueryHandler(RequestValidator.Object, _repository.Object);
             
@@ -43,14 +39,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionsTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetTransactions(ExpectedAccountId), Times.Once);
+            _repository.Verify(x=>x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate), Times.Once);
         }
 
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            _repository.Setup(x => x.GetTransactions(ExpectedAccountId)).ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
+            _repository.Setup(x => x.GetTransactionsByDateRange(ExpectedAccountId, Query.FromDate, Query.ToDate))
+                       .ReturnsAsync(new List<TransactionLine> {new TransactionLine()});
 
             //Act
             var actual = await RequestHandler.Handle(Query);

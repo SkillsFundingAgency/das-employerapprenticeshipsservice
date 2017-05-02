@@ -102,16 +102,16 @@
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Types">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.Provider.Events.Api.Types, Version=2.0.0.27426, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.0.0.27426\lib\net45\SFA.DAS.Provider.Events.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.ReferenceData.Api.Client, Version=1.0.0.26699, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.0.0.26699\lib\net45\SFA.DAS.ReferenceData.Api.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SFA.DAS.Payments.Events.Api.Client, Version=1.0.0.16420, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Payments.Events.Api.Client.1.0.0.16420\lib\net45\SFA.DAS.Payments.Events.Api.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
@@ -145,6 +145,7 @@
     <Compile Include="Services\DasAccountServiceTests\WhenIUpdatePayeSchemeNames.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetEnglishFractionForAnEmpref.cs" />
+    <Compile Include="Services\DasLevyServiceTests\WhenIGetPreviousTransactionCount.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionDetailInformation.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />

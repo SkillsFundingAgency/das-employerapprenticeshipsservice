@@ -1819,6 +1819,11 @@ input[type=number] {
   display: block;
 }
 
+.mobile-hide-inline {
+  display: none;
+  display: inline;
+}
+
 .mobile-hide-cell {
   display: none;
   display: table-cell;
@@ -1877,6 +1882,38 @@ dl.inline.course-details {
   display: block;
   color: #6f777b;
   margin: 0;
+}
+
+.data {
+  background: #912b88;
+  color: white;
+  padding: 15px;
+}
+
+.data dl {
+  display: table;
+}
+
+.data dl dt {
+  display: table-footer-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3157894737;
+}
+
+.data dl dd {
+  display: table-header-group;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: none;
+  font-size: 32px;
+  line-height: 1.09375;
+  font-size: 48px;
+  line-height: 1.0416666667;
 }
 
 main, .header-inner {
@@ -2414,111 +2451,79 @@ a#link-settings:focus {
   display: block;
 }
 
-.error-summary, .info-summary, .success-summary, .warning-summary {
-  border-width: 4px;
-  border-style: solid;
-  margin-top: 15px;
-  margin-bottom: 15px;
-  padding: 15px 10px;
-  border-width: 5px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  padding: 20px 15px 15px;
+.previous-next-navigation {
+  margin: 40px -3px;
+  padding: 3px;
+  overflow: hidden;
 }
 
-.error-summary:focus, .info-summary:focus, .success-summary:focus, .warning-summary:focus {
-  outline: 3px solid #ffbf47;
-}
-
-.error-summary p, .info-summary p, .success-summary p, .warning-summary p {
-  margin-bottom: 10px;
-}
-
-.error-summary-heading, .info-summary-heading, .success-summary-heading, .warning-summary-heading {
-  margin-top: 0;
-}
-
-.error-summary h1[class^="heading-"], .info-summary h1[class^="heading-"], .success-summary h1[class^="heading-"], .warning-summary h1[class^="heading-"] {
+.previous-next-navigation li {
+  display: block;
+  padding: 0;
   margin: 0;
+  width: 50%;
+  float: left;
 }
 
-.error-summary h2[class^="heading-"], .info-summary h2[class^="heading-"], .success-summary h2[class^="heading-"], .warning-summary h2[class^="heading-"] {
-  margin: 0;
+.previous-next-navigation li a {
+  display: block;
+  padding: 15px 0 15px 38px;
+  text-decoration: none;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 18px;
+  line-height: 1.2;
+  font-size: 24px;
+  line-height: 1.25;
 }
 
-.error-summary h3[class^="heading-"], .info-summary h3[class^="heading-"], .success-summary h3[class^="heading-"], .warning-summary h3[class^="heading-"] {
-  margin: 0;
+.previous-next-navigation li a:before {
+  background: url("/dist/images/arrow-sprite.png");
+  background-position: -4px -2px;
+  margin-top: -2px;
+  margin-left: -30px;
+  display: block;
+  float: left;
+  width: 30px;
+  height: 40px;
+  content: " ";
+  margin-top: 6px;
 }
 
-.error-summary h4[class^="heading-"], .info-summary h4[class^="heading-"], .success-summary h4[class^="heading-"], .warning-summary h4[class^="heading-"] {
-  margin: 0;
+.previous-next-navigation li a:hover {
+  background: #f8f8f8;
 }
 
-.error-summary h5[class^="heading-"], .info-summary h5[class^="heading-"], .success-summary h5[class^="heading-"], .warning-summary h5[class^="heading-"] {
-  margin: 0;
+.previous-next-navigation li a:focus {
+  background: #dee0e2;
 }
 
-.error-summary h6[class^="heading-"], .info-summary h6[class^="heading-"], .success-summary h6[class^="heading-"], .warning-summary h6[class^="heading-"] {
-  margin: 0;
+.previous-next-navigation li .detail {
+  display: block;
+  font-family: "nta", Arial, sans-serif;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 16px;
+  line-height: 1.25;
+  font-size: 19px;
+  line-height: 1.3157894737;
 }
 
-.error-summary-list, .info-summary-list, .success-summary-list, .warning-summary-list {
-  padding-left: 0;
+.previous-next-navigation li.next {
+  text-align: right;
+  float: right;
 }
 
-.error-summary-list li, .info-summary-list li, .success-summary-list li, .warning-summary-list li {
-  margin-bottom: 5px;
+.previous-next-navigation li.next a {
+  padding: 15px 38px 15px 0;
 }
 
-.error-summary-list a, .info-summary-list a, .success-summary-list a, .warning-summary-list a {
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.info-dismiss, .success-dismiss, .warning-dismiss {
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-.info-summary {
-  border-color: #2e358b;
-}
-
-.info-summary .info-summary-list a {
-  color: #2e358b;
-}
-
-.info-summary .info-dismiss {
-  color: #2e358b;
-}
-
-.success-summary {
-  border-color: #28a197;
-}
-
-.success-summary .success-summary-list a {
-  color: #28a197;
-}
-
-.success-summary .success-dismiss {
-  color: #28a197;
-}
-
-.warning-summary {
-  border-color: #f47738;
-}
-
-.warning-summary .warning-summary-list a {
-  color: #f47738;
-}
-
-.warning-summary .warning-dismiss {
-  color: #f47738;
-}
-
-.sfa-govuk-box-highlight {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
+.previous-next-navigation li.next a:before {
+  float: right;
+  margin-left: 0;
+  margin-right: -30px;
+  background-position: -86px -2px;
 }
 
 .govuk-box-highlight {

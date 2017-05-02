@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var transactions = await _dasLevyService.GetTransactionsByDateRange<PaymentTransactionLine>
+            var transactions = await _dasLevyService.GetTransactionDetailsByDateRange<PaymentTransactionLine>
                                     (accountId, message.FromDate, message.ToDate, message.ExternalUserId);
 
             if (!transactions.Any())

@@ -9,9 +9,9 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.ApprenticeshipCourse;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.Payments.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Client;
+
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class PaymentService : IPaymentService
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             return paymentDetails;
         }
 
-        private Task<Provider> GetProvider(int ukPrn)
+        private Task<Domain.Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
         {
             return Task.Run(() =>
             {
