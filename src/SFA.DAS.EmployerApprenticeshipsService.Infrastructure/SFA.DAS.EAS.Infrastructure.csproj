@@ -224,6 +224,7 @@
     <Compile Include="Data\UserAccountRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="DependencyResolution\ConfigurationHelper.cs" />
+    <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="DependencyResolution\ExecutionPolicyPolicy.cs" />
     <Compile Include="ExecutionPolicies\CompaniesHouseExecutionPolicy.cs" />
     <Compile Include="ExecutionPolicies\ExecutionPolicy.cs" />

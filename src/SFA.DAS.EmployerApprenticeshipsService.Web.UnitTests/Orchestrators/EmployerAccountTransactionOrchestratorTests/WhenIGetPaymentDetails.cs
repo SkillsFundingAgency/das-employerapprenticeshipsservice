@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application;
 using SFA.DAS.EAS.Application.Queries.FindEmployerAccountPaymentTransactions;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Web.Orchestrators;
 
@@ -22,11 +23,13 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private FindEmployerAccountPaymentTransactionsResponse _response;
+        private Mock<ICurrentDateTime> _currentTime;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
+            _currentTime = new Mock<ICurrentDateTime>();
 
             _response = new FindEmployerAccountPaymentTransactionsResponse
             {
@@ -42,7 +45,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             _mediator.Setup(x => x.SendAsync(It.IsAny<FindEmployerAccountPaymentTransactionsQuery>()))
                 .ReturnsAsync(_response);
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object);
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object);
         }
 
         [Test]
