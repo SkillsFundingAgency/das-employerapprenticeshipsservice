@@ -127,7 +127,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(transactions);
 
-            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Provider {ProviderName = "test"}});
+            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView {Provider = new Domain.Models.ApprenticeshipProvider.Provider {ProviderName = "test"}});
 
             //Act
             await RequestHandler.Handle(_request);
@@ -221,7 +221,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectPaymentTransactions()
         {
             //Arrange
-            var provider = new Provider { ProviderName = "test" };
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -252,7 +252,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromSFAPayment()
         {
             //Arrange
-            var provider = new Provider { ProviderName = "test" };
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -283,7 +283,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromEmployerPayment()
         {
             //Arrange
-            var provider = new Provider { ProviderName = "test" };
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -316,7 +316,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionsFromCombinedPayment()
         {
             //Arrange
-            var provider = new Provider { ProviderName = "test" };
+            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var sfaTransaction = new PaymentTransactionLine
             {
                 UkPrn = 100,

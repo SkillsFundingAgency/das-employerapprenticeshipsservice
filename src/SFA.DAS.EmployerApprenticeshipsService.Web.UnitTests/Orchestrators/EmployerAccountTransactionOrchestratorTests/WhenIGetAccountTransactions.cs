@@ -85,6 +85,7 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
             var year = DateTime.Now.Year;
             var month = DateTime.Now.Month;
             var daysInMonth = DateTime.DaysInMonth(year, month);
+            _currentTime.Setup(x => x.Now).Returns(new DateTime(year, month, 1));
 
             //Act
             await _orchestrator.GetAccountTransactions(HashedAccountId, default(int), default(int), ExternalUser);
@@ -113,6 +114,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Orchestrators.EmployerAccountTransactionOrch
         [Test]
         public async Task ThenResultShouldShowIfTheSelectMonthIsTheLatest()
         {
+            //Arrange
+            _currentTime.Setup(x => x.Now).Returns(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
+
             //Act
             var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
             var resultHistoricalMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, 2016, 1, ExternalUser);
